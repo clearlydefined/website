@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// SPDX-License-Identifier: MIT
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
