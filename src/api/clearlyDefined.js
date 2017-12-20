@@ -11,9 +11,8 @@ export const apiHome = process.env.REACT_APP_SERVER || API_DEVELOP
 
 export const BASIC_PAGE_SIZE = 25
 // const CURATIONS = 'curations'
-// const HARVEST = 'harvest'
+const HARVEST = 'harvest'
 // const PACKAGES = "packages"
-const LOGIN = 'login'
 const ROOT = ''
 
 function base64(value) {
@@ -22,6 +21,10 @@ function base64(value) {
 
 export function checkPassword(user, password) {
   return get(url(ROOT), base64(user + ":" + password))
+}
+
+export function harvest(token, spec) {
+  return post(url(HARVEST), token, spec)
 }
 
 export function url(path, query) {
@@ -63,34 +66,44 @@ function handleResponse(response) {
   return response.json()
 }
 
-const put = (url, token, payload) => fetch(url, {
-  headers: getHeaders(token),
-  method: 'PUT',
-  body: JSON.stringify(payload)
-})
-  .then(handleResponse)
+function put(url, token, payload) {
+  return fetch(url, {
+    headers: getHeaders(token),
+    method: 'PUT',
+    body: JSON.stringify(payload)
+  })
+    .then(handleResponse)
+}
 
-const post = (url, token, payload) => fetch(url, {
-  headers: getHeaders(token),
-  method: 'POST',
-  body: JSON.stringify(payload)
-})
-  .then(handleResponse)
+function post(url, token, payload) {
+  return fetch(url, {
+    headers: getHeaders(token),
+    method: 'POST',
+    body: JSON.stringify(payload)
+  })
+    .then(handleResponse)
+}
 
-const patch = (url, token, payload) => fetch(url, {
-  headers: getHeaders(token),
-  method: 'PATCH',
-  body: JSON.stringify(payload)
-})
-  .then(handleResponse)
+function patch(url, token, payload) {
+  return fetch(url, {
+    headers: getHeaders(token),
+    method: 'PATCH',
+    body: JSON.stringify(payload)
+  })
+    .then(handleResponse)
+}
 
-const del = (url, token) => fetch(url, {
-  headers: getHeaders(token),
-  method: 'DELETE'
-})
-  .then(handleResponse)
+function del(url, token) {
+  return fetch(url, {
+    headers: getHeaders(token),
+    method: 'DELETE'
+  })
+    .then(handleResponse)
+}
 
-const get = (url, token, scope) => fetch(url, {
-  headers: getHeaders(token),
-})
-  .then(handleResponse)
+function get(url, token, scope) {
+  return fetch(url, {
+    headers: getHeaders(token),
+  })
+    .then(handleResponse)
+}

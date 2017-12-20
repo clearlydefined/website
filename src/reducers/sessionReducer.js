@@ -10,7 +10,7 @@ const initialState = {
 }
 
 function base64(value) {
-  Buffer.from(value).toString('base64')
+  return Buffer.from(value).toString('base64')
 }
 
 function onLogIn(result, error, context) {

@@ -15,14 +15,6 @@ const adopt = 'toggle-on'
 
 export default class Landing extends Component {
 
-  verticalAlign(element) {
-    return (
-      <div className="valign-parent">
-        <div className="valign-child">
-        </div>
-      </div>
-    )
-  }
   renderNeighborhood(name) {
     return (
       <div className="neighborhood-icon">
