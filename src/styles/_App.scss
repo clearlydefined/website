@@ -2,6 +2,7 @@
 /* SPDX-License-Identifier: MIT */
 
 .App {
+
 }
 
 .App-logo {
@@ -27,4 +28,37 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.main-container {
+  h1 {
+    font-size: $size-text-banner;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: $size-text-message;
+    color: $color-text-main;
+    text-align: center;
+  }
+
+  .valign-parent {
+    display: flex;
+  }
+
+  .valign-child {
+    align-self: center;
+  }
+  
+  .neighborhood-row {
+    padding-top: 100px;
+    display: flex;
+    min-height: 150px;
+  }
+
+  .neighborhood-icon {
+    font-size:10rem;
+    color: $color-text-light;
+    text-align: center;
+  }
 }

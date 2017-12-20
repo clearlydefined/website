@@ -6,7 +6,7 @@
 //   background-repeat: repeat-x;
   border-radius: 0px;
   border-width: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 20px;
   .navbar-brand {
       padding: 0
   }
@@ -17,7 +17,7 @@
       >li {
           >a {
               font-weight: 600;
-              color: $color_textcolor_light;
+              color: $color-text-light;
               padding-top: 17px;
               padding-bottom: 0px;
               &:hover,

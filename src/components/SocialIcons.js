@@ -3,8 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import * as Fa from 'react-icons/lib/fa'
-import * as Md from 'react-icons/lib/md'
+import FontAwesome from 'react-fontawesome'
 
 export default class SocialIcons extends Component {
   static propTypes = {
@@ -17,14 +16,15 @@ export default class SocialIcons extends Component {
   }
 
   render() {
-    const { website, facebook, twitter, instagram, email } = this.props.entity
+    const { website, github, facebook, twitter, instagram, email } = this.props.entity
     return (
       <span className={this.props.className}>
-        {website && <a href={website} target="_blank"><Md.MdPublic /></a>}
-        {email && <a href={'mailto:' + email}><Fa.FaEnvelopeO /></a>}
-        {facebook && <a href={facebook} target="_blank"><Fa.FaFacebook /></a>}
-        {twitter && <a href={twitter} target="_blank"><Fa.FaTwitter /></a>}
-        {instagram && <a href={instagram} target="_blank"><Fa.FaInstagram /></a>}
+        {github && <a href={github} target="_blank"><FontAwesome name="github" /></a>}
+        {website && <a href={website} target="_blank"><FontAwesome name="globe" /></a>}
+        {email && <a href={'mailto:' + email}><FontAwesome name="envelope" /></a>}
+        {facebook && <a href={facebook} target="_blank"><FontAwesome name="facebook-official" /></a>}
+        {twitter && <a href={twitter} target="_blank"><FontAwesome name="twitter" /></a>}
+        {instagram && <a href={instagram} target="_blank"><FontAwesome name="instagram" /></a>}
       </span>
     )
   }

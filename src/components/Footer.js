@@ -19,6 +19,7 @@ export default class Footer extends Component {
   static propTypes = {}
   static defaultProps = {
     socials: {
+      github: 'https://github.com/clearlydefined',
       website: 'https://clearlydefined.io',
       email: 'clearlydefined@outlook.com',
       twitter: 'https://twitter.com/clearlydefd'

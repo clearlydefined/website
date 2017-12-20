@@ -10,13 +10,16 @@ $color_highlight: green;
 $color_blue: #337ab7;
 $color_darkgrey: #222429;
 $color_darkgrey_highlight: #444651;
-//BG
-$color_background_main: #F0F0F0;
+// BG
+$color_background_main: #fff;
 $color_border_frame: #EDEDED;
-//TEXT
-$color_textcolor_main: #888;
-$color_textcolor_light: #fff;
+// TEXT
+$color-text-bold: #222;
+$color-text-main: #444;
+$color-text-light: #888;
 $color_none: rgba(0, 0, 0, 0);
 $color_semitransparent: rgba(0, 0, 0, 0.5);
 $color_black_10: rgba(0, 0, 0, 0.1);
-$color_standard_text: #444;
+
+$size-text-banner: 10rem;
+$size-text-message: 5rem;
