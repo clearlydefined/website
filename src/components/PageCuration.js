@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { HarvestForm } from './'
+import { MonacoHarvestForm } from './'
 import { harvestAction } from '../actions/harvestActions'
 
 class PageCuration extends Component {
@@ -26,7 +26,7 @@ class PageCuration extends Component {
           <Col md={4} >
           </Col>
           <Col md={8}>
-            <HarvestForm harvestHandler={this.harvestHandler} />
+            <MonacoHarvestForm harvestHandler={this.harvestHandler} />
           </Col>
         </Row>
       </Grid>

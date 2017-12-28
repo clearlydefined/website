@@ -79,4 +79,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-index.css
+index.css\
+public/vs
