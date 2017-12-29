@@ -1,0 +1,13 @@
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
+/* SPDX-License-Identifier: MIT */
+
+// modifications to the standard bootstrap styles
+.panel-heading a {
+    cursor: pointer;
+}
+
+.badge {
+  color: #555555;
+  background-color: #dddddd;
+  font-weight: 400;
+}

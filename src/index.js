@@ -1,8 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// SPDX-License-Identifier: MIT
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './styles/index.css'
+import registerServiceWorker from './registerServiceWorker'
+import { RehydrationProvider } from './components'
+
+ReactDOM.render(<RehydrationProvider />, document.getElementById('root'))
+registerServiceWorker()

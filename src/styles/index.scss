@@ -1,0 +1,48 @@
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
+/* SPDX-License-Identifier: MIT */
+
+@import './variables';
+@import './bootstrapFixes';
+body {
+    margin: 10;
+    padding: 0;
+    min-height: 100vh;
+    position: relative;
+    font-family: sans-serif;
+    background-color: $color_background_main;
+    color: $color-text-main;
+}
+
+h1 {
+    color: $color-text-bold;
+    margin: 0px;
+    text-align: left;
+    font-size: 1.5rem;
+    display: block;
+}
+
+h2 {
+    color: $color-text-bold;
+    margin: 0px;
+    text-align: left;
+    font-size: 1.3rem;
+    font-weight: 500;
+    display: block;
+    // text-align: center;
+}
+
+main {
+    // Margin before the footer
+    margin-bottom: 0.5em;
+}
+
+// stub to show while the state is reconstructed
+.loading-site-root {
+    padding-top: 20rem;
+    width: 100%;
+    text-align: center;
+}
+
+@import './App.scss';
+@import './Header.scss';
+@import './Footer.scss';
