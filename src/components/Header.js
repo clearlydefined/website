@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import logo from '../images/logo.svg';
 import { logout, login } from '../actions/sessionActions'
 import { withRouter } from 'react-router-dom'
-import { ROUTE_ROOT, ROUTE_CURATION } from '../utils/routingConstants'
+import { ROUTE_ROOT } from '../utils/routingConstants'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap'
 import { filter } from 'lodash'

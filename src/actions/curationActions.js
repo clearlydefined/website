@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { asyncActions } from './'
-import { curate, getCuration, getProposedCuration } from '../api/clearlyDefined'
+import { curate, getCuration } from '../api/clearlyDefined'
 
 export const CURATION_POST = 'CURATION_POST'
 export const CURATION_GET = 'CURATION_GET'

@@ -82,14 +82,14 @@ function handleResponse(response) {
   return response.json()
 }
 
-function put(url, token, payload) {
-  return fetch(url, {
-    headers: getHeaders(token),
-    method: 'PUT',
-    body: JSON.stringify(payload)
-  })
-    .then(handleResponse)
-}
+// function put(url, token, payload) {
+//   return fetch(url, {
+//     headers: getHeaders(token),
+//     method: 'PUT',
+//     body: JSON.stringify(payload)
+//   })
+//     .then(handleResponse)
+// }
 
 function post(url, token, payload) {
   return fetch(url, {
@@ -109,13 +109,13 @@ function patch(url, token, payload) {
     .then(handleResponse)
 }
 
-function del(url, token) {
-  return fetch(url, {
-    headers: getHeaders(token),
-    method: 'DELETE'
-  })
-    .then(handleResponse)
-}
+// function del(url, token) {
+//   return fetch(url, {
+//     headers: getHeaders(token),
+//     method: 'DELETE'
+//   })
+//     .then(handleResponse)
+// }
 
 function get(url, token) {
   return fetch(url, {

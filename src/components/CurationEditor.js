@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap'
-import { FieldGroup } from './'
 import { MonacoDiffEditor } from 'react-monaco-editor'
 
 export default class CurationEditor extends Component {

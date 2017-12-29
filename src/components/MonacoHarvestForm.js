@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap'
-import { FieldGroup } from './'
 import MonacoEditor from 'react-monaco-editor'
 
 export default class HarvestForm extends Component {

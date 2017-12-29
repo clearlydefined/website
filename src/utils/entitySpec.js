@@ -3,7 +3,9 @@
 
 export default class EntitySpec {
   static fromUrl(url) {
+    // eslint-disable-next-line
     const [full, type, provider, namespace, name, revision, prSpec] = url.match(/.*:\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/)
+    // eslint-disable-next-line
     const [blank, delimiter, pr] = prSpec ? prSpec.split('/') : []
     return new EntitySpec(type, provider, namespace, name, revision, pr)
   }

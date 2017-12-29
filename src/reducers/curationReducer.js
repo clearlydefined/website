@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { ROUTE_CURATION } from '../utils/routingConstants'
 import { CURATION_GET, CURATION_GET_PROPOSED } from '../actions/curationActions'
 import itemReducer from './itemReducer'
 

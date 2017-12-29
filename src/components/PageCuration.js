@@ -10,7 +10,6 @@ import { ROUTE_CURATION } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import { getCurationAction } from '../actions/curationActions'
 import { getPackageAction } from '../actions/packageActions'
-import { curate } from '../api/clearlyDefined'
 import yaml from 'js-yaml'
 
 class PageCuration extends Component {
