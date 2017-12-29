@@ -11,7 +11,7 @@ export default class HarvestForm extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { spec: "{}"}
+    this.state = { spec: '{}'}
     this.handleChange = this.handleChange.bind(this)
     this.okHandler = this.okHandler.bind(this)
     this.editorDidMount = this.editorDidMount.bind(this)
@@ -51,16 +51,16 @@ export default class HarvestForm extends Component {
       <Form>
         <h3>Queue a component to be harvested</h3>
         <MonacoEditor
-          width="700"
-          height="400"
-          language="json"
-          theme="vs-dark"
+          width='700'
+          height='400'
+          language='json'
+          theme='vs-dark'
           value={spec}
           options={options}
           onChange={this.onChange}
           editorDidMount={this.editorDidMount}
         />
-        <Button type="submit" onClick={this.okHandler}>
+        <Button type='submit' onClick={this.okHandler}>
           OK
         </Button>
       </Form>

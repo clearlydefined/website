@@ -3,30 +3,75 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { uiNavigation, } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { MonacoHarvestForm } from './'
-import { harvestAction } from '../actions/harvestActions'
+import { CurationEditor } from './'
+import { ROUTE_CURATION } from '../utils/routingConstants'
+import EntitySpec from '../utils/entitySpec'
+import { getCurationAction } from '../actions/curationActions'
+import { getPackageAction } from '../actions/packageActions'
+import { curate } from '../api/clearlyDefined'
+import yaml from 'js-yaml'
 
 class PageCuration extends Component {
 
   constructor(props) {
     super(props)
-    this.harvestHandler = this.harvestHandler.bind(this)
+    this.onCurationChange = this.onCurationChange.bind(this)
   }
 
-  harvestHandler(spec) {
+  componentDidMount() {
+    const { dispatch, path } = this.props
+    this.handleNewSpec(path)
+    dispatch(uiNavigation({ to: ROUTE_CURATION }))
+  }
+
+  componentWillReceiveProps(newProps) {
+    // If the spec is changing, kick off some loading to get all the state in order
+    const newPath = newProps.path
+    if (newPath && this.props.path !== newPath)
+      this.handleNewUser(newPath)
+  }
+
+  // A new spec has been seleted, fetch all the details
+  handleNewSpec(path) {
+    if (!path)
+      return
     const { dispatch, token } = this.props
-    dispatch(harvestAction(token, spec))
+    const fullSpec = EntitySpec.fromUrl('cd:' + path);
+    const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null }); 
+    if (fullSpec.pr) {
+      dispatch(getCurationAction(token, fullSpec))
+      dispatch(getPackageAction(token, fullSpec))
+    }
+    dispatch(getCurationAction(token, currentSpec))
+    dispatch(getPackageAction(token, currentSpec))
+  }
+
+  onCurationChange(newValue) {
+
+  }
+
+  getStringValue(item) {
+    return item ? yaml.safeDump(item, { sortKeys: true }) : ''
   }
 
   render() {
+    const { currentCuration, proposedCuration, currentPackage, proposedPackage } = this.props
+    const curationOriginal = this.getStringValue(currentCuration.item)
+    const curationValue = this.getStringValue(proposedCuration.item)
+    const packageOriginal = this.getStringValue(currentPackage.item)
+    const packageValue = this.getStringValue(proposedPackage.item) 
     return (
       <Grid className="main-container">
         <Row className="show-grid">
-          <Col md={4} >
-          </Col>
-          <Col md={8}>
-            <MonacoHarvestForm harvestHandler={this.harvestHandler} />
+          <Col md={12} >
+            <CurationEditor
+              currentCuration={curationOriginal}
+              currentPackage={packageOriginal}
+              newCuration={curationValue}
+              newPackage={packageValue}
+              onChange={this.onCurationChange} />
           </Col>
         </Row>
       </Grid>
@@ -35,6 +80,13 @@ class PageCuration extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  return { token: state.session.token }
+  return {
+    path: ownProps.location.pathname.slice(ownProps.match.url.length),
+    token: state.session.token,
+    currentCuration: state.curation.current,
+    currentPackage: state.package.current,
+    proposedCuration: state.curation.proposed,
+    proposedPackage: state.package.proposed,
+  }
 }
 export default connect(mapStateToProps)(PageCuration)

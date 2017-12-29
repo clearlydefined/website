@@ -11,7 +11,7 @@ export function harvestAction(token, spec) {
     const actions = asyncActions(HARVEST_POST)
     dispatch(actions.start())
     return harvest(token, spec).then(
-      result => { dispatch(actions.success(result)) },
+      result => dispatch(actions.success(result)),
       error => dispatch(actions.error(error))
     )
   }

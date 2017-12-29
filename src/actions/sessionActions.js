@@ -14,7 +14,7 @@ export function login(user, password) {
     const actions = asyncActions(LOGIN)
     dispatch(actions.start())
     return checkPassword(user, password).then(
-      result => { dispatch(actions.success(result, { user, password })) },
+      result => dispatch(actions.success(result, { user, password })),
       error => dispatch(actions.error(error))
     )
   }

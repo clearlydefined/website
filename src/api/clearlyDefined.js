@@ -10,9 +10,9 @@ export const API_PROD = 'https://api.clearlydefined.io'
 export const apiHome = process.env.REACT_APP_SERVER || API_DEVELOP
 
 export const BASIC_PAGE_SIZE = 25
-// const CURATIONS = 'curations'
+const CURATIONS = 'curations'
 const HARVEST = 'harvest'
-// const PACKAGES = "packages"
+const PACKAGES = "packages"
 const ROOT = ''
 
 function base64(value) {
@@ -25,6 +25,22 @@ export function checkPassword(user, password) {
 
 export function harvest(token, spec) {
   return post(url(HARVEST), token, spec)
+}
+
+export function getCuration(token, entity) {
+  return get(url(`${CURATIONS}/${entity.toUrlPath()}`), token)
+}
+
+export function curate(token, entity, spec) {
+  return patch(url(`${CURATIONS}/${entity.toUrlPath()}`), token, spec)
+}
+
+export function getPackage(token, entity) {
+  return get(url(`${PACKAGES}/${entity.toUrlPath()}`), token)
+}
+
+export function previewPackage(token, entity, spec) {
+  return post(url(`${PACKAGES}/${entity.toUrlPath()}`, { preview: true }), token, spec)
 }
 
 export function url(path, query) {
@@ -58,7 +74,7 @@ function handleResponse(response) {
     throw err
   }
   if (response.status === 204) {
-    //handle NO DATA
+    // handle NO DATA
     const err = new Error(response ? response.statusText : 'No data')
     err.status = 204
     throw err
@@ -101,7 +117,7 @@ function del(url, token) {
     .then(handleResponse)
 }
 
-function get(url, token, scope) {
+function get(url, token) {
   return fetch(url, {
     headers: getHeaders(token),
   })

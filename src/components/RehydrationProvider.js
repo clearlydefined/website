@@ -8,7 +8,7 @@ import { ROUTE_ROOT, ROUTE_CURATION } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { App, Landing, PageCuration } from './'
+import { App, Landing, PageCuration, PageHarvest } from './'
 import { omit } from 'lodash'
 
 const store = configureStore()
@@ -43,6 +43,7 @@ export default class RehydrationDelayedProvider extends Component {
         <Router>
           <App className="App">
             <Switch>
+              <Route path={'/test'} component={PageHarvest} />
               <Route path={ROUTE_CURATION} component={PageCuration} />
               <Route path={ROUTE_ROOT} component={Landing} />
             </Switch>
