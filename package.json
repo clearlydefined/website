@@ -24,7 +24,7 @@
     "npm-run-all": "^4.0.2"
   },
   "scripts": {
-    "copy-monaco": "cpx node_modules/monaco-editor/min/vs/**/* public/vs",
+    "copy-monaco": "cpx 'node_modules/monaco-editor/min/vs/**/*' public/vs",
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
