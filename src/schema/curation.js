@@ -1,5 +1,5 @@
-console.log(JSON.stringify( {
-  id: "http://api.clearlydefined.io/schemas/curation",
+return {
+  id: "https://api.clearlydefined.io/schemas/curation",
   $schema: "http://json-schema.org/draft-06/schema#",
   title: "curation",
   required: ["package"],
@@ -54,4 +54,4 @@ console.log(JSON.stringify( {
       }
     }
   }
-}, null, 2))
+}
