@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap'
 import { MonacoDiffEditor } from 'react-monaco-editor'
 
-export default class CurationEditor extends Component {
+export default class CurationReview extends Component {
 
   constructor(props) {
     super(props)

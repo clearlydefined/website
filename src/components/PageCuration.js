@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { uiNavigation, } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { CurationEditor } from './'
+import { CurationReview } from './'
 import { ROUTE_CURATION } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import { getCurationAction } from '../actions/curationActions'
@@ -65,7 +65,7 @@ class PageCuration extends Component {
       <Grid className="main-container">
         <Row className="show-grid">
           <Col md={12} >
-            <CurationEditor
+            <CurationReview
               currentCuration={curationOriginal}
               currentPackage={packageOriginal}
               newCuration={curationValue}

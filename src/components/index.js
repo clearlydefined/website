@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 export { default as App } from './App'
-export { default as CurationEditor } from './CurationEditor'
+export { default as CurationReview } from './CurationReview'
 export { default as FieldGroup } from './FieldGroup'
 export { default as Footer } from './Footer'
 export { default as HarvestForm } from './HarvestForm'
