@@ -16,6 +16,7 @@ class PageCuration extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {}
     this.onCurationChange = this.onCurationChange.bind(this)
   }
 
@@ -38,7 +39,8 @@ class PageCuration extends Component {
       return
     const { dispatch, token } = this.props
     const fullSpec = EntitySpec.fromUrl('cd:' + path);
-    const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null }); 
+    this.setState({ ...this.state, entitySpec: fullSpec })
+    const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null });
     if (fullSpec.pr) {
       dispatch(getCurationAction(token, fullSpec))
       dispatch(getPackageAction(token, fullSpec))
@@ -51,16 +53,25 @@ class PageCuration extends Component {
 
   }
 
-  getStringValue(item) {
-    return item ? yaml.safeDump(item, { sortKeys: true }) : ''
+  getStringValue(item, revision) {
+    if (!item)
+      return ''
+    let effectiveItem = item
+    if (revision)
+      effectiveItem = item.revisions ? item.revisions[revision] : ''
+    return effectiveItem ? yaml.safeDump(effectiveItem) : ''
   }
 
   render() {
+    const { entitySpec } = this.state
+    if (!entitySpec)
+      return null
     const { currentCuration, proposedCuration, currentPackage, proposedPackage } = this.props
-    const curationOriginal = this.getStringValue(currentCuration.item)
-    const curationValue = this.getStringValue(proposedCuration.item)
+    const curationOriginal = this.getStringValue(currentCuration.item, entitySpec.revision)
+    const curationValue = this.getStringValue(proposedCuration.item, entitySpec.revision)
     const packageOriginal = this.getStringValue(currentPackage.item)
-    const packageValue = this.getStringValue(proposedPackage.item) 
+    const packageValue = this.getStringValue(proposedPackage.item)
+    const currentSummary = packageOriginal
     return (
       <Grid className="main-container">
         <Row className="show-grid">
@@ -69,7 +80,7 @@ class PageCuration extends Component {
               currentCuration={curationOriginal}
               currentPackage={packageOriginal}
               newCuration={curationValue}
-              newPackage={packageValue}
+              currentSummary={currentSummary}
               onChange={this.onCurationChange} />
           </Col>
         </Row>
