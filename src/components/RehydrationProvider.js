@@ -43,9 +43,9 @@ export default class RehydrationDelayedProvider extends Component {
         <Router>
           <App className="App">
             <Switch>
-            <Route path={ROUTE_COMPONENTS} component={PageComponents} />
-            <Route path={ROUTE_CURATE} component={PageCurate} />
-            <Route path={ROUTE_CURATION} component={PageCuration} />
+              <Route path={ROUTE_COMPONENTS} component={PageComponents} />
+              <Route path={ROUTE_CURATE} component={PageCurate} />
+              <Route path={ROUTE_CURATION} component={PageCuration} />
               <Route path={ROUTE_ROOT} component={Landing} />
             </Switch>
           </App>
