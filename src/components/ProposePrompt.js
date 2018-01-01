@@ -56,9 +56,9 @@ export default class ProposePrompt extends Component {
             value={description || ""}
             onChange={this.handleChange}
             placeholder="Short description of changes. Like a commit message..."
-            maxLength={20}
+            maxLength={100}
           />
-          <Button type="submit" onClick={this.okHandler}>
+          <Button type="button" onClick={this.okHandler}>
             OK
           </Button>
         </Form>

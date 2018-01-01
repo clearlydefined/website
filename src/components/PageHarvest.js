@@ -4,26 +4,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row } from 'react-bootstrap'
-import { curateAction } from '../actions/curationActions'
-import { CurationEditor } from './'
+import { harvestAction } from '../actions/harvestActions'
+import { HarvestForm } from './'
 
-class PageCurate extends Component {
+class PageHarvest extends Component {
 
   constructor(props) {
     super(props)
-    this.curateHandler = this.curateHandler.bind(this)
+    this.harvestHandler = this.harvestHandler.bind(this)
   }
 
-  curateHandler(spec) {
+  harvestHandler(spec) {
     const { dispatch, token } = this.props
-    dispatch(curateAction(token, spec))
+    dispatch(harvestAction(token, spec))
   }
 
   render() {
     return (
       <Grid className='main-container'>
         <Row className='show-grid'>
-          <CurationEditor proposeHandler={this.curateHandler} currentSpec='this is a test' />
+          <HarvestForm harvestHandler={this.harvestHandler} />
         </Row>
       </Grid>
     )
@@ -33,4 +33,4 @@ class PageCurate extends Component {
 function mapStateToProps(state, ownProps) {
   return { token: state.session.token }
 }
-export default connect(mapStateToProps)(PageCurate)
+export default connect(mapStateToProps)(PageHarvest)
