@@ -5,18 +5,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { uiNavigation, } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { CurationEditor } from './'
+import { CurationReview } from './'
 import { ROUTE_CURATION } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
-import { getCurationAction } from '../actions/curationActions'
-import { getPackageAction } from '../actions/packageActions'
-import yaml from 'js-yaml'
+import { getCurationAction, curateAction } from '../actions/curationActions'
+import { getPackageAction, previewPackageAction } from '../actions/packageActions'
 
 class PageCuration extends Component {
 
   constructor(props) {
     super(props)
-    this.onCurationChange = this.onCurationChange.bind(this)
+    this.state = {}
+    this.doPropose = this.doPropose.bind(this)
   }
 
   componentDidMount() {
@@ -38,39 +38,47 @@ class PageCuration extends Component {
       return
     const { dispatch, token } = this.props
     const fullSpec = EntitySpec.fromUrl('cd:' + path);
-    const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null }); 
+    this.setState({ ...this.state, entitySpec: fullSpec })
+    const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null });
     if (fullSpec.pr) {
       dispatch(getCurationAction(token, fullSpec))
       dispatch(getPackageAction(token, fullSpec))
     }
     dispatch(getCurationAction(token, currentSpec))
     dispatch(getPackageAction(token, currentSpec))
+    dispatch(previewPackageAction(token, currentSpec, {}))
   }
 
-  onCurationChange(newValue) {
-
-  }
-
-  getStringValue(item) {
-    return item ? yaml.safeDump(item, { sortKeys: true }) : ''
+  doPropose(spec) {
+    const { dispatch, token } = this.props
+    dispatch(curateAction(token, this.state.entitySpec, spec))
   }
 
   render() {
-    const { currentCuration, proposedCuration, currentPackage, proposedPackage } = this.props
-    const curationOriginal = this.getStringValue(currentCuration.item)
-    const curationValue = this.getStringValue(proposedCuration.item)
-    const packageOriginal = this.getStringValue(currentPackage.item)
-    const packageValue = this.getStringValue(proposedPackage.item) 
+    const { entitySpec } = this.state
+    if (!entitySpec)
+      return null
+    const { currentCuration, proposedCuration, currentPackage, rawSummary } = this.props
+    // wait to render until we have everything
+    if (!(currentCuration.isFetched && currentPackage.isFetched && rawSummary.isFetched))
+      return null
+    if (entitySpec.pr && !proposedCuration.isFetched)
+      return null    
+    const curationOriginal = currentCuration.item
+    const curationValue = proposedCuration.item
+    const packageOriginal = currentPackage.item
+    const packageValue = rawSummary.item
+    // wait for all the data before rendering the editors
     return (
       <Grid className="main-container">
         <Row className="show-grid">
           <Col md={12} >
-            <CurationEditor
-              currentCuration={curationOriginal}
-              currentPackage={packageOriginal}
-              newCuration={curationValue}
-              newPackage={packageValue}
-              onChange={this.onCurationChange} />
+            <CurationReview
+              curationOriginal={curationOriginal}
+              curationValue={curationValue}
+              packageOriginal={packageOriginal}
+              rawSummary={packageValue}
+              proposeHandler={this.doPropose} />
           </Col>
         </Row>
       </Grid>
@@ -85,7 +93,7 @@ function mapStateToProps(state, ownProps) {
     currentCuration: state.curation.current,
     currentPackage: state.package.current,
     proposedCuration: state.curation.proposed,
-    proposedPackage: state.package.proposed,
+    rawSummary: state.package.preview
   }
 }
 export default connect(mapStateToProps)(PageCuration)

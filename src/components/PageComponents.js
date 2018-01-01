@@ -4,19 +4,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { harvestAction } from '../actions/harvestActions'
 
-class PageHarvest extends Component {
-
-  constructor(props) {
-    super(props)
-    this.harvestHandler = this.harvestHandler.bind(this)
-  }
-
-  harvestHandler(spec) {
-    const { dispatch, token } = this.props
-    dispatch(harvestAction(token, spec))
-  }
+class PageComponents extends Component {
 
   render() {
     return (
@@ -25,7 +14,7 @@ class PageHarvest extends Component {
           <Col md={4} >
           </Col>
           <Col md={8}>
-         Dummy page
+          The list of compoenents and a component filter etc will be here.
           </Col>
         </Row>
       </Grid>
@@ -36,4 +25,4 @@ class PageHarvest extends Component {
 function mapStateToProps(state, ownProps) {
   return { token: state.session.token }
 }
-export default connect(mapStateToProps)(PageHarvest)
+export default connect(mapStateToProps)(PageComponents)
