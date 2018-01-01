@@ -147,7 +147,6 @@ export default class CurationReview extends Component {
             </Button>
           </Col>
         </Row>
-
         <MonacoDiffEditor
           height='400'
           theme='vs-dark'
