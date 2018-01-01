@@ -142,7 +142,7 @@ export default class CurationReview extends Component {
             <h4>Proposed</h4>
           </Col>
           <Col sm={2}>
-            <Button type="submit" onClick={this.promptDescription}>
+            <Button type="button" onClick={this.promptDescription}>
               Propose
             </Button>
           </Col>
@@ -167,7 +167,7 @@ export default class CurationReview extends Component {
             <h4>Proposed</h4>
           </Col>
           <Col sm={2}>
-            <Button type="submit" onClick={this.promptDescription}>
+            <Button type="button" onClick={this.promptDescription}>
               Propose
             </Button>
           </Col>

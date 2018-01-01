@@ -3,28 +3,34 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import { Form, Button } from 'react-bootstrap'
-import { FieldGroup } from './'
+import { Button } from 'react-bootstrap'
+import MonacoEditor from 'react-monaco-editor'
+import yaml from 'js-yaml'
 
 export default class HarvestForm extends Component {
 
   constructor(props) {
     super(props)
     this.state = {}
+    this.editorDidMount = this.editorDidMount.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.okHandler = this.okHandler.bind(this)
   }
 
   static propTypes = {
-    harvestHandler: PropTypes.func.isRequired
+    harvestHandler: PropTypes.func.isRequired,
+    template: PropTypes.string
   }
 
   static defaultProps = {
+    template: '[\n  { type: npm, url: cd:/npm/npmjs/namespace/name/revision }\n]'
   }
 
   okHandler(e) {
-    const { spec } = this.state
-    this.props.harvestHandler(spec)
+    const specString = this.state.editor.model.getValue()
+    const spec = yaml.safeLoad(specString)
+    if (spec)
+      this.props.harvestHandler(spec)
   }
 
   handleChange(event) {
@@ -34,24 +40,32 @@ export default class HarvestForm extends Component {
     this.setState({ ...this.state, [name]: value })
   }
 
+  editorDidMount(editor, monaco) {
+    this.setState({ ...this.state, editor: editor })
+    editor.focus()
+  }
+
   render() {
-    const { spec } = this.state
+    const { template } = this.props
+    const options = {
+      selectOnLineNumbers: true
+    };
     return (
-      <Form>
-        <h3>Queue a component to be harvested</h3>
-        <FieldGroup
-          name="spec"
-          componentClass="textarea"
-          label="Description"
-          rows="5"
-          value={spec || ""}
-          placeholder="A description of the component to harvest"
-          onChange={this.handleChange}
+      <div>
+        <h3>Queue some components to be harvested</h3>
+        <MonacoEditor
+          height='400'
+          language='yaml'
+          theme='vs-dark'
+          value={template}
+          options={options}
+          onChange={this.onChange}
+          editorDidMount={this.editorDidMount}
         />
-        <Button type="submit" onClick={this.okHandler}>
-          OK
+        <Button className='pull-right' type='button' onClick={this.okHandler}>
+          Queue
         </Button>
-      </Form>
+      </div>
     )
   }
 }
