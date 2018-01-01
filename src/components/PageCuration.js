@@ -8,18 +8,16 @@ import { Grid, Row, Col } from 'react-bootstrap'
 import { CurationReview } from './'
 import { ROUTE_CURATION } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
-import { getCurationAction } from '../actions/curationActions'
+import { getCurationAction, curateAction } from '../actions/curationActions'
 import { getPackageAction, previewPackageAction } from '../actions/packageActions'
 import yaml from 'js-yaml'
-
-// Scenarios
 
 class PageCuration extends Component {
 
   constructor(props) {
     super(props)
     this.state = {}
-    this.onCurationChange = this.onCurationChange.bind(this)
+    this.doPropose = this.doPropose.bind(this)
   }
 
   componentDidMount() {
@@ -52,8 +50,9 @@ class PageCuration extends Component {
     dispatch(previewPackageAction(token, currentSpec, {}))
   }
 
-  onCurationChange(newValue) {
-
+  doPropose(spec) {
+    const { dispatch, token } = this.props
+    dispatch(curateAction(token, this.state.entitySpec, spec))
   }
 
   render() {
@@ -61,8 +60,11 @@ class PageCuration extends Component {
     if (!entitySpec)
       return null
     const { currentCuration, proposedCuration, currentPackage, rawSummary } = this.props
+    // wait to render until we have everything
     if (!(currentCuration.isFetched && currentPackage.isFetched && rawSummary.isFetched))
       return null
+    if (entitySpec.pr && !proposedCuration.isFetched)
+      return null    
     const curationOriginal = currentCuration.item
     const curationValue = proposedCuration.item
     const packageOriginal = currentPackage.item
@@ -77,7 +79,7 @@ class PageCuration extends Component {
               curationValue={curationValue}
               packageOriginal={packageOriginal}
               rawSummary={packageValue}
-              onChange={this.onCurationChange} />
+              proposeHandler={this.doPropose} />
           </Col>
         </Row>
       </Grid>

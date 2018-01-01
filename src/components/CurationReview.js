@@ -3,11 +3,12 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Button } from 'react-bootstrap'
 import { MonacoDiffEditor } from 'react-monaco-editor'
 import deepDiff from 'deep-diff'
 import extend from 'extend'
 import yaml from 'js-yaml'
+import { ProposePrompt } from './.'
 
 export default class CurationReview extends Component {
 
@@ -15,7 +16,8 @@ export default class CurationReview extends Component {
     curationOriginal: PropTypes.object,
     curationValue: PropTypes.object,
     packageOriginal: PropTypes.object,
-    rawSummary: PropTypes.object
+    rawSummary: PropTypes.object,
+    proposeHandler: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -27,6 +29,8 @@ export default class CurationReview extends Component {
     this.editorDidMount = this.editorDidMount.bind(this)
     this.onCurationChange = this.onCurationChange.bind(this)
     this.onSummaryChange = this.onSummaryChange.bind(this)
+    this.promptDescription = this.promptDescription.bind(this)
+    this.doPropose = this.doPropose.bind(this)
   }
 
   componentDidMount() {
@@ -52,10 +56,12 @@ export default class CurationReview extends Component {
       this.state.result.getModifiedEditor().getModel().setValue(newProposal)
   }
 
-  computeProposedPackage(rawSummary, newCurationString) {
+  computeProposedPackage(rawSummary, newCurationOrString) {
     // TODO figure out how to represent deletions
     try {
-      const newCuration = yaml.safeLoad(newCurationString)
+      const newCuration = typeof newCurationOrString === 'string'
+        ? yaml.safeLoad(newCurationOrString)
+        : newCurationOrString
       if (Array.isArray(newCuration))
         return null
       const newValue = extend(true, {}, rawSummary, newCuration)
@@ -88,7 +94,7 @@ export default class CurationReview extends Component {
       if (!changes || changes.length === 0)
         return null
       const newValue = {}
-      changes.forEach(change => 
+      changes.forEach(change =>
         deepDiff.applyChange(newValue, change, change));
       return this.getStringValue(newValue)
     } catch (error) {
@@ -99,6 +105,21 @@ export default class CurationReview extends Component {
 
   getStringValue(item) {
     return item ? yaml.safeDump(item, { sortKeys: true }) : ''
+  }
+
+  doPropose(description) {
+    const patchString = this.state.curation.getModifiedEditor().getModel().getValue();
+    const patch = yaml.safeLoad(patchString)
+    // TODO validate patch and ensure it is not the same as the original
+    if (!patch)
+      return
+    const proposal = { description, patch }
+    this.props.proposeHandler(proposal)
+  }
+
+  promptDescription(e) {
+    e.preventDefault()
+    this.refs.proposeModal.open()
   }
 
   render() {
@@ -113,11 +134,17 @@ export default class CurationReview extends Component {
       <div>
         <h3>Curations</h3>
         <Row>
+          <ProposePrompt ref="proposeModal" proposeHandler={this.doPropose} />
           <Col sm={6}>
             <h4>Current</h4>
           </Col>
-          <Col sm={6}>
+          <Col sm={4}>
             <h4>Proposed</h4>
+          </Col>
+          <Col sm={2}>
+            <Button type="submit" onClick={this.promptDescription}>
+              Propose
+            </Button>
           </Col>
         </Row>
 
@@ -137,8 +164,13 @@ export default class CurationReview extends Component {
           <Col sm={6}>
             <h4>Current</h4>
           </Col>
-          <Col sm={6}>
+          <Col sm={4}>
             <h4>Proposed</h4>
+          </Col>
+          <Col sm={2}>
+            <Button type="submit" onClick={this.promptDescription}>
+              Propose
+            </Button>
           </Col>
         </Row>
         <MonacoDiffEditor
