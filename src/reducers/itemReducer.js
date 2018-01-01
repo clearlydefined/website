@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // SPDX-License-Identifier: MIT
 
-const initialState = { isFetching: false, item: null, error: null, headers: null, deleted: false }
+const initialState = { isFetching: false, isFetched: false, item: null, error: null, headers: null, deleted: false }
 
 export default (name = '', itemName = 'item') => {
   return (state = initialState, action) => {
@@ -22,21 +22,22 @@ export default (name = '', itemName = 'item') => {
       return {
         ...state,
         isFetching: false,
+        isFetched: true,
         error: false,
         deleted: true
       }
     }
 
     if (!(result || error)) {
-      return { ...state, isFetching: true, deleted: false }
+      return { ...state, isFetching: true, isFetched: false, deleted: false }
     }
 
     if (error) {
-      return { ...state, isFetching: false, error: error, item: null, deleted: false }
+      return { ...state, isFetching: false, isFetched: true, error: error, item: null, deleted: false }
     }
 
     if (result) {
-      return { ...state, isFetching: false, deleted: false, [itemName]: result, headers: result.headers }
+      return { ...state, isFetching: false, isFetched: true, deleted: false, [itemName]: result, headers: result.headers }
     }
   }
 }

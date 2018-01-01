@@ -9,8 +9,10 @@ import { CurationReview } from './'
 import { ROUTE_CURATION } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import { getCurationAction } from '../actions/curationActions'
-import { getPackageAction } from '../actions/packageActions'
+import { getPackageAction, previewPackageAction } from '../actions/packageActions'
 import yaml from 'js-yaml'
+
+// Scenarios
 
 class PageCuration extends Component {
 
@@ -47,40 +49,34 @@ class PageCuration extends Component {
     }
     dispatch(getCurationAction(token, currentSpec))
     dispatch(getPackageAction(token, currentSpec))
+    dispatch(previewPackageAction(token, currentSpec, {}))
   }
 
   onCurationChange(newValue) {
 
   }
 
-  getStringValue(item, revision) {
-    if (!item)
-      return ''
-    let effectiveItem = item
-    if (revision)
-      effectiveItem = item.revisions ? item.revisions[revision] : ''
-    return effectiveItem ? yaml.safeDump(effectiveItem) : ''
-  }
-
   render() {
     const { entitySpec } = this.state
     if (!entitySpec)
       return null
-    const { currentCuration, proposedCuration, currentPackage, proposedPackage } = this.props
-    const curationOriginal = this.getStringValue(currentCuration.item, entitySpec.revision)
-    const curationValue = this.getStringValue(proposedCuration.item, entitySpec.revision)
-    const packageOriginal = this.getStringValue(currentPackage.item)
-    const packageValue = this.getStringValue(proposedPackage.item)
-    const currentSummary = packageOriginal
+    const { currentCuration, proposedCuration, currentPackage, rawSummary } = this.props
+    if (!(currentCuration.isFetched && currentPackage.isFetched && rawSummary.isFetched))
+      return null
+    const curationOriginal = currentCuration.item
+    const curationValue = proposedCuration.item
+    const packageOriginal = currentPackage.item
+    const packageValue = rawSummary.item
+    // wait for all the data before rendering the editors
     return (
       <Grid className="main-container">
         <Row className="show-grid">
           <Col md={12} >
             <CurationReview
-              currentCuration={curationOriginal}
-              currentPackage={packageOriginal}
-              newCuration={curationValue}
-              currentSummary={currentSummary}
+              curationOriginal={curationOriginal}
+              curationValue={curationValue}
+              packageOriginal={packageOriginal}
+              rawSummary={packageValue}
               onChange={this.onCurationChange} />
           </Col>
         </Row>
@@ -96,7 +92,7 @@ function mapStateToProps(state, ownProps) {
     currentCuration: state.curation.current,
     currentPackage: state.package.current,
     proposedCuration: state.curation.proposed,
-    proposedPackage: state.package.proposed,
+    rawSummary: state.package.preview
   }
 }
 export default connect(mapStateToProps)(PageCuration)

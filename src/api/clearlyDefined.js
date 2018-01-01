@@ -39,8 +39,8 @@ export function getPackage(token, entity) {
   return get(url(`${PACKAGES}/${entity.toUrlPath()}`), token)
 }
 
-export function previewPackage(token, entity, spec) {
-  return post(url(`${PACKAGES}/${entity.toUrlPath()}`, { preview: true }), token, spec)
+export function previewPackage(token, entity, curation) {
+  return post(url(`${PACKAGES}/${entity.toUrlPath()}`, { preview: true }), token, curation)
 }
 
 export function url(path, query) {

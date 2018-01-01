@@ -19,11 +19,11 @@ export function getPackageAction(token, entity) {
   }
 }
 
-export function previewPackageAction(token, entity, spec) {
+export function previewPackageAction(token, entity, curation) {
   return (dispatch) => {
     const actions = asyncActions(PACKAGE_PREVIEW)
     dispatch(actions.start())
-    return previewPackage(token, entity, spec).then(
+    return previewPackage(token, entity, curation).then(
       result => dispatch(actions.success(result)),
       error => dispatch(actions.error(error))
     )
