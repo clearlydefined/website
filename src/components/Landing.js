@@ -73,9 +73,6 @@ export default class Landing extends Component {
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={4} className="valign-child">
-            {this.renderNeighborhood(adopt)}
-          </Col>
           <Col md={8}>
             <h2>Get ClearlyDefined</h2>
             <h3>
@@ -84,11 +81,11 @@ export default class Landing extends Component {
             This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
             </h3>
           </Col>
+          <Col md={4} className="valign-child">
+            {this.renderNeighborhood(adopt)}
+          </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={4} className="valign-child">
-            {this.renderNeighborhood(use)}
-          </Col>
           <Col md={8}>
             <h2>Use definitions</h2>
             <h3>
@@ -97,18 +94,21 @@ export default class Landing extends Component {
             This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
             </h3>
           </Col>
+          <Col md={4} className="valign-child">
+            {this.renderNeighborhood(use)}
+          </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={4} className="valign-child">
-            {this.renderNeighborhood(contribute)}
-          </Col>
           <Col md={8}>
-            <h2>Contribute or curate definitions</h2>
+            <h2>Contribute or curate data</h2>
             <h3>
               This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
               This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
             This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
             </h3>
+          </Col>
+          <Col md={4} className="valign-child">
+            {this.renderNeighborhood(contribute)}
           </Col>
         </Row>
       </Grid>
