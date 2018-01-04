@@ -8,7 +8,6 @@ import { MonacoDiffEditor } from 'react-monaco-editor'
 import deepDiff from 'deep-diff'
 import extend from 'extend'
 import yaml from 'js-yaml'
-import { ProposePrompt } from './.'
 
 export default class CurationReview extends Component {
 
@@ -17,7 +16,8 @@ export default class CurationReview extends Component {
     curationValue: PropTypes.object,
     packageOriginal: PropTypes.object,
     rawSummary: PropTypes.object,
-    proposeHandler: PropTypes.func.isRequired
+    actionHandler: PropTypes.func.isRequired,
+    actionText: PropTypes.string
   }
 
   static defaultProps = {
@@ -29,8 +29,7 @@ export default class CurationReview extends Component {
     this.editorDidMount = this.editorDidMount.bind(this)
     this.onCurationChange = this.onCurationChange.bind(this)
     this.onSummaryChange = this.onSummaryChange.bind(this)
-    this.promptDescription = this.promptDescription.bind(this)
-    this.doPropose = this.doPropose.bind(this)
+    this.doAction = this.doAction.bind(this)
   }
 
   componentDidMount() {
@@ -107,23 +106,15 @@ export default class CurationReview extends Component {
     return item ? yaml.safeDump(item, { sortKeys: true }) : ''
   }
 
-  doPropose(description) {
+  doAction(e) {
+    e.preventDefault()
     const patchString = this.state.curation.getModifiedEditor().getModel().getValue();
     const patch = yaml.safeLoad(patchString)
-    // TODO validate patch and ensure it is not the same as the original
-    if (!patch)
-      return
-    const proposal = { description, patch }
-    this.props.proposeHandler(proposal)
-  }
-
-  promptDescription(e) {
-    e.preventDefault()
-    this.refs.proposeModal.open()
+    this.props.actionHandler(patch)
   }
 
   render() {
-    const { curationOriginal, curationValue, packageOriginal } = this.props
+    const { curationOriginal, curationValue, packageOriginal, actionText } = this.props
     const { packagePreview } = this.state
     const options = {
       selectOnLineNumbers: true,
@@ -134,7 +125,6 @@ export default class CurationReview extends Component {
       <div>
         <h3>Curations</h3>
         <Row>
-          <ProposePrompt ref="proposeModal" proposeHandler={this.doPropose} />
           <Col sm={6}>
             <h4>Current</h4>
           </Col>
@@ -142,8 +132,8 @@ export default class CurationReview extends Component {
             <h4>Proposed</h4>
           </Col>
           <Col sm={2}>
-            <Button type="button" onClick={this.promptDescription}>
-              Propose
+            <Button type="button" onClick={this.doAction}>
+              {actionText}
             </Button>
           </Col>
         </Row>
@@ -167,8 +157,8 @@ export default class CurationReview extends Component {
             <h4>Proposed</h4>
           </Col>
           <Col sm={2}>
-            <Button type="button" onClick={this.promptDescription}>
-              Propose
+            <Button type="button" onClick={this.doAction}>
+              {actionText}
             </Button>
           </Col>
         </Row>

@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { uiNavigation, } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { CurationReview } from './'
+import { CurationReview, ProposePrompt } from './'
 import { ROUTE_CURATION } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import { getCurationAction, curateAction } from '../actions/curationActions'
@@ -17,6 +17,7 @@ class PageCuration extends Component {
     super(props)
     this.state = {}
     this.doPropose = this.doPropose.bind(this)
+    this.doAction = this.doAction.bind(this)
   }
 
   componentDidMount() {
@@ -49,36 +50,53 @@ class PageCuration extends Component {
     dispatch(previewPackageAction(token, currentSpec, {}))
   }
 
-  doPropose(spec) {
+  doPropose(description) {
     const { dispatch, token } = this.props
-    dispatch(curateAction(token, this.state.entitySpec, spec))
+    const { proposal, entitySpec } = this.state
+    const spec = { description, patch: proposal }
+    dispatch(curateAction(token, entitySpec, spec))
+  }
+
+  doMerge(spec) {
+    const url = `https://github.com/clearlydefined/curated-data-dev/pull/${spec.pr}`;
+    window.open(url, '_blank');
+  }
+
+  doAction(proposal) {
+    const { entitySpec } = this.state
+    if (entitySpec.pr)
+      return this.doMerge(entitySpec)
+    this.setState({ ...this.state, proposal })
+    this.refs.proposeModal.open()
   }
 
   render() {
     const { entitySpec } = this.state
     if (!entitySpec)
-      return null
+      return 'Navigate to a specific curation with a URL like https://clearlydefined.io/curation/npm/npmjs/-/lodash/4.17.4'
     const { currentCuration, proposedCuration, currentPackage, rawSummary } = this.props
     // wait to render until we have everything
     if (!(currentCuration.isFetched && currentPackage.isFetched && rawSummary.isFetched))
-      return null
+      return 'Loading the curations for the requested component'
     if (entitySpec.pr && !proposedCuration.isFetched)
-      return null    
+      return 'Loading the curations for the requested component'
     const curationOriginal = currentCuration.item
     const curationValue = proposedCuration.item
     const packageOriginal = currentPackage.item
     const packageValue = rawSummary.item
-    // wait for all the data before rendering the editors
+    const actionText = entitySpec.pr ? 'Show on GitHub' : 'Propose'
     return (
       <Grid className="main-container">
         <Row className="show-grid">
+          <ProposePrompt ref="proposeModal" proposeHandler={this.doPropose} />
           <Col md={12} >
             <CurationReview
               curationOriginal={curationOriginal}
               curationValue={curationValue}
               packageOriginal={packageOriginal}
               rawSummary={packageValue}
-              proposeHandler={this.doPropose} />
+              actionHandler={this.doAction}
+              actionText={actionText} />
           </Col>
         </Row>
       </Grid>
