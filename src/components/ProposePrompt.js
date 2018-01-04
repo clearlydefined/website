@@ -13,6 +13,7 @@ export default class ProposePrompt extends Component {
     this.state = { show: false }
     this.handleChange = this.handleChange.bind(this)
     this.okHandler = this.okHandler.bind(this)
+    this.close = this.close.bind(this)
   }
 
   static propTypes = {
@@ -23,7 +24,7 @@ export default class ProposePrompt extends Component {
   }
 
   open() {
-    this.setState({ show: true })
+    this.setState({ show: true, description: '' })
   }
 
   close() {

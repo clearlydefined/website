@@ -83,7 +83,7 @@ export default class CurationEditor extends Component {
               placeholder="Description of your changes"
               maxLength={100}
             />
-            <Button className='pull-right' type='submit' onClick={this.okHandler}>
+            <Button className='pull-right' type='button' onClick={this.okHandler}>
               Propose
             </Button>
           </Col>
