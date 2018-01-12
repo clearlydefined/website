@@ -113,8 +113,31 @@ export default class CurationReview extends Component {
     this.props.actionHandler(patch)
   }
 
+  renderDiffHeader(type, className = '') {
+    const { actionText } = this.props
+    return (
+      <Row className={className}>
+        <Col sm={2}>
+          <Button type="button">
+            Propose upstream
+          </Button>
+        </Col>
+        <Col sm={4}>
+          <h4>Current {type}</h4>
+        </Col>
+        <Col sm={2} smOffset={2}>
+          <h4>Proposed {type}</h4>
+        </Col>
+        <Col sm={2}>
+          <Button type="button" bsStyle='success' className='pull-right' onClick={this.doAction}>
+            {actionText}
+          </Button>
+        </Col>
+      </Row>)
+  }
+
   render() {
-    const { curationOriginal, curationValue, packageOriginal, actionText } = this.props
+    const { curationOriginal, curationValue, packageOriginal } = this.props
     const { packagePreview } = this.state
     const options = {
       selectOnLineNumbers: true,
@@ -123,20 +146,7 @@ export default class CurationReview extends Component {
     const requireConfig = { baseUrl: '/', paths: { vs: 'vs' }, url: '/vs/loader.js' }
     return (
       <div>
-        <h3>Curations</h3>
-        <Row>
-          <Col sm={6}>
-            <h4>Current</h4>
-          </Col>
-          <Col sm={4}>
-            <h4>Proposed</h4>
-          </Col>
-          <Col sm={2}>
-            <Button type="button" onClick={this.doAction}>
-              {actionText}
-            </Button>
-          </Col>
-        </Row>
+        {this.renderDiffHeader('curation')}
         <MonacoDiffEditor
           height='400'
           theme='vs-dark'
@@ -148,20 +158,8 @@ export default class CurationReview extends Component {
           editorDidMount={this.editorDidMount.bind(this, 'curation')}
           requireConfig={requireConfig}
         />
-        <h3>Effective results</h3>
-        <Row>
-          <Col sm={6}>
-            <h4>Current</h4>
-          </Col>
-          <Col sm={4}>
-            <h4>Proposed</h4>
-          </Col>
-          <Col sm={2}>
-            <Button type="button" onClick={this.doAction}>
-              {actionText}
-            </Button>
-          </Col>
-        </Row>
+
+        {this.renderDiffHeader('result', 'top-space')}
         <MonacoDiffEditor
           height='400'
           theme='vs-dark'

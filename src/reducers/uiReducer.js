@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { ROUTE_ROOT, ROUTE_CURATION, ROUTE_COMPONENTS, ROUTE_HARVEST, ROUTE_CURATE, ROUTE_ABOUT } from '../utils/routingConstants'
-import { UI_NAVIGATION } from '../actions/ui'
+import { ROUTE_ROOT, ROUTE_CURATE, ROUTE_COMPONENTS, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
+import { UI_NAVIGATION, UI_UPDATE_FILTER } from '../actions/ui'
 
 /**
  * protected:
@@ -19,14 +19,8 @@ const initialStateNavigation = [
     isSelected: true,
   },
   {
-    title: "Components",
+    title: "Browse",
     to: ROUTE_COMPONENTS,
-    protected: 1,
-    isSelected: false,
-  },
-  {
-    title: "Curations",
-    to: ROUTE_CURATION,
     protected: 1,
     isSelected: false,
   },
@@ -62,6 +56,17 @@ const navigation = (state = initialStateNavigation, action) => {
   }
 }
 
+const initialFilter = { value: null }
+const filter = (state = initialFilter, action) => {
+  switch (action.type) {
+    case UI_UPDATE_FILTER:
+      return { ...state, value: action.value }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
-  navigation
+  navigation,
+  filter
 })

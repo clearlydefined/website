@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, Row, Col, Jumbotron } from 'react-bootstrap'
+import { Grid, Row, Col } from 'react-bootstrap'
 
 export default class PageAbout extends Component {
 

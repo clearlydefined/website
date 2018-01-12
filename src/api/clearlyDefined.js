@@ -4,7 +4,7 @@
 import 'whatwg-fetch'
 import { toPairs } from 'lodash'
 
-export const API_LOCAL = 'http://localhost:5000'
+export const API_LOCAL = 'http://localhost:4000'
 export const API_DEVELOP = 'https://dev-api.clearlydefined.io'
 export const API_PROD = 'https://api.clearlydefined.io'
 export const apiHome = process.env.REACT_APP_SERVER || API_DEVELOP
@@ -37,6 +37,11 @@ export function curate(token, entity, spec) {
 
 export function getPackage(token, entity) {
   return get(url(`${PACKAGES}/${entity.toUrlPath()}`), token)
+}
+
+export async function getPackageList(token, prefix) {
+  const list = await get(url(`${PACKAGES}/${prefix || ''}`), token)
+  return { list }
 }
 
 export function previewPackage(token, entity, curation) {
