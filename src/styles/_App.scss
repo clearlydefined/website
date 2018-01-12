@@ -62,3 +62,27 @@
     text-align: center;
   }
 }
+
+.labelled-button {
+  display: inline-block;
+  width: 100%;
+  .btn {
+    margin-left: 10px;
+  }
+}
+
+.placeholder-message {
+  display: flex;
+  margin: 50px;
+  align-items: center;
+  justify-content: center;
+  color: #bdbdbd;
+}
+
+.spacer {
+  margin: 30px;
+}
+
+.top-space {
+  padding-top: 30px;
+}
