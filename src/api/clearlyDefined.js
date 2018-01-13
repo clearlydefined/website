@@ -15,6 +15,10 @@ const HARVEST = 'harvest'
 const PACKAGES = "packages"
 const ROOT = ''
 
+const packageListTTL = 60000
+let lastFetchPackageList = null
+let packageList = []
+
 function base64(value) {
   return Buffer.from(value).toString('base64')
 }
@@ -44,8 +48,12 @@ export function getPackage(token, entity) {
   return get(url(`${PACKAGES}/${entity.toUrlPath()}`), token)
 }
 
-export async function getPackageList(token, prefix) {
+export async function getPackageList(token, prefix, force = false) {
+  if (!force && lastFetchPackageList && (Date.now() - lastFetchPackageList < packageListTTL))
+    return { list: packageList}
   const list = await get(url(`${PACKAGES}/${prefix || ''}`), token)
+  lastFetchPackageList = Date.now()
+  packageList = list
   return { list }
 }
 
