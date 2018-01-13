@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap'
-import MonacoEditor from 'react-monaco-editor'
+import { MonacoEditorWrapper, Section } from './'
 import yaml from 'js-yaml'
 
 export default class HarvestForm extends Component {
@@ -49,23 +49,23 @@ export default class HarvestForm extends Component {
     const { template } = this.props
     const options = {
       selectOnLineNumbers: true
-    };
+    }
+    const actionButton =
+      <Button className='pull-right' bsStyle='success' type='button' onClick={this.okHandler}>
+        Queue
+      </Button>
     return (
-      <div>
-        <h3>Queue some components to be harvested</h3>
-        <MonacoEditor
+      <Section name={'Queue some components to be harvested'} actionButton={actionButton}>
+        <MonacoEditorWrapper
           height='400'
           language='yaml'
-          theme='vs-dark'
+          // theme='vs-dark'
           value={template}
           options={options}
           onChange={this.onChange}
           editorDidMount={this.editorDidMount}
         />
-        <Button className='pull-right' type='button' onClick={this.okHandler}>
-          Queue
-        </Button>
-      </div>
+      </Section >
     )
   }
 }

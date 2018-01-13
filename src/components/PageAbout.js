@@ -2,9 +2,16 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
+import { uiNavigation } from '../actions/ui'
+import { ROUTE_ABOUT } from '../utils/routingConstants'
 
-export default class PageAbout extends Component {
+class PageAbout extends Component {
+
+  componentDidMount() {
+    this.props.dispatch(uiNavigation({ to: ROUTE_ABOUT }))
+  }
 
   render() {
     return (
@@ -37,3 +44,8 @@ export default class PageAbout extends Component {
     )
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  return { token: state.session.token }
+}
+export default connect(mapStateToProps)(PageAbout)

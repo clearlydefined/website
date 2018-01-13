@@ -3,7 +3,7 @@
 
 import { combineReducers } from 'redux'
 import { ROUTE_ROOT, ROUTE_CURATE, ROUTE_COMPONENTS, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
-import { UI_NAVIGATION, UI_UPDATE_FILTER } from '../actions/ui'
+import { UI_NAVIGATION, UI_CURATE_UPDATE_FILTER, UI_BROWSE_UPDATE_FILTER } from '../actions/ui'
 
 /**
  * protected:
@@ -56,11 +56,29 @@ const navigation = (state = initialStateNavigation, action) => {
   }
 }
 
-const initialFilter = { value: null }
-const filter = (state = initialFilter, action) => {
+const initialCurate = { filter: null }
+const curate = (state = initialCurate, action) => {
   switch (action.type) {
-    case UI_UPDATE_FILTER:
-      return { ...state, value: action.value }
+    case UI_CURATE_UPDATE_FILTER:
+      return { ...state, filter: action.value }
+    default:
+      return state
+  }
+}
+
+const initialBrowse = { filter: null }
+const browse = (state = initialBrowse, action) => {
+  switch (action.type) {
+    case UI_BROWSE_UPDATE_FILTER:
+      return { ...state, filter: action.value }
+    default:
+      return state
+  }
+}
+
+const initialHarvest = { }
+const harvest = (state = initialHarvest, action) => {
+  switch (action.type) {
     default:
       return state
   }
@@ -68,5 +86,7 @@ const filter = (state = initialFilter, action) => {
 
 export default combineReducers({
   navigation,
-  filter
+  browse,
+  curate,
+  harvest
 })

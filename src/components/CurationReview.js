@@ -146,31 +146,34 @@ export default class CurationReview extends Component {
     const requireConfig = { baseUrl: '/', paths: { vs: 'vs' }, url: '/vs/loader.js' }
     return (
       <div>
-        {this.renderDiffHeader('curation')}
-        <MonacoDiffEditor
-          height='400'
-          theme='vs-dark'
-          language='yaml'
-          original={this.getStringValue(curationOriginal)}
-          value={this.getStringValue(curationValue)}
-          options={options}
-          // onChange={this.onCurationChange}
-          editorDidMount={this.editorDidMount.bind(this, 'curation')}
-          requireConfig={requireConfig}
-        />
+        {this.renderDiffHeader('curation', 'top-space')}
+        <div className='editor-wrapper'>
+          <MonacoDiffEditor
+            height='400'
+            language='yaml'
+            original={this.getStringValue(curationOriginal)}
+            value={this.getStringValue(curationValue)}
+            options={options}
+            // onChange={this.onCurationChange}
+            editorDidMount={this.editorDidMount.bind(this, 'curation')}
+            requireConfig={requireConfig}
+          />
+        </div>
 
         {this.renderDiffHeader('result', 'top-space')}
-        <MonacoDiffEditor
-          height='400'
-          theme='vs-dark'
-          language='yaml'
-          original={this.getStringValue(packageOriginal)}
-          value={packagePreview}
-          options={options}
-          onChange={this.onSummaryChange}
-          editorDidMount={this.editorDidMount.bind(this, 'result')}
-          requireConfig={requireConfig}
-        />
+        {/* for some bizarre reason the diff editor cannot be wrapped in a separate component. Turns into an editor! */}
+        <div className='editor-wrapper'>
+          <MonacoDiffEditor
+            height='400'
+            language='yaml'
+            original={this.getStringValue(packageOriginal)}
+            value={packagePreview}
+            options={options}
+            onChange={this.onSummaryChange}
+            editorDidMount={this.editorDidMount.bind(this, 'result')}
+            requireConfig={requireConfig}
+          />
+        </div>
       </div>
     )
   }

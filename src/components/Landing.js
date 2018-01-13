@@ -2,8 +2,11 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Grid, Row, Col, Jumbotron } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
+import { ROUTE_ROOT } from '../utils/routingConstants'
+import { uiNavigation } from '../actions/ui'
 
 const described = 'vcard'
 const secure = 'lock'
@@ -12,7 +15,11 @@ const use = 'sign-out'
 const contribute = 'sign-in'
 const adopt = 'toggle-on'
 
-export default class Landing extends Component {
+class Landing extends Component {
+
+  componentDidMount() {
+    this.props.dispatch(uiNavigation({ to: ROUTE_ROOT }))
+  }
 
   renderNeighborhood(name) {
     return (
@@ -115,3 +122,8 @@ export default class Landing extends Component {
     )
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  return { token: state.session.token }
+}
+export default connect(mapStateToProps)(Landing)

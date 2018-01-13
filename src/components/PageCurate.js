@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { uiNavigation, uiUpdateFilter, } from '../actions/ui'
+import { uiNavigation, uiCurateUpdateFilter, } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { CurationReview, ProposePrompt } from './'
 import { ROUTE_CURATE } from '../utils/routingConstants'
@@ -25,27 +25,34 @@ class PageCurate extends Component {
 
   componentDidMount() {
     const { dispatch, token, path, filterValue } = this.props
-    this.handleNewSpec(path)
+    const pathToShow = path ? path : filterValue
+    this.handleNewSpec(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_CURATE }))
-    dispatch(getPackageListAction(token, filterValue))
+    dispatch(getPackageListAction(token))
   }
 
   componentWillReceiveProps(newProps) {
-    // If the spec is changing, kick off some loading to get all the state in order
+    // if the path is changing, update the filter to match. That will trigger getting the content
     const newPath = newProps.path
-    if (newPath && this.props.path !== newPath)
-      this.handleNewSpec(newPath)
+    if (this.props.path !== newPath)
+      return this.props.dispatch(uiCurateUpdateFilter(newPath))
+
+    // if the filter is changing (either on its own or because of the path), get the new content
+    const newFilter = newProps.filterValue
+    if (this.props.filterValue !== newFilter)
+      this.handleNewSpec(newFilter)
   }
 
   // A new spec has been seleted, fetch all the details
-  handleNewSpec(path) {
-    if (!path)
-      return
+  handleNewSpec(newFilter) {
     const { dispatch, token } = this.props
-    const fullSpec = EntitySpec.fromUrl('cd:' + path);
+    if (!newFilter) {
+      // TODO clear out the "current" values as we are not showing anything.
+      return
+    }
+    const fullSpec = EntitySpec.fromUrl('cd:' + newFilter);
     this.setState({ ...this.state, entitySpec: fullSpec })
     const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null });
-    this.props.dispatch(uiUpdateFilter(path))
     if (fullSpec.pr) {
       dispatch(getCurationAction(token, fullSpec))
       dispatch(getPackageAction(token, fullSpec))
@@ -75,9 +82,8 @@ class PageCurate extends Component {
     this.refs.proposeModal.open()
   }
 
-  filterChanged(value) {
-    this.props.dispatch(uiUpdateFilter(value))
-    this.gotoValue(value)
+  filterChanged(newFilter) {
+    this.props.dispatch(uiCurateUpdateFilter(newFilter))
   }
 
   gotoValue(value) {
@@ -91,7 +97,7 @@ class PageCurate extends Component {
   renderCurationView() {
     const { entitySpec } = this.state
     const { currentCuration, proposedCuration, currentPackage, rawSummary, filterValue } = this.props
-    if (!filterValue)
+    if (!filterValue || !entitySpec)
       return this.renderPlaceholder('Search for some part of a component name to see details')
     // wait to render until we have everything
     if (!(currentCuration.isFetched && currentPackage.isFetched && rawSummary.isFetched))
@@ -159,7 +165,7 @@ function mapStateToProps(state, ownProps) {
     currentPackage: state.package.current,
     proposedCuration: state.curation.proposed,
     rawSummary: state.package.preview,
-    filterValue: state.ui.filter.value,
+    filterValue: state.ui.curate.filter,
     filterOptions: state.package.list
   }
 }

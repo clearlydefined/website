@@ -20,11 +20,11 @@ export function getPackageAction(token, entity) {
   }
 }
 
-export function getPackageListAction(token, prefix) {
+export function getPackageListAction(token, prefix, force) {
   return (dispatch) => {
     const actions = asyncActions(PACKAGE_LIST)
     dispatch(actions.start())
-    return getPackageList(token, prefix).then(
+    return getPackageList(token, prefix, force).then(
       result => dispatch(actions.success(result)),
       error => dispatch(actions.error(error))
     )

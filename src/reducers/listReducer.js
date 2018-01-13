@@ -6,6 +6,7 @@ import * as _ from 'lodash'
 export const initialState = {
   isFetching: false,
   list: [],
+  transformedList: [],
   filter: null,
   error: null,
   hasMore: false,
@@ -21,7 +22,14 @@ const add = (list, item) => {
   return list ? [...list, item] : list
 }
 
-export default (name = '') => {
+function computeTranformed(state, append, list, transformer) {
+  if (!transformer)
+    return state.transformedList 
+  const transformed = list.map(entry => transformer(entry))
+  return append ? state.transformedList.concat(transformed) : transformed
+}
+
+export default (name = '', transformer = null) => {
   return (state = initialState, action) => {
     // if there is a group on the action then it must match this reducer's name
     // otherwise the action type must match the name
@@ -53,21 +61,24 @@ export default (name = '') => {
         hasMore: false,
         error: error,
         filter: filter,
-        list: []
+        list: [],
+        transformedList: []
       }
     }
 
     if (result.add) {
       return {
         ...state,
-        list: add(state.list, result.add)
+        list: add(state.list, result.add),
+        transformedList: transformer ? add(state.transformedList, transformer(result.add)) : state.transformedList
       }
     }
 
     if (result.remove) {
       return {
         ...state,
-        list: remove(state.list, result.remove)
+        list: remove(state.list, result.remove),
+        transformedList: transformer ? remove(state.transformedList, transformer(result.add)) : state.transformedList
       }
     }
 
@@ -77,6 +88,7 @@ export default (name = '') => {
         isFetching: false,
         filter: filter,
         list: (append ? state.list.concat(result.list) : result.list),
+        transformedList: computeTranformed(state, append, result.list, transformer),
         hasMore: result.hasMore,
         headers: result.headers
       }

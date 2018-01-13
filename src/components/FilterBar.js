@@ -8,11 +8,6 @@ import 'react-select/dist/react-select.css'
 
 export default class FilterBar extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = { options: [] }
-  }
-
   static propTypes = {
     value: PropTypes.string,
     options: PropTypes.any,
@@ -22,19 +17,7 @@ export default class FilterBar extends Component {
 
   static defaultProps = {
     value: null,
-    options: []
-  }
-
-  componentWillReceiveProps(newProps) {
-    const list = newProps.options
-    if (list.isFetching)
-      return
-    if (!list.list || list.list.length === 0)
-      return this.setState({ ...this.state, options: [] })
-    this.setState({
-      ...this.state,
-      options: list.list.map(entry => { return { path: entry } })
-    })
+    options: {}
   }
 
   render() {
@@ -47,7 +30,7 @@ export default class FilterBar extends Component {
         placeholder='Component search...'
         value={value}
         onChange={onChange}
-        options={this.state.options}
+        options={options.transformedList}
         isLoading={options.isFetching}
         searchable
         simpleValue
