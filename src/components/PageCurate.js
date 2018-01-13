@@ -42,10 +42,10 @@ class PageCurate extends Component {
     if (!path)
       return
     const { dispatch, token } = this.props
+    dispatch(uiUpdateFilter(path))
     const fullSpec = EntitySpec.fromUrl('cd:' + path);
     this.setState({ ...this.state, entitySpec: fullSpec })
     const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null });
-    this.props.dispatch(uiUpdateFilter(path))
     if (fullSpec.pr) {
       dispatch(getCurationAction(token, fullSpec))
       dispatch(getPackageAction(token, fullSpec))

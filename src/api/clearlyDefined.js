@@ -23,6 +23,11 @@ export function checkPassword(user, password) {
   return get(url(ROOT), base64(user + ":" + password))
 }
 
+export function getHarvestResults(token, entity) {
+  // TODO ensure that the entity has data all the way down to the revision (and no more)
+  return get(url(`${HARVEST}/${entity.toUrlPath()}`, { form: 'raw' }), token)
+}
+
 export function harvest(token, spec) {
   return post(url(HARVEST), token, spec)
 }

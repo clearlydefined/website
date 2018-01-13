@@ -6,12 +6,14 @@ import sessionReducer from './sessionReducer'
 import uiReducer from './uiReducer'
 import curationReducer from './curationReducer'
 import packageReducer from './packageReducer'
+import harvestReducer from './harvestReducer'
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   ui: uiReducer,
   package: packageReducer,
-  curation: curationReducer
+  curation: curationReducer,
+  harvest: harvestReducer
 })
 
 export default rootReducer

@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap'
-import MonacoEditor from 'react-monaco-editor'
+import { MonacoEditorWrapper } from './'
 import yaml from 'js-yaml'
 
 export default class HarvestForm extends Component {
@@ -49,14 +49,14 @@ export default class HarvestForm extends Component {
     const { template } = this.props
     const options = {
       selectOnLineNumbers: true
-    };
+    }
     return (
       <div>
         <h3>Queue some components to be harvested</h3>
-        <MonacoEditor
+        <MonacoEditorWrapper
           height='400'
           language='yaml'
-          theme='vs-dark'
+          // theme='vs-dark'
           value={template}
           options={options}
           onChange={this.onChange}

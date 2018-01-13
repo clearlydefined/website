@@ -147,30 +147,33 @@ export default class CurationReview extends Component {
     return (
       <div>
         {this.renderDiffHeader('curation')}
-        <MonacoDiffEditor
-          height='400'
-          theme='vs-dark'
-          language='yaml'
-          original={this.getStringValue(curationOriginal)}
-          value={this.getStringValue(curationValue)}
-          options={options}
-          // onChange={this.onCurationChange}
-          editorDidMount={this.editorDidMount.bind(this, 'curation')}
-          requireConfig={requireConfig}
-        />
+        <div className='editor-wrapper'>
+          <MonacoDiffEditor
+            height='400'
+            language='yaml'
+            original={this.getStringValue(curationOriginal)}
+            value={this.getStringValue(curationValue)}
+            options={options}
+            // onChange={this.onCurationChange}
+            editorDidMount={this.editorDidMount.bind(this, 'curation')}
+            requireConfig={requireConfig}
+          />
+        </div>
 
         {this.renderDiffHeader('result', 'top-space')}
-        <MonacoDiffEditor
-          height='400'
-          theme='vs-dark'
-          language='yaml'
-          original={this.getStringValue(packageOriginal)}
-          value={packagePreview}
-          options={options}
-          onChange={this.onSummaryChange}
-          editorDidMount={this.editorDidMount.bind(this, 'result')}
-          requireConfig={requireConfig}
-        />
+        {/* for some bizarre reason the diff editor cannot be wrapped in a separate component. Turns into an editor! */}
+        <div className='editor-wrapper'>
+          <MonacoDiffEditor
+            height='400'
+            language='yaml'
+            original={this.getStringValue(packageOriginal)}
+            value={packagePreview}
+            options={options}
+            onChange={this.onSummaryChange}
+            editorDidMount={this.editorDidMount.bind(this, 'result')}
+            requireConfig={requireConfig}
+          />
+        </div>
       </div>
     )
   }

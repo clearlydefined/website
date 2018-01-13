@@ -2,6 +2,11 @@
 // SPDX-License-Identifier: MIT
 
 export default class EntitySpec {
+
+  static fromPath(path) {
+    return EntitySpec.fromUrl(`cd:/${path}`)
+  }
+
   static fromUrl(url) {
     // eslint-disable-next-line
     const [full, type, provider, namespace, name, revision, prSpec] = url.match(/.*:\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/)
