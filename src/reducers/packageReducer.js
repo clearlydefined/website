@@ -11,5 +11,5 @@ export default combineReducers({
   current: new itemReducer(PACKAGE_GET, item => yaml.safeDump(item, { sortKeys: true })),
   proposed: new itemReducer(PACKAGE_GET_PROPOSED),
   preview: new itemReducer(PACKAGE_PREVIEW),
-  list: new listReducer(PACKAGE_LIST)
+  list: new listReducer(PACKAGE_LIST, item => { return { path: item } })
 })
