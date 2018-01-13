@@ -146,7 +146,7 @@ export default class CurationReview extends Component {
     const requireConfig = { baseUrl: '/', paths: { vs: 'vs' }, url: '/vs/loader.js' }
     return (
       <div>
-        {this.renderDiffHeader('curation')}
+        {this.renderDiffHeader('curation', 'top-space')}
         <div className='editor-wrapper'>
           <MonacoDiffEditor
             height='400'

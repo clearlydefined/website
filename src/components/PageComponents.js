@@ -8,8 +8,8 @@ import 'react-select/dist/react-select.css'
 import { getPackageListAction, getPackageAction } from '../actions/packageActions'
 import { getCurationAction } from '../actions/curationActions'
 import { getHarvestResultsAction } from '../actions/harvestActions'
-import { uiUpdateFilter, uiNavigation } from '../actions/ui'
-import { FilterBar, MonacoEditorWrapper } from './'
+import { uiBrowseUpdateFilter, uiNavigation } from '../actions/ui'
+import { FilterBar, MonacoEditorWrapper, Section } from './'
 import EntitySpec from '../utils/entitySpec';
 import { ROUTE_COMPONENTS } from '../utils/routingConstants';
 
@@ -23,34 +23,39 @@ class PageComponents extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, token, filterValue, path } = this.props
-    this.handleNewSpec(path)
+    const { dispatch, token, path, filterValue } = this.props
+    const pathToShow = path ? path : filterValue
+    this.handleNewSpec(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_COMPONENTS }))
-    dispatch(getPackageListAction(token, filterValue))
+    dispatch(getPackageListAction(token))
   }
 
   componentWillReceiveProps(newProps) {
-    // If the spec is changing, kick off some loading to get all the state in order
+    // if the path is changing, update the filter to match. That will trigger getting the content
     const newPath = newProps.path
-    if (newPath && this.props.path !== newPath)
-      this.handleNewSpec(newPath)
+    if (this.props.path !== newPath)
+      return this.props.dispatch(uiBrowseUpdateFilter(newPath))
+
+    // if the filter is changing (either on its own or because of the path), get the new content
+    const newFilter = newProps.filterValue
+    if (this.props.filterValue !== newFilter)
+      this.handleNewSpec(newFilter)
   }
 
-  handleNewSpec(path) {
-    if (!path)
-      return
+  handleNewSpec(newFilter) {
     const { dispatch, token } = this.props
-    dispatch(uiUpdateFilter(path))
-    const spec = EntitySpec.fromPath(path)
+    if (!newFilter) {
+      // TODO clear out the "current" values as we are not showing anything.
+      return
+    }
+    const spec = EntitySpec.fromPath(newFilter)
     dispatch(getPackageAction(token, spec))
     dispatch(getCurationAction(token, spec))
     dispatch(getHarvestResultsAction(token, spec))
   }
 
-  filterChanged(path) {
-    const { dispatch, token } = this.props
-    dispatch(uiUpdateFilter(token, path))
-    this.gotoValue(path)
+  filterChanged(newFilter) {
+    this.props.dispatch(uiBrowseUpdateFilter(newFilter))
   }
 
   gotoValue(value) {
@@ -58,8 +63,8 @@ class PageComponents extends Component {
   }
 
   editorDidMount(editor, monaco) {
-    // this.setState({ ...this.state, editor: editor })
-    // editor.focus()
+    this.setState({ ...this.state, editor: editor })
+    editor.focus()
   }
 
   renderMissing(value) {
@@ -68,25 +73,11 @@ class PageComponents extends Component {
     )
   }
 
-  renderTitle(name, actionButton = null) {
-    const Name = name.charAt(0).toUpperCase() + name.slice(1)
-    return (
-      <Row className='section-header'>
-        <Col sm={10}>
-          <div className='section-title'>{Name}</div>
-        </Col>
-        <Col sm={2}>
-          <div className='section-button'>{actionButton}</div>
-        </Col>
-      </Row>)
-  }
-
   renderData(value, name, type = 'json', actionButton = null) {
     return (
-      <div>
-        {this.renderTitle(name, actionButton)}
+      <Section name={name} actionButton={actionButton}>
         {this.renderInnerData(value, name, type, actionButton)}
-      </div>)
+      </Section>)
   }
 
   renderInnerData(value, name, type = 'json', actionButton = null) {
@@ -132,7 +123,9 @@ class PageComponents extends Component {
     return (
       <Grid className='main-container'>
         <Row className="show-grid spacer">
-          <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
+          <Col md={10} mdOffset={1}>
+            <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
+          </Col>
         </Row>
         <Row className='show-grid'>
           {this.renderData(component, 'results', 'yaml', this.renderCurationButton())}
@@ -148,7 +141,7 @@ function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
-    filterValue: state.ui.filter.value,
+    filterValue: state.ui.browse.filter,
     filterOptions: state.package.list,
     component: state.package.current,
     curation: state.curation.current,
