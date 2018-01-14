@@ -59,7 +59,6 @@ export default class HarvestForm extends Component {
         <MonacoEditorWrapper
           height='400'
           language='yaml'
-          // theme='vs-dark'
           value={template}
           options={options}
           onChange={this.onChange}
