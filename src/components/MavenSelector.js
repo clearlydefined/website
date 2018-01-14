@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Select, { Async } from 'react-select';
 
-export default class GitHubSelector extends Component {
+export default class MavenSelector extends Component {
 
   static propTypes = {
     onChange: PropTypes.func,
@@ -26,23 +26,18 @@ export default class GitHubSelector extends Component {
   }
 
   async getOptions(value) {
-    if (!value)
+    if (!value) 
       return Promise.resolve({ options: [] })
-
-    const [login, repo] = value.split('/')
-    if (!repo && !value.endsWith('/')) {
-      const response = await fetch(`https://api.github.com/search/users?q=${login}+repos:%3E0`)
-      const json = await response.json()
-      return { options: json.items.map(item => { return { id: item.login } }) }
-    }
-    const response = await fetch(`https://api.github.com/search/repositories?q=${repo}+user:${login}+in:name+fork:true`)
+    const response = await fetch(`http://npmsearch.com/query?q=${value}&fields=name`)
     const json = await response.json()
-    return { options: json.items.map(item => { return { id: item.full_name } }) }
+    const options = json.results.map(entry => { return { id: entry.name[0]}})
+    return { options }
   }
 
   cleanInput(inputValue) {
     // Strip all whitespace characters from the input
-    return inputValue.replace(/[\s]/g, '')
+    // return inputValue.replace(/[\s]/g, '')
+    return ''  // strip all chars as Maven is not yet supported
   }
 
   onChange(value) {
@@ -73,7 +68,7 @@ export default class GitHubSelector extends Component {
       loadOptions={this.getOptions}
       simpleValue
       clearable
-      placeholder='Enter a GitHub "login/repo" to harvest'
+      placeholder='Maven support coming soon...'
       backspaceRemoves={backspaceRemoves}
     />)
   }

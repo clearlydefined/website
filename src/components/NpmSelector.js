@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Select, { Async } from 'react-select';
 
-export default class GitHubSelector extends Component {
+export default class NpmSelector extends Component {
 
   static propTypes = {
     onChange: PropTypes.func,
@@ -21,23 +21,27 @@ export default class GitHubSelector extends Component {
   constructor(props) {
     super(props)
     this.getOptions = this.getOptions.bind(this)
-    this.onChange = this.onChange.bind(this)
     this.cleanInput = this.cleanInput.bind(this)
   }
 
-  async getOptions(value) {
-    if (!value)
-      return Promise.resolve({ options: [] })
+  // version of getting options from NpmSearch. They seem somewhat broken right now so leaving here but disabling
+  // async getOptionsNpmSearch(value) {
+  //   if (!value) 
+  //     return Promise.resolve({ options: [] })
+  //   const response = await fetch(`https://npmsearch.com/query?q=${value}&fields=name`)
+  //   const json = await response.json()
+  //   const options = json.results.map(entry => { return { id: entry.name[0]}})
+  //   return { options }
+  // }
 
-    const [login, repo] = value.split('/')
-    if (!repo && !value.endsWith('/')) {
-      const response = await fetch(`https://api.github.com/search/users?q=${login}+repos:%3E0`)
-      const json = await response.json()
-      return { options: json.items.map(item => { return { id: item.login } }) }
-    }
-    const response = await fetch(`https://api.github.com/search/repositories?q=${repo}+user:${login}+in:name+fork:true`)
+  async getOptions(value) {
+    if (!value) 
+      return Promise.resolve({ options: [] })
+    // TODO decide if we want to tone down their scoring effect
+    const response = await fetch(`https://api.npms.io/v2/search?q=${value}`)
     const json = await response.json()
-    return { options: json.items.map(item => { return { id: item.full_name } }) }
+    const options = json.results.map(entry => { return { id: entry.package.name}})
+    return { options }
   }
 
   cleanInput(inputValue) {
@@ -45,25 +49,11 @@ export default class GitHubSelector extends Component {
     return inputValue.replace(/[\s]/g, '')
   }
 
-  onChange(value) {
-    if (!value)
-      return
-    if (value.indexOf('/') > 0 && !value.endsWith('/'))
-      return this.props.onChange(value)
-    const newValue = value + '/'
-    this.select.setInputValue(newValue)
-  }
-
   render() {
-    const { gotoValue, backspaceRemoves } = this.props
-    const kids = props => <Select {...props}
-      ref={
-        select => this.select = this.select || select}
-    />
+    const { onChange, gotoValue, backspaceRemoves } = this.props
     return (<Async
-      children={kids}
       multi={false}
-      onChange={this.onChange}
+      onChange={onChange}
       onBlurResetsInput={false}
       onCloseResetsInput={false}
       onValueClick={gotoValue}
@@ -73,7 +63,7 @@ export default class GitHubSelector extends Component {
       loadOptions={this.getOptions}
       simpleValue
       clearable
-      placeholder='Enter a GitHub "login/repo" to harvest'
+      placeholder='Enter an NPM name to harvest'
       backspaceRemoves={backspaceRemoves}
     />)
   }
