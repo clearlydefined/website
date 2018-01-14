@@ -3,7 +3,7 @@
 
 import { combineReducers } from 'redux'
 import { ROUTE_ROOT, ROUTE_CURATE, ROUTE_COMPONENTS, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
-import { UI_NAVIGATION, UI_CURATE_UPDATE_FILTER, UI_BROWSE_UPDATE_FILTER } from '../actions/ui'
+import { UI_NAVIGATION, UI_CURATE_UPDATE_FILTER, UI_BROWSE_UPDATE_FILTER, UI_HARVEST_UPDATE_FILTER } from '../actions/ui'
 
 /**
  * protected:
@@ -76,9 +76,11 @@ const browse = (state = initialBrowse, action) => {
   }
 }
 
-const initialHarvest = { }
+const initialHarvest = { filter: null }
 const harvest = (state = initialHarvest, action) => {
   switch (action.type) {
+    case UI_HARVEST_UPDATE_FILTER:
+      return { ...state, filter: action.value }
     default:
       return state
   }
