@@ -32,8 +32,8 @@ export default class Footer extends Component {
       <Col sm={4} className="Footer-element">
         <SocialIcons className="Footer-socials" entity={socials} />
       </Col>
-      <Col sm={4} className="Footer-element">
-        We are ClearlyDefined. You?
+      <Col sm={4} className="Footer-element Footer-center">
+        Are you ClearlyDefined?
       </Col>
       <Col sm={4} className="Footer-element">
         <div className="pull-right">{colorize('© ClearlyDefined')}</div>
