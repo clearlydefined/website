@@ -3,7 +3,9 @@
 
 import { combineReducers } from 'redux'
 import { ROUTE_ROOT, ROUTE_CURATE, ROUTE_COMPONENTS, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
-import { UI_NAVIGATION, UI_CURATE_UPDATE_FILTER, UI_BROWSE_UPDATE_FILTER, UI_HARVEST_UPDATE_FILTER } from '../actions/ui'
+import { UI_NAVIGATION, UI_CURATE_UPDATE_FILTER, UI_BROWSE_UPDATE_FILTER, UI_HARVEST_UPDATE_FILTER, UI_HARVEST_UPDATE_QUEUE } from '../actions/ui'
+import listReducer, { initialState } from './listReducer';
+import { isEqual } from 'lodash'
 
 /**
  * protected:
@@ -76,11 +78,14 @@ const browse = (state = initialBrowse, action) => {
   }
 }
 
-const initialHarvest = { filter: null }
+const harvestQueue = listReducer(UI_HARVEST_UPDATE_QUEUE, null, isEqual)
+const initialHarvest = { filter: null, requestQueue: initialState }
 const harvest = (state = initialHarvest, action) => {
   switch (action.type) {
     case UI_HARVEST_UPDATE_FILTER:
       return { ...state, filter: action.value }
+    case UI_HARVEST_UPDATE_QUEUE:
+      return { ...state, requestQueue: harvestQueue(state.requestQueue, action) }
     default:
       return state
   }

@@ -10,7 +10,7 @@ export default class MonacoEditorWrapper extends Component {
   render() {
     const requireConfig = { baseUrl: '/', paths: { vs: 'vs' }, url: '/vs/loader.js' }
     return (
-      <div className='editor-wrapper'>
+      <div className='section-body'>
         <MonacoEditor {...this.props} requireConfig={requireConfig} />
       </div>
     )

@@ -14,22 +14,24 @@ export const initialState = {
   data: null
 }
 
-const remove = (list, item) => {
-  return list ? _.filter(list, (element) => {return element.id !== item.id } ) : list
+const remove = (list, item, comparator) => {
+  const test = comparator ? element => !comparator(element, item) : element => element !== item
+  return list ? _.filter(list, test) : list
 }
 
-const add = (list, item) => {
-  return list ? [...list, item] : list
+const add = (list, item, comparator) => {
+  const test = comparator ? element => comparator(element, item) : element => element === item
+  return list && !(_.find(list, test)) ? [...list, item] : list
 }
 
 function computeTranformed(state, append, list, transformer) {
   if (!transformer)
-    return state.transformedList 
+    return state.transformedList
   const transformed = list.map(entry => transformer(entry))
   return append ? state.transformedList.concat(transformed) : transformed
 }
 
-export default (name = '', transformer = null) => {
+export default (name = '', transformer = null, comparator = null) => {
   return (state = initialState, action) => {
     // if there is a group on the action then it must match this reducer's name
     // otherwise the action type must match the name
@@ -69,7 +71,7 @@ export default (name = '', transformer = null) => {
     if (result.add) {
       return {
         ...state,
-        list: add(state.list, result.add),
+        list: add(state.list, result.add, comparator),
         transformedList: transformer ? add(state.transformedList, transformer(result.add)) : state.transformedList
       }
     }
@@ -77,7 +79,7 @@ export default (name = '', transformer = null) => {
     if (result.remove) {
       return {
         ...state,
-        list: remove(state.list, result.remove),
+        list: remove(state.list, result.remove, comparator),
         transformedList: transformer ? remove(state.transformedList, transformer(result.add)) : state.transformedList
       }
     }

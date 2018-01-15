@@ -105,7 +105,7 @@ class PageComponents extends Component {
 
   renderPlaceholder(message) {
     return (
-      <div className='placeholder-message inline placeholder-wrapper'>
+      <div className='placeholder-message inline section-body'>
         <span>{message}</span>
       </div>)
   }

@@ -49,7 +49,7 @@ export default class GitHubSelector extends Component {
     if (!value)
       return
     if (value.indexOf('/') > 0 && !value.endsWith('/'))
-      return this.props.onChange(value)
+      return this.props.onChange && this.props.onChange({ type: 'git', provider: 'github', name: value})
     const newValue = value + '/'
     this.select.setInputValue(newValue)
   }

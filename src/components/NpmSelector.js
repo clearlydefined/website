@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Select, { Async } from 'react-select';
+import { Async } from 'react-select';
 
 export default class NpmSelector extends Component {
 
@@ -22,6 +22,7 @@ export default class NpmSelector extends Component {
     super(props)
     this.getOptions = this.getOptions.bind(this)
     this.cleanInput = this.cleanInput.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   // version of getting options from NpmSearch. They seem somewhat broken right now so leaving here but disabling
@@ -33,6 +34,11 @@ export default class NpmSelector extends Component {
   //   const options = json.results.map(entry => { return { id: entry.name[0]}})
   //   return { options }
   // }
+
+  onChange(value) {
+    const { onChange } = this.props
+    onChange && onChange({ type: 'npm', provider: 'npmjs', name: value})
+  }
 
   async getOptions(value) {
     if (!value) 
@@ -50,10 +56,10 @@ export default class NpmSelector extends Component {
   }
 
   render() {
-    const { onChange, gotoValue, backspaceRemoves } = this.props
+    const { gotoValue, backspaceRemoves } = this.props
     return (<Async
       multi={false}
-      onChange={onChange}
+      onChange={this.onChange}
       onBlurResetsInput={false}
       onCloseResetsInput={false}
       onValueClick={gotoValue}
