@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_HARVEST } from '../utils/routingConstants'
 import { harvestAction } from '../actions/harvestActions'
-import { HarvestQueueList, GitHubSelector, NpmSelector, MavenSelector, Section } from './'
+import { HarvestQueueList, GitHubSelector, NpmSelector, MavenSelector, NuGetSelector, Section } from './'
 import { uiNavigation, uiHarvestUpdateQueue } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
@@ -57,8 +57,9 @@ class PageHarvest extends Component {
     return (
       <ButtonGroup>
         <Button name='github' onClick={this.onClick} active={activeProvider === 'github'}>GitHub</Button>
-        <Button name='npm' onClick={this.onClick} active={activeProvider === 'npm'}>NPM</Button>
         <Button name='maven' onClick={this.onClick} active={activeProvider === 'maven'}>Maven</Button>
+        <Button name='npm' onClick={this.onClick} active={activeProvider === 'npm'}>NPM</Button>
+        <Button name='nuget' onClick={this.onClick} active={activeProvider === 'nuget'}>NuGet</Button>
       </ButtonGroup>
     )
   }
@@ -77,13 +78,14 @@ class PageHarvest extends Component {
     return (
       <Grid className='main-container'>
         <Row className='show-grid spacer'>
-          <Col md={3} mdOffset={1}>
+          <Col md={4}>
             {this.renderProviderButtons()}
           </Col>
           <Col md={7}>
             {activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'npm' && <NpmSelector onChange={this.onAddRequest} />}
             {activeProvider === 'maven' && <MavenSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'npm' && <NpmSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'nuget' && <NuGetSelector onChange={this.onAddRequest} />}
           </Col>
         </Row>
         <Section name={'Components to harvest'} actionButton={this.renderActionButton()}>

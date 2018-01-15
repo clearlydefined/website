@@ -3,7 +3,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types'
-import { Alert } from 'react-bootstrap'
 import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker } from './'
 import { clone } from 'lodash'
 import FontAwesome from 'react-fontawesome'
