@@ -16,6 +16,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
     "react-select": "^1.2.0",
+    "react-select-plus": "^1.1.0",
     "react-virtualized": "^9.17.1",
     "redux": "^3.7.2",
     "redux-persist": "^4.6.0",

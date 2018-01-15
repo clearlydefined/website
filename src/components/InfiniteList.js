@@ -16,7 +16,9 @@ export default class InfiniteList extends React.Component {
     isRowLoaded: PropTypes.func,
     loadMoreRows: PropTypes.func,
     rowRenderer: PropTypes.func,
-    noRowsRenderer: PropTypes.func
+    noRowsRenderer: PropTypes.func,
+    sortOrder: PropTypes.string,
+    contentSeq: PropTypes.number  // value upper levels can change to sign non-shallow content change
   }
 
   static defaultProps = {
@@ -24,7 +26,7 @@ export default class InfiniteList extends React.Component {
   }
 
   render() {
-    const { isRowLoaded, loadMoreRows, listHeight, totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer } = this.props
+    const { isRowLoaded, loadMoreRows, listHeight, totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer, sortOrder, contentSeq } = this.props
     let height = Math.min(currentRows() * rowHeight, listHeight || 300)
     if (noRowsRenderer)
       // show noRowsRenderer won't be called with zero height
@@ -39,7 +41,7 @@ export default class InfiniteList extends React.Component {
           <AutoSizer disableHeight>
             {({ width }) => (
               <List
-                ref="registerChild"
+                ref={registerChild}
                 className={styles.List}
                 height={height}
                 onRowsRendered={onRowsRendered}
@@ -48,6 +50,8 @@ export default class InfiniteList extends React.Component {
                 rowHeight={rowHeight}
                 rowRenderer={rowRenderer}
                 width={width}
+                sortOrder={sortOrder}
+                contentSeq={contentSeq}
               />
             )}
           </AutoSizer>

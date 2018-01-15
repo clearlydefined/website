@@ -22,16 +22,25 @@
   background: $color_black_10;
 }
 
+.list-image {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  margin-right: 20px;
+  
+}
+
 .list-letter {
   display: inline-block;
   height: 40px;
   width: 40px;
+  margin-right: 20px;
   line-height: 40px;
   text-align: center;
   border-radius: 40px;
   color: white;
   font-size: 1.5em;
-  margin-right: 20px;
 }
 
 .list-headline {
@@ -52,16 +61,29 @@
   flex-grow: 100;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
 }
 
-.list-buttons {
-  width: 100px;
+.list-activity-area {
+  min-width: 200px;
   display: inline-flex;
   justify-content: flex-end;
   .btn {
-      min-width: 5rem;
+    min-width: 5rem;
   }
+  .Select {
+    width: 400px
+  }
+}
+
+.list-remove {
+  font-size: 2.5rem;
+  color: red;
+  align-self: center;
+  padding-left: 15px;
+}
+
+.list-buttons {
+  padding-left: 10px;
 }
 
 .list-message {
@@ -74,19 +96,6 @@
   a:focus {
     color: $color_highlight;
   }
-}
-
-.list-noRows1 {
-  // it breaks tab layout
-  // position: absolute;
-  // top: 0;
-  // bottom: 0;
-  // left: 0;
-  // right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #bdbdbd;
 }
 
 .list-noRows {

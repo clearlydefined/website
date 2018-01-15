@@ -14,14 +14,23 @@ export const initialState = {
   data: null
 }
 
-const remove = (list, item, comparator) => {
+const remove = (list, item, comparator = null) => {
   const test = comparator ? element => !comparator(element, item) : element => element !== item
   return list ? _.filter(list, test) : list
 }
 
-const add = (list, item, comparator) => {
+const add = (list, item, comparator = null) => {
   const test = comparator ? element => comparator(element, item) : element => element === item
   return list && !(_.find(list, test)) ? [...list, item] : list
+}
+
+const update = (list, item, newValue, comparator = null) => {
+  const test = comparator ? element => comparator(element, item) : element => element === item
+  const entry = _.find(list, test)
+  if (!entry)
+    return list
+  const result = remove(list, item, comparator)
+  return [...result, newValue]
 }
 
 function computeTranformed(state, append, list, transformer) {
@@ -80,7 +89,16 @@ export default (name = '', transformer = null, comparator = null) => {
       return {
         ...state,
         list: remove(state.list, result.remove, comparator),
-        transformedList: transformer ? remove(state.transformedList, transformer(result.add)) : state.transformedList
+        transformedList: transformer ? remove(state.transformedList, transformer(result.remove)) : state.transformedList
+      }
+    }
+
+    if (result.update) {
+      const newTransformed = transformer ? transformer(result.value) : null
+      return {
+        ...state,
+        list: update(state.list, result.update, result.value, comparator),
+        transformedList: transformer ? update(state.transformedList, transformer(result.update), newTransformed) : state.transformedList
       }
     }
 

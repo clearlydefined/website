@@ -18,6 +18,7 @@ class PageHarvest extends Component {
     this.harvestHandler = this.harvestHandler.bind(this)
     this.onAddRequest = this.onAddRequest.bind(this)
     this.onRemoveRequest = this.onRemoveRequest.bind(this)
+    this.onChangeRequest = this.onChangeRequest.bind(this)
     this.onClick = this.onClick.bind(this)
   }
 
@@ -39,6 +40,10 @@ class PageHarvest extends Component {
 
   onRemoveRequest(request) {
     this.props.dispatch(uiHarvestUpdateQueue({ remove: request }))
+  }
+
+  onChangeRequest(request, newRequest) {
+    this.props.dispatch(uiHarvestUpdateQueue({ update: request, value: newRequest }))
   }
 
   onClick(event, thing) {
@@ -86,6 +91,7 @@ class PageHarvest extends Component {
             <HarvestQueueList
               list={queue}
               onRemove={this.onRemoveRequest}
+              onChange={this.onChangeRequest}
               noRowsRenderer={this.noRowsRenderer} />
           </div>
         </Section>

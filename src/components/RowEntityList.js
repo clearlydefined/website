@@ -3,8 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { InfiniteList, Overlay } from './'
-import { Button } from 'react-bootstrap'
+import { InfiniteList } from './'
 
 export default class RowEntityList extends React.Component {
 
@@ -16,6 +15,8 @@ export default class RowEntityList extends React.Component {
     loadMoreRows: PropTypes.func,
     fetchingRenderer: PropTypes.func,
     noRowsRenderer: PropTypes.func,
+    sortOrder: PropTypes.string,
+    contentSeq: PropTypes.number  // value upper levels can change to sign non-shallow content change
   }
 
   static defaultProps = {
@@ -40,7 +41,7 @@ export default class RowEntityList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, rowRenderer, list, header } = this.props
+    const { loadMoreRows, listHeight, rowRenderer, list, contentSeq, sortOrder } = this.props
     if (!list.list || list.list.length === 0) {
       return this.wrappedNoRowsRender()
     }
@@ -54,6 +55,8 @@ export default class RowEntityList extends React.Component {
         rowRenderer={rowRenderer}
         noRowsRenderer={this.wrappedNoRowsRender}
         rowHeight={50}
+        sortOrder={sortOrder}
+        contentSeq={contentSeq}        
       />)
   }
 
