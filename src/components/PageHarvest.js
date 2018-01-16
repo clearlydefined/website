@@ -27,8 +27,12 @@ class PageHarvest extends Component {
   }
 
   harvestHandler(spec) {
-    const { dispatch, token } = this.props
-    dispatch(harvestAction(token, spec))
+    const { dispatch, token, queue } = this.props
+    const requests = queue.list.map(entry => {
+      return { type: entry.tool || entry.type, url: entry.toUrl(), policy: entry.policy }
+    })
+    dispatch(harvestAction(token, requests))
+    // TODO clearly the harvest queue when everything is successfully queued
   }
 
   onAddRequest(value) {
@@ -92,6 +96,7 @@ class PageHarvest extends Component {
           <div className='section-body'>
             <HarvestQueueList
               list={queue}
+              listHeight={1000}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}
               noRowsRenderer={this.noRowsRenderer} />

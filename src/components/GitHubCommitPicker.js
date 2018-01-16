@@ -3,13 +3,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { createPortal, findDOMNode } from 'react-dom';
-import Select, { Async } from 'react-select-plus';
+import { PortalSelect } from './'
 
 export default class GitHubCommitPicker extends Component {
 
   static propTypes = {
-    value: PropTypes.object,
     onChange: PropTypes.func,
     gotoValue: PropTypes.func,
     backspaceRemoves: PropTypes.bool,
@@ -27,10 +25,6 @@ export default class GitHubCommitPicker extends Component {
     this.getOptions = this.getOptions.bind(this)
     this.onChange = this.onChange.bind(this)
     this.cleanInput = this.cleanInput.bind(this)
-  }
-
-  componentDidMount() {
-    this.setState({ element: findDOMNode(this.select) });
   }
 
   async getOptions(value) {
@@ -64,37 +58,13 @@ export default class GitHubCommitPicker extends Component {
     return `${option.tag} (${option.sha})`
   }
 
-  // protal building code from https://gist.github.com/Liooo/3bd6c79d5b4bdcded9927bbdd9133af0
-  buildPortal() {
-    return (props) => {
-      if (!this.state.element)
-        return props.children;
-
-      const box = this.state.element.getBoundingClientRect();
-      const style = {
-        position: 'absolute',
-        top: box.top + box.height,
-        left: box.left,
-        width: box.width,
-      };
-      return createPortal(
-        <div style={style}>{props.children}</div>,
-        document.getElementsByTagName('body')[0]
-      );
-    }
-  }
-
   render() {
     const { request, gotoValue, backspaceRemoves } = this.props
-    const kids = props => <Select {...props}
-      ref={
-        select => this.select = this.select || select}
-    />
     return (
       <div>
-        <Async
-          children={kids}
+        <PortalSelect
           multi={false}
+          mode='async'
           value={request.revision}
           onChange={this.onChange}
           onBlurResetsInput={false}
@@ -110,7 +80,6 @@ export default class GitHubCommitPicker extends Component {
           autosize={false}
           placeholder='Enter a Git SHA1 or tag'
           backspaceRemoves={backspaceRemoves}
-          dropdownComponent={this.buildPortal()}
         />
       </div>)
   }

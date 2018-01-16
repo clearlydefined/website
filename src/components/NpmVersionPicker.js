@@ -3,8 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { createPortal, findDOMNode } from 'react-dom';
-import Select from 'react-select-plus';
+import { PortalSelect } from './'
 
 export default class NpmVersionPicker extends Component {
 
@@ -17,23 +16,21 @@ export default class NpmVersionPicker extends Component {
 
   static defaultProps = {
     backspaceRemoves: true,
+    gotoValue: value => console.log(value)
   }
 
   constructor(props) {
     super(props)
-    this.state = { createable: false }
+    this.state = { creatable: false, created: [] }
     this.getOptions = this.getOptions.bind(this)
     this.onChange = this.onChange.bind(this)
     this.cleanInput = this.cleanInput.bind(this)
-  }
-
-  componentDidMount() {
-    this.setState({ element: findDOMNode(this.select) });
+    this.newOptionCreator = this.newOptionCreator.bind(this)
   }
 
   async getOptions(value) {
-    this.setState( {...this.state, createable: true})
-    return []
+    this.setState({ ...this.state, creatable: true })
+    return this.state.created
 
     // TODO npmjs.com does not allow CORS GETs. Need to do something on the service? or a ServiceWorker?
     // try {
@@ -43,10 +40,10 @@ export default class NpmVersionPicker extends Component {
     //   const url = `${baseUrl}/${encodeURIComponent(fullName).replace('%40', '@')}` // npmjs doesn't handle the escaped version
     //   const response = await fetch(url, { mode: 'cors' })
     //   const json = await response.json()
-    //   this.setState( {...this.state, createable: false})
+    //   this.setState( {...this.state, creatable: false})
     //   return { options: Object.getOwnPropertyNames(json.versions) }
     // } catch (error) {
-    //   this.setState( {...this.state, createable: true})
+    //   this.setState( {...this.state, creatable: true})
     //   console.log(error)
     //   return []
     // }
@@ -59,55 +56,36 @@ export default class NpmVersionPicker extends Component {
 
   onChange(value) {
     const { onChange } = this.props
-    onChange && onChange(value)
+    this.setState({ ...this.state, created: [value, ...this.state.created] })
+    this.forceUpdate()
+    onChange && onChange(value.label)
   }
 
-  // protal building code from https://gist.github.com/Liooo/3bd6c79d5b4bdcded9927bbdd9133af0
-  buildPortal() {
-    return (props) => {
-      if (!this.state.element)
-        return props.children;
-
-      const box = this.state.element.getBoundingClientRect();
-      const style = {
-        position: 'absolute',
-        top: box.top + box.height,
-        left: box.left,
-        width: box.width,
-      };
-      return createPortal(
-        <div style={style}>{props.children}</div>,
-        document.getElementsByTagName('body')[0]
-      );
-    }
+  newOptionCreator({ label, labelKey, valueKey }) {
+    return { label, value: label }
   }
 
   render() {
-    const { request, backspaceRemoves } = this.props
-    const kids = props => <Select {...props}
-      ref={
-        select => this.select = this.select || select}
-    />
-    const AsyncComponent = this.state.creatable
-			? Select.AsyncCreatable
-			: Select.Async;
+    const { request, gotoValue, backspaceRemoves } = this.props
+    const { creatable, created } = this.state
     return (
       <div>
-        <AsyncComponent
-          children={kids}
+        <PortalSelect
           multi={false}
+          mode={creatable ? 'creatable' : 'select'}
           value={request.revision}
+          options={created}
           onChange={this.onChange}
           onBlurResetsInput={false}
           onCloseResetsInput={false}
+          onValueClick={gotoValue}
           onInputChange={this.cleanInput}
-          loadOptions={this.getOptions}
-          simpleValue
+          // loadOptions={this.getOptions}
           clearable
           autosize={false}
-          placeholder={this.state.createable ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
+          placeholder={this.state.creatable ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
           backspaceRemoves={backspaceRemoves}
-          dropdownComponent={this.buildPortal()}
+          newOptionCreator={this.newOptionCreator}
         />
       </div>)
   }
