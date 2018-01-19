@@ -10,13 +10,12 @@ import { ROUTE_ROOT } from '../utils/routingConstants'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap'
 import { filter } from 'lodash'
-import { LoginPrompt } from './'
+import { url } from '../api/clearlyDefined';
 
 class Header extends Component {
 
   constructor(props) {
     super(props)
-    this.promptLogin = this.promptLogin.bind(this)
     this.doLogin = this.doLogin.bind(this)
     this.doLogout = this.doLogout.bind(this)
   }
@@ -26,13 +25,16 @@ class Header extends Component {
     this.props.dispatch(logout())
   }
 
-  doLogin(username, password) {
-    this.props.dispatch(login(username, password))
-  }
-
-  promptLogin(e) {
+  doLogin(e) {
     e.preventDefault()
-    this.refs.loginModal.open()
+    window.open(url('auth/github'))
+    const tokenListener = (e) => {
+      if (e.data.type === 'github-token') {
+        this.props.dispatch(login(e.data.token))
+        window.removeEventListener('message', tokenListener)
+      }
+    }
+    window.addEventListener('message', tokenListener)
   }
 
   renderLogin() {
@@ -40,8 +42,7 @@ class Header extends Component {
     if (session.isAnonymous && !session.isFetching)
       return (
         <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>
-          <LoginPrompt ref="loginModal" loginHandler={this.doLogin} />
-          <NavItem eventKey={1} onClick={this.promptLogin} >Login</NavItem>
+          <NavItem eventKey={1} onClick={this.doLogin} >Login</NavItem>
         </Nav>)
     return (
       <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>

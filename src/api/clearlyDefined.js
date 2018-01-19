@@ -13,21 +13,12 @@ export const BASIC_PAGE_SIZE = 25
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
 const PACKAGES = 'packages'
-const ROOT = ''
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
 
 const packageListTTL = 60000
 let lastFetchPackageList = null
 let packageList = []
-
-function base64(value) {
-  return Buffer.from(value).toString('base64')
-}
-
-export function checkPassword(user, password) {
-  return get(url(ROOT), base64(user + ":" + password))
-}
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
@@ -98,7 +89,7 @@ export function url(path, query) {
 
 function getHeaders(token) {
   return {
-    'Authorization': 'Basic ' + token,
+    'Authorization': 'Bearer ' + token,
     'Content-Type': 'application/json; charset=utf-8'
   }
 }
@@ -133,7 +124,7 @@ function post(url, token, payload) {
   return fetch(url, {
     headers: getHeaders(token),
     method: 'POST',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
     .then(handleResponse)
 }
@@ -142,7 +133,7 @@ function patch(url, token, payload) {
   return fetch(url, {
     headers: getHeaders(token),
     method: 'PATCH',
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   })
     .then(handleResponse)
 }
