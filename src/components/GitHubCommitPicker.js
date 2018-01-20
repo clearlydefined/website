@@ -3,29 +3,25 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { PortalSelect } from './'
 import { getGitHubRevisions } from '../api/clearlyDefined'
+import { Typeahead } from 'react-bootstrap-typeahead'
 
 export default class GitHubCommitPicker extends Component {
 
   static propTypes = {
     onChange: PropTypes.func,
-    gotoValue: PropTypes.func,
-    backspaceRemoves: PropTypes.bool,
     request: PropTypes.object.isRequired,
-  }
-
-  static defaultProps = {
-    backspaceRemoves: true,
-    gotoValue: value => console.log(value)
   }
 
   constructor(props) {
     super(props)
-    this.state = { creatable: true }
-    this.getOptions = this.getOptions.bind(this)
+    this.state = { customValues: [], options: [] }
     this.onChange = this.onChange.bind(this)
-    this.cleanInput = this.cleanInput.bind(this)
+    this.filter = this.filter.bind(this)
+  }
+
+  componentDidMount() {
+    this.getOptions('')
   }
 
   async getOptions(value) {
@@ -33,59 +29,53 @@ export default class GitHubCommitPicker extends Component {
       const { namespace, name } = this.props.request
       const path = name ? `${namespace}/${name}` : name
       const options = await getGitHubRevisions(this.props.token, path)
-      return { options }
+      this.setState({ ...this.state, options });
     } catch (error) {
       console.log(error)
-      return []
+      this.setState({ ...this.state, options: [] });
     }
   }
 
-  cleanInput(inputValue) {
-    // Strip all whitespace characters from the input
-    return inputValue.replace(/[\s]/g, '')
-  }
-
-  onChange(value) {
+  onChange(values) {
     const { onChange } = this.props
-    onChange && onChange(value)
+    if (!onChange)
+      return
+    let value = values.length === 0 ? null : values[0]
+    if (!value)
+      return onChange(value)
+    if (value.customOption) {
+      value = { tag: value.tag, sha: value.tag }
+      this.setState({ ...this.state, customValues: [...this.state.customValues, value] })
+    }
+    onChange(value)
   }
 
-  renderEntry(option) {
+  renderMenuItemChildren(option, props) {
     return option.tag === option.sha ? option.sha : `${option.tag} (${option.sha})`
   }
 
-  newOptionCreator({ label, labelKey, valueKey }) {
-    return { tag: label, sha: label }
-    // return { tag: label, sha: label }
+  filter(option, text) {
+    if (this.props.request.revision)
+      return true;
+    return option.tag.toLowerCase().indexOf(text.toLowerCase()) !== -1;
   }
 
   render() {
-    const { request, gotoValue, backspaceRemoves } = this.props
-    const { creatable } = this.state
-    const noResults = <div/>
+    const { customValues, options } = this.state
+    const list = customValues.concat(options)
     return (
-      <div>
-        <PortalSelect
-          multi={false}
-          mode={creatable ? 'asyncCreatable' : 'async'}
-          value={request.revision ? this.newOptionCreator({ label: request.revision }) : null}
-          onChange={this.onChange}
-          onBlurResetsInput={false}
-          onCloseResetsInput={false}
-          onValueClick={gotoValue}
-          onInputChange={this.cleanInput}
-          valueRenderer={this.renderEntry}
-          optionRenderer={this.renderEntry}
-          valueKey='sha'
-          labelKey='tag'
-          loadOptions={this.getOptions}
-          clearable
-          autosize={false}
-          placeholder={this.state.creatable ? 'No tags found, enter a commit hash' : 'Pick a tag or enter a commit hash'}
-          backspaceRemoves={backspaceRemoves}
-          newOptionCreator={this.newOptionCreator}
-          noResultsText={noResults}
-        />
-      </div>)
+      <Typeahead
+        options={list}
+        labelKey='tag'
+        placeholder={options.length === 0 ? 'No tags found, enter a commit hash' : 'Pick a tag or enter a commit hash'}
+        onChange={this.onChange}
+        bodyContainer
+        allowNew
+        newSelectionPrefix='SHA:'
+        emptyLabel=''
+        filterBy={this.filter}
+        selectHintOnEnter
+        renderMenuItemChildren={this.renderMenuItemChildren}
+      />)
   }
 }
