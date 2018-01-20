@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { PortalSelect } from './'
+import { getNpmRevisions } from '../api/clearlyDefined'
 
 export default class NpmVersionPicker extends Component {
 
@@ -21,7 +22,6 @@ export default class NpmVersionPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { creatable: false, created: [] }
     this.getOptions = this.getOptions.bind(this)
     this.onChange = this.onChange.bind(this)
     this.cleanInput = this.cleanInput.bind(this)
@@ -29,24 +29,15 @@ export default class NpmVersionPicker extends Component {
   }
 
   async getOptions(value) {
-    this.setState({ ...this.state, creatable: true })
-    return this.state.created
-
-    // TODO npmjs.com does not allow CORS GETs. Need to do something on the service? or a ServiceWorker?
-    // try {
-    //   const baseUrl = 'https://registry.npmjs.com'
-    //   const { namespace, name } = this.props.request
-    //   const fullName = `${namespace ? namespace + '/' : ''}${name}`;
-    //   const url = `${baseUrl}/${encodeURIComponent(fullName).replace('%40', '@')}` // npmjs doesn't handle the escaped version
-    //   const response = await fetch(url, { mode: 'cors' })
-    //   const json = await response.json()
-    //   this.setState( {...this.state, creatable: false})
-    //   return { options: Object.getOwnPropertyNames(json.versions) }
-    // } catch (error) {
-    //   this.setState( {...this.state, creatable: true})
-    //   console.log(error)
-    //   return []
-    // }
+    try {
+      const { namespace, name } = this.props.request
+      const path = name ? `${namespace}/${name}` : name
+      const options = await getNpmRevisions(this.props.token, path)
+      return { options }
+    } catch (error) {
+      console.log(error)
+      return []
+    }
   }
 
   cleanInput(inputValue) {
@@ -61,31 +52,24 @@ export default class NpmVersionPicker extends Component {
     onChange && onChange(value.label)
   }
 
-  newOptionCreator({ label, labelKey, valueKey }) {
-    return { label, value: label }
-  }
-
   render() {
     const { request, gotoValue, backspaceRemoves } = this.props
-    const { creatable, created } = this.state
     return (
       <div>
         <PortalSelect
           multi={false}
-          mode={creatable ? 'creatable' : 'select'}
+          mode='async'
           value={request.revision}
-          options={created}
           onChange={this.onChange}
           onBlurResetsInput={false}
           onCloseResetsInput={false}
           onValueClick={gotoValue}
           onInputChange={this.cleanInput}
-          // loadOptions={this.getOptions}
+          loadOptions={this.getOptions}
           clearable
           autosize={false}
           placeholder={this.state.creatable ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
           backspaceRemoves={backspaceRemoves}
-          newOptionCreator={this.newOptionCreator}
         />
       </div>)
   }

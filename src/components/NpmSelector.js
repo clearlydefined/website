@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Async } from 'react-select';
+import { getNpmSearch } from '../api/clearlyDefined'
 
 export default class NpmSelector extends Component {
 
@@ -25,28 +26,15 @@ export default class NpmSelector extends Component {
     this.onChange = this.onChange.bind(this)
   }
 
-  // version of getting options from NpmSearch. They seem somewhat broken right now so leaving here but disabling
-  // async getOptionsNpmSearch(value) {
-  //   if (!value) 
-  //     return Promise.resolve({ options: [] })
-  //   const response = await fetch(`https://npmsearch.com/query?q=${value}&fields=name`)
-  //   const json = await response.json()
-  //   const options = json.results.map(entry => { return { id: entry.name[0]}})
-  //   return { options }
-  // }
-
   onChange(value) {
     const { onChange } = this.props
     onChange && onChange({ type: 'npm', provider: 'npmjs', name: value})
   }
 
   async getOptions(value) {
-    if (!value) 
+    if (!value)
       return Promise.resolve({ options: [] })
-    // TODO decide if we want to tone down their scoring effect
-    const response = await fetch(`https://api.npms.io/v2/search?q=${value}`)
-    const json = await response.json()
-    const options = json.results.map(entry => { return { id: entry.package.name}})
+    const options = await getNpmSearch(this.props.token, value)
     return { options }
   }
 

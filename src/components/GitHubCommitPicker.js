@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { PortalSelect } from './'
+import { getGitHubRevisions } from '../api/clearlyDefined'
 
 export default class GitHubCommitPicker extends Component {
 
@@ -21,7 +22,7 @@ export default class GitHubCommitPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = { creatable: true }
     this.getOptions = this.getOptions.bind(this)
     this.onChange = this.onChange.bind(this)
     this.cleanInput = this.cleanInput.bind(this)
@@ -30,14 +31,9 @@ export default class GitHubCommitPicker extends Component {
   async getOptions(value) {
     try {
       const { namespace, name } = this.props.request
-      const url = `https://api.github.com/repos/${encodeURIComponent(namespace)}/${encodeURIComponent(name)}/git/refs/tags`;
-      const response = await fetch(url)
-      const json = await response.json()
-      return {
-        options: json.map(item => {
-          return { tag: item.ref.slice(10), sha: item.object.sha }
-        })
-      }
+      const path = name ? `${namespace}/${name}` : name
+      const options = await getGitHubRevisions(this.props.token, path)
+      return { options }
     } catch (error) {
       console.log(error)
       return []
@@ -55,17 +51,24 @@ export default class GitHubCommitPicker extends Component {
   }
 
   renderEntry(option) {
-    return `${option.tag} (${option.sha})`
+    return option.tag === option.sha ? option.sha : `${option.tag} (${option.sha})`
+  }
+
+  newOptionCreator({ label, labelKey, valueKey }) {
+    return { tag: label, sha: label }
+    // return { tag: label, sha: label }
   }
 
   render() {
     const { request, gotoValue, backspaceRemoves } = this.props
+    const { creatable } = this.state
+    const noResults = <div/>
     return (
       <div>
         <PortalSelect
           multi={false}
-          mode='async'
-          value={request.revision}
+          mode={creatable ? 'asyncCreatable' : 'async'}
+          value={request.revision ? this.newOptionCreator({ label: request.revision }) : null}
           onChange={this.onChange}
           onBlurResetsInput={false}
           onCloseResetsInput={false}
@@ -78,8 +81,10 @@ export default class GitHubCommitPicker extends Component {
           loadOptions={this.getOptions}
           clearable
           autosize={false}
-          placeholder='Enter a Git SHA1 or tag'
+          placeholder={this.state.creatable ? 'No tags found, enter a commit hash' : 'Pick a tag or enter a commit hash'}
           backspaceRemoves={backspaceRemoves}
+          newOptionCreator={this.newOptionCreator}
+          noResultsText={noResults}
         />
       </div>)
   }

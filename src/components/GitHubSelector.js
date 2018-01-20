@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Select, { Async } from 'react-select';
+import { getGitHubSearch } from '../api/clearlyDefined'
 
 export default class GitHubSelector extends Component {
 
@@ -28,16 +29,8 @@ export default class GitHubSelector extends Component {
   async getOptions(value) {
     if (!value)
       return Promise.resolve({ options: [] })
-
-    const [login, repo] = value.split('/')
-    if (!repo && !value.endsWith('/')) {
-      const response = await fetch(`https://api.github.com/search/users?q=${login}+repos:%3E0`)
-      const json = await response.json()
-      return { options: json.items.map(item => { return { id: item.login } }) }
-    }
-    const response = await fetch(`https://api.github.com/search/repositories?q=${repo}+user:${login}+in:name+fork:true`)
-    const json = await response.json()
-    return { options: json.items.map(item => { return { id: item.full_name } }) }
+    const options = await getGitHubSearch(this.props.token, value)
+    return { options }
   }
 
   cleanInput(inputValue) {
@@ -49,7 +42,7 @@ export default class GitHubSelector extends Component {
     if (!value)
       return
     if (value.indexOf('/') > 0 && !value.endsWith('/'))
-      return this.props.onChange && this.props.onChange({ type: 'git', provider: 'github', name: value})
+      return this.props.onChange && this.props.onChange({ type: 'git', provider: 'github', name: value })
     const newValue = value + '/'
     this.select.setInputValue(newValue)
   }

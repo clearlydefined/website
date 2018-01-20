@@ -12,8 +12,10 @@ export const apiHome = process.env.REACT_APP_SERVER || API_DEVELOP
 export const BASIC_PAGE_SIZE = 25
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
-const PACKAGES = "packages"
+const PACKAGES = 'packages'
 const ROOT = ''
+const ORIGINS_GITHUB = 'origins/github'
+const ORIGINS_NPM = 'origins/npm'
 
 const packageListTTL = 60000
 let lastFetchPackageList = null
@@ -60,6 +62,24 @@ export async function getPackageList(token, prefix, force = false) {
 export function previewPackage(token, entity, curation) {
   return post(url(`${PACKAGES}/${entity.toUrlPath()}`, { preview: true }), token, curation)
 }
+
+export function getGitHubSearch(token, path) {
+  return get(url(`${ORIGINS_GITHUB}/${path}`), token)
+}
+
+export function getGitHubRevisions(token, path) {
+  return get(url(`${ORIGINS_GITHUB}/${path}/revisions`), token)
+}
+
+export function getNpmSearch(token, path) {
+  return get(url(`${ORIGINS_NPM}/${path}`), token)
+}
+
+export function getNpmRevisions(token, path) {
+  return get(url(`${ORIGINS_NPM}/${path}/revisions`), token)
+}
+
+// ========================== utilities ====================
 
 export function url(path, query) {
   path = apiHome + '/' + path
