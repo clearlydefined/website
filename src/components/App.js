@@ -8,7 +8,7 @@ export default class App extends Component {
   render() {
     const { children } = this.props
     return (
-      <div className="App-root">
+      <div className="App">
         <Header />
         <main className="App-content">
           {children}

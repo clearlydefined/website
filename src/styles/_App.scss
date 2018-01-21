@@ -2,7 +2,14 @@
 /* SPDX-License-Identifier: MIT */
 
 .App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
+.App-content {
+  flex: 1 0 auto;
+  width: 100%;
 }
 
 .App-logo {
@@ -11,6 +18,7 @@
 }
 
 .App-header {
+  flex: none;
   background-color: #222;
   height: 150px;
   padding: 20px;
