@@ -5,6 +5,8 @@ export const UI_NAVIGATION = 'UI_NAVIGATION'
 export const UI_REDIRECT = 'UI_REDIRECT'
 export const UI_CURATE_UPDATE_FILTER = 'UI_CURATE_UPDATE_FILTER'
 export const UI_BROWSE_UPDATE_FILTER = 'UI_BROWSE_UPDATE_FILTER'
+export const UI_HARVEST_UPDATE_FILTER = 'UI_HARVEST_UPDATE_FILTER'
+export const UI_HARVEST_UPDATE_QUEUE = 'UI_HARVEST_UPDATE_QUEUE'
 
 export function uiNavigation(navItem) {
   return { type: UI_NAVIGATION, to: navItem }
@@ -22,3 +24,10 @@ export function uiBrowseUpdateFilter(value) {
   return { type: UI_BROWSE_UPDATE_FILTER, value }
 }
 
+export function uiHarvestUpdateFilter(value) {
+  return { type: UI_HARVEST_UPDATE_FILTER, value }
+}
+
+export function uiHarvestUpdateQueue(value) {
+  return { type: UI_HARVEST_UPDATE_QUEUE, result: value }
+}

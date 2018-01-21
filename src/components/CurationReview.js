@@ -147,7 +147,7 @@ export default class CurationReview extends Component {
     return (
       <div>
         {this.renderDiffHeader('curation', 'top-space')}
-        <div className='editor-wrapper'>
+        <div className='section-body'>
           <MonacoDiffEditor
             height='400'
             language='yaml'
@@ -162,7 +162,7 @@ export default class CurationReview extends Component {
 
         {this.renderDiffHeader('result', 'top-space')}
         {/* for some bizarre reason the diff editor cannot be wrapped in a separate component. Turns into an editor! */}
-        <div className='editor-wrapper'>
+        <div className='section-body'>
           <MonacoDiffEditor
             height='400'
             language='yaml'

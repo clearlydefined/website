@@ -1,0 +1,106 @@
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
+/* SPDX-License-Identifier: MIT */
+
+.List {
+  width: 100%;
+}
+
+.list-row {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 25px;
+  cursor: pointer;
+}
+
+.list-highlight-text {
+  color: $color_highlight;
+}
+
+.list-row:hover {
+  background: $color_black_10;
+}
+
+.list-image {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  margin-right: 20px;
+  
+}
+
+.list-letter {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  margin-right: 20px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 40px;
+  color: white;
+  font-size: 1.5em;
+}
+
+.list-headline {
+  font-weight: bold;
+  margin-bottom: 2px;
+  a {
+    color: inherit;
+  }
+  a:hover,
+  a:focus {
+    color: $color_highlight;
+  }
+}
+
+.list-body {
+  display: inline-block;
+  color: $color-text-main;
+  flex-grow: 100;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.list-activity-area {
+  min-width: 200px;
+  display: inline-flex;
+  justify-content: flex-end;
+  .btn {
+    min-width: 5rem;
+  }
+  .rbt {
+    width: 450px
+  }
+}
+
+.list-remove {
+  font-size: 2.5rem;
+  color: red;
+  align-self: center;
+  padding-left: 15px;
+}
+
+.list-buttons {
+  padding-left: 10px;
+}
+
+.list-message {
+  font-size: .85em;
+  color: $color-text-main;
+  a {
+    color: inherit;
+  }
+  a:hover,
+  a:focus {
+    color: $color_highlight;
+  }
+}
+
+.list-noRows {
+  min-height: 200px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+}

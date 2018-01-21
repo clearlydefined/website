@@ -3,8 +3,8 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Select from 'react-select'
-import 'react-select/dist/react-select.css'
+import { Typeahead } from 'react-bootstrap-typeahead'
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 export default class FilterBar extends Component {
 
@@ -15,28 +15,34 @@ export default class FilterBar extends Component {
     className: PropTypes.string
   }
 
-  static defaultProps = {
-    value: null,
-    options: {}
+  constructor(props) {
+    super(props)
+    this.onChange = this.onChange.bind(this)
+    this.filter = this.filter.bind(this)
+  }
+
+  onChange(values) {
+    this.props.onChange && values.length && this.props.onChange(values[0].path)
+  }
+
+  
+  filter(option, text) {
+    if (this.props.value)
+      return true;
+    return option.path.toLowerCase().indexOf(text.toLowerCase()) !== -1;
   }
 
   render() {
-    const { value, onChange, options } = this.props
+    const { options } = this.props
     return (
-      <Select
-        className='filter-select'
-        name='filter'
-        id='filter'
+      <Typeahead
         placeholder='Component search...'
-        value={value}
-        onChange={onChange}
+        onChange={this.onChange}
         options={options.transformedList}
         isLoading={options.isFetching}
-        searchable
-        simpleValue
+        clearButton
+        filterBy={this.filter}
         labelKey='path'
-        valueKey='path'
-        autosize={false}
       />
     )
   }

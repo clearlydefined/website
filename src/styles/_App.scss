@@ -87,21 +87,12 @@
   padding-bottom: 7px;
 }
 
-.editor-wrapper {
+.section-body {
   border: 1px;
   border-style: solid;
   border-color: lightgray;
-  height: 402px;
-  width: 1178px;
-  box-shadow: 5px 5px 70px -10px lightgrey;
-}
-
-.placeholder-wrapper {
-  border: 1px;
-  border-style: solid;
-  border-color: lightgray;
-  height: 200px;
-  width: 1178px;
+  min-height: 200px;
+  // width: 1178px;
   box-shadow: 5px 5px 70px -10px lightgrey;
 }
 
