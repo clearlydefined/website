@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Grid, Row, Col } from 'react-bootstrap'
-import 'react-select/dist/react-select.css'
 import { getPackageListAction, getPackageAction } from '../actions/packageActions'
 import { getCurationAction } from '../actions/curationActions'
 import { getHarvestResultsAction } from '../actions/harvestActions'
@@ -96,7 +95,6 @@ class PageComponents extends Component {
       <MonacoEditorWrapper
         height='400'
         language={type}
-        // theme='vs-dark'
         value={value.transformed}
         options={options}
         editorDidMount={this.editorDidMount}
