@@ -71,6 +71,7 @@ export default class GitHubCommitPicker extends Component {
         onChange={this.onChange}
         bodyContainer
         allowNew
+        clearButton
         newSelectionPrefix='SHA:'
         emptyLabel=''
         filterBy={this.filter}

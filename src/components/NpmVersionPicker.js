@@ -66,12 +66,12 @@ export default class NpmVersionPicker extends Component {
         placeholder={options.length === 0 ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
         onChange={this.onChange}
         bodyContainer
+        clearButton
         allowNew
         newSelectionPrefix='Version:'
         emptyLabel=''
         filterBy={this.filter}
         selectHintOnEnter
-        renderMenuItemChildren={this.renderMenuItemChildren}
       />)
   }
 }

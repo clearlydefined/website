@@ -52,7 +52,7 @@ class PageHarvest extends Component {
 
   onClick(event, thing) {
     const target = event.target
-    const activeProvider = this.state.activeProvider === target.name ? null : target.name
+    const activeProvider = target.name
     this.setState({ ...this.state, activeProvider })
   }
 
