@@ -12,13 +12,9 @@ export default class FilterBar extends Component {
     value: PropTypes.string,
     options: PropTypes.any,
     onChange: PropTypes.func,
-    // className: PropTypes.string
+    className: PropTypes.string
   }
 
-  static defaultProps = {
-    // value: null,
-    // options: {}
-  }
   constructor(props) {
     super(props)
     this.onChange = this.onChange.bind(this)
@@ -37,7 +33,7 @@ export default class FilterBar extends Component {
   }
 
   render() {
-    const { value, onChange, options } = this.props
+    const { options } = this.props
     return (
       <Typeahead
         placeholder='Component search...'
