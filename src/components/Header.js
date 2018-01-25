@@ -10,7 +10,7 @@ import { ROUTE_ROOT } from '../utils/routingConstants'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap'
 import { filter } from 'lodash'
-import { url } from '../api/clearlyDefined';
+import { url } from '../api/clearlyDefined'
 
 class Header extends Component {
 

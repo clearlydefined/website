@@ -133,7 +133,7 @@ function patch(url, token, payload) {
   return fetch(url, {
     headers: getHeaders(token),
     method: 'PATCH',
-    body: JSON.stringify(payload),
+    body: JSON.stringify(payload)
   })
     .then(handleResponse)
 }
