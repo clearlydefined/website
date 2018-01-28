@@ -15,6 +15,7 @@ const HARVEST = 'harvest'
 const PACKAGES = 'packages'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
+const ORIGINS_MAVEN = 'origins/maven'
 
 const packageListTTL = 60000
 let lastFetchPackageList = null
@@ -72,6 +73,14 @@ export function getNpmSearch(token, path) {
 
 export function getNpmRevisions(token, path) {
   return get(url(`${ORIGINS_NPM}/${path}/revisions`), token)
+}
+
+export function getMavenSearch(token, path) {
+  return get(url(`${ORIGINS_MAVEN}/${path}`), token)
+}
+
+export function getMavenRevisions(token, path) {
+  return get(url(`${ORIGINS_MAVEN}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================
