@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 export { default as App } from './App'
+export { default as ComponentList } from './ComponentList'
 export { default as CurationEditor } from './CurationEditor'
 export { default as CurationReview } from './CurationReview'
 export { default as FieldGroup } from './FieldGroup'
@@ -19,6 +20,7 @@ export { default as NpmSelector } from './NpmSelector'
 export { default as NpmVersionPicker } from './NpmVersionPicker'
 export { default as NuGetSelector } from './NuGetSelector'
 export { default as PageAbout } from './PageAbout'
+export { default as PageComponentDetails } from './PageComponentDetails'
 export { default as PageComponents } from './PageComponents'
 export { default as PageCurate } from './PageCurate'
 export { default as PageHarvest } from './PageHarvest'

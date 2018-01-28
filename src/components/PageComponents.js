@@ -3,133 +3,95 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button, Grid, Row, Col } from 'react-bootstrap'
-import { getPackageListAction, getPackageAction } from '../actions/packageActions'
-import { getCurationAction } from '../actions/curationActions'
-import { getHarvestResultsAction } from '../actions/harvestActions'
-import { uiBrowseUpdateFilter, uiNavigation } from '../actions/ui'
-import { FilterBar, MonacoEditorWrapper, Section } from './'
-import EntitySpec from '../utils/entitySpec';
-import { ROUTE_COMPONENTS } from '../utils/routingConstants';
+import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
+import { ROUTE_COMPONENTS } from '../utils/routingConstants'
+import { getPackageListAction } from '../actions/packageActions'
+import { FilterBar, ComponentList, Section } from './'
+import { uiNavigation, uiComponentsUpdateList } from '../actions/ui'
+import EntitySpec from '../utils/entitySpec'
 
 class PageComponents extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {}
-    this.filterChanged = this.filterChanged.bind(this)
-    this.editorDidMount = this.editorDidMount.bind(this)
+    this.state = { activeProvider: 'github' }
+    this.filterHandler = this.filterHandler.bind(this)
+    this.onAddComponent = this.onAddComponent.bind(this)
+    this.onRemoveComponent = this.onRemoveComponent.bind(this)
+    this.onChangeComponent = this.onChangeComponent.bind(this)
+    this.onClick = this.onClick.bind(this)
   }
 
   componentDidMount() {
-    const { dispatch, token, path, filterValue } = this.props
-    const pathToShow = path ? path : filterValue
-    this.handleNewSpec(pathToShow)
+    const { dispatch, token } = this.props
     dispatch(uiNavigation({ to: ROUTE_COMPONENTS }))
     dispatch(getPackageListAction(token))
   }
 
-  componentWillReceiveProps(newProps) {
-    // if the path is changing, update the filter to match. That will trigger getting the content
-    const newPath = newProps.path
-    if (this.props.path !== newPath)
-      return this.props.dispatch(uiBrowseUpdateFilter(newPath))
-
-    // if the filter is changing (either on its own or because of the path), get the new content
-    const newFilter = newProps.filterValue
-    if (this.props.filterValue !== newFilter)
-      this.handleNewSpec(newFilter)
+  filterHandler(spec) {
+    // const { dispatch, token, queue } = this.props
   }
 
-  handleNewSpec(newFilter) {
-    const { dispatch, token } = this.props
-    if (!newFilter) {
-      // TODO clear out the "current" values as we are not showing anything.
-      return
-    }
-    const spec = EntitySpec.fromPath(newFilter)
-    dispatch(getPackageAction(token, spec))
-    dispatch(getCurationAction(token, spec))
-    dispatch(getHarvestResultsAction(token, spec))
+  onAddComponent(value) {
+    const { dispatch } = this.props
+    const component = EntitySpec.fromPath(value)
+    dispatch(uiComponentsUpdateList({ add: component }))
   }
 
-  filterChanged(newFilter) {
-    this.props.dispatch(uiBrowseUpdateFilter(newFilter))
+  onRemoveComponent(component) {
+    this.props.dispatch(uiComponentsUpdateList({ remove: component }))
   }
 
-  gotoValue(value) {
-    this.props.history.push(`${ROUTE_COMPONENTS}${value ? '/' + value : ''}`)
+  onChangeComponent(component, newComponent) {
+    this.props.dispatch(uiComponentsUpdateList({ update: component, value: newComponent }))
   }
 
-  editorDidMount(editor, monaco) {
-    this.setState({ ...this.state, editor: editor })
-    editor.focus()
+  onClick(event, thing) {
+    const target = event.target
+    const activeProvider = target.name
+    this.setState({ ...this.state, activeProvider })
   }
 
-  renderMissing(value) {
+  renderProviderButtons() {
+    const { activeProvider } = this.state
     return (
-      <Button>Queue harvest</Button>
+      <ButtonGroup>
+        <Button name='github' onClick={this.onClick} active={activeProvider === 'github'}>GitHub</Button>
+        <Button name='maven' onClick={this.onClick} active={activeProvider === 'maven'}>Maven</Button>
+        <Button name='npm' onClick={this.onClick} active={activeProvider === 'npm'}>NPM</Button>
+        <Button name='nuget' onClick={this.onClick} active={activeProvider === 'nuget'}>NuGet</Button>
+      </ButtonGroup>
     )
   }
 
-  renderData(value, name, type = 'json', actionButton = null) {
-    return (
-      <Section name={name} actionButton={actionButton}>
-        {this.renderInnerData(value, name, type, actionButton)}
-      </Section>)
+  renderActionButton() {
+    return (<Button className='pull-right' bsStyle='success' onClick={this.filterHandler}>Filter</Button>)
   }
 
-  renderInnerData(value, name, type = 'json', actionButton = null) {
-    if (value.isFetching)
-      return this.renderPlaceholder(`Loading the ${name}`)
-    if (value.error && !value.error.state === 404)
-      return this.renderPlaceholder(`There was a problem loading the ${name}`)
-    if (!value.isFetched)
-      return this.renderPlaceholder('Search for some part of a component name to see details')
-    if (!value.item)
-      return this.renderPlaceholder(`There are no ${name}`, actionButton)
-    const options = {
-      selectOnLineNumbers: true
-    }
-    return (
-      <MonacoEditorWrapper
-        height='400'
-        language={type}
-        value={value.transformed}
-        options={options}
-        editorDidMount={this.editorDidMount}
-      />)
-  }
-
-  renderPlaceholder(message) {
-    return (
-      <div className='placeholder-message inline section-body'>
-        <span>{message}</span>
-      </div>)
-  }
-
-  renderCurationButton() {
-    return (<Button bsStyle='success' className='pull-right'>Add curation</Button>)
-  }
-
-  renderHarvestButton() {
-    return (<Button bsStyle='success' className='pull-right'>Harvest data</Button>)
+  noRowsRenderer() {
+    return <div>Select components...</div>
   }
 
   render() {
-    const { filterOptions, filterValue, component, curation, harvest } = this.props
+    const { components, filterOptions } = this.props
     return (
       <Grid className='main-container'>
-        <Row className="show-grid spacer">
-          <Col md={10} mdOffset={1}>
-            <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
+        <Row className='show-grid spacer'>
+          <Col md={4}>
+            {this.renderProviderButtons()}
+          </Col>
+          <Col md={7}>
+            <FilterBar options={filterOptions} onChange={this.onAddComponent} clearOnChange />
           </Col>
         </Row>
-        <Row className='show-grid'>
-          {this.renderData(component, 'results', 'yaml', this.renderCurationButton())}
-          {this.renderData(curation, 'curations', 'json', this.renderCurationButton())}
-          {this.renderData(harvest, 'harvest data', 'json', this.renderHarvestButton())}
-        </Row>
+        <Section name={'Known components'} actionButton={this.renderActionButton()}>
+          <div className='section-body'>
+            <ComponentList
+              list={components}
+              listHeight={1000}
+              noRowsRenderer={this.noRowsRenderer} />
+          </div>
+        </Section>
       </Grid>
     )
   }
@@ -137,13 +99,10 @@ class PageComponents extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    token: state.session.token,
-    path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
+    token: state.session.token, 
     filterValue: state.ui.browse.filter,
     filterOptions: state.package.list,
-    component: state.package.current,
-    curation: state.curation.current,
-    harvest: state.harvest.current
+    components: state.ui.components.componentList
   }
 }
 export default connect(mapStateToProps)(PageComponents)
