@@ -4,13 +4,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getGitHubRevisions } from '../api/clearlyDefined'
-import { Typeahead } from 'react-bootstrap-typeahead'
+import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
 
 export default class GitHubCommitPicker extends Component {
 
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
+    defaultInputValue: PropTypes.string,
+    allowNew: PropTypes.bool
   }
 
   constructor(props) {
@@ -51,26 +53,32 @@ export default class GitHubCommitPicker extends Component {
   }
 
   renderMenuItemChildren(option, props) {
-    return option.tag === option.sha ? option.sha : `${option.tag} (${option.sha})`
+    const value = option.tag === option.sha ? option.sha : `${option.tag} (${option.sha})`
+    return <Highlighter search={props.text}>
+      {value}
+    </Highlighter>
   }
 
   filter(option, text) {
-    if (this.props.request.revision)
+    if (!text)
       return true;
-    return option.tag.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+    return option.tag.toLowerCase().indexOf(text.toLowerCase()) !== -1
+      || option.sha.toLowerCase().indexOf(text.toLowerCase()) !== -1
   }
 
   render() {
+    const { defaultInputValue, allowNew } = this.props
     const { customValues, options } = this.state
     const list = customValues.concat(options)
     return (
       <Typeahead
         options={list}
         labelKey='tag'
+        defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'No tags found, enter a commit hash' : 'Pick a tag or enter a commit hash'}
         onChange={this.onChange}
         bodyContainer
-        allowNew
+        allowNew={allowNew}
         clearButton
         newSelectionPrefix='SHA:'
         emptyLabel=''

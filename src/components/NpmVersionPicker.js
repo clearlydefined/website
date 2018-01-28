@@ -11,6 +11,7 @@ export default class NpmVersionPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
+    defaultInputValue: PropTypes.string
   }
 
   constructor(props) {
@@ -57,12 +58,14 @@ export default class NpmVersionPicker extends Component {
   }
 
   render() {
+    const { defaultInputValue } = this.props
     const { customValues, options } = this.state
     const list = customValues.concat(options)
     return (
       <Typeahead
         options={list}
         // labelKey='id'
+        defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
         onChange={this.onChange}
         bodyContainer
