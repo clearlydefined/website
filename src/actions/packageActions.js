@@ -2,12 +2,13 @@
 // SPDX-License-Identifier: MIT
 
 import { asyncActions } from './'
-import { getPackage, previewPackage, getPackageList } from '../api/clearlyDefined'
+import { getDefinitions, getPackage, previewPackage, getPackageList } from '../api/clearlyDefined'
 
 export const PACKAGE_GET = 'PACKAGE_GET'
 export const PACKAGE_GET_PROPOSED = 'PACKAGE_GET_PROPOSED'
 export const PACKAGE_PREVIEW = 'PACKAGE_PREVIEW'
 export const PACKAGE_LIST = 'PACKAGE_LIST'
+export const PACKAGE_DEFINITIONS = 'PACKAGE_DEFINITIONS'
 
 export function getPackageAction(token, entity) {
   return (dispatch) => {
@@ -15,6 +16,17 @@ export function getPackageAction(token, entity) {
     dispatch(actions.start())
     return getPackage(token, entity).then(
       result => dispatch(actions.success(result)),
+      error => dispatch(actions.error(error))
+    )
+  }
+}
+
+export function getDefinitionsAction(token, entities) {
+  return (dispatch) => {
+    const actions = asyncActions(PACKAGE_DEFINITIONS)
+    dispatch(actions.start())
+    return getDefinitions(token, entities).then(
+      result => dispatch(actions.success({ add: result })),
       error => dispatch(actions.error(error))
     )
   }

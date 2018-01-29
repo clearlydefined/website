@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_COMPONENTS } from '../utils/routingConstants'
-import { getPackageListAction } from '../actions/packageActions'
+import { getPackageListAction, getDefinitionsAction } from '../actions/packageActions'
 import { FilterBar, ComponentList, Section } from './'
 import { uiNavigation, uiComponentsUpdateList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
@@ -33,8 +33,11 @@ class PageComponents extends Component {
   }
 
   onAddComponent(value) {
-    const { dispatch } = this.props
+    const { dispatch, token, definitions } = this.props
     const component = EntitySpec.fromPath(value)
+    const path = component.toUrlPath()
+    component.definition = !!definitions[path]
+    !component.definition && dispatch(getDefinitionsAction(token, [path]))
     dispatch(uiComponentsUpdateList({ add: component }))
   }
 
@@ -73,7 +76,7 @@ class PageComponents extends Component {
   }
 
   render() {
-    const { components, filterOptions } = this.props
+    const { components, filterOptions, definitions } = this.props
     return (
       <Grid className='main-container'>
         <Row className='show-grid spacer'>
@@ -89,6 +92,7 @@ class PageComponents extends Component {
             <ComponentList
               list={components}
               listHeight={1000}
+              definitions={definitions}
               noRowsRenderer={this.noRowsRenderer} />
           </div>
         </Section>
@@ -102,6 +106,7 @@ function mapStateToProps(state, ownProps) {
     token: state.session.token, 
     filterValue: state.ui.browse.filter,
     filterOptions: state.package.list,
+    definitions: state.package.bodies,
     components: state.ui.components.componentList
   }
 }

@@ -64,6 +64,26 @@
   text-overflow: ellipsis;
 }
 
+.list-panel {
+  margin-left: 85px;
+  margin-right: 85px;
+  text-overflow: ellipsis;
+  p {
+    margin: 0;
+  }
+  h5 {
+    font-weight: bold;
+    margin-bottom: 2px;
+  }
+}
+
+.list-singleLine {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .list-activity-area {
   min-width: 200px;
   display: inline-flex;

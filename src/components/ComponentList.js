@@ -3,8 +3,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker } from './'
-import { clone } from 'lodash'
+import { Row, Col } from 'react-bootstrap'
+import { clone, get } from 'lodash'
 import FontAwesome from 'react-fontawesome'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -19,6 +21,7 @@ export default class ComponentList extends React.Component {
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
+    definitions: PropTypes.object
   }
 
   static defaultProps = {
@@ -86,8 +89,66 @@ export default class ComponentList extends React.Component {
     return (<span>{nameText} &nbsp; {policyText}</span>)
   }
 
+  getSourceUrl(definition) {
+    const l = definition.described.sourceLocation
+    if (l)
+      switch (l.provider) {
+        case 'github':
+          return <Link to={`https://github.com/${l.namespace}/${l.name}/commit/${l.revision}`}>{l.revision}</Link>
+        default:
+          return ''
+      }
+    const p = definition.package || {}
+    switch (p.provider) {
+      case 'github':
+        return <Link to={`https://github.com/${p.namespace}/${p.name}/commit/${p.revision}`}>{p.revision}</Link>
+      default:
+        return ''
+    }
+  }
+
   renderPanel(component) {
-    return <div>This is a component</div>
+    const { definitions } = this.props
+    const key = component.toUrlPath()
+    const definition = definitions[key]
+    if (!definition)
+      return (<div className={"list-noRows"}>
+        <div>
+          'Boo, nothing to see here'
+        </div>
+      </div>)
+    const { licensed, described } = definition
+    const sourceUrl = this.getSourceUrl(definition)
+    return (
+      <Row>
+        <Col md={6} >
+          <h5>Descriptive info</h5>
+          <Row>
+            <Col md={3} >
+              <p>Source:</p>
+              <p>Date:</p>
+            </Col>
+            <Col md={9} >
+              <p>{sourceUrl}</p>
+              <p>{described.releaseDate}</p>
+            </Col>
+          </Row>
+        </Col>
+        <Col md={6} >
+          <h5>License info</h5>
+          <Row>
+            <Col md={3} >
+              <p>License:</p>
+              <p>Copyright:</p>
+            </Col>
+            <Col md={9} >
+              <p><span className='list-singleLine'>{licensed.license}</span></p>
+              <p><span className='list-singleLine'>{get(licensed, 'copyright.holders', []).join(', ')}</span></p>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    )
   }
 
   getImage(component) {
@@ -99,7 +160,7 @@ export default class ComponentList extends React.Component {
   }
 
   rowHeight({ index }, showExpanded = false) {
-    return showExpanded ? 150 :  50
+    return showExpanded ? 150 : 50
   }
 
   renderRow({ index, key, style }, toggleExpanded = null, showExpanded = false) {

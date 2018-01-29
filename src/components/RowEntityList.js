@@ -69,7 +69,7 @@ export default class RowEntityList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, list, contentSeq, sortOrder, rowHeight } = this.props
+    const { loadMoreRows, listHeight, list, contentSeq, sortOrder } = this.props
     if (!list.list || list.list.length === 0)
       return this.wrappedNoRowsRender()
     return (

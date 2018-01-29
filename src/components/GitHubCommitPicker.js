@@ -70,7 +70,7 @@ export default class GitHubCommitPicker extends Component {
     const { defaultInputValue, allowNew } = this.props
     const { customValues, options } = this.state
     const list = customValues.concat(options)
-    return (
+    return (<div onClick={e => e.stopPropagation()}>
       <Typeahead
         options={list}
         labelKey='tag'
@@ -85,6 +85,7 @@ export default class GitHubCommitPicker extends Component {
         filterBy={this.filter}
         selectHintOnEnter
         renderMenuItemChildren={this.renderMenuItemChildren}
-      />)
+      />
+    </div >)
   }
 }
