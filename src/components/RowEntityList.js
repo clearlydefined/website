@@ -55,6 +55,8 @@ export default class RowEntityList extends React.Component {
 
   wrappedRowHeight({ index }) {
     const { allowExpand, rowHeight } = this.props
+    if (typeof rowHeight !== 'function')
+      return rowHeight
     return allowExpand
       ? rowHeight({ index }, this.state.expanded.includes(index))
       : rowHeight({ index })

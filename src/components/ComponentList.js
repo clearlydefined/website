@@ -46,7 +46,7 @@ export default class ComponentList extends React.Component {
   commitChanged(component, value) {
     const newComponent = clone(component)
     newComponent.revision = value ? value.sha : null
-    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
+    this.incrementSequence()
     const { onChange } = this.props
     onChange && onChange(component, newComponent)
   }
@@ -54,9 +54,13 @@ export default class ComponentList extends React.Component {
   npmVersionChanged(component, value) {
     const newComponent = clone(component)
     newComponent.revision = value
-    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
+    this.incrementSequence()
     const { onChange } = this.props
     onChange && onChange(component, newComponent)
+  }
+
+  incrementSequence() {
+    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
   }
 
   renderButtons(component) {
