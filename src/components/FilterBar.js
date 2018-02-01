@@ -12,7 +12,7 @@ export default class FilterBar extends Component {
     value: PropTypes.string,
     options: PropTypes.any,
     onChange: PropTypes.func,
-    className: PropTypes.string
+    clearOnChange: PropTypes.bool
   }
 
   constructor(props) {
@@ -22,10 +22,13 @@ export default class FilterBar extends Component {
   }
 
   onChange(values) {
-    this.props.onChange && values.length && this.props.onChange(values[0].path)
+    const { onChange, clearOnChange } = this.props
+    if (values.length) {
+      onChange && onChange(values[0].path)
+      clearOnChange && setTimeout(() => this.refs.typeahead.getInstance().clear(), 0);
+    }
   }
 
-  
   filter(option, text) {
     if (this.props.value)
       return true;
@@ -36,6 +39,7 @@ export default class FilterBar extends Component {
     const { options } = this.props
     return (
       <Typeahead
+        ref='typeahead'
         placeholder='Component search...'
         onChange={this.onChange}
         options={options.transformedList}

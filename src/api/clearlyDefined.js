@@ -41,6 +41,10 @@ export function getPackage(token, entity) {
   return get(url(`${PACKAGES}/${entity.toUrlPath()}`), token)
 }
 
+export function getDefinitions(token, list) {
+  return post(url(`${PACKAGES}`), token, list)
+}
+
 export async function getPackageList(token, prefix, force = false) {
   if (!force && lastFetchPackageList && (Date.now() - lastFetchPackageList < packageListTTL))
     return { list: packageList}

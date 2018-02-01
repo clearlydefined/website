@@ -10,7 +10,7 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 export default class GitHubSelector extends Component {
 
   static propTypes = {
-    onChange: PropTypes.func,
+    onChange: PropTypes.func
   }
 
   constructor(props) {

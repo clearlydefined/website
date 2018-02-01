@@ -12,6 +12,7 @@ export default class TwoLineEntry extends React.Component {
     headline: PropTypes.element,
     message: PropTypes.element,
     onClick: PropTypes.func,
+    panel: PropTypes.element
   }
 
   static defaultProps = {
@@ -19,20 +20,25 @@ export default class TwoLineEntry extends React.Component {
   };
 
   render() {
-    const { buttons, image, headline, message, onClick, letter } = this.props
+    const { buttons, image, headline, message, onClick, letter, panel } = this.props
     return (
-      <div className="list-row" onClick={onClick} >
-        {image && <img className="list-image" src={image} alt="" />}
-        {letter && !image && <span className="list-letter">{letter.slice(0, 1)}</span>}
-        <div className="list-body">
-          <div className="list-headline">
-            {headline}
+      <div>
+        <div className="list-row" onClick={onClick} >
+          {image && <img className="list-image" src={image} alt="" />}
+          {letter && !image && <span className="list-letter">{letter.slice(0, 1)}</span>}
+          <div className="list-body">
+            <div className="list-headline">
+              {headline}
+            </div>
+            <div className="list-message">
+              {message}
+            </div>
           </div>
-          <div className="list-message">
-            {message}
-          </div>
+          {buttons}
         </div>
-        {buttons}
+        {panel && <div className="list-panel">
+          {panel}
+        </div>}
       </div>
     )
   }

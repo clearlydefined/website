@@ -7,7 +7,7 @@
     "lodash": "^4.17.4",
     "react": "^16.2.0",
     "react-bootstrap": "^0.31.5",
-    "react-bootstrap-typeahead": "^2.2.0",
+    "react-bootstrap-typeahead": "^2.3.0",
     "react-dom": "^16.2.0",
     "react-fontawesome": "^1.6.1",
     "react-monaco-editor": "^0.13.0",
@@ -27,7 +27,7 @@
     "npm-run-all": "^4.0.2"
   },
   "scripts": {
-    "copy-monaco": "cpx 'node_modules/monaco-editor/min/vs/**/*' public/vs",
+    "copy-monaco": "node ./src/utils/install-monaco.js",
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",

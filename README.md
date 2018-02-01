@@ -4,8 +4,9 @@ This project implements the website for [ClearlyDefined](https://clearlydefined.
 
 # Getting Started
 1. Set the following environment variables:
-   * REACT_APP_SERVER=[http://localhost:5000 | https://dev-api.clearlydefined.io | ...]
-1. `npm install && npm start`
+   * REACT_APP_SERVER=[http://localhost:4000 | https://dev-api.clearlydefined.io | ...]
+1. `npm install`
+1. `npm start`
 
 That installs all the dependencies and starts the website on http://localhost:3000.
 

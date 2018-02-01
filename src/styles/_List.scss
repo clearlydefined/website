@@ -7,10 +7,11 @@
 
 .list-row {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0 25px;
+  padding: 5px 25px 5px 25px;
   cursor: pointer;
 }
 
@@ -60,6 +61,26 @@
   color: $color-text-main;
   flex-grow: 100;
   white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.list-panel {
+  margin-left: 85px;
+  margin-right: 85px;
+  text-overflow: ellipsis;
+  p {
+    margin: 0;
+  }
+  h5 {
+    font-weight: bold;
+    margin-bottom: 2px;
+  }
+}
+
+.list-singleLine {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 

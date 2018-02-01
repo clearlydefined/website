@@ -5,12 +5,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { AutoSizer, List, InfiniteLoader } from 'react-virtualized'
 import styles from 'react-virtualized/styles.css'
+import { xor } from 'lodash'
 
 export default class InfiniteList extends React.Component {
 
   static propTypes = {
     listHeight: PropTypes.number,
-    rowHeight: PropTypes.number,
+    rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
     totalRows: PropTypes.func,
     currentRows: PropTypes.func,
     isRowLoaded: PropTypes.func,
@@ -18,19 +19,42 @@ export default class InfiniteList extends React.Component {
     rowRenderer: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     sortOrder: PropTypes.string,
-    contentSeq: PropTypes.number  // value upper levels can change to sign non-shallow content change
+    contentSeq: PropTypes.number,  // value upper levels can change to sign non-shallow content change
+    expanded: PropTypes.arrayOf(PropTypes.number)
   }
 
   static defaultProps = {
     loadMoreRows: () => { }
   }
 
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  componentWillReceiveProps(newProps) {
+    const changed = xor(newProps.expanded, this.props.expanded)
+    if (changed.length === 0 || !this.state.list)
+      return
+    this.state.list.recomputeRowHeights(changed.sort()[0])
+  }
+
+  // hook the List ref so we can trigger recompute when expand happens.
+  hookRef(ref) {
+    return (element, ...args) => {
+      if (!element)
+        return ref(element, ...args)
+      if (this.state.list !== element)
+        this.setState({ ...this.state, list: element })
+    }
+  }
+
   render() {
     const { isRowLoaded, loadMoreRows, listHeight, totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer, sortOrder, contentSeq } = this.props
-    let height = Math.min(currentRows() * rowHeight, listHeight || 300)
+    let height = Math.min(currentRows() * 150, listHeight || 300)
     if (noRowsRenderer)
       // show noRowsRenderer won't be called with zero height
-      height = Math.max(height, rowHeight)
+      height = Math.max(height, 200)
 
     return (
       <InfiniteLoader
@@ -41,7 +65,7 @@ export default class InfiniteList extends React.Component {
           <AutoSizer disableHeight>
             {({ width }) => (
               <List
-                ref={registerChild}
+                ref={this.hookRef(registerChild)}
                 className={styles.List}
                 height={height}
                 onRowsRendered={onRowsRendered}
