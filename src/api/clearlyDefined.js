@@ -15,6 +15,7 @@ const HARVEST = 'harvest'
 const PACKAGES = 'packages'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
+const ORIGINS_MAVEN = 'origins/maven'
 
 const packageListTTL = 60000
 let lastFetchPackageList = null
@@ -47,7 +48,7 @@ export function getDefinitions(token, list) {
 
 export async function getPackageList(token, prefix, force = false) {
   if (!force && lastFetchPackageList && (Date.now() - lastFetchPackageList < packageListTTL))
-    return { list: packageList}
+    return { list: packageList }
   const list = await get(url(`${PACKAGES}/${prefix || ''}`), token)
   lastFetchPackageList = Date.now()
   packageList = list
@@ -74,6 +75,14 @@ export function getNpmRevisions(token, path) {
   return get(url(`${ORIGINS_NPM}/${path}/revisions`), token)
 }
 
+export function getMavenSearch(token, path) {
+  return get(url(`${ORIGINS_MAVEN}/${path}`), token)
+}
+
+export function getMavenRevisions(token, path) {
+  return get(url(`${ORIGINS_MAVEN}/${path}/revisions`), token)
+}
+
 // ========================== utilities ====================
 
 export function url(path, query) {
@@ -92,10 +101,12 @@ export function url(path, query) {
 }
 
 function getHeaders(token) {
-  return {
-    'Authorization': 'Bearer ' + token,
+  const result = {
     'Content-Type': 'application/json; charset=utf-8'
   }
+  if (token)
+    result.Authorization = 'Bearer ' + token
+  return result
 }
 
 function handleResponse(response) {
