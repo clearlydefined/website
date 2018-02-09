@@ -35,10 +35,11 @@ class PageHarvest extends Component {
     // TODO clearly the harvest queue when everything is successfully queued
   }
 
-  onAddRequest(value) {
+  onAddRequest(value, tool) {
     const [namespace, name] = value.name.split('/')
     const path = [value.type, value.provider, name ? namespace : '-', name || namespace].join('/')
     const request = EntitySpec.fromPath(path)
+    request.tool = tool
     this.props.dispatch(uiHarvestUpdateQueue({ add: request }))
   }
 
