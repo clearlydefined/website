@@ -21,7 +21,7 @@ export default class NuGetSelector extends Component {
   onChange(values) {
     const { onChange } = this.props
     const value = values.length === 0 ? null : values[0]
-    value && onChange && onChange({ type: 'npm', provider: 'npmjs', name: value.id })
+    value && onChange && onChange({ type: 'npm', provider: 'npmjs', name: value.id }, 'package')
   }
 
   async getOptions(value) {

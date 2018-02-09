@@ -26,7 +26,7 @@ export default class GitHubSelector extends Component {
     if (!value)
       return
     if (value.indexOf('/') > 0 && !value.endsWith('/'))
-      return onChange && onChange({ type: 'git', provider: 'github', name: value })
+      return onChange && onChange({ type: 'git', provider: 'github', name: value }, 'source')
     this._typeahead._updateText(value + '/')
     this._typeahead._updateSelected([])
   }
