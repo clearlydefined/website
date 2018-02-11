@@ -12,7 +12,8 @@ export default class GitHubCommitPicker extends Component {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
     defaultInputValue: PropTypes.string,
-    allowNew: PropTypes.bool
+    allowNew: PropTypes.bool,
+    token: PropTypes.string
   }
 
   constructor(props) {

@@ -48,7 +48,7 @@ export function getDefinitions(token, list) {
 
 export async function getPackageList(token, prefix, force = false) {
   if (!force && lastFetchPackageList && (Date.now() - lastFetchPackageList < packageListTTL))
-    return { list: packageList}
+    return { list: packageList }
   const list = await get(url(`${PACKAGES}/${prefix || ''}`), token)
   lastFetchPackageList = Date.now()
   packageList = list
@@ -101,10 +101,12 @@ export function url(path, query) {
 }
 
 function getHeaders(token) {
-  return {
-    'Authorization': 'Bearer ' + token,
+  const result = {
     'Content-Type': 'application/json; charset=utf-8'
   }
+  if (token)
+    result.Authorization = 'Bearer ' + token
+  return result
 }
 
 function handleResponse(response) {
