@@ -21,7 +21,8 @@ export default class ComponentList extends React.Component {
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
-    definitions: PropTypes.object
+    definitions: PropTypes.object,
+    githubToken: PropTypes.string
   }
 
   static defaultProps = {
@@ -69,6 +70,7 @@ export default class ComponentList extends React.Component {
         {component.provider === 'github' && <GitHubCommitPicker
           request={component}
           defaultInputValue={component.revision}
+          token={this.props.githubToken}
           onChange={this.commitChanged.bind(this, component)}
         />}
         {component.provider === 'npmjs' && <NpmVersionPicker

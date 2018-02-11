@@ -19,6 +19,7 @@ export default class HarvestQueueList extends React.Component {
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
+    githubToken: PropTypes.string
   }
 
   static defaultProps = {
@@ -58,13 +59,14 @@ export default class HarvestQueueList extends React.Component {
       <div className='list-activity-area'>
         {request.provider === 'github' && <GitHubCommitPicker
           request={request}
+          token={this.props.githubToken}
           onChange={this.commitChanged.bind(this, request)}
         />}
         {request.provider === 'npmjs' && <NpmVersionPicker
           request={request}
           onChange={this.versionChanged.bind(this, request)}
         />}
-        {request.provider === 'maven-central' && <MavenVersionPicker
+        {request.provider === 'mavenCentral' && <MavenVersionPicker
           request={request}
           onChange={this.versionChanged.bind(this, request)}
         />}
@@ -94,7 +96,7 @@ export default class HarvestQueueList extends React.Component {
   }
 
   getLetter(request) {
-    if (request.provider === 'maven-central')
+    if (request.provider === 'mavenCentral')
       return 'M'
     return null
   }

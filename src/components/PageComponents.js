@@ -76,7 +76,7 @@ class PageComponents extends Component {
   }
 
   render() {
-    const { components, filterOptions, definitions } = this.props
+    const { components, filterOptions, definitions, token } = this.props
     return (
       <Grid className='main-container'>
         <Row className='show-grid spacer'>
@@ -93,6 +93,7 @@ class PageComponents extends Component {
               list={components}
               listHeight={1000}
               definitions={definitions}
+              githubToken={token}
               noRowsRenderer={this.noRowsRenderer} />
           </div>
         </Section>
