@@ -3,7 +3,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types'
-import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker } from './'
+import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker, MavenVersionPicker } from './'
 import { clone } from 'lodash'
 import FontAwesome from 'react-fontawesome'
 import github from '../images/GitHub-Mark-120px-plus.png'
@@ -19,6 +19,7 @@ export default class HarvestQueueList extends React.Component {
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
+    githubToken: PropTypes.string
   }
 
   static defaultProps = {
@@ -46,7 +47,7 @@ export default class HarvestQueueList extends React.Component {
     this.props.onChange(request, newRequest)
   }
 
-  npmVersionChanged(request, value) {
+  versionChanged(request, value) {
     const newRequest = clone(request)
     newRequest.revision = value 
     this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
@@ -58,11 +59,16 @@ export default class HarvestQueueList extends React.Component {
       <div className='list-activity-area'>
         {request.provider === 'github' && <GitHubCommitPicker
           request={request}
+          token={this.props.githubToken}
           onChange={this.commitChanged.bind(this, request)}
         />}
         {request.provider === 'npmjs' && <NpmVersionPicker
           request={request}
-          onChange={this.npmVersionChanged.bind(this, request)}
+          onChange={this.versionChanged.bind(this, request)}
+        />}
+        {request.provider === 'mavenCentral' && <MavenVersionPicker
+          request={request}
+          onChange={this.versionChanged.bind(this, request)}
         />}
         <FontAwesome name={'times'} className='list-remove' onClick={this.removeRequest.bind(this, request)} />
       </div>)
@@ -89,6 +95,12 @@ export default class HarvestQueueList extends React.Component {
     return null
   }
 
+  getLetter(request) {
+    if (request.provider === 'mavenCentral')
+      return 'M'
+    return null
+  }
+
   renderRow({ index, key, style }) {
     const { list } = this.props
     const request = list.list[index]
@@ -97,6 +109,7 @@ export default class HarvestQueueList extends React.Component {
       <div key={key} style={style}>
         <TwoLineEntry
           image={this.getImage(request)}
+          letter={this.getLetter(request)}
           headline={this.renderHeadline(request)}
           message={this.renderMessage(request)}
           buttons={this.renderButtons(request)}

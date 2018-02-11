@@ -21,7 +21,8 @@ export default class ComponentList extends React.Component {
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
-    definitions: PropTypes.object
+    definitions: PropTypes.object,
+    githubToken: PropTypes.string
   }
 
   static defaultProps = {
@@ -69,6 +70,7 @@ export default class ComponentList extends React.Component {
         {component.provider === 'github' && <GitHubCommitPicker
           request={component}
           defaultInputValue={component.revision}
+          token={this.props.githubToken}
           onChange={this.commitChanged.bind(this, component)}
         />}
         {component.provider === 'npmjs' && <NpmVersionPicker
@@ -146,7 +148,7 @@ export default class ComponentList extends React.Component {
               <p>Copyright:</p>
             </Col>
             <Col md={9} >
-              <p><span className='list-singleLine'>{licensed.license}</span></p>
+              <p><span className='list-singleLine'>{get(licensed, 'license')}</span></p>
               <p><span className='list-singleLine'>{get(licensed, 'copyright.holders', []).join(', ')}</span></p>
             </Col>
           </Row>

@@ -35,10 +35,11 @@ class PageHarvest extends Component {
     // TODO clearly the harvest queue when everything is successfully queued
   }
 
-  onAddRequest(value) {
+  onAddRequest(value, tool) {
     const [namespace, name] = value.name.split('/')
     const path = [value.type, value.provider, name ? namespace : '-', name || namespace].join('/')
     const request = EntitySpec.fromPath(path)
+    request.tool = tool
     this.props.dispatch(uiHarvestUpdateQueue({ add: request }))
   }
 
@@ -78,7 +79,7 @@ class PageHarvest extends Component {
 
   render() {
     const { activeProvider } = this.state
-    const { queue } = this.props
+    const { queue, token } = this.props
     return (
       <Grid className='main-container'>
         <Row className='show-grid spacer'>
@@ -99,6 +100,7 @@ class PageHarvest extends Component {
               listHeight={1000}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}
+              githubToken={token}
               noRowsRenderer={this.noRowsRenderer} />
           </div>
         </Section>

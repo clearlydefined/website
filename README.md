@@ -4,9 +4,8 @@ This project implements the website for [ClearlyDefined](https://clearlydefined.
 
 # Getting Started
 1. Set the following environment variables:
-   * REACT_APP_SERVER=[http://localhost:4000 | https://dev-api.clearlydefined.io | ...]
-1. `npm install`
-1. `npm start`
+   * REACT_APP_SERVER=[http://localhost:4000 | https://dev-api.clearlydefined.io | ...] -- Note the default is http://localhost:4000 so you can leave this unset if your service is also local.
+1. `npm install && npm start`
 
 That installs all the dependencies and starts the website on http://localhost:3000.
 
@@ -26,7 +25,7 @@ https://clearlydefined.io/curation/type/provider/namespace/name/revision/pr/numb
 Where the segments have following values:
 
 * type -- the type of the component you are looking for. For exammple, npm, git, nuget, maven, ... This talks about the *shape* of the component.
-* provider -- where the component can be found. Examples include npmjs, maven-central, github, nuget, ...
+* provider -- where the component can be found. Examples include npmjs, mavenCentral, github, nuget, ...
 * namespace -- many component systems have namespaces. GitHub orgs, NPM namespace, Maven group id, ... This segment must be supplied. If your component does not have a namespace, use '-' (ASCII hyphen).
 * name -- the name of the component you want. Given the `namespace` segment mentioned above, this is just the simple name.
 * revision -- components typically have some differentiator like a version or commit id. Use that here. If this segment is omitted, the latest revision is used (if that makes sense for the provider).
