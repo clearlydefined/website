@@ -7,9 +7,21 @@ import { toPairs } from 'lodash'
 export const API_LOCAL = 'http://localhost:4000'
 export const API_DEVELOP = 'https://dev-api.clearlydefined.io'
 export const API_PROD = 'https://api.clearlydefined.io'
-export const apiHome = process.env.REACT_APP_SERVER || process.env.SERVICE_ENDPOINT || API_LOCAL
+export const apiHome = process.env.REACT_APP_SERVER || process.env.SERVICE_ENDPOINT || getServiceDefaultUrl()
 
-export const BASIC_PAGE_SIZE = 25
+function getServiceDefaultUrl() {
+  switch (process.env.NODE_ENV) {
+    case 'development':
+      return API_LOCAL
+    case 'test':
+      return API_DEVELOP
+    case 'production':
+      return API_PROD
+    default:
+      return API_LOCAL
+  }
+}
+
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
 const PACKAGES = 'packages'
