@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Grid, Row, Col } from 'react-bootstrap'
-import { getPackageListAction, getPackageAction } from '../actions/packageActions'
+import { getDefinitionListAction, getDefinitionAction } from '../actions/definitionActions'
 import { getCurationAction } from '../actions/curationActions'
 import { getHarvestResultsAction } from '../actions/harvestActions'
 import { uiBrowseUpdateFilter, uiNavigation } from '../actions/ui'
@@ -26,7 +26,7 @@ class PageComponents extends Component {
     const pathToShow = path ? path : filterValue
     this.handleNewSpec(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_INSPECT }))
-    dispatch(getPackageListAction(token))
+    dispatch(getDefinitionListAction(token))
   }
 
   componentWillReceiveProps(newProps) {
@@ -48,7 +48,7 @@ class PageComponents extends Component {
       return
     }
     const spec = EntitySpec.fromPath(newFilter)
-    dispatch(getPackageAction(token, spec))
+    dispatch(getDefinitionAction(token, spec))
     dispatch(getCurationAction(token, spec))
     dispatch(getHarvestResultsAction(token, spec))
   }
@@ -140,8 +140,8 @@ function mapStateToProps(state, ownProps) {
     token: state.session.token,
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     filterValue: state.ui.browse.filter,
-    filterOptions: state.package.list,
-    component: state.package.current,
+    filterOptions: state.definition.list,
+    component: state.definition.current,
     curation: state.curation.current,
     harvest: state.harvest.current
   }
