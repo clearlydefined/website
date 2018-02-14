@@ -26,14 +26,14 @@ function getServiceDefaultUrl() {
 
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
-const PACKAGES = 'packages'
+const DEFINITIONS = 'definitions'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
 const ORIGINS_MAVEN = 'origins/maven'
 
-const packageListTTL = 60000
-let lastFetchPackageList = null
-let packageList = []
+const definitionListTTL = 60000
+let lastFetchDefinitionList = null
+let definitionList = []
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
@@ -52,25 +52,25 @@ export function curate(token, entity, spec) {
   return patch(url(`${CURATIONS}/${entity.toUrlPath()}`), token, spec)
 }
 
-export function getPackage(token, entity) {
-  return get(url(`${PACKAGES}/${entity.toUrlPath()}`), token)
+export function getDefinition(token, entity) {
+  return get(url(`${DEFINITIONS}/${entity.toUrlPath()}`), token)
 }
 
 export function getDefinitions(token, list) {
-  return post(url(`${PACKAGES}`), token, list)
+  return post(url(`${DEFINITIONS}`), token, list)
 }
 
-export async function getPackageList(token, prefix, force = false) {
-  if (!force && lastFetchPackageList && (Date.now() - lastFetchPackageList < packageListTTL))
-    return { list: packageList }
-  const list = await get(url(`${PACKAGES}/${prefix || ''}`), token)
-  lastFetchPackageList = Date.now()
-  packageList = list
+export async function getDefinitionList(token, prefix, force = false) {
+  if (!force && lastFetchDefinitionList && (Date.now() - lastFetchDefinitionList < definitionListTTL))
+    return { list: definitionList }
+  const list = await get(url(`${DEFINITIONS}/${prefix || ''}`), token)
+  lastFetchDefinitionList = Date.now()
+  definitionList = list
   return { list }
 }
 
-export function previewPackage(token, entity, curation) {
-  return post(url(`${PACKAGES}/${entity.toUrlPath()}`, { preview: true }), token, curation)
+export function previewDefinition(token, entity, curation) {
+  return post(url(`${DEFINITIONS}/${entity.toUrlPath()}`, { preview: true }), token, curation)
 }
 
 export function getGitHubSearch(token, path) {

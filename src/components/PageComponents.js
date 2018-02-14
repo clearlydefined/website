@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_COMPONENTS } from '../utils/routingConstants'
-import { getPackageListAction, getDefinitionsAction } from '../actions/packageActions'
+import { getDefinitionListAction, getDefinitionsAction } from '../actions/definitionActions'
 import { FilterBar, ComponentList, Section } from './'
 import { uiNavigation, uiComponentsUpdateList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
@@ -25,7 +25,7 @@ class PageComponents extends Component {
   componentDidMount() {
     const { dispatch, token } = this.props
     dispatch(uiNavigation({ to: ROUTE_COMPONENTS }))
-    dispatch(getPackageListAction(token))
+    dispatch(getDefinitionListAction(token))
   }
 
   filterHandler(spec) {
@@ -106,8 +106,8 @@ function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token, 
     filterValue: state.ui.browse.filter,
-    filterOptions: state.package.list,
-    definitions: state.package.bodies,
+    filterOptions: state.definition.list,
+    definitions: state.definition.bodies,
     components: state.ui.components.componentList
   }
 }

@@ -14,7 +14,7 @@ export default class CurationReview extends Component {
   static propTypes = {
     curationOriginal: PropTypes.object,
     curationValue: PropTypes.object,
-    packageOriginal: PropTypes.object,
+    definitionOriginal: PropTypes.object,
     rawSummary: PropTypes.object,
     actionHandler: PropTypes.func.isRequired,
     actionText: PropTypes.string
@@ -33,9 +33,9 @@ export default class CurationReview extends Component {
   }
 
   componentDidMount() {
-    // setup the initial packagePreview value. Afterwards, changes will be handled by the editor
-    if (!this.state.packagePreview)
-      this.setState({ ...this.state, packagePreview: this.computeProposedPackage(this.props.rawSummary, this.props.curationValue) })
+    // setup the initial definitionPreview value. Afterwards, changes will be handled by the editor
+    if (!this.state.definitionPreview)
+      this.setState({ ...this.state, definitionPreview: this.computeProposedDefinition(this.props.rawSummary, this.props.curationValue) })
   }
 
   editorDidMount(type, editor, monaco) {
@@ -47,7 +47,7 @@ export default class CurationReview extends Component {
   onCurationChange(newCuration, event) {
     // TODO put in some throttling
     const { rawSummary } = this.props
-    const newProposal = this.computeProposedPackage(rawSummary, newCuration)
+    const newProposal = this.computeProposedDefinition(rawSummary, newCuration)
     if (!this.state.result || !newProposal)
       return
     // only set the value if it is different. Optimization plus it stops cycles
@@ -55,7 +55,7 @@ export default class CurationReview extends Component {
       this.state.result.getModifiedEditor().getModel().setValue(newProposal)
   }
 
-  computeProposedPackage(rawSummary, newCurationOrString) {
+  computeProposedDefinition(rawSummary, newCurationOrString) {
     // TODO figure out how to represent deletions
     try {
       const newCuration = typeof newCurationOrString === 'string'
@@ -73,7 +73,7 @@ export default class CurationReview extends Component {
 
   onSummaryChange(newSummary, event) {
     // TODO put in some throttling
-    if (!this.state.packagePreview)
+    if (!this.state.definitionPreview)
       return
     const { rawSummary } = this.props
     const newProposal = this.computeProposedCuration(rawSummary, newSummary)
@@ -137,8 +137,8 @@ export default class CurationReview extends Component {
   }
 
   render() {
-    const { curationOriginal, curationValue, packageOriginal } = this.props
-    const { packagePreview } = this.state
+    const { curationOriginal, curationValue, definitionOriginal } = this.props
+    const { definitionPreview } = this.state
     const options = {
       selectOnLineNumbers: true,
       renderSideBySide: true
@@ -166,8 +166,8 @@ export default class CurationReview extends Component {
           <MonacoDiffEditor
             height='400'
             language='yaml'
-            original={this.getStringValue(packageOriginal)}
-            value={packagePreview}
+            original={this.getStringValue(definitionOriginal)}
+            value={definitionPreview}
             options={options}
             onChange={this.onSummaryChange}
             editorDidMount={this.editorDidMount.bind(this, 'result')}

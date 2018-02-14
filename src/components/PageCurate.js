@@ -9,7 +9,7 @@ import { CurationReview, ProposePrompt } from './'
 import { ROUTE_CURATE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import { getCurationAction, curateAction } from '../actions/curationActions'
-import { getPackageAction, getPackageListAction, previewPackageAction } from '../actions/packageActions'
+import { getDefinitionAction, getDefinitionListAction, previewDefinitionAction } from '../actions/definitionActions'
 import { FilterBar } from './'
 import { Button } from 'react-bootstrap'
 
@@ -28,7 +28,7 @@ class PageCurate extends Component {
     const pathToShow = path ? path : filterValue
     this.handleNewSpec(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_CURATE }))
-    dispatch(getPackageListAction(token))
+    dispatch(getDefinitionListAction(token))
   }
 
   componentWillReceiveProps(newProps) {
@@ -55,11 +55,11 @@ class PageCurate extends Component {
     const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null });
     if (fullSpec.pr) {
       dispatch(getCurationAction(token, fullSpec))
-      dispatch(getPackageAction(token, fullSpec))
+      dispatch(getDefinitionAction(token, fullSpec))
     }
     dispatch(getCurationAction(token, currentSpec))
-    dispatch(getPackageAction(token, currentSpec))
-    dispatch(previewPackageAction(token, currentSpec, {}))
+    dispatch(getDefinitionAction(token, currentSpec))
+    dispatch(previewDefinitionAction(token, currentSpec, {}))
   }
 
   doPropose(description) {
@@ -96,26 +96,26 @@ class PageCurate extends Component {
 
   renderCurationView() {
     const { entitySpec } = this.state
-    const { currentCuration, proposedCuration, currentPackage, rawSummary, filterValue } = this.props
+    const { currentCuration, proposedCuration, currentDefinition, rawSummary, filterValue } = this.props
     if (!filterValue || !entitySpec)
       return this.renderPlaceholder('Search for some part of a component name to see details')
     // wait to render until we have everything
-    if (!(currentCuration.isFetched && currentPackage.isFetched && rawSummary.isFetched))
+    if (!(currentCuration.isFetched && currentDefinition.isFetched && rawSummary.isFetched))
       return this.renderPlaceholder('Loading the curations for the requested component')
     if (entitySpec.pr && !proposedCuration.isFetched)
       return this.renderPlaceholder('Loading the curations for the requested component')
     const curationOriginal = currentCuration.item
     const curationValue = proposedCuration.item
-    const packageOriginal = currentPackage.item
-    const packageValue = rawSummary.item
+    const definitionOriginal = currentDefinition.item
+    const definitionValue = rawSummary.item
     const actionText = entitySpec.pr ? 'Show on GitHub' : 'Save curation'
     return (
       <Col md={12} >
         <CurationReview
           curationOriginal={curationOriginal}
           curationValue={curationValue}
-          packageOriginal={packageOriginal}
-          rawSummary={packageValue}
+          definitionOriginal={definitionOriginal}
+          rawSummary={definitionValue}
           actionHandler={this.doAction}
           actionText={actionText} />
       </Col>
@@ -162,11 +162,11 @@ function mapStateToProps(state, ownProps) {
     token: state.session.token,
     isCurator: state.session.isCurator,
     currentCuration: state.curation.current,
-    currentPackage: state.package.current,
+    currentDefinition: state.definition.current,
     proposedCuration: state.curation.proposed,
-    rawSummary: state.package.preview,
+    rawSummary: state.definition.preview,
     filterValue: state.ui.curate.filter,
-    filterOptions: state.package.list
+    filterOptions: state.definition.list
   }
 }
 export default connect(mapStateToProps)(PageCurate)
