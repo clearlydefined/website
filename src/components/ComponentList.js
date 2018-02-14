@@ -96,7 +96,7 @@ export default class ComponentList extends React.Component {
   }
 
   getSourceUrl(definition) {
-    const l = definition.described.sourceLocation
+    const l = definition.described && definition.described.sourceLocation
     if (l)
       switch (l.provider) {
         case 'github':
@@ -136,7 +136,7 @@ export default class ComponentList extends React.Component {
             </Col>
             <Col md={9} >
               <p>{sourceUrl}</p>
-              <p>{described.releaseDate}</p>
+              <p>{described && described.releaseDate}</p>
             </Col>
           </Row>
         </Col>
