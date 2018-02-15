@@ -29,7 +29,7 @@ class PageHarvest extends Component {
   harvestHandler(spec) {
     const { dispatch, token, queue } = this.props
     const requests = queue.list.map(entry => {
-      return { type: entry.tool || entry.type, url: entry.toUrl(), policy: entry.policy }
+      return { tool: entry.tool || entry.type, path: entry.toPath(), policy: entry.policy }
     })
     dispatch(harvestAction(token, requests))
     // TODO clearly the harvest queue when everything is successfully queued

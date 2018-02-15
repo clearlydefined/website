@@ -35,7 +35,7 @@ class PageComponents extends Component {
   onAddComponent(value) {
     const { dispatch, token, definitions } = this.props
     const component = EntitySpec.fromPath(value)
-    const path = component.toUrlPath()
+    const path = component.toPath()
     component.definition = !!definitions[path]
     !component.definition && dispatch(getDefinitionsAction(token, [path]))
     dispatch(uiComponentsUpdateList({ add: component }))

@@ -115,7 +115,7 @@ export default class ComponentList extends React.Component {
 
   renderPanel(component) {
     const { definitions } = this.props
-    const key = component.toUrlPath()
+    const key = component.toPath()
     const definition = definitions[key]
     if (!definition)
       return (<div className={"list-noRows"}>

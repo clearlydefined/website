@@ -21,14 +21,9 @@ function normalize(value, provider, property) {
 }
 
 export default class EntitySpec {
-
   static fromPath(path) {
-    return EntitySpec.fromUrl(`cd:/${path}`)
-  }
-
-  static fromUrl(url) {
     // eslint-disable-next-line
-    const [full, type, provider, namespace, name, revision, prSpec] = url.match(/.*:\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/)
+    const [full, type, provider, namespace, name, revision, prSpec] = path.match(/\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/)
     // eslint-disable-next-line
     const [blank, delimiter, pr] = prSpec ? prSpec.split('/') : []
     return new EntitySpec(type, provider, namespace, name, revision, pr)
@@ -43,11 +38,7 @@ export default class EntitySpec {
     this.pr = pr
   }
 
-  toUrl() {
-    return `cd:/${this.toUrlPath()}`
-  }
-
-  toUrlPath() {
+  toPath() {
     const revisionPart = this.revision ? `/${this.revision}` : ''
     const prPart = this.pr ? `/pr/${this.pr}` : ''
     return `${this.type}/${this.provider}/${this.namespace || '-'}/${this.name}${revisionPart}${prPart}`
