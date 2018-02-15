@@ -50,7 +50,7 @@ class PageCurate extends Component {
       // TODO clear out the "current" values as we are not showing anything.
       return
     }
-    const fullSpec = EntitySpec.fromUrl('cd:' + newFilter);
+    const fullSpec = EntitySpec.fromPath(newFilter);
     this.setState({ ...this.state, entitySpec: fullSpec })
     const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null });
     if (fullSpec.pr) {

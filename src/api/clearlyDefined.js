@@ -37,7 +37,7 @@ let definitionList = []
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
-  return get(url(`${HARVEST}/${entity.toUrlPath()}`, { form: 'raw' }), token)
+  return get(url(`${HARVEST}/${entity.toPath()}`, { form: 'raw' }), token)
 }
 
 export function harvest(token, spec) {
@@ -45,15 +45,15 @@ export function harvest(token, spec) {
 }
 
 export function getCuration(token, entity) {
-  return get(url(`${CURATIONS}/${entity.toUrlPath()}`), token)
+  return get(url(`${CURATIONS}/${entity.toPath()}`), token)
 }
 
 export function curate(token, entity, spec) {
-  return patch(url(`${CURATIONS}/${entity.toUrlPath()}`), token, spec)
+  return patch(url(`${CURATIONS}/${entity.toPath()}`), token, spec)
 }
 
 export function getDefinition(token, entity) {
-  return get(url(`${DEFINITIONS}/${entity.toUrlPath()}`), token)
+  return get(url(`${DEFINITIONS}/${entity.toPath()}`), token)
 }
 
 export function getDefinitions(token, list) {
@@ -70,7 +70,7 @@ export async function getDefinitionList(token, prefix, force = false) {
 }
 
 export function previewDefinition(token, entity, curation) {
-  return post(url(`${DEFINITIONS}/${entity.toUrlPath()}`, { preview: true }), token, curation)
+  return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true }), token, curation)
 }
 
 export function getGitHubSearch(token, path) {
