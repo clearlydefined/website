@@ -36,19 +36,7 @@ return {
     licensed: {
       properties: {
         copyright: {
-          statements: {
-            type: "array",
-            items: {
-              type: "string"
-            }
-          },
           holders: {
-            type: "array",
-            items: {
-              type: "string"
-            }
-          },
-          authors: {
             type: "array",
             items: {
               type: "string"
