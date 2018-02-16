@@ -92,6 +92,8 @@ class PageComponents extends Component {
             <ComponentList
               list={components}
               listHeight={1000}
+              onRemove={this.onRemoveComponent}
+              onChange={this.onChangeComponent}
               definitions={definitions}
               githubToken={token}
               noRowsRenderer={this.noRowsRenderer} />
@@ -104,7 +106,7 @@ class PageComponents extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    token: state.session.token, 
+    token: state.session.token,
     filterValue: state.ui.browse.filter,
     filterOptions: state.definition.list,
     definitions: state.definition.bodies,
