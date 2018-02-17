@@ -135,7 +135,7 @@ export default class ComponentList extends React.Component {
               <p>Date:</p>
             </Col>
             <Col md={9} >
-              <p>{sourceUrl}</p>
+              <p>{sourceUrl}&nbsp;</p>
               <p>{described && described.releaseDate}</p>
             </Col>
           </Row>
@@ -148,7 +148,7 @@ export default class ComponentList extends React.Component {
               <p>Copyright:</p>
             </Col>
             <Col md={9} >
-              <p><span className='list-singleLine'>{get(licensed, 'license.expression')}</span></p>
+              <p><span className='list-singleLine'>{get(licensed, 'license.expression')}</span>&nbsp;</p>
               <p><span className='list-singleLine'>{get(licensed, 'copyright.holders', []).join(', ')}</span></p>
             </Col>
           </Row>
