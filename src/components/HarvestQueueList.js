@@ -66,7 +66,7 @@ export default class HarvestQueueList extends React.Component {
           request={request}
           onChange={this.versionChanged.bind(this, request)}
         />}
-        {request.provider === 'mavenCentral' && <MavenVersionPicker
+        {request.provider === 'mavencentral' && <MavenVersionPicker
           request={request}
           onChange={this.versionChanged.bind(this, request)}
         />}
@@ -96,7 +96,7 @@ export default class HarvestQueueList extends React.Component {
   }
 
   getLetter(request) {
-    if (request.provider === 'mavenCentral')
+    if (request.provider === 'mavencentral')
       return 'M'
     return null
   }

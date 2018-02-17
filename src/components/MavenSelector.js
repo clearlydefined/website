@@ -27,7 +27,7 @@ export default class MavenSelector extends Component {
       return
     if (value.indexOf(':') > 0 && !value.endsWith(':')) {
       const name = value.replace(':', '/')
-      return onChange && onChange({ type: 'maven', provider: 'mavenCentral', name }, 'package')
+      return onChange && onChange({ type: 'maven', provider: 'mavencentral', name }, 'package')
     }
     this._typeahead._updateText(value + ':')
     this._typeahead._updateSelected([])
