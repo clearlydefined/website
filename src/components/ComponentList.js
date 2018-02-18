@@ -96,18 +96,12 @@ export default class ComponentList extends React.Component {
   }
 
   getSourceUrl(definition) {
-    const l = definition.described && definition.described.sourceLocation
-    if (l)
-      switch (l.provider) {
-        case 'github':
-          return <Link to={`https://github.com/${l.namespace}/${l.name}/commit/${l.revision}`}>{l.revision}</Link>
-        default:
-          return ''
-      }
-    const p = definition.package || {}
-    switch (p.provider) {
+    const location = definition.described && definition.described.sourceLocation
+    if (!location)
+      return
+    switch (location.provider) {
       case 'github':
-        return <Link to={`https://github.com/${p.namespace}/${p.name}/commit/${p.revision}`}>{p.revision}</Link>
+        return <Link to={`${location.url}/commit/${location.revision}`}>{location.revision}</Link>
       default:
         return ''
     }
