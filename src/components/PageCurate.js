@@ -26,7 +26,7 @@ class PageCurate extends Component {
   componentDidMount() {
     const { dispatch, token, path, filterValue } = this.props
     const pathToShow = path ? path : filterValue
-    this.handleNewSpec(pathToShow)
+    this.filterChanged(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_CURATE }))
     dispatch(getDefinitionListAction(token))
   }
@@ -131,7 +131,7 @@ class PageCurate extends Component {
   }
 
   render() {
-    const { filterOptions, filterValue, isCurator } = this.props
+    const { filterOptions, filterValue, isCurator, path } = this.props
     const searchWidth = isCurator ? 7 : 10
     return (
       <Grid className="main-container">
@@ -142,6 +142,7 @@ class PageCurate extends Component {
               options={filterOptions}
               value={filterValue}
               onChange={this.filterChanged}
+              defaultValue={path ? path : ''}
             />
           </Col>
           {isCurator && <Col md={4} >
