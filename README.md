@@ -12,6 +12,8 @@ That installs all the dependencies and starts the website on http://localhost:30
 Initially there is not much on the site unless you login (see top right corner). Contact the project team 
 for credentials if needed. In the near future that will all be opened up but for now we need a little more control.
 
+Please refer to the [service's quick start guide](https://github.com/clearlydefined/service/blob/master/README.md) for information on how to setup a local instance of the `service`.
+
 # Using the site
 
 ## Curation
