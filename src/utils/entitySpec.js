@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // SPDX-License-Identifier: MIT
 
+const url = require('url');
+
 const NAMESPACE = 0x4;
 const NAME = 0x2;
 const REVISION = 0x1;
@@ -27,6 +29,17 @@ export default class EntitySpec {
     // eslint-disable-next-line
     const [blank, delimiter, pr] = prSpec ? prSpec.split('/') : []
     return new EntitySpec(type, provider, namespace, name, revision, pr)
+  }
+
+  static fromSourceCoordinates(coordinates) {
+    switch (coordinates.provider) {
+      case 'github':
+        // eslint-disable-next-line
+        const [blank, namespace, name] = url.parse(coordinates.url).pathname.split('/')
+        return new EntitySpec(coordinates.type, coordinates.provider, namespace, name, coordinates.revision)
+      default: 
+        return null
+    }
   }
 
   constructor(type, provider, namespace, name, revision = null, pr = null) {

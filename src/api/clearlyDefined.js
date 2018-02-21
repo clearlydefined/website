@@ -27,6 +27,7 @@ function getServiceDefaultUrl() {
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
 const DEFINITIONS = 'definitions'
+const BADGES = 'badges'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
 const ORIGINS_MAVEN = 'origins/maven'
@@ -71,6 +72,10 @@ export async function getDefinitionList(token, prefix, force = false) {
 
 export function previewDefinition(token, entity, curation) {
   return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true }), token, curation)
+}
+
+export function getBadgeUrl(entity) {
+  return url(`${BADGES}/${entity.toPath()}`)
 }
 
 export function getGitHubSearch(token, path) {

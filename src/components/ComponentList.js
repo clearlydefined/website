@@ -3,13 +3,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker } from './'
-import { Row, Col } from 'react-bootstrap'
+import { RowEntityList, TwoLineEntry } from './'
+import { Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { clone, get } from 'lodash'
 import FontAwesome from 'react-fontawesome'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
+import EntitySpec from '../utils/entitySpec'
+// import two from '../images/2.svg'
+import { getBadgeUrl } from '../api/clearlyDefined';
+
 
 export default class ComponentList extends React.Component {
 
@@ -18,7 +21,10 @@ export default class ComponentList extends React.Component {
     listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
+    onAddComponent: PropTypes.func,
     onChange: PropTypes.func,
+    onCurate: PropTypes.func,
+    onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
     definitions: PropTypes.object,
@@ -37,11 +43,37 @@ export default class ComponentList extends React.Component {
     this.commitChanged = this.commitChanged.bind(this)
     this.rowHeight = this.rowHeight.bind(this)
   }
+  
+  componentWillReceiveProps(newProps) {
+    if (newProps.definitions.sequence !== this.props.definitions.sequence)
+      this.incrementSequence()
+  }
 
   removeComponent(component, event) {
     event.stopPropagation()
     const { onRemove } = this.props
     onRemove && onRemove(component)
+  }
+
+  inspectComponent(component, event) {
+    event.stopPropagation()
+    const action = this.props.onInspect
+    action && action(component)
+  }
+
+  curateComponent(component, event) {
+    event.stopPropagation()
+    const action = this.props.onCurate
+    action && action(component)
+  }
+
+  addSourceForComponent(component, event) {
+    event.stopPropagation()
+    const definition = this.props.definitions.entries[component.toPath()]
+    const sourceLocation = get(definition, 'described.sourceLocation')
+    const sourceEntity = sourceLocation && EntitySpec.fromSourceCoordinates(sourceLocation)
+    const action = this.props.onAddComponent
+    action && sourceEntity && action(sourceEntity, component)
   }
 
   commitChanged(component, value) {
@@ -64,86 +96,142 @@ export default class ComponentList extends React.Component {
     this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
   }
 
+  renderButtonWithTip(button, tip) {
+    const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
+    return <OverlayTrigger placement="top" overlay={toolTip}>
+      {button}
+    </OverlayTrigger>
+  }
+
+  isSourceComponent(component) {
+    return ['github', 'sourcearchive'].includes(component.provider)
+  }
+
   renderButtons(component) {
+    const isSourceComponent = this.isSourceComponent(component)
     return (
       <div className='list-activity-area'>
-        {component.provider === 'github' && <GitHubCommitPicker
-          request={component}
-          defaultInputValue={component.revision}
-          token={this.props.githubToken}
-          onChange={this.commitChanged.bind(this, component)}
-        />}
-        {component.provider === 'npmjs' && <NpmVersionPicker
-          request={component}
-          defaultInputValue={component.revision}
-          onChange={this.npmVersionChanged.bind(this, component)}
-        />}
+        {!isSourceComponent && 
+          <Button className='list-hybrid-button' onClick={this.addSourceForComponent.bind(this, component)}>
+            <FontAwesome name={'plus'}/> 
+            <span>&nbsp;Add source</span>
+          </Button>
+        }
+        {this.renderButtonWithTip(
+          <FontAwesome name={'edit'} className='list-fa-button' onClick={this.curateComponent.bind(this, component)} />,
+          'Curate this defintion'
+        )}
+        {this.renderButtonWithTip(
+          <FontAwesome name={'search'} className='list-fa-button' onClick={this.inspectComponent.bind(this, component)} />,
+          'Dig into this definition'
+        )}
+        {/* <img className='list-buttons' width='45px' src={two} alt='score'/> */}
+        <img className='list-buttons' src={getBadgeUrl(component)} alt='score'/>
         <FontAwesome name={'times'} className='list-remove' onClick={this.removeComponent.bind(this, component)} />
       </div>)
   }
 
   renderHeadline(component) {
-    const { namespace, name } = component
+    const { namespace, name, revision } = component
     const namespaceText = namespace ? (namespace + '/') : ''
-    return (<span>{namespaceText}{name}</span>)
+    const definition = this.props.definitions.entries[component.toPath()]
+    const sourceUrl = this.getSourceUrl(definition)
+    let revisionText = <span>&nbsp;&nbsp;&nbsp;{revision}</span>
+    if (definition) {
+      const location = get(definition, 'described.sourceLocation')
+      if (component.provider === location.provider && revision === location.revision)
+        revisionText = ''
+    }
+    return (<span>{namespaceText}{name}{revisionText}&nbsp;&nbsp;&nbsp;{sourceUrl}</span>)
   }
 
   renderMessage(component) {
-    const { type, policy } = component
-    const nameText = type ? <span>{type}&nbsp;</span> : ''
-    const policyText = 'Policy: ' + policy ? policy : 'default'
-    return (<span>{nameText} &nbsp; {policyText}</span>)
+    const definition = this.props.definitions.entries[component.toPath()]
+    const licenseExpression = definition ? get(definition, 'licensed.license.expression') : ''
+    return (<span>{licenseExpression} </span>)
   }
 
   getSourceUrl(definition) {
-    const location = definition.described && definition.described.sourceLocation
+    const location = get(definition, 'described.sourceLocation')
     if (!location)
-      return
+      return ''
     switch (location.provider) {
       case 'github':
-        return <Link to={`${location.url}/commit/${location.revision}`}>{location.revision}</Link>
+        return <a href={`${location.url}/commit/${location.revision}`} target='_blank'>{location.revision}</a>
       default:
         return ''
     }
   }
 
+  getPercentage(count, total) {
+    return Math.round(((count || 0) / total) * 100)
+  }
+
   renderPanel(component) {
-    const { definitions } = this.props
-    const key = component.toPath()
-    const definition = definitions[key]
+    const definition = this.props.definitions.entries[component.toPath()]
     if (!definition)
-      return (<div className={"list-noRows"}>
+      return (<div className='list-noRows'>
         <div>
-          'Boo, nothing to see here'
+          'Nothing to see here'
         </div>
       </div>)
     const { licensed, described } = definition
     const sourceUrl = this.getSourceUrl(definition)
+    const facetsText = this.isSourceComponent(component) ? 'Core, Tests, Examples, Data, Doc' : 'Core'
+    const totalFiles = get(licensed, 'files')
+    const unlicensed = get(licensed, 'license.unknown') 
+    const unattributed = get(licensed, 'copyright.unknown')
+    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : null;
+    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : null;
     return (
       <Row>
-        <Col md={6} >
-          <h5>Descriptive info</h5>
+        <Col md={5} >
           <Row>
-            <Col md={3} >
-              <p>Source:</p>
-              <p>Date:</p>
+            <Col md={2} >
+              <p><b>Source</b></p>
+              <p><b>Release</b></p>
             </Col>
-            <Col md={9} >
+            <Col md={10} >
               <p>{sourceUrl}&nbsp;</p>
               <p>{described && described.releaseDate}</p>
             </Col>
           </Row>
         </Col>
-        <Col md={6} >
-          <h5>License info</h5>
+        <Col md={7} >
           <Row>
-            <Col md={3} >
-              <p>License:</p>
-              <p>Copyright:</p>
+            <Col md={2} >
+              <p><b>Attribution</b></p>
             </Col>
             <Col md={9} >
-              <p><span className='list-singleLine'>{get(licensed, 'license.expression')}</span>&nbsp;</p>
               <p><span className='list-singleLine'>{get(licensed, 'copyright.holders', []).join(', ')}</span></p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2} >
+              <p><b>Files</b></p>
+            </Col>
+            <Col md={10} >
+              <p>
+                Total: <b>{totalFiles || '?'}</b>, 
+                Unlicensed: <b>{unlicensed ? `${unlicensed} (${unlicensedPercent}%)` : '?'}</b>, 
+                Unattributed: <b>{unattributed ? `${unattributed} (${unattributedPercent}%)` : '?'}</b>, 
+              </p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2} >
+              <p><b>Harvesters</b></p>
+            </Col>
+            <Col md={9} >
+              <p><span className='list-singleLine'>{get(described, 'tools', []).join(', ')}</span></p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2} >
+              <p><b>Facets</b></p>
+            </Col>
+            <Col md={9} >
+              <p><span className='list-singleLine'>{facetsText}</span></p>
             </Col>
           </Row>
         </Col>

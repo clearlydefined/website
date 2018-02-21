@@ -11,7 +11,8 @@ export const initialState = {
   error: null,
   hasMore: false,
   headers: null,
-  data: null
+  data: null,
+  sequence: 0
 }
 
 const remove = (list, item, comparator = null) => {
@@ -68,6 +69,7 @@ export default (name = '', transformer = null, comparator = null) => {
     if (error) {
       return {
         ...state,
+        sequence: ++state.sequence,
         isFetching: false,
         hasMore: false,
         error: error,
@@ -80,6 +82,7 @@ export default (name = '', transformer = null, comparator = null) => {
     if (result.add) {
       return {
         ...state,
+        sequence: ++state.sequence,
         list: add(state.list, result.add, comparator),
         transformedList: transformer ? add(state.transformedList, transformer(result.add)) : state.transformedList
       }
@@ -88,6 +91,7 @@ export default (name = '', transformer = null, comparator = null) => {
     if (result.remove) {
       return {
         ...state,
+        sequence: ++state.sequence,
         list: remove(state.list, result.remove, comparator),
         transformedList: transformer ? remove(state.transformedList, transformer(result.remove)) : state.transformedList
       }
@@ -97,6 +101,7 @@ export default (name = '', transformer = null, comparator = null) => {
       const newTransformed = transformer ? transformer(result.value) : null
       return {
         ...state,
+        sequence: ++state.sequence,
         list: update(state.list, result.update, result.value, comparator),
         transformedList: transformer ? update(state.transformedList, transformer(result.update), newTransformed) : state.transformedList
       }
@@ -105,6 +110,7 @@ export default (name = '', transformer = null, comparator = null) => {
     if (result) {
       return {
         ...state,
+        sequence: ++state.sequence,
         isFetching: false,
         filter: filter,
         list: (append ? state.list.concat(result.list) : result.list),

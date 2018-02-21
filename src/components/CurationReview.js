@@ -103,7 +103,7 @@ export default class CurationReview extends Component {
   }
 
   getStringValue(item) {
-    return item ? yaml.safeDump(item, { sortKeys: true }) : ''
+    return item ? yaml.safeDump(item, { sortKeys: false }) : ''
   }
 
   doAction(e) {

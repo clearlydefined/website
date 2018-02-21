@@ -3,15 +3,19 @@
 
 import { merge, omit, keys } from 'lodash'
 
+function initialState() {
+  return { sequence: 0, entries: {} }
+} 
+
 export default (name = '', keyGenerator = Object.toString) => {
-  return (state = {}, action) => {
+  return (state = initialState(), action) => {
     // if there is a group on the action then it must match this reducer's name
     // otherwise the action type must match the name
     if ((action.group && action.group !== name) || (action.type !== name))
       return state
 
     if (action.context && action.context.clear)
-      return {}
+      return initialState()
 
     const { result, error } = action
 
@@ -24,15 +28,24 @@ export default (name = '', keyGenerator = Object.toString) => {
     }
 
     if (result.remove) {
-      return omit(state, keys(result.remove))
+      return {
+        sequence: state.sequence + 1,
+        entries: omit(state.entries, keys(result.remove))
+      }
     }
 
     if (result.add) {
-      return merge({}, state, result.add)
+      return {
+        sequence: state.sequence + 1,
+        entries: merge({}, state.entries, result.add)
+      }
     }
 
     if (result.update) {
-      return merge({}, state, result.add)
+      return {
+        sequence: state.sequence + 1,
+        entries: merge({}, state.entries, result.add)
+      }
     }
 
     throw new Error('Invalid action format in TableReducer')
