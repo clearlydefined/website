@@ -20,6 +20,9 @@ export default class FilterBar extends Component {
     super(props)
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
+    this.state = {
+      value: props.value ? [props.value] : null
+    };
   }
 
   onChange(values) {
@@ -50,6 +53,7 @@ export default class FilterBar extends Component {
         defaultInputValue={defaultValue || ''}
         filterBy={this.filter}
         labelKey='path'
+        selected={this.state.value}
       />
     )
   }
