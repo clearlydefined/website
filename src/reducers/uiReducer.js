@@ -4,11 +4,12 @@
 import { combineReducers } from 'redux'
 import { ROUTE_ROOT, ROUTE_CURATE, ROUTE_COMPONENTS, ROUTE_HARVEST, ROUTE_ABOUT, ROUTE_INSPECT } from '../utils/routingConstants'
 import {
-  UI_NAVIGATION, UI_CURATE_UPDATE_FILTER, UI_BROWSE_UPDATE_FILTER,
+  UI_NAVIGATION, UI_CURATE_UPDATE_FILTER, 
+  UI_BROWSE_UPDATE_FILTER, UI_BROWSE_UPDATE_LIST,
   UI_HARVEST_UPDATE_FILTER, UI_HARVEST_UPDATE_QUEUE,
-  UI_COMPONENTS_UPDATE_LIST
+  UI_INSPECT_UPDATE_FILTER
 } from '../actions/ui'
-import listReducer, { initialState } from './listReducer';
+import listReducer, { initialState as initialListState } from './listReducer';
 import { isEqual } from 'lodash'
 
 /**
@@ -78,18 +79,31 @@ const curate = (state = initialCurate, action) => {
   }
 }
 
-const initialBrowse = { filter: null }
-const browse = (state = initialBrowse, action) => {
+const initialInspect = { filter: null }
+const inspect = (state = initialInspect, action) => {
   switch (action.type) {
-    case UI_BROWSE_UPDATE_FILTER:
+    case UI_INSPECT_UPDATE_FILTER:
       return { ...state, filter: action.value }
     default:
       return state
   }
 }
 
+const componentList = listReducer(UI_BROWSE_UPDATE_LIST, null, isEqual)
+const initialBrowse = { filter: null, componentList: initialListState }
+const browse = (state = initialBrowse, action) => {
+  switch (action.type) {
+    case UI_BROWSE_UPDATE_FILTER:
+      return { ...state, filter: action.value }
+    case UI_BROWSE_UPDATE_LIST:
+      return { ...state, componentList: componentList(state.componentList, action) }
+    default:
+      return state
+  }
+}
+
 const harvestQueue = listReducer(UI_HARVEST_UPDATE_QUEUE, null, isEqual)
-const initialHarvest = { filter: null, requestQueue: initialState }
+const initialHarvest = { filter: null, requestQueue: initialListState }
 const harvest = (state = initialHarvest, action) => {
   switch (action.type) {
     case UI_HARVEST_UPDATE_FILTER:
@@ -101,21 +115,10 @@ const harvest = (state = initialHarvest, action) => {
   }
 }
 
-const componentList = listReducer(UI_COMPONENTS_UPDATE_LIST, null, isEqual)
-const initialComponents = { componentList: initialState }
-const components = (state = initialComponents, action) => {
-  switch (action.type) {
-    case UI_COMPONENTS_UPDATE_LIST:
-      return { ...state, componentList: componentList(state.componentList, action) }
-    default:
-      return state
-  }
-}
-
 export default combineReducers({
   navigation,
-  components,
   browse,
+  inspect,
   curate,
   harvest
 })

@@ -17,6 +17,7 @@ const rootReducer = combineReducers({
 })
 
 export default rootReducer
+export { default as valueReducer } from './valueReducer'
 export { default as listReducer } from './listReducer'
 export { default as itemReducer } from './itemReducer'
 export { default as tableReducer } from './tableReducer'

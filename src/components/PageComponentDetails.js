@@ -7,7 +7,7 @@ import { Button, Grid, Row, Col } from 'react-bootstrap'
 import { getDefinitionListAction, getDefinitionAction } from '../actions/definitionActions'
 import { getCurationAction } from '../actions/curationActions'
 import { getHarvestResultsAction } from '../actions/harvestActions'
-import { uiBrowseUpdateFilter, uiNavigation } from '../actions/ui'
+import { uiInspectUpdateFilter, uiNavigation } from '../actions/ui'
 import { FilterBar, MonacoEditorWrapper, Section } from './'
 import EntitySpec from '../utils/entitySpec';
 import { ROUTE_INSPECT } from '../utils/routingConstants';
@@ -33,7 +33,7 @@ class PageComponents extends Component {
     // if the path is changing, update the filter to match. That will trigger getting the content
     const newPath = newProps.path
     if (this.props.path !== newPath)
-      return this.props.dispatch(uiBrowseUpdateFilter(newPath))
+      return this.filterChanged(newPath)
 
     // if the filter is changing (either on its own or because of the path), get the new content
     const newFilter = newProps.filterValue
@@ -54,7 +54,7 @@ class PageComponents extends Component {
   }
 
   filterChanged(newFilter) {
-    this.props.dispatch(uiBrowseUpdateFilter(newFilter))
+    this.props.dispatch(uiInspectUpdateFilter(newFilter))
   }
 
   gotoValue(value) {
@@ -139,7 +139,7 @@ function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
-    filterValue: state.ui.browse.filter,
+    filterValue: state.ui.inspect.filter,
     filterOptions: state.definition.list,
     component: state.definition.current,
     curation: state.curation.current,

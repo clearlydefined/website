@@ -7,7 +7,7 @@ import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_COMPONENTS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionListAction, getDefinitionsAction } from '../actions/definitionActions'
 import { FilterBar, ComponentList, Section } from './'
-import { uiNavigation, uiComponentsUpdateList } from '../actions/ui'
+import { uiNavigation, uiBrowseUpdateList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
 class PageComponents extends Component {
@@ -40,7 +40,7 @@ class PageComponents extends Component {
     const path = component.toPath()
     component.definition = !!definitions.entries[path]
     !component.definition && dispatch(getDefinitionsAction(token, [path]))
-    dispatch(uiComponentsUpdateList({ add: component }))
+    dispatch(uiBrowseUpdateList({ add: component }))
   }
 
   onCurate(component) {
@@ -54,11 +54,11 @@ class PageComponents extends Component {
   }
 
   onRemoveComponent(component) {
-    this.props.dispatch(uiComponentsUpdateList({ remove: component }))
+    this.props.dispatch(uiBrowseUpdateList({ remove: component }))
   }
 
   onChangeComponent(component, newComponent) {
-    this.props.dispatch(uiComponentsUpdateList({ update: component, value: newComponent }))
+    this.props.dispatch(uiBrowseUpdateList({ update: component, value: newComponent }))
   }
 
   onClick(event, thing) {
@@ -124,9 +124,9 @@ function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
     filterValue: state.ui.browse.filter,
+    components: state.ui.browse.componentList,
     filterOptions: state.definition.list,
-    definitions: state.definition.bodies,
-    components: state.ui.components.componentList
+    definitions: state.definition.bodies
   }
 }
 export default connect(mapStateToProps)(PageComponents)
