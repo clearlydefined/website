@@ -29,7 +29,6 @@
   width: 40px;
   line-height: 40px;
   margin-right: 20px;
-  
 }
 
 .list-letter {
@@ -95,16 +94,37 @@
   .rbt {
     width: 450px
   }
+  img {
+    align-self: center;
+    height: auto;
+  }
 }
 
 .list-remove {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: red;
   align-self: center;
-  padding-left: 15px;
+  padding-left: 10px;
 }
 
 .list-buttons {
+  align-self: center;
+  padding-left: 10px;
+}
+
+.list-hybrid-button {
+  .fa {
+    font-size: 1.5rem;
+    color: #38a038;
+  }
+  align-self: center;
+  padding-left: 10px;
+}
+
+.list-fa-button {
+  font-size: 2rem;
+  color: #38a038;
+  align-self: center;
   padding-left: 10px;
 }
 

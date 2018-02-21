@@ -9,7 +9,7 @@ import tableReducer from './tableReducer'
 import yaml from 'js-yaml'
 
 export default combineReducers({
-  current: new itemReducer(DEFINITION_GET, item => yaml.safeDump(item, { sortKeys: true })),
+  current: new itemReducer(DEFINITION_GET, item => yaml.safeDump(item, { sortKeys: false })),
   proposed: new itemReducer(DEFINITION_GET_PROPOSED),
   preview: new itemReducer(DEFINITION_PREVIEW),
   list: new listReducer(DEFINITION_LIST, item => { return { path: item } }),

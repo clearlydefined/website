@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
-import { ROUTE_COMPONENTS } from '../utils/routingConstants'
+import { ROUTE_COMPONENTS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionListAction, getDefinitionsAction } from '../actions/definitionActions'
 import { FilterBar, ComponentList, Section } from './'
 import { uiNavigation, uiComponentsUpdateList } from '../actions/ui'
@@ -17,6 +17,8 @@ class PageComponents extends Component {
     this.state = { activeProvider: 'github' }
     this.filterHandler = this.filterHandler.bind(this)
     this.onAddComponent = this.onAddComponent.bind(this)
+    this.onInspect = this.onInspect.bind(this)
+    this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.onClick = this.onClick.bind(this)
@@ -32,13 +34,23 @@ class PageComponents extends Component {
     // const { dispatch, token, queue } = this.props
   }
 
-  onAddComponent(value) {
+  onAddComponent(value, after = null) {
     const { dispatch, token, definitions } = this.props
-    const component = EntitySpec.fromPath(value)
+    const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
     const path = component.toPath()
-    component.definition = !!definitions[path]
+    component.definition = !!definitions.entries[path]
     !component.definition && dispatch(getDefinitionsAction(token, [path]))
     dispatch(uiComponentsUpdateList({ add: component }))
+  }
+
+  onCurate(component) {
+    const url = `${ROUTE_CURATE}/${component.toPath()}`
+    this.props.history.push(url)
+  }
+
+  onInspect(component) {
+    const url = `${ROUTE_INSPECT}/${component.toPath()}`
+    this.props.history.push(url)
   }
 
   onRemoveComponent(component) {
@@ -72,7 +84,7 @@ class PageComponents extends Component {
   }
 
   noRowsRenderer() {
-    return <div>Select components...</div>
+    return <div>Select components from the list above ...</div>
   }
 
   render() {
@@ -87,16 +99,20 @@ class PageComponents extends Component {
             <FilterBar options={filterOptions} onChange={this.onAddComponent} clearOnChange />
           </Col>
         </Row>
-        <Section name={'Known components'} actionButton={this.renderActionButton()}>
+        <Section name={'Available definitions'} actionButton={this.renderActionButton()}>
           <div className='section-body'>
             <ComponentList
               list={components}
               listHeight={1000}
               onRemove={this.onRemoveComponent}
               onChange={this.onChangeComponent}
+              onAddComponent={this.onAddComponent}
+              onInspect={this.onInspect}
+              onCurate={this.onCurate}
               definitions={definitions}
               githubToken={token}
-              noRowsRenderer={this.noRowsRenderer} />
+              noRowsRenderer={this.noRowsRenderer}
+            />
           </div>
         </Section>
       </Grid>

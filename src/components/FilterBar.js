@@ -12,7 +12,8 @@ export default class FilterBar extends Component {
     value: PropTypes.string,
     options: PropTypes.any,
     onChange: PropTypes.func,
-    clearOnChange: PropTypes.bool
+    clearOnChange: PropTypes.bool,
+    defaultValue: PropTypes.string
   }
 
   constructor(props) {
@@ -25,6 +26,7 @@ export default class FilterBar extends Component {
     const { onChange, clearOnChange } = this.props
     if (values.length) {
       onChange && onChange(values[0].path)
+      // timing hack to work around https://github.com/ericgio/react-bootstrap-typeahead/issues/211
       clearOnChange && setTimeout(() => this.refs.typeahead.getInstance().clear(), 0);
     }
   }
@@ -36,7 +38,7 @@ export default class FilterBar extends Component {
   }
 
   render() {
-    const { options } = this.props
+    const { options, defaultValue } = this.props
     return (
       <Typeahead
         ref='typeahead'
@@ -45,6 +47,7 @@ export default class FilterBar extends Component {
         options={options.transformedList}
         isLoading={options.isFetching}
         clearButton
+        defaultInputValue={defaultValue || ''}
         filterBy={this.filter}
         labelKey='path'
       />

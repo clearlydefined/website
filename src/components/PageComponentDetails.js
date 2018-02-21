@@ -126,9 +126,9 @@ class PageComponents extends Component {
           </Col>
         </Row>
         <Row className='show-grid'>
-          {this.renderData(component, 'results', 'yaml', this.renderCurationButton())}
-          {this.renderData(curation, 'curations', 'json', this.renderCurationButton())}
-          {this.renderData(harvest, 'harvest data', 'json', this.renderHarvestButton())}
+          {this.renderData(component, 'Current definition', 'yaml', this.renderCurationButton())}
+          {this.renderData(curation, 'Curations', 'json', this.renderCurationButton())}
+          {this.renderData(harvest, 'Harvested data', 'json', this.renderHarvestButton())}
         </Row>
       </Grid>
     )
