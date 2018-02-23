@@ -4,15 +4,12 @@
 import { asyncActions } from './'
 import { getDefinitions, getDefinition, previewDefinition, getDefinitionList } from '../api/clearlyDefined'
 
-export const DEFINITION_GET = 'DEFINITION_GET'
-export const DEFINITION_GET_PROPOSED = 'DEFINITION_GET_PROPOSED'
-export const DEFINITION_PREVIEW = 'DEFINITION_PREVIEW'
 export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
 
-export function getDefinitionAction(token, entity) {
+export function getDefinitionAction(token, entity, name) {
   return (dispatch) => {
-    const actions = asyncActions(entity.pr ? DEFINITION_GET_PROPOSED: DEFINITION_GET)
+    const actions = asyncActions(name)
     dispatch(actions.start())
     return getDefinition(token, entity).then(
       result => dispatch(actions.success(result)),
@@ -43,9 +40,9 @@ export function getDefinitionListAction(token, prefix, force) {
   }
 }
 
-export function previewDefinitionAction(token, entity, curation) {
+export function previewDefinitionAction(token, entity, curation, name) {
   return (dispatch) => {
-    const actions = asyncActions(DEFINITION_PREVIEW)
+    const actions = asyncActions(name)
     dispatch(actions.start())
     return previewDefinition(token, entity, curation).then(
       result => dispatch(actions.success(result)),

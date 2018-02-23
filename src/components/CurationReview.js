@@ -15,7 +15,7 @@ export default class CurationReview extends Component {
     curationOriginal: PropTypes.object,
     curationValue: PropTypes.object,
     definitionOriginal: PropTypes.object,
-    rawSummary: PropTypes.object,
+    previewDefinition: PropTypes.object,
     actionHandler: PropTypes.func.isRequired,
     actionText: PropTypes.string
   }
@@ -35,7 +35,7 @@ export default class CurationReview extends Component {
   componentDidMount() {
     // setup the initial definitionPreview value. Afterwards, changes will be handled by the editor
     if (!this.state.definitionPreview)
-      this.setState({ ...this.state, definitionPreview: this.computeProposedDefinition(this.props.rawSummary, this.props.curationValue) })
+      this.setState({ ...this.state, definitionPreview: this.computeProposedDefinition(this.props.previewDefinition, this.props.curationValue) })
   }
 
   editorDidMount(type, editor, monaco) {
@@ -46,8 +46,8 @@ export default class CurationReview extends Component {
 
   onCurationChange(newCuration, event) {
     // TODO put in some throttling
-    const { rawSummary } = this.props
-    const newProposal = this.computeProposedDefinition(rawSummary, newCuration)
+    const { previewDefinition } = this.props
+    const newProposal = this.computeProposedDefinition(previewDefinition, newCuration)
     if (!this.state.result || !newProposal)
       return
     // only set the value if it is different. Optimization plus it stops cycles
@@ -55,7 +55,7 @@ export default class CurationReview extends Component {
       this.state.result.getModifiedEditor().getModel().setValue(newProposal)
   }
 
-  computeProposedDefinition(rawSummary, newCurationOrString) {
+  computeProposedDefinition(previewDefinition, newCurationOrString) {
     // TODO figure out how to represent deletions
     try {
       const newCuration = typeof newCurationOrString === 'string'
@@ -63,7 +63,8 @@ export default class CurationReview extends Component {
         : newCurationOrString
       if (Array.isArray(newCuration))
         return null
-      const newValue = extend(true, {}, rawSummary, newCuration)
+      const previewValue = this.getObjectValue(previewDefinition)
+      const newValue = extend(true, {}, previewValue, newCuration)
       return this.getStringValue(newValue)
     } catch (error) {
       // No proposal if there is an error figuring one out
@@ -75,10 +76,13 @@ export default class CurationReview extends Component {
     // TODO put in some throttling
     if (!this.state.definitionPreview)
       return
-    const { rawSummary } = this.props
-    const newProposal = this.computeProposedCuration(rawSummary, newSummary)
-    if (!this.state.curation || !newProposal)
-      return
+    const { previewDefinition, curationOriginal } = this.props
+    const newProposal = this.computeProposedCuration(previewDefinition, newSummary)
+    if (!this.state.curation)
+      return 
+    if (!newProposal)
+      // reset the proposed curation to ensure it matches the left hand side
+      return this.state.curation.getModifiedEditor().getModel().setValue(curationOriginal || '')
     // only set the value if it is different. Optimization plus it stops cycles
     if (newProposal !== this.state.curation.getModifiedEditor().getModel().getValue())
       this.state.curation.getModifiedEditor().getModel().setValue(newProposal)
@@ -102,8 +106,16 @@ export default class CurationReview extends Component {
     }
   }
 
+  getObjectValue(item) {
+    if (!item)
+      return null
+    return typeof item === 'string' ? yaml.safeLoad(item) : item
+  }
+
   getStringValue(item) {
-    return item ? yaml.safeDump(item, { sortKeys: false }) : ''
+    if (!item)
+      return null
+    return typeof item === 'string' ? item : yaml.safeDump(item, { sortKeys: true })
   }
 
   doAction(e) {

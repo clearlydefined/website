@@ -4,15 +4,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Grid, Row, Col } from 'react-bootstrap'
-import { getDefinitionListAction, getDefinitionAction } from '../actions/definitionActions'
-import { getCurationAction } from '../actions/curationActions'
-import { getHarvestResultsAction } from '../actions/harvestActions'
-import { uiBrowseUpdateFilter, uiNavigation } from '../actions/ui'
+import { getDefinitionListAction } from '../actions/definitionActions'
+import { uiInspectUpdateFilter, uiNavigation, uiInspectGetCuration, uiInspectGetHarvested, uiInspectGetDefinition } from '../actions/ui'
 import { FilterBar, MonacoEditorWrapper, Section } from './'
 import EntitySpec from '../utils/entitySpec';
 import { ROUTE_INSPECT } from '../utils/routingConstants';
 
-class PageComponents extends Component {
+class PageInspect extends Component {
 
   constructor(props) {
     super(props)
@@ -33,7 +31,7 @@ class PageComponents extends Component {
     // if the path is changing, update the filter to match. That will trigger getting the content
     const newPath = newProps.path
     if (this.props.path !== newPath)
-      return this.props.dispatch(uiBrowseUpdateFilter(newPath))
+      return this.filterChanged(newPath)
 
     // if the filter is changing (either on its own or because of the path), get the new content
     const newFilter = newProps.filterValue
@@ -48,13 +46,13 @@ class PageComponents extends Component {
       return
     }
     const spec = EntitySpec.fromPath(newFilter)
-    dispatch(getDefinitionAction(token, spec))
-    dispatch(getCurationAction(token, spec))
-    dispatch(getHarvestResultsAction(token, spec))
+    dispatch(uiInspectGetDefinition(token, spec))
+    dispatch(uiInspectGetCuration(token, spec))
+    dispatch(uiInspectGetHarvested(token, spec))
   }
 
   filterChanged(newFilter) {
-    this.props.dispatch(uiBrowseUpdateFilter(newFilter))
+    this.props.dispatch(uiInspectUpdateFilter(newFilter))
   }
 
   gotoValue(value) {
@@ -117,7 +115,7 @@ class PageComponents extends Component {
   }
 
   render() {
-    const { filterOptions, filterValue, component, curation, harvest } = this.props
+    const { filterOptions, filterValue, definition, curation, harvest } = this.props
     return (
       <Grid className='main-container'>
         <Row className="show-grid spacer">
@@ -126,7 +124,7 @@ class PageComponents extends Component {
           </Col>
         </Row>
         <Row className='show-grid'>
-          {this.renderData(component, 'Current definition', 'yaml', this.renderCurationButton())}
+          {this.renderData(definition, 'Current definition', 'yaml', this.renderCurationButton())}
           {this.renderData(curation, 'Curations', 'json', this.renderCurationButton())}
           {this.renderData(harvest, 'Harvested data', 'json', this.renderHarvestButton())}
         </Row>
@@ -139,11 +137,11 @@ function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
-    filterValue: state.ui.browse.filter,
+    filterValue: state.ui.inspect.filter,
     filterOptions: state.definition.list,
-    component: state.definition.current,
-    curation: state.curation.current,
-    harvest: state.harvest.current
+    definition: state.ui.inspect.definition,
+    curation: state.ui.inspect.curation,
+    harvest: state.ui.inspect.harvested
   }
 }
-export default connect(mapStateToProps)(PageComponents)
+export default connect(mapStateToProps)(PageInspect)

@@ -3,13 +3,13 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { uiNavigation, uiCurateUpdateFilter, } from '../actions/ui'
+import { uiNavigation, uiCurateUpdateFilter, uiCurateGetDefinitionPreview, uiCurateGetCuration, uiCurateGetDefinition } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { CurationReview, ProposePrompt } from './'
 import { ROUTE_CURATE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
-import { getCurationAction, curateAction } from '../actions/curationActions'
-import { getDefinitionAction, getDefinitionListAction, previewDefinitionAction } from '../actions/definitionActions'
+import { curateAction } from '../actions/curationActions'
+import { getDefinitionListAction } from '../actions/definitionActions'
 import { FilterBar } from './'
 import { Button } from 'react-bootstrap'
 
@@ -54,12 +54,12 @@ class PageCurate extends Component {
     this.setState({ ...this.state, entitySpec: fullSpec })
     const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null });
     if (fullSpec.pr) {
-      dispatch(getCurationAction(token, fullSpec))
-      dispatch(getDefinitionAction(token, fullSpec))
+      dispatch(uiCurateGetCuration(token, fullSpec))
+      dispatch(uiCurateGetDefinition(token, fullSpec))
     }
-    dispatch(getCurationAction(token, currentSpec))
-    dispatch(getDefinitionAction(token, currentSpec))
-    dispatch(previewDefinitionAction(token, currentSpec, {}))
+    dispatch(uiCurateGetCuration(token, currentSpec))
+    dispatch(uiCurateGetDefinition(token, currentSpec))
+    dispatch(uiCurateGetDefinitionPreview(token, currentSpec, {}))
   }
 
   doPropose(description) {
@@ -96,18 +96,18 @@ class PageCurate extends Component {
 
   renderCurationView() {
     const { entitySpec } = this.state
-    const { currentCuration, proposedCuration, currentDefinition, rawSummary, filterValue } = this.props
+    const { currentCuration, proposedCuration, currentDefinition, previewDefinition, filterValue } = this.props
     if (!filterValue || !entitySpec)
       return this.renderPlaceholder('Search for some part of a component name to see details')
     // wait to render until we have everything
-    if (!(currentCuration.isFetched && currentDefinition.isFetched && rawSummary.isFetched))
+    if (!(currentCuration.isFetched && currentDefinition.isFetched && previewDefinition.isFetched))
       return this.renderPlaceholder('Loading the curations for the requested component')
     if (entitySpec.pr && !proposedCuration.isFetched)
       return this.renderPlaceholder('Loading the curations for the requested component')
     const curationOriginal = currentCuration.item
     const curationValue = proposedCuration.item
     const definitionOriginal = currentDefinition.item
-    const definitionValue = rawSummary.item
+    const definitionValue = previewDefinition.item
     const actionText = entitySpec.pr ? 'Show on GitHub' : 'Save curation'
     return (
       <Col md={12} >
@@ -115,7 +115,7 @@ class PageCurate extends Component {
           curationOriginal={curationOriginal}
           curationValue={curationValue}
           definitionOriginal={definitionOriginal}
-          rawSummary={definitionValue}
+          previewDefinition={definitionValue}
           actionHandler={this.doAction}
           actionText={actionText} />
       </Col>
@@ -162,10 +162,10 @@ function mapStateToProps(state, ownProps) {
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     token: state.session.token,
     isCurator: state.session.isCurator,
-    currentCuration: state.curation.current,
-    currentDefinition: state.definition.current,
-    proposedCuration: state.curation.proposed,
-    rawSummary: state.definition.preview,
+    currentCuration: state.ui.curate.currentCuration,
+    currentDefinition: state.ui.curate.currentDefinition,
+    proposedCuration: state.ui.curate.proposedCuration,
+    previewDefinition: state.ui.curate.previewDefinition,
     filterValue: state.ui.curate.filter,
     filterOptions: state.definition.list
   }
