@@ -139,7 +139,7 @@ export default class ComponentList extends React.Component {
     let revisionText = <span>&nbsp;&nbsp;&nbsp;{revision}</span>
     if (definition) {
       const location = get(definition, 'described.sourceLocation')
-      if (component.provider === location.provider && revision === location.revision)
+      if (!location || (component.provider === location.provider && revision === location.revision))
         revisionText = ''
     }
     return (<span>{namespaceText}{name}{revisionText}&nbsp;&nbsp;&nbsp;{sourceUrl}</span>)
