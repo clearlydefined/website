@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -25,7 +25,7 @@ class PageCurate extends Component {
 
   componentDidMount() {
     const { dispatch, token, path, filterValue } = this.props
-    const pathToShow = path ? path : filterValue
+    const pathToShow = path || filterValue
     this.filterChanged(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_CURATE }))
     dispatch(getDefinitionListAction(token))
@@ -35,7 +35,7 @@ class PageCurate extends Component {
     // if the path is changing, update the filter to match. That will trigger getting the content
     const newPath = newProps.path
     if (this.props.path !== newPath)
-      return this.props.dispatch(uiCurateUpdateFilter(newPath))
+      return this.filterChanged(newPath)
 
     // if the filter is changing (either on its own or because of the path), get the new content
     const newFilter = newProps.filterValue
@@ -87,7 +87,7 @@ class PageCurate extends Component {
   }
 
   gotoValue(value) {
-    this.props.history.push(`${ROUTE_CURATE}${value ? '/' + value : ''}`)
+    this.props.history.push(`${ROUTE_CURATE}${value ? `/${value}` : ''}`)
   }
 
   renderPlaceholder(message) {
@@ -140,9 +140,8 @@ class PageCurate extends Component {
           <Col md={searchWidth} mdOffset={1}>
             <FilterBar
               options={filterOptions}
-              value={filterValue}
+              value={path || filterValue}
               onChange={this.filterChanged}
-              defaultValue={path ? path : ''}
             />
           </Col>
           {isCurator && <Col md={4} >
