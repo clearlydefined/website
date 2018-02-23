@@ -5,12 +5,10 @@ import { asyncActions } from './'
 import { curate, getCuration } from '../api/clearlyDefined'
 
 export const CURATION_POST = 'CURATION_POST'
-export const CURATION_GET = 'CURATION_GET'
-export const CURATION_GET_PROPOSED = 'CURATION_GET_PROPOSED'
 
-export function getCurationAction(token, entity) {
+export function getCurationAction(token, entity, name) {
   return (dispatch) => {
-    const actions = asyncActions(entity.pr ? CURATION_GET_PROPOSED: CURATION_GET)
+    const actions = asyncActions(name)
     dispatch(actions.start())
     return getCuration(token, entity).then(
       result => dispatch(actions.success(result)),

@@ -2,9 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { HARVEST_GET } from '../actions/harvestActions'
-import itemReducer from './itemReducer'
+// import { HARVEST_POST } from '../actions/harvestActions'
 
 export default combineReducers({
-  current: new itemReducer(HARVEST_GET, item => JSON.stringify(item, null, 2)),
+  // TODO add reducer to get the results of POSTing so we can do progress/alerting
 })

@@ -119,7 +119,7 @@ export default class ComponentList extends React.Component {
         }
         {this.renderButtonWithTip(
           <FontAwesome name={'edit'} className='list-fa-button' onClick={this.curateComponent.bind(this, component)} />,
-          'Curate this defintion'
+          'Curate this definition'
         )}
         {this.renderButtonWithTip(
           <FontAwesome name={'search'} className='list-fa-button' onClick={this.inspectComponent.bind(this, component)} />,

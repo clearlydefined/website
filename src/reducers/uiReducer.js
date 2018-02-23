@@ -4,13 +4,17 @@
 import { combineReducers } from 'redux'
 import { ROUTE_ROOT, ROUTE_CURATE, ROUTE_COMPONENTS, ROUTE_HARVEST, ROUTE_ABOUT, ROUTE_INSPECT } from '../utils/routingConstants'
 import {
-  UI_NAVIGATION, UI_CURATE_UPDATE_FILTER, 
+  UI_NAVIGATION, 
+  UI_CURATE_UPDATE_FILTER, UI_CURATE_GET, UI_CURATE_GET_PROPOSED, UI_CURATE_GET_DEFINITION,UI_CURATE_DEFINITION_PREVIEW,
   UI_BROWSE_UPDATE_FILTER, UI_BROWSE_UPDATE_LIST,
   UI_HARVEST_UPDATE_FILTER, UI_HARVEST_UPDATE_QUEUE,
-  UI_INSPECT_UPDATE_FILTER
+  UI_INSPECT_UPDATE_FILTER, UI_INSPECT_GET_CURATION, UI_INSPECT_GET_DEFINITION, UI_INSPECT_GET_HARVESTED,
 } from '../actions/ui'
 import listReducer, { initialState as initialListState } from './listReducer';
 import { isEqual } from 'lodash'
+import valueReducer from './valueReducer';
+import itemReducer from './itemReducer';
+import yaml from 'js-yaml'
 
 /**
  * protected:
@@ -69,25 +73,20 @@ const navigation = (state = initialStateNavigation, action) => {
   }
 }
 
-const initialCurate = { filter: null }
-const curate = (state = initialCurate, action) => {
-  switch (action.type) {
-    case UI_CURATE_UPDATE_FILTER:
-      return { ...state, filter: action.value }
-    default:
-      return state
-  }
-}
+const curate = combineReducers({
+  filter: new valueReducer(UI_CURATE_UPDATE_FILTER),
+  currentCuration: new itemReducer(UI_CURATE_GET),
+  proposedCuration: new itemReducer(UI_CURATE_GET_PROPOSED),
+  currentDefinition: new itemReducer(UI_CURATE_GET_DEFINITION),
+  previewDefinition: new itemReducer(UI_CURATE_DEFINITION_PREVIEW),
+})
 
-const initialInspect = { filter: null }
-const inspect = (state = initialInspect, action) => {
-  switch (action.type) {
-    case UI_INSPECT_UPDATE_FILTER:
-      return { ...state, filter: action.value }
-    default:
-      return state
-  }
-}
+const inspect = combineReducers({
+  filter: new valueReducer(UI_INSPECT_UPDATE_FILTER),
+  definition: new itemReducer(UI_INSPECT_GET_DEFINITION, item => yaml.safeDump(item, { sortKeys: true })),
+  curation: new itemReducer(UI_INSPECT_GET_CURATION, item => yaml.safeDump(item, { sortKeys: true })),
+  harvested: new itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2)),
+})
 
 const componentList = listReducer(UI_BROWSE_UPDATE_LIST, null, isEqual)
 const initialBrowse = { filter: null, componentList: initialListState }

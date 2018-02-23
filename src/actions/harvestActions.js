@@ -18,9 +18,9 @@ export function harvestAction(token, spec) {
   }
 }
 
-export function getHarvestResultsAction(token, entity) {
+export function getHarvestOutputAction(token, entity, name) {
   return (dispatch) => {
-    const actions = asyncActions(HARVEST_GET)
+    const actions = asyncActions(name)
     dispatch(actions.start())
     return getHarvestResults(token, entity).then(
       result => dispatch(actions.success(result)),

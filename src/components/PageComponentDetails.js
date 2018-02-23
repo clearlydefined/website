@@ -4,15 +4,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Grid, Row, Col } from 'react-bootstrap'
-import { getDefinitionListAction, getDefinitionAction } from '../actions/definitionActions'
-import { getCurationAction } from '../actions/curationActions'
-import { getHarvestResultsAction } from '../actions/harvestActions'
-import { uiInspectUpdateFilter, uiNavigation } from '../actions/ui'
+import { getDefinitionListAction } from '../actions/definitionActions'
+import { uiInspectUpdateFilter, uiNavigation, uiInspectGetCuration, uiInspectGetHarvested, uiInspectGetDefinition } from '../actions/ui'
 import { FilterBar, MonacoEditorWrapper, Section } from './'
 import EntitySpec from '../utils/entitySpec';
 import { ROUTE_INSPECT } from '../utils/routingConstants';
 
-class PageComponents extends Component {
+class PageInspect extends Component {
 
   constructor(props) {
     super(props)
@@ -48,9 +46,9 @@ class PageComponents extends Component {
       return
     }
     const spec = EntitySpec.fromPath(newFilter)
-    dispatch(getDefinitionAction(token, spec))
-    dispatch(getCurationAction(token, spec))
-    dispatch(getHarvestResultsAction(token, spec))
+    dispatch(uiInspectGetDefinition(token, spec))
+    dispatch(uiInspectGetCuration(token, spec))
+    dispatch(uiInspectGetHarvested(token, spec))
   }
 
   filterChanged(newFilter) {
@@ -117,7 +115,7 @@ class PageComponents extends Component {
   }
 
   render() {
-    const { filterOptions, filterValue, component, curation, harvest } = this.props
+    const { filterOptions, filterValue, definition, curation, harvest } = this.props
     return (
       <Grid className='main-container'>
         <Row className="show-grid spacer">
@@ -126,7 +124,7 @@ class PageComponents extends Component {
           </Col>
         </Row>
         <Row className='show-grid'>
-          {this.renderData(component, 'Current definition', 'yaml', this.renderCurationButton())}
+          {this.renderData(definition, 'Current definition', 'yaml', this.renderCurationButton())}
           {this.renderData(curation, 'Curations', 'json', this.renderCurationButton())}
           {this.renderData(harvest, 'Harvested data', 'json', this.renderHarvestButton())}
         </Row>
@@ -141,9 +139,9 @@ function mapStateToProps(state, ownProps) {
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     filterValue: state.ui.inspect.filter,
     filterOptions: state.definition.list,
-    component: state.definition.current,
-    curation: state.curation.current,
-    harvest: state.harvest.current
+    definition: state.ui.inspect.definition,
+    curation: state.ui.inspect.curation,
+    harvest: state.ui.inspect.harvested
   }
 }
-export default connect(mapStateToProps)(PageComponents)
+export default connect(mapStateToProps)(PageInspect)
