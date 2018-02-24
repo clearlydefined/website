@@ -213,8 +213,8 @@ export default class ComponentList extends React.Component {
             <Col md={10} >
               <p>
                 Total: <b>{totalFiles || '?'}</b>, 
-                Unlicensed: <b>{unlicensed ? `${unlicensed} (${unlicensedPercent}%)` : '?'}</b>, 
-                Unattributed: <b>{unattributed ? `${unattributed} (${unattributedPercent}%)` : '?'}</b>, 
+                Unlicensed: <b>{isNaN(unlicensed) ? '/' : `${unlicensed} (${unlicensedPercent}%)`}</b>, 
+                Unattributed: <b>{isNaN(unattributed) ? '?' : `${unattributed} (${unattributedPercent}%)`}</b>, 
               </p>
             </Col>
           </Row>
