@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import logo from '../images/logo.svg';
+import logo from '../images/logo-text.svg';
 import { logout, login } from '../actions/sessionActions'
 import { withRouter } from 'react-router-dom'
 import { ROUTE_ROOT } from '../utils/routingConstants'
@@ -74,7 +74,7 @@ class Header extends Component {
         <Navbar.Header>
           <Navbar.Brand>
             <LinkContainer to={ROUTE_ROOT}>
-              <img src={logo} className="app-header_logo-content" alt="logo" />
+              <img src={logo} className="App-logo" alt="logo" />
             </LinkContainer>
           </Navbar.Brand>
         </Navbar.Header>

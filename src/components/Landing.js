@@ -7,6 +7,7 @@ import { Grid, Row, Col, Jumbotron } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { ROUTE_ROOT } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
+import logo from '../images/logo-text-stacked.svg'
 
 const described = 'vcard'
 const secure = 'lock'
@@ -33,10 +34,7 @@ class Landing extends Component {
     return (
       <Grid className="main-container">
         <Jumbotron>
-          <h1>ClearlyDefined</h1>
-          <p>&nbsp;</p>
-          <p> Enabling free and open source project success by simplifying consumption. </p>
-          <p>Are you ClearlyDefined?</p>
+          <img src={logo} alt='logo'/>
         </Jumbotron>
 
 
