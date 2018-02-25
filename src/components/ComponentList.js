@@ -176,7 +176,7 @@ export default class ComponentList extends React.Component {
       </div>)
     const { licensed, described } = definition
     const sourceUrl = this.getSourceUrl(definition)
-    const facetsText = this.isSourceComponent(component) ? 'Core, Tests, Examples, Data, Doc' : 'Core'
+    const facetsText = this.isSourceComponent(component) ? 'Core, Data, Dev, Doc, Examples, Tests' : 'Core'
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown') 
     const unattributed = get(licensed, 'attribution.unknown')
