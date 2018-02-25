@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // SPDX-License-Identifier: MIT
 
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
 import { RowEntityList, TwoLineEntry } from './'
 import { Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
@@ -10,9 +10,8 @@ import FontAwesome from 'react-fontawesome'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import EntitySpec from '../utils/entitySpec'
-// import two from '../images/2.svg'
-import { getBadgeUrl } from '../api/clearlyDefined';
-
+import { getBadgeUrl } from '../api/clearlyDefined'
+import moment from 'moment'
 
 export default class ComponentList extends React.Component {
 
@@ -147,8 +146,8 @@ export default class ComponentList extends React.Component {
 
   renderMessage(component) {
     const definition = this.props.definitions.entries[component.toPath()]
-    const licenseExpression = definition ? get(definition, 'licensed.license.expression') : ''
-    return (<span>{licenseExpression} </span>)
+    const licenseExpression = definition ? get(definition, 'licensed.declared') : null
+    return licenseExpression ? <span>{licenseExpression}</span> : <span>&nbsp;</span>
   }
 
   getSourceUrl(definition) {
@@ -179,8 +178,8 @@ export default class ComponentList extends React.Component {
     const sourceUrl = this.getSourceUrl(definition)
     const facetsText = this.isSourceComponent(component) ? 'Core, Tests, Examples, Data, Doc' : 'Core'
     const totalFiles = get(licensed, 'files')
-    const unlicensed = get(licensed, 'license.unknown') 
-    const unattributed = get(licensed, 'copyright.unknown')
+    const unlicensed = get(licensed, 'discovered.unknown') 
+    const unattributed = get(licensed, 'attribution.unknown')
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : null;
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : null;
     return (
@@ -189,21 +188,59 @@ export default class ComponentList extends React.Component {
           <Row>
             <Col md={2} >
               <p><b>Source</b></p>
+            </Col>
+            <Col md={10} >
+              <p>{sourceUrl}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2} >
               <p><b>Release</b></p>
             </Col>
             <Col md={10} >
-              <p>{sourceUrl}&nbsp;</p>
-              <p>{described && described.releaseDate}</p>
+              <p>{(described && described.releaseDate && moment(described.releaseDate).format('YYYY.MM.DD'))}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2} >
+              <p><b>Tools</b></p>
+            </Col>
+            <Col md={9} >
+              <p><span className='list-singleLine'>{get(described, 'tools', []).join(', ')}</span></p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2} >
+              <p><b>Facets</b></p>
+            </Col>
+            <Col md={10} >
+              <p><span className='list-singleLine'>{facetsText}</span></p>
             </Col>
           </Row>
         </Col>
         <Col md={7} >
           <Row>
             <Col md={2} >
+              <p><b>Declared</b></p>
+            </Col>
+            <Col md={9} >
+              <p>{licensed && licensed.declared}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2} >
+              <p><b>Discovered</b></p>
+            </Col>
+            <Col md={9} >
+              <p><span className='list-singleLine'>{get(licensed, 'discovered.expression', '')}</span></p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2} >
               <p><b>Attribution</b></p>
             </Col>
             <Col md={9} >
-              <p><span className='list-singleLine'>{get(licensed, 'copyright.holders', []).join(', ')}</span></p>
+              <p><span className='list-singleLine'>{get(licensed, 'attribution.parties', []).join(', ')}</span></p>
             </Col>
           </Row>
           <Row>
@@ -216,22 +253,6 @@ export default class ComponentList extends React.Component {
                 Unlicensed: <b>{isNaN(unlicensed) ? '/' : `${unlicensed} (${unlicensedPercent}%)`}</b>, 
                 Unattributed: <b>{isNaN(unattributed) ? '?' : `${unattributed} (${unattributedPercent}%)`}</b>, 
               </p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2} >
-              <p><b>Harvesters</b></p>
-            </Col>
-            <Col md={9} >
-              <p><span className='list-singleLine'>{get(described, 'tools', []).join(', ')}</span></p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2} >
-              <p><b>Facets</b></p>
-            </Col>
-            <Col md={9} >
-              <p><span className='list-singleLine'>{facetsText}</span></p>
             </Col>
           </Row>
         </Col>
