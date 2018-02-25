@@ -88,10 +88,9 @@ class Landing extends Component {
           <Col md={8}>
             <h2>Get {clearlyDefined}</h2>
             <h3>
-              {clearlyDefined} is about meeting communities where they are. Becoming {clearlyDefined} means defining the 
-              information above in your terms. The {clearlyDefined} infrastructure then helps others discover how to 
-              engage with your project. In many cases it's as simple as adding a few properties to a package manifest 
-              or dropping a file in your code repo.
+              Becoming {clearlyDefined} means identifying the information needed, in your terms. The {clearlyDefined} community 
+              meets you where you are to enable automated discovery of your essential data. In many cases it's as easy as 
+              adding a few properties to a package manifest or dropping a simple file in your code repo.
               Learn more...
             </h3>
           </Col>
