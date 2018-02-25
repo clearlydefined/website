@@ -8,6 +8,7 @@ import FontAwesome from 'react-fontawesome'
 import { ROUTE_ROOT } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
 import logo from '../images/logo-text-stacked.svg'
+import { Clearly } from './'
 
 const described = 'vcard'
 const secure = 'lock'
@@ -15,6 +16,8 @@ const licensed = 'file-code-o'
 const use = 'sign-out'
 const contribute = 'sign-in'
 const adopt = 'toggle-on'
+
+const clearlyDefined = <Clearly>Defined</Clearly>
 
 class Landing extends Component {
 
@@ -43,11 +46,13 @@ class Landing extends Component {
             {this.renderNeighborhood(described)}
           </Col>
           <Col md={8}>
-            <h2>ClearlyDescribed</h2>
+            <h2><Clearly>Described</Clearly></h2>
             <h3>
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
+              Knowing simple things like the source location for a component version enables contribution of docs, bug 
+              fixes, or new features. It also inspires confidence by enabling IP and security code scans, and source code 
+              archiving and disclosure. Round that out with project and issue tracking site info, and you have a sound 
+              basis for engagement.
+              Learn more...
             </h3>
           </Col>
         </Row>
@@ -56,11 +61,12 @@ class Landing extends Component {
             {this.renderNeighborhood(licensed)}
           </Col>
           <Col md={8}>
-            <h2>ClearlyLicensed</h2>
+            <h2><Clearly>Licensed</Clearly></h2>
             <h3>
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-            This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-            This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
+              Defining and knowing the license for a component is essential to a successful partnership. Communities choose
+              a license with terms they like. {clearlyDefined} helps clarify that choice and enables consumers to
+              do follow the terms by identifying key data such as license set, attribution parties, and code location.
+              Learn more...
             </h3>
           </Col>
         </Row>
@@ -69,21 +75,24 @@ class Landing extends Component {
             {this.renderNeighborhood(secure)}
           </Col>
           <Col md={8}>
-            <h2>ClearlySecure</h2>
+            <h2><Clearly>Secure</Clearly></h2>
             <h3>
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-            This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
+              Teams working hard to create quality, secure components need a simple way of recording security issues they find 
+              and fix. Bug report and pull requests are great. CVEs and global notifications are even better. It can still 
+              be hard to relate that data to the components you use. {clearlyDefined} gives communities a security forum that  
+              builds confidence and makes for even more collaboration. Learn more...
             </h3>
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
           <Col md={8}>
-            <h2>Get ClearlyDefined</h2>
+            <h2>Get {clearlyDefined}</h2>
             <h3>
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-            This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
+              {clearlyDefined} is about meeting communities where they are. Becoming {clearlyDefined} means defining the 
+              information above in your terms. The {clearlyDefined} infrastructure then helps others discover how to 
+              engage with your project. In many cases it's as simple as adding a few properties to a package manifest 
+              or dropping a file in your code repo.
+              Learn more...
             </h3>
           </Col>
           <Col md={4} className="valign-child">
@@ -94,9 +103,9 @@ class Landing extends Component {
           <Col md={8}>
             <h2>Use definitions</h2>
             <h3>
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-            This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
+              {clearlyDefined} harvests and curates key data about projects from around the world and makes it available 
+              through a simple REST API and web user experience. Use the data when picking components. Use it to enable more
+              collaboration with other project. Use the data to simplify your compliance efforts Learn more...
             </h3>
           </Col>
           <Col md={4} className="valign-child">
@@ -107,9 +116,9 @@ class Landing extends Component {
           <Col md={8}>
             <h2>Contribute or curate data</h2>
             <h3>
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-              This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
-            This is a bunch of text about this topic. This is a bunch of text about this topic. This is a bunch of text about this topic.
+              {clearlyDefined} is a communit approach to a community challenge. If you've ever had to figure out where 
+              source is, or what license is being used, you can contribute to {clearlyDefined}. Add new data, curate data
+              provided by others. It's an open source community like any other. Learn more...
             </h3>
           </Col>
           <Col md={4} className="valign-child">
