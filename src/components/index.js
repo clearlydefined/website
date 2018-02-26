@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 export { default as App } from './App'
+export { default as Clearly } from './Clearly'
 export { default as ComponentList } from './ComponentList'
 export { default as CurationEditor } from './CurationEditor'
 export { default as CurationReview } from './CurationReview'

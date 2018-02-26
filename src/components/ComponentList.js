@@ -5,7 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { RowEntityList, TwoLineEntry } from './'
 import { Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
-import { clone, get } from 'lodash'
+import { clone, get, union } from 'lodash'
 import FontAwesome from 'react-fontawesome'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -146,7 +146,7 @@ export default class ComponentList extends React.Component {
 
   renderMessage(component) {
     const definition = this.props.definitions.entries[component.toPath()]
-    const licenseExpression = definition ? get(definition, 'licensed.declared') : null
+    const licenseExpression = definition ? get(definition, 'licensed.facets.core.declared') : null
     return licenseExpression ? <span>{licenseExpression}</span> : <span>&nbsp;</span>
   }
 
@@ -166,14 +166,50 @@ export default class ComponentList extends React.Component {
     return Math.round(((count || 0) / total) * 100)
   }
 
+  foldFacets(definition, facets = null) {
+    facets = facets || ['core', 'data', 'dev', 'docs', 'examples', 'tests']
+    let files = 0
+    let attributionUnknown = 0
+    let discoveredUnknown = 0
+    let parties = []
+    let expressions = []
+    let declared = []
+
+    facets.forEach(name => {
+      const facet = get(definition, `licensed.facets.${name}`)
+      if (!facet)
+        return
+      files += (facet.files || 0)
+      attributionUnknown += get(facet, 'attribution.unknown', 0)
+      parties = union(parties, get(facet, 'attribution.parties', []))
+      discoveredUnknown += get(facet, 'discovered.unknown', 0)
+      expressions = union(expressions, get(facet, 'discovered.expressions', []))
+      declared = union(declared, get(facet, 'declared', []))
+    })
+
+    return {
+      coordinates: definition.coordinates,
+      described: definition.described,
+      licensed: { 
+        files,
+        declared,
+        discovered: { expressions, unknown: discoveredUnknown },
+        attribution: { parties, unknown: attributionUnknown }
+      }
+    }
+  }
+
   renderPanel(component) {
-    const definition = this.props.definitions.entries[component.toPath()]
-    if (!definition)
+    const rawDefinition = this.props.definitions.entries[component.toPath()]
+    if (!rawDefinition)
       return (<div className='list-noRows'>
         <div>
           'Nothing to see here'
         </div>
       </div>)
+
+    // TODO find a way of calling this less frequently. Relatively expensive.
+    const definition = this.foldFacets(rawDefinition, this.props.facetList)
     const { licensed, described } = definition
     const sourceUrl = this.getSourceUrl(definition)
     const facetsText = this.isSourceComponent(component) ? 'Core, Data, Dev, Doc, Examples, Tests' : 'Core'
@@ -232,7 +268,7 @@ export default class ComponentList extends React.Component {
               <p><b>Discovered</b></p>
             </Col>
             <Col md={9} >
-              <p><span className='list-singleLine'>{get(licensed, 'discovered.expression', '')}</span></p>
+              <p><span className='list-singleLine'>{get(licensed, 'discovered.expressions', '')}</span></p>
             </Col>
           </Row>
           <Row>
