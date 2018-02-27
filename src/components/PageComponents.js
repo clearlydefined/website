@@ -68,7 +68,7 @@ class PageComponents extends Component {
     const { components, filterOptions, definitions, token } = this.props
     return (
       <Grid className='main-container'>
-        <Row className='show-grid spacer'>
+        <Row className='show-grid'>
           <Col md={7}>
             <FilterBar options={filterOptions} onChange={this.onAddComponent} clearOnChange />
           </Col>
