@@ -10,7 +10,7 @@ import { ROUTE_CURATE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import { curateAction } from '../actions/curationActions'
 import { getDefinitionListAction } from '../actions/definitionActions'
-import { FilterBar } from './'
+import { FilterBar, CopyUrlButton } from './'
 import { Button } from 'react-bootstrap'
 
 class PageCurate extends Component {
@@ -136,8 +136,8 @@ class PageCurate extends Component {
     return (
       <Grid className="main-container">
         <ProposePrompt ref="proposeModal" proposeHandler={this.doPropose} />
-        <Row className="show-grid spacer">
-          <Col md={searchWidth} mdOffset={1}>
+        <Row className="show-grid well">
+          <Col md={searchWidth}>
             <FilterBar
               options={filterOptions}
               value={filterValue}
@@ -145,9 +145,10 @@ class PageCurate extends Component {
               defaultValue={path ? path : ''}
             />
           </Col>
-          {isCurator && <Col md={4} >
-            {this.renderButtons()}
-          </Col>}
+          <Col md={1}>
+            <CopyUrlButton route={ROUTE_CURATE} path={filterValue}/>
+          </Col>
+          {isCurator && <Col md={4}>{this.renderButtons()}</Col>}
         </Row>
         <Row className='top-space'>
           {this.renderCurationView()}

@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { Button, Grid, Row, Col } from 'react-bootstrap'
 import { getDefinitionListAction } from '../actions/definitionActions'
 import { uiInspectUpdateFilter, uiNavigation, uiInspectGetCuration, uiInspectGetHarvested, uiInspectGetDefinition } from '../actions/ui'
-import { FilterBar, MonacoEditorWrapper, Section } from './'
+import { FilterBar, MonacoEditorWrapper, Section, CopyUrlButton } from './'
 import EntitySpec from '../utils/entitySpec';
 import { ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants';
 
@@ -132,9 +132,12 @@ class PageInspect extends Component {
     const { filterOptions, filterValue, definition, curation, harvest } = this.props
     return (
       <Grid className='main-container'>
-        <Row className="show-grid spacer">
-          <Col md={10} mdOffset={1}>
+        <Row className="show-grid well">
+          <Col md={10}>
             <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
+          </Col>
+          <Col md={2}>
+            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue}/>
           </Col>
         </Row>
         <Row className='show-grid'>
