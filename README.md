@@ -41,15 +41,16 @@ results of applying a particular curation PR to the harvested and curated data f
 * https://clearlydefined.io/curation/npm/npmjs/@someNamespace/coolpackage/1.13/pr/37
 * https://clearlydefined.io/curation/git/github/clearlydefined/service/0.1.0
 
+# ClearlyDefined, defined.
+
+## Mission
+Help FOSS projects be more successful through clearly defined project data.
+
+For more details on the project, check out the [wiki](../../../clearlydefined/wiki).
+
 # Contributing
 
-This project welcomes contributions and suggestions. Most contributions require you to
-agree to a Contributor License Agreement (CLA) declaring that you have the right to,
-and actually do, grant the project the rights to use your contribution. Details are TBD.
+This project welcomes contributions and suggestions, and we've documented the details of contribution policy [here](CONTRIBUTING.md).
 
-When you submit a pull request, a CLA-bot will automatically determine whether you need
-to provide a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the
-instructions provided by the bot. You will only need to do this once across all repositories using our CLA.
-
-The [Code of Conduct](CODE_OF_CONDUCT.md) for this project is details how the community interacts in 
+The [Code of Conduct](CODE_OF_CONDUCT.md) for this project is details how the community interacts in
 an inclusive and respectful manner. Please keep it in mind as you engage here.
