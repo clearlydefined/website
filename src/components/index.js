@@ -4,6 +4,7 @@
 export { default as App } from './App'
 export { default as Clearly } from './Clearly'
 export { default as ComponentList } from './ComponentList'
+export { default as CopyUrlButton } from './CopyUrlButton'
 export { default as CurationEditor } from './CurationEditor'
 export { default as CurationReview } from './CurationReview'
 export { default as FieldGroup } from './FieldGroup'

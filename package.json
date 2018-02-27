@@ -9,6 +9,7 @@
     "react": "^16.2.0",
     "react-bootstrap": "^0.31.5",
     "react-bootstrap-typeahead": "^2.3.0",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.2.0",
     "react-fontawesome": "^1.6.1",
     "react-monaco-editor": "^0.13.0",
