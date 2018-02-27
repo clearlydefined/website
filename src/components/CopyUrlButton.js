@@ -15,15 +15,17 @@ export default class CopyUrlButton extends Component {
 
   constructor(props) {
     super(props)
-    const {route = '', path = ''} = props
     this.state = {
-      route,
-      path,
       copied: false,
       timeoutId: null
     }
     this.onCopy = this.onCopy.bind(this)
     this.didCopy = this.didCopy.bind(this)
+    this.onClick = this.onClick.bind(this)
+  }
+
+  onClick(event) {
+    event.stopPropagation()
   }
 
   onCopy() {
@@ -48,13 +50,13 @@ export default class CopyUrlButton extends Component {
   }
 
   render() {
-    const {path} = this.props
+    const {path, bsStyle = 'link', className} = this.props
     const isDisabled = !Boolean(path)
 
     return (
       <CopyToClipboard text={this.renderUrl()} onCopy={this.onCopy}>
         <OverlayTrigger placement="bottom" overlay={this.renderTooltip()} shouldUpdatePosition={true}>
-          <Button bsStyle="link" className="pull-right" disabled={isDisabled}>
+          <Button bsStyle={bsStyle} className={className} disabled={isDisabled} onClick={this.onClick}>
             <FontAwesome name={'copy'}/>
           </Button>
         </OverlayTrigger>

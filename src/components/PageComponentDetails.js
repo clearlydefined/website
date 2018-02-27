@@ -137,7 +137,7 @@ class PageInspect extends Component {
             <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
           </Col>
           <Col md={2}>
-            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue}/>
+            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue} className="pull-right"/>
           </Col>
         </Row>
         <Row className='show-grid'>
