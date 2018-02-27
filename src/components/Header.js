@@ -30,7 +30,7 @@ class Header extends Component {
     window.open(url('auth/github'))
     const tokenListener = (e) => {
       if (e.data.type === 'github-token') {
-        this.props.dispatch(login(e.data.token))
+        this.props.dispatch(login(e.data.token, e.data.permissions))
         window.removeEventListener('message', tokenListener)
       }
     }

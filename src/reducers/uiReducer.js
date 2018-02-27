@@ -32,19 +32,19 @@ const initialStateNavigation = [
   {
     title: "Browse",
     to: ROUTE_COMPONENTS,
-    protected: 1,
+    protected: 0,
     isSelected: false,
   },
   {
     title: "Inspect",
     to: ROUTE_INSPECT,
-    protected: 1,
+    protected: 0,
     isSelected: false,
   },
   {
     title: "Curate",
     to: ROUTE_CURATE,
-    protected: 1,
+    protected: 0,
     isSelected: false,
   },
   {
