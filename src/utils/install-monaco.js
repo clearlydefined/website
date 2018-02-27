@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // SPDX-License-Identifier: MIT
 
 // Goofy little utility used at build time to copy the monaco files from their module to
