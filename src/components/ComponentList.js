@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React from 'react'
@@ -111,6 +111,8 @@ export default class ComponentList extends React.Component {
     const isSourceComponent = this.isSourceComponent(component)
     return (
       <div className='list-activity-area'>
+        {/* <img className='list-buttons' width='45px' src={two} alt='score'/> */}
+        <img className='list-buttons' src={getBadgeUrl(component)} alt='score'/>
         <ButtonGroup>
           {!isSourceComponent &&
             <Button className='list-hybrid-button' onClick={this.addSourceForComponent.bind(this, component)}>
@@ -132,8 +134,6 @@ export default class ComponentList extends React.Component {
           )}
           <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button"/>
         </ButtonGroup>
-        {/* <img className='list-buttons' width='45px' src={two} alt='score'/> */}
-        <img className='list-buttons' src={getBadgeUrl(component)} alt='score'/>
         <FontAwesome name={'times'} className='list-remove' onClick={this.removeComponent.bind(this, component)} />
       </div>)
   }

@@ -1,5 +1,4 @@
-// Copyright (c) Microsoft Corporation and Others.
-// Copyright (c) 2018, The Linux Foundation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
