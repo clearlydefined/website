@@ -52,6 +52,7 @@ const initialStateNavigation = [
     to: ROUTE_HARVEST,
     protected: 1,
     isSelected: false,
+    permissions: ['harvest']
   },
   {
     title: "About",

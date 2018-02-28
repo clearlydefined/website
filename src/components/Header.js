@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom'
 import { ROUTE_ROOT } from '../utils/routingConstants'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap'
-import { filter } from 'lodash'
+import { filter, intersection } from 'lodash'
 import { url } from '../api/clearlyDefined'
 
 class Header extends Component {
@@ -51,7 +51,7 @@ class Header extends Component {
   }
 
   renderNavigation(navigation, isAnonymous) {
-    const filterExpr = isAnonymous ? o => o.protected !== 1 : o => o.protected !== -1
+    const filterExpr = isAnonymous ? o => o.protected !== 1 : o => o.protected !== -1 && this.hasPermissions(o.permissions)
     return (
       <Nav bsStyle="pills">
         {filter(navigation, filterExpr).map((navItem, i) => {
@@ -65,6 +65,12 @@ class Header extends Component {
         })}
       </Nav>
     )
+  }
+
+  hasPermissions(permissions) {
+    if (!permissions)
+      return true
+    return intersection(this.props.session.permissions, permissions).length > 0
   }
 
   render() {
