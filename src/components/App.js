@@ -1,8 +1,8 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and Others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react';
-import { Header, Footer } from './'
+import { Header, Footer, NotificationList } from './'
 
 export default class App extends Component {
   render() {
@@ -14,6 +14,7 @@ export default class App extends Component {
           {children}
         </main>
         <Footer />
+        <NotificationList />
       </div>
     )
   }

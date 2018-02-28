@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and Others.
 // SPDX-License-Identifier: MIT
 
 export { default as App } from './App'
@@ -18,6 +18,7 @@ export { default as Landing } from './Landing'
 export { default as MavenSelector } from './MavenSelector'
 export { default as MavenVersionPicker } from './MavenVersionPicker'
 export { default as MonacoEditorWrapper } from './MonacoEditorWrapper'
+export { default as NotificationList } from './NotificationList'
 export { default as NpmSelector } from './NpmSelector'
 export { default as NpmVersionPicker } from './NpmVersionPicker'
 export { default as NuGetSelector } from './NuGetSelector'
