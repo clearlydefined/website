@@ -1,4 +1,5 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and Others.
+// Copyright (c) 2018, The Linux Foundation.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -8,7 +9,7 @@ import { getDefinitionListAction } from '../actions/definitionActions'
 import { uiInspectUpdateFilter, uiNavigation, uiInspectGetCuration, uiInspectGetHarvested, uiInspectGetDefinition } from '../actions/ui'
 import { FilterBar, MonacoEditorWrapper, Section } from './'
 import EntitySpec from '../utils/entitySpec';
-import { ROUTE_INSPECT } from '../utils/routingConstants';
+import { ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants';
 
 class PageInspect extends Component {
 
@@ -17,6 +18,7 @@ class PageInspect extends Component {
     this.state = {}
     this.filterChanged = this.filterChanged.bind(this)
     this.editorDidMount = this.editorDidMount.bind(this)
+    this.addCuration = this.addCuration.bind(this)
   }
 
   componentDidMount() {
@@ -49,6 +51,11 @@ class PageInspect extends Component {
     dispatch(uiInspectGetDefinition(token, spec))
     dispatch(uiInspectGetCuration(token, spec))
     dispatch(uiInspectGetHarvested(token, spec))
+  }
+
+  addCuration() {
+    const url = `${ROUTE_CURATE}/${this.props.filterValue}`
+    this.props.history.push(url)
   }
 
   filterChanged(newFilter) {
@@ -107,7 +114,14 @@ class PageInspect extends Component {
   }
 
   renderCurationButton() {
-    return (<Button bsStyle='success' className='pull-right'>Add curation</Button>)
+    return (
+      <Button
+        bsStyle='success'
+        className='pull-right'
+        disabled={!Boolean(this.props.filterValue)}
+        onClick={this.addCuration}>Add curation
+      </Button>
+    )
   }
 
   renderHarvestButton() {
