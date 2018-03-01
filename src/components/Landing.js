@@ -115,7 +115,7 @@ class Landing extends Component {
           <Col md={8}>
             <h2>Contribute or curate data</h2>
             <h3>
-              {clearlyDefined} is a communit approach to a community challenge. If you've ever had to figure out where 
+              {clearlyDefined} is a community approach to a community challenge. If you've ever had to figure out where 
               source is, or what license is being used, you can contribute to {clearlyDefined}. Add new data, curate data
               provided by others. It's an open source community like any other. Learn more...
             </h3>
