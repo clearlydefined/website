@@ -57,7 +57,7 @@
   .valign-child {
     align-self: center;
   }
-  
+
   .neighborhood-row {
     padding-top: 100px;
     display: flex;
@@ -114,4 +114,10 @@
 
 .section-title {
   font-size: 2em;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

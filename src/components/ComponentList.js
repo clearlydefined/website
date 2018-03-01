@@ -233,8 +233,8 @@ export default class ComponentList extends React.Component {
             <Col md={2} >
               <p><b>Source</b></p>
             </Col>
-            <Col md={10} >
-              <p>{sourceUrl}</p>
+            <Col md={10}>
+              <p className="ellipsis">{sourceUrl}</p>
             </Col>
           </Row>
           <Row>
