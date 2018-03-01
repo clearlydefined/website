@@ -17,7 +17,6 @@ class PageComponents extends Component {
   constructor(props) {
     super(props)
     this.state = { activeFacets: defaultFacets.map(x => x.value) }
-    this.filterHandler = this.filterHandler.bind(this)
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
@@ -30,10 +29,6 @@ class PageComponents extends Component {
     const { dispatch, token } = this.props
     dispatch(uiNavigation({ to: ROUTE_COMPONENTS }))
     dispatch(getDefinitionListAction(token))
-  }
-
-  filterHandler(spec) {
-    // const { dispatch, token, queue } = this.props
   }
 
   onAddComponent(value, after = null) {
@@ -64,14 +59,8 @@ class PageComponents extends Component {
   }
 
   facetChange(value) {
-    const activeFacets = [];
-    value && value.forEach(facet => activeFacets.push(facet['value']))
+    const activeFacets = (value || []).map(facet => facet.value)
     this.setState({ ...this.state, activeFacets})
-    console.log('Current state in Page Component:', JSON.stringify(this.state))
-  }
-
-  renderActionButton() {
-    return (<Button className='pull-right' bsStyle='success' onClick={this.filterHandler}>Filter</Button>)
   }
 
   noRowsRenderer() {
@@ -87,7 +76,7 @@ class PageComponents extends Component {
           <Col md={4}>
             <FacetSelect 
               name="facets"
-              changeHandler={this.facetChange}
+              onChange={this.facetChange}
               defaultFacets={defaultFacets}
             /> 
           </Col>

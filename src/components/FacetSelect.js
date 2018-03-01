@@ -19,7 +19,7 @@ const options = [
 export default class FacetSelect extends Select {
   
   static propTypes = {
-    changeHandler: PropTypes.func,
+    onChange: PropTypes.func,
     defaultFacets: PropTypes.array
   }
 
@@ -33,26 +33,22 @@ export default class FacetSelect extends Select {
   }
 
   facetChange (value) {
-    console.log('You\'ve selected:', value)
     this.setState({value})
-    console.log('Current state:', JSON.stringify(this.state))
-    const { changeHandler } = this.props;
-    changeHandler && changeHandler(value)
+    const { onChange } = this.props;
+    onChange && onChange(value)
   }
 
   render () {
     const { value } = this.state;
     return (
-      <div className="section">
-        <Select
-          name="facets"
-          multi={true}
-          options={options}
-          onChange={this.facetChange}
-          getInitialState={this.getInitialState}
-          value={value} 
-        />
-      </div>
+      <Select
+        name="facets"
+        multi={true}
+        options={options}
+        onChange={this.facetChange}
+        getInitialState={this.getInitialState}
+        value={value} 
+      />
     ); 
   }
 }

@@ -178,7 +178,6 @@ export default class ComponentList extends React.Component {
     let expressions = []
     let declared = []
 
-    console.log("Facets: " + JSON.stringify(facets))
     facets.forEach(name => {
       const facet = get(definition, `licensed.facets.${name}`)
       if (!facet)
@@ -332,7 +331,6 @@ export default class ComponentList extends React.Component {
   render() {
     const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer, facetList } = this.props
     const { sortOrder, contentSeq } = this.state
-    console.log("Rendering with facetList:" + JSON.stringify(facetList))
     return (<RowEntityList
       list={list}
       loadMoreRows={loadMoreRows}
