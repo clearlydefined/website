@@ -10,22 +10,32 @@ import { uiNotificationDelete } from '../actions/ui'
 class NotificationList extends Component {
 
   static propTypes = {
-    notifications: PropTypes.array
+    notifications: PropTypes.array,
+    position: PropTypes.string
   }
 
   static defaultProps = {
-    notifications: []
+    notifications: [],
+    position: 'top-right'
+  }
+
+  constructor(props) {
+    super(props)
+    this.onDismiss = this.onDismiss.bind(this)
+  }
+
+  onDismiss(message) {
+    this.props.dispatch(uiNotificationDelete(message))
   }
 
   render() {
-    const {dispatch} = this.props
+    const { position, notifications } = this.props
     return (
       <div>
         <AlertList
-          position="top-right"
-          alerts={this.props.notifications}
-          timeout={4000}
-          onDismiss={message => dispatch(uiNotificationDelete(message))}
+          position={ position }
+          alerts={ notifications }
+          onDismiss={ this.onDismiss }
           />
       </div>
     )
