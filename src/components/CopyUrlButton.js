@@ -10,7 +10,17 @@ import FontAwesome from 'react-fontawesome'
 export default class CopyUrlButton extends Component {
 
   static propTypes = {
-    path: PropTypes.string
+    path: PropTypes.string,
+    bsStyle: PropTypes.string,
+    className: PropTypes.string,
+    route: PropTypes.string
+  }
+
+  static defaultProps = {
+    path: '',
+    bsStyle: 'link',
+    className: '',
+    route: ''
   }
 
   constructor(props) {
@@ -31,11 +41,11 @@ export default class CopyUrlButton extends Component {
   onCopy() {
     this.state.timeoutId && clearTimeout(this.state.timeoutId)
     const timeoutId = setTimeout(this.didCopy, 2000)
-    this.setState({...this.state, copied: true, timeoutId})
+    this.setState({ ...this.state, copied: true, timeoutId })
   }
 
   didCopy() {
-    this.setState({...this.state, copied: false, timeoutId: null})
+    this.setState({ ...this.state, copied: false, timeoutId: null })
   }
 
   renderUrl() {
@@ -50,7 +60,7 @@ export default class CopyUrlButton extends Component {
   }
 
   render() {
-    const {path, bsStyle = 'link', className} = this.props
+    const {path, bsStyle, className} = this.props
     const isDisabled = !Boolean(path)
 
     return (

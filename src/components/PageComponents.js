@@ -69,7 +69,7 @@ class PageComponents extends Component {
     return (
       <Grid className='main-container'>
         <Row className='show-grid'>
-          <Col md={7}>
+          <Col md={12}>
             <FilterBar options={filterOptions} onChange={this.onAddComponent} clearOnChange />
           </Col>
         </Row>

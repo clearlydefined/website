@@ -131,7 +131,7 @@ class PageInspect extends Component {
     const { filterOptions, filterValue, definition, curation, harvest } = this.props
     return (
       <Grid className='main-container'>
-        <Row className="show-grid well">
+        <Row className="show-grid">
           <Col md={10}>
             <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
           </Col>

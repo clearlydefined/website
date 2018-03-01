@@ -136,7 +136,7 @@ class PageCurate extends Component {
     return (
       <Grid className="main-container">
         <ProposePrompt ref="proposeModal" proposeHandler={this.doPropose} />
-        <Row className="show-grid well">
+        <Row className="show-grid">
           <Col md={searchWidth}>
             <FilterBar
               options={filterOptions}
