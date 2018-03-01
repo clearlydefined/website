@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others. All rights reserved.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -14,14 +14,13 @@ class PageComponents extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { activeProvider: 'github' }
+    this.state = { }
     this.filterHandler = this.filterHandler.bind(this)
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
-    this.onClick = this.onClick.bind(this)
   }
 
   componentDidMount() {
@@ -61,28 +60,6 @@ class PageComponents extends Component {
     this.props.dispatch(uiBrowseUpdateList({ update: component, value: newComponent }))
   }
 
-  onClick(event, thing) {
-    const target = event.target
-    const activeProvider = target.name
-    this.setState({ ...this.state, activeProvider })
-  }
-
-  renderProviderButtons() {
-    const { activeProvider } = this.state
-    return (
-      <ButtonGroup>
-        <Button name='github' onClick={this.onClick} active={activeProvider === 'github'}>GitHub</Button>
-        <Button name='maven' onClick={this.onClick} active={activeProvider === 'maven'}>Maven</Button>
-        <Button name='npm' onClick={this.onClick} active={activeProvider === 'npm'}>NPM</Button>
-        <Button name='nuget' onClick={this.onClick} active={activeProvider === 'nuget'}>NuGet</Button>
-      </ButtonGroup>
-    )
-  }
-
-  renderActionButton() {
-    return (<Button className='pull-right' bsStyle='success' onClick={this.filterHandler}>Filter</Button>)
-  }
-
   noRowsRenderer() {
     return <div>Select components from the list above ...</div>
   }
@@ -92,14 +69,11 @@ class PageComponents extends Component {
     return (
       <Grid className='main-container'>
         <Row className='show-grid spacer'>
-          <Col md={4}>
-            {this.renderProviderButtons()}
-          </Col>
           <Col md={7}>
             <FilterBar options={filterOptions} onChange={this.onAddComponent} clearOnChange />
           </Col>
         </Row>
-        <Section name={'Available definitions'} actionButton={this.renderActionButton()}>
+        <Section name={'Available definitions'}>
           <div className='section-body'>
             <ComponentList
               list={components}
