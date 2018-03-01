@@ -29,7 +29,7 @@ Typical coordinates that you will encounter are a five part path-like structure 
 
 ```
 npm/npmjs/-/jquery/3.3.1
-'''
+```
 
 Or, more generally:
 
