@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // SPDX-License-Identifier: MIT
 
 // In production, we register a service worker to serve assets from local cache.

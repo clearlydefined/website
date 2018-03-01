@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // SPDX-License-Identifier: MIT
 
 import { LOGIN, LOGOUT } from '../actions/sessionActions'
@@ -16,6 +16,7 @@ export default function sessionReducer(state = initialState, action) {
         ...state,
         isAnonymous: false,
         token: action.token,
+        permissions: action.permissions
       }
     case LOGOUT:
       return { ...initialState }

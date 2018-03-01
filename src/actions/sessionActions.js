@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation.
 // SPDX-License-Identifier: MIT
 
 import { ROUTE_ROOT } from '../utils/routingConstants'
@@ -7,13 +7,8 @@ import { uiRedirect } from './ui'
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 
-export function login(token) {
-  return (dispatch) => {
-    dispatch({
-      type: LOGIN,
-      token,
-    })
-  }
+export function login(token, permissions) {
+  return (dispatch) => dispatch({ type: LOGIN, token, permissions })
 }
 
 export function logout(error) {
