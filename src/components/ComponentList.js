@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and Others.
 // SPDX-License-Identifier: MIT
 
 import React from 'react'
@@ -26,6 +26,7 @@ export default class ComponentList extends React.Component {
     onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
+    facetList: PropTypes.array,
     definitions: PropTypes.object,
     githubToken: PropTypes.string
   }
@@ -45,6 +46,8 @@ export default class ComponentList extends React.Component {
   
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence)
+      this.incrementSequence()
+    if (newProps.facetList !== this.props.facetList)
       this.incrementSequence()
   }
 
@@ -326,7 +329,7 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer } = this.props
+    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer, facetList } = this.props
     const { sortOrder, contentSeq } = this.state
     return (<RowEntityList
       list={list}
@@ -337,6 +340,7 @@ export default class ComponentList extends React.Component {
       rowHeight={this.rowHeight}
       noRowsRenderer={noRowsRenderer}
       fetchingRenderer={fetchingRenderer}
+      facetList={facetList}
       sortOrder={sortOrder}
       contentSeq={contentSeq}
     />)
