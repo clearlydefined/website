@@ -1,10 +1,10 @@
-// Copyright (c) Microsoft Corporation and Others.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { RowEntityList, TwoLineEntry } from './'
-import { Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { RowEntityList, TwoLineEntry, CopyUrlButton } from './'
+import { Row, Col, Button, OverlayTrigger, Tooltip, ButtonGroup } from 'react-bootstrap'
 import { clone, get, union } from 'lodash'
 import FontAwesome from 'react-fontawesome'
 import github from '../images/GitHub-Mark-120px-plus.png'
@@ -12,6 +12,7 @@ import npm from '../images/n-large.png'
 import EntitySpec from '../utils/entitySpec'
 import { getBadgeUrl } from '../api/clearlyDefined'
 import moment from 'moment'
+import { ROUTE_INSPECT } from '../utils/routingConstants';
 
 export default class ComponentList extends React.Component {
 
@@ -43,7 +44,7 @@ export default class ComponentList extends React.Component {
     this.commitChanged = this.commitChanged.bind(this)
     this.rowHeight = this.rowHeight.bind(this)
   }
-  
+
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence)
       this.incrementSequence()
@@ -100,7 +101,7 @@ export default class ComponentList extends React.Component {
 
   renderButtonWithTip(button, tip) {
     const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
-    return <OverlayTrigger placement="top" overlay={toolTip}>
+    return <OverlayTrigger placement="bottom" overlay={toolTip}>
       {button}
     </OverlayTrigger>
   }
@@ -113,22 +114,29 @@ export default class ComponentList extends React.Component {
     const isSourceComponent = this.isSourceComponent(component)
     return (
       <div className='list-activity-area'>
-        {!isSourceComponent && 
-          <Button className='list-hybrid-button' onClick={this.addSourceForComponent.bind(this, component)}>
-            <FontAwesome name={'plus'}/> 
-            <span>&nbsp;Add source</span>
-          </Button>
-        }
-        {this.renderButtonWithTip(
-          <FontAwesome name={'edit'} className='list-fa-button' onClick={this.curateComponent.bind(this, component)} />,
-          'Curate this definition'
-        )}
-        {this.renderButtonWithTip(
-          <FontAwesome name={'search'} className='list-fa-button' onClick={this.inspectComponent.bind(this, component)} />,
-          'Dig into this definition'
-        )}
         {/* <img className='list-buttons' width='45px' src={two} alt='score'/> */}
         <img className='list-buttons' src={getBadgeUrl(component)} alt='score'/>
+        <ButtonGroup>
+          {!isSourceComponent &&
+            <Button className='list-hybrid-button' onClick={this.addSourceForComponent.bind(this, component)}>
+              <FontAwesome name={'plus'}/>
+              <span>&nbsp;Add source</span>
+            </Button>
+          }
+          {this.renderButtonWithTip(
+            <Button>
+              <FontAwesome name={'edit'} className='list-fa-button' onClick={this.curateComponent.bind(this, component)} />
+            </Button>,
+            'Curate this definition'
+          )}
+          {this.renderButtonWithTip(
+            <Button>
+              <FontAwesome name={'search'} className='list-fa-button' onClick={this.inspectComponent.bind(this, component)} />
+            </Button>,
+            'Dig into this definition'
+          )}
+          <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button"/>
+        </ButtonGroup>
         <FontAwesome name={'times'} className='list-remove' onClick={this.removeComponent.bind(this, component)} />
       </div>)
   }
@@ -193,7 +201,7 @@ export default class ComponentList extends React.Component {
     return {
       coordinates: definition.coordinates,
       described: definition.described,
-      licensed: { 
+      licensed: {
         files,
         declared,
         discovered: { expressions, unknown: discoveredUnknown },
@@ -217,7 +225,7 @@ export default class ComponentList extends React.Component {
     const sourceUrl = this.getSourceUrl(definition)
     const facetsText = this.isSourceComponent(component) ? 'Core, Data, Dev, Doc, Examples, Tests' : 'Core'
     const totalFiles = get(licensed, 'files')
-    const unlicensed = get(licensed, 'discovered.unknown') 
+    const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : null;
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : null;
@@ -228,8 +236,8 @@ export default class ComponentList extends React.Component {
             <Col md={2} >
               <p><b>Source</b></p>
             </Col>
-            <Col md={10} >
-              <p>{sourceUrl}</p>
+            <Col md={10}>
+              <p className="ellipsis">{sourceUrl}</p>
             </Col>
           </Row>
           <Row>
@@ -288,9 +296,9 @@ export default class ComponentList extends React.Component {
             </Col>
             <Col md={10} >
               <p>
-                Total: <b>{totalFiles || '?'}</b>, 
-                Unlicensed: <b>{isNaN(unlicensed) ? '/' : `${unlicensed} (${unlicensedPercent}%)`}</b>, 
-                Unattributed: <b>{isNaN(unattributed) ? '?' : `${unattributed} (${unattributedPercent}%)`}</b>, 
+                Total: <b>{totalFiles || '?'}</b>,
+                Unlicensed: <b>{isNaN(unlicensed) ? '/' : `${unlicensed} (${unlicensedPercent}%)`}</b>,
+                Unattributed: <b>{isNaN(unattributed) ? '?' : `${unattributed} (${unattributedPercent}%)`}</b>,
               </p>
             </Col>
           </Row>

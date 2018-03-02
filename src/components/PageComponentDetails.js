@@ -1,5 +1,4 @@
-// Copyright (c) Microsoft Corporation and Others.
-// Copyright (c) 2018, The Linux Foundation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -7,7 +6,7 @@ import { connect } from 'react-redux'
 import { Button, Grid, Row, Col } from 'react-bootstrap'
 import { getDefinitionListAction } from '../actions/definitionActions'
 import { uiInspectUpdateFilter, uiNavigation, uiInspectGetCuration, uiInspectGetHarvested, uiInspectGetDefinition } from '../actions/ui'
-import { FilterBar, MonacoEditorWrapper, Section } from './'
+import { FilterBar, MonacoEditorWrapper, Section, CopyUrlButton } from './'
 import EntitySpec from '../utils/entitySpec';
 import { ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants';
 
@@ -132,9 +131,12 @@ class PageInspect extends Component {
     const { filterOptions, filterValue, definition, curation, harvest } = this.props
     return (
       <Grid className='main-container'>
-        <Row className="show-grid spacer">
-          <Col md={10} mdOffset={1}>
+        <Row className="show-grid">
+          <Col md={10}>
             <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
+          </Col>
+          <Col md={2}>
+            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue} className="pull-right"/>
           </Col>
         </Row>
         <Row className='show-grid'>

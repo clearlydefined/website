@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -82,11 +82,11 @@ class PageHarvest extends Component {
     const { queue, token } = this.props
     return (
       <Grid className='main-container'>
-        <Row className='show-grid spacer'>
+        <Row className='show-grid'>
           <Col md={4}>
             {this.renderProviderButtons()}
           </Col>
-          <Col md={7}>
+          <Col md={8}>
             {activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
             {activeProvider === 'maven' && <MavenSelector onChange={this.onAddRequest} />}
             {activeProvider === 'npm' && <NpmSelector onChange={this.onAddRequest} />}
