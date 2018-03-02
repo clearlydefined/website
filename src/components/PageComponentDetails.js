@@ -1,5 +1,4 @@
-// Copyright (c) Microsoft Corporation and Others.
-// Copyright (c) 2018, The Linux Foundation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -23,7 +22,7 @@ class PageInspect extends Component {
 
   componentDidMount() {
     const { dispatch, token, path, filterValue } = this.props
-    const pathToShow = path ? path : filterValue
+    const pathToShow = path || filterValue
     this.handleNewSpec(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_INSPECT }))
     dispatch(getDefinitionListAction(token))
@@ -63,7 +62,7 @@ class PageInspect extends Component {
   }
 
   gotoValue(value) {
-    this.props.history.push(`${ROUTE_INSPECT}${value ? '/' + value : ''}`)
+    this.props.history.push(`${ROUTE_INSPECT}${value ? `/${value}` : ''}`)
   }
 
   editorDidMount(editor, monaco) {
@@ -129,12 +128,15 @@ class PageInspect extends Component {
   }
 
   render() {
-    const { filterOptions, filterValue, definition, curation, harvest } = this.props
+    const { filterOptions, filterValue, definition, curation, harvest, path } = this.props
     return (
       <Grid className='main-container'>
         <Row className="show-grid spacer">
           <Col md={10} mdOffset={1}>
-            <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
+            <FilterBar
+              options={filterOptions}
+              value={path || filterValue}
+              onChange={this.filterChanged} />
           </Col>
         </Row>
         <Row className='show-grid'>
@@ -158,4 +160,5 @@ function mapStateToProps(state, ownProps) {
     harvest: state.ui.inspect.harvested
   }
 }
+
 export default connect(mapStateToProps)(PageInspect)

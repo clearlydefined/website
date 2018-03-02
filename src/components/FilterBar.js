@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -20,12 +20,18 @@ export default class FilterBar extends Component {
     super(props)
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
+    const value = props.value || props.defaultValue
+    this.state = {
+      // TypeAhead.selected expects null if empty. Concat used because it accepts a single item or array
+      value: value ? [].concat(value) : null
+    };
   }
 
   onChange(values) {
     const { onChange, clearOnChange } = this.props
     if (values.length) {
-      onChange && onChange(values[0].path)
+      const {path} = values[0]
+      onChange && onChange(path)
       // timing hack to work around https://github.com/ericgio/react-bootstrap-typeahead/issues/211
       clearOnChange && setTimeout(() => this.refs.typeahead.getInstance().clear(), 0);
     }
@@ -38,7 +44,7 @@ export default class FilterBar extends Component {
   }
 
   render() {
-    const { options, defaultValue } = this.props
+    const { options } = this.props
     return (
       <Typeahead
         ref='typeahead'
@@ -47,9 +53,9 @@ export default class FilterBar extends Component {
         options={options.transformedList}
         isLoading={options.isFetching}
         clearButton
-        defaultInputValue={defaultValue || ''}
         filterBy={this.filter}
         labelKey='path'
+        selected={this.state.value}
       />
     )
   }

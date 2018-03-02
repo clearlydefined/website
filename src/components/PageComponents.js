@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation and others. All rights reserved.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -7,7 +7,7 @@ import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_COMPONENTS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionListAction, getDefinitionsAction } from '../actions/definitionActions'
 import { FilterBar, ComponentList, Section } from './'
-import { uiNavigation, uiBrowseUpdateList } from '../actions/ui'
+import { uiNavigation, uiBrowseUpdateList, uiInspectUpdateFilter, uiCurateUpdateFilter } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
 class PageComponents extends Component {
@@ -43,13 +43,17 @@ class PageComponents extends Component {
   }
 
   onCurate(component) {
-    const url = `${ROUTE_CURATE}/${component.toPath()}`
+    const path = component.toPath();
+    const url = `${ROUTE_CURATE}/${path}`
     this.props.history.push(url)
+    this.props.dispatch(uiCurateUpdateFilter(path))
   }
 
   onInspect(component) {
-    const url = `${ROUTE_INSPECT}/${component.toPath()}`
+    const path = component.toPath();
+    const url = `${ROUTE_INSPECT}/${path}`
     this.props.history.push(url)
+    this.props.dispatch(uiInspectUpdateFilter(path))
   }
 
   onRemoveComponent(component) {
