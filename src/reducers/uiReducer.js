@@ -1,10 +1,11 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and Others.
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
 import { ROUTE_ROOT, ROUTE_CURATE, ROUTE_COMPONENTS, ROUTE_HARVEST, ROUTE_ABOUT, ROUTE_INSPECT } from '../utils/routingConstants'
 import {
-  UI_NAVIGATION, 
+  UI_NAVIGATION,
+  UI_NOTIFICATION_NEW, UI_NOTIFICATION_DELETE,
   UI_CURATE_UPDATE_FILTER, UI_CURATE_GET, UI_CURATE_GET_PROPOSED, UI_CURATE_GET_DEFINITION,UI_CURATE_DEFINITION_PREVIEW,
   UI_BROWSE_UPDATE_FILTER, UI_BROWSE_UPDATE_LIST,
   UI_HARVEST_UPDATE_FILTER, UI_HARVEST_UPDATE_QUEUE,
@@ -115,10 +116,23 @@ const harvest = (state = initialHarvest, action) => {
   }
 }
 
+const notifications = (state = [], action) => {
+  const {type, message} = action
+  switch(type) {
+    case UI_NOTIFICATION_NEW:
+      return [...state, message]
+    case UI_NOTIFICATION_DELETE:
+      return state.filter(x => x.id !== message.id)
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   navigation,
   browse,
   inspect,
   curate,
-  harvest
+  harvest,
+  notifications
 })

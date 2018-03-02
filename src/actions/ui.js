@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and Others.
 // SPDX-License-Identifier: MIT
 
 import { getCurationAction } from './curationActions'
@@ -7,6 +7,9 @@ import { getHarvestOutputAction } from './harvestActions'
 
 export const UI_NAVIGATION = 'UI_NAVIGATION'
 export const UI_REDIRECT = 'UI_REDIRECT'
+
+export const UI_NOTIFICATION_NEW = 'UI_NOTIFICATION_NEW'
+export const UI_NOTIFICATION_DELETE = 'UI_NOTIFICATION_DELETE'
 
 export const UI_INSPECT_UPDATE_FILTER = 'UI_INSPECT_UPDATE_FILTER'
 export const UI_INSPECT_GET_CURATION = 'UI_INSPECT_GET_CURATION'
@@ -32,6 +35,15 @@ export function uiNavigation(navItem) {
 
 export function uiRedirect(to) {
   return { type: UI_REDIRECT, to }
+}
+
+let nextNotificationId = 0
+export function uiNotificationNew(message) {
+  return { type: UI_NOTIFICATION_NEW, message: { ...message, id: nextNotificationId++} }
+}
+
+export function uiNotificationDelete(message) {
+  return { type: UI_NOTIFICATION_DELETE, message }
 }
 
 export function uiInspectUpdateFilter(value) {

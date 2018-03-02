@@ -7,7 +7,7 @@ import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_HARVEST } from '../utils/routingConstants'
 import { harvestAction } from '../actions/harvestActions'
 import { HarvestQueueList, GitHubSelector, NpmSelector, MavenSelector, NuGetSelector, Section } from './'
-import { uiNavigation, uiHarvestUpdateQueue } from '../actions/ui'
+import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
 class PageHarvest extends Component {
@@ -28,6 +28,7 @@ class PageHarvest extends Component {
 
   harvestHandler(spec) {
     const { dispatch, token, queue } = this.props
+    dispatch(uiNotificationNew({ type: 'info', message: 'Harvesting started.', timeout: 5000 }))
     const requests = queue.list.map(entry => {
       return { tool: entry.tool || entry.type, coordinates: entry.toPath(), policy: entry.policy }
     })
