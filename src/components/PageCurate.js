@@ -132,12 +132,12 @@ class PageCurate extends Component {
 
   render() {
     const { filterOptions, filterValue, isCurator, path } = this.props
-    const searchWidth = isCurator ? 7 : 11
+    const searchWidth = isCurator ? 7 : 9
     return (
       <Grid className="main-container">
         <ProposePrompt ref="proposeModal" proposeHandler={this.doPropose} />
-        <Row className="show-grid">
-          <Col md={searchWidth}>
+        <Row className="show-grid spacer">
+          <Col md={searchWidth} mdOffset={1}>
             <FilterBar
               options={filterOptions}
               value={filterValue}
@@ -146,7 +146,7 @@ class PageCurate extends Component {
             />
           </Col>
           <Col md={1}>
-            <CopyUrlButton route={ROUTE_CURATE} path={filterValue} className="pull-right"/>
+            <CopyUrlButton route={ROUTE_CURATE} path={filterValue} bsStyle='default'/>
           </Col>
           {isCurator && <Col md={4}>{this.renderButtons()}</Col>}
         </Row>

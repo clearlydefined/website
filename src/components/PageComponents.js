@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button } from 'react-bootstrap'
+import { Grid, Row, Col } from 'react-bootstrap'
 import { ROUTE_COMPONENTS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionListAction, getDefinitionsAction } from '../actions/definitionActions'
 import { FilterBar, ComponentList, Section, FacetSelect } from './'

@@ -131,12 +131,12 @@ class PageInspect extends Component {
     const { filterOptions, filterValue, definition, curation, harvest } = this.props
     return (
       <Grid className='main-container'>
-        <Row className="show-grid">
-          <Col md={10}>
+        <Row className="show-grid spacer">
+          <Col md={9} mdOffset={1}>
             <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
           </Col>
-          <Col md={2}>
-            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue} className="pull-right"/>
+          <Col md={1}>
+            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue} bsStyle='default'/>
           </Col>
         </Row>
         <Row className='show-grid'>

@@ -101,7 +101,7 @@ export default class ComponentList extends React.Component {
 
   renderButtonWithTip(button, tip) {
     const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
-    return <OverlayTrigger placement="bottom" overlay={toolTip}>
+    return <OverlayTrigger placement="top" overlay={toolTip}>
       {button}
     </OverlayTrigger>
   }

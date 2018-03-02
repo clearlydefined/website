@@ -65,7 +65,7 @@ export default class CopyUrlButton extends Component {
 
     return (
       <CopyToClipboard text={this.renderUrl()} onCopy={this.onCopy}>
-        <OverlayTrigger placement="bottom" overlay={this.renderTooltip()} shouldUpdatePosition={true}>
+        <OverlayTrigger placement="top" overlay={this.renderTooltip()} shouldUpdatePosition={true}>
           <Button bsStyle={bsStyle} className={className} disabled={isDisabled} onClick={this.onClick}>
             <FontAwesome name={'copy'}/>
           </Button>

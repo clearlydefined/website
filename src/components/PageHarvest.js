@@ -82,7 +82,7 @@ class PageHarvest extends Component {
     const { queue, token } = this.props
     return (
       <Grid className='main-container'>
-        <Row className='show-grid'>
+        <Row className='show-grid spacer'>
           <Col md={4}>
             {this.renderProviderButtons()}
           </Col>
