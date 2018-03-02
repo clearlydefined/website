@@ -1,11 +1,11 @@
 // Copyright (c) 2018, The Linux Foundation.
 // SPDX-License-Identifier: MIT
 
-import React from "react";
-import PropTypes from "prop-types";
-import Select from "react-select";
+import React from "react"
+import PropTypes from "prop-types"
+import Select from "react-select"
 
-import "react-select/dist/react-select.css";
+import "react-select/dist/react-select.css"
 
 const options = [
   { value: "core", label: "Core" },
@@ -14,26 +14,26 @@ const options = [
   { value: "docs", label: "Docs" },
   { value: "examples", label: "Examples" },
   { value: "tests", label: "Tests" }
-];
+]
 
 export default class FacetSelect extends Select {
   static propTypes = {
     onChange: PropTypes.func,
     defaultFacets: PropTypes.array
-  };
+  }
 
-  static defaultProps = {};
+  static defaultProps = {}
 
   constructor(props) {
-    super(props);
-    this.state = { value: props.defaultFacets };
-    this.facetChange = this.facetChange.bind(this);
+    super(props)
+    this.state = { value: props.defaultFacets }
+    this.facetChange = this.facetChange.bind(this)
   }
 
   facetChange(value) {
-    this.setState({ value });
-    const { onChange } = this.props;
-    onChange && onChange(value);
+    this.setState({ value })
+    const { onChange } = this.props
+    onChange && onChange(value)
   }
 
   render() {
@@ -46,6 +46,6 @@ export default class FacetSelect extends Select {
         onChange={this.facetChange}
         value={value}
       />
-    );
+    )
   }
 }
