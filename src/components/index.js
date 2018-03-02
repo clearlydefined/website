@@ -1,11 +1,13 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 export { default as App } from './App'
 export { default as Clearly } from './Clearly'
 export { default as ComponentList } from './ComponentList'
+export { default as CopyUrlButton } from './CopyUrlButton'
 export { default as CurationEditor } from './CurationEditor'
 export { default as CurationReview } from './CurationReview'
+export { default as FacetSelect } from './FacetSelect'
 export { default as FieldGroup } from './FieldGroup'
 export { default as FilterBar } from './FilterBar'
 export { default as Footer } from './Footer'
@@ -18,6 +20,7 @@ export { default as Landing } from './Landing'
 export { default as MavenSelector } from './MavenSelector'
 export { default as MavenVersionPicker } from './MavenVersionPicker'
 export { default as MonacoEditorWrapper } from './MonacoEditorWrapper'
+export { default as NotificationList } from './NotificationList'
 export { default as NpmSelector } from './NpmSelector'
 export { default as NpmVersionPicker } from './NpmVersionPicker'
 export { default as NuGetSelector } from './NuGetSelector'

@@ -57,7 +57,7 @@
   .valign-child {
     align-self: center;
   }
-  
+
   .neighborhood-row {
     padding-top: 100px;
     display: flex;
@@ -68,6 +68,15 @@
     font-size:10rem;
     color: $color-text-light;
     text-align: center;
+  }
+
+  .about-cell {
+    display: flex;
+    min-height: 170px;
+  }
+
+  .about-image {
+    align-self: center;
   }
 }
 
@@ -114,4 +123,10 @@
 
 .section-title {
   font-size: 2em;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

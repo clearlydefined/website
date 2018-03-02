@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -7,7 +7,7 @@ import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_HARVEST } from '../utils/routingConstants'
 import { harvestAction } from '../actions/harvestActions'
 import { HarvestQueueList, GitHubSelector, NpmSelector, MavenSelector, NuGetSelector, Section } from './'
-import { uiNavigation, uiHarvestUpdateQueue } from '../actions/ui'
+import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
 class PageHarvest extends Component {
@@ -28,6 +28,7 @@ class PageHarvest extends Component {
 
   harvestHandler(spec) {
     const { dispatch, token, queue } = this.props
+    dispatch(uiNotificationNew({ type: 'info', message: 'Harvesting started.', timeout: 5000 }))
     const requests = queue.list.map(entry => {
       return { tool: entry.tool || entry.type, coordinates: entry.toPath(), policy: entry.policy }
     })
@@ -86,7 +87,7 @@ class PageHarvest extends Component {
           <Col md={4}>
             {this.renderProviderButtons()}
           </Col>
-          <Col md={7}>
+          <Col md={8}>
             {activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
             {activeProvider === 'maven' && <MavenSelector onChange={this.onAddRequest} />}
             {activeProvider === 'npm' && <NpmSelector onChange={this.onAddRequest} />}
