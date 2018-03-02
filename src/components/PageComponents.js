@@ -97,7 +97,7 @@ class PageComponents extends Component {
               definitions={definitions}
               githubToken={token}
               noRowsRenderer={this.noRowsRenderer}
-              facetList={activeFacets}
+              activeFacets={activeFacets}
             />
           </div>
         </Section>

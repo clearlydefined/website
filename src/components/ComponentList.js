@@ -26,7 +26,7 @@ export default class ComponentList extends React.Component {
     onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
-    facetList: PropTypes.array,
+    activeFacets: PropTypes.array,
     definitions: PropTypes.object,
     githubToken: PropTypes.string
   }
@@ -47,7 +47,7 @@ export default class ComponentList extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence)
       this.incrementSequence()
-    if (newProps.facetList !== this.props.facetList)
+    if (newProps.activeFacets !== this.props.activeFacets)
       this.incrementSequence()
   }
 
@@ -212,7 +212,7 @@ export default class ComponentList extends React.Component {
       </div>)
 
     // TODO find a way of calling this less frequently. Relatively expensive.
-    const definition = this.foldFacets(rawDefinition, this.props.facetList)
+    const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed, described } = definition
     const sourceUrl = this.getSourceUrl(definition)
     const facetsText = this.isSourceComponent(component) ? 'Core, Data, Dev, Doc, Examples, Tests' : 'Core'
@@ -329,7 +329,7 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer, facetList } = this.props
+    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer } = this.props
     const { sortOrder, contentSeq } = this.state
     return (<RowEntityList
       list={list}
@@ -340,7 +340,6 @@ export default class ComponentList extends React.Component {
       rowHeight={this.rowHeight}
       noRowsRenderer={noRowsRenderer}
       fetchingRenderer={fetchingRenderer}
-      facetList={facetList}
       sortOrder={sortOrder}
       contentSeq={contentSeq}
     />)
