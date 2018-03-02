@@ -7,7 +7,7 @@ import { Grid, Row, Col } from 'react-bootstrap'
 import { uiNavigation } from '../actions/ui'
 import { ROUTE_ABOUT } from '../utils/routingConstants'
 
-import microsoft from '../images/partner-logos/Microsoft.jpg'
+import microsoft from '../images/partner-logos/Microsoft-logo_rgb_c-gray.png'
 import nexb from '../images/partner-logos/nexB.png'
 import here from '../images/partner-logos/HERE.png'
 import aws from '../images/partner-logos/AWS_logo_RGB.png'
