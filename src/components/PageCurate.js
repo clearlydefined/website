@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { uiNavigation, uiCurateUpdateFilter, uiCurateGetDefinitionPreview, uiCurateGetCuration, uiCurateGetDefinition } from '../actions/ui'
+import { uiNavigation, uiCurateUpdateFilter, uiCurateGetCuration, uiCurateGetDefinition } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { CurationReview, ProposePrompt } from './'
 import { ROUTE_CURATE } from '../utils/routingConstants'
@@ -59,7 +59,6 @@ class PageCurate extends Component {
     }
     dispatch(uiCurateGetCuration(token, currentSpec))
     dispatch(uiCurateGetDefinition(token, currentSpec))
-    dispatch(uiCurateGetDefinitionPreview(token, currentSpec, {}))
   }
 
   doPropose(description) {
@@ -96,18 +95,20 @@ class PageCurate extends Component {
 
   renderCurationView() {
     const { entitySpec } = this.state
-    const { currentCuration, proposedCuration, currentDefinition, previewDefinition, filterValue } = this.props
+    const { currentCuration, proposedCuration, currentDefinition, proposedDefinition, filterValue } = this.props
     if (!filterValue || !entitySpec)
       return this.renderPlaceholder('Search for some part of a component name to see details')
-    // wait to render until we have everything
-    if (!(currentCuration.isFetched && currentDefinition.isFetched && previewDefinition.isFetched))
-      return this.renderPlaceholder('Loading the curations for the requested component')
-    if (entitySpec.pr && !proposedCuration.isFetched)
-      return this.renderPlaceholder('Loading the curations for the requested component')
+    // wait to render until we have the current content
+    if (!currentCuration.isFetched || !currentDefinition.isFetched)
+      return this.renderPlaceholder('Loading the curations and definitions for the requested component')
+    // if we're doing a PR, wait for the PR content as well
+    if (entitySpec.pr && (!proposedCuration.isFetched || !proposedDefinition.isFetched))
+      return this.renderPlaceholder('Loading the curations and definitions for the requested component')
     const curationOriginal = currentCuration.item
-    const curationValue = proposedCuration.item
+    const curationValue = entitySpec.pr ? proposedCuration.item : curationOriginal
     const definitionOriginal = currentDefinition.item
-    const definitionValue = previewDefinition.item
+    const definitionValue = entitySpec.pr ? proposedDefinition.item : definitionOriginal
+
     const actionText = entitySpec.pr ? 'Show on GitHub' : 'Save curation'
     return (
       <Col md={12} >
@@ -115,7 +116,7 @@ class PageCurate extends Component {
           curationOriginal={curationOriginal}
           curationValue={curationValue}
           definitionOriginal={definitionOriginal}
-          previewDefinition={definitionValue}
+          definitionValue={definitionValue}
           actionHandler={this.doAction}
           actionText={actionText} />
       </Col>
@@ -165,7 +166,7 @@ function mapStateToProps(state, ownProps) {
     currentCuration: state.ui.curate.currentCuration,
     currentDefinition: state.ui.curate.currentDefinition,
     proposedCuration: state.ui.curate.proposedCuration,
-    previewDefinition: state.ui.curate.previewDefinition,
+    proposedDefinition: state.ui.curate.proposedDefinition,
     filterValue: state.ui.curate.filter,
     filterOptions: state.definition.list
   }
