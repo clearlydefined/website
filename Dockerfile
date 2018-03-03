@@ -4,6 +4,7 @@ FROM node:8-alpine as builder
 COPY . /opt/website
 WORKDIR /opt/website
 ARG REACT_APP_SERVER=http://localhost:4000
+ARG REACT_APP_GA_TRACKINGID
 RUN npm install
 RUN npm run build
 

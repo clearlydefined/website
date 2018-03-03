@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 // Delays loading untill the store is rehydrated
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { persistStore, createTransform } from 'redux-persist'
 import { ROUTE_ROOT, ROUTE_COMPONENTS, ROUTE_INSPECT, ROUTE_CURATE, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
@@ -10,7 +10,8 @@ import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { App, Landing, PageCurate, PageComponents, PageComponentDetails, PageHarvest } from './'
 import { omit } from 'lodash'
-import PageAbout from './PageAbout';
+import PageAbout from './PageAbout'
+import withTracker from '../utils/withTracker'
 
 const store = configureStore()
 
@@ -44,12 +45,12 @@ export default class RehydrationDelayedProvider extends Component {
         <Router>
           <App className="App">
             <Switch>
-              <Route path={ROUTE_COMPONENTS} component={PageComponents} />
-              <Route path={ROUTE_INSPECT} component={PageComponentDetails} />
-              <Route path={ROUTE_CURATE} component={PageCurate} />
-              <Route path={ROUTE_HARVEST} component={PageHarvest} />
-              <Route path={ROUTE_ABOUT} component={PageAbout} />
-              <Route path={ROUTE_ROOT} component={Landing} />
+              <Route path={ROUTE_COMPONENTS} component={withTracker(PageComponents)} />
+              <Route path={ROUTE_INSPECT} component={withTracker(PageComponentDetails)} />
+              <Route path={ROUTE_CURATE} component={withTracker(PageCurate)} />
+              <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
+              <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
+              <Route path={ROUTE_ROOT} component={withTracker(Landing)} />
             </Switch>
           </App>
         </Router>
