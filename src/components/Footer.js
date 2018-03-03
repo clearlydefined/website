@@ -2,16 +2,16 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react';
-import { API_DEVELOP, API_PROD, API_LOCAL } from '../api/clearlyDefined';
 import { SocialIcons } from './';
 import { Col } from 'react-bootstrap';
 
-function colorize(content) {
-  const serverAddress = process.env.REACT_APP_ENVIRONMENT || API_DEVELOP;
-  if (serverAddress === API_PROD) return content;
-  if (serverAddress === API_LOCAL) return <font color="orange">{content}</font>;
-  return <font color="green">{content}</font>;
-}
+// import { API_DEVELOP, API_PROD, API_LOCAL } from '../api/clearlyDefined';
+// function colorize(content) {
+//   const serverAddress = process.env.REACT_APP_ENVIRONMENT || API_DEVELOP;
+//   if (serverAddress === API_PROD) return content;
+//   if (serverAddress === API_LOCAL) return <font color="orange">{content}</font>;
+//   return <font color="green">{content}</font>;
+// }
 
 export default class Footer extends Component {
   static propTypes = {};

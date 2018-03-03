@@ -73,7 +73,7 @@ class PageComponents extends Component {
     return (
       <Grid className='main-container'>
         <Row className='show-grid spacer'>
-          <Col md={4}>
+          <Col md={5}>
             <FacetSelect 
               name="facets"
               onChange={this.facetChange}
