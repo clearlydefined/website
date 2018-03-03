@@ -20,6 +20,9 @@ const adopt = 'toggle-on'
 
 const clearlyDefined = <Clearly>Defined</Clearly>
 
+const logoColWidth = 3
+const textColWidth = 9
+
 class PageLanding extends Component {
 
   componentDidMount() {
@@ -47,10 +50,10 @@ class PageLanding extends Component {
       <Grid className="main-container">
         <img src={logo} alt='logo' className="landing-large-logo"/>
         <Row className="show-grid neighborhood-row">
-          <Col md={4} className="valign-child">
+          <Col md={logoColWidth} className="valign-child">
             {this.renderLogo(described)}
           </Col>
-          <Col md={8}>
+          <Col md={textColWidth}>
             <h2><Clearly style={describedColor}>Described</Clearly></h2>
             <h3>
               Knowing simple things like the source location for a component version enables contribution of docs, bug 
@@ -61,10 +64,10 @@ class PageLanding extends Component {
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={4} className="valign-child">
+          <Col md={logoColWidth} className="valign-child">
             {this.renderLogo(licensed)}
           </Col>
-          <Col md={8}>
+          <Col md={textColWidth}>
             <h2><Clearly style={licensedColor}>Licensed</Clearly></h2>
             <h3>
               Defining and knowing the license for a component is essential to a successful partnership. Communities choose
@@ -74,10 +77,10 @@ class PageLanding extends Component {
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={4} className="valign-child">
+          <Col md={logoColWidth} className="valign-child">
             {this.renderLogo(secure)}
           </Col>
-          <Col md={8}>
+          <Col md={textColWidth}>
             <h2><Clearly style={secureColor}>Secure</Clearly></h2>
             <h3>
               Teams working hard to create quality, secure components need a simple way of recording security issues they find 
@@ -88,7 +91,7 @@ class PageLanding extends Component {
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={8}>
+          <Col md={textColWidth}>
             <h2 style={primaryColor}>Get {clearlyDefined}</h2>
             <h3>
               Becoming {clearlyDefined} means identifying the information needed, in your terms. The {clearlyDefined} community 
@@ -96,12 +99,12 @@ class PageLanding extends Component {
               adding a few properties to a package manifest or dropping a simple file in your code repo. <a href=''>Learn more...</a>
             </h3>
           </Col>
-          <Col md={4} className="valign-child">
+          <Col md={logoColWidth} className="valign-child">
             {this.renderNeighborhood(adopt)}
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={8}>
+          <Col md={textColWidth}>
             <h2 style={primaryColor}>Use definitions</h2>
             <h3>
               {clearlyDefined} harvests and curates key data about projects from around the world and makes it available 
@@ -109,12 +112,12 @@ class PageLanding extends Component {
               collaboration with other project. Use the data to simplify your compliance efforts. <a href=''>Learn more...</a>
             </h3>
           </Col>
-          <Col md={4} className="valign-child">
+          <Col md={logoColWidth} className="valign-child">
             {this.renderNeighborhood(use)}
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={8}>
+          <Col md={textColWidth}>
             <h2 style={primaryColor}>Contribute or curate data</h2>
             <h3>
               {clearlyDefined} is a community approach to a community challenge. If you've ever had to figure out where 
@@ -122,7 +125,7 @@ class PageLanding extends Component {
               provided by others. It's an open source community like any other. <a href=''>Learn more...</a>
             </h3>
           </Col>
-          <Col md={4} className="valign-child">
+          <Col md={logoColWidth} className="valign-child">
             {this.renderNeighborhood(contribute)}
           </Col>
         </Row>
