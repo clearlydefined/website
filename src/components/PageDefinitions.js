@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { ROUTE_COMPONENTS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
+import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionListAction, getDefinitionsAction } from '../actions/definitionActions'
 import { FilterBar, ComponentList, Section, FacetSelect } from './'
 import { uiNavigation, uiBrowseUpdateList } from '../actions/ui'
@@ -12,7 +12,7 @@ import EntitySpec from '../utils/entitySpec'
 
 const defaultFacets = [{value: 'core', label: 'Core'}] 
 
-class PageComponents extends Component {
+class PageDefinitions extends Component {
 
   constructor(props) {
     super(props)
@@ -27,7 +27,7 @@ class PageComponents extends Component {
 
   componentDidMount() {
     const { dispatch, token } = this.props
-    dispatch(uiNavigation({ to: ROUTE_COMPONENTS }))
+    dispatch(uiNavigation({ to: ROUTE_DEFINITIONS }))
     dispatch(getDefinitionListAction(token))
   }
 
@@ -115,4 +115,4 @@ function mapStateToProps(state, ownProps) {
     definitions: state.definition.bodies
   }
 }
-export default connect(mapStateToProps)(PageComponents)
+export default connect(mapStateToProps)(PageDefinitions)
