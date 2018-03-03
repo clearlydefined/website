@@ -21,7 +21,7 @@ export default class Footer extends Component {
     socials: {
       github: 'https://github.com/clearlydefined',
       website: 'https://clearlydefined.io',
-      email: 'mailto:clearlydefined@outlook.com',
+      email: 'mailto:clearlydefined@googlegroups.com',
       discord: 'https://discord.gg/wEzHJku',
       twitter: 'https://twitter.com/clearlydefd'
     }

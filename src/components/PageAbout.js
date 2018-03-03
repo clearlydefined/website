@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { uiNavigation } from '../actions/ui';
 import { ROUTE_ABOUT } from '../utils/routingConstants';
-import FontAwesome from 'react-fontawesome'
+import FontAwesome from 'react-fontawesome';
 
 import microsoft from '../images/partner-logos/microsoft.png';
 import nexb from '../images/partner-logos/nexB.png';
@@ -16,6 +16,7 @@ import eclipse from '../images/partner-logos/Eclipse.jpg';
 import osi from '../images/partner-logos/osi_standard_logo.png';
 import qualcomm from '../images/partner-logos/qualcomm.jpg';
 import swh from '../images/partner-logos/swh.png';
+// import travix from '../images/partner-logos/travis.png';
 
 class PageAbout extends Component {
   componentDidMount() {
@@ -34,16 +35,21 @@ class PageAbout extends Component {
               clarity around licenses and security vulnerabilities reduces engagement -- that means fewer users, fewer
               contributors and a smaller community.
             </p>
-            <p>This is a community-wide challenge that needs a community-wide approach.</p>
+            <div style={{ textAlign: 'center' }}>
+              <p>
+                <b>This is a community-wide challenge that needs a community-wide approach.</b>
+              </p>
+            </div>
 
-            <p>We are:</p>
+            <p>As such, the goals of the project are to:</p>
             <ul className="list-style-type:square">
-              <li> Raising awareness about this challenge within FOSS project teams</li>
-              <li> Automatically harvesting data from projects</li>
-              <li> Making it easy to identify and contribute missing information</li>
-              <li> Crowd-sourcing the curation of these contributions</li>
-              <li> Feeding curated contributions back to the original projects</li>
+              <li> Raise awareness about this challenge within FOSS project teams</li>
+              <li> Automatically harvest data from projects</li>
+              <li> Make it easy for anyone to contribute missing information</li>
+              <li> Crowd-source the curation of these contributions</li>
+              <li> Feed curated contributions back to the original projects</li>
             </ul>
+
             <p>
               FOSS consumers often struggle to find basic things like the license for a component, the source location
               (e.g., Git commit) for a version, and details to be included in attributions (e.g., copyright holders in a
@@ -72,23 +78,38 @@ class PageAbout extends Component {
               out more about{' '}
               <a href="https://github.com/clearlydefined/clearlydefined/wiki/Get-Involved">how to get involved</a>.
             </p>
-            <p>
-              You can find us at 
-              <ul className="list-style-type:square">
-              <li> 
-              <a href="clearlydefined.io"> <FontAwesome name="github" /> &nbsp; clearlydefined.io</a>,{' '}
+            <p>You can find us at:</p>
+            <ul style={{ listStyleType: 'none' }}>
+              <li>
+                <FontAwesome name="github" /> &nbsp;&nbsp;
+                <a href="https://github.com/clearlydefined/clearlydefined">GitHub</a>
               </li>
-              </ul>
-
-              <a href="github.com/clearlydefined">github.com/clearlydefined</a>, and{' '}
-              <a href="mailto:clearlydefined@googlegroups.com">clearlydefined@googlegroups.com</a>.
-            </p>
+              <li>
+                <FontAwesome name="comment" /> &nbsp;&nbsp;
+                <a href="https://discord.gg/wEzHJku">Discord</a>
+              </li>
+              <li>
+                <FontAwesome name="twitter" /> &nbsp;&nbsp;
+                <a href="https://twitter.com/clearlydefd">Twitter</a>
+              </li>
+              <li>
+                <FontAwesome name="envelope" /> &nbsp;&nbsp;
+                <a href="mailto:clearlydefined@googlegroups.com">clearlydefined@googlegroups.com</a>
+              </li>
+            </ul>
             <p>We'd love to hear how you want to get involved in ClearlyDefined!</p>
           </Col>
         </Row>
-        <Row className="show-grid neighborhood-row">
-          <Col md={12}>
+        <Row className="show-grid neighborhood-row about-text">
+          <Col md={10} mdOffset={1}>
             <h2>Partners</h2>
+            <p>&nbsp;</p>
+            <p>
+              We are proud to be a have a growing list of partners from across the free and open source software
+              ecosystem -- from foundations to initiatives to small and large scale companies across a broad spectrum of
+              industries. You too can be on this list! See some of the many{' '}
+              <a href="https://github.com/clearlydefined/clearlydefined/wiki/Get-Involved">ways to get involved</a>.
+            </p>
           </Col>
         </Row>
 
@@ -137,6 +158,11 @@ class PageAbout extends Component {
               <img src={swh} width="240" className="about-image" alt="swh" />
             </div>
           </Col>
+          {/* <Col md={3}>
+            <div className="about-cell">
+              <img src={travis} width="200" className="about-image" alt="travis" />
+            </div>
+          </Col> */}
         </Row>
       </Grid>
     );
