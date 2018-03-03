@@ -7,7 +7,6 @@ import { without } from 'lodash'
 import { InfiniteList } from './'
 
 export default class RowEntityList extends React.Component {
-
   static propTypes = {
     list: PropTypes.object.isRequired,
     listHeight: PropTypes.number,
@@ -18,14 +17,14 @@ export default class RowEntityList extends React.Component {
     fetchingRenderer: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     sortOrder: PropTypes.string,
-    contentSeq: PropTypes.number,  // value upper levels can change to sign non-shallow content change
+    contentSeq: PropTypes.number // value upper levels can change to sign non-shallow content change
   }
 
   static defaultProps = {
     listHeight: 600,
     rowHeight: 50,
     fetchingRenderer: () => <div>Loading...</div>,
-    noRowsRenderer: () => <div>Nothing found</div>,
+    noRowsRenderer: () => <div>Nothing found</div>
   }
 
   constructor(props) {
@@ -43,7 +42,7 @@ export default class RowEntityList extends React.Component {
   wrappedNoRowsRender() {
     const { noRowsRenderer, fetchingRenderer, list } = this.props
     const renderer = list.isFetching ? fetchingRenderer : noRowsRenderer
-    return <div className={"list-noRows"}>{renderer()}</div>
+    return <div className={'list-noRows'}>{renderer()}</div>
   }
 
   wrappedRowRenderer({ index, key, style }) {
@@ -55,25 +54,19 @@ export default class RowEntityList extends React.Component {
 
   wrappedRowHeight({ index }) {
     const { allowExpand, rowHeight } = this.props
-    if (typeof rowHeight !== 'function')
-      return rowHeight
-    return allowExpand
-      ? rowHeight({ index }, this.state.expanded.includes(index))
-      : rowHeight({ index })
+    if (typeof rowHeight !== 'function') return rowHeight
+    return allowExpand ? rowHeight({ index }, this.state.expanded.includes(index)) : rowHeight({ index })
   }
 
   toggleExpanded(index) {
     const { expanded } = this.state
-    if (expanded.includes(index))
-      this.setState({ ...this.state, expanded: without(expanded, index) })
-    else
-      this.setState({ ...this.state, expanded: [...expanded, index] })
+    if (expanded.includes(index)) this.setState({ ...this.state, expanded: without(expanded, index) })
+    else this.setState({ ...this.state, expanded: [...expanded, index] })
   }
 
   render() {
     const { loadMoreRows, listHeight, list, contentSeq, sortOrder } = this.props
-    if (!list.list || list.list.length === 0)
-      return this.wrappedNoRowsRender()
+    if (!list.list || list.list.length === 0) return this.wrappedNoRowsRender()
     return (
       <InfiniteList
         isRowLoaded={this.isRowLoaded}
@@ -87,7 +80,8 @@ export default class RowEntityList extends React.Component {
         sortOrder={sortOrder}
         contentSeq={contentSeq}
         expanded={this.state.expanded}
-      />)
+      />
+    )
   }
 
   listLength() {

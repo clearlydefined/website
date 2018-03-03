@@ -8,7 +8,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import FontAwesome from 'react-fontawesome'
 
 export default class CopyUrlButton extends Component {
-
   static propTypes = {
     path: PropTypes.string,
     bsStyle: PropTypes.string,
@@ -49,25 +48,23 @@ export default class CopyUrlButton extends Component {
   }
 
   renderUrl() {
-    const {route, path} = this.props
+    const { route, path } = this.props
     return `${window.location.origin}${route}/${path}`
   }
 
   renderTooltip() {
-    return (
-      <Tooltip id="tooltip">{this.state.copied ? "Copied!" : "Copy URL to clipboard"}</Tooltip>
-    )
+    return <Tooltip id="tooltip">{this.state.copied ? 'Copied!' : 'Copy URL to clipboard'}</Tooltip>
   }
 
   render() {
-    const {path, bsStyle, className} = this.props
+    const { path, bsStyle, className } = this.props
     const isDisabled = !Boolean(path)
 
     return (
       <CopyToClipboard text={this.renderUrl()} onCopy={this.onCopy}>
         <OverlayTrigger placement="top" overlay={this.renderTooltip()} shouldUpdatePosition={true}>
           <Button bsStyle={bsStyle} className={className} disabled={isDisabled} onClick={this.onClick}>
-            <FontAwesome name={'copy'}/>
+            <FontAwesome name={'copy'} />
           </Button>
         </OverlayTrigger>
       </CopyToClipboard>

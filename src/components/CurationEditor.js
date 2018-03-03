@@ -2,21 +2,19 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { Row, Col, Button } from 'react-bootstrap'
 import { FieldGroup } from './'
 import MonacoEditor from 'react-monaco-editor'
 
 export default class CurationEditor extends Component {
-
   static propTypes = {
     proposeHandler: PropTypes.func.isRequired,
     currentSpec: PropTypes.string,
     proposedSpec: PropTypes.string
   }
 
-  static defaultProps = {
-  }
+  static defaultProps = {}
 
   constructor(props) {
     super(props)
@@ -48,16 +46,16 @@ export default class CurationEditor extends Component {
     const { current, proposed, description } = this.state
     const options = {
       selectOnLineNumbers: true
-    };
+    }
     return (
       <div>
         <Row>
           <h3>Create a curation for a component</h3>
           <Col sm={6}>
             <MonacoEditor
-              height='400'
-              language='yaml'
-              theme='vs-dark'
+              height="400"
+              language="yaml"
+              theme="vs-dark"
               value={current}
               options={options}
               onChange={this.onChange}
@@ -66,9 +64,9 @@ export default class CurationEditor extends Component {
           </Col>
           <Col sm={6}>
             <MonacoEditor
-              height='400'
-              language='yaml'
-              theme='vs-dark'
+              height="400"
+              language="yaml"
+              theme="vs-dark"
               value={proposed}
               options={options}
               onChange={this.onChange}
@@ -78,12 +76,12 @@ export default class CurationEditor extends Component {
               name="description"
               type="text"
               label="Description"
-              value={description || ""}
+              value={description || ''}
               onChange={this.handleChange}
               placeholder="Description of your changes"
               maxLength={100}
             />
-            <Button className='pull-right' type='button' onClick={this.okHandler}>
+            <Button className="pull-right" type="button" onClick={this.okHandler}>
               Propose
             </Button>
           </Col>

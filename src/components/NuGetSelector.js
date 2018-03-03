@@ -4,11 +4,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 export default class NuGetSelector extends Component {
   static propTypes = {
-    onChange: PropTypes.func,
+    onChange: PropTypes.func
   }
 
   constructor(props) {
@@ -38,14 +38,15 @@ export default class NuGetSelector extends Component {
         options={options}
         placeholder={'NuGet support coming soon...'}
         onChange={this.onChange}
-        labelKey='id'
+        labelKey="id"
         disabled
         clearButton
         highlightOnlyResult
-        emptyLabel=''
+        emptyLabel=""
         selectHintOnEnter
         isLoading={isLoading}
         onSearch={this.getOptions}
-      />)
+      />
+    )
   }
 }

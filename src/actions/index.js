@@ -3,7 +3,7 @@
 
 export function asyncActions(actionType, group = null) {
   return {
-    start: (context) => ({
+    start: context => ({
       type: actionType,
       group,
       context

@@ -16,7 +16,7 @@ function getServiceDefaultUrl() {
     case 'test':
       return API_DEVELOP
     case 'production':
-      // TODO this needs to be replaced when we do a prod deployment. We want a "production" build deployed in 
+      // TODO this needs to be replaced when we do a prod deployment. We want a "production" build deployed in
       // the dev environment but of course it will need to point to the dev server. Don't know how to do that.
       return API_DEVELOP
     default:
@@ -62,7 +62,7 @@ export function getDefinitions(token, list) {
 }
 
 export async function getDefinitionList(token, prefix, force = false) {
-  if (!force && lastFetchDefinitionList && (Date.now() - lastFetchDefinitionList < definitionListTTL))
+  if (!force && lastFetchDefinitionList && Date.now() - lastFetchDefinitionList < definitionListTTL)
     return { list: definitionList }
   const list = await get(url(`${DEFINITIONS}/${prefix || ''}`), token)
   lastFetchDefinitionList = Date.now()
@@ -106,16 +106,16 @@ export function getMavenRevisions(token, path) {
 
 export function url(path, query) {
   path = apiHome + '/' + path
-  if (!query)
-    return path
+  if (!query) return path
 
   const queryString = toPairs(query)
     // take only having values ones (0 is allowed)
-    .filter((p) => p[1] || p[1] === 0)
+    .filter(p => p[1] || p[1] === 0)
     // sort() is essential for caching
     .sort()
     // compose key=value&key2=value with encoded keys and values
-    .map((p) => p.map(encodeURIComponent).join('=')).join('&')
+    .map(p => p.map(encodeURIComponent).join('='))
+    .join('&')
   return `${path}?${queryString}`
 }
 
@@ -123,8 +123,7 @@ function getHeaders(token) {
   const result = {
     'Content-Type': 'application/json; charset=utf-8'
   }
-  if (token)
-    result.Authorization = 'Bearer ' + token
+  if (token) result.Authorization = 'Bearer ' + token
   return result
 }
 
@@ -132,8 +131,7 @@ function handleResponse(response) {
   // reject if code is out of range 200-299
   if (!response || !response.ok) {
     const err = new Error(response ? response.statusText : 'Error')
-    if (response)
-      err.status = response.status
+    if (response) err.status = response.status
     throw err
   }
   if (response.status === 204) {
@@ -158,9 +156,8 @@ function post(url, token, payload) {
   return fetch(url, {
     headers: getHeaders(token),
     method: 'POST',
-    body: JSON.stringify(payload),
-  })
-    .then(handleResponse)
+    body: JSON.stringify(payload)
+  }).then(handleResponse)
 }
 
 function patch(url, token, payload) {
@@ -168,8 +165,7 @@ function patch(url, token, payload) {
     headers: getHeaders(token),
     method: 'PATCH',
     body: JSON.stringify(payload)
-  })
-    .then(handleResponse)
+  }).then(handleResponse)
 }
 
 // function del(url, token) {
@@ -182,7 +178,6 @@ function patch(url, token, payload) {
 
 function get(url, token) {
   return fetch(url, {
-    headers: getHeaders(token),
-  })
-    .then(handleResponse)
+    headers: getHeaders(token)
+  }).then(handleResponse)
 }

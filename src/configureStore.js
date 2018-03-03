@@ -7,12 +7,5 @@ import rootReducer from './reducers'
 import { autoRehydrate } from 'redux-persist'
 
 export function configureStore(preloadedState) {
-  return createStore(
-    rootReducer,
-    preloadedState,
-    compose(
-      applyMiddleware(thunkMiddleware),
-      autoRehydrate()
-    )
-  )
+  return createStore(rootReducer, preloadedState, compose(applyMiddleware(thunkMiddleware), autoRehydrate()))
 }

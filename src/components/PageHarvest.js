@@ -11,7 +11,6 @@ import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../action
 import EntitySpec from '../utils/entitySpec'
 
 class PageHarvest extends Component {
-
   constructor(props) {
     super(props)
     this.state = { activeProvider: 'github' }
@@ -62,16 +61,28 @@ class PageHarvest extends Component {
     const { activeProvider } = this.state
     return (
       <ButtonGroup>
-        <Button name='github' onClick={this.onClick} active={activeProvider === 'github'}>GitHub</Button>
-        <Button name='maven' onClick={this.onClick} active={activeProvider === 'maven'}>Maven</Button>
-        <Button name='npm' onClick={this.onClick} active={activeProvider === 'npm'}>NPM</Button>
-        <Button name='nuget' onClick={this.onClick} active={activeProvider === 'nuget'}>NuGet</Button>
+        <Button name="github" onClick={this.onClick} active={activeProvider === 'github'}>
+          GitHub
+        </Button>
+        <Button name="maven" onClick={this.onClick} active={activeProvider === 'maven'}>
+          Maven
+        </Button>
+        <Button name="npm" onClick={this.onClick} active={activeProvider === 'npm'}>
+          NPM
+        </Button>
+        <Button name="nuget" onClick={this.onClick} active={activeProvider === 'nuget'}>
+          NuGet
+        </Button>
       </ButtonGroup>
     )
   }
 
   renderActionButton() {
-    return (<Button className='pull-right' bsStyle='success' onClick={this.harvestHandler}>Harvest</Button>)
+    return (
+      <Button className="pull-right" bsStyle="success" onClick={this.harvestHandler}>
+        Harvest
+      </Button>
+    )
   }
 
   noRowsRenderer() {
@@ -82,11 +93,9 @@ class PageHarvest extends Component {
     const { activeProvider } = this.state
     const { queue, token } = this.props
     return (
-      <Grid className='main-container'>
-        <Row className='show-grid spacer'>
-          <Col md={4}>
-            {this.renderProviderButtons()}
-          </Col>
+      <Grid className="main-container">
+        <Row className="show-grid spacer">
+          <Col md={4}>{this.renderProviderButtons()}</Col>
           <Col md={8}>
             {activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
             {activeProvider === 'maven' && <MavenSelector onChange={this.onAddRequest} />}
@@ -95,14 +104,15 @@ class PageHarvest extends Component {
           </Col>
         </Row>
         <Section name={'Components to harvest'} actionButton={this.renderActionButton()}>
-          <div className='section-body'>
+          <div className="section-body">
             <HarvestQueueList
               list={queue}
               listHeight={1000}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}
               githubToken={token}
-              noRowsRenderer={this.noRowsRenderer} />
+              noRowsRenderer={this.noRowsRenderer}
+            />
           </div>
         </Section>
       </Grid>
@@ -112,7 +122,8 @@ class PageHarvest extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    token: state.session.token, queue: state.ui.harvest.requestQueue
+    token: state.session.token,
+    queue: state.ui.harvest.requestQueue
   }
 }
 export default connect(mapStateToProps)(PageHarvest)

@@ -1,11 +1,11 @@
 // Copyright (c) 2017, The Linux Foundation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from "react"
-import PropTypes from "prop-types"
-import { connect } from "react-redux"
-import { AlertList } from "react-bs-notifier"
-import { uiNotificationDelete } from "../actions/ui"
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { AlertList } from 'react-bs-notifier'
+import { uiNotificationDelete } from '../actions/ui'
 
 class NotificationList extends Component {
   static propTypes = {
@@ -15,7 +15,7 @@ class NotificationList extends Component {
 
   static defaultProps = {
     notifications: [],
-    position: "top-right"
+    position: 'top-right'
   }
 
   constructor(props) {
@@ -31,11 +31,7 @@ class NotificationList extends Component {
     const { position, notifications } = this.props
     return (
       <div>
-        <AlertList
-          position={position}
-          alerts={notifications}
-          onDismiss={this.onDismiss}
-        />
+        <AlertList position={position} alerts={notifications} onDismiss={this.onDismiss} />
       </div>
     )
   }

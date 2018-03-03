@@ -2,11 +2,10 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { Modal, Form, Button } from 'react-bootstrap'
 
 export default class ProposePrompt extends Component {
-
   constructor(props) {
     super(props)
     this.state = { show: false }
@@ -43,7 +42,10 @@ export default class ProposePrompt extends Component {
     return (
       <Modal show={this.state.show} onHide={this.close}>
         <Form>
-          <h5>Eventually this will expose a handy workflow for curators to propose changes to upstream projects based on the work done in ClearlyDefined.</h5>
+          <h5>
+            Eventually this will expose a handy workflow for curators to propose changes to upstream projects based on
+            the work done in ClearlyDefined.
+          </h5>
           <Button type="button" onClick={this.okHandler}>
             OK
           </Button>

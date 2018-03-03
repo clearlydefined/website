@@ -4,10 +4,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Typeahead } from 'react-bootstrap-typeahead'
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 export default class FilterBar extends Component {
-
   static propTypes = {
     value: PropTypes.string,
     options: PropTypes.any,
@@ -27,29 +26,28 @@ export default class FilterBar extends Component {
     if (values.length) {
       onChange && onChange(values[0].path)
       // timing hack to work around https://github.com/ericgio/react-bootstrap-typeahead/issues/211
-      clearOnChange && setTimeout(() => this.refs.typeahead.getInstance().clear(), 0);
+      clearOnChange && setTimeout(() => this.refs.typeahead.getInstance().clear(), 0)
     }
   }
 
   filter(option, text) {
-    if (this.props.value)
-      return true;
-    return option.path.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+    if (this.props.value) return true
+    return option.path.toLowerCase().indexOf(text.toLowerCase()) !== -1
   }
 
   render() {
     const { options, defaultValue } = this.props
     return (
       <Typeahead
-        ref='typeahead'
-        placeholder='Component search...'
+        ref="typeahead"
+        placeholder="Component search..."
         onChange={this.onChange}
         options={options.transformedList}
         isLoading={options.isFetching}
         clearButton
         defaultInputValue={defaultValue || ''}
         filterBy={this.filter}
-        labelKey='path'
+        labelKey="path"
       />
     )
   }

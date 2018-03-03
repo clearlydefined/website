@@ -7,6 +7,8 @@ import listReducer from './listReducer'
 import tableReducer from './tableReducer'
 
 export default combineReducers({
-  list: new listReducer(DEFINITION_LIST, item => { return { path: item } }),
+  list: new listReducer(DEFINITION_LIST, item => {
+    return { path: item }
+  }),
   bodies: tableReducer(DEFINITION_BODIES)
 })

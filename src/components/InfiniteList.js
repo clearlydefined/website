@@ -8,7 +8,6 @@ import styles from 'react-virtualized/styles.css'
 import { xor } from 'lodash'
 
 export default class InfiniteList extends React.Component {
-
   static propTypes = {
     listHeight: PropTypes.number,
     rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
@@ -19,12 +18,12 @@ export default class InfiniteList extends React.Component {
     rowRenderer: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     sortOrder: PropTypes.string,
-    contentSeq: PropTypes.number,  // value upper levels can change to sign non-shallow content change
+    contentSeq: PropTypes.number, // value upper levels can change to sign non-shallow content change
     expanded: PropTypes.arrayOf(PropTypes.number)
   }
 
   static defaultProps = {
-    loadMoreRows: () => { }
+    loadMoreRows: () => {}
   }
 
   constructor(props) {
@@ -34,33 +33,28 @@ export default class InfiniteList extends React.Component {
 
   componentWillReceiveProps(newProps) {
     const changed = xor(newProps.expanded, this.props.expanded)
-    if (changed.length === 0 || !this.state.list)
-      return
+    if (changed.length === 0 || !this.state.list) return
     this.state.list.recomputeRowHeights(changed.sort()[0])
   }
 
   // hook the List ref so we can trigger recompute when expand happens.
   hookRef(ref) {
     return (element, ...args) => {
-      if (!element)
-        return ref(element, ...args)
-      if (this.state.list !== element)
-        this.setState({ ...this.state, list: element })
+      if (!element) return ref(element, ...args)
+      if (this.state.list !== element) this.setState({ ...this.state, list: element })
     }
   }
 
   render() {
-    const { isRowLoaded, loadMoreRows, listHeight, totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer, sortOrder, contentSeq } = this.props
+    const { isRowLoaded, loadMoreRows, listHeight, sortOrder, contentSeq } = this.props
+    const { totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer } = this.props
     let height = Math.min(currentRows() * 150, listHeight || 300)
     if (noRowsRenderer)
       // show noRowsRenderer won't be called with zero height
       height = Math.max(height, 200)
 
     return (
-      <InfiniteLoader
-        isRowLoaded={isRowLoaded}
-        loadMoreRows={loadMoreRows}
-        rowCount={totalRows()}>
+      <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={totalRows()}>
         {({ onRowsRendered, registerChild }) => (
           <AutoSizer disableHeight>
             {({ width }) => (
@@ -80,6 +74,7 @@ export default class InfiniteList extends React.Component {
             )}
           </AutoSizer>
         )}
-      </InfiniteLoader>)
+      </InfiniteLoader>
+    )
   }
 }

@@ -23,7 +23,7 @@ const clearlyDefined = <Clearly>Defined</Clearly>
 
 class PageAbout extends Component {
   componentDidMount() {
-    this.props.dispatch(uiNavigation({ to: ROUTE_ABOUT }));
+    this.props.dispatch(uiNavigation({ to: ROUTE_ABOUT }))
   }
 
   render() {
@@ -168,11 +168,11 @@ class PageAbout extends Component {
           </Col> */}
         </Row>
       </Grid>
-    );
+    )
   }
 }
 
 function mapStateToProps(state, ownProps) {
-  return { token: state.session.token };
+  return { token: state.session.token }
 }
-export default connect(mapStateToProps)(PageAbout);
+export default connect(mapStateToProps)(PageAbout)

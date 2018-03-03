@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import logo from '../images/logo-text.svg';
+import logo from '../images/logo-text.svg'
 import { logout, login } from '../actions/sessionActions'
 import { withRouter } from 'react-router-dom'
 import { ROUTE_ROOT } from '../utils/routingConstants'
@@ -13,7 +13,6 @@ import { filter, intersection } from 'lodash'
 import { url } from '../api/clearlyDefined'
 
 class Header extends Component {
-
   constructor(props) {
     super(props)
     this.doLogin = this.doLogin.bind(this)
@@ -28,7 +27,7 @@ class Header extends Component {
   doLogin(e) {
     e.preventDefault()
     window.open(url('auth/github'))
-    const tokenListener = (e) => {
+    const tokenListener = e => {
       if (e.data.type === 'github-token') {
         this.props.dispatch(login(e.data.token, e.data.permissions))
         window.removeEventListener('message', tokenListener)
@@ -42,21 +41,29 @@ class Header extends Component {
     if (session.isAnonymous && !session.isFetching)
       return (
         <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>
-          <NavItem eventKey={1} onClick={this.doLogin} >Login</NavItem>
-        </Nav>)
+          <NavItem eventKey={1} onClick={this.doLogin}>
+            Login
+          </NavItem>
+        </Nav>
+      )
     return (
       <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>
-        <NavItem eventKey={1} onClick={this.doLogout} >Logout</NavItem>
-      </Nav>)
+        <NavItem eventKey={1} onClick={this.doLogout}>
+          Logout
+        </NavItem>
+      </Nav>
+    )
   }
 
   renderNavigation(navigation, isAnonymous) {
-    const filterExpr = isAnonymous ? o => o.protected !== 1 : o => o.protected !== -1 && this.hasPermissions(o.permissions)
+    const filterExpr = isAnonymous
+      ? o => o.protected !== 1
+      : o => o.protected !== -1 && this.hasPermissions(o.permissions)
     return (
       <Nav bsStyle="pills">
         {filter(navigation, filterExpr).map((navItem, i) => {
           return (
-            <IndexLinkContainer active={navItem.isSelected} activeClassName='active' to={navItem.to} key={i}>
+            <IndexLinkContainer active={navItem.isSelected} activeClassName="active" to={navItem.to} key={i}>
               <NavItem>
                 <div>{navItem.title}</div>
               </NavItem>
@@ -68,8 +75,7 @@ class Header extends Component {
   }
 
   hasPermissions(permissions) {
-    if (!permissions)
-      return true
+    if (!permissions) return true
     return intersection(this.props.session.permissions, permissions).length > 0
   }
 

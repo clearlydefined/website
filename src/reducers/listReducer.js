@@ -22,21 +22,19 @@ const remove = (list, item, comparator = null) => {
 
 const add = (list, item, comparator = null) => {
   const test = comparator ? element => comparator(element, item) : element => element === item
-  return list && !(_.find(list, test)) ? [...list, item] : list
+  return list && !_.find(list, test) ? [...list, item] : list
 }
 
 const update = (list, item, newValue, comparator = null) => {
   const test = comparator ? element => comparator(element, item) : element => element === item
   const entry = _.find(list, test)
-  if (!entry)
-    return list
+  if (!entry) return list
   const result = remove(list, item, comparator)
   return [...result, newValue]
 }
 
 function computeTranformed(state, append, list, transformer) {
-  if (!transformer)
-    return state.transformedList
+  if (!transformer) return state.transformedList
   const transformed = list.map(entry => transformer(entry))
   return append ? state.transformedList.concat(transformed) : transformed
 }
@@ -45,8 +43,7 @@ export default (name = '', transformer = null, comparator = null) => {
   return (state = initialState, action) => {
     // if there is a group on the action then it must match this reducer's name
     // otherwise the action type must match the name
-    if ((action.group && action.group !== name) || (action.type !== name))
-      return state
+    if ((action.group && action.group !== name) || action.type !== name) return state
 
     if (action.context && action.context.clear) {
       return {
@@ -103,7 +100,9 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: update(state.list, result.update, result.value, comparator),
-        transformedList: transformer ? update(state.transformedList, transformer(result.update), newTransformed) : state.transformedList
+        transformedList: transformer
+          ? update(state.transformedList, transformer(result.update), newTransformed)
+          : state.transformedList
       }
     }
 
@@ -113,7 +112,7 @@ export default (name = '', transformer = null, comparator = null) => {
         sequence: ++state.sequence,
         isFetching: false,
         filter: filter,
-        list: (append ? state.list.concat(result.list) : result.list),
+        list: append ? state.list.concat(result.list) : result.list,
         transformedList: computeTranformed(state, append, result.list, transformer),
         hasMore: result.hasMore,
         headers: result.headers

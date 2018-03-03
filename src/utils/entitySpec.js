@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-const url = require('url');
+const url = require('url')
 
-const NAMESPACE = 0x4;
-const NAME = 0x2;
-const REVISION = 0x1;
-const NONE = 0;
+const NAMESPACE = 0x4
+const NAME = 0x2
+const REVISION = 0x1
+const NONE = 0
 
 const toLowerCaseMap = {
   github: NAMESPACE | NAME,
@@ -16,16 +16,17 @@ const toLowerCaseMap = {
 }
 
 function normalize(value, provider, property) {
-  if (!value)
-    return value;
-  const mask = toLowerCaseMap[provider] || 0;
-  return (mask & property) ? value.toLowerCase() : value;
+  if (!value) return value
+  const mask = toLowerCaseMap[provider] || 0
+  return mask & property ? value.toLowerCase() : value
 }
 
 export default class EntitySpec {
   static fromPath(path) {
     // eslint-disable-next-line
-    const [full, type, provider, namespace, name, revision, prSpec] = path.match(/\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/)
+    const [full, type, provider, namespace, name, revision, prSpec] = path.match(
+      /\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/
+    )
     // eslint-disable-next-line
     const [blank, delimiter, pr] = prSpec ? prSpec.split('/') : []
     return new EntitySpec(type, provider, namespace, name, revision, pr)
@@ -37,7 +38,7 @@ export default class EntitySpec {
         // eslint-disable-next-line
         const [blank, namespace, name] = url.parse(coordinates.url).pathname.split('/')
         return new EntitySpec(coordinates.type, coordinates.provider, namespace, name, coordinates.revision)
-      default: 
+      default:
         return null
     }
   }
@@ -45,9 +46,9 @@ export default class EntitySpec {
   constructor(type, provider, namespace, name, revision = null, pr = null) {
     this.type = type.toLowerCase()
     this.provider = provider.toLowerCase()
-    this.namespace = namespace === '-' ? null : normalize(namespace, this.provider, NAMESPACE);
-    this.name = normalize(name, this.provider, NAME);
-    this.revision = normalize(revision, this.provider, REVISION);
+    this.namespace = namespace === '-' ? null : normalize(namespace, this.provider, NAMESPACE)
+    this.name = normalize(name, this.provider, NAME)
+    this.revision = normalize(revision, this.provider, REVISION)
     this.pr = pr
   }
 
@@ -57,4 +58,3 @@ export default class EntitySpec {
     return `${this.type}/${this.provider}/${this.namespace || '-'}/${this.name}${revisionPart}${prPart}`
   }
 }
-

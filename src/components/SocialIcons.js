@@ -12,20 +12,28 @@ export default class SocialIcons extends Component {
   }
 
   static defaultProps = {
-    className: "page__socials"
+    className: 'page__socials'
+  }
+
+  renderLink(href, icon) {
+    return (
+      <a href={href} target="_blank">
+        <FontAwesome name={icon} />
+      </a>
+    )
   }
 
   render() {
     const { website, github, facebook, twitter, instagram, email, discord } = this.props.entity
     return (
       <span className={this.props.className}>
-        {github && <a href={github} target="_blank"><FontAwesome name="github" /></a>}
-        {website && <a href={website} target="_blank"><FontAwesome name="globe" /></a>}
-        {email && <a href={'mailto:' + email}><FontAwesome name="envelope" /></a>}
-        {facebook && <a href={facebook} target="_blank"><FontAwesome name="facebook-official" /></a>}
-        {twitter && <a href={twitter} target="_blank"><FontAwesome name="twitter" /></a>}
-        {instagram && <a href={instagram} target="_blank"><FontAwesome name="instagram" /></a>}
-        {discord && <a href={discord} target="_blank"><FontAwesome name="discord" /></a>}
+        {github && this.renderLink(github, 'github')}
+        {website && this.renderLink(website, 'globe')}
+        {email && this.renderLink('mailto:' + email, 'envelope')}
+        {facebook && this.renderLink(facebook, 'facebook-official')}
+        {twitter && this.renderLink(twitter, 'twitter')}
+        {instagram && this.renderLink(instagram, 'instagram')}
+        {discord && this.renderLink(discord, 'comment')}
       </span>
     )
   }

@@ -8,7 +8,7 @@ export const HARVEST_POST = 'HARVEST_POST'
 export const HARVEST_GET = 'HARVEST_GET'
 
 export function harvestAction(token, spec) {
-  return (dispatch) => {
+  return dispatch => {
     const actions = asyncActions(HARVEST_POST)
     dispatch(actions.start())
     return harvest(token, spec).then(
@@ -19,7 +19,7 @@ export function harvestAction(token, spec) {
 }
 
 export function getHarvestOutputAction(token, entity, name) {
-  return (dispatch) => {
+  return dispatch => {
     const actions = asyncActions(name)
     dispatch(actions.start())
     return getHarvestResults(token, entity).then(

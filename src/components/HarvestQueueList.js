@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React from 'react';
+import React from 'react'
 import PropTypes from 'prop-types'
 import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker, MavenVersionPicker } from './'
 import { clone } from 'lodash'
@@ -10,7 +10,6 @@ import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 
 export default class HarvestQueueList extends React.Component {
-
   static propTypes = {
     list: PropTypes.object.isRequired,
     listHeight: PropTypes.number,
@@ -23,7 +22,7 @@ export default class HarvestQueueList extends React.Component {
   }
 
   static defaultProps = {
-    loadMoreRows: () => { },
+    loadMoreRows: () => {}
   }
 
   constructor(props) {
@@ -49,62 +48,69 @@ export default class HarvestQueueList extends React.Component {
 
   versionChanged(request, value) {
     const newRequest = clone(request)
-    newRequest.revision = value 
+    newRequest.revision = value
     this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
     this.props.onChange(request, newRequest)
   }
 
   renderButtons(request) {
     return (
-      <div className='list-activity-area'>
-        {request.provider === 'github' && <GitHubCommitPicker
-          request={request}
-          token={this.props.githubToken}
-          onChange={this.commitChanged.bind(this, request)}
-        />}
-        {request.provider === 'npmjs' && <NpmVersionPicker
-          request={request}
-          onChange={this.versionChanged.bind(this, request)}
-        />}
-        {request.provider === 'mavencentral' && <MavenVersionPicker
-          request={request}
-          onChange={this.versionChanged.bind(this, request)}
-        />}
-        <FontAwesome name={'times'} className='list-remove' onClick={this.removeRequest.bind(this, request)} />
-      </div>)
+      <div className="list-activity-area">
+        {request.provider === 'github' && (
+          <GitHubCommitPicker
+            request={request}
+            token={this.props.githubToken}
+            onChange={this.commitChanged.bind(this, request)}
+          />
+        )}
+        {request.provider === 'npmjs' && (
+          <NpmVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
+        {request.provider === 'mavencentral' && (
+          <MavenVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
+        <FontAwesome name={'times'} className="list-remove" onClick={this.removeRequest.bind(this, request)} />
+      </div>
+    )
   }
 
   renderHeadline(request) {
     const { namespace, name } = request
-    const namespaceText = namespace ? (namespace + '/') : ''
-    return (<span>{namespaceText}{name}</span>)
+    const namespaceText = namespace ? namespace + '/' : ''
+    return (
+      <span>
+        {namespaceText}
+        {name}
+      </span>
+    )
   }
 
   renderMessage(request) {
     const { type, policy } = request
     const nameText = type ? <span>{type}&nbsp;</span> : ''
     const policyText = 'Policy: ' + policy ? policy : 'default'
-    return (<span>{nameText} &nbsp; {policyText}</span>)
+    return (
+      <span>
+        {nameText} &nbsp; {policyText}
+      </span>
+    )
   }
 
   getImage(request) {
-    if (request.provider === 'github')
-      return github
-    if (request.provider === 'npmjs')
-      return npm
+    if (request.provider === 'github') return github
+    if (request.provider === 'npmjs') return npm
     return null
   }
 
   getLetter(request) {
-    if (request.provider === 'mavencentral')
-      return 'M'
+    if (request.provider === 'mavencentral') return 'M'
     return null
   }
 
   renderRow({ index, key, style }) {
     const { list } = this.props
     const request = list.list[index]
-    const clickHandler = () => { }
+    const clickHandler = () => {}
     return (
       <div key={key} style={style}>
         <TwoLineEntry
@@ -115,22 +121,25 @@ export default class HarvestQueueList extends React.Component {
           buttons={this.renderButtons(request)}
           onClick={clickHandler}
         />
-      </div>)
+      </div>
+    )
   }
 
   render() {
     const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer } = this.props
     const { sortOrder, contentSeq } = this.state
-    return (<RowEntityList
-      list={list}
-      loadMoreRows={loadMoreRows}
-      listHeight={listHeight}
-      rowRenderer={this.renderRow}
-      rowHeight={50}
-      noRowsRenderer={noRowsRenderer}
-      fetchingRenderer={fetchingRenderer}
-      sortOrder={sortOrder}
-      contentSeq={contentSeq}
-    />)
+    return (
+      <RowEntityList
+        list={list}
+        loadMoreRows={loadMoreRows}
+        listHeight={listHeight}
+        rowRenderer={this.renderRow}
+        rowHeight={50}
+        noRowsRenderer={noRowsRenderer}
+        fetchingRenderer={fetchingRenderer}
+        sortOrder={sortOrder}
+        contentSeq={contentSeq}
+      />
+    )
   }
 }
