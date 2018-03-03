@@ -9,7 +9,7 @@ import { ROUTE_ROOT } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
 import logo from '../images/logo-text-stacked.svg'
 import { Clearly } from './'
-import { primaryColor, secondaryColor, secureColor, licensedColor, describedColor } from './Clearly'
+import { primaryColor, secureColor, licensedColor, describedColor } from './Clearly'
 
 import described from '../images/described-logo.svg'
 import secure from '../images/secure-logo.svg'
