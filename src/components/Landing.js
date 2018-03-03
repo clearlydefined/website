@@ -3,13 +3,13 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Jumbotron } from 'react-bootstrap'
+import { Grid, Row, Col } from 'react-bootstrap'
 import FontAwesome from 'react-fontawesome'
 import { ROUTE_ROOT } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
 import logo from '../images/logo-text-stacked.svg'
 import { Clearly } from './'
-import { blue, green } from './Clearly'
+import { primaryColor, secondaryColor } from './Clearly'
 
 const described = 'vcard'
 const secure = 'lock'
@@ -43,7 +43,7 @@ class Landing extends Component {
             {this.renderNeighborhood(described)}
           </Col>
           <Col md={8}>
-            <h2><Clearly color={blue}>Described</Clearly></h2>
+            <h2><Clearly style={primaryColor}>Described</Clearly></h2>
             <h3>
               Knowing simple things like the source location for a component version enables contribution of docs, bug 
               fixes, or new features. It also inspires confidence by enabling IP and security code scans, and source code 
@@ -58,7 +58,7 @@ class Landing extends Component {
             {this.renderNeighborhood(licensed)}
           </Col>
           <Col md={8}>
-            <h2><Clearly color={blue}>Licensed</Clearly></h2>
+            <h2><Clearly style={primaryColor}>Licensed</Clearly></h2>
             <h3>
               Defining and knowing the license for a component is essential to a successful partnership. Communities choose
               a license with terms they like. {clearlyDefined} helps clarify that choice and enables consumers to
@@ -72,7 +72,7 @@ class Landing extends Component {
             {this.renderNeighborhood(secure)}
           </Col>
           <Col md={8}>
-            <h2><Clearly color={blue}>Secure</Clearly></h2>
+            <h2><Clearly style={primaryColor}>Secure</Clearly></h2>
             <h3>
               Teams working hard to create quality, secure components need a simple way of recording security issues they find 
               and fix. Bug report and pull requests are great. CVEs and global notifications are even better. It can still 
@@ -83,7 +83,7 @@ class Landing extends Component {
         </Row>
         <Row className="show-grid neighborhood-row">
           <Col md={8}>
-            <h2 style={{ color: green }}>Get {clearlyDefined}</h2>
+            <h2 style={secondaryColor}>Get {clearlyDefined}</h2>
             <h3>
               Becoming {clearlyDefined} means identifying the information needed, in your terms. The {clearlyDefined} community 
               meets you where you are to enable automated discovery of your essential data. In many cases it's as easy as 
@@ -97,7 +97,7 @@ class Landing extends Component {
         </Row>
         <Row className="show-grid neighborhood-row">
           <Col md={8}>
-            <h2 style={{ color: green }}>Use definitions</h2>
+            <h2 style={secondaryColor}>Use definitions</h2>
             <h3>
               {clearlyDefined} harvests and curates key data about projects from around the world and makes it available 
               through a simple REST API and web user experience. Use the data when picking components. Use it to enable more
@@ -110,7 +110,7 @@ class Landing extends Component {
         </Row>
         <Row className="show-grid neighborhood-row">
           <Col md={8}>
-            <h2 style={{ color: green }}>Contribute or curate data</h2>
+            <h2 style={secondaryColor}>Contribute or curate data</h2>
             <h3>
               {clearlyDefined} is a community approach to a community challenge. If you've ever had to figure out where 
               source is, or what license is being used, you can contribute to {clearlyDefined}. Add new data, curate data

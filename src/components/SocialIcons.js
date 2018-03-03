@@ -16,7 +16,7 @@ export default class SocialIcons extends Component {
   }
 
   render() {
-    const { website, github, facebook, twitter, instagram, email } = this.props.entity
+    const { website, github, facebook, twitter, instagram, email, discord } = this.props.entity
     return (
       <span className={this.props.className}>
         {github && <a href={github} target="_blank"><FontAwesome name="github" /></a>}
@@ -25,6 +25,7 @@ export default class SocialIcons extends Component {
         {facebook && <a href={facebook} target="_blank"><FontAwesome name="facebook-official" /></a>}
         {twitter && <a href={twitter} target="_blank"><FontAwesome name="twitter" /></a>}
         {instagram && <a href={instagram} target="_blank"><FontAwesome name="instagram" /></a>}
+        {discord && <a href={discord} target="_blank"><FontAwesome name="discord" /></a>}
       </span>
     )
   }
