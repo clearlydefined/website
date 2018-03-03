@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others. Made available under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import React from 'react';
@@ -49,7 +49,7 @@ export default class HarvestQueueList extends React.Component {
 
   versionChanged(request, value) {
     const newRequest = clone(request)
-    newRequest.revision = value 
+    newRequest.revision = value
     this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
     this.props.onChange(request, newRequest)
   }

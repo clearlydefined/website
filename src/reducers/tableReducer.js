@@ -1,11 +1,11 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others. Made available under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import { merge, omit, keys } from 'lodash'
 
 function initialState() {
   return { sequence: 0, entries: {} }
-} 
+}
 
 export default (name = '', keyGenerator = Object.toString) => {
   return (state = initialState(), action) => {

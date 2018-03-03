@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others. Made available under the MIT license.
 // SPDX-License-Identifier: MIT
 
 const url = require('url');
@@ -37,7 +37,7 @@ export default class EntitySpec {
         // eslint-disable-next-line
         const [blank, namespace, name] = url.parse(coordinates.url).pathname.split('/')
         return new EntitySpec(coordinates.type, coordinates.provider, namespace, name, coordinates.revision)
-      default: 
+      default:
         return null
     }
   }

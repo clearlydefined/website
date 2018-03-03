@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others. Made available under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -79,7 +79,7 @@ export default class CurationReview extends Component {
     const { definitionValue, curationOriginal } = this.props
     const newProposal = this.computeProposedCuration(definitionValue, newSummary)
     if (!this.state.curation)
-      return 
+      return
     if (!newProposal) {
       const curationValue = this.getStringValue(curationOriginal)
       // reset the proposed curation to ensure it matches the left hand side

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others. Made available under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -32,11 +32,11 @@ class PageAbout extends Component {
             <h2>About ClearlyDefined</h2>
             <h4>
               <p>
-              ClearlyDefined is on a mission to help FOSS projects thrive by being, well, clearly defined. Lack of clarity around licenses and security vulnerabilities reduces engagement -- that means fewer users, 
+              ClearlyDefined is on a mission to help FOSS projects thrive by being, well, clearly defined. Lack of clarity around licenses and security vulnerabilities reduces engagement -- that means fewer users,
               fewer contributors and a smaller community.
                 </p>
              <p>
-            This is a community-wide challenge that needs a community-wide approach. 
+            This is a community-wide challenge that needs a community-wide approach.
             </p>
 
             <p>
@@ -50,25 +50,25 @@ class PageAbout extends Component {
             <li>Feeding curated contributions back to the original projects</li>
             </ul>
          <p>
-          FOSS consumers often struggle to find basic things like the license for a component, the source location (e.g., Git commit) for 
-          a version, and details to be included in attributions (e.g., copyright holders in a Notices file). 
+          FOSS consumers often struggle to find basic things like the license for a component, the source location (e.g., Git commit) for
+          a version, and details to be included in attributions (e.g., copyright holders in a Notices file).
           These ambiguities make projects hard to consume. Projects that are hard to consume get less engagement. Everyone loses.
           </p>
          <p>
-          To date, most people are: ignoring the problem, vetting FOSS through repetitive, duplicative efforts, or employing external services to do this task. ClearlyDefined seeks to help projects be more clear from the beginning. 
-          It provides a mechanism for harvesting available data using tools such as ScanCode and FOSSology, and facilitates crowd-sourcing the curation of that information when ambiguities or gaps arise. The ultimate goal of harvesting 
+          To date, most people are: ignoring the problem, vetting FOSS through repetitive, duplicative efforts, or employing external services to do this task. ClearlyDefined seeks to help projects be more clear from the beginning.
+          It provides a mechanism for harvesting available data using tools such as ScanCode and FOSSology, and facilitates crowd-sourcing the curation of that information when ambiguities or gaps arise. The ultimate goal of harvesting
           and curation is to contribute any new-found clarity (e.g., new licenses found) to the upstream projects so they can include the updates in their next release -- thus becoming more clearly defined. Everyone wins.
           </p>
           <p>
-          Right now the focus is on clarifying an individual project’s license, source code location, and copyright holders -- all the essentials for engaging with a project. Going forward, we see security, accessibility, and internationalization 
-          being important parts of the ClearlyDefined ecosystem. 
+          Right now the focus is on clarifying an individual project’s license, source code location, and copyright holders -- all the essentials for engaging with a project. Going forward, we see security, accessibility, and internationalization
+          being important parts of the ClearlyDefined ecosystem.
           </p>
           <p>
-          It’s still very early days and we don’t have all the answers. ClearlyDefined is still being defined. You can help. Come design the processes, make decisions, connect with projects, and build the community. 
+          It’s still very early days and we don’t have all the answers. ClearlyDefined is still being defined. You can help. Come design the processes, make decisions, connect with projects, and build the community.
           Find out more about <a href="https://github.com/clearlydefined/clearlydefined/wiki/Get-Involved">how to get involved</a>.
               </p>
               <p>
-          You can find us at <a href="clearlydefined.io">clearlydefined.io</a>, <a href="github.com/clearlydefined">github.com/clearlydefined</a>, and <a href="mailto:clearlydefined@googlegroups.com">clearlydefined@googlegroups.com</a>. 
+          You can find us at <a href="clearlydefined.io">clearlydefined.io</a>, <a href="github.com/clearlydefined">github.com/clearlydefined</a>, and <a href="mailto:clearlydefined@googlegroups.com">clearlydefined@googlegroups.com</a>.
           </p>
          <p>
           We'd love to hear how you want to get involved in ClearlyDefined!
@@ -82,7 +82,7 @@ class PageAbout extends Component {
           </Col>
         </Row>
 
-        <Row className="show-grid"> 
+        <Row className="show-grid">
           <Col md={3} mdOffset={2}>
             <div className="about-cell">
               <img src={aws} width="120" className="about-image" alt="aws"></img>

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation and Others.
+// Copyright (c) Microsoft Corporation and others. Made available under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import { getCurationAction } from './curationActions'

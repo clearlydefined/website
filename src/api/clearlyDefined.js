@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation and others. Made available under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import 'whatwg-fetch'
@@ -16,7 +16,7 @@ function getServiceDefaultUrl() {
     case 'test':
       return API_DEVELOP
     case 'production':
-      // TODO this needs to be replaced when we do a prod deployment. We want a "production" build deployed in 
+      // TODO this needs to be replaced when we do a prod deployment. We want a "production" build deployed in
       // the dev environment but of course it will need to point to the dev server. Don't know how to do that.
       return API_DEVELOP
     default:
