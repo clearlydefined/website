@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation and others.
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
 export { default as App } from './App'

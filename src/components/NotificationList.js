@@ -1,4 +1,4 @@
-// Copyright (c) 2017, The Linux Foundation. All rights reserved.
+// Copyright (c) 2017, The Linux Foundation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from "react"

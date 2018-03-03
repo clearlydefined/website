@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
 return {
   id: "https://api.clearlydefined.io/schemas/curation",
   $schema: "http://json-schema.org/draft-06/schema#",
