@@ -2,11 +2,10 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { FormGroup, FormControl, HelpBlock, ControlLabel } from 'react-bootstrap'
 
 export default class FieldGroup extends Component {
-
   static propTypes = {
     id: PropTypes.string,
     label: PropTypes.string,

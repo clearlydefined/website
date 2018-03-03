@@ -39,7 +39,7 @@ export function uiRedirect(to) {
 
 let nextNotificationId = 0
 export function uiNotificationNew(message) {
-  return { type: UI_NOTIFICATION_NEW, message: { ...message, id: nextNotificationId++} }
+  return { type: UI_NOTIFICATION_NEW, message: { ...message, id: nextNotificationId++ } }
 }
 
 export function uiNotificationDelete(message) {
@@ -67,11 +67,11 @@ export function uiCurateUpdateFilter(value) {
 }
 
 export function uiCurateGetCuration(token, entity) {
-  return getCurationAction(token, entity, entity.pr ? UI_CURATE_GET_PROPOSED: UI_CURATE_GET)
+  return getCurationAction(token, entity, entity.pr ? UI_CURATE_GET_PROPOSED : UI_CURATE_GET)
 }
 
 export function uiCurateGetDefinition(token, entity) {
-  return getDefinitionAction(token, entity, entity.pr ? UI_CURATE_GET_DEFINITION_PROPOSED: UI_CURATE_GET_DEFINITION)
+  return getDefinitionAction(token, entity, entity.pr ? UI_CURATE_GET_DEFINITION_PROPOSED : UI_CURATE_GET_DEFINITION)
 }
 
 export function uiCurateGetDefinitionPreview(token, entity, curation) {

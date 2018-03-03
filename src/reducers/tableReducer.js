@@ -5,22 +5,19 @@ import { merge, omit, keys } from 'lodash'
 
 function initialState() {
   return { sequence: 0, entries: {} }
-} 
+}
 
 export default (name = '', keyGenerator = Object.toString) => {
   return (state = initialState(), action) => {
     // if there is a group on the action then it must match this reducer's name
     // otherwise the action type must match the name
-    if ((action.group && action.group !== name) || (action.type !== name))
-      return state
+    if ((action.group && action.group !== name) || action.type !== name) return state
 
-    if (action.context && action.context.clear)
-      return initialState()
+    if (action.context && action.context.clear) return initialState()
 
     const { result, error } = action
 
-    if (!(result || error))
-      return state
+    if (!(result || error)) return state
 
     if (error) {
       // TODO figure out what to do here with errors filling the table...

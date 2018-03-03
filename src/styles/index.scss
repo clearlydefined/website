@@ -4,45 +4,45 @@
 @import './variables';
 @import './bootstrapFixes';
 body {
-    padding: 0;
-    min-height: 100vh;
-    position: relative;
-    font-family: sans-serif;
-    background-color: $color_background_main;
-    color: $color-text-main;
+  padding: 0;
+  min-height: 100vh;
+  position: relative;
+  font-family: sans-serif;
+  background-color: $color_background_main;
+  color: $color-text-main;
 }
 
 h1 {
-    color: $color-text-bold;
-    margin: 0px;
-    text-align: left;
-    font-size: 1.5rem;
-    display: block;
+  color: $color-text-bold;
+  margin: 0px;
+  text-align: left;
+  font-size: 1.5rem;
+  display: block;
 }
 
 h2 {
-    color: $color-text-bold;
-    margin: 0px;
-    text-align: left;
-    font-size: 1.3rem;
-    font-weight: 500;
-    display: block;
-    // text-align: center;
+  color: $color-text-bold;
+  margin: 0px;
+  text-align: left;
+  font-size: 1.3rem;
+  font-weight: 500;
+  display: block;
+  // text-align: center;
 }
 
 main {
-    // Margin before the footer
-    margin-bottom: 2em;
+  // Margin before the footer
+  margin-bottom: 2em;
 }
 
 // stub to show while the state is reconstructed
 .loading-site-root {
-    padding-top: 20rem;
-    width: 100%;
-    text-align: center;
+  padding-top: 20rem;
+  width: 100%;
+  text-align: center;
 }
 
 @import './App.scss';
 @import './Header.scss';
 @import './Footer.scss';
-@import './List.scss'; 
+@import './List.scss';

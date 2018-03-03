@@ -1,19 +1,19 @@
 // Copyright (c) 2018, The Linux Foundation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React from "react"
-import PropTypes from "prop-types"
-import Select from "react-select"
+import React from 'react'
+import PropTypes from 'prop-types'
+import Select from 'react-select'
 
-import "react-select/dist/react-select.css"
+import 'react-select/dist/react-select.css'
 
 const options = [
-  { value: "core", label: "Core" },
-  { value: "data", label: "Data" },
-  { value: "dev", label: "Dev" },
-  { value: "docs", label: "Docs" },
-  { value: "examples", label: "Examples" },
-  { value: "tests", label: "Tests" }
+  { value: 'core', label: 'Core' },
+  { value: 'data', label: 'Data' },
+  { value: 'dev', label: 'Dev' },
+  { value: 'docs', label: 'Docs' },
+  { value: 'examples', label: 'Examples' },
+  { value: 'tests', label: 'Tests' }
 ]
 
 export default class FacetSelect extends Select {
@@ -37,15 +37,7 @@ export default class FacetSelect extends Select {
   }
 
   render() {
-    const { value } = this.state;
-    return (
-      <Select
-        name="facets"
-        multi={true}
-        options={options}
-        onChange={this.facetChange}
-        value={value}
-      />
-    )
+    const { value } = this.state
+    return <Select name="facets" multi={true} options={options} onChange={this.facetChange} value={value} />
   }
 }

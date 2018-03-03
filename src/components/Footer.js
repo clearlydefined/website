@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react';
-import { SocialIcons } from './';
-import { Col } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { SocialIcons } from './'
+import { Col } from 'react-bootstrap'
 
 // import { API_DEVELOP, API_PROD, API_LOCAL } from '../api/clearlyDefined';
 // function colorize(content) {
@@ -14,7 +14,7 @@ import { Col } from 'react-bootstrap';
 // }
 
 export default class Footer extends Component {
-  static propTypes = {};
+  static propTypes = {}
   static defaultProps = {
     socials: {
       github: 'https://github.com/clearlydefined',
@@ -23,10 +23,10 @@ export default class Footer extends Component {
       discord: 'https://discord.gg/wEzHJku',
       twitter: 'https://twitter.com/clearlydefd'
     }
-  };
+  }
 
   render() {
-    const { socials } = this.props;
+    const { socials } = this.props
     return (
       <footer className="Footer">
         <Col sm={4} className="Footer-element">
@@ -43,6 +43,6 @@ export default class Footer extends Component {
           </div>
         </Col>
       </footer>
-    );
+    )
   }
 }

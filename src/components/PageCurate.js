@@ -3,7 +3,8 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { uiNavigation, uiCurateUpdateFilter, uiCurateGetCuration, uiCurateGetDefinition, uiNotificationNew } from '../actions/ui'
+import { uiCurateUpdateFilter, uiCurateGetCuration, uiCurateGetDefinition } from '../actions/ui'
+import { uiNavigation, uiNotificationNew } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { CurationReview, ContributePrompt, ProposePrompt } from './'
 import { ROUTE_CURATE } from '../utils/routingConstants'
@@ -14,7 +15,6 @@ import { FilterBar, CopyUrlButton } from './'
 import { Button } from 'react-bootstrap'
 
 class PageCurate extends Component {
-
   constructor(props) {
     super(props)
     this.state = {}
@@ -36,13 +36,11 @@ class PageCurate extends Component {
   componentWillReceiveProps(newProps) {
     // if the path is changing, update the filter to match. That will trigger getting the content
     const newPath = newProps.path
-    if (this.props.path !== newPath)
-      return this.props.dispatch(uiCurateUpdateFilter(newPath))
+    if (this.props.path !== newPath) return this.props.dispatch(uiCurateUpdateFilter(newPath))
 
     // if the filter is changing (either on its own or because of the path), get the new content
     const newFilter = newProps.filterValue
-    if (this.props.filterValue !== newFilter)
-      this.handleNewSpec(newFilter)
+    if (this.props.filterValue !== newFilter) this.handleNewSpec(newFilter)
   }
 
   // A new spec has been seleted, fetch all the details
@@ -52,9 +50,9 @@ class PageCurate extends Component {
       // TODO clear out the "current" values as we are not showing anything.
       return
     }
-    const fullSpec = EntitySpec.fromPath(newFilter);
+    const fullSpec = EntitySpec.fromPath(newFilter)
     this.setState({ ...this.state, entitySpec: fullSpec })
-    const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null });
+    const currentSpec = Object.assign(Object.create(fullSpec), fullSpec, { pr: null })
     if (fullSpec.pr) {
       dispatch(uiCurateGetCuration(token, fullSpec))
       dispatch(uiCurateGetDefinition(token, fullSpec))
@@ -70,20 +68,18 @@ class PageCurate extends Component {
     dispatch(curateAction(token, entitySpec, spec))
   }
 
-  doPropose(description) {
-  }
+  doPropose(description) {}
 
   doMerge(spec) {
-    const url = `https://github.com/clearlydefined/curated-data-dev/pull/${spec.pr}`;
-    window.open(url, '_blank');
+    const url = `https://github.com/clearlydefined/curated-data-dev/pull/${spec.pr}`
+    window.open(url, '_blank')
   }
 
   doPromptContribute(proposal) {
     if (!proposal)
       return this.props.dispatch(uiNotificationNew({ type: 'info', message: 'Nothing to contribute', timeout: 3000 }))
     const { entitySpec } = this.state
-    if (entitySpec.pr)
-      return this.doMerge(entitySpec)
+    if (entitySpec.pr) return this.doMerge(entitySpec)
     this.setState({ ...this.state, proposal })
     this.refs.contributeModal.open()
   }
@@ -101,12 +97,13 @@ class PageCurate extends Component {
   }
 
   renderPlaceholder(message) {
-    return (<div className='placeholder-message'>{message}</div>)
+    return <div className="placeholder-message">{message}</div>
   }
 
   renderCurationView() {
     const { entitySpec } = this.state
-    const { permissions, currentCuration, proposedCuration, currentDefinition, proposedDefinition, filterValue } = this.props
+    const { permissions, filterValue } = this.props
+    const { currentCuration, proposedCuration, currentDefinition, proposedDefinition } = this.props
     if (!filterValue || !entitySpec)
       return this.renderPlaceholder('Search for some part of a component name to see details')
     // wait to render until we have the current content
@@ -122,7 +119,7 @@ class PageCurate extends Component {
 
     const actionText = entitySpec.pr ? 'Show on GitHub' : 'Contribute curation'
     return (
-      <Col md={12} >
+      <Col md={12}>
         <CurationReview
           permissions={permissions}
           curationOriginal={curationOriginal}
@@ -131,15 +128,18 @@ class PageCurate extends Component {
           definitionValue={definitionValue}
           proposeHandler={this.doPromptPropose}
           actionHandler={this.doPromptContribute}
-          actionText={actionText} />
+          actionText={actionText}
+        />
       </Col>
     )
   }
 
   renderButtons() {
     return (
-      <div className='labelled-button inline '>
-        <Button className='pull-right' bsStyle='success'>Harvest more</Button>
+      <div className="labelled-button inline ">
+        <Button className="pull-right" bsStyle="success">
+          Harvest more
+        </Button>
       </div>
     )
   }
@@ -161,14 +161,12 @@ class PageCurate extends Component {
             />
           </Col>
           <Col md={1}>
-            <CopyUrlButton route={ROUTE_CURATE} path={filterValue} bsStyle='default'/>
+            <CopyUrlButton route={ROUTE_CURATE} path={filterValue} bsStyle="default" />
           </Col>
           {isCurator && <Col md={4}>{this.renderButtons()}</Col>}
         </Row>
-        <Row className='top-space'>
-          {this.renderCurationView()}
-        </Row>
-      </Grid >
+        <Row className="top-space">{this.renderCurationView()}</Row>
+      </Grid>
     )
   }
 }

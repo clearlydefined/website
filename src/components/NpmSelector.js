@@ -5,12 +5,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getNpmSearch } from '../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
-import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 export default class NpmSelector extends Component {
-
   static propTypes = {
-    onChange: PropTypes.func,
+    onChange: PropTypes.func
   }
 
   constructor(props) {
@@ -28,12 +27,12 @@ export default class NpmSelector extends Component {
 
   async getOptions(value) {
     try {
-      this.setState({ ...this.state, isLoading: true });
+      this.setState({ ...this.state, isLoading: true })
       const options = await getNpmSearch(this.props.token, value)
-      this.setState({ ...this.state, options, isLoading: false });
+      this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
       console.log(error)
-      this.setState({ ...this.state, options: [], isLoading: false });
+      this.setState({ ...this.state, options: [], isLoading: false })
     }
   }
 
@@ -44,13 +43,14 @@ export default class NpmSelector extends Component {
         options={options}
         placeholder={'Pick an NPM to harvest'}
         onChange={this.onChange}
-        labelKey='id'
+        labelKey="id"
         clearButton
         highlightOnlyResult
-        emptyLabel=''
+        emptyLabel=""
         selectHintOnEnter
         isLoading={isLoading}
         onSearch={this.getOptions}
-      />)
+      />
+    )
   }
 }

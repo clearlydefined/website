@@ -5,13 +5,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Grid, Row, Col } from 'react-bootstrap'
 import { getDefinitionListAction } from '../actions/definitionActions'
-import { uiInspectUpdateFilter, uiNavigation, uiInspectGetCuration, uiInspectGetHarvested, uiInspectGetDefinition } from '../actions/ui'
+import { uiInspectGetCuration, uiInspectGetHarvested, uiInspectGetDefinition } from '../actions/ui'
+import { uiNavigation, uiInspectUpdateFilter } from '../actions/ui'
 import { FilterBar, MonacoEditorWrapper, Section, CopyUrlButton } from './'
-import EntitySpec from '../utils/entitySpec';
-import { ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants';
+import EntitySpec from '../utils/entitySpec'
+import { ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 
 class PageInspect extends Component {
-
   constructor(props) {
     super(props)
     this.state = {}
@@ -31,13 +31,11 @@ class PageInspect extends Component {
   componentWillReceiveProps(newProps) {
     // if the path is changing, update the filter to match. That will trigger getting the content
     const newPath = newProps.path
-    if (this.props.path !== newPath)
-      return this.filterChanged(newPath)
+    if (this.props.path !== newPath) return this.filterChanged(newPath)
 
     // if the filter is changing (either on its own or because of the path), get the new content
     const newFilter = newProps.filterValue
-    if (this.props.filterValue !== newFilter)
-      this.handleNewSpec(newFilter)
+    if (this.props.filterValue !== newFilter) this.handleNewSpec(newFilter)
   }
 
   handleNewSpec(newFilter) {
@@ -71,54 +69,54 @@ class PageInspect extends Component {
   }
 
   renderMissing(value) {
-    return (
-      <Button>Queue harvest</Button>
-    )
+    return <Button>Queue harvest</Button>
   }
 
   renderData(value, name, type = 'json', actionButton = null) {
     return (
       <Section name={name} actionButton={actionButton}>
         {this.renderInnerData(value, name, type, actionButton)}
-      </Section>)
+      </Section>
+    )
   }
 
   renderInnerData(value, name, type = 'json', actionButton = null) {
-    if (value.isFetching)
-      return this.renderPlaceholder(`Loading the ${name}`)
+    if (value.isFetching) return this.renderPlaceholder(`Loading the ${name}`)
     if (value.error && !value.error.state === 404)
       return this.renderPlaceholder(`There was a problem loading the ${name}`)
-    if (!value.isFetched)
-      return this.renderPlaceholder('Search for some part of a component name to see details')
-    if (!value.item)
-      return this.renderPlaceholder(`There are no ${name}`, actionButton)
+    if (!value.isFetched) return this.renderPlaceholder('Search for some part of a component name to see details')
+    if (!value.item) return this.renderPlaceholder(`There are no ${name}`, actionButton)
     const options = {
       selectOnLineNumbers: true
     }
     return (
       <MonacoEditorWrapper
-        height='400'
+        height="400"
         language={type}
         value={value.transformed}
         options={options}
         editorDidMount={this.editorDidMount}
-      />)
+      />
+    )
   }
 
   renderPlaceholder(message) {
     return (
-      <div className='placeholder-message inline section-body'>
+      <div className="placeholder-message inline section-body">
         <span>{message}</span>
-      </div>)
+      </div>
+    )
   }
 
   renderCurationButton() {
     return (
       <Button
-        bsStyle='success'
-        className='pull-right'
+        bsStyle="success"
+        className="pull-right"
         disabled={!Boolean(this.props.filterValue)}
-        onClick={this.addCuration}>Add curation
+        onClick={this.addCuration}
+      >
+        Add curation
       </Button>
     )
   }
@@ -130,16 +128,16 @@ class PageInspect extends Component {
   render() {
     const { filterOptions, filterValue, definition, curation, harvest } = this.props
     return (
-      <Grid className='main-container'>
+      <Grid className="main-container">
         <Row className="show-grid spacer">
           <Col md={9} mdOffset={1}>
             <FilterBar options={filterOptions} value={filterValue} onChange={this.filterChanged} />
           </Col>
           <Col md={1}>
-            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue} bsStyle='default'/>
+            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue} bsStyle="default" />
           </Col>
         </Row>
-        <Row className='show-grid'>
+        <Row className="show-grid">
           {this.renderData(definition, 'Current definition', 'yaml', this.renderCurationButton())}
           {this.renderData(curation, 'Curations', 'json', this.renderCurationButton())}
           {this.renderData(harvest, 'Harvested data', 'json', this.renderHarvestButton())}

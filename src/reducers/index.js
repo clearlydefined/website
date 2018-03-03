@@ -10,7 +10,7 @@ import definitionReducer from './definitionReducer'
 const rootReducer = combineReducers({
   session: sessionReducer,
   ui: uiReducer,
-  definition: definitionReducer,
+  definition: definitionReducer
   // harvest: harvestReducer
 })
 

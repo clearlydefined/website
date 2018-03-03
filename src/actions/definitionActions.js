@@ -8,7 +8,7 @@ export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
 
 export function getDefinitionAction(token, entity, name) {
-  return (dispatch) => {
+  return dispatch => {
     const actions = asyncActions(name)
     dispatch(actions.start())
     return getDefinition(token, entity).then(
@@ -19,7 +19,7 @@ export function getDefinitionAction(token, entity, name) {
 }
 
 export function getDefinitionsAction(token, entities) {
-  return (dispatch) => {
+  return dispatch => {
     const actions = asyncActions(DEFINITION_BODIES)
     dispatch(actions.start())
     return getDefinitions(token, entities).then(
@@ -30,7 +30,7 @@ export function getDefinitionsAction(token, entities) {
 }
 
 export function getDefinitionListAction(token, prefix, force) {
-  return (dispatch) => {
+  return dispatch => {
     const actions = asyncActions(DEFINITION_LIST)
     dispatch(actions.start())
     return getDefinitionList(token, prefix, force).then(
@@ -41,7 +41,7 @@ export function getDefinitionListAction(token, prefix, force) {
 }
 
 export function previewDefinitionAction(token, entity, curation, name) {
-  return (dispatch) => {
+  return dispatch => {
     const actions = asyncActions(name)
     dispatch(actions.start())
     return previewDefinition(token, entity, curation).then(

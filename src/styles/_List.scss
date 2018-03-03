@@ -89,7 +89,7 @@
   display: inline-flex;
   justify-content: flex-end;
   .rbt {
-    width: 450px
+    width: 450px;
   }
   img {
     align-self: center;
@@ -126,7 +126,7 @@
 }
 
 .list-message {
-  font-size: .85em;
+  font-size: 0.85em;
   color: $color-text-main;
   a {
     color: inherit;

@@ -7,7 +7,6 @@ import { getNpmRevisions } from '../api/clearlyDefined'
 import { Typeahead } from 'react-bootstrap-typeahead'
 
 export default class NpmVersionPicker extends Component {
-
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
@@ -30,20 +29,18 @@ export default class NpmVersionPicker extends Component {
       const { namespace, name } = this.props.request
       const path = namespace ? `${namespace}/${name}` : name
       const options = await getNpmRevisions(this.props.token, path)
-      this.setState({ ...this.state, options });
+      this.setState({ ...this.state, options })
     } catch (error) {
       console.log(error)
-      this.setState({ ...this.state, options: [] });
+      this.setState({ ...this.state, options: [] })
     }
   }
 
   onChange(values) {
     const { onChange } = this.props
-    if (!onChange)
-      return
+    if (!onChange) return
     let value = values.length === 0 ? null : values[0]
-    if (!value)
-      return onChange(value)
+    if (!value) return onChange(value)
     if (value.customOption) {
       value = value.label
       this.setState({ ...this.state, customValues: [...this.state.customValues, value] })
@@ -52,9 +49,8 @@ export default class NpmVersionPicker extends Component {
   }
 
   filter(option, text) {
-    if (this.props.request.revision)
-      return true;
-    return option.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+    if (this.props.request.revision) return true
+    return option.toLowerCase().indexOf(text.toLowerCase()) !== -1
   }
 
   render() {
@@ -71,10 +67,11 @@ export default class NpmVersionPicker extends Component {
         bodyContainer
         clearButton
         allowNew
-        newSelectionPrefix='Version:'
-        emptyLabel=''
+        newSelectionPrefix="Version:"
+        emptyLabel=""
         filterBy={this.filter}
         selectHintOnEnter
-      />)
+      />
+    )
   }
 }

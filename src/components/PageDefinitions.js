@@ -10,10 +10,9 @@ import { FilterBar, ComponentList, Section, FacetSelect } from './'
 import { uiNavigation, uiBrowseUpdateList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
-const defaultFacets = [{value: 'core', label: 'Core'}] 
+const defaultFacets = [{ value: 'core', label: 'Core' }]
 
 class PageDefinitions extends Component {
-
   constructor(props) {
     super(props)
     this.state = { activeFacets: defaultFacets.map(x => x.value) }
@@ -60,7 +59,7 @@ class PageDefinitions extends Component {
 
   facetChange(value) {
     const activeFacets = (value || []).map(facet => facet.value)
-    this.setState({ ...this.state, activeFacets})
+    this.setState({ ...this.state, activeFacets })
   }
 
   noRowsRenderer() {
@@ -71,21 +70,17 @@ class PageDefinitions extends Component {
     const { components, filterOptions, definitions, token } = this.props
     const { activeFacets } = this.state
     return (
-      <Grid className='main-container'>
-        <Row className='show-grid spacer'>
+      <Grid className="main-container">
+        <Row className="show-grid spacer">
           <Col md={5}>
-            <FacetSelect 
-              name="facets"
-              onChange={this.facetChange}
-              defaultFacets={defaultFacets}
-            /> 
+            <FacetSelect name="facets" onChange={this.facetChange} defaultFacets={defaultFacets} />
           </Col>
           <Col md={7}>
             <FilterBar options={filterOptions} onChange={this.onAddComponent} clearOnChange />
           </Col>
         </Row>
         <Section name={'Available definitions'}>
-          <div className='section-body'>
+          <div className="section-body">
             <ComponentList
               list={components}
               listHeight={1000}

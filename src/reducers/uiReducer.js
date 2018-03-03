@@ -2,21 +2,37 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { ROUTE_ROOT, ROUTE_CURATE, ROUTE_DEFINITIONS, ROUTE_HARVEST, ROUTE_ABOUT, ROUTE_INSPECT } from '../utils/routingConstants'
 import {
-  UI_NAVIGATION, 
-  UI_NOTIFICATION_NEW, UI_NOTIFICATION_DELETE,
-  UI_CURATE_UPDATE_FILTER, 
-  UI_CURATE_GET, UI_CURATE_GET_PROPOSED, 
-  UI_CURATE_GET_DEFINITION, UI_CURATE_GET_DEFINITION_PROPOSED, UI_CURATE_DEFINITION_PREVIEW,
-  UI_BROWSE_UPDATE_FILTER, UI_BROWSE_UPDATE_LIST,
-  UI_HARVEST_UPDATE_FILTER, UI_HARVEST_UPDATE_QUEUE,
-  UI_INSPECT_UPDATE_FILTER, UI_INSPECT_GET_CURATION, UI_INSPECT_GET_DEFINITION, UI_INSPECT_GET_HARVESTED,
+  ROUTE_ROOT,
+  ROUTE_CURATE,
+  ROUTE_DEFINITIONS,
+  ROUTE_HARVEST,
+  ROUTE_ABOUT,
+  ROUTE_INSPECT
+} from '../utils/routingConstants'
+import {
+  UI_NAVIGATION,
+  UI_NOTIFICATION_NEW,
+  UI_NOTIFICATION_DELETE,
+  UI_CURATE_UPDATE_FILTER,
+  UI_CURATE_GET,
+  UI_CURATE_GET_PROPOSED,
+  UI_CURATE_GET_DEFINITION,
+  UI_CURATE_GET_DEFINITION_PROPOSED,
+  UI_CURATE_DEFINITION_PREVIEW,
+  UI_BROWSE_UPDATE_FILTER,
+  UI_BROWSE_UPDATE_LIST,
+  UI_HARVEST_UPDATE_FILTER,
+  UI_HARVEST_UPDATE_QUEUE,
+  UI_INSPECT_UPDATE_FILTER,
+  UI_INSPECT_GET_CURATION,
+  UI_INSPECT_GET_DEFINITION,
+  UI_INSPECT_GET_HARVESTED
 } from '../actions/ui'
-import listReducer, { initialState as initialListState } from './listReducer';
+import listReducer, { initialState as initialListState } from './listReducer'
 import { isEqual } from 'lodash'
-import valueReducer from './valueReducer';
-import itemReducer from './itemReducer';
+import valueReducer from './valueReducer'
+import itemReducer from './itemReducer'
 import yaml from 'js-yaml'
 
 /**
@@ -27,41 +43,41 @@ import yaml from 'js-yaml'
  */
 const initialStateNavigation = [
   {
-    title: "Home",
+    title: 'Home',
     to: ROUTE_ROOT,
     protected: 0,
-    isSelected: true,
+    isSelected: true
   },
   {
-    title: "Browse",
+    title: 'Browse',
     to: ROUTE_DEFINITIONS,
     protected: 0,
-    isSelected: false,
+    isSelected: false
   },
   {
-    title: "Inspect",
+    title: 'Inspect',
     to: ROUTE_INSPECT,
     protected: 0,
-    isSelected: false,
+    isSelected: false
   },
   {
-    title: "Curate",
+    title: 'Curate',
     to: ROUTE_CURATE,
     protected: 0,
-    isSelected: false,
+    isSelected: false
   },
   {
-    title: "Harvest",
+    title: 'Harvest',
     to: ROUTE_HARVEST,
     protected: 1,
     isSelected: false,
     permissions: ['harvest']
   },
   {
-    title: "About",
+    title: 'About',
     to: ROUTE_ABOUT,
     protected: 0,
-    isSelected: false,
+    isSelected: false
   }
 ]
 
@@ -83,14 +99,14 @@ const curate = combineReducers({
   proposedCuration: new itemReducer(UI_CURATE_GET_PROPOSED),
   currentDefinition: new itemReducer(UI_CURATE_GET_DEFINITION),
   proposedDefinition: new itemReducer(UI_CURATE_GET_DEFINITION_PROPOSED),
-  previewDefinition: new itemReducer(UI_CURATE_DEFINITION_PREVIEW),
+  previewDefinition: new itemReducer(UI_CURATE_DEFINITION_PREVIEW)
 })
 
 const inspect = combineReducers({
   filter: new valueReducer(UI_INSPECT_UPDATE_FILTER),
   definition: new itemReducer(UI_INSPECT_GET_DEFINITION, item => yaml.safeDump(item, { sortKeys: true })),
   curation: new itemReducer(UI_INSPECT_GET_CURATION, item => yaml.safeDump(item, { sortKeys: true })),
-  harvested: new itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2)),
+  harvested: new itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2))
 })
 
 const componentList = listReducer(UI_BROWSE_UPDATE_LIST, null, isEqual)
@@ -120,8 +136,8 @@ const harvest = (state = initialHarvest, action) => {
 }
 
 const notifications = (state = [], action) => {
-  const {type, message} = action
-  switch(type) {
+  const { type, message } = action
+  switch (type) {
     case UI_NOTIFICATION_NEW:
       return [...state, message]
     case UI_NOTIFICATION_DELETE:

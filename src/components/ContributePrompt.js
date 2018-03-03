@@ -2,12 +2,11 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { FieldGroup } from './'
 
 export default class ContributePrompt extends Component {
-
   constructor(props) {
     super(props)
     this.state = { show: false }
@@ -20,8 +19,7 @@ export default class ContributePrompt extends Component {
     actionHandler: PropTypes.func.isRequired
   }
 
-  static defaultProps = {
-  }
+  static defaultProps = {}
 
   open() {
     this.setState({ show: true, description: '' })
@@ -45,7 +43,7 @@ export default class ContributePrompt extends Component {
   }
 
   render() {
-    const { description } = this.state;
+    const { description } = this.state
     return (
       <Modal show={this.state.show} onHide={this.close}>
         <Form>
@@ -54,7 +52,7 @@ export default class ContributePrompt extends Component {
             name="description"
             type="text"
             label="Description"
-            value={description || ""}
+            value={description || ''}
             onChange={this.handleChange}
             placeholder="Short description of changes. Like a commit message..."
             maxLength={100}

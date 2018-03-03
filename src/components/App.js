@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Header, Footer, NotificationList } from './'
 
 export default class App extends Component {
@@ -10,9 +10,7 @@ export default class App extends Component {
     return (
       <div className="App">
         <Header />
-        <main className="App-content">
-          {children}
-        </main>
+        <main className="App-content">{children}</main>
         <Footer />
         <NotificationList />
       </div>

@@ -12,10 +12,9 @@ import npm from '../images/n-large.png'
 import EntitySpec from '../utils/entitySpec'
 import { getBadgeUrl } from '../api/clearlyDefined'
 import moment from 'moment'
-import { ROUTE_INSPECT } from '../utils/routingConstants';
+import { ROUTE_INSPECT } from '../utils/routingConstants'
 
 export default class ComponentList extends React.Component {
-
   static propTypes = {
     list: PropTypes.object.isRequired,
     listHeight: PropTypes.number,
@@ -33,7 +32,7 @@ export default class ComponentList extends React.Component {
   }
 
   static defaultProps = {
-    loadMoreRows: () => { },
+    loadMoreRows: () => {}
   }
 
   constructor(props) {
@@ -46,10 +45,8 @@ export default class ComponentList extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.definitions.sequence !== this.props.definitions.sequence)
-      this.incrementSequence()
-    if (newProps.activeFacets !== this.props.activeFacets)
-      this.incrementSequence()
+    if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
+    if (newProps.activeFacets !== this.props.activeFacets) this.incrementSequence()
   }
 
   removeComponent(component, event) {
@@ -101,9 +98,11 @@ export default class ComponentList extends React.Component {
 
   renderButtonWithTip(button, tip) {
     const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
-    return <OverlayTrigger placement="top" overlay={toolTip}>
-      {button}
-    </OverlayTrigger>
+    return (
+      <OverlayTrigger placement="top" overlay={toolTip}>
+        {button}
+      </OverlayTrigger>
+    )
   }
 
   isSourceComponent(component) {
@@ -113,46 +112,60 @@ export default class ComponentList extends React.Component {
   renderButtons(component) {
     const isSourceComponent = this.isSourceComponent(component)
     return (
-      <div className='list-activity-area'>
+      <div className="list-activity-area">
         {/* <img className='list-buttons' width='45px' src={two} alt='score'/> */}
-        <img className='list-buttons' src={getBadgeUrl(component)} alt='score'/>
+        <img className="list-buttons" src={getBadgeUrl(component)} alt="score" />
         <ButtonGroup>
-          {!isSourceComponent &&
-            <Button className='list-hybrid-button' onClick={this.addSourceForComponent.bind(this, component)}>
-              <FontAwesome name={'plus'}/>
+          {!isSourceComponent && (
+            <Button className="list-hybrid-button" onClick={this.addSourceForComponent.bind(this, component)}>
+              <FontAwesome name={'plus'} />
               <span>&nbsp;Add source</span>
             </Button>
-          }
+          )}
           {this.renderButtonWithTip(
             <Button>
-              <FontAwesome name={'edit'} className='list-fa-button' onClick={this.curateComponent.bind(this, component)} />
+              <FontAwesome
+                name={'edit'}
+                className="list-fa-button"
+                onClick={this.curateComponent.bind(this, component)}
+              />
             </Button>,
             'Curate this definition'
           )}
           {this.renderButtonWithTip(
             <Button>
-              <FontAwesome name={'search'} className='list-fa-button' onClick={this.inspectComponent.bind(this, component)} />
+              <FontAwesome
+                name={'search'}
+                className="list-fa-button"
+                onClick={this.inspectComponent.bind(this, component)}
+              />
             </Button>,
             'Dig into this definition'
           )}
-          <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button"/>
+          <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button" />
         </ButtonGroup>
-        <FontAwesome name={'times'} className='list-remove' onClick={this.removeComponent.bind(this, component)} />
-      </div>)
+        <FontAwesome name={'times'} className="list-remove" onClick={this.removeComponent.bind(this, component)} />
+      </div>
+    )
   }
 
   renderHeadline(component) {
     const { namespace, name, revision } = component
-    const namespaceText = namespace ? (namespace + '/') : ''
+    const namespaceText = namespace ? namespace + '/' : ''
     const definition = this.props.definitions.entries[component.toPath()]
     const sourceUrl = this.getSourceUrl(definition)
     let revisionText = <span>&nbsp;&nbsp;&nbsp;{revision}</span>
     if (definition) {
       const location = get(definition, 'described.sourceLocation')
-      if (!location || (component.provider === location.provider && revision === location.revision))
-        revisionText = ''
+      if (!location || (component.provider === location.provider && revision === location.revision)) revisionText = ''
     }
-    return (<span>{namespaceText}{name}{revisionText}&nbsp;&nbsp;&nbsp;{sourceUrl}</span>)
+    return (
+      <span>
+        {namespaceText}
+        {name}
+        {revisionText}&nbsp;&nbsp;&nbsp;{sourceUrl}
+      </span>
+    )
   }
 
   renderMessage(component) {
@@ -163,18 +176,21 @@ export default class ComponentList extends React.Component {
 
   getSourceUrl(definition) {
     const location = get(definition, 'described.sourceLocation')
-    if (!location)
-      return ''
+    if (!location) return ''
     switch (location.provider) {
       case 'github':
-        return <a href={`${location.url}/commit/${location.revision}`} target='_blank'>{location.revision}</a>
+        return (
+          <a href={`${location.url}/commit/${location.revision}`} target="_blank">
+            {location.revision}
+          </a>
+        )
       default:
         return ''
     }
   }
 
   getPercentage(count, total) {
-    return Math.round(((count || 0) / total) * 100)
+    return Math.round((count || 0) / total * 100)
   }
 
   foldFacets(definition, facets = null) {
@@ -188,9 +204,8 @@ export default class ComponentList extends React.Component {
 
     facets.forEach(name => {
       const facet = get(definition, `licensed.facets.${name}`)
-      if (!facet)
-        return
-      files += (facet.files || 0)
+      if (!facet) return
+      files += facet.files || 0
       attributionUnknown += get(facet, 'attribution.unknown', 0)
       parties = union(parties, get(facet, 'attribution.parties', []))
       discoveredUnknown += get(facet, 'discovered.unknown', 0)
@@ -213,11 +228,11 @@ export default class ComponentList extends React.Component {
   renderPanel(component) {
     const rawDefinition = this.props.definitions.entries[component.toPath()]
     if (!rawDefinition)
-      return (<div className='list-noRows'>
-        <div>
-          'Nothing to see here'
+      return (
+        <div className="list-noRows">
+          <div>'Nothing to see here'</div>
         </div>
-      </div>)
+      )
 
     // TODO find a way of calling this less frequently. Relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
@@ -227,78 +242,102 @@ export default class ComponentList extends React.Component {
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
-    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : null;
-    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : null;
+    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : null
+    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : null
     return (
       <Row>
-        <Col md={5} >
+        <Col md={5}>
           <Row>
-            <Col md={2} >
-              <p><b>Source</b></p>
+            <Col md={2}>
+              <p>
+                <b>Source</b>
+              </p>
             </Col>
             <Col md={10}>
               <p className="ellipsis">{sourceUrl}</p>
             </Col>
           </Row>
           <Row>
-            <Col md={2} >
-              <p><b>Release</b></p>
+            <Col md={2}>
+              <p>
+                <b>Release</b>
+              </p>
             </Col>
-            <Col md={10} >
-              <p>{(described && described.releaseDate && moment(described.releaseDate).format('YYYY.MM.DD'))}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2} >
-              <p><b>Tools</b></p>
-            </Col>
-            <Col md={9} >
-              <p><span className='list-singleLine'>{get(described, 'tools', []).join(', ')}</span></p>
+            <Col md={10}>
+              <p>{described && described.releaseDate && moment(described.releaseDate).format('YYYY.MM.DD')}</p>
             </Col>
           </Row>
           <Row>
-            <Col md={2} >
-              <p><b>Facets</b></p>
+            <Col md={2}>
+              <p>
+                <b>Tools</b>
+              </p>
             </Col>
-            <Col md={10} >
-              <p><span className='list-singleLine'>{facetsText}</span></p>
+            <Col md={9}>
+              <p>
+                <span className="list-singleLine">{get(described, 'tools', []).join(', ')}</span>
+              </p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>
+              <p>
+                <b>Facets</b>
+              </p>
+            </Col>
+            <Col md={10}>
+              <p>
+                <span className="list-singleLine">{facetsText}</span>
+              </p>
             </Col>
           </Row>
         </Col>
-        <Col md={7} >
+        <Col md={7}>
           <Row>
-            <Col md={2} >
-              <p><b>Declared</b></p>
+            <Col md={2}>
+              <p>
+                <b>Declared</b>
+              </p>
             </Col>
-            <Col md={9} >
+            <Col md={9}>
               <p>{licensed && licensed.declared}</p>
             </Col>
           </Row>
           <Row>
-            <Col md={2} >
-              <p><b>Discovered</b></p>
-            </Col>
-            <Col md={9} >
-              <p><span className='list-singleLine'>{get(licensed, 'discovered.expressions', '')}</span></p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2} >
-              <p><b>Attribution</b></p>
-            </Col>
-            <Col md={9} >
-              <p><span className='list-singleLine'>{get(licensed, 'attribution.parties', []).join(', ')}</span></p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2} >
-              <p><b>Files</b></p>
-            </Col>
-            <Col md={10} >
+            <Col md={2}>
               <p>
-                Total: <b>{totalFiles || '?'}</b>,
-                Unlicensed: <b>{isNaN(unlicensed) ? '/' : `${unlicensed} (${unlicensedPercent}%)`}</b>,
-                Unattributed: <b>{isNaN(unattributed) ? '?' : `${unattributed} (${unattributedPercent}%)`}</b>,
+                <b>Discovered</b>
+              </p>
+            </Col>
+            <Col md={9}>
+              <p>
+                <span className="list-singleLine">{get(licensed, 'discovered.expressions', '')}</span>
+              </p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>
+              <p>
+                <b>Attribution</b>
+              </p>
+            </Col>
+            <Col md={9}>
+              <p>
+                <span className="list-singleLine">{get(licensed, 'attribution.parties', []).join(', ')}</span>
+              </p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>
+              <p>
+                <b>Files</b>
+              </p>
+            </Col>
+            <Col md={10}>
+              <p>
+                Total: <b>{totalFiles || '?'}</b>, Unlicensed:{' '}
+                <b>{isNaN(unlicensed) ? '/' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
+                <b>{isNaN(unattributed) ? '?' : `${unattributed} (${unattributedPercent}%)`}</b>,
               </p>
             </Col>
           </Row>
@@ -308,10 +347,8 @@ export default class ComponentList extends React.Component {
   }
 
   getImage(component) {
-    if (component.provider === 'github')
-      return github
-    if (component.provider === 'npmjs')
-      return npm
+    if (component.provider === 'github') return github
+    if (component.provider === 'npmjs') return npm
     return null
   }
 
@@ -333,23 +370,26 @@ export default class ComponentList extends React.Component {
           onClick={clickHandler}
           panel={showExpanded ? this.renderPanel(component) : null}
         />
-      </div>)
+      </div>
+    )
   }
 
   render() {
     const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer } = this.props
     const { sortOrder, contentSeq } = this.state
-    return (<RowEntityList
-      list={list}
-      loadMoreRows={loadMoreRows}
-      listHeight={listHeight}
-      rowRenderer={this.renderRow}
-      allowExpand
-      rowHeight={this.rowHeight}
-      noRowsRenderer={noRowsRenderer}
-      fetchingRenderer={fetchingRenderer}
-      sortOrder={sortOrder}
-      contentSeq={contentSeq}
-    />)
+    return (
+      <RowEntityList
+        list={list}
+        loadMoreRows={loadMoreRows}
+        listHeight={listHeight}
+        rowRenderer={this.renderRow}
+        allowExpand
+        rowHeight={this.rowHeight}
+        noRowsRenderer={noRowsRenderer}
+        fetchingRenderer={fetchingRenderer}
+        sortOrder={sortOrder}
+        contentSeq={contentSeq}
+      />
+    )
   }
 }
