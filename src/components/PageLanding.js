@@ -20,7 +20,7 @@ const adopt = 'toggle-on'
 
 const clearlyDefined = <Clearly>Defined</Clearly>
 
-class Landing extends Component {
+class PageLanding extends Component {
 
   componentDidMount() {
     this.props.dispatch(uiNavigation({ to: ROUTE_ROOT }))
@@ -129,4 +129,4 @@ class Landing extends Component {
 function mapStateToProps(state, ownProps) {
   return { token: state.session.token }
 }
-export default connect(mapStateToProps)(Landing)
+export default connect(mapStateToProps)(PageLanding)
