@@ -126,7 +126,7 @@ class PageCurate extends Component {
   renderButtons() {
     return (
       <div className='labelled-button inline '>
-        <Button className='pull-right' bsStyle='success'>New Harvest</Button>
+        <Button className='pull-right' bsStyle='success'>Harvest more</Button>
       </div>
     )
   }

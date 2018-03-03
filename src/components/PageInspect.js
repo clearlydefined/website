@@ -124,7 +124,7 @@ class PageInspect extends Component {
   }
 
   renderHarvestButton() {
-    return (<Button bsStyle='success' className='pull-right'>Harvest data</Button>)
+    return null
   }
 
   render() {

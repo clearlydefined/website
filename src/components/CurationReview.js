@@ -28,7 +28,7 @@ export default class CurationReview extends Component {
     this.state = {}
     this.editorDidMount = this.editorDidMount.bind(this)
     this.onCurationChange = this.onCurationChange.bind(this)
-    this.onSummaryChange = this.onSummaryChange.bind(this)
+    this.onDefinitionChange = this.onDefinitionChange.bind(this)
     this.doAction = this.doAction.bind(this)
   }
 
@@ -40,7 +40,7 @@ export default class CurationReview extends Component {
 
   editorDidMount(type, editor, monaco) {
     this.setState({ ...this.state, [type]: editor })
-    if (type === 'result')
+    if (type === 'definition')
       editor.focus()
   }
 
@@ -48,11 +48,11 @@ export default class CurationReview extends Component {
     // TODO put in some throttling
     const { definitionValue } = this.props
     const newProposal = this.computeProposedDefinition(definitionValue, newCuration)
-    if (!this.state.result || !newProposal)
+    if (!this.state.definition || !newProposal)
       return
     // only set the value if it is different. Optimization plus it stops cycles
-    if (newProposal !== this.state.result.getModifiedEditor().getModel().getValue())
-      this.state.result.getModifiedEditor().getModel().setValue(newProposal)
+    if (newProposal !== this.state.definition.getModifiedEditor().getModel().getValue())
+      this.state.definition.getModifiedEditor().getModel().setValue(newProposal)
   }
 
   computeProposedDefinition(definitionValue, newCurationOrString) {
@@ -72,7 +72,7 @@ export default class CurationReview extends Component {
     }
   }
 
-  onSummaryChange(newSummary, event) {
+  onDefinitionChange(newSummary, event) {
     // TODO put in some throttling
     if (!this.state.definitionPreview)
       return
@@ -174,7 +174,7 @@ export default class CurationReview extends Component {
           />
         </div>
 
-        {this.renderDiffHeader('result', 'top-space')}
+        {this.renderDiffHeader('definition', 'top-space')}
         {/* for some bizarre reason the diff editor cannot be wrapped in a separate component. Turns into an editor! */}
         <div className='section-body'>
           <MonacoDiffEditor
@@ -183,8 +183,8 @@ export default class CurationReview extends Component {
             original={this.getStringValue(definitionOriginal)}
             value={definitionPreview}
             options={options}
-            onChange={this.onSummaryChange}
-            editorDidMount={this.editorDidMount.bind(this, 'result')}
+            onChange={this.onDefinitionChange}
+            editorDidMount={this.editorDidMount.bind(this, 'definition')}
             requireConfig={requireConfig}
           />
         </div>
