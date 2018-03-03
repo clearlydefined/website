@@ -16,11 +16,14 @@ export default class CurationReview extends Component {
     curationValue: PropTypes.object,
     definitionOriginal: PropTypes.object,
     definitionValue: PropTypes.object,
-    actionHandler: PropTypes.func.isRequired,
-    actionText: PropTypes.string
+    proposeHandler: PropTypes.func,
+    actionHandler: PropTypes.func,
+    actionText: PropTypes.string,
+    permissions: PropTypes.arrayOf(PropTypes.string)
   }
 
   static defaultProps = {
+    permissions: []
   }
 
   constructor(props) {
@@ -29,7 +32,8 @@ export default class CurationReview extends Component {
     this.editorDidMount = this.editorDidMount.bind(this)
     this.onCurationChange = this.onCurationChange.bind(this)
     this.onDefinitionChange = this.onDefinitionChange.bind(this)
-    this.doAction = this.doAction.bind(this)
+    this.doContributeAction = this.doContributeAction.bind(this)
+    this.doProposeAction = this.doProposeAction.bind(this)
   }
 
   componentDidMount() {
@@ -120,21 +124,32 @@ export default class CurationReview extends Component {
     return typeof item === 'string' ? item : yaml.safeDump(item, { sortKeys: true })
   }
 
-  doAction(e) {
+  doContributeAction(e) {
     e.preventDefault()
+    const { actionHandler } = this.props
+    if (!actionHandler)
+      return
     const patchString = this.state.curation.getModifiedEditor().getModel().getValue();
-    const patch = yaml.safeLoad(patchString)
-    this.props.actionHandler(patch)
+    const currentString = this.state.curation.getOriginalEditor().getModel().getValue();
+    const patch = patchString === currentString ? null : yaml.safeLoad(patchString)
+    actionHandler(patch)
+  }
+
+  doProposeAction(e) {
+    e.preventDefault()
+    const { proposeHandler } = this.props
+    proposeHandler && proposeHandler()
   }
 
   renderDiffHeader(type, className = '') {
-    const { actionText } = this.props
+    const { actionText, permissions } = this.props
+    const curator = permissions.includes('curate')
     return (
       <Row className={className}>
         <Col sm={2}>
-          <Button type="button">
+          {curator && <Button type="button" onClick={this.doProposeAction}>
             Propose upstream
-          </Button>
+          </Button>}
         </Col>
         <Col sm={4}>
           <h4>Current {type}</h4>
@@ -143,9 +158,9 @@ export default class CurationReview extends Component {
           <h4>Proposed {type}</h4>
         </Col>
         <Col sm={2}>
-          <Button type="button" bsStyle='success' className='pull-right' onClick={this.doAction}>
+          {actionText && <Button type="button" bsStyle='success' className='pull-right' onClick={this.doContributeAction}>
             {actionText}
-          </Button>
+          </Button>}
         </Col>
       </Row>)
   }
