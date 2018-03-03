@@ -4,8 +4,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import { Modal, Form, Button } from 'react-bootstrap'
+import { FieldGroup } from './'
 
-export default class ProposePrompt extends Component {
+export default class ContributePrompt extends Component {
 
   constructor(props) {
     super(props)
@@ -19,8 +20,11 @@ export default class ProposePrompt extends Component {
     actionHandler: PropTypes.func.isRequired
   }
 
+  static defaultProps = {
+  }
+
   open() {
-    this.setState({ show: true })
+    this.setState({ show: true, description: '' })
   }
 
   close() {
@@ -29,7 +33,8 @@ export default class ProposePrompt extends Component {
 
   okHandler(e) {
     this.close()
-    this.props.actionHandler()
+    const { description } = this.state
+    this.props.actionHandler(description)
   }
 
   handleChange(event) {
@@ -40,10 +45,20 @@ export default class ProposePrompt extends Component {
   }
 
   render() {
+    const { description } = this.state;
     return (
       <Modal show={this.state.show} onHide={this.close}>
         <Form>
-          <h5>Eventually this will expose a handy workflow for curators to propose changes to upstream projects based on the work done in ClearlyDefined.</h5>
+          <h5>Describe the changes in this curation</h5>
+          <FieldGroup
+            name="description"
+            type="text"
+            label="Description"
+            value={description || ""}
+            onChange={this.handleChange}
+            placeholder="Short description of changes. Like a commit message..."
+            maxLength={100}
+          />
           <Button type="button" onClick={this.okHandler}>
             OK
           </Button>

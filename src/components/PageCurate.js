@@ -3,9 +3,9 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { uiNavigation, uiCurateUpdateFilter, uiCurateGetCuration, uiCurateGetDefinition } from '../actions/ui'
+import { uiNavigation, uiCurateUpdateFilter, uiCurateGetCuration, uiCurateGetDefinition, uiNotificationNew } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { CurationReview, ProposePrompt } from './'
+import { CurationReview, ContributePrompt, ProposePrompt } from './'
 import { ROUTE_CURATE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import { curateAction } from '../actions/curationActions'
@@ -18,8 +18,10 @@ class PageCurate extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.doContribute = this.doContribute.bind(this)
     this.doPropose = this.doPropose.bind(this)
-    this.doAction = this.doAction.bind(this)
+    this.doPromptContribute = this.doPromptContribute.bind(this)
+    this.doPromptPropose = this.doPromptPropose.bind(this)
     this.filterChanged = this.filterChanged.bind(this)
   }
 
@@ -61,11 +63,14 @@ class PageCurate extends Component {
     dispatch(uiCurateGetDefinition(token, currentSpec))
   }
 
-  doPropose(description) {
+  doContribute(description) {
     const { dispatch, token } = this.props
     const { proposal, entitySpec } = this.state
     const spec = { description, patch: proposal }
     dispatch(curateAction(token, entitySpec, spec))
+  }
+
+  doPropose(description) {
   }
 
   doMerge(spec) {
@@ -73,11 +78,17 @@ class PageCurate extends Component {
     window.open(url, '_blank');
   }
 
-  doAction(proposal) {
+  doPromptContribute(proposal) {
+    if (!proposal)
+      return this.props.dispatch(uiNotificationNew({ type: 'info', message: 'Nothing to contribute', timeout: 3000 }))
     const { entitySpec } = this.state
     if (entitySpec.pr)
       return this.doMerge(entitySpec)
     this.setState({ ...this.state, proposal })
+    this.refs.contributeModal.open()
+  }
+
+  doPromptPropose(proposal) {
     this.refs.proposeModal.open()
   }
 
@@ -95,7 +106,7 @@ class PageCurate extends Component {
 
   renderCurationView() {
     const { entitySpec } = this.state
-    const { currentCuration, proposedCuration, currentDefinition, proposedDefinition, filterValue } = this.props
+    const { permissions, currentCuration, proposedCuration, currentDefinition, proposedDefinition, filterValue } = this.props
     if (!filterValue || !entitySpec)
       return this.renderPlaceholder('Search for some part of a component name to see details')
     // wait to render until we have the current content
@@ -109,15 +120,17 @@ class PageCurate extends Component {
     const definitionOriginal = currentDefinition.item
     const definitionValue = entitySpec.pr ? proposedDefinition.item : definitionOriginal
 
-    const actionText = entitySpec.pr ? 'Show on GitHub' : 'Save curation'
+    const actionText = entitySpec.pr ? 'Show on GitHub' : 'Contribute curation'
     return (
       <Col md={12} >
         <CurationReview
+          permissions={permissions}
           curationOriginal={curationOriginal}
           curationValue={curationValue}
           definitionOriginal={definitionOriginal}
           definitionValue={definitionValue}
-          actionHandler={this.doAction}
+          proposeHandler={this.doPromptPropose}
+          actionHandler={this.doPromptContribute}
           actionText={actionText} />
       </Col>
     )
@@ -126,7 +139,7 @@ class PageCurate extends Component {
   renderButtons() {
     return (
       <div className='labelled-button inline '>
-        <Button className='pull-right' bsStyle='success'>New Harvest</Button>
+        <Button className='pull-right' bsStyle='success'>Harvest more</Button>
       </div>
     )
   }
@@ -136,7 +149,8 @@ class PageCurate extends Component {
     const searchWidth = isCurator ? 7 : 9
     return (
       <Grid className="main-container">
-        <ProposePrompt ref="proposeModal" proposeHandler={this.doPropose} />
+        <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
+        <ProposePrompt ref="proposeModal" actionHandler={this.doPropose} />
         <Row className="show-grid spacer">
           <Col md={searchWidth} mdOffset={1}>
             <FilterBar
@@ -163,6 +177,7 @@ function mapStateToProps(state, ownProps) {
   return {
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     token: state.session.token,
+    permissions: state.session.permissions,
     isCurator: state.session.isCurator,
     currentCuration: state.ui.curate.currentCuration,
     currentDefinition: state.ui.curate.currentDefinition,
