@@ -1,22 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Grid, Row, Col } from 'react-bootstrap';
-import { uiNavigation } from '../actions/ui';
-import { ROUTE_ABOUT } from '../utils/routingConstants';
-import FontAwesome from 'react-fontawesome';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Grid, Row, Col } from 'react-bootstrap'
+import { uiNavigation } from '../actions/ui'
+import { ROUTE_ABOUT } from '../utils/routingConstants'
+import FontAwesome from 'react-fontawesome'
+import { Clearly } from './'
 
-import microsoft from '../images/partner-logos/microsoft.png';
-import nexb from '../images/partner-logos/nexB.png';
-import here from '../images/partner-logos/HERE.png';
-import aws from '../images/partner-logos/AWS_logo_RGB.png';
-import eclipse from '../images/partner-logos/Eclipse.jpg';
-import osi from '../images/partner-logos/osi_standard_logo.png';
-import qualcomm from '../images/partner-logos/qualcomm.jpg';
-import swh from '../images/partner-logos/swh.png';
-// import travix from '../images/partner-logos/travis.png';
+import microsoft from '../images/partner-logos/microsoft.png'
+import nexb from '../images/partner-logos/nexB.png'
+import here from '../images/partner-logos/HERE.png'
+import aws from '../images/partner-logos/AWS_logo_RGB.png'
+import eclipse from '../images/partner-logos/Eclipse.jpg'
+import osi from '../images/partner-logos/osi_standard_logo.png'
+import qualcomm from '../images/partner-logos/qualcomm.jpg'
+import swh from '../images/partner-logos/swh.png'
+// import travix from '../images/partner-logos/travis.png'
+
+const clearlyDefined = <Clearly>Defined</Clearly>
 
 class PageAbout extends Component {
   componentDidMount() {
@@ -28,7 +31,7 @@ class PageAbout extends Component {
       <Grid className="main-container">
         <Row className="show-grid neighborhood-row about-text">
           <Col md={10} mdOffset={1}>
-            <h2>About ClearlyDefined</h2>
+            <h2>About {clearlyDefined}</h2>
             <p>&nbsp;</p>
             <p>
               ClearlyDefined is on a mission to help FOSS projects thrive by being, well, clearly defined. Lack of
