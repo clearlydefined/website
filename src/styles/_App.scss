@@ -71,8 +71,16 @@
 
   .neighborhood-icon {
     font-size:10rem;
-    color: $color-text-light;
+    color: $color_primary;
     text-align: center;
+  }
+
+  .neighborhood-logo-container {
+    text-align: center;
+  }
+
+  .neighborhood-logo {
+    width: 100px;
   }
 
   .about-cell {
