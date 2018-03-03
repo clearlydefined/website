@@ -50,6 +50,11 @@
     text-align: center;
   }
 
+  h3 {
+    font-size: 1.6em;
+    line-height: 1.3;
+  }
+
   .valign-parent {
     display: flex;
   }
@@ -59,7 +64,7 @@
   }
 
   .neighborhood-row {
-    padding-top: 100px;
+    padding-top: 80px;
     display: flex;
     min-height: 150px;
   }
@@ -77,6 +82,13 @@
 
   .about-image {
     align-self: center;
+  }
+
+  .landing-large-logo {
+    width: 500px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -110,7 +122,7 @@
   border-color: lightgray;
   min-height: 200px;
   // width: 1178px;
-  box-shadow: 5px 5px 70px -10px lightgrey;
+  // box-shadow: 5px 5px 70px -10px lightgrey;
 }
 
 .section-header {
@@ -129,4 +141,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.about-text {
+  font-size: 1.25em;
 }
