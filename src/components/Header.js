@@ -17,6 +17,7 @@ class Header extends Component {
     super(props)
     this.doLogin = this.doLogin.bind(this)
     this.doLogout = this.doLogout.bind(this)
+    this.gotoDocs = this.gotoDocs.bind(this)
   }
 
   doLogout(e) {
@@ -34,6 +35,20 @@ class Header extends Component {
       }
     }
     window.addEventListener('message', tokenListener)
+  }
+
+  gotoDocs() {
+    window.open('https://docs.clearlydefined.io', '_blank')
+  }
+
+  renderDocs() {
+    return (
+      <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>
+        <NavItem eventKey={1} onClick={this.gotoDocs}>
+          Docs
+        </NavItem>
+      </Nav>
+    )
   }
 
   renderLogin() {
@@ -93,6 +108,7 @@ class Header extends Component {
         <Navbar.Collapse>
           {this.renderNavigation(navigation, session.isAnonymous)}
           {this.renderLogin()}
+          {this.renderDocs()}
         </Navbar.Collapse>
       </Navbar>
     )

@@ -3,11 +3,11 @@
 
 import { combineReducers } from 'redux'
 import {
-  ROUTE_ROOT,
   ROUTE_CURATE,
   ROUTE_DEFINITIONS,
   ROUTE_HARVEST,
   ROUTE_ABOUT,
+  ROUTE_CONTRIBUTE,
   ROUTE_INSPECT
 } from '../utils/routingConstants'
 import {
@@ -42,12 +42,6 @@ import yaml from 'js-yaml'
  * 1 - only protected
  */
 const initialStateNavigation = [
-  {
-    title: 'Home',
-    to: ROUTE_ROOT,
-    protected: 0,
-    isSelected: true
-  },
   {
     title: 'Browse',
     to: ROUTE_DEFINITIONS,
