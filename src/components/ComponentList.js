@@ -242,8 +242,8 @@ export default class ComponentList extends React.Component {
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
-    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : null
-    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : null
+    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
+    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     return (
       <Row>
         <Col md={5}>
@@ -311,7 +311,7 @@ export default class ComponentList extends React.Component {
             </Col>
             <Col md={9}>
               <p>
-                <span className="list-singleLine">{get(licensed, 'discovered.expressions', '')}</span>
+                <span className="list-singleLine">{get(licensed, 'discovered.expressions', []).join(', ')}</span>
               </p>
             </Col>
           </Row>
@@ -335,9 +335,9 @@ export default class ComponentList extends React.Component {
             </Col>
             <Col md={10}>
               <p>
-                Total: <b>{totalFiles || '?'}</b>, Unlicensed:{' '}
-                <b>{isNaN(unlicensed) ? '/' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
-                <b>{isNaN(unattributed) ? '?' : `${unattributed} (${unattributedPercent}%)`}</b>,
+                Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
+                <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
+                <b>{isNaN(unattributed) ? '-' : `${unattributed} (${unattributedPercent}%)`}</b>
               </p>
             </Col>
           </Row>

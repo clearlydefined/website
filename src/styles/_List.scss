@@ -68,8 +68,8 @@
 }
 
 .list-panel {
-  margin-left: 85px;
-  margin-right: 85px;
+  margin-left: 70px;
+  margin-right: 20px;
   p {
     margin: 0;
   }
@@ -80,10 +80,10 @@
 }
 
 .list-singleLine {
-  width: 100%;
-  white-space: nowrap;
+  // width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .list-activity-area {

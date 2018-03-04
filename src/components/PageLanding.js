@@ -57,10 +57,10 @@ class PageLanding extends Component {
               <Clearly style={describedColor}>Described</Clearly>
             </h2>
             <h3>
-              Knowing simple things like the source location for a component version enables contribution of docs, bug
-              fixes, or new features. It also inspires confidence by enabling IP and security code scans, and source
-              code archiving and disclosure. Round that out with project and issue tracking site info, and you have a
-              sound basis for engagement. <a href="">Learn more...</a>
+              Knowing simple things like the source location for the open source component you are using enables
+              contribution of docs, bug fixes, or new features. It also inspires confidence by enabling IP and security
+              code scans, and source code archiving and disclosure. Round that out with project and issue tracking site
+              info, and you have a sound basis for engagement. <a href="">Learn more...</a>
             </h3>
           </Col>
         </Row>
@@ -73,10 +73,10 @@ class PageLanding extends Component {
               <Clearly style={licensedColor}>Licensed</Clearly>
             </h2>
             <h3>
-              Defining and knowing the license for a component is essential to a successful partnership. Communities
-              choose a license with terms they like. {clearlyDefined} helps clarify that choice and enables consumers to
-              do follow the terms by identifying key data such as license set, attribution parties, and code location.{' '}
-              <a href="">Learn more...</a>
+              Defining and knowing the license for an open source component is essential to a successful partnership.
+              Communities choose a license with terms they like. {clearlyDefined} helps clarify that choice and enables
+              consumers to do follow the terms by identifying key data such as license set, attribution parties, and
+              code location. <a href="">Learn more...</a>
             </h3>
           </Col>
         </Row>
@@ -89,10 +89,11 @@ class PageLanding extends Component {
               <Clearly style={secureColor}>Secure</Clearly>
             </h2>
             <h3>
-              Teams working hard to create quality, secure components need a simple way of recording security issues
-              they find and fix. Bug report and pull requests are great. CVEs and global notifications are even better.
-              It can still be hard to relate that data to the components you use. {clearlyDefined} gives communities a
-              security forum that builds confidence and makes for even more collaboration. <a href="">Learn more...</a>
+              Teams working hard to create quality, secure free and open source components need a simple way of
+              recording security issues they find and fix. Bug report and pull requests are great. CVEs and global
+              notifications are even better. It can still be hard to relate that data to the components you use.{' '}
+              {clearlyDefined} gives communities a security forum that builds confidence and makes for even more
+              collaboration. <a href="">Learn more...</a>
             </h3>
           </Col>
         </Row>
@@ -100,10 +101,10 @@ class PageLanding extends Component {
           <Col md={textColWidth}>
             <h2 style={primaryColor}>Get {clearlyDefined}</h2>
             <h3>
-              Becoming {clearlyDefined} means identifying the information needed, in your terms. The {clearlyDefined}{' '}
-              community meets you where you are to enable automated discovery of your essential data. In many cases it's
-              as easy as adding a few properties to a package manifest or dropping a simple file in your code repo.{' '}
-              <a href="">Learn more...</a>
+              Becoming {clearlyDefined} means identifying the information others need, but in your terms. The{' '}
+              {clearlyDefined} community meets you where you are to enable automated discovery of your essential data.
+              In many cases it's as easy as adding a few properties to a package manifest or dropping a simple file in
+              your code repo. <a href="">Learn more...</a>
             </h3>
           </Col>
           <Col md={logoColWidth} className="valign-child">
