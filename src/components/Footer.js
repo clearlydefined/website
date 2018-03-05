@@ -44,7 +44,7 @@ export default class Footer extends Component {
             <a href="https://docs.clearlydefined.io/legal/privacy" target="_blank" rel="noopener noreferrer">
               Privacy policy
             </a>{' '}
-            | <a href="https://github.com/clearlydefined/website/blob/master/NOTICES.md">Notices</a>
+            | <a href="https://docs.clearlydefined.io/legal/NOTICES">Notices</a>
           </div>
         </Col>
       </footer>
