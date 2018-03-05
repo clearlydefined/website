@@ -255,7 +255,7 @@ export default class ComponentList extends React.Component {
               </p>
             </Col>
             <Col md={10}>
-              <p className="ellipsis">{sourceUrl}</p>
+              <p className="list-singleLine">{sourceUrl}</p>
             </Col>
           </Row>
           <Row>
@@ -275,9 +275,7 @@ export default class ComponentList extends React.Component {
               </p>
             </Col>
             <Col md={9}>
-              <p>
-                <span className="list-singleLine">{toolList.join(', ')}</span>
-              </p>
+              <p className="list-singleLine">{toolList.join(', ')}</p>
             </Col>
           </Row>
           <Row>
@@ -287,9 +285,7 @@ export default class ComponentList extends React.Component {
               </p>
             </Col>
             <Col md={10}>
-              <p>
-                <span className="list-singleLine">{facetsText}</span>
-              </p>
+              <p className="list-singleLine">{facetsText}</p>
             </Col>
           </Row>
         </Col>
@@ -311,9 +307,7 @@ export default class ComponentList extends React.Component {
               </p>
             </Col>
             <Col md={9}>
-              <p>
-                <span className="list-singleLine">{get(licensed, 'discovered.expressions', []).join(', ')}</span>
-              </p>
+              <p className="list-singleLine">{get(licensed, 'discovered.expressions', []).join(', ')}</p>
             </Col>
           </Row>
           <Row>
@@ -323,9 +317,7 @@ export default class ComponentList extends React.Component {
               </p>
             </Col>
             <Col md={9}>
-              <p>
-                <span className="list-singleLine">{get(licensed, 'attribution.parties', []).join(', ')}</span>
-              </p>
+              <p className="list-singleLine">{get(licensed, 'attribution.parties', []).join(', ')}</p>
             </Col>
           </Row>
           <Row>
