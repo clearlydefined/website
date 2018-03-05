@@ -12,6 +12,9 @@
     padding: 0px 20px 0px 0px;
     height: 60px;
     align-self: center;
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .navbar-nav {

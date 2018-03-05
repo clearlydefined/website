@@ -37,9 +37,14 @@ export default class Footer extends Component {
         </Col>
         <Col sm={4} className="Footer-element">
           <div className="pull-right Footer-right">
-            <a href="https://github.com/clearlydefined/clearlydefined/blob/master/legal/terms.md">Terms of use</a> |{' '}
-            <a href="https://github.com/clearlydefined/clearlydefined/blob/master/legal/privacy.md">Privacy policy</a> |{' '}
-            <a href="https://github.com/clearlydefined/website/blob/master/NOTICES.md">Notices</a>
+            <a href="https://docs.clearlydefined.io/legal/terms" target="_blank" rel="noopener noreferrer">
+              Terms of use
+            </a>{' '}
+            |{' '}
+            <a href="https://docs.clearlydefined.io/legal/privacy" target="_blank" rel="noopener noreferrer">
+              Privacy policy
+            </a>{' '}
+            | <a href="https://github.com/clearlydefined/website/blob/master/NOTICES.md">Notices</a>
           </div>
         </Col>
       </footer>
