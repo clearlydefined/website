@@ -244,6 +244,7 @@ export default class ComponentList extends React.Component {
     const unattributed = get(licensed, 'attribution.unknown')
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
+    const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
     return (
       <Row>
         <Col md={5}>
@@ -275,7 +276,7 @@ export default class ComponentList extends React.Component {
             </Col>
             <Col md={9}>
               <p>
-                <span className="list-singleLine">{get(described, 'tools', []).join(', ')}</span>
+                <span className="list-singleLine">{toolList.join(', ')}</span>
               </p>
             </Col>
           </Row>
