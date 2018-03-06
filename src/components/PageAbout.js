@@ -17,7 +17,7 @@ import eclipse from '../images/partner-logos/Eclipse.jpg'
 import osi from '../images/partner-logos/osi_standard_logo.png'
 import qualcomm from '../images/partner-logos/qualcomm.jpg'
 import swh from '../images/partner-logos/swh.png'
-// import travix from '../images/partner-logos/travis.png'
+import sap from '../images/partner-logos/sap.png'
 
 const clearlyDefined = <Clearly>Defined</Clearly>
 
@@ -162,11 +162,11 @@ class PageAbout extends Component {
               <img src={swh} width="240" className="about-image" alt="swh" />
             </div>
           </Col>
-          {/* <Col md={3}>
+          <Col md={3}>
             <div className="about-cell">
-              <img src={travis} width="200" className="about-image" alt="travis" />
+              <img src={sap} width="160" className="about-image" alt="sap" />
             </div>
-          </Col> */}
+          </Col>
         </Row>
       </Grid>
     )

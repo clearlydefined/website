@@ -60,7 +60,10 @@ class PageLanding extends Component {
               Knowing simple things like the source location for the open source component you are using enables
               contribution of docs, bug fixes, or new features. It also inspires confidence by enabling IP and security
               code scans, and source code archiving and disclosure. Round that out with project and issue tracking site
-              info, and you have a sound basis for engagement. <a href="">Learn more...</a>
+              info, and you have a sound basis for engagement.{' '}
+              <a href="https://docs.clearlydefined.io/clearly#described" target="_blank" rel="noopener noreferrer">
+                Learn more...
+              </a>
             </h3>
           </Col>
         </Row>
@@ -76,7 +79,10 @@ class PageLanding extends Component {
               Defining and knowing the license for an open source component is essential to a successful partnership.
               Communities choose a license with terms they like. {clearlyDefined} helps clarify that choice and enables
               consumers to do follow the terms by identifying key data such as license set, attribution parties, and
-              code location. <a href="">Learn more...</a>
+              code location.{' '}
+              <a href="https://docs.clearlydefined.io/clearly#licensed" target="_blank" rel="noopener noreferrer">
+                Learn more...
+              </a>
             </h3>
           </Col>
         </Row>
@@ -93,7 +99,10 @@ class PageLanding extends Component {
               recording security issues they find and fix. Bug report and pull requests are great. CVEs and global
               notifications are even better. It can still be hard to relate that data to the components you use.{' '}
               {clearlyDefined} gives communities a security forum that builds confidence and makes for even more
-              collaboration. <a href="">Learn more...</a>
+              collaboration.{' '}
+              <a href="https://docs.clearlydefined.io/clearly#secure" target="_blank" rel="noopener noreferrer">
+                Learn more...
+              </a>
             </h3>
           </Col>
         </Row>
@@ -104,7 +113,10 @@ class PageLanding extends Component {
               Becoming {clearlyDefined} means identifying the information others need, but in your terms. The{' '}
               {clearlyDefined} community meets you where you are to enable automated discovery of your essential data.
               In many cases it's as easy as adding a few properties to a package manifest or dropping a simple file in
-              your code repo. <a href="">Learn more...</a>
+              your code repo.{' '}
+              <a href="https://docs.clearlydefined.io/adopting" target="_blank" rel="noopener noreferrer">
+                Learn more...
+              </a>
             </h3>
           </Col>
           <Col md={logoColWidth} className="valign-child">
@@ -118,7 +130,9 @@ class PageLanding extends Component {
               {clearlyDefined} harvests and curates key data about projects from around the world and makes it available
               through a simple REST API and web user experience. Use the data when picking components. Use it to enable
               more collaboration with other project. Use the data to simplify your compliance efforts.{' '}
-              <a href="">Learn more...</a>
+              <a href="https://docs.clearlydefined.io/using-data" target="_blank" rel="noopener noreferrer">
+                Learn more...
+              </a>
             </h3>
           </Col>
           <Col md={logoColWidth} className="valign-child">
@@ -131,7 +145,10 @@ class PageLanding extends Component {
             <h3>
               {clearlyDefined} is a community approach to a community challenge. If you've ever had to figure out where
               source is, or what license is being used, you can contribute to {clearlyDefined}. Add new data, curate
-              data provided by others. It's an open source community like any other. <a href="">Learn more...</a>
+              data provided by others. It's an open source community like any other.{' '}
+              <a href="https://docs.clearlydefined.io/contributing-data" target="_blank" rel="noopener noreferrer">
+                Learn more...
+              </a>
             </h3>
           </Col>
           <Col md={logoColWidth} className="valign-child">
