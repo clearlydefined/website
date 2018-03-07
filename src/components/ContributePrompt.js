@@ -47,19 +47,28 @@ export default class ContributePrompt extends Component {
     return (
       <Modal show={this.state.show} onHide={this.close}>
         <Form>
-          <h5>Describe the changes in this curation</h5>
-          <FieldGroup
-            name="description"
-            type="text"
-            label="Description"
-            value={description || ''}
-            onChange={this.handleChange}
-            placeholder="Short description of changes. Like a commit message..."
-            maxLength={100}
-          />
-          <Button type="button" onClick={this.okHandler}>
-            OK
-          </Button>
+          <Modal.Header closeButton>
+            <Modal.Title>Describe the changes in this curation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <FieldGroup
+              name="description"
+              type="text"
+              label="Description"
+              value={description || ''}
+              onChange={this.handleChange}
+              placeholder="Short description of changes. Like a commit message..."
+              maxLength={100}
+              componentClass="textarea"
+              rows="10"
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.close}>Cancel</Button>
+            <Button bsStyle="success" type="button" onClick={this.okHandler}>
+              OK
+            </Button>
+          </Modal.Footer>
         </Form>
       </Modal>
     )
