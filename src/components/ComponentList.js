@@ -357,6 +357,7 @@ export default class ComponentList extends React.Component {
       <div key={key} style={style}>
         <TwoLineEntry
           image={this.getImage(component)}
+          letter={component.type.slice(0, 1).toUpperCase()}
           headline={this.renderHeadline(component)}
           message={this.renderMessage(component)}
           buttons={this.renderButtons(component)}
