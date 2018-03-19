@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { uiNavigation } from '../actions/ui'
 import { ROUTE_ABOUT } from '../utils/routingConstants'
-import FontAwesome from 'react-fontawesome'
 import { Clearly } from './'
 
 import microsoft from '../images/partner-logos/microsoft.png'
@@ -85,19 +84,19 @@ class PageAbout extends Component {
             <p>You can find us at:</p>
             <ul style={{ listStyleType: 'none' }}>
               <li>
-                <FontAwesome name="github" /> &nbsp;&nbsp;
+                <i className="fab fa-github" /> &nbsp;&nbsp;
                 <a href="https://github.com/clearlydefined/clearlydefined">GitHub</a>
               </li>
               <li>
-                <FontAwesome name="comment" /> &nbsp;&nbsp;
+                <i className="fab fa-discord" /> &nbsp;&nbsp;
                 <a href="https://discord.gg/wEzHJku">Discord</a>
               </li>
               <li>
-                <FontAwesome name="twitter" /> &nbsp;&nbsp;
+                <i className="fab fa-twitter" /> &nbsp;&nbsp;
                 <a href="https://twitter.com/clearlydefd">Twitter</a>
               </li>
               <li>
-                <FontAwesome name="envelope" /> &nbsp;&nbsp;
+                <i className="fa fa-envelope" /> &nbsp;&nbsp;
                 <a href="mailto:clearlydefined@googlegroups.com">clearlydefined@googlegroups.com</a>
               </li>
             </ul>

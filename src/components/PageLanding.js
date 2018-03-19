@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
-import FontAwesome from 'react-fontawesome'
 import { ROUTE_ROOT } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
 import logo from '../images/logo-text-stacked.svg'
@@ -14,8 +13,8 @@ import { primaryColor, secureColor, licensedColor, describedColor } from './Clea
 import described from '../images/described-logo.svg'
 import secure from '../images/secure-logo.svg'
 import licensed from '../images/licensed-logo.svg'
-const use = 'sign-out'
-const contribute = 'sign-in'
+const use = 'sign-out-alt'
+const contribute = 'sign-in-alt'
 const adopt = 'toggle-on'
 
 const clearlyDefined = <Clearly>Defined</Clearly>
@@ -31,7 +30,7 @@ class PageLanding extends Component {
   renderNeighborhood(name) {
     return (
       <div className="neighborhood-icon">
-        <FontAwesome name={name} />
+        <i className={`fas fa-${name}`} />
       </div>
     )
   }

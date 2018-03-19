@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import FontAwesome from 'react-fontawesome'
 
 export default class CopyUrlButton extends Component {
   static propTypes = {
@@ -64,7 +63,7 @@ export default class CopyUrlButton extends Component {
       <CopyToClipboard text={this.renderUrl()} onCopy={this.onCopy}>
         <OverlayTrigger placement="top" overlay={this.renderTooltip()} shouldUpdatePosition={true}>
           <Button bsStyle={bsStyle} className={className} disabled={isDisabled} onClick={this.onClick}>
-            <FontAwesome name={'copy'} />
+            <i className="fas fa-copy" />
           </Button>
         </OverlayTrigger>
       </CopyToClipboard>
