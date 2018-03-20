@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import FontAwesome from 'react-fontawesome'
 
 export default class SocialIcons extends Component {
   static propTypes = {
@@ -18,7 +17,7 @@ export default class SocialIcons extends Component {
   renderLink(href, icon) {
     return (
       <a href={href} target="_blank">
-        <FontAwesome name={icon} />
+        <i className={icon} />
       </a>
     )
   }
@@ -27,13 +26,13 @@ export default class SocialIcons extends Component {
     const { website, github, facebook, twitter, instagram, email, discord } = this.props.entity
     return (
       <span className={this.props.className}>
-        {github && this.renderLink(github, 'github')}
-        {website && this.renderLink(website, 'globe')}
-        {email && this.renderLink('mailto:' + email, 'envelope')}
-        {facebook && this.renderLink(facebook, 'facebook-official')}
-        {twitter && this.renderLink(twitter, 'twitter')}
-        {instagram && this.renderLink(instagram, 'instagram')}
-        {discord && this.renderLink(discord, 'comment')}
+        {github && this.renderLink(github, 'fab fa-github')}
+        {website && this.renderLink(website, 'fas fa-globe')}
+        {email && this.renderLink('mailto:' + email, 'fas fa-envelope')}
+        {facebook && this.renderLink(facebook, 'fab fa-facebook')}
+        {twitter && this.renderLink(twitter, 'fab fa-twitter')}
+        {instagram && this.renderLink(instagram, 'fab fa-instagram')}
+        {discord && this.renderLink(discord, 'fab fa-discord')}
       </span>
     )
   }

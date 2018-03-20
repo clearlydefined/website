@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import { RowEntityList, TwoLineEntry, CopyUrlButton } from './'
 import { Row, Col, Button, OverlayTrigger, Tooltip, ButtonGroup } from 'react-bootstrap'
 import { clone, get, union } from 'lodash'
-import FontAwesome from 'react-fontawesome'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import EntitySpec from '../utils/entitySpec'
@@ -118,33 +117,29 @@ export default class ComponentList extends React.Component {
         <ButtonGroup>
           {!isSourceComponent && (
             <Button className="list-hybrid-button" onClick={this.addSourceForComponent.bind(this, component)}>
-              <FontAwesome name={'plus'} />
+              <i className="fas fa-plus" />
               <span>&nbsp;Add source</span>
             </Button>
           )}
           {this.renderButtonWithTip(
-            <Button>
-              <FontAwesome
-                name={'edit'}
-                className="list-fa-button"
-                onClick={this.curateComponent.bind(this, component)}
-              />
+            <Button
+              className="list-fa-button"
+              onClick={this.curateComponent.bind(this, component)}>
+              <i className="fas fa-edit" />
             </Button>,
             'Curate this definition'
           )}
           {this.renderButtonWithTip(
-            <Button>
-              <FontAwesome
-                name={'search'}
+            <Button
                 className="list-fa-button"
-                onClick={this.inspectComponent.bind(this, component)}
-              />
+                onClick={this.inspectComponent.bind(this, component)}>
+              <i className="fas fa-search" />
             </Button>,
             'Dig into this definition'
           )}
           <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button" />
         </ButtonGroup>
-        <FontAwesome name={'times'} className="list-remove" onClick={this.removeComponent.bind(this, component)} />
+        <i className="fas fa-times list-remove" onClick={this.removeComponent.bind(this, component)} />
       </div>
     )
   }

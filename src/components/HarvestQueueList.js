@@ -5,7 +5,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker, MavenVersionPicker } from './'
 import { clone } from 'lodash'
-import FontAwesome from 'react-fontawesome'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 
@@ -69,7 +68,7 @@ export default class HarvestQueueList extends React.Component {
         {request.provider === 'mavencentral' && (
           <MavenVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
-        <FontAwesome name={'times'} className="list-remove" onClick={this.removeRequest.bind(this, request)} />
+        <i className="fas fa-times list-remove" onClick={this.removeRequest.bind(this, request)} />
       </div>
     )
   }
