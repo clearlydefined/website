@@ -157,7 +157,7 @@ class PageCurate extends Component {
               options={filterOptions}
               value={filterValue}
               onChange={this.filterChanged}
-              defaultValue={path ? path : ''}
+              defaultValue={path || ''}
             />
           </Col>
           <Col md={1}>
