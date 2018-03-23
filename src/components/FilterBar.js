@@ -31,8 +31,7 @@ export default class FilterBar extends Component {
   }
 
   filter(option, text) {
-    if (this.props.value) return true
-    return option.path.toLowerCase().indexOf(text.toLowerCase()) !== -1
+    return option.path.toLowerCase().includes(text.toLowerCase())
   }
 
   render() {
