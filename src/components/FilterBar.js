@@ -36,7 +36,7 @@ export default class FilterBar extends Component {
   }
 
   render() {
-    const { options, defaultValue } = this.props
+    const { options, defaultValue, value } = this.props
     return (
       <Typeahead
         ref="typeahead"
@@ -45,9 +45,10 @@ export default class FilterBar extends Component {
         options={options.transformedList}
         isLoading={options.isFetching}
         clearButton
-        defaultInputValue={defaultValue || ''}
+        defaultInputValue={(!value && defaultValue) || ''}
         filterBy={this.filter}
         labelKey="path"
+        selected={value && [{ path: value }]}
       />
     )
   }
