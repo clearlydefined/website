@@ -7,6 +7,7 @@ import { persistStore, createTransform } from 'redux-persist'
 import {
   ROUTE_ROOT,
   ROUTE_DEFINITIONS,
+  ROUTE_DEFINITIONS2,
   ROUTE_INSPECT,
   ROUTE_CURATE,
   ROUTE_HARVEST,
@@ -15,7 +16,7 @@ import {
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { App, PageLanding, PageCurate, PageDefinitions, PageInspect, PageHarvest } from './'
+import { App, PageLanding, PageCurate, PageDefinitions, PageDefinitions2, PageInspect, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import withTracker from '../utils/withTracker'
@@ -51,6 +52,7 @@ export default class RehydrationDelayedProvider extends Component {
           <App className="App">
             <Switch>
               <Route path={ROUTE_DEFINITIONS} component={withTracker(PageDefinitions)} />
+              <Route path={ROUTE_DEFINITIONS2} component={withTracker(PageDefinitions2)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
               <Route path={ROUTE_CURATE} component={withTracker(PageCurate)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />

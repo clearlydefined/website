@@ -42,6 +42,11 @@ main {
   text-align: center;
 }
 
+.editable-field {
+  cursor: pointer;
+  border-bottom: 1px dashed #444444;
+}
+
 @import './App.scss';
 @import './Header.scss';
 @import './Footer.scss';

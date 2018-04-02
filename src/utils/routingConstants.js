@@ -3,6 +3,7 @@
 
 export const ROUTE_ABOUT = '/about'
 export const ROUTE_DEFINITIONS = '/definitions'
+export const ROUTE_DEFINITIONS2 = '/definitions2'
 export const ROUTE_INSPECT = '/inspect'
 export const ROUTE_CURATE = '/curate'
 export const ROUTE_HARVEST = '/harvest'
