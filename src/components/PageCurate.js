@@ -4,13 +4,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { uiCurateUpdateFilter, uiCurateGetCuration, uiCurateGetDefinition } from '../actions/ui'
-import { uiNavigation, uiNotificationNew } from '../actions/ui'
+import { uiNavigation, uiNotificationNew, uiCurateUpdateFilterList } from '../actions/ui'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { CurationReview, ContributePrompt, ProposePrompt } from './'
 import { ROUTE_CURATE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import { curateAction } from '../actions/curationActions'
-import { getDefinitionListAction } from '../actions/definitionActions'
 import { FilterBar, CopyUrlButton } from './'
 import { Button } from 'react-bootstrap'
 
@@ -23,14 +22,14 @@ class PageCurate extends Component {
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doPromptPropose = this.doPromptPropose.bind(this)
     this.filterChanged = this.filterChanged.bind(this)
+    this.onSearch = this.onSearch.bind(this)
   }
 
   componentDidMount() {
-    const { dispatch, token, path, filterValue } = this.props
+    const { dispatch, path, filterValue } = this.props
     const pathToShow = path ? path : filterValue
     this.filterChanged(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_CURATE }))
-    dispatch(getDefinitionListAction(token))
   }
 
   componentWillReceiveProps(newProps) {
@@ -90,6 +89,11 @@ class PageCurate extends Component {
 
   filterChanged(newFilter) {
     this.props.dispatch(uiCurateUpdateFilter(newFilter))
+  }
+
+  onSearch(value) {
+    const { dispatch, token } = this.props
+    dispatch(uiCurateUpdateFilterList(token, value))
   }
 
   gotoValue(value) {
@@ -157,6 +161,7 @@ class PageCurate extends Component {
               options={filterOptions}
               value={filterValue}
               onChange={this.filterChanged}
+              onSearch={this.onSearch}
               defaultValue={path || ''}
             />
           </Col>
@@ -182,7 +187,7 @@ function mapStateToProps(state, ownProps) {
     proposedCuration: state.ui.curate.proposedCuration,
     proposedDefinition: state.ui.curate.proposedDefinition,
     filterValue: state.ui.curate.filter,
-    filterOptions: state.definition.list
+    filterOptions: state.ui.curate.filterList
   }
 }
 export default connect(mapStateToProps)(PageCurate)

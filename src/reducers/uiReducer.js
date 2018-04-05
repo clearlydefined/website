@@ -8,21 +8,24 @@ import {
   UI_NOTIFICATION_NEW,
   UI_NOTIFICATION_DELETE,
   UI_CURATE_UPDATE_FILTER,
+  UI_CURATE_UPDATE_FILTER_LIST,
   UI_CURATE_GET,
   UI_CURATE_GET_PROPOSED,
   UI_CURATE_GET_DEFINITION,
   UI_CURATE_GET_DEFINITION_PROPOSED,
   UI_CURATE_DEFINITION_PREVIEW,
   UI_BROWSE_UPDATE_FILTER,
+  UI_BROWSE_UPDATE_FILTER_LIST,
   UI_BROWSE_UPDATE_LIST,
   UI_HARVEST_UPDATE_FILTER,
   UI_HARVEST_UPDATE_QUEUE,
   UI_INSPECT_UPDATE_FILTER,
+  UI_INSPECT_UPDATE_FILTER_LIST,
   UI_INSPECT_GET_CURATION,
   UI_INSPECT_GET_DEFINITION,
   UI_INSPECT_GET_HARVESTED
 } from '../actions/ui'
-import listReducer, { initialState as initialListState } from './listReducer'
+import listReducer from './listReducer'
 import { isEqual } from 'lodash'
 import valueReducer from './valueReducer'
 import itemReducer from './itemReducer'
@@ -82,6 +85,7 @@ const navigation = (state = initialStateNavigation, action) => {
 
 const curate = combineReducers({
   filter: new valueReducer(UI_CURATE_UPDATE_FILTER),
+  filterList: new listReducer(UI_CURATE_UPDATE_FILTER_LIST),
   currentCuration: new itemReducer(UI_CURATE_GET),
   proposedCuration: new itemReducer(UI_CURATE_GET_PROPOSED),
   currentDefinition: new itemReducer(UI_CURATE_GET_DEFINITION),
@@ -91,36 +95,22 @@ const curate = combineReducers({
 
 const inspect = combineReducers({
   filter: new valueReducer(UI_INSPECT_UPDATE_FILTER),
+  filterList: new listReducer(UI_INSPECT_UPDATE_FILTER_LIST),
   definition: new itemReducer(UI_INSPECT_GET_DEFINITION, item => yaml.safeDump(item, { sortKeys: true })),
   curation: new itemReducer(UI_INSPECT_GET_CURATION, item => yaml.safeDump(item, { sortKeys: true })),
   harvested: new itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2))
 })
 
-const componentList = listReducer(UI_BROWSE_UPDATE_LIST, null, isEqual)
-const initialBrowse = { filter: null, componentList: initialListState }
-const browse = (state = initialBrowse, action) => {
-  switch (action.type) {
-    case UI_BROWSE_UPDATE_FILTER:
-      return { ...state, filter: action.value }
-    case UI_BROWSE_UPDATE_LIST:
-      return { ...state, componentList: componentList(state.componentList, action) }
-    default:
-      return state
-  }
-}
+const browse = combineReducers({
+  filter: new valueReducer(UI_BROWSE_UPDATE_FILTER),
+  filterList: new listReducer(UI_BROWSE_UPDATE_FILTER_LIST),
+  componentList: new listReducer(UI_BROWSE_UPDATE_LIST, null, isEqual)
+})
 
-const harvestQueue = listReducer(UI_HARVEST_UPDATE_QUEUE, null, isEqual)
-const initialHarvest = { filter: null, requestQueue: initialListState }
-const harvest = (state = initialHarvest, action) => {
-  switch (action.type) {
-    case UI_HARVEST_UPDATE_FILTER:
-      return { ...state, filter: action.value }
-    case UI_HARVEST_UPDATE_QUEUE:
-      return { ...state, requestQueue: harvestQueue(state.requestQueue, action) }
-    default:
-      return state
-  }
-}
+const harvest = combineReducers({
+  filter: new valueReducer(UI_HARVEST_UPDATE_FILTER),
+  requestQueue: new listReducer(UI_HARVEST_UPDATE_QUEUE, null, isEqual)
+})
 
 const notifications = (state = [], action) => {
   const { type, message } = action

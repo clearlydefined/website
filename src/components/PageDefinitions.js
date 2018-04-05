@@ -5,9 +5,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
-import { getDefinitionListAction, getDefinitionsAction } from '../actions/definitionActions'
+import { getDefinitionsAction } from '../actions/definitionActions'
 import { FilterBar, ComponentList, Section, FacetSelect } from './'
-import { uiNavigation, uiBrowseUpdateList } from '../actions/ui'
+import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
 const defaultFacets = [{ value: 'core', label: 'Core' }]
@@ -17,6 +17,7 @@ class PageDefinitions extends Component {
     super(props)
     this.state = { activeFacets: defaultFacets.map(x => x.value) }
     this.onAddComponent = this.onAddComponent.bind(this)
+    this.onSearch = this.onSearch.bind(this)
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
@@ -25,9 +26,8 @@ class PageDefinitions extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, token } = this.props
+    const { dispatch } = this.props
     dispatch(uiNavigation({ to: ROUTE_DEFINITIONS }))
-    dispatch(getDefinitionListAction(token))
   }
 
   onAddComponent(value, after = null) {
@@ -37,6 +37,11 @@ class PageDefinitions extends Component {
     component.definition = !!definitions.entries[path]
     !component.definition && dispatch(getDefinitionsAction(token, [path]))
     dispatch(uiBrowseUpdateList({ add: component }))
+  }
+
+  onSearch(value) {
+    const { dispatch, token } = this.props
+    dispatch(uiBrowseUpdateFilterList(token, value))
   }
 
   onCurate(component) {
@@ -76,7 +81,7 @@ class PageDefinitions extends Component {
             <FacetSelect name="facets" onChange={this.facetChange} defaultFacets={defaultFacets} />
           </Col>
           <Col md={7}>
-            <FilterBar options={filterOptions} onChange={this.onAddComponent} clearOnChange />
+            <FilterBar options={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} clearOnChange />
           </Col>
         </Row>
         <Section name={'Available definitions'}>
@@ -105,8 +110,8 @@ function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
     filterValue: state.ui.browse.filter,
+    filterOptions: state.ui.browse.filterList,
     components: state.ui.browse.componentList,
-    filterOptions: state.definition.list,
     definitions: state.definition.bodies
   }
 }

@@ -32,10 +32,6 @@ const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
 const ORIGINS_MAVEN = 'origins/maven'
 
-const definitionListTTL = 60000
-let lastFetchDefinitionList = null
-let definitionList = []
-
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
   return get(url(`${HARVEST}/${entity.toPath()}`, { form: 'raw' }), token)
@@ -61,13 +57,8 @@ export function getDefinitions(token, list) {
   return post(url(`${DEFINITIONS}`), token, list)
 }
 
-export async function getDefinitionList(token, prefix, force = false) {
-  if (!force && lastFetchDefinitionList && Date.now() - lastFetchDefinitionList < definitionListTTL)
-    return { list: definitionList }
-  const list = await get(url(`${DEFINITIONS}/${prefix || ''}`), token)
-  lastFetchDefinitionList = Date.now()
-  definitionList = list
-  return { list }
+export async function getDefinitionSuggestions(token, prefix, type) {
+  return await getList(url(DEFINITIONS, { pattern: prefix, type }), token)
 }
 
 export function previewDefinition(token, entity, curation) {
@@ -116,7 +107,7 @@ export function url(path, query) {
     // compose key=value&key2=value with encoded keys and values
     .map(p => p.map(encodeURIComponent).join('='))
     .join('&')
-  return `${path}?${queryString}`
+  return queryString ? `${path}?${queryString}` : path
 }
 
 function getHeaders(token) {
@@ -141,6 +132,11 @@ function handleResponse(response) {
     throw err
   }
   return response.json()
+}
+
+async function handleListResponse(response) {
+  const list = await handleResponse(response)
+  return { list, headers: response.headers }
 }
 
 // function put(url, token, payload) {
@@ -180,4 +176,10 @@ function get(url, token) {
   return fetch(url, {
     headers: getHeaders(token)
   }).then(handleResponse)
+}
+
+function getList(url, token) {
+  return fetch(url, {
+    headers: getHeaders(token)
+  }).then(handleListResponse)
 }
