@@ -37,7 +37,8 @@ class PageDefinitions extends Component {
       activeFacets: defaultFacets.map(x => x.value),
       sortBy: 'date',
       sortAsc: false,
-      changes: []
+      changes: {},
+      showChanges: false
     }
   }
 
@@ -82,9 +83,23 @@ class PageDefinitions extends Component {
     this.setState({ sortAsc: !this.state.sortAsc })
   }
 
+  setComponentChange = (component, newChanges) => {
+    const { changes } = this.state
+    const path = component.toPath()
+    this.setState({
+      changes: {
+        ...this.state.changes,
+        [path]: newChanges
+      }
+    })
+  }
+
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activeFacets, sortBy, sortAsc } = this.state
+    const { activeFacets, sortBy, sortAsc, changes, showChanges } = this.state
+
+    const numChanges = Object.keys(changes).length
+
     return (
       <Grid className="main-container">
         <Row className="show-grid spacer">
@@ -98,7 +113,7 @@ class PageDefinitions extends Component {
 
         <Row>
           <Col md={12}>
-            <Panel>
+            <Panel bsStyle={showChanges ? 'primary' : undefined}>
               <Panel.Heading>
                 <div className="pull-right">
                   <Dropdown id="dropdown-custom-2" pullRight>
@@ -121,12 +136,34 @@ class PageDefinitions extends Component {
                   </Dropdown>
                 </div>
 
-                <Panel.Title>Components</Panel.Title>
+                <Panel.Title>
+                  Components{' '}
+                  {numChanges > 0 &&
+                    !showChanges && (
+                      <Button bsStyle="link" bsSize="xsmall" onClick={() => this.setState({ showChanges: true })}>
+                        ({numChanges} pending changes)
+                      </Button>
+                    )}
+                  {showChanges && (
+                    <Button bsStyle="info" bsSize="xsmall" onClick={() => this.setState({ showChanges: false })}>
+                      Return to search
+                    </Button>
+                  )}
+                </Panel.Title>
               </Panel.Heading>
 
               <Table condensed className="component-list">
                 {/* Search results: factor out into component */}
-                <tbody>{components.list.map(c => <EditableComponent component={c} sortColumn={sortBy} />)}</tbody>
+                <tbody>
+                  {components.list.map(c => (
+                    <EditableComponent
+                      key={c.toPath()}
+                      component={c}
+                      sortColumn={sortBy}
+                      onChange={changes => this.setComponentChange(c, changes)}
+                    />
+                  ))}
+                </tbody>
               </Table>
             </Panel>
           </Col>
@@ -134,9 +171,20 @@ class PageDefinitions extends Component {
 
         <Row>
           <Col md={12}>
-            <Button className="pull-right" bsStyle="primary" bsSize="large">
-              Submit changes
-            </Button>
+            {showChanges ? (
+              <Button className="pull-right" bsStyle="primary" bsSize="large">
+                Submit change request
+              </Button>
+            ) : (
+              <Button
+                className="pull-right"
+                bsStyle="info"
+                bsSize="large"
+                onClick={() => this.setState({ showChanges: true })}
+              >
+                Review changes
+              </Button>
+            )}
           </Col>
         </Row>
       </Grid>

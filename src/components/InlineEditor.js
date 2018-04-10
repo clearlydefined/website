@@ -25,6 +25,12 @@ export default class InlineEditor extends React.Component {
     }
   }
 
+  focus = ref => {
+    if (ref && ref.focus) {
+      ref.focus()
+    }
+  }
+
   onChange = event => {
     const { value, onChange } = this.props
 
@@ -66,7 +72,8 @@ export default class InlineEditor extends React.Component {
 
     const editor = React.cloneElement(this.editors[type](value), {
       onBlur: this.onChange,
-      onKeyPress: e => e.key === 'Enter' && this.onChange(e)
+      onKeyPress: e => e.key === 'Enter' && this.onChange(e),
+      ref: this.focus
     })
 
     return editor
