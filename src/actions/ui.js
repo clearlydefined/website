@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { getCurationAction } from './curationActions'
-import { getDefinitionAction, previewDefinitionAction } from './definitionActions'
+import { getDefinitionAction, previewDefinitionAction, getDefinitionSuggestionsAction } from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
 
 export const UI_NAVIGATION = 'UI_NAVIGATION'
@@ -12,11 +12,13 @@ export const UI_NOTIFICATION_NEW = 'UI_NOTIFICATION_NEW'
 export const UI_NOTIFICATION_DELETE = 'UI_NOTIFICATION_DELETE'
 
 export const UI_INSPECT_UPDATE_FILTER = 'UI_INSPECT_UPDATE_FILTER'
+export const UI_INSPECT_UPDATE_FILTER_LIST = 'UI_INSPECT_UPDATE_FILTER_LIST'
 export const UI_INSPECT_GET_CURATION = 'UI_INSPECT_GET_CURATION'
 export const UI_INSPECT_GET_DEFINITION = 'UI_INSPECT_GET_DEFINITION'
 export const UI_INSPECT_GET_HARVESTED = 'UI_INSPECT_GET_HARVESTED'
 
 export const UI_CURATE_UPDATE_FILTER = 'UI_CURATE_UPDATE_FILTER'
+export const UI_CURATE_UPDATE_FILTER_LIST = 'UI_CURATE_UPDATE_FILTER_LIST'
 export const UI_CURATE_GET = 'UI_CURATE_GET'
 export const UI_CURATE_GET_PROPOSED = 'UI_CURATE_GET_PROPOSED'
 export const UI_CURATE_GET_DEFINITION = 'UI_CURATE_GET_DEFINITION'
@@ -24,6 +26,7 @@ export const UI_CURATE_GET_DEFINITION_PROPOSED = 'UI_CURATE_GET_DEFINITION_PROPO
 export const UI_CURATE_DEFINITION_PREVIEW = 'UI_CURATE_DEFINITION_PREVIEW'
 
 export const UI_BROWSE_UPDATE_FILTER = 'UI_BROWSE_UPDATE_FILTER'
+export const UI_BROWSE_UPDATE_FILTER_LIST = 'UI_BROWSE_UPDATE_FILTER_LIST'
 export const UI_BROWSE_UPDATE_LIST = 'UI_BROWSE_UPDATE_LIST'
 
 export const UI_HARVEST_UPDATE_FILTER = 'UI_HARVEST_UPDATE_FILTER'
@@ -50,6 +53,10 @@ export function uiInspectUpdateFilter(value) {
   return { type: UI_INSPECT_UPDATE_FILTER, value }
 }
 
+export function uiInspectUpdateFilterList(token, prefix) {
+  return getDefinitionSuggestionsAction(token, prefix, UI_INSPECT_UPDATE_FILTER_LIST)
+}
+
 export function uiInspectGetCuration(token, entity) {
   return getCurationAction(token, entity, UI_INSPECT_GET_CURATION)
 }
@@ -66,6 +73,10 @@ export function uiCurateUpdateFilter(value) {
   return { type: UI_CURATE_UPDATE_FILTER, value }
 }
 
+export function uiCurateUpdateFilterList(token, prefix) {
+  return getDefinitionSuggestionsAction(token, prefix, UI_CURATE_UPDATE_FILTER_LIST)
+}
+
 export function uiCurateGetCuration(token, entity) {
   return getCurationAction(token, entity, entity.pr ? UI_CURATE_GET_PROPOSED : UI_CURATE_GET)
 }
@@ -80,6 +91,10 @@ export function uiCurateGetDefinitionPreview(token, entity, curation) {
 
 export function uiBrowseUpdateFilter(value) {
   return { type: UI_BROWSE_UPDATE_FILTER, value }
+}
+
+export function uiBrowseUpdateFilterList(token, prefix) {
+  return getDefinitionSuggestionsAction(token, prefix, UI_BROWSE_UPDATE_FILTER_LIST)
 }
 
 export function uiBrowseUpdateList(value) {

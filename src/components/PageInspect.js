@@ -4,8 +4,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Grid, Row, Col } from 'react-bootstrap'
-import { getDefinitionListAction } from '../actions/definitionActions'
-import { uiInspectGetCuration, uiInspectGetHarvested, uiInspectGetDefinition } from '../actions/ui'
+import {
+  uiInspectGetCuration,
+  uiInspectGetHarvested,
+  uiInspectGetDefinition,
+  uiInspectUpdateFilterList
+} from '../actions/ui'
 import { uiNavigation, uiInspectUpdateFilter } from '../actions/ui'
 import { FilterBar, MonacoEditorWrapper, Section, CopyUrlButton } from './'
 import EntitySpec from '../utils/entitySpec'
@@ -16,16 +20,16 @@ class PageInspect extends Component {
     super(props)
     this.state = {}
     this.filterChanged = this.filterChanged.bind(this)
+    this.onSearch = this.onSearch.bind(this)
     this.editorDidMount = this.editorDidMount.bind(this)
     this.addCuration = this.addCuration.bind(this)
   }
 
   componentDidMount() {
-    const { dispatch, token, path, filterValue } = this.props
+    const { dispatch, path, filterValue } = this.props
     const pathToShow = path ? path : filterValue
     this.handleNewSpec(pathToShow)
     dispatch(uiNavigation({ to: ROUTE_INSPECT }))
-    dispatch(getDefinitionListAction(token))
   }
 
   componentWillReceiveProps(newProps) {
@@ -57,6 +61,11 @@ class PageInspect extends Component {
 
   filterChanged(newFilter) {
     this.props.dispatch(uiInspectUpdateFilter(newFilter))
+  }
+
+  onSearch(value) {
+    const { dispatch, token } = this.props
+    dispatch(uiInspectUpdateFilterList(token, value))
   }
 
   gotoValue(value) {
@@ -135,6 +144,7 @@ class PageInspect extends Component {
               options={filterOptions}
               value={filterValue}
               onChange={this.filterChanged}
+              onSearch={this.onSearch}
               defaultValue={path || ''}
             />
           </Col>
@@ -157,7 +167,7 @@ function mapStateToProps(state, ownProps) {
     token: state.session.token,
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     filterValue: state.ui.inspect.filter,
-    filterOptions: state.definition.list,
+    filterOptions: state.ui.inspect.filterList,
     definition: state.ui.inspect.definition,
     curation: state.ui.inspect.curation,
     harvest: state.ui.inspect.harvested
