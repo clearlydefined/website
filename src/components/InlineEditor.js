@@ -44,7 +44,7 @@ export default class InlineEditor extends React.Component {
     onChange(target.value)
   }
 
-  render() {
+  renderValue() {
     const { value, type, initialValue } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
@@ -62,6 +62,14 @@ export default class InlineEditor extends React.Component {
     })
   }
 
+  render() {
+    return (
+      <div className="list-singleLine">
+        <i className="fas fa-pencil-alt editable-marker" />
+        {this.renderValue()}
+      </div>
+    )
+  }
   renderers = {
     text: value => value
   }

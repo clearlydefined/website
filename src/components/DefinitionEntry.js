@@ -5,7 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { TwoLineEntry, InlineEditor } from './'
 import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
-import { get, union } from 'lodash'
+import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import moment from 'moment'
@@ -48,13 +48,14 @@ export default class DefinitionEntry extends React.Component {
     return ['github', 'sourcearchive'].includes(component.provider)
   }
 
-  fieldChange(field) {
+  fieldChange(field, equality = isEqual, transform = a => a) {
     const { onChange, component } = this.props
     return value => {
-      const newValue = value === this.getOriginalValue(field) ? undefined : value
+      const proposedValue = transform(value)
+      const isChanged = !equality(proposedValue, this.getOriginalValue(field))
       const newChanges = { ...component.changes }
-      if (value === this.getOriginalValue(field)) delete newChanges[field]
-      else newChanges[field] = newValue
+      if (isChanged) newChanges[field] = proposedValue
+      else delete newChanges[field]
       onChange && onChange(component, newChanges)
     }
   }
@@ -141,6 +142,42 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
+  parseArray(value) {
+    return value ? value.split(',').map(v => v.trim()) : null
+  }
+
+  printArray(value) {
+    return value ? value.join(', ') : null
+  }
+
+  printDate(value) {
+    return value ? moment(value).format('YYYY.MM.DD') : null
+  }
+
+  parseDate(value) {
+    return moment(value)
+  }
+
+  printCoordinates(value) {
+    return value ? `${value.url}/commit/${value.revision}` : null
+  }
+
+  parseCoordinates(value) {
+    if (!value) return null
+    const segments = this.url.split('/')
+    return { type: 'git', provider: 'github', url: value, revision: segments[4] }
+  }
+
+  renderLabel(text, editable = false) {
+    return (
+      <p>
+        <b>
+          {text} <i className={false ? 'fas fa-pencil-alt' : ''} />
+        </b>
+      </p>
+    )
+  }
+
   renderPanel(rawDefinition) {
     if (!rawDefinition)
       return (
@@ -152,8 +189,10 @@ export default class DefinitionEntry extends React.Component {
     // TODO find a way of calling this less frequently. Relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed, described } = definition
-    const sourceUrl = this.getSourceUrl(definition)
-    const facetsText = this.isSourceComponent(definition.coordinates) ? 'Core, Data, Dev, Doc, Examples, Tests' : 'Core'
+    const initialFacets =
+      get(described, 'facets') || this.isSourceComponent(definition.coordinates)
+        ? ['Core', 'Data', 'Dev', 'Doc', 'Examples', 'Tests']
+        : ['Core']
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
@@ -164,99 +203,81 @@ export default class DefinitionEntry extends React.Component {
       <Row>
         <Col md={5}>
           <Row>
-            <Col md={2}>
-              <p>
-                <b>Source</b>
-              </p>
-            </Col>
+            <Col md={2}>{this.renderLabel('Declared', true)}</Col>
             <Col md={10}>
-              <p className="list-singleLine">{sourceUrl}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2}>
-              <p>
-                <b>Release</b>
-              </p>
-            </Col>
-            <Col md={10}>
-              <InlineEditor
-                type="text"
-                initialValue={moment(this.getOriginalValue('described.releaseDate')).format('YYYY.MM.DD')}
-                value={moment(this.getValue('described.releaseDate')).format('YYYY.MM.DD')}
-                onChange={this.fieldChange('described.releaseDate')}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2}>
-              <p>
-                <b>Tools</b>
-              </p>
-            </Col>
-            <Col md={9}>
-              <p className="list-singleLine">{toolList.join(', ')}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2}>
-              <p>
-                <b>Facets</b>
-              </p>
-            </Col>
-            <Col md={10}>
-              <p className="list-singleLine">{facetsText}</p>
-            </Col>
-          </Row>
-        </Col>
-        <Col md={7}>
-          <Row>
-            <Col md={2}>
-              <p>
-                <b>Declared</b>
-              </p>
-            </Col>
-            <Col md={9}>
               <InlineEditor
                 type="text"
                 initialValue={this.getOriginalValue('licensed.declared')}
                 value={this.getValue('licensed.declared')}
                 onChange={this.fieldChange('licensed.declared')}
+                validator={value => true}
               />
             </Col>
           </Row>
           <Row>
-            <Col md={2}>
-              <p>
-                <b>Discovered</b>
-              </p>
+            <Col md={2}>{this.renderLabel('Source', true)}</Col>
+            <Col md={10}>
+              <InlineEditor
+                type="text"
+                initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
+                value={this.printCoordinates(this.getValue('described.sourceLocation'))}
+                onChange={this.fieldChange('described.sourceLocation', isEqual, this.parseCoordinates)}
+                validator={value => true}
+              />
             </Col>
-            <Col md={9}>
+          </Row>
+          <Row>
+            <Col md={2}>{this.renderLabel('Release', true)}</Col>
+            <Col md={10}>
+              <InlineEditor
+                type="text"
+                initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
+                value={this.printDate(this.getValue('described.releaseDate'))}
+                onChange={this.fieldChange('described.releaseDate')}
+                validator={value => true}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>{this.renderLabel('Facets', true)}</Col>
+            <Col md={10}>
+              <InlineEditor
+                type="text"
+                initialValue={this.printArray(initialFacets)}
+                value={this.printArray(this.getValue('described.facets') || initialFacets)}
+                onChange={this.fieldChange('described.facets', isEqual, this.parseArray)}
+                validator={value => true}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col md={7}>
+          <Row>
+            <Col md={2}>{this.renderLabel('Discovered')}</Col>
+            <Col md={10}>
               <p className="list-singleLine">{get(licensed, 'discovered.expressions', []).join(', ')}</p>
             </Col>
           </Row>
           <Row>
-            <Col md={2}>
-              <p>
-                <b>Attribution</b>
-              </p>
-            </Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
+            <Col md={10}>
               <p className="list-singleLine">{get(licensed, 'attribution.parties', []).join(', ')}</p>
             </Col>
           </Row>
           <Row>
-            <Col md={2}>
-              <p>
-                <b>Files</b>
-              </p>
-            </Col>
+            <Col md={2}>{this.renderLabel('Files')}</Col>
             <Col md={10}>
-              <p>
+              <p className="list-singleLine">
                 Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
                 <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
                 <b>{isNaN(unattributed) ? '-' : `${unattributed} (${unattributedPercent}%)`}</b>
               </p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>{this.renderLabel('Tools')}</Col>
+            <Col md={10}>
+              <p className="list-singleLine">{toolList.join(', ')}</p>
             </Col>
           </Row>
         </Col>
