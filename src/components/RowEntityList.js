@@ -3,7 +3,6 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { without } from 'lodash'
 import { InfiniteList } from './'
 
 export default class RowEntityList extends React.Component {
@@ -17,7 +16,7 @@ export default class RowEntityList extends React.Component {
     fetchingRenderer: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     sortOrder: PropTypes.string,
-    contentSeq: PropTypes.number // value upper levels can change to sign non-shallow content change
+    contentSeq: PropTypes.number // value upper levels can change to sign non-shallow content/display change
   }
 
   static defaultProps = {
@@ -34,9 +33,6 @@ export default class RowEntityList extends React.Component {
     this.length = this.length.bind(this)
     this.listLength = this.listLength.bind(this)
     this.wrappedNoRowsRender = this.wrappedNoRowsRender.bind(this)
-    this.wrappedRowRenderer = this.wrappedRowRenderer.bind(this)
-    this.wrappedRowHeight = this.wrappedRowHeight.bind(this)
-    this.toggleExpanded = this.toggleExpanded.bind(this)
   }
 
   wrappedNoRowsRender() {
@@ -45,27 +41,8 @@ export default class RowEntityList extends React.Component {
     return <div className={'list-noRows'}>{renderer()}</div>
   }
 
-  wrappedRowRenderer({ index, key, style }) {
-    const { allowExpand, rowRenderer } = this.props
-    return allowExpand
-      ? rowRenderer({ index, key, style }, this.toggleExpanded, this.state.expanded.includes(index))
-      : rowRenderer({ index, key, style })
-  }
-
-  wrappedRowHeight({ index }) {
-    const { allowExpand, rowHeight } = this.props
-    if (typeof rowHeight !== 'function') return rowHeight
-    return allowExpand ? rowHeight({ index }, this.state.expanded.includes(index)) : rowHeight({ index })
-  }
-
-  toggleExpanded(index) {
-    const { expanded } = this.state
-    if (expanded.includes(index)) this.setState({ ...this.state, expanded: without(expanded, index) })
-    else this.setState({ ...this.state, expanded: [...expanded, index] })
-  }
-
   render() {
-    const { loadMoreRows, listHeight, list, contentSeq, sortOrder } = this.props
+    const { loadMoreRows, listHeight, list, rowRenderer, rowHeight, contentSeq, sortOrder } = this.props
     if (!list.list || list.list.length === 0) return this.wrappedNoRowsRender()
     return (
       <InfiniteList
@@ -74,12 +51,11 @@ export default class RowEntityList extends React.Component {
         listHeight={listHeight}
         totalRows={this.listLength}
         currentRows={this.length}
-        rowRenderer={this.wrappedRowRenderer}
+        rowRenderer={rowRenderer}
         noRowsRenderer={this.wrappedNoRowsRender}
-        rowHeight={this.wrappedRowHeight}
+        rowHeight={rowHeight}
         sortOrder={sortOrder}
         contentSeq={contentSeq}
-        expanded={this.state.expanded}
       />
     )
   }
