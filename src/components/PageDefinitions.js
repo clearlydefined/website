@@ -78,7 +78,7 @@ class PageDefinitions extends Component {
     const { dispatch, token, components } = this.props
     const specs = this.buildSpecs(components.list, description)
     specs.forEach(spec => {
-      dispatch(curateAction(token, spec.coordinates, spec))
+      // dispatch(curateAction(token, spec.coordinates, spec))
     })
   }
 
