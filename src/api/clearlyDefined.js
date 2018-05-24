@@ -49,6 +49,10 @@ export function curate(token, entity, spec) {
   return patch(url(`${CURATIONS}/${entity.toPath()}`), token, spec)
 }
 
+export function curateAll(token, spec) {
+  return patch(url(`${CURATIONS}`), token, spec)
+}
+
 export function getDefinition(token, entity) {
   return get(url(`${DEFINITIONS}/${entity.toPath()}`), token)
 }

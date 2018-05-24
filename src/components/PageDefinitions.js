@@ -6,11 +6,11 @@ import { connect } from 'react-redux'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { curateAction } from '../actions/curationActions'
+import { curateAction, curateActionAll } from '../actions/curationActions'
 import { FilterBar, ComponentList, Section, FacetSelect, ContributePrompt } from './'
 import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
-import { set } from 'lodash'
+import { set, get, find } from 'lodash'
 
 const defaultFacets = [{ value: 'core', label: 'Core' }]
 
@@ -76,20 +76,32 @@ class PageDefinitions extends Component {
 
   doContribute(description) {
     const { dispatch, token, components } = this.props
-    const specs = this.buildSpecs(components.list, description)
-    specs.forEach(spec => {
-      // dispatch(curateAction(token, spec.coordinates, spec))
-    })
+    const patches = this.buildSpecs(components.list, description).patches
+    const spec = { description: description, patches }
+    dispatch(curateActionAll(token, spec))
   }
 
   buildSpecs(list, description) {
     return list.reduce((result, component) => {
       if (!this.hasChange(component)) return
-      const entry = { coordinates: EntitySpec.fromCoordinates(component), description, patch: {} }
-      Object.getOwnPropertyNames(component.changes).forEach(change =>
-        set(entry.patch, change, component.changes[change])
-      )
-      result.push(entry)
+      const patches = result.patches
+      result.patches = patches || []
+      const coord = EntitySpec.asRevisionless(component)
+      const patch = find(result.patches, function (p) { return p.coordinates.type === coord.type && p.coordinates.provider === coord.provider && p.coordinates.namespace === coord.namespace && p.coordinates.name === coord.name })
+      const revisionNumber = component.revision
+      if (patch) {
+        const revisions = patch.revisions
+        set(revisions, [revisionNumber], {})
+        Object.getOwnPropertyNames(component.changes).forEach(change => {
+          set(revisions[revisionNumber], change, component.changes[change])
+        })
+      } else {
+        const newPatch = { coordinates: EntitySpec.asRevisionless(component), revisions: { [revisionNumber]: {} } }
+        Object.getOwnPropertyNames(component.changes).forEach(change => {
+          set(newPatch.revisions[revisionNumber], change, component.changes[change])
+        })
+        result.patches.push(newPatch)
+      }
       return result
     }, [])
   }

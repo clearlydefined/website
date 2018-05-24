@@ -47,6 +47,10 @@ export default class EntitySpec {
     return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision)
   }
 
+  static asRevisionless(o) {
+    return new EntitySpec(o.type, o.provider, o.namespace, o.name)
+  }
+
   static isEquivalent(one, other) {
     return (
       other &&
