@@ -87,10 +87,16 @@ class PageDefinitions extends Component {
       const coord = EntitySpec.asRevisionless(component)
       const patch = find(result, p => { return EntitySpec.isEquivalent(p.coordinates, coord) })
       const revisionNumber = component.revision
+      const patchChanges = Object.getOwnPropertyNames(component.changes).reduce((result, change) => {
+        set(result, change, component.changes[change])
+        return result
+      }, {})
       if (patch) {
-        patch.revisions[revisionNumber] = component.changes
+        patch.revisions[revisionNumber] = patchChanges
       } else {
-        const newPatch = { coordinates: coord, revisions: { [revisionNumber]: component.changes } }
+
+
+        const newPatch = { coordinates: coord, revisions: { [revisionNumber]: patchChanges } }
         result.push(newPatch)
       }
       return result
