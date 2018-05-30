@@ -94,8 +94,6 @@ class PageDefinitions extends Component {
       if (patch) {
         patch.revisions[revisionNumber] = patchChanges
       } else {
-
-
         const newPatch = { coordinates: coord, revisions: { [revisionNumber]: patchChanges } }
         result.push(newPatch)
       }
