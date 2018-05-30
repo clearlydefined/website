@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { asyncActions } from './'
-import { curate, getCuration, curateAll } from '../api/clearlyDefined'
+import { curate, getCuration } from '../api/clearlyDefined'
 
 export const CURATION_POST = 'CURATION_POST'
 
@@ -17,22 +17,12 @@ export function getCurationAction(token, entity, name) {
   }
 }
 
-export function curateAction(token, entity, spec) {
-  return dispatch => {
-    const actions = asyncActions(CURATION_POST)
-    dispatch(actions.start())
-    return curate(token, entity, spec).then(
-      result => dispatch(actions.success(result)),
-      error => dispatch(actions.error(error))
-    )
-  }
-}
 
-export function curateActionAll(token, spec) {
+export function curateAction(token, spec) {
   return dispatch => {
     const actions = asyncActions(CURATION_POST)
     dispatch(actions.start())
-    return curateAll(token, spec).then(
+    return curate(token, spec).then(
       result => dispatch(actions.success(result)),
       error => dispatch(actions.error(error))
     )
