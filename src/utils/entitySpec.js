@@ -43,6 +43,25 @@ export default class EntitySpec {
     }
   }
 
+  static fromCoordinates(o) {
+    return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision)
+  }
+
+  static asRevisionless(o) {
+    return new EntitySpec(o.type, o.provider, o.namespace, o.name)
+  }
+
+  static isEquivalent(one, other) {
+    return (
+      other &&
+      one.type === other.type &&
+      one.provider === other.provider &&
+      one.namespace === other.namespace &&
+      one.name === other.name &&
+      one.revision === other.revision
+    )
+  }
+
   constructor(type, provider, namespace, name, revision = null, pr = null) {
     this.type = type.toLowerCase()
     this.provider = provider.toLowerCase()
@@ -56,5 +75,9 @@ export default class EntitySpec {
     const revisionPart = this.revision ? `/${this.revision}` : ''
     const prPart = this.pr ? `/pr/${this.pr}` : ''
     return `${this.type}/${this.provider}/${this.namespace || '-'}/${this.name}${revisionPart}${prPart}`
+  }
+
+  toString() {
+    return this.toPath()
   }
 }

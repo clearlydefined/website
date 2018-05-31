@@ -17,11 +17,12 @@ export function getCurationAction(token, entity, name) {
   }
 }
 
-export function curateAction(token, entity, spec) {
+
+export function curateAction(token, spec) {
   return dispatch => {
     const actions = asyncActions(CURATION_POST)
     dispatch(actions.start())
-    return curate(token, entity, spec).then(
+    return curate(token, spec).then(
       result => dispatch(actions.success(result)),
       error => dispatch(actions.error(error))
     )
