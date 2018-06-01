@@ -27,10 +27,11 @@ const add = (list, item, comparator = null) => {
 
 const update = (list, item, newValue, comparator = null) => {
   const test = comparator ? element => comparator(element, item) : element => element === item
-  const entry = _.find(list, test)
-  if (!entry) return list
-  const result = remove(list, item, comparator)
-  return [...result, newValue]
+  const entry = _.findIndex(list, test)
+  if (entry < 0) return list
+  const result = [...list]
+  result[entry] = newValue
+  return result
 }
 
 function computeTranformed(state, append, list, transformer) {

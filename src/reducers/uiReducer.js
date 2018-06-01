@@ -51,12 +51,12 @@ const initialStateNavigation = [
     protected: 0,
     isSelected: false
   },
-  {
-    title: 'Curate',
-    to: ROUTE_CURATE,
-    protected: 0,
-    isSelected: false
-  },
+  // {
+  //   title: 'Curate',
+  //   to: ROUTE_CURATE,
+  //   protected: 0,
+  //   isSelected: false
+  // },
   {
     title: 'Harvest',
     to: ROUTE_HARVEST,
