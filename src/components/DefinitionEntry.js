@@ -61,6 +61,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   getOriginalValue(field) {
+    const temp = get(this.props.definition, field)
     return get(this.props.definition, field)
   }
 
@@ -211,6 +212,7 @@ export default class DefinitionEntry extends React.Component {
                 value={this.getValue('licensed.declared')}
                 onChange={this.fieldChange('licensed.declared')}
                 validator={value => true}
+                placeholder={'SPDX license'}
               />
             </Col>
           </Row>
@@ -223,6 +225,7 @@ export default class DefinitionEntry extends React.Component {
                 value={this.printCoordinates(this.getValue('described.sourceLocation'))}
                 onChange={this.fieldChange('described.sourceLocation', isEqual, this.parseCoordinates)}
                 validator={value => true}
+                placeholder={'Source location'}
               />
             </Col>
           </Row>
@@ -235,6 +238,7 @@ export default class DefinitionEntry extends React.Component {
                 value={this.printDate(this.getValue('described.releaseDate'))}
                 onChange={this.fieldChange('described.releaseDate')}
                 validator={value => true}
+                placeholder={'YYYY/MM/DD'}
               />
             </Col>
           </Row>
@@ -247,6 +251,7 @@ export default class DefinitionEntry extends React.Component {
                 value={this.printArray(this.getValue('described.facets') || initialFacets)}
                 onChange={this.fieldChange('described.facets', isEqual, this.parseArray)}
                 validator={value => true}
+                placeholder={'Facets'}
               />
             </Col>
           </Row>
