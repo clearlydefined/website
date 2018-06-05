@@ -88,7 +88,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   renderMessage(definition) {
-    const licenseExpression = definition ? get(definition, 'licensed.facets.core.declared') : null
+    const licenseExpression = definition ? get(definition, 'licensed.declared') : null
     return licenseExpression ? <span>{licenseExpression}</span> : <span>&nbsp;</span>
   }
 
