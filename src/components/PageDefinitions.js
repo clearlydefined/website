@@ -14,7 +14,6 @@ import { set, get, find } from 'lodash'
 import { saveAs } from 'file-saver'
 import Dropzone from 'react-dropzone'
 
-
 const defaultFacets = [{ value: 'core', label: 'Core' }]
 
 class PageDefinitions extends Component {
@@ -47,7 +46,6 @@ class PageDefinitions extends Component {
     dispatch(uiBrowseUpdateList({ add: component }))
   }
 
-
   onDrop(acceptedFile, rejectedFiles) {
     const { dispatch, token, definitions } = this.props
     acceptedFile.forEach(file => {
@@ -68,7 +66,6 @@ class PageDefinitions extends Component {
         }
       };
       reader.readAsBinaryString(file)
-
     })
   }
 
@@ -123,7 +120,6 @@ class PageDefinitions extends Component {
     const file = new File([JSON.stringify(fileObject, null, 2)], "components.json");
     saveAs(file);
   }
-
 
   buildContributeSpec(list) {
     return list.reduce((result, component) => {
@@ -182,7 +178,6 @@ class PageDefinitions extends Component {
   render() {
     const { components, filterOptions, definitions, token } = this.props
     const { activeFacets, dropzoneActive } = this.state
-
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />

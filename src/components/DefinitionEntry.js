@@ -61,7 +61,6 @@ export default class DefinitionEntry extends React.Component {
   }
 
   getOriginalValue(field) {
-    const temp = get(this.props.definition, field)
     return get(this.props.definition, field)
   }
 
