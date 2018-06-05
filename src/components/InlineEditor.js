@@ -37,7 +37,7 @@ export default class InlineEditor extends React.Component {
     this.setState({ editing: false })
 
     // sanity check for empty textboxes
-    if (typeof target.value === 'string' && target.value.trim().length === 0) return
+    if (typeof target.value === 'string' && target.value.trim().length === 0) return this.renderValue()
 
     // don't bother saving unchanged fields
     if (target.value === value) return
@@ -51,9 +51,9 @@ export default class InlineEditor extends React.Component {
     const changed = initialValue !== value
     if (!editing)
       return (
-        <span className={`editable-field ${changed ? 'bg-info' : ''}`} onClick={() => this.setState({ editing: true })}>
-          {this.renderers[type](value)}
-        </span>
+        <span className={`editable-field ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`} onClick={() => this.setState({ editing: true })}>
+          {this.renderers[type](value) || placeholder}
+        </span >
       )
 
     return React.cloneElement(this.editors[type](value), {
