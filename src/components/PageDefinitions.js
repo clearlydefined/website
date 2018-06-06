@@ -26,6 +26,7 @@ class PageDefinitions extends Component {
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
+    this.doSort = this.doSort.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.facetChange = this.facetChange.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
@@ -153,6 +154,10 @@ class PageDefinitions extends Component {
     this.refs.contributeModal.open()
   }
 
+  doSort() {
+    this.props.dispatch(uiBrowseUpdateList({ sort: 'type' }))
+  }
+
   facetChange(value) {
     const activeFacets = (value || []).map(facet => facet.value)
     this.setState({ ...this.state, activeFacets })
@@ -162,7 +167,7 @@ class PageDefinitions extends Component {
     return <div>Select components from the list above ...</div>
   }
 
-  renderContributeButton() {
+  renderButtons() {
     return (
       <div>
         <Button bsStyle="success" className="pull-right" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
@@ -170,6 +175,9 @@ class PageDefinitions extends Component {
         </Button>
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
+        </Button>
+        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSort}>
+          Sort
         </Button>
       </div>
     )
@@ -189,7 +197,7 @@ class PageDefinitions extends Component {
             <FilterBar options={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} clearOnChange />
           </Col>
         </Row>
-        <Section name={'Available definitions'} actionButton={this.renderContributeButton()}>
+        <Section name={'Available definitions'} actionButton={this.renderButtons()}>
           <Dropzone disableClick onDrop={this.onDrop} style={{ position: "relative" }}>
             <div className="section-body">
               <ComponentList
