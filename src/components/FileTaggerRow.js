@@ -7,7 +7,7 @@ import { Grid, Row, Col, Table } from 'react-bootstrap'
 import { uiNavigation } from '../actions/ui'
 
 const Facets = {
-  core: {},
+  core: { backgroundColor: '#ffffff' },
   data: { backgroundColor: '#cfb7ff' },
   dev: { backgroundColor: '#fffa9e' },
   doc: { backgroundColor: '#9ee8ff' },
@@ -16,6 +16,10 @@ const Facets = {
 }
 
 export default class FileTaggerRow extends Component {
+  static defaultProps = {
+    depth: -1
+  }
+
   constructor(props) {
     super(props)
     this.toggle = this.toggle.bind(this)
@@ -29,47 +33,103 @@ export default class FileTaggerRow extends Component {
   }
 
   render() {
-    const { entry, depth, facet, onFacetSelect } = this.props
+    const { entry, depth, fileFacets, onFacetSelect } = this.props
     const { expanded, showFacets } = this.state
+
+    // root node shouldn't itself be rendered
+    if (entry.path.length === 0) {
+      return this.renderChildren('core')
+    }
+
     const hasChildren = Object.keys(entry.children).length > 0
     const fullPath = entry.path.join('/')
+
+    const appliedFacet = this.findAppliedFacet()
+
     return (
       <React.Fragment>
-        <tr key={fullPath} onMouseOver={this.showFacets} onMouseLeave={this.hideFacets} style={{...Facets[facet]}}>
-          <td style={{ paddingLeft: `${15 * depth}px`, cursor: hasChildren ? 'pointer' : undefined }} onClick={this.toggle}>
+        <tr
+          key={fullPath}
+          onMouseOver={this.showFacets}
+          onMouseLeave={this.hideFacets}
+          style={{ ...Facets[appliedFacet] }}
+        >
+          <td
+            style={{ paddingLeft: `${15 * depth}px`, cursor: hasChildren ? 'pointer' : undefined }}
+            onClick={this.toggle}
+          >
             <div style={{ display: 'inline-block', width: '15px' }}>
               {hasChildren && <strong>{expanded ? '-' : '+'}</strong>}
             </div>
             {entry.name} <small>{entry.path.join('/')}</small>
           </td>
           <td style={{ width: '350px', fontSize: '0.7em', textAlign: 'right' }}>
-            {showFacets && (
-              <div>
-                {Object.keys(Facets).map(f => (
-                  <div
-                    style={{
-                      display: 'inline-block',
-                      border: '1px solid #ccc',
-                      padding: '2px 4px',
-                      marginRight: '4px',
-                      cursor: 'pointer',
-                      ...Facets[f]
-                    }}
-                    onClick={() => this.facetClicked(f)}
-                  >
-                    {f}
-                  </div>
-                ))}
-              </div>
-            )}
+            {showFacets ? this.renderFacetPicker() : appliedFacet}
           </td>
         </tr>
-        {expanded &&
-          Object.entries(entry.children).map(([name, child]) => (
-            <FileTaggerRow key={name} entry={child} depth={depth + 1} onFacetSelect={onFacetSelect} />
-          ))}
+        {expanded && this.renderChildren(appliedFacet)}
       </React.Fragment>
     )
+  }
+
+  renderChildren(appliedFacet) {
+    const { entry, depth, fileFacets, onFacetSelect } = this.props
+    return Object.entries(entry.children).map(([name, child]) => (
+      <FileTaggerRow
+        key={name}
+        entry={child}
+        depth={depth + 1}
+        fileFacets={fileFacets}
+        parentFacet={appliedFacet}
+        onFacetSelect={onFacetSelect}
+      />
+    ))
+  }
+
+  renderFacetPicker() {
+    return (
+      <div>
+        {Object.keys(Facets).map(f => (
+          <div
+            key={f}
+            style={{
+              display: 'inline-block',
+              border: '1px solid #ccc',
+              padding: '2px 4px',
+              marginRight: '4px',
+              cursor: 'pointer',
+              ...Facets[f]
+            }}
+            onClick={() => this.facetClicked(f)}
+          >
+            {f}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  /**
+   * Determine the facet that applies to this entry/row.
+   */
+  findAppliedFacet() {
+    const { fileFacets, parentFacet, entry } = this.props
+
+    const appliedFacet = fileFacets
+      // filter facets for paths that match ours
+      .filter(([facetparts, facet]) => {
+        return inPath(entry.path, facetparts)
+      })
+      // find the longest path (highest precedence; "closest" to file)
+      .reduce(
+        (acc, curr) => {
+          return curr[0].length > acc[0].length ? curr : acc
+        },
+        [[], null]
+      )[1]
+
+    // if no applied facet was found, it's probably "core", but just return the parent anyway
+    return appliedFacet || parentFacet
   }
 
   toggle() {
@@ -88,8 +148,13 @@ export default class FileTaggerRow extends Component {
   }
 
   facetClicked(facet) {
-    const { entry, onFacetSelect } = this.props;
-    onFacetSelect(entry, facet)
+    const { entry, parentFacet, onFacetSelect } = this.props
+    // if we set a facet that would match the parent, just clear it
+    if (facet === parentFacet) {
+      onFacetSelect(entry, null)
+    } else {
+      onFacetSelect(entry, facet)
+    }
   }
 }
 

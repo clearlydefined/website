@@ -17,19 +17,30 @@ export default class PageFileTaggerTest extends Component {
   }
 
   render() {
-    const { tree } = this.state
+    const { tree, facetMap } = this.state
+
+    const fileFacets = Object.entries(facetMap).map(([filepath, facet]) => {
+      return [filepath.split('/'), facet]
+    })
+
     return (
       <Grid className="main-container">
         <Row>
           <Col md={12}>
             <Table hover condensed>
               <tbody>
-                <FileTaggerRow key="root" entry={tree} depth={0} onFacetSelect={this.changeFacet} />
+                <FileTaggerRow
+                  key="root"
+                  entry={tree}
+                  fileFacets={fileFacets}
+                  onFacetSelect={this.changeFacet}
+                />
               </tbody>
             </Table>
 
-            <textarea className="form-control" value={JSON.stringify(this.state.facetMap, null, 2)} rows={10} />
-            <textarea className="form-control" value={JSON.stringify(this.state.tree, null, 2)} rows={15}/>
+            <h4>debug stuff</h4>
+            <textarea readOnly className="form-control" value={JSON.stringify(this.state.facetMap, null, 2)} rows={10} />
+            <textarea readOnly className="form-control" value={JSON.stringify(this.state.tree, null, 2)} rows={15} />
           </Col>
         </Row>
       </Grid>
@@ -38,6 +49,18 @@ export default class PageFileTaggerTest extends Component {
 
   changeFacet(node, facet) {
     const nodePath = node.path.join('/')
+
+    // erase a facet
+    if (!facet) {
+      const newMap = {...this.state.facetMap}
+      delete newMap[nodePath]
+      this.setState({
+        facetMap: newMap
+      })
+      return
+    }
+
+    // update/add a facet
     this.setState({
       facetMap: {
         ...this.state.facetMap,
@@ -47,9 +70,17 @@ export default class PageFileTaggerTest extends Component {
   }
 }
 
-
-const files = ['src', 'src/examples', 'src/examples/blah.txt', 'src/examples/DOCS.txt', 'src/foo.c', 'test', 'test/bar.rs', 'LICENSE']
-const facetMap = {'src/examples': 'examples', 'test': 'tests', 'src/examples/DOCS.txt': 'doc'}
+const files = [
+  'src',
+  'src/examples',
+  'src/examples/blah.txt',
+  'src/examples/DOCS.txt',
+  'src/foo.c',
+  'test',
+  'test/bar.rs',
+  'LICENSE'
+]
+const facetMap = { 'src/examples': 'examples', test: 'tests', 'src/examples/DOCS.txt': 'doc' }
 
 function pathsToTree(paths) {
   const root = emptyNode('root')
@@ -78,7 +109,6 @@ function emptyNode(name) {
   return {
     name,
     path: [],
-    children: {},
+    children: {}
   }
 }
-
