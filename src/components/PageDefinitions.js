@@ -19,8 +19,9 @@ const defaultFacets = [{ value: 'core', label: 'Core' }]
 class PageDefinitions extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeFacets: defaultFacets.map(x => x.value), dropzoneActive: false }
+    this.state = { activeFacets: defaultFacets.map(x => x.value) }
     this.onAddComponent = this.onAddComponent.bind(this)
+    this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
@@ -30,9 +31,6 @@ class PageDefinitions extends Component {
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
     this.doSave = this.doSave.bind(this)
-    this.onDrop.bind(this)
-    this.onDragEnter.bind(this)
-    this.onDragLeave.bind(this)
   }
 
   componentDidMount() {
@@ -69,20 +67,6 @@ class PageDefinitions extends Component {
       };
       reader.readAsBinaryString(file)
     })
-  }
-
-  onDragEnter() {
-    this.setState({
-      dropzoneActive: true
-    })
-    console.log(this.state.dropzoneActive)
-  }
-
-  onDragLeave() {
-    this.setState({
-      dropzoneActive: false
-    })
-    console.log(this.state.dropzoneActive)
   }
 
   onSearch(value) {
@@ -175,7 +159,7 @@ class PageDefinitions extends Component {
   }
 
   noRowsRenderer() {
-    return <div>Select components from the list above or drop file ...</div>
+    return <div>Select components from the list above ...</div>
   }
 
   renderContributeButton() {
@@ -206,8 +190,7 @@ class PageDefinitions extends Component {
           </Col>
         </Row>
         <Section name={'Available definitions'} actionButton={this.renderContributeButton()}>
-          <Dropzone disableClick onDrop={this.onDrop} onDragEnter={this.onDragEnter} onDragLeave={this.onDragLeave} style={{ position: "relative" }}>
-            {dropzoneActive && <div className={`drop-overlay`}>Drop files...</div>}
+          <Dropzone disableClick onDrop={this.onDrop} style={{ position: "relative" }}>
             <div className="section-body">
               <ComponentList
                 list={components}
