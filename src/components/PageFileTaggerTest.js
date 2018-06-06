@@ -2,71 +2,41 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Grid, Row, Col, Table } from 'react-bootstrap'
-import FileTaggerRow from './FileTaggerRow'
+import { Grid, Row, Col } from 'react-bootstrap'
+import FileTagger from './FileTagger';
 
 export default class PageFileTaggerTest extends Component {
   constructor(props) {
     super(props)
-    this.changeFacet = this.changeFacet.bind(this)
+    this.onFacetMapChange = this.onFacetMapChange.bind(this)
     this.state = {
-      tree: pathsToTree(files),
       facetMap: facetMap
     }
   }
 
   render() {
-    const { tree, facetMap } = this.state
-
-    const fileFacets = Object.entries(facetMap).map(([filepath, facet]) => {
-      return [filepath.split('/'), facet]
-    })
-
+    const { facetMap } = this.state
     return (
       <Grid className="main-container">
         <Row>
           <Col md={12}>
-            <Table hover condensed>
-              <tbody>
-                <FileTaggerRow
-                  key="root"
-                  entry={tree}
-                  fileFacets={fileFacets}
-                  onFacetSelect={this.changeFacet}
-                />
-              </tbody>
-            </Table>
+            <FileTagger fileList={files} facetMap={facetMap} onFacetMapChange={this.onFacetMapChange} />
 
             <h4>debug stuff</h4>
-            <textarea readOnly className="form-control" value={JSON.stringify(this.state.facetMap, null, 2)} rows={10} />
-            <textarea readOnly className="form-control" value={JSON.stringify(this.state.tree, null, 2)} rows={15} />
+            <textarea
+              readOnly
+              className="form-control"
+              value={JSON.stringify(this.state.facetMap, null, 2)}
+              rows={10}
+            />
           </Col>
         </Row>
       </Grid>
     )
   }
 
-  changeFacet(node, facet) {
-    const nodePath = node.path.join('/')
-
-    // erase a facet
-    if (!facet) {
-      const newMap = {...this.state.facetMap}
-      delete newMap[nodePath]
-      this.setState({
-        facetMap: newMap
-      })
-      return
-    }
-
-    // update/add a facet
-    this.setState({
-      facetMap: {
-        ...this.state.facetMap,
-        [node.path.join('/')]: facet
-      }
-    })
+  onFacetMapChange(facetMap) {
+    this.setState({facetMap})
   }
 }
 
@@ -81,34 +51,3 @@ const files = [
   'LICENSE'
 ]
 const facetMap = { 'src/examples': 'examples', test: 'tests', 'src/examples/DOCS.txt': 'doc' }
-
-function pathsToTree(paths) {
-  const root = emptyNode('root')
-  for (const path of paths) {
-    buildPath(root, path.split('/'))
-  }
-  return root
-}
-
-function buildPath(base, parts, i = 0) {
-  if (i == parts.length) {
-    return
-  }
-
-  const item = parts[i]
-  let child = base.children[item]
-  if (!child) {
-    child = emptyNode(item)
-    child.path = parts.slice(0, i + 1)
-    base.children[item] = child
-  }
-  buildPath(child, parts, i + 1)
-}
-
-function emptyNode(name) {
-  return {
-    name,
-    path: [],
-    children: {}
-  }
-}

@@ -1,23 +1,30 @@
 // Copyright (c) Amazon.com, Inc. and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Grid, Row, Col, Table } from 'react-bootstrap'
-import { uiNavigation } from '../actions/ui'
 
 const Facets = {
   core: { backgroundColor: '#ffffff' },
-  data: { backgroundColor: '#cfb7ff' },
+  data: { backgroundColor: '#d4bfff' },
   dev: { backgroundColor: '#fffa9e' },
   doc: { backgroundColor: '#9ee8ff' },
   examples: { backgroundColor: '#9effa7' },
-  tests: { backgroundColor: '#ff9e9e' }
+  tests: { backgroundColor: '#ffdac1' }
 }
 
 export default class FileTaggerRow extends Component {
+  static propTypes = {
+    entry: PropTypes.object.isRequired,
+    fileFacets: PropTypes.objectOf(PropTypes.string).isRequired,
+    onFacetSelect: PropTypes.func.isRequired,
+    depth: PropTypes.number,
+    parentFacet: PropTypes.string
+  }
+
   static defaultProps = {
-    depth: -1
+    depth: -1,
+    parentFacet: 'core'
   }
 
   constructor(props) {
@@ -33,7 +40,7 @@ export default class FileTaggerRow extends Component {
   }
 
   render() {
-    const { entry, depth, fileFacets, onFacetSelect } = this.props
+    const { entry, depth } = this.props
     const { expanded, showFacets } = this.state
 
     // root node shouldn't itself be rendered
@@ -61,7 +68,7 @@ export default class FileTaggerRow extends Component {
             <div style={{ display: 'inline-block', width: '15px' }}>
               {hasChildren && <strong>{expanded ? '-' : '+'}</strong>}
             </div>
-            {entry.name} <small>{entry.path.join('/')}</small>
+            {entry.name}
           </td>
           <td style={{ width: '350px', fontSize: '0.7em', textAlign: 'right' }}>
             {showFacets ? this.renderFacetPicker() : appliedFacet}

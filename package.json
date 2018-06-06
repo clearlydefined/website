@@ -6,6 +6,7 @@
     "deep-diff": "^0.3.8",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
+    "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-bootstrap": "^0.31.5",
     "react-bootstrap-typeahead": "^2.3.0",
