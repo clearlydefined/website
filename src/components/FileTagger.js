@@ -30,7 +30,7 @@ export default class FileTagger extends Component {
     })
 
     return (
-      <Table hover condensed>
+      <Table className="file-tagger" condensed>
         <tbody>
           <FileTaggerRow key="root" entry={tree} fileFacets={fileFacets} onFacetSelect={this.changeFacet} />
         </tbody>

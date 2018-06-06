@@ -4,14 +4,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-const Facets = {
-  core: { backgroundColor: '#ffffff' },
-  data: { backgroundColor: '#d4bfff' },
-  dev: { backgroundColor: '#fffa9e' },
-  doc: { backgroundColor: '#9ee8ff' },
-  examples: { backgroundColor: '#9effa7' },
-  tests: { backgroundColor: '#ffdac1' }
-}
+const FACETS = ['core', 'data', 'dev', 'doc', 'examples', 'tests']
 
 export default class FileTaggerRow extends Component {
   static propTypes = {
@@ -59,18 +52,18 @@ export default class FileTaggerRow extends Component {
           key={fullPath}
           onMouseOver={this.showFacets}
           onMouseLeave={this.hideFacets}
-          style={{ ...Facets[appliedFacet] }}
+          className={`facet-${appliedFacet}`}
         >
           <td
             style={{ paddingLeft: `${15 * depth}px`, cursor: hasChildren ? 'pointer' : undefined }}
             onClick={this.toggle}
           >
-            <div style={{ display: 'inline-block', width: '15px' }}>
+            <div className="file-tagger-expander">
               {hasChildren && <strong>{expanded ? '-' : '+'}</strong>}
             </div>
             {entry.name}
           </td>
-          <td style={{ width: '350px', fontSize: '0.7em', textAlign: 'right' }}>
+          <td className="file-tagger-facets">
             {showFacets ? this.renderFacetPicker() : appliedFacet}
           </td>
         </tr>
@@ -96,17 +89,10 @@ export default class FileTaggerRow extends Component {
   renderFacetPicker() {
     return (
       <div>
-        {Object.keys(Facets).map(f => (
+        {FACETS.map(f => (
           <div
             key={f}
-            style={{
-              display: 'inline-block',
-              border: '1px solid #ccc',
-              padding: '2px 4px',
-              marginRight: '4px',
-              cursor: 'pointer',
-              ...Facets[f]
-            }}
+            className={`file-tagger-facet facet-${f}`}
             onClick={() => this.facetClicked(f)}
           >
             {f}
