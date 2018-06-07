@@ -24,7 +24,8 @@ export default class ComponentList extends React.Component {
     fetchingRenderer: PropTypes.func,
     activeFacets: PropTypes.array,
     definitions: PropTypes.object,
-    githubToken: PropTypes.string
+    githubToken: PropTypes.string,
+    sortCounter: PropTypes.number
   }
 
   static defaultProps = {
@@ -43,6 +44,7 @@ export default class ComponentList extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
     if (newProps.activeFacets !== this.props.activeFacets) this.incrementSequence()
+    if (newProps.sortCounter !== this.props.sortCounter) this.incrementSequence()
   }
 
   getDefinition(component) {

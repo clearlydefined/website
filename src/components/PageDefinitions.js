@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button } from 'react-bootstrap'
+import { Grid, Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
@@ -19,7 +19,7 @@ const defaultFacets = [{ value: 'core', label: 'Core' }]
 class PageDefinitions extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeFacets: defaultFacets.map(x => x.value) }
+    this.state = { activeFacets: defaultFacets.map(x => x.value), sortCounter: 0 }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
@@ -154,13 +154,18 @@ class PageDefinitions extends Component {
     this.refs.contributeModal.open()
   }
 
-  doSort() {
-    this.props.dispatch(uiBrowseUpdateList({ sort: 'type' }))
+  doSort(eventKey) {
+    this.props.dispatch(uiBrowseUpdateList({ sort: eventKey }))
+    this.incrementSequence()
   }
 
   facetChange(value) {
     const activeFacets = (value || []).map(facet => facet.value)
     this.setState({ ...this.state, activeFacets })
+  }
+
+  incrementSequence() {
+    this.setState({ ...this.state, sortCounter: this.state.sortCounter + 1 })
   }
 
   noRowsRenderer() {
@@ -176,16 +181,19 @@ class PageDefinitions extends Component {
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
         </Button>
-        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSort}>
-          Sort
-        </Button>
+        <DropdownButton title="Sort By" Style="default" title={'Sort By'}>
+          <MenuItem onSelect={this.doSort} eventKey="type">Type</MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="releaseDate">Release Date</MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="license">License</MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="score">Score</MenuItem>
+        </DropdownButton>
       </div>
     )
   }
 
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activeFacets, dropzoneActive } = this.state
+    const { activeFacets, sortCounter } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -212,6 +220,7 @@ class PageDefinitions extends Component {
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 activeFacets={activeFacets}
+                sortCounter={sortCounter}
               />
             </div>
           </Dropzone>
