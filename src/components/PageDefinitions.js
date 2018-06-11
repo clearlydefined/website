@@ -57,15 +57,17 @@ class PageDefinitions extends Component {
           const message = `Invalid component list file: ${listSpec}`
           return dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
         }
+        const specs = []
         listSpec.coordinates.forEach(component => {
           // TODO figure a way to add these in bulk. One by one will be painful for large lists
           const spec = EntitySpec.validateAndCreate(component)
           if (spec) {
             const path = spec.toPath()
             !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
-            dispatch(uiBrowseUpdateList({ add: spec }))
+            specs.push(spec)
           }
         })
+        dispatch(uiBrowseUpdateList({ addAll: specs }))
       }
       reader.readAsBinaryString(file)
     })

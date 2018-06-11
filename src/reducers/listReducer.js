@@ -25,6 +25,14 @@ const add = (list, item, comparator = null) => {
   return list && !_.find(list, test) ? [...list, item] : list
 }
 
+const addAll = (list, items, comparator = null) => {
+  items.forEach(item => {
+    const test = comparator ? element => comparator(element, item) : element => element === item
+    list = list && !_.find(list, test) ? [...list, item] : list
+  })
+  return list
+}
+
 const update = (list, item, newValue, comparator = null) => {
   const test = comparator ? element => comparator(element, item) : element => element === item
   const entry = _.findIndex(list, test)
@@ -82,6 +90,15 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: add(state.list, result.add, comparator),
+        transformedList: transformer ? add(state.transformedList, transformer(result.add)) : state.transformedList
+      }
+    }
+
+    if (result.addAll) {
+      return {
+        ...state,
+        sequence: ++state.sequence,
+        list: addAll(state.list, result.addAll, comparator),
         transformedList: transformer ? add(state.transformedList, transformer(result.add)) : state.transformedList
       }
     }

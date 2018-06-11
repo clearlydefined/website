@@ -28,7 +28,7 @@ export default class ComponentList extends React.Component {
   }
 
   static defaultProps = {
-    loadMoreRows: () => { }
+    loadMoreRows: () => {}
   }
 
   constructor(props) {
