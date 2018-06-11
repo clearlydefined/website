@@ -10,7 +10,8 @@ export default class InlineEditor extends React.Component {
     initialValue: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     type: PropTypes.oneOf(['text']).isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.string.isRequired
   }
 
   static defaultProps = {
@@ -33,10 +34,10 @@ export default class InlineEditor extends React.Component {
     // check browser validation (if used)
     if (!target.checkValidity()) return
 
-    // sanity check for empty textboxes
-    if (typeof target.value === 'string' && target.value.trim().length === 0) return
-
     this.setState({ editing: false })
+
+    // sanity check for empty textboxes
+    if (typeof target.value === 'string' && target.value.trim().length === 0) return this.renderValue()
 
     // don't bother saving unchanged fields
     if (target.value === value) return
@@ -45,14 +46,14 @@ export default class InlineEditor extends React.Component {
   }
 
   renderValue() {
-    const { value, type, initialValue } = this.props
+    const { value, type, initialValue, placeholder } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
     if (!editing)
       return (
-        <span className={`editable-field ${changed ? 'bg-info' : ''}`} onClick={() => this.setState({ editing: true })}>
-          {this.renderers[type](value)}
-        </span>
+        <span className={`editable-field ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`} onClick={() => this.setState({ editing: true })}>
+          {this.renderers[type](value) || placeholder}
+        </span >
       )
 
     return React.cloneElement(this.editors[type](value), {
@@ -65,11 +66,12 @@ export default class InlineEditor extends React.Component {
   render() {
     return (
       <div className="list-singleLine">
-        <i className="fas fa-pencil-alt editable-marker" />
+        <i className="fas fa-pencil-alt editable-marker" onClick={() => this.setState({ editing: true })} />
         {this.renderValue()}
       </div>
     )
   }
+
   renderers = {
     text: value => value
   }

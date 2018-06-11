@@ -28,7 +28,7 @@ export default class ComponentList extends React.Component {
   }
 
   static defaultProps = {
-    loadMoreRows: () => {}
+    loadMoreRows: () => { }
   }
 
   constructor(props) {
@@ -89,7 +89,7 @@ export default class ComponentList extends React.Component {
 
   rowHeight({ index }) {
     const component = this.props.list.list[index]
-    return component.expanded ? 150 : 100
+    return component.expanded ? 150 : 50
   }
 
   renderButtonWithTip(button, tip) {

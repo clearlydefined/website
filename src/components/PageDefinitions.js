@@ -8,9 +8,11 @@ import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routing
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
 import { FilterBar, ComponentList, Section, FacetSelect, ContributePrompt } from './'
-import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList } from '../actions/ui'
+import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find } from 'lodash'
+import { saveAs } from 'file-saver'
+import Dropzone from 'react-dropzone'
 
 const defaultFacets = [{ value: 'core', label: 'Core' }]
 
@@ -19,6 +21,7 @@ class PageDefinitions extends Component {
     super(props)
     this.state = { activeFacets: defaultFacets.map(x => x.value) }
     this.onAddComponent = this.onAddComponent.bind(this)
+    this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
@@ -27,6 +30,7 @@ class PageDefinitions extends Component {
     this.facetChange = this.facetChange.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
+    this.doSave = this.doSave.bind(this)
   }
 
   componentDidMount() {
@@ -40,6 +44,29 @@ class PageDefinitions extends Component {
     const path = component.toPath()
     !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
     dispatch(uiBrowseUpdateList({ add: component }))
+  }
+
+  onDrop(acceptedFile, rejectedFiles) {
+    const { dispatch, token, definitions } = this.props
+    acceptedFile.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const components = JSON.parse(reader.result);
+        if (components.coordinates) {
+          components.coordinates.forEach(component => {
+            const spec = EntitySpec.validateAndCreate(component)
+            if (spec) {
+              const path = spec.toPath()
+              !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
+              dispatch(uiBrowseUpdateList({ add: spec }))
+            }
+          })
+        } else {
+          dispatch(uiNotificationNew({ type: 'info', message: 'Invalid file.', timeout: 5000 }))
+        }
+      };
+      reader.readAsBinaryString(file)
+    })
   }
 
   onSearch(value) {
@@ -70,20 +97,33 @@ class PageDefinitions extends Component {
     return components && components.list.some(entry => this.hasChange(entry))
   }
 
+  hasComponents() {
+    const { components } = this.props
+    return components && components.list.length > 0
+  }
+
   hasChange(entry) {
     return entry.changes && Object.getOwnPropertyNames(entry.changes).length
   }
 
   doContribute(description) {
     const { dispatch, token, components } = this.props
-    const patches = this.buildSpecs(components.list)
+    const patches = this.buildContributeSpec(components.list)
     const spec = { description: description, patches }
     dispatch(curateAction(token, spec))
   }
 
-  buildSpecs(list) {
+  doSave() {
+    const { components } = this.props
+    const spec = this.buildSaveSpec(components.list)
+    const fileObject = { filter: null, sortBy: null, coordinates: spec }
+    const file = new File([JSON.stringify(fileObject, null, 2)], "components.json");
+    saveAs(file);
+  }
+
+  buildContributeSpec(list) {
     return list.reduce((result, component) => {
-      if (!this.hasChange(component)) return
+      if (!this.hasChange(component)) return result
       const coord = EntitySpec.asRevisionless(component)
       const patch = find(result, p => { return EntitySpec.isEquivalent(p.coordinates, coord) })
       const revisionNumber = component.revision
@@ -97,6 +137,13 @@ class PageDefinitions extends Component {
         const newPatch = { coordinates: coord, revisions: { [revisionNumber]: patchChanges } }
         result.push(newPatch)
       }
+      return result
+    }, [])
+  }
+
+  buildSaveSpec(list) {
+    return list.reduce((result, component) => {
+      result.push(EntitySpec.fromCoordinates(component))
       return result
     }, [])
   }
@@ -117,15 +164,20 @@ class PageDefinitions extends Component {
 
   renderContributeButton() {
     return (
-      <Button bsStyle="success" className="pull-right" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
-        Contribute
-      </Button>
+      <div>
+        <Button bsStyle="success" className="pull-right" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
+          Contribute
+        </Button>
+        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
+          Save
+        </Button>
+      </div>
     )
   }
 
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activeFacets } = this.state
+    const { activeFacets, dropzoneActive } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -138,21 +190,23 @@ class PageDefinitions extends Component {
           </Col>
         </Row>
         <Section name={'Available definitions'} actionButton={this.renderContributeButton()}>
-          <div className="section-body">
-            <ComponentList
-              list={components}
-              listHeight={1000}
-              onRemove={this.onRemoveComponent}
-              onChange={this.onChangeComponent}
-              onAddComponent={this.onAddComponent}
-              onInspect={this.onInspect}
-              onCurate={this.onCurate}
-              definitions={definitions}
-              githubToken={token}
-              noRowsRenderer={this.noRowsRenderer}
-              activeFacets={activeFacets}
-            />
-          </div>
+          <Dropzone disableClick onDrop={this.onDrop} style={{ position: "relative" }}>
+            <div className="section-body">
+              <ComponentList
+                list={components}
+                listHeight={1000}
+                onRemove={this.onRemoveComponent}
+                onChange={this.onChangeComponent}
+                onAddComponent={this.onAddComponent}
+                onInspect={this.onInspect}
+                onCurate={this.onCurate}
+                definitions={definitions}
+                githubToken={token}
+                noRowsRenderer={this.noRowsRenderer}
+                activeFacets={activeFacets}
+              />
+            </div>
+          </Dropzone>
         </Section>
       </Grid>
     )
