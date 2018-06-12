@@ -107,7 +107,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   getPercentage(count, total) {
-    return Math.round((count || 0) / total * 100)
+    return Math.round(((count || 0) / total) * 100)
   }
 
   foldFacets(definition, facets = null) {
@@ -164,8 +164,8 @@ export default class DefinitionEntry extends React.Component {
 
   parseCoordinates(value) {
     if (!value) return null
-    const segments = this.url.split('/')
-    return { type: 'git', provider: 'github', url: value, revision: segments[4] }
+    const segments = value.split('/')
+    return { type: 'git', provider: 'github', url: value, revision: segments[6] }
   }
 
   renderLabel(text, editable = false) {
