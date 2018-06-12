@@ -26,11 +26,12 @@ const add = (list, item, comparator = null) => {
 }
 
 const addAll = (list, items, comparator = null) => {
+  let newList = list
   items.forEach(item => {
     const test = comparator ? element => comparator(element, item) : element => element === item
-    list = list && !_.find(list, test) ? [...list, item] : list
+    newList = newList && !_.find(newList, test) ? [...newList, item] : newList
   })
-  return list
+  return newList
 }
 
 const update = (list, item, newValue, comparator = null) => {
