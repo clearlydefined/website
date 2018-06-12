@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { DEFINITION_BODIES } from '../actions/definitionActions'
+import { DEFINITION_BODIES, DEFINITION_BADGES } from '../actions/definitionActions'
 import tableReducer from './tableReducer'
 
 export default combineReducers({
-  bodies: tableReducer(DEFINITION_BODIES)
+  bodies: tableReducer(DEFINITION_BODIES),
+  badges: tableReducer(DEFINITION_BADGES)
 })

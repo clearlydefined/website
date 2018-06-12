@@ -6,6 +6,7 @@ import { getDefinitions, getDefinition, previewDefinition, getDefinitionSuggesti
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
+export const DEFINITION_BADGES = 'DEFINITION_BADGES'
 
 export function getDefinitionAction(token, entity, name) {
   return dispatch => {
