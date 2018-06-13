@@ -28,7 +28,7 @@ export default class ComponentList extends React.Component {
   }
 
   static defaultProps = {
-    loadMoreRows: () => { }
+    loadMoreRows: () => {}
   }
 
   constructor(props) {
@@ -119,12 +119,12 @@ export default class ComponentList extends React.Component {
               <span>&nbsp;Add source</span>
             </Button>
           )}
-          {this.renderButtonWithTip(
+          {/* {this.renderButtonWithTip(
             <Button className="list-fa-button" onClick={this.curateComponent.bind(this, component)}>
               <i className="fas fa-edit" />
             </Button>,
             'Curate this definition'
-          )}
+          )} */}
           {this.renderButtonWithTip(
             <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, component)}>
               <i className="fas fa-search" />

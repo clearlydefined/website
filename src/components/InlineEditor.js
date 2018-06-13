@@ -51,9 +51,12 @@ export default class InlineEditor extends React.Component {
     const changed = initialValue !== value
     if (!editing)
       return (
-        <span className={`editable-field ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`} onClick={() => this.setState({ editing: true })}>
+        <span
+          className={`editable-field ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
+          onClick={() => this.setState({ editing: true })}
+        >
           {this.renderers[type](value) || placeholder}
-        </span >
+        </span>
       )
 
     return React.cloneElement(this.editors[type](value), {
@@ -77,6 +80,6 @@ export default class InlineEditor extends React.Component {
   }
 
   editors = {
-    text: value => <input type="text" defaultValue={value} />
+    text: value => <input size="45" type="text" defaultValue={value} />
   }
 }
