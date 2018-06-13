@@ -71,16 +71,28 @@ export default class DefinitionEntry extends React.Component {
 
   renderHeadline(definition) {
     const { namespace, name, revision } = definition.coordinates
+    const locationUrl = this.getLocationURL(definition)
+    const revisionUrl = this.getRevisionUrl(definition)
     const namespaceText = namespace ? namespace + '/' : ''
     const sourceUrl = this.getSourceUrl(definition)
-    let revisionText = <span>&nbsp;&nbsp;&nbsp;{revision}</span>
+    let revisionText = (
+      <span>
+        &nbsp;&nbsp;&nbsp;
+        <a href={revisionUrl} target="_blank">
+          {revision}
+        </a>
+      </span>
+    )
+
     const location = get(definition, 'described.sourceLocation')
-    if (!location || (definition.coordinates.provider === location.provider && revision === location.revision))
+    if (location && (definition.coordinates.provider === location.provider && revision === location.revision))
       revisionText = ''
     return (
       <span>
-        {namespaceText}
-        {name}
+        <a href={locationUrl} target="_blank">
+          {namespaceText}
+          {name}
+        </a>
         {revisionText}&nbsp;&nbsp;&nbsp;{sourceUrl}
       </span>
     )
@@ -89,6 +101,26 @@ export default class DefinitionEntry extends React.Component {
   renderMessage(definition) {
     const licenseExpression = definition ? get(definition, 'licensed.declared') : null
     return licenseExpression ? <span>{licenseExpression}</span> : <span>&nbsp;</span>
+  }
+
+  getRevisionUrl(definition) {
+    const coordinate = get(definition, 'coordinates')
+    switch (coordinate.provider) {
+      case 'github':
+        return ''
+      case 'npmjs':
+        return `${this.getLocationURL(definition)}/v/${coordinate.revision}`
+    }
+  }
+
+  getLocationURL(definition) {
+    const coordinate = get(definition, 'coordinates')
+    switch (coordinate.provider) {
+      case 'github':
+        return `https://${coordinate.provider}.com/${coordinate.namespace}/${coordinate.name}`
+      case 'npmjs':
+        return `https://${coordinate.provider}.com/package/${coordinate.name}`
+    }
   }
 
   getSourceUrl(definition) {
@@ -244,7 +276,7 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Facets', true)}</Col>
             <Col md={10}>
-              <p className="list-singleLine">{this.printArray(initialFacets)}</p>
+              <p className="list-singleLine"> &nbsp;&nbsp;&nbsp;&nbsp;{this.printArray(initialFacets)}</p>
 
               {/* <InlineEditor
                 type="text"
