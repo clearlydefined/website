@@ -133,7 +133,7 @@
   border-color: lightgray;
   min-height: 200px;
   // width: 1178px;
-  // box-shadow: 5px 5px 70px -10px lightgrey;
+  box-shadow: 5px 5px 20px -10px lightgrey;
 }
 
 .section-header {
@@ -150,4 +150,17 @@
 
 .about-text {
   font-size: 1.25em;
+}
+
+.editable-field {
+  text-decoration-style: dashed;
+}
+
+.editable-marker {
+  font-size: x-small;
+  padding-right: 4px;
+}
+
+.placeholder-text {
+  color: #bdbdbd;
 }

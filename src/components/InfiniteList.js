@@ -5,7 +5,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { AutoSizer, List, InfiniteLoader } from 'react-virtualized'
 import styles from 'react-virtualized/styles.css'
-import { xor } from 'lodash'
 
 export default class InfiniteList extends React.Component {
   static propTypes = {
@@ -18,8 +17,7 @@ export default class InfiniteList extends React.Component {
     rowRenderer: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     sortOrder: PropTypes.string,
-    contentSeq: PropTypes.number, // value upper levels can change to sign non-shallow content change
-    expanded: PropTypes.arrayOf(PropTypes.number)
+    contentSeq: PropTypes.number // value upper levels can change to signal non-shallow content change
   }
 
   static defaultProps = {
@@ -32,9 +30,10 @@ export default class InfiniteList extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const changed = xor(newProps.expanded, this.props.expanded)
-    if (changed.length === 0 || !this.state.list) return
-    this.state.list.recomputeRowHeights(changed.sort()[0])
+    // aggressively recompute heights if the deeper content has changes. Never know if heights will be affected.
+    const changed = newProps.contentSeq !== this.props.contentSeq
+    if (!changed || !this.state.list) return
+    this.state.list.recomputeRowHeights(0)
   }
 
   // hook the List ref so we can trigger recompute when expand happens.

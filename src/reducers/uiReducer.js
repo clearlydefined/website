@@ -30,6 +30,7 @@ import { isEqual } from 'lodash'
 import valueReducer from './valueReducer'
 import itemReducer from './itemReducer'
 import yaml from 'js-yaml'
+import EntitySpec from '../utils/entitySpec'
 
 /**
  * protected:
@@ -50,12 +51,12 @@ const initialStateNavigation = [
     protected: 0,
     isSelected: false
   },
-  {
-    title: 'Curate',
-    to: ROUTE_CURATE,
-    protected: 0,
-    isSelected: false
-  },
+  // {
+  //   title: 'Curate',
+  //   to: ROUTE_CURATE,
+  //   protected: 0,
+  //   isSelected: false
+  // },
   {
     title: 'Harvest',
     to: ROUTE_HARVEST,
@@ -104,7 +105,7 @@ const inspect = combineReducers({
 const browse = combineReducers({
   filter: new valueReducer(UI_BROWSE_UPDATE_FILTER),
   filterList: new listReducer(UI_BROWSE_UPDATE_FILTER_LIST),
-  componentList: new listReducer(UI_BROWSE_UPDATE_LIST, null, isEqual)
+  componentList: new listReducer(UI_BROWSE_UPDATE_LIST, null, EntitySpec.isEquivalent)
 })
 
 const harvest = combineReducers({
