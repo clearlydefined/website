@@ -183,7 +183,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   printDate(value) {
-    return value ? moment(value).format('YYYY.MM.DD') : null
+    return value ? moment(value).format('YYYY-MM-DD') : null
   }
 
   parseDate(value) {
@@ -269,7 +269,7 @@ export default class DefinitionEntry extends React.Component {
                 value={this.printDate(this.getValue('described.releaseDate'))}
                 onChange={this.fieldChange('described.releaseDate')}
                 validator={value => true}
-                placeholder={'YYYY/MM/DD'}
+                placeholder={'YYYY-MM-DD'}
               />
             </Col>
           </Row>
