@@ -215,9 +215,6 @@ class PageDefinitions extends Component {
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
         <Row className="show-grid spacer">
-          {/* <Col md={5}>
-            <FacetSelect name="facets" onChange={this.facetChange} defaultFacets={defaultFacets} />
-          </Col> */}
           <Col md={10} mdOffset={1}>
             <FilterBar options={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} clearOnChange />
           </Col>

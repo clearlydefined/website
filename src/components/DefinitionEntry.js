@@ -277,15 +277,6 @@ export default class DefinitionEntry extends React.Component {
             <Col md={2}>{this.renderLabel('Facets', true)}</Col>
             <Col md={10}>
               <p className="list-singleLine"> &nbsp;&nbsp;&nbsp;&nbsp;{this.printArray(initialFacets)}</p>
-
-              {/* <InlineEditor
-                type="text"
-                initialValue={this.printArray(initialFacets)}
-                value={this.printArray(this.getValue('described.facets') || initialFacets)}
-                onChange={this.fieldChange('described.facets', isEqual, this.parseArray)}
-                validator={value => true}
-                placeholder={'Facets'}
-              /> */}
             </Col>
           </Row>
         </Col>
