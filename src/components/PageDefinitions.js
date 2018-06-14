@@ -27,6 +27,7 @@ class PageDefinitions extends Component {
     this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
+    this.onRemoveAll = this.onRemoveAll.bind(this)
     this.facetChange = this.facetChange.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
@@ -114,6 +115,10 @@ class PageDefinitions extends Component {
     this.props.dispatch(uiBrowseUpdateList({ remove: component }))
   }
 
+  onRemoveAll() {
+    this.props.dispatch(uiBrowseUpdateList({ removeAll: {} }))
+  }
+
   onChangeComponent(component, newComponent) {
     this.props.dispatch(uiBrowseUpdateList({ update: component, value: newComponent }))
   }
@@ -192,17 +197,17 @@ class PageDefinitions extends Component {
 
   renderContributeButton() {
     return (
-      <div>
-        <Button
-          bsStyle="success"
-          className="pull-right"
-          disabled={!this.hasChanges()}
-          onClick={this.doPromptContribute}
-        >
-          Contribute
+      <div className="pull-right">
+        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
+          Remove All
         </Button>
+        &nbsp;
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
+        </Button>
+        &nbsp;
+        <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
+          Contribute
         </Button>
       </div>
     )
