@@ -1,0 +1,43 @@
+/* Copyright (c) Amazon.com, Inc. and others. Licensed under the MIT license. */
+/* SPDX-License-Identifier: MIT */
+
+.file-tagger {
+  tr {
+    .file-tagger-expander {
+      display: inline-block;
+      width: 15px;
+    }
+
+    .file-tagger-facets {
+      width: 350px;
+      font-size: 0.7em;
+      text-align: right;
+
+      .file-tagger-facet {
+        display: inline-block;
+        border: 1px solid #cccccc;
+        padding: 2px 4px;
+        margin-right: 4px;
+        cursor: pointer;
+      }
+    }
+  }
+  .facet-core {
+    background-color: #ffffff;
+  }
+  .facet-data {
+    background-color: #d4bfff;
+  }
+  .facet-dev {
+    background-color: #fffa9e;
+  }
+  .facet-doc {
+    background-color: #9ee8ff;
+  }
+  .facet-examples {
+    background-color: #9effa7;
+  }
+  .facet-tests {
+    background-color: #ffdac1;
+  }
+}

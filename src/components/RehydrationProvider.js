@@ -19,6 +19,7 @@ import { App, PageLanding, PageCurate, PageDefinitions, PageInspect, PageHarvest
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import withTracker from '../utils/withTracker'
+import PageFileTaggerTest from './PageFileTaggerTest'
 
 const store = configureStore()
 
@@ -50,6 +51,7 @@ export default class RehydrationDelayedProvider extends Component {
         <Router>
           <App className="App">
             <Switch>
+              <Route path={'/file-tagger-test'} component={withTracker(PageFileTaggerTest)} />
               <Route path={ROUTE_DEFINITIONS} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
               {/* <Route path={ROUTE_CURATE} component={withTracker(PageCurate)} /> */}
