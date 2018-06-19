@@ -47,27 +47,53 @@ class PageDefinitions extends Component {
     dispatch(uiBrowseUpdateList({ add: component }))
   }
 
-  onDrop(acceptedFile, rejectedFiles) {
+  onDrop(acceptedFiles, rejectedFiles) {
     const { dispatch, token, definitions } = this.props
-    acceptedFile.forEach(file => {
-      const reader = new FileReader();
+    dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
+    acceptedFiles.forEach(file => {
+      const reader = new FileReader()
       reader.onload = () => {
-        const components = JSON.parse(reader.result);
-        if (components.coordinates) {
-          components.coordinates.forEach(component => {
-            const spec = EntitySpec.validateAndCreate(component)
-            if (spec) {
-              const path = spec.toPath()
-              !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
-              dispatch(uiBrowseUpdateList({ add: spec }))
-            }
-          })
-        } else {
-          dispatch(uiNotificationNew({ type: 'info', message: 'Invalid file.', timeout: 5000 }))
+        const listSpec = this.loadListSpec(reader.result, file)
+        if (typeof listSpec === 'string') {
+          const message = `Invalid component list file: ${listSpec}`
+          return dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
         }
-      };
+        listSpec.coordinates.forEach(component => {
+          // TODO figure a way to add these in bulk. One by one will be painful for large lists
+          const spec = EntitySpec.validateAndCreate(component)
+          if (spec) {
+            const path = spec.toPath()
+            !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
+            dispatch(uiBrowseUpdateList({ add: spec }))
+          }
+        })
+      }
       reader.readAsBinaryString(file)
     })
+  }
+
+  loadListSpec(content, file) {
+    try {
+      const object = JSON.parse(content)
+      if (file.name.toLowerCase() === 'package-lock.json') return this.loadPackageLockFile(object.dependencies)
+      if (object.coordinates) return object
+      return 'No component coordinates found'
+    } catch (e) {
+      return e.message
+    }
+  }
+
+  loadPackageLockFile(dependencies) {
+    const coordinates = []
+    for (const dependency in dependencies) {
+      let [namespace, name] = dependency.split('/')
+      if (!name) {
+        name = namespace
+        namespace = null
+      }
+      coordinates.push({ type: 'npm', provider: 'npmjs', namespace, name, revision: dependencies[dependency].version })
+    }
+    return { coordinates }
   }
 
   onSearch(value) {
@@ -118,15 +144,17 @@ class PageDefinitions extends Component {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: null, sortBy: null, coordinates: spec }
-    const file = new File([JSON.stringify(fileObject, null, 2)], "components.json");
-    saveAs(file);
+    const file = new File([JSON.stringify(fileObject, null, 2)], 'components.json')
+    saveAs(file)
   }
 
   buildContributeSpec(list) {
     return list.reduce((result, component) => {
       if (!this.hasChange(component)) return result
       const coord = EntitySpec.asRevisionless(component)
-      const patch = find(result, p => { return EntitySpec.isEquivalent(p.coordinates, coord) })
+      const patch = find(result, p => {
+        return EntitySpec.isEquivalent(p.coordinates, coord)
+      })
       const revisionNumber = component.revision
       const patchChanges = Object.getOwnPropertyNames(component.changes).reduce((result, change) => {
         set(result, change, component.changes[change])
@@ -175,7 +203,12 @@ class PageDefinitions extends Component {
   renderButtons() {
     return (
       <div>
-        <Button bsStyle="success" className="pull-right" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
+        <Button
+          bsStyle="success"
+          className="pull-right"
+          disabled={!this.hasChanges()}
+          onClick={this.doPromptContribute}
+        >
           Contribute
         </Button>
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
