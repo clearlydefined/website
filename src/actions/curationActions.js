@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
+import React from 'react'
 import { asyncActions } from './'
 import { curate, getCuration } from '../api/clearlyDefined'
 import { uiNotificationNew } from '../actions/ui'
@@ -25,8 +26,20 @@ export function curateAction(token, spec) {
     dispatch(uiNotificationNew({ type: 'info', message: 'Started contribution.', timeout: 5000 }))
     return curate(token, spec).then(
       result => {
+        const url = 'https://github.com/clearlydefined/curated-data-dev/pull/' + result.prNumber
+        const prMessage = (
+          <a href={url} target="_blank">
+            Successfully contributed PR#{result.prNumber}
+          </a>
+        )
         dispatch(actions.success(result))
-        dispatch(uiNotificationNew({ type: 'info', message: `Successfully contributed PR#${result.prNumber}.`, timeout: 5000 }))
+        dispatch(
+          uiNotificationNew({
+            type: 'info',
+            message: prMessage,
+            timeout: 10000
+          })
+        )
       },
       error => {
         dispatch(actions.error(error))
