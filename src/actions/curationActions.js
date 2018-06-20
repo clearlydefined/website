@@ -34,9 +34,12 @@ export function curateAction(token, spec) {
             url = 'https://github.com/clearlydefined/curated-data-dev/pull/' + result.prNumber
         }
         const prMessage = (
-          <a href={url} target="_blank">
-            Successfully contributed PR#{result.prNumber}
-          </a>
+          <div>
+            Successfully contributed{' '}
+            <a href={url} target="_blank">
+              PR#{result.prNumber}
+            </a>
+          </div>
         )
         dispatch(actions.success(result))
         dispatch(
