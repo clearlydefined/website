@@ -202,24 +202,29 @@ class PageDefinitions extends Component {
 
   renderButtons() {
     return (
-      <div>
-        <Button
-          bsStyle="success"
-          className="pull-right"
-          disabled={!this.hasChanges()}
-          onClick={this.doPromptContribute}
-        >
-          Contribute
-        </Button>
+      <div className="pull-right">
+        <DropdownButton title="Sort By" Style="default" title={'Sort By'} disabled={!this.hasComponents()}>
+          <MenuItem onSelect={this.doSort} eventKey="type">
+            Type
+          </MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="releaseDate">
+            Release Date
+          </MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="license">
+            License
+          </MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="score">
+            Score
+          </MenuItem>
+        </DropdownButton>
+        &nbsp;
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
         </Button>
-        <DropdownButton title="Sort By" Style="default" title={'Sort By'}>
-          <MenuItem onSelect={this.doSort} eventKey="type">Type</MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="releaseDate">Release Date</MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="license">License</MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="score">Score</MenuItem>
-        </DropdownButton>
+        &nbsp;
+        <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
+          Contribute
+        </Button>
       </div>
     )
   }
@@ -239,7 +244,7 @@ class PageDefinitions extends Component {
           </Col>
         </Row>
         <Section name={'Available definitions'} actionButton={this.renderButtons()}>
-          <Dropzone disableClick onDrop={this.onDrop} style={{ position: "relative" }}>
+          <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
             <div className="section-body">
               <ComponentList
                 list={components}
