@@ -182,8 +182,55 @@ class PageDefinitions extends Component {
     this.refs.contributeModal.open()
   }
 
+  name = coordinates => {
+    return coordinates.name ? coordinates.name : null
+  }
+
+  namespace = coordinates => {
+    return coordinates.namespace ? coordinates.namespace : null
+  }
+
+  provider = coordinates => {
+    return coordinates.provider ? coordinates.provider : null
+  }
+
+  type = coordinates => {
+    return coordinates.type ? coordinates.type : null
+  }
+
+  releaseDate = coordinates => {
+    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+    const described = get(definition, 'described')
+    if (described && described.releaseDate) return described.releaseDate
+    return null
+  }
+
+  license = coordinates => {
+    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+    const licensed = get(definition, 'licensed')
+    if (licensed && licensed.declared) return licensed.declared
+    return null
+  }
+
+  getSort(eventKey) {
+    switch (eventKey) {
+      case 'name':
+        return this.name
+      case 'namespace':
+        return this.namespace
+      case 'provider':
+        return this.provider
+      case 'type':
+        return this.type
+      case 'releaseDate':
+        return this.releaseDate
+      case 'license':
+        return this.license
+    }
+  }
+
   doSort(eventKey) {
-    this.props.dispatch(uiBrowseUpdateList({ sort: eventKey }))
+    this.props.dispatch(uiBrowseUpdateList({ sort: this.getSort(eventKey) }))
     this.incrementSequence()
   }
 
@@ -203,18 +250,24 @@ class PageDefinitions extends Component {
   renderButtons() {
     return (
       <div className="pull-right">
-        <DropdownButton title="Sort By" Style="default" title={'Sort By'} disabled={!this.hasComponents()}>
-          <MenuItem onSelect={this.doSort} eventKey="type">
-            Type
+        <DropdownButton title="Sort By" bsStyle="default" title={'Sort By'} disabled={!this.hasComponents()} id="sort">
+          <MenuItem onSelect={this.doSort} eventKey="license">
+            License
+          </MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="name">
+            Name
+          </MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="namespace">
+            Namespace
+          </MenuItem>
+          <MenuItem onSelect={this.doSort} eventKey="provider">
+            Provider
           </MenuItem>
           <MenuItem onSelect={this.doSort} eventKey="releaseDate">
             Release Date
           </MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="license">
-            License
-          </MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="score">
-            Score
+          <MenuItem onSelect={this.doSort} eventKey="type">
+            Type
           </MenuItem>
         </DropdownButton>
         &nbsp;

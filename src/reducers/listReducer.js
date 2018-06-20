@@ -35,8 +35,7 @@ const update = (list, item, newValue, comparator = null) => {
 }
 
 const sort = (list, sortValue) => {
-  const temp = list ? _.sortBy(list, sortValue) : list
-  return temp
+  return list ? _.sortBy(list, sortValue) : list
 }
 
 function computeTranformed(state, append, list, transformer) {
