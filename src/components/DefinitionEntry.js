@@ -71,29 +71,35 @@ export default class DefinitionEntry extends React.Component {
 
   renderHeadline(definition) {
     const { namespace, name, revision } = definition.coordinates
-    const locationUrl = this.getLocationURL(definition)
-    const revisionUrl = this.getRevisionUrl(definition)
+    const componentUrl = this.getComponentUrl(definition.coordinates)
+    const revisionUrl = this.getRevisionUrl(definition.coordinates)
     const namespaceText = namespace ? namespace + '/' : ''
-    const sourceUrl = this.getSourceUrl(definition)
-    let revisionText = (
+    const componentTag = componentUrl ? (
       <span>
-        &nbsp;&nbsp;&nbsp;
-        <a href={revisionUrl} target="_blank">
-          {revision}
-        </a>
-      </span>
-    )
-
-    const location = get(definition, 'described.sourceLocation')
-    if (location && (definition.coordinates.provider === location.provider && revision === location.revision))
-      revisionText = ''
-    return (
-      <span>
-        <a href={locationUrl} target="_blank">
+        <a href={componentUrl} target="_blank">
           {namespaceText}
           {name}
         </a>
-        {revisionText}&nbsp;&nbsp;&nbsp;{sourceUrl}
+      </span>
+    ) : (
+      <span>
+        {namespaceText}
+        {name}
+      </span>
+    )
+    const revisionTag = revisionUrl ? (
+      <span>
+        &nbsp;&nbsp;&nbsp;<a href={revisionUrl} target="_blank">
+          {revision}
+        </a>
+      </span>
+    ) : (
+      <span>&nbsp;&nbsp;&nbsp;{revision}</span>
+    )
+    return (
+      <span>
+        {componentTag}
+        {revisionTag}
       </span>
     )
   }
@@ -103,23 +109,36 @@ export default class DefinitionEntry extends React.Component {
     return licenseExpression ? <span>{licenseExpression}</span> : <span>&nbsp;</span>
   }
 
-  getRevisionUrl(definition) {
-    const coordinate = get(definition, 'coordinates')
-    switch (coordinate.provider) {
+  getRevisionUrl(coordinates) {
+    if (!coordinates.revision) return
+    switch (coordinates.provider) {
       case 'github':
-        return ''
+        return `${this.getComponentUrl(coordinates)}/commit/${coordinates.revision}`
       case 'npmjs':
-        return `${this.getLocationURL(definition)}/v/${coordinate.revision}`
+        return `${this.getComponentUrl(coordinates)}/v/${coordinates.revision}`
+      case 'nuget':
+        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
+      case 'mavencentral':
+        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
+      default:
+        return
     }
   }
 
-  getLocationURL(definition) {
-    const coordinate = get(definition, 'coordinates')
-    switch (coordinate.provider) {
+  getComponentUrl(coordinates) {
+    switch (coordinates.provider) {
       case 'github':
-        return `https://${coordinate.provider}.com/${coordinate.namespace}/${coordinate.name}`
+        return `https://github.com/${coordinates.namespace}/${coordinates.name}`
       case 'npmjs':
-        return `https://${coordinate.provider}.com/package/${coordinate.name}`
+        return `https://npmjs.com/package/${
+          coordinates.namespace ? coordinates.namespace + '/' + coordinates.name : coordinates.name
+        }`
+      case 'nuget':
+        return `https://nuget.org/packages/${coordinates.name}`
+      case 'mavencentral':
+        return `https://mvnrepository.com/artifact/${coordinates.namespace}/${coordinates.name}`
+      default:
+        return
     }
   }
 
