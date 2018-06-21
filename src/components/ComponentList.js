@@ -22,7 +22,6 @@ export default class ComponentList extends React.Component {
     onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
-    activeFacets: PropTypes.array,
     definitions: PropTypes.object,
     githubToken: PropTypes.string,
     sortCounter: PropTypes.number
@@ -43,7 +42,6 @@ export default class ComponentList extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
-    if (newProps.activeFacets !== this.props.activeFacets) this.incrementSequence()
     if (newProps.sortCounter !== this.props.sortCounter) this.incrementSequence()
   }
 
@@ -147,7 +145,7 @@ export default class ComponentList extends React.Component {
   }
 
   renderRow({ index, key, style }, toggleExpanded = null, showExpanded = false) {
-    const { list, activeFacets } = this.props
+    const { list } = this.props
     const component = list.list[index]
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
@@ -157,7 +155,6 @@ export default class ComponentList extends React.Component {
           onClick={() => this.toggleExpanded(component)}
           definition={definition}
           component={component}
-          activeFacets={activeFacets}
           onChange={this.onEntryChange}
           renderButtons={this.renderButtons}
         />

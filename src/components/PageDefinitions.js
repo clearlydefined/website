@@ -7,19 +7,24 @@ import { Grid, Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstra
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
-import { FilterBar, ComponentList, Section, FacetSelect, ContributePrompt } from './'
+import { FilterBar, ComponentList, Section, FilterSelect, ContributePrompt } from './'
 import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
-import { set, get, find } from 'lodash'
+import { set, get, find, filter } from 'lodash'
 import { saveAs } from 'file-saver'
 import Dropzone from 'react-dropzone'
 
-const defaultFacets = [{ value: 'core', label: 'Core' }]
+const defaultPresence = []
+const defaultAbsence = []
 
 class PageDefinitions extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeFacets: defaultFacets.map(x => x.value), sortCounter: 0 }
+    this.state = {
+      activePresence: defaultPresence.map(x => x.value),
+      activeAbsence: defaultAbsence.map(x => x.value),
+      sortCounter: 0
+    }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
@@ -28,10 +33,19 @@ class PageDefinitions extends Component {
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.doSort = this.doSort.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
-    this.facetChange = this.facetChange.bind(this)
+    this.presenceChange = this.presenceChange.bind(this)
+    this.absenceChange = this.absenceChange.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
     this.doSave = this.doSave.bind(this)
+  }
+
+  getDefinition(component) {
+    return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+  }
+
+  getValue(component, field) {
+    return get(component, field)
   }
 
   componentDidMount() {
@@ -234,9 +248,49 @@ class PageDefinitions extends Component {
     this.incrementSequence()
   }
 
-  facetChange(value) {
-    const activeFacets = (value || []).map(facet => facet.value)
-    this.setState({ ...this.state, activeFacets })
+  filterPresence(list) {
+    const { activePresence } = this.state
+    if (activePresence.length === 0) {
+      return list
+    }
+    return filter(list, component => {
+      const defintion = this.getDefinition(component)
+      for (let filterIndex in activePresence) {
+        const value = this.getValue(defintion, activePresence[filterIndex])
+        if (!value) {
+          return false
+        }
+      }
+      return true
+    })
+  }
+
+  filterAbsence(list) {
+    const { activeAbsence } = this.state
+    if (activeAbsence.length === 0) {
+      return list
+    }
+    return filter(list, component => {
+      let filterBoolean = false
+      const defintion = this.getDefinition(component)
+      for (let filterIndex in activeAbsence) {
+        const value = this.getValue(defintion, activeAbsence[filterIndex])
+        if (value) {
+          return false
+        }
+      }
+      return true
+    })
+  }
+
+  presenceChange(value) {
+    const activePresence = (value || []).map(filter => filter.value)
+    this.setState({ ...this.state, activePresence })
+  }
+
+  absenceChange(value) {
+    const activeAbsence = (value || []).map(filter => filter.value)
+    this.setState({ ...this.state, activeAbsence })
   }
 
   incrementSequence() {
@@ -284,15 +338,35 @@ class PageDefinitions extends Component {
 
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activeFacets, sortCounter } = this.state
+    const { activePresence, activeAbsence, sortCounter } = this.state
+    const filterComponents = Object.assign({}, components)
+    filterComponents.list = this.filterPresence(filterComponents.list)
+    filterComponents.list = this.filterAbsence(filterComponents.list)
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
         <Row className="show-grid spacer">
-          <Col md={5}>
-            <FacetSelect name="facets" onChange={this.facetChange} defaultFacets={defaultFacets} />
+          <Col md={6}>
+            <Col md={6}>
+              <FilterSelect
+                name="presence"
+                onChange={this.presenceChange}
+                defaultFilters={defaultPresence}
+                disabled={!this.hasComponents()}
+                placeholder={'Presence of...'}
+              />
+            </Col>
+            <Col md={6}>
+              <FilterSelect
+                name="absence"
+                onChange={this.absenceChange}
+                defaultFilters={defaultAbsence}
+                disabled={!this.hasComponents()}
+                placeholder={'Absence of...'}
+              />
+            </Col>
           </Col>
-          <Col md={7}>
+          <Col md={6}>
             <FilterBar options={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} clearOnChange />
           </Col>
         </Row>
@@ -300,7 +374,7 @@ class PageDefinitions extends Component {
           <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
             <div className="section-body">
               <ComponentList
-                list={components}
+                list={filterComponents}
                 listHeight={1000}
                 onRemove={this.onRemoveComponent}
                 onChange={this.onChangeComponent}
@@ -310,7 +384,8 @@ class PageDefinitions extends Component {
                 definitions={definitions}
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
-                activeFacets={activeFacets}
+                activePresence={activePresence}
+                activeAbsence={activeAbsence}
                 sortCounter={sortCounter}
               />
             </div>
