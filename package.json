@@ -29,8 +29,11 @@
   },
   "devDependencies": {
     "cpx": "^1.5.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "node-sass": "^4.5.2",
-    "npm-run-all": "^4.0.2"
+    "npm-run-all": "^4.0.2",
+    "react-test-renderer": "^16.4.1"
   },
   "scripts": {
     "copy-monaco": "node ./src/utils/install-monaco.js",
