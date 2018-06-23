@@ -15,7 +15,7 @@ import { FilterBar, MonacoEditorWrapper, Section, CopyUrlButton } from './'
 import EntitySpec from '../utils/entitySpec'
 import { ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 
-class PageInspect extends Component {
+export class PageInspect extends Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -91,10 +91,10 @@ class PageInspect extends Component {
 
   renderInnerData(value, name, type = 'json', actionButton = null) {
     if (value.isFetching) return this.renderPlaceholder(`Loading the ${name}`)
-    if (value.error && !value.error.state === 404)
+    if (value.error && value.error.state !== 404)
       return this.renderPlaceholder(`There was a problem loading the ${name}`)
     if (!value.isFetched) return this.renderPlaceholder('Search for some part of a component name to see details')
-    if (!value.item) return this.renderPlaceholder(`There are no ${name}`, actionButton)
+    if (!value.item) return this.renderPlaceholder(`There are no ${name}`)
     const options = {
       selectOnLineNumbers: true
     }
@@ -121,7 +121,7 @@ class PageInspect extends Component {
     return (
       <Button
         bsStyle="success"
-        className="pull-right"
+        className="pull-right add-curation-btn"
         disabled={!Boolean(this.props.filterValue)}
         onClick={this.addCuration}
       >
