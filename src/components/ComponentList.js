@@ -22,6 +22,7 @@ export default class ComponentList extends React.Component {
     onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     fetchingRenderer: PropTypes.func,
+    renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
     githubToken: PropTypes.string,
     sortCounter: PropTypes.number
@@ -163,20 +164,23 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer } = this.props
+    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <RowEntityList
-        list={list}
-        loadMoreRows={loadMoreRows}
-        listHeight={listHeight}
-        rowRenderer={this.renderRow}
-        rowHeight={this.rowHeight}
-        noRowsRenderer={noRowsRenderer}
-        fetchingRenderer={fetchingRenderer}
-        sortOrder={sortOrder}
-        contentSeq={contentSeq}
-      />
+      <div>
+        {renderFilterBar()}
+        <RowEntityList
+          list={list}
+          loadMoreRows={loadMoreRows}
+          listHeight={listHeight}
+          rowRenderer={this.renderRow}
+          rowHeight={this.rowHeight}
+          noRowsRenderer={noRowsRenderer}
+          fetchingRenderer={fetchingRenderer}
+          sortOrder={sortOrder}
+          contentSeq={contentSeq}
+        />
+      </div>
     )
   }
 }

@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Grid, Row, Col, Button, DropdownButton, MenuItem, Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
@@ -13,9 +13,38 @@ import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter } from 'lodash'
 import { saveAs } from 'file-saver'
 import Dropzone from 'react-dropzone'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+
+import 'react-day-picker/lib/style.css'
 
 const defaultPresence = []
 const defaultAbsence = []
+
+const sorts = [
+  { value: 'license', label: 'License' },
+  { value: 'name', label: 'Name' },
+  { value: 'namespace', label: 'Namespace' },
+  { value: 'provider', label: 'Provider' },
+  { value: 'releaseDate', label: 'Release Date' },
+  { value: 'type', label: 'Type' }
+]
+
+const licenses = [
+  { value: 'apache-2.0', label: 'Apache-2.0' },
+  { value: 'bsd-2-clause', label: 'BSD-2-Clause' },
+  { value: 'cddl-1.0', label: 'CDDL-1.0' },
+  { value: 'epl-1.0', label: 'EPL-1.0' },
+  { value: 'gpl', label: 'GPL' },
+  { value: 'lgpl', label: 'LGPL' },
+  { value: 'mit', label: 'MIT' },
+  { value: 'mpl-2.0', label: 'MPL-2.0' },
+  { value: 'presence', label: 'Presence Of' },
+  { value: 'absence', label: 'Absence Of' }
+]
+
+const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+
+const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
 
 class PageDefinitions extends Component {
   constructor(props) {
@@ -23,6 +52,7 @@ class PageDefinitions extends Component {
     this.state = {
       activePresence: defaultPresence.map(x => x.value),
       activeAbsence: defaultAbsence.map(x => x.value),
+      activeFilters: [],
       sortCounter: 0
     }
     this.onAddComponent = this.onAddComponent.bind(this)
@@ -32,12 +62,14 @@ class PageDefinitions extends Component {
     this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.doSort = this.doSort.bind(this)
+    this.onFilter = this.onFilter.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.presenceChange = this.presenceChange.bind(this)
     this.absenceChange = this.absenceChange.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
     this.doSave = this.doSave.bind(this)
+    this.renderFilterBar = this.renderFilterBar.bind(this)
   }
 
   getDefinition(component) {
@@ -227,7 +259,7 @@ class PageDefinitions extends Component {
   }
 
   getSort(eventKey) {
-    switch (eventKey) {
+    switch (eventKey.value) {
       case 'name':
         return this.name
       case 'namespace':
@@ -248,39 +280,31 @@ class PageDefinitions extends Component {
     this.incrementSequence()
   }
 
-  filterPresence(list) {
-    const { activePresence } = this.state
-    if (activePresence.length === 0) {
+  filterList(list) {
+    const { activeFilters } = this.state
+    if (activeFilters.length === 0) {
       return list
     }
     return filter(list, component => {
       const defintion = this.getDefinition(component)
-      for (let filterIndex in activePresence) {
-        const value = this.getValue(defintion, activePresence[filterIndex])
-        if (!value) {
-          return false
+      for (let filterType in activeFilters) {
+        const fieldValue = this.getValue(defintion, activeFilters[filterType].type)
+        if (activeFilters[filterType].value === 'presence') {
+          if (!fieldValue) return false
+        } else if (activeFilters[filterType].value === 'absence') {
+          if (fieldValue) return false
+        } else {
+          if (!fieldValue || !activeFilters[filterType].value.toLowerCase().includes(fieldValue.toLowerCase())) {
+            return false
+          }
         }
       }
       return true
     })
   }
 
-  filterAbsence(list) {
-    const { activeAbsence } = this.state
-    if (activeAbsence.length === 0) {
-      return list
-    }
-    return filter(list, component => {
-      let filterBoolean = false
-      const defintion = this.getDefinition(component)
-      for (let filterIndex in activeAbsence) {
-        const value = this.getValue(defintion, activeAbsence[filterIndex])
-        if (value) {
-          return false
-        }
-      }
-      return true
-    })
+  onFilter(value) {
+    this.setState({ ...this.state, activeFilters: [...this.state.activeFilters, value] })
   }
 
   presenceChange(value) {
@@ -301,30 +325,71 @@ class PageDefinitions extends Component {
     return <div>Select components from the list above ...</div>
   }
 
+  renderSort(list, title, id) {
+    return (
+      <DropdownButton bsStyle={''} pullRight title={title} disabled={!this.hasComponents()} id={id}>
+        {list.map(sortType => {
+          return (
+            <MenuItem onSelect={this.doSort} eventKey={{ type: id, value: sortType.value }}>
+              {sortType.label}
+            </MenuItem>
+          )
+        })}
+      </DropdownButton>
+    )
+  }
+
+  renderFilter(list, title, id) {
+    return (
+      <DropdownButton bsStyle={''} pullRight title={title} disabled={!this.hasComponents()} id={id}>
+        {list.map(filterType => {
+          return (
+            <MenuItem onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
+              {filterType.label}
+            </MenuItem>
+          )
+        })}
+      </DropdownButton>
+    )
+  }
+
+  renderDateFilter() {
+    return (
+      <DropdownButton
+        pullRight
+        bsStyle={''}
+        title={'Release Date'}
+        disabled={!this.hasComponents()}
+        id={'described.releaseDate'}
+      >
+        {releaseDates.map(filterType => {
+          return (
+            <MenuItem onSelect={this.onFilter} eventKey={{ type: 'described.releaseDate', value: filterType.value }}>
+              {filterType.label}
+            </MenuItem>
+          )
+        })}
+        <MenuItem onSelect={null} eventKey="startDate">
+          <DayPickerInput style={{ position: 'absolute' }} placeholder="DD/MM/YYYY" format="DD/MM/YYYY" />
+        </MenuItem>
+      </DropdownButton>
+    )
+  }
+
+  renderFilterBar() {
+    return (
+      <div style={{ height: 50 }}>
+        {this.renderSort(sorts, 'Sort By', 'sort')}
+        {this.renderFilter(licenses, 'License', 'licensed.declared')}
+        {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
+        {this.renderDateFilter()}
+      </div>
+    )
+  }
+
   renderButtons() {
     return (
       <div className="pull-right">
-        <DropdownButton title="Sort By" bsStyle="default" title={'Sort By'} disabled={!this.hasComponents()} id="sort">
-          <MenuItem onSelect={this.doSort} eventKey="license">
-            License
-          </MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="name">
-            Name
-          </MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="namespace">
-            Namespace
-          </MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="provider">
-            Provider
-          </MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="releaseDate">
-            Release Date
-          </MenuItem>
-          <MenuItem onSelect={this.doSort} eventKey="type">
-            Type
-          </MenuItem>
-        </DropdownButton>
-        &nbsp;
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
         </Button>
@@ -340,8 +405,7 @@ class PageDefinitions extends Component {
     const { components, filterOptions, definitions, token } = this.props
     const { activePresence, activeAbsence, sortCounter } = this.state
     const filterComponents = Object.assign({}, components)
-    filterComponents.list = this.filterPresence(filterComponents.list)
-    filterComponents.list = this.filterAbsence(filterComponents.list)
+    filterComponents.list = this.filterList(filterComponents.list)
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -381,6 +445,7 @@ class PageDefinitions extends Component {
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
                 onCurate={this.onCurate}
+                renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
