@@ -13,12 +13,6 @@ import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter } from 'lodash'
 import { saveAs } from 'file-saver'
 import Dropzone from 'react-dropzone'
-import DayPickerInput from 'react-day-picker/DayPickerInput'
-
-import 'react-day-picker/lib/style.css'
-
-const defaultPresence = []
-const defaultAbsence = []
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -50,9 +44,8 @@ class PageDefinitions extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activePresence: defaultPresence.map(x => x.value),
-      activeAbsence: defaultAbsence.map(x => x.value),
-      activeFilters: [],
+      activeFilters: {},
+      activeSort: null,
       sortCounter: 0
     }
     this.onAddComponent = this.onAddComponent.bind(this)
@@ -276,8 +269,8 @@ class PageDefinitions extends Component {
   }
 
   doSort(eventKey) {
+    this.setState({ ...this.state, activeSort: eventKey.value, sortCounter: this.state.sortCounter + 1 })
     this.props.dispatch(uiBrowseUpdateList({ sort: this.getSort(eventKey) }))
-    this.incrementSequence()
   }
 
   filterList(list) {
@@ -288,13 +281,14 @@ class PageDefinitions extends Component {
     return filter(list, component => {
       const defintion = this.getDefinition(component)
       for (let filterType in activeFilters) {
-        const fieldValue = this.getValue(defintion, activeFilters[filterType].type)
-        if (activeFilters[filterType].value === 'presence') {
+        const value = activeFilters[filterType]
+        const fieldValue = this.getValue(defintion, filterType)
+        if (value === 'presence') {
           if (!fieldValue) return false
-        } else if (activeFilters[filterType].value === 'absence') {
+        } else if (value === 'absence') {
           if (fieldValue) return false
         } else {
-          if (!fieldValue || !activeFilters[filterType].value.toLowerCase().includes(fieldValue.toLowerCase())) {
+          if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
             return false
           }
         }
@@ -304,7 +298,11 @@ class PageDefinitions extends Component {
   }
 
   onFilter(value) {
-    this.setState({ ...this.state, activeFilters: [...this.state.activeFilters, value] })
+    let activeFilters = Object.assign({}, this.state.activeFilters)
+    const filterValue = get(activeFilters, value.type)
+    if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
+    else activeFilters[value.type] = value.value
+    this.setState({ ...this.state, activeFilters })
   }
 
   presenceChange(value) {
@@ -325,6 +323,21 @@ class PageDefinitions extends Component {
     return <div>Select components from the list above ...</div>
   }
 
+  checkSort(sortType) {
+    const { activeSort } = this.state
+    if (activeSort === sortType.value) return true
+    return false
+  }
+
+  checkFilter(filterType, id) {
+    const { activeFilters } = this.state
+    for (let filterIdx in activeFilters) {
+      const filter = activeFilters[filterIdx]
+      if (filterIdx == id && filter === filterType.value) return true
+    }
+    return false
+  }
+
   renderSort(list, title, id) {
     return (
       <DropdownButton bsStyle={''} pullRight title={title} disabled={!this.hasComponents()} id={id}>
@@ -332,6 +345,7 @@ class PageDefinitions extends Component {
           return (
             <MenuItem onSelect={this.doSort} eventKey={{ type: id, value: sortType.value }}>
               {sortType.label}
+              {this.checkSort(sortType) && <i className="fas fa-check pull-right" />}
             </MenuItem>
           )
         })}
@@ -346,32 +360,10 @@ class PageDefinitions extends Component {
           return (
             <MenuItem onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
               {filterType.label}
+              {this.checkFilter(filterType, id) && <i className="fas fa-check pull-right" />}
             </MenuItem>
           )
         })}
-      </DropdownButton>
-    )
-  }
-
-  renderDateFilter() {
-    return (
-      <DropdownButton
-        pullRight
-        bsStyle={''}
-        title={'Release Date'}
-        disabled={!this.hasComponents()}
-        id={'described.releaseDate'}
-      >
-        {releaseDates.map(filterType => {
-          return (
-            <MenuItem onSelect={this.onFilter} eventKey={{ type: 'described.releaseDate', value: filterType.value }}>
-              {filterType.label}
-            </MenuItem>
-          )
-        })}
-        <MenuItem onSelect={null} eventKey="startDate">
-          <DayPickerInput style={{ position: 'absolute' }} placeholder="DD/MM/YYYY" format="DD/MM/YYYY" />
-        </MenuItem>
       </DropdownButton>
     )
   }
@@ -382,7 +374,7 @@ class PageDefinitions extends Component {
         {this.renderSort(sorts, 'Sort By', 'sort')}
         {this.renderFilter(licenses, 'License', 'licensed.declared')}
         {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
-        {this.renderDateFilter()}
+        {this.renderFilter(releaseDates, 'Release Date', 'described.releaseDate')}
       </div>
     )
   }
@@ -410,27 +402,7 @@ class PageDefinitions extends Component {
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
         <Row className="show-grid spacer">
-          <Col md={6}>
-            <Col md={6}>
-              <FilterSelect
-                name="presence"
-                onChange={this.presenceChange}
-                defaultFilters={defaultPresence}
-                disabled={!this.hasComponents()}
-                placeholder={'Presence of...'}
-              />
-            </Col>
-            <Col md={6}>
-              <FilterSelect
-                name="absence"
-                onChange={this.absenceChange}
-                defaultFilters={defaultAbsence}
-                disabled={!this.hasComponents()}
-                placeholder={'Absence of...'}
-              />
-            </Col>
-          </Col>
-          <Col md={6}>
+          <Col md={10} mdOffset={1}>
             <FilterBar options={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} clearOnChange />
           </Col>
         </Row>
