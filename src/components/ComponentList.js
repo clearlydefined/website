@@ -25,7 +25,7 @@ export default class ComponentList extends React.Component {
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
     githubToken: PropTypes.string,
-    sortCounter: PropTypes.number
+    counter: PropTypes.number
   }
 
   static defaultProps = {
@@ -43,7 +43,7 @@ export default class ComponentList extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
-    if (newProps.sortCounter !== this.props.sortCounter) this.incrementSequence()
+    if (newProps.counter !== this.props.counter) this.incrementSequence()
   }
 
   getDefinition(component) {

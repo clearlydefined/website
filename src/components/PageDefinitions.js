@@ -7,7 +7,7 @@ import { Grid, Row, Col, Button, DropdownButton, MenuItem, Navbar, Nav, NavItem,
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
-import { FilterBar, ComponentList, Section, FilterSelect, ContributePrompt } from './'
+import { FilterBar, ComponentList, Section, ContributePrompt } from './'
 import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter } from 'lodash'
@@ -46,7 +46,7 @@ class PageDefinitions extends Component {
     this.state = {
       activeFilters: {},
       activeSort: null,
-      sortCounter: 0
+      counter: 0
     }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onDrop = this.onDrop.bind(this)
@@ -57,8 +57,6 @@ class PageDefinitions extends Component {
     this.onSort = this.onSort.bind(this)
     this.onFilter = this.onFilter.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
-    this.presenceChange = this.presenceChange.bind(this)
-    this.absenceChange = this.absenceChange.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
     this.doSave = this.doSave.bind(this)
@@ -269,7 +267,7 @@ class PageDefinitions extends Component {
   }
 
   onSort(eventKey) {
-    this.setState({ ...this.state, activeSort: eventKey.value, sortCounter: this.state.sortCounter + 1 })
+    this.setState({ ...this.state, activeSort: eventKey.value, counter: this.state.counter + 1 })
     this.props.dispatch(uiBrowseUpdateList({ sort: this.getSort(eventKey) }))
   }
 
@@ -305,18 +303,8 @@ class PageDefinitions extends Component {
     this.setState({ ...this.state, activeFilters })
   }
 
-  presenceChange(value) {
-    const activePresence = (value || []).map(filter => filter.value)
-    this.setState({ ...this.state, activePresence })
-  }
-
-  absenceChange(value) {
-    const activeAbsence = (value || []).map(filter => filter.value)
-    this.setState({ ...this.state, activeAbsence })
-  }
-
   incrementSequence() {
-    this.setState({ ...this.state, sortCounter: this.state.sortCounter + 1 })
+    this.setState({ ...this.state, counter: this.state.counter + 1 })
   }
 
   noRowsRenderer() {
@@ -395,7 +383,7 @@ class PageDefinitions extends Component {
 
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activePresence, activeAbsence, sortCounter } = this.state
+    const { counter } = this.state
     const filterComponents = Object.assign({}, components)
     filterComponents.list = this.filterList(filterComponents.list)
     return (
@@ -421,9 +409,7 @@ class PageDefinitions extends Component {
                 definitions={definitions}
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
-                activePresence={activePresence}
-                activeAbsence={activeAbsence}
-                sortCounter={sortCounter}
+                counter={counter}
               />
             </div>
           </Dropzone>

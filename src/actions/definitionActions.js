@@ -18,7 +18,7 @@ export function getDefinitionAction(token, entity, name) {
   }
 }
 
-export function getDefinitionsAction(token, entities) {
+export function counteries) {
   return dispatch => {
     const actions = asyncActions(DEFINITION_BODIES)
     dispatch(actions.start())
