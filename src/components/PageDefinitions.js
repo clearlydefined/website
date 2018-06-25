@@ -54,7 +54,7 @@ class PageDefinitions extends Component {
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
-    this.doSort = this.doSort.bind(this)
+    this.onSort = this.onSort.bind(this)
     this.onFilter = this.onFilter.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.presenceChange = this.presenceChange.bind(this)
@@ -268,7 +268,7 @@ class PageDefinitions extends Component {
     }
   }
 
-  doSort(eventKey) {
+  onSort(eventKey) {
     this.setState({ ...this.state, activeSort: eventKey.value, sortCounter: this.state.sortCounter + 1 })
     this.props.dispatch(uiBrowseUpdateList({ sort: this.getSort(eventKey) }))
   }
@@ -343,7 +343,7 @@ class PageDefinitions extends Component {
       <DropdownButton bsStyle={''} pullRight title={title} disabled={!this.hasComponents()} id={id}>
         {list.map(sortType => {
           return (
-            <MenuItem onSelect={this.doSort} eventKey={{ type: id, value: sortType.value }}>
+            <MenuItem onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
               {sortType.label}
               {this.checkSort(sortType) && <i className="fas fa-check pull-right" />}
             </MenuItem>
@@ -370,7 +370,7 @@ class PageDefinitions extends Component {
 
   renderFilterBar() {
     return (
-      <div style={{ height: 50 }}>
+      <div style={{ height: 50 }} align="right">
         {this.renderSort(sorts, 'Sort By', 'sort')}
         {this.renderFilter(licenses, 'License', 'licensed.declared')}
         {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
