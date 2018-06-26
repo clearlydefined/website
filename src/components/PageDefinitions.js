@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Grid, Row, Col, Button } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
@@ -19,7 +19,7 @@ const defaultFacets = [{ value: 'core', label: 'Core' }]
 class PageDefinitions extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeFacets: defaultFacets.map(x => x.value), sortCounter: 0 }
+    this.state = { activeFacets: defaultFacets.map(x => x.value), counter: 0 }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
@@ -188,7 +188,7 @@ class PageDefinitions extends Component {
   }
 
   incrementSequence() {
-    this.setState({ ...this.state, sortCounter: this.state.sortCounter + 1 })
+    this.setState({ ...this.state, counter: this.state.counter + 1 })
   }
 
   noRowsRenderer() {
@@ -225,7 +225,7 @@ class PageDefinitions extends Component {
 
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activeFacets, sortCounter } = this.state
+    const { activeFacets, counter } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -252,7 +252,7 @@ class PageDefinitions extends Component {
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 activeFacets={activeFacets}
-                sortCounter={sortCounter}
+                counter={counter}
               />
             </div>
           </Dropzone>
