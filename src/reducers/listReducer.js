@@ -38,6 +38,7 @@ const sort = (list, sortValue) => {
   return list ? _.sortBy(list, sortValue) : list
 }
 
+
 function computeTranformed(state, append, list, transformer) {
   if (!transformer) return state.transformedList
   const transformed = list.map(entry => transformer(entry))
@@ -96,15 +97,6 @@ export default (name = '', transformer = null, comparator = null) => {
         sequence: ++state.sequence,
         list: remove(state.list, result.remove, comparator),
         transformedList: transformer ? remove(state.transformedList, transformer(result.remove)) : state.transformedList
-      }
-    }
-
-    if (result.sort) {
-      return {
-        ...state,
-        sequence: ++state.sequence,
-        list: sort(state.list, result.sort),
-        transformedList: state.transformedList
       }
     }
 
