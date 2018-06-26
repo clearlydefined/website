@@ -25,11 +25,11 @@ export default class ComponentList extends React.Component {
     activeFacets: PropTypes.array,
     definitions: PropTypes.object,
     githubToken: PropTypes.string,
-    sortCounter: PropTypes.number
+    counter: PropTypes.number
   }
 
   static defaultProps = {
-    loadMoreRows: () => { }
+    loadMoreRows: () => {}
   }
 
   constructor(props) {
@@ -44,7 +44,7 @@ export default class ComponentList extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
     if (newProps.activeFacets !== this.props.activeFacets) this.incrementSequence()
-    if (newProps.sortCounter !== this.props.sortCounter) this.incrementSequence()
+    if (newProps.counter !== this.props.counter) this.incrementSequence()
   }
 
   getDefinition(component) {
@@ -136,6 +136,8 @@ export default class ComponentList extends React.Component {
           <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button" />
         </ButtonGroup>
         <i className="fas fa-times list-remove" onClick={this.removeComponent.bind(this, component)} />
+        &nbsp;&nbsp;
+        <input type="checkbox" className="list-buttons" onClick={event => this.toggleSelected(component, event)} />
       </div>
     )
   }
@@ -143,6 +145,13 @@ export default class ComponentList extends React.Component {
   toggleExpanded(component) {
     const { onChange } = this.props
     onChange && onChange(component, { ...component, expanded: !component.expanded })
+    this.incrementSequence()
+  }
+
+  toggleSelected(component, event) {
+    event.stopPropagation()
+    const { onChange } = this.props
+    onChange && onChange(component, { ...component, selected: !component.selected })
     this.incrementSequence()
   }
 
