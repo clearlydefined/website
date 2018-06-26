@@ -31,6 +31,7 @@ class PageDefinitions extends Component {
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
     this.doSave = this.doSave.bind(this)
+    this.collapseAll = this.collapseAll.bind(this)
   }
 
   componentDidMount() {
@@ -194,19 +195,29 @@ class PageDefinitions extends Component {
     return <div>Select components from the list above ...</div>
   }
 
+  collapseComponent(component) {
+    this.onChangeComponent(component, { ...component, expanded: false })
+  }
+
+  collapseAll() {
+    const { components } = this.props
+    components.list.forEach(component => this.collapseComponent(component))
+    this.incrementSequence()
+  }
+
   renderButtons() {
     return (
-      <div>
-        <Button
-          bsStyle="success"
-          className="pull-right"
-          disabled={!this.hasChanges()}
-          onClick={this.doPromptContribute}
-        >
-          Contribute
+      <div className="pull-right">
+        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
+          Collapse All
         </Button>
+        &nbsp;
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
+        </Button>
+        &nbsp;
+        <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
+          Contribute
         </Button>
       </div>
     )
