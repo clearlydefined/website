@@ -358,7 +358,7 @@ class PageDefinitions extends Component {
 
   renderFilterBar() {
     return (
-      <div style={{ height: 50 }} align="right">
+      <div className="list-filter" align="right">
         {this.renderSort(sorts, 'Sort By', 'sort')}
         {this.renderFilter(licenses, 'License', 'licensed.declared')}
         {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
@@ -373,7 +373,6 @@ class PageDefinitions extends Component {
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
         </Button>
-
         &nbsp;
         <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
           Contribute
