@@ -283,7 +283,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={2}>{this.renderLabel('Release', true)}</Col>
             <Col md={10}>
               <InlineEditor
-                type="text"
+                type="date"
                 initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
                 value={this.printDate(this.getValue('described.releaseDate'))}
                 onChange={this.fieldChange('described.releaseDate')}

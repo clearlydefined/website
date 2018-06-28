@@ -9,7 +9,7 @@ export default class InlineEditor extends React.Component {
   static propTypes = {
     initialValue: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['text']).isRequired,
+    type: PropTypes.oneOf(['text', 'date']).isRequired,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string.isRequired
   }
@@ -76,10 +76,12 @@ export default class InlineEditor extends React.Component {
   }
 
   renderers = {
-    text: value => value
+    text: value => value,
+    date: value => value
   }
 
   editors = {
-    text: value => <input size="45" type="text" defaultValue={value} />
+    text: value => <input size="45" type="text" defaultValue={value} />,
+    date: value => <input size="45" type="date" defaultValue={value} />
   }
 }
