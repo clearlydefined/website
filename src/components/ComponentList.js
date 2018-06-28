@@ -135,8 +135,6 @@ export default class ComponentList extends React.Component {
           <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button" />
         </ButtonGroup>
         <i className="fas fa-times list-remove" onClick={this.removeComponent.bind(this, component)} />
-        &nbsp;&nbsp;
-        <input type="checkbox" className="list-buttons" onClick={event => this.toggleSelected(component, event)} />
       </div>
     )
   }
@@ -144,13 +142,6 @@ export default class ComponentList extends React.Component {
   toggleExpanded(component) {
     const { onChange } = this.props
     onChange && onChange(component, { ...component, expanded: !component.expanded })
-    this.incrementSequence()
-  }
-
-  toggleSelected(component, event) {
-    event.stopPropagation()
-    const { onChange } = this.props
-    onChange && onChange(component, { ...component, selected: !component.selected })
     this.incrementSequence()
   }
 
