@@ -25,7 +25,7 @@ export default class ComponentList extends React.Component {
     activeFacets: PropTypes.array,
     definitions: PropTypes.object,
     githubToken: PropTypes.string,
-    counter: PropTypes.number
+    sequence: PropTypes.number
   }
 
   static defaultProps = {
@@ -44,7 +44,7 @@ export default class ComponentList extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
     if (newProps.activeFacets !== this.props.activeFacets) this.incrementSequence()
-    if (newProps.counter !== this.props.counter) this.incrementSequence()
+    if (newProps.sequence !== this.props.sequence) this.incrementSequence()
   }
 
   getDefinition(component) {

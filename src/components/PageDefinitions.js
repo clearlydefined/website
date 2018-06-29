@@ -19,7 +19,7 @@ const defaultFacets = [{ value: 'core', label: 'Core' }]
 class PageDefinitions extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeFacets: defaultFacets.map(x => x.value), counter: 0 }
+    this.state = { activeFacets: defaultFacets.map(x => x.value), sequence: 0 }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
@@ -188,7 +188,7 @@ class PageDefinitions extends Component {
   }
 
   incrementSequence() {
-    this.setState({ ...this.state, counter: this.state.counter + 1 })
+    this.setState({ ...this.state, sequence: this.state.sequence + 1 })
   }
 
   noRowsRenderer() {
@@ -201,7 +201,7 @@ class PageDefinitions extends Component {
 
   collapseAll() {
     const { components } = this.props
-    components.list.forEach(component => this.collapseComponent(component))
+    components.list.forEach(component => component.expanded && this.collapseComponent(component))
     this.incrementSequence()
   }
 
@@ -225,7 +225,7 @@ class PageDefinitions extends Component {
 
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activeFacets, counter } = this.state
+    const { activeFacets, sequence } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -252,7 +252,7 @@ class PageDefinitions extends Component {
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 activeFacets={activeFacets}
-                counter={counter}
+                sequence={sequence}
               />
             </div>
           </Dropzone>
