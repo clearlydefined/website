@@ -26,13 +26,7 @@ export function curateAction(token, spec) {
     dispatch(uiNotificationNew({ type: 'info', message: 'Started contribution.', timeout: 5000 }))
     return curate(token, spec).then(
       result => {
-        let url
-        switch (process.env.NODE_ENV) {
-          case 'production':
-            url = 'https://github.com/clearlydefined/curated-data/pull/' + result.prNumber
-          default:
-            url = 'https://github.com/clearlydefined/curated-data-dev/pull/' + result.prNumber
-        }
+        const url = `https://github.com/clearlydefined/${result.repo}/pull/${result.prNumber}`
         const prMessage = (
           <div>
             Successfully contributed{' '}
