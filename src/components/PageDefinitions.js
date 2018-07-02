@@ -293,7 +293,7 @@ class PageDefinitions extends Component {
   }
 
   onFilter(value) {
-    let activeFilters = Object.assign({}, this.state.activeFilters)
+    const activeFilters = Object.assign({}, this.state.activeFilters)
     const filterValue = get(activeFilters, value.type)
     if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
     else activeFilters[value.type] = value.value
