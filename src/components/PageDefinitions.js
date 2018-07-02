@@ -405,6 +405,10 @@ class PageDefinitions extends Component {
     )
   }
 
+  noRowsRenderer() {
+    return () => <div className={'list-noRows'}>Search for components above ...</div>
+  }
+
   render() {
     const { components, filterOptions, definitions, token } = this.props
     const { sequence } = this.state
@@ -421,8 +425,7 @@ class PageDefinitions extends Component {
             <div className="section-body">
               <ComponentList
                 list={components.transformedList}
-                isFetching={components.isFetching}
-                headers={components.headers}
+                listLength={get(components, 'headers.pagination.totalCount')}
                 listHeight={1000}
                 onRemove={this.onRemoveComponent}
                 onChange={this.onChangeComponent}
@@ -432,7 +435,7 @@ class PageDefinitions extends Component {
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
                 githubToken={token}
-                noRowsRenderer={this.noRowsRenderer}
+                noRowsRenderer={this.noRowsRenderer()}
                 sequence={sequence}
               />
             </div>

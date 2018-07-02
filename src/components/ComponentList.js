@@ -13,8 +13,7 @@ import { ROUTE_INSPECT } from '../utils/routingConstants'
 export default class ComponentList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
-    isFetching: PropTypes.boolean,
-    headers: PropTypes.object,
+    listLength: PropTypes.number,
     listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
@@ -23,7 +22,6 @@ export default class ComponentList extends React.Component {
     onCurate: PropTypes.func,
     onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
-    fetchingRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
     githubToken: PropTypes.string,
@@ -166,30 +164,19 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const {
-      loadMoreRows,
-      listHeight,
-      noRowsRenderer,
-      list,
-      isFetching,
-      headers,
-      fetchingRenderer,
-      renderFilterBar
-    } = this.props
+    const { loadMoreRows, listHeight, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
       <div>
         {renderFilterBar()}
         <RowEntityList
           list={list}
-          isFetching={isFetching}
-          headers={headers}
+          listLength={listLength}
           loadMoreRows={loadMoreRows}
           listHeight={listHeight}
           rowRenderer={this.renderRow}
           rowHeight={this.rowHeight}
           noRowsRenderer={noRowsRenderer}
-          fetchingRenderer={fetchingRenderer}
           sortOrder={sortOrder}
           contentSeq={contentSeq}
         />
