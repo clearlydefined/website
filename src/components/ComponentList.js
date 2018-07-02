@@ -24,11 +24,12 @@ export default class ComponentList extends React.Component {
     fetchingRenderer: PropTypes.func,
     activeFacets: PropTypes.array,
     definitions: PropTypes.object,
-    githubToken: PropTypes.string
+    githubToken: PropTypes.string,
+    sequence: PropTypes.number
   }
 
   static defaultProps = {
-    loadMoreRows: () => { }
+    loadMoreRows: () => {}
   }
 
   constructor(props) {
@@ -43,6 +44,7 @@ export default class ComponentList extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
     if (newProps.activeFacets !== this.props.activeFacets) this.incrementSequence()
+    if (newProps.sequence !== this.props.sequence) this.incrementSequence()
   }
 
   getDefinition(component) {
@@ -110,7 +112,6 @@ export default class ComponentList extends React.Component {
     const isSourceComponent = this.isSourceComponent(component)
     return (
       <div className="list-activity-area">
-        {/* <img className='list-buttons' width='45px' src={two} alt='score'/> */}
         <img className="list-buttons" src={getBadgeUrl(component)} alt="score" />
         <ButtonGroup>
           {!isSourceComponent && (
@@ -118,12 +119,6 @@ export default class ComponentList extends React.Component {
               <i className="fas fa-plus" />
               <span>&nbsp;Add source</span>
             </Button>
-          )}
-          {this.renderButtonWithTip(
-            <Button className="list-fa-button" onClick={this.curateComponent.bind(this, component)}>
-              <i className="fas fa-edit" />
-            </Button>,
-            'Curate this definition'
           )}
           {this.renderButtonWithTip(
             <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, component)}>
