@@ -19,7 +19,7 @@ const defaultFacets = [{ value: 'core', label: 'Core' }]
 class PageDefinitions extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeFacets: defaultFacets.map(x => x.value) }
+    this.state = { activeFacets: defaultFacets.map(x => x.value), sequence: 0 }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
@@ -31,6 +31,7 @@ class PageDefinitions extends Component {
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
     this.doSave = this.doSave.bind(this)
+    this.collapseAll = this.collapseAll.bind(this)
   }
 
   componentDidMount() {
@@ -186,23 +187,37 @@ class PageDefinitions extends Component {
     this.setState({ ...this.state, activeFacets })
   }
 
+  incrementSequence() {
+    this.setState({ ...this.state, sequence: this.state.sequence + 1 })
+  }
+
   noRowsRenderer() {
     return <div>Select components from the list above ...</div>
   }
 
-  renderContributeButton() {
+  collapseComponent(component) {
+    this.onChangeComponent(component, { ...component, expanded: false })
+  }
+
+  collapseAll() {
+    const { components } = this.props
+    components.list.forEach(component => component.expanded && this.collapseComponent(component))
+    this.incrementSequence()
+  }
+
+  renderButtons() {
     return (
-      <div>
-        <Button
-          bsStyle="success"
-          className="pull-right"
-          disabled={!this.hasChanges()}
-          onClick={this.doPromptContribute}
-        >
-          Contribute
+      <div className="pull-right">
+        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
+          Collapse All
         </Button>
+        &nbsp;
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
+        </Button>
+        &nbsp;
+        <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
+          Contribute
         </Button>
       </div>
     )
@@ -210,7 +225,7 @@ class PageDefinitions extends Component {
 
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activeFacets, dropzoneActive } = this.state
+    const { activeFacets, sequence } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -222,7 +237,7 @@ class PageDefinitions extends Component {
             <FilterBar options={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} clearOnChange />
           </Col>
         </Row>
-        <Section name={'Available definitions'} actionButton={this.renderContributeButton()}>
+        <Section name={'Available definitions'} actionButton={this.renderButtons()}>
           <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
             <div className="section-body">
               <ComponentList
@@ -237,6 +252,7 @@ class PageDefinitions extends Component {
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 activeFacets={activeFacets}
+                sequence={sequence}
               />
             </div>
           </Dropzone>

@@ -24,11 +24,12 @@ export default class ComponentList extends React.Component {
     fetchingRenderer: PropTypes.func,
     activeFacets: PropTypes.array,
     definitions: PropTypes.object,
-    githubToken: PropTypes.string
+    githubToken: PropTypes.string,
+    sequence: PropTypes.number
   }
 
   static defaultProps = {
-    loadMoreRows: () => { }
+    loadMoreRows: () => {}
   }
 
   constructor(props) {
@@ -43,6 +44,7 @@ export default class ComponentList extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
     if (newProps.activeFacets !== this.props.activeFacets) this.incrementSequence()
+    if (newProps.sequence !== this.props.sequence) this.incrementSequence()
   }
 
   getDefinition(component) {
