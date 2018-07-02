@@ -102,7 +102,7 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: newList,
-        transformedList: transformer ? transform(newList, transformer) : newList
+        transformedList: transformer ? transformer(newList) : newList
       }
     }
 
@@ -122,18 +122,16 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: newList,
-        transformedList: transformer ? transform(newList, transformer) : newList
+        transformedList: transformer ? transformer(newList) : newList
       }
     }
 
     if (result.transform) {
-      transformer = _.assign(transformer, result.transform)
-      const newList = state.list
+      transformer = result.transform
       return {
         ...state,
         sequence: ++state.sequence,
-        list: state.list,
-        transformedList: transformer ? transform(state.list, transformer) : newList
+        transformedList: transformer ? transformer(state.list) : state.list
       }
     }
 

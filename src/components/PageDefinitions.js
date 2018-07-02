@@ -67,8 +67,7 @@ class PageDefinitions extends Component {
     this.type = this.type.bind(this)
     this.releaseDate = this.releaseDate.bind(this)
     this.license = this.license.bind(this)
-    this.filterList = this.filterList.bind(this)
-    this.sortList = this.sortList.bind(this)
+    this.transform = this.transform.bind(this)
   }
 
   getDefinition(component) {
@@ -258,15 +257,14 @@ class PageDefinitions extends Component {
   }
 
   getSort(eventKey) {
-    return this[eventKey.value]
+    return this[eventKey]
   }
 
   onSort(eventKey) {
-    const { activeFilters } = this.state
-    this.setState({ ...this.state, activeSort: eventKey.value, sequence: this.state.sequence + 1 })
-    this.props.dispatch(
-      uiBrowseUpdateList({ transform: { sort: { func: this.sortList, sortFunction: this.getSort(eventKey) } } })
-    )
+    let activeSort = eventKey.value
+    if (this.state.activeSort === activeSort) activeSort = null
+    this.setState({ ...this.state, activeSort, sequence: this.state.sequence + 1 })
+    this.props.dispatch(uiBrowseUpdateList({ transform: this.createTransform(activeSort, this.state.activeFilters) }))
   }
 
   sortList(list, sortFunction) {
@@ -274,32 +272,47 @@ class PageDefinitions extends Component {
   }
 
   filterList(list, activeFilters) {
-    if (activeFilters.length === 0) return list
+    if (Object.keys(activeFilters).length === 0) return list
     return filter(list, component => {
       const defintion = this.getDefinition(component)
       for (let filterType in activeFilters) {
         const value = activeFilters[filterType]
         const fieldValue = this.getValue(defintion, filterType)
         if (value === 'presence') {
-          return fieldValue
+          if (!fieldValue) return false
         } else if (value === 'absence') {
-          return !fieldValue
+          if (fieldValue) return false
         } else {
-          return fieldValue && fieldValue.toLowerCase().includes(value.toLowerCase())
+          if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
+            return false
+          }
         }
       }
-      return false
+      return true
     })
   }
 
   onFilter(value) {
-    const { activeSort } = this.state
     let activeFilters = Object.assign({}, this.state.activeFilters)
     const filterValue = get(activeFilters, value.type)
     if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
     else activeFilters[value.type] = value.value
     this.setState({ ...this.state, activeFilters })
-    this.props.dispatch(uiBrowseUpdateList({ transform: { filter: { activeFilters, func: this.filterList } } }))
+    this.props.dispatch(uiBrowseUpdateList({ transform: this.createTransform(this.state.activeSort, activeFilters) }))
+  }
+
+  transform(list, sort, filters) {
+    let newList = list
+    if (sort) {
+      const sortFunction = this.getSort(sort)
+      newList = this.sortList(newList, sortFunction)
+    }
+    if (filters) newList = this.filterList(newList, filters)
+    return newList
+  }
+
+  createTransform(sort, filters) {
+    return list => this.transform(list, sort, filters)
   }
 
   incrementSequence() {
@@ -318,14 +331,21 @@ class PageDefinitions extends Component {
     const { activeFilters } = this.state
     for (let filterId in activeFilters) {
       const filter = activeFilters[filterId]
-      if (filterId == id && filter === filterType.value) return true
+      if (filterId === id && filter === filterType.value) return true
     }
     return false
   }
 
   renderSort(list, title, id) {
     return (
-      <DropdownButton bsStyle={''} pullRight title={title} disabled={!this.hasComponents()} id={id}>
+      <DropdownButton
+        className="list-button"
+        bsStyle={''}
+        pullRight
+        title={title}
+        disabled={!this.hasComponents()}
+        id={id}
+      >
         {list.map(sortType => {
           return (
             <MenuItem onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
@@ -340,7 +360,14 @@ class PageDefinitions extends Component {
 
   renderFilter(list, title, id) {
     return (
-      <DropdownButton bsStyle={''} pullRight title={title} disabled={!this.hasComponents()} id={id}>
+      <DropdownButton
+        className="list-button"
+        bsStyle={''}
+        pullRight
+        title={title}
+        disabled={!this.hasComponents()}
+        id={id}
+      >
         {list.map(filterType => {
           return (
             <MenuItem onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
