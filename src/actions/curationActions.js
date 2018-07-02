@@ -26,7 +26,9 @@ export function curateAction(token, spec) {
     return curate(token, spec).then(
       result => {
         dispatch(actions.success(result))
-        dispatch(uiNotificationNew({ type: 'info', message: `Successfully contributed PR#${result.prNumber}.`, timeout: 5000 }))
+        dispatch(
+          uiNotificationNew({ type: 'info', message: `Successfully contributed PR#${result.prNumber}.`, timeout: 5000 })
+        )
       },
       error => {
         dispatch(actions.error(error))

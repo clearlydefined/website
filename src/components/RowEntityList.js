@@ -7,7 +7,9 @@ import { InfiniteList } from './'
 
 export default class RowEntityList extends React.Component {
   static propTypes = {
-    list: PropTypes.object.isRequired,
+    list: PropTypes.array,
+    isFetching: PropTypes.boolean,
+    headers: PropTypes.object,
     listHeight: PropTypes.number,
     rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
     rowRenderer: PropTypes.func.isRequired,
@@ -36,14 +38,14 @@ export default class RowEntityList extends React.Component {
   }
 
   wrappedNoRowsRender() {
-    const { noRowsRenderer, fetchingRenderer, list } = this.props
-    const renderer = list.isFetching ? fetchingRenderer : noRowsRenderer
+    const { noRowsRenderer, fetchingRenderer, isFetching } = this.props
+    const renderer = isFetching ? fetchingRenderer : noRowsRenderer
     return <div className={'list-noRows'}>{renderer()}</div>
   }
 
   render() {
     const { loadMoreRows, listHeight, list, rowRenderer, rowHeight, contentSeq, sortOrder } = this.props
-    if (!list.list || list.list.length === 0) return this.wrappedNoRowsRender()
+    if (!list || list.length === 0) return this.wrappedNoRowsRender()
     return (
       <InfiniteList
         isRowLoaded={this.isRowLoaded}
@@ -61,8 +63,8 @@ export default class RowEntityList extends React.Component {
   }
 
   listLength() {
-    const { list } = this.props
-    return list.headers ? list.headers.pagination.totalCount : 0
+    const { headers } = this.props
+    return headers ? headers.pagination.totalCount : 0
   }
 
   isRowLoaded({ index }) {
@@ -71,6 +73,6 @@ export default class RowEntityList extends React.Component {
 
   length() {
     const { list } = this.props
-    return list && list.list ? list.list.length : 0
+    return list ? list.length : 0
   }
 }

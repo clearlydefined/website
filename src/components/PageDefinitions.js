@@ -10,7 +10,7 @@ import { curateAction } from '../actions/curationActions'
 import { FilterBar, ComponentList, Section, ContributePrompt } from './'
 import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
-import { set, get, find, filter } from 'lodash'
+import { set, get, find, filter, sortBy } from 'lodash'
 import { saveAs } from 'file-saver'
 import Dropzone from 'react-dropzone'
 
@@ -46,7 +46,7 @@ class PageDefinitions extends Component {
     this.state = {
       activeFilters: {},
       activeSort: null,
-      counter: 0
+      sequence: 0
     }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onDrop = this.onDrop.bind(this)
@@ -61,6 +61,14 @@ class PageDefinitions extends Component {
     this.doContribute = this.doContribute.bind(this)
     this.doSave = this.doSave.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
+    this.name = this.name.bind(this)
+    this.namespace = this.namespace.bind(this)
+    this.provider = this.provider.bind(this)
+    this.type = this.type.bind(this)
+    this.releaseDate = this.releaseDate.bind(this)
+    this.license = this.license.bind(this)
+    this.filterList = this.filterList.bind(this)
+    this.sortList = this.sortList.bind(this)
   }
 
   getDefinition(component) {
@@ -219,30 +227,30 @@ class PageDefinitions extends Component {
     this.refs.contributeModal.open()
   }
 
-  name = coordinates => {
+  name(coordinates) {
     return coordinates.name ? coordinates.name : null
   }
 
-  namespace = coordinates => {
+  namespace(coordinates) {
     return coordinates.namespace ? coordinates.namespace : null
   }
 
-  provider = coordinates => {
+  provider(coordinates) {
     return coordinates.provider ? coordinates.provider : null
   }
 
-  type = coordinates => {
+  type(coordinates) {
     return coordinates.type ? coordinates.type : null
   }
 
-  releaseDate = coordinates => {
+  releaseDate(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
     const described = get(definition, 'described')
     if (described && described.releaseDate) return described.releaseDate
     return null
   }
 
-  license = coordinates => {
+  license(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
     const licensed = get(definition, 'licensed')
     if (licensed && licensed.declared) return licensed.declared
@@ -250,61 +258,52 @@ class PageDefinitions extends Component {
   }
 
   getSort(eventKey) {
-    switch (eventKey.value) {
-      case 'name':
-        return this.name
-      case 'namespace':
-        return this.namespace
-      case 'provider':
-        return this.provider
-      case 'type':
-        return this.type
-      case 'releaseDate':
-        return this.releaseDate
-      case 'license':
-        return this.license
-    }
+    return this[eventKey.value]
   }
 
   onSort(eventKey) {
-    this.setState({ ...this.state, activeSort: eventKey.value, counter: this.state.counter + 1 })
-    this.props.dispatch(uiBrowseUpdateList({ sort: this.getSort(eventKey) }))
+    const { activeFilters } = this.state
+    this.setState({ ...this.state, activeSort: eventKey.value, sequence: this.state.sequence + 1 })
+    this.props.dispatch(
+      uiBrowseUpdateList({ transform: { sort: { func: this.sortList, sortFunction: this.getSort(eventKey) } } })
+    )
   }
 
-  filterList(list) {
-    const { activeFilters } = this.state
-    if (activeFilters.length === 0) {
-      return list
-    }
+  sortList(list, sortFunction) {
+    return list ? sortBy(list, sortFunction) : list
+  }
+
+  filterList(list, activeFilters) {
+    if (activeFilters.length === 0) return list
     return filter(list, component => {
       const defintion = this.getDefinition(component)
       for (let filterType in activeFilters) {
         const value = activeFilters[filterType]
         const fieldValue = this.getValue(defintion, filterType)
         if (value === 'presence') {
-          if (!fieldValue) return false
+          return fieldValue
         } else if (value === 'absence') {
-          if (fieldValue) return false
+          return !fieldValue
         } else {
-          if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
-            return false
-          }
+          return fieldValue && fieldValue.toLowerCase().includes(value.toLowerCase())
         }
       }
-      return true
+      return false
     })
   }
 
   onFilter(value) {
+    const { activeSort } = this.state
     let activeFilters = Object.assign({}, this.state.activeFilters)
     const filterValue = get(activeFilters, value.type)
     if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
     else activeFilters[value.type] = value.value
     this.setState({ ...this.state, activeFilters })
+    this.props.dispatch(uiBrowseUpdateList({ transform: { filter: { activeFilters, func: this.filterList } } }))
   }
 
   incrementSequence() {
-    this.setState({ ...this.state, counter: this.state.counter + 1 })
+    this.setState({ ...this.state, sequence: this.state.sequence + 1 })
   }
 
   noRowsRenderer() {
@@ -312,16 +311,14 @@ class PageDefinitions extends Component {
   }
 
   checkSort(sortType) {
-    const { activeSort } = this.state
-    if (activeSort === sortType.value) return true
-    return false
+    return this.state.activeSort === sortType.value
   }
 
   checkFilter(filterType, id) {
     const { activeFilters } = this.state
-    for (let filterIdx in activeFilters) {
-      const filter = activeFilters[filterIdx]
-      if (filterIdx == id && filter === filterType.value) return true
+    for (let filterId in activeFilters) {
+      const filter = activeFilters[filterId]
+      if (filterId == id && filter === filterType.value) return true
     }
     return false
   }
@@ -383,9 +380,7 @@ class PageDefinitions extends Component {
 
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { counter } = this.state
-    const filterComponents = Object.assign({}, components)
-    filterComponents.list = this.filterList(filterComponents.list)
+    const { sequence } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -398,7 +393,9 @@ class PageDefinitions extends Component {
           <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
             <div className="section-body">
               <ComponentList
-                list={filterComponents}
+                list={components.transformedList}
+                isFetching={components.isFetching}
+                headers={components.headers}
                 listHeight={1000}
                 onRemove={this.onRemoveComponent}
                 onChange={this.onChangeComponent}
@@ -409,7 +406,7 @@ class PageDefinitions extends Component {
                 definitions={definitions}
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
-                counter={counter}
+                sequence={sequence}
               />
             </div>
           </Dropzone>

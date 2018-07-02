@@ -12,7 +12,9 @@ import { ROUTE_INSPECT } from '../utils/routingConstants'
 
 export default class ComponentList extends React.Component {
   static propTypes = {
-    list: PropTypes.object.isRequired,
+    list: PropTypes.array,
+    isFetching: PropTypes.boolean,
+    headers: PropTypes.object,
     listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
@@ -25,7 +27,7 @@ export default class ComponentList extends React.Component {
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
     githubToken: PropTypes.string,
-    counter: PropTypes.number
+    sequence: PropTypes.number
   }
 
   static defaultProps = {
@@ -43,7 +45,7 @@ export default class ComponentList extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
-    if (newProps.counter !== this.props.counter) this.incrementSequence()
+    if (newProps.sequence !== this.props.sequence) this.incrementSequence()
   }
 
   getDefinition(component) {
@@ -89,7 +91,7 @@ export default class ComponentList extends React.Component {
   }
 
   rowHeight({ index }) {
-    const component = this.props.list.list[index]
+    const component = this.props.list[index]
     return component.expanded ? 150 : 50
   }
 
@@ -147,7 +149,7 @@ export default class ComponentList extends React.Component {
 
   renderRow({ index, key, style }, toggleExpanded = null, showExpanded = false) {
     const { list } = this.props
-    const component = list.list[index]
+    const component = list[index]
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
     return (
@@ -164,13 +166,24 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer, renderFilterBar } = this.props
+    const {
+      loadMoreRows,
+      listHeight,
+      noRowsRenderer,
+      list,
+      isFetching,
+      headers,
+      fetchingRenderer,
+      renderFilterBar
+    } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
       <div>
         {renderFilterBar()}
         <RowEntityList
           list={list}
+          isFetching={isFetching}
+          headers={headers}
           loadMoreRows={loadMoreRows}
           listHeight={listHeight}
           rowRenderer={this.renderRow}
