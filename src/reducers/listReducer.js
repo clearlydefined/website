@@ -95,6 +95,15 @@ export default (name = '', transformer = null, comparator = null) => {
       }
     }
 
+    if (result.removeAll) {
+      return {
+        ...state,
+        sequence: ++state.sequence,
+        list: [],
+        transformedList: transformer ? state.list.map(transformer) : []
+      }
+    }
+
     if (result.update) {
       const newTransformed = transformer ? transformer(result.value) : null
       return {

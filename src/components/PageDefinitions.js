@@ -27,6 +27,7 @@ class PageDefinitions extends Component {
     this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
+    this.onRemoveAll = this.onRemoveAll.bind(this)
     this.facetChange = this.facetChange.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
@@ -113,6 +114,10 @@ class PageDefinitions extends Component {
 
   onRemoveComponent(component) {
     this.props.dispatch(uiBrowseUpdateList({ remove: component }))
+  }
+
+  onRemoveAll() {
+    this.props.dispatch(uiBrowseUpdateList({ removeAll: {} }))
   }
 
   onChangeComponent(component, newComponent) {
@@ -210,6 +215,10 @@ class PageDefinitions extends Component {
       <div className="pull-right">
         <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
           Collapse All
+        </Button>
+        &nbsp;
+        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
+          Remove All
         </Button>
         &nbsp;
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
