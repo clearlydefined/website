@@ -213,12 +213,12 @@ class PageDefinitions extends Component {
   renderButtons() {
     return (
       <div className="pull-right">
-        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
-          Collapse All
+        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
+          Clear All
         </Button>
         &nbsp;
-        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
-          Remove All
+        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
+          Collapse All
         </Button>
         &nbsp;
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
