@@ -85,32 +85,32 @@ const navigation = (state = initialStateNavigation, action) => {
 }
 
 const curate = combineReducers({
-  filter: new valueReducer(UI_CURATE_UPDATE_FILTER),
-  filterList: new listReducer(UI_CURATE_UPDATE_FILTER_LIST),
-  currentCuration: new itemReducer(UI_CURATE_GET),
-  proposedCuration: new itemReducer(UI_CURATE_GET_PROPOSED),
-  currentDefinition: new itemReducer(UI_CURATE_GET_DEFINITION),
-  proposedDefinition: new itemReducer(UI_CURATE_GET_DEFINITION_PROPOSED),
-  previewDefinition: new itemReducer(UI_CURATE_DEFINITION_PREVIEW)
+  filter: valueReducer(UI_CURATE_UPDATE_FILTER),
+  filterList: listReducer(UI_CURATE_UPDATE_FILTER_LIST),
+  currentCuration: itemReducer(UI_CURATE_GET),
+  proposedCuration: itemReducer(UI_CURATE_GET_PROPOSED),
+  currentDefinition: itemReducer(UI_CURATE_GET_DEFINITION),
+  proposedDefinition: itemReducer(UI_CURATE_GET_DEFINITION_PROPOSED),
+  previewDefinition: itemReducer(UI_CURATE_DEFINITION_PREVIEW)
 })
 
 const inspect = combineReducers({
-  filter: new valueReducer(UI_INSPECT_UPDATE_FILTER),
-  filterList: new listReducer(UI_INSPECT_UPDATE_FILTER_LIST),
-  definition: new itemReducer(UI_INSPECT_GET_DEFINITION, item => yaml.safeDump(item, { sortKeys: true })),
-  curation: new itemReducer(UI_INSPECT_GET_CURATION, item => yaml.safeDump(item, { sortKeys: true })),
-  harvested: new itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2))
+  filter: valueReducer(UI_INSPECT_UPDATE_FILTER),
+  filterList: listReducer(UI_INSPECT_UPDATE_FILTER_LIST),
+  definition: itemReducer(UI_INSPECT_GET_DEFINITION, item => yaml.safeDump(item, { sortKeys: true })),
+  curation: itemReducer(UI_INSPECT_GET_CURATION, item => yaml.safeDump(item, { sortKeys: true })),
+  harvested: itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2))
 })
 
 const browse = combineReducers({
-  filter: new valueReducer(UI_BROWSE_UPDATE_FILTER),
-  filterList: new listReducer(UI_BROWSE_UPDATE_FILTER_LIST),
-  componentList: new listReducer(UI_BROWSE_UPDATE_LIST, null, EntitySpec.isEquivalent)
+  filter: valueReducer(UI_BROWSE_UPDATE_FILTER),
+  filterList: listReducer(UI_BROWSE_UPDATE_FILTER_LIST),
+  componentList: listReducer(UI_BROWSE_UPDATE_LIST, null, EntitySpec.isEquivalent)
 })
 
 const harvest = combineReducers({
-  filter: new valueReducer(UI_HARVEST_UPDATE_FILTER),
-  requestQueue: new listReducer(UI_HARVEST_UPDATE_QUEUE, null, isEqual)
+  filter: valueReducer(UI_HARVEST_UPDATE_FILTER),
+  requestQueue: listReducer(UI_HARVEST_UPDATE_QUEUE, null, isEqual)
 })
 
 const notifications = (state = [], action) => {
