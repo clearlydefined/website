@@ -100,7 +100,7 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: [],
-        transformedList: transformer ? state.list.map(transformer) : []
+        transformedList: []
       }
     }
 
