@@ -257,7 +257,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={2}>{this.renderLabel('Declared', true)}</Col>
             <Col md={10}>
               <InlineEditor
-                type="text"
+                type="license"
                 initialValue={this.getOriginalValue('licensed.declared')}
                 value={this.getValue('licensed.declared')}
                 onChange={this.fieldChange('licensed.declared')}
