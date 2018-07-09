@@ -121,6 +121,8 @@ export default class DefinitionEntry extends React.Component {
         return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
       case 'mavencentral':
         return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
+      case 'rubygems':
+        return `${this.getComponentUrl(coordinates)}/versions/${coordinates.revision}`
       default:
         return
     }
@@ -138,6 +140,8 @@ export default class DefinitionEntry extends React.Component {
         return `https://nuget.org/packages/${coordinates.name}`
       case 'mavencentral':
         return `https://mvnrepository.com/artifact/${coordinates.namespace}/${coordinates.name}`
+      case 'rubygems':
+        return `https://rubygems.org/gems/${coordinates.name}`
       default:
         return
     }
