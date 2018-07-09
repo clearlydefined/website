@@ -8,6 +8,7 @@ import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
+import nuget from '../images/nuget.svg'
 import moment from 'moment'
 
 export default class DefinitionEntry extends React.Component {
@@ -336,6 +337,7 @@ export default class DefinitionEntry extends React.Component {
   getImage(definition) {
     if (definition.coordinates.provider === 'github') return github
     if (definition.coordinates.provider === 'npmjs') return npm
+    if (definition.coordinates.provider === 'nuget') return nuget
     return null
   }
 
