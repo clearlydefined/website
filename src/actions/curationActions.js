@@ -45,7 +45,9 @@ export function curateAction(token, spec) {
       },
       error => {
         dispatch(actions.error(error))
-        dispatch(uiNotificationNew({ type: 'info', message: 'Failed contribution.', timeout: 5000 }))
+        if (error.status === 400)
+          dispatch(uiNotificationNew({ type: 'info', message: 'Incorrect contribution format.', timeout: 5000 }))
+        else dispatch(uiNotificationNew({ type: 'info', message: 'Failed contribution.', timeout: 5000 }))
       }
     )
   }
