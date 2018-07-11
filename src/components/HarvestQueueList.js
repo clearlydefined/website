@@ -3,10 +3,18 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker, MavenVersionPicker } from './'
+import {
+  RowEntityList,
+  TwoLineEntry,
+  GitHubCommitPicker,
+  NpmVersionPicker,
+  MavenVersionPicker,
+  PyPiVersionPicker
+} from './'
 import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
+import pypi from '../images/pypi.png'
 
 export default class HarvestQueueList extends React.Component {
   static propTypes = {
@@ -68,6 +76,9 @@ export default class HarvestQueueList extends React.Component {
         {request.provider === 'mavencentral' && (
           <MavenVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
+        {request.provider === 'pypi' && (
+          <PyPiVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
         <i className="fas fa-times list-remove" onClick={this.removeRequest.bind(this, request)} />
       </div>
     )
@@ -98,6 +109,7 @@ export default class HarvestQueueList extends React.Component {
   getImage(request) {
     if (request.provider === 'github') return github
     if (request.provider === 'npmjs') return npm
+    if (request.provider === 'pypi') return pypi
     return null
   }
 

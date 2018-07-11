@@ -31,6 +31,7 @@ const BADGES = 'badges'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
 const ORIGINS_MAVEN = 'origins/maven'
+const ORIGINS_PYPI = 'origins/pypi'
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
@@ -44,7 +45,6 @@ export function harvest(token, spec) {
 export function getCuration(token, entity) {
   return get(url(`${CURATIONS}/${entity.toPath()}`), token)
 }
-
 
 export function curate(token, spec) {
   return patch(url(`${CURATIONS}`), token, spec)
@@ -92,6 +92,14 @@ export function getMavenSearch(token, path) {
 
 export function getMavenRevisions(token, path) {
   return get(url(`${ORIGINS_MAVEN}/${path}/revisions`), token)
+}
+
+export function getPyPiSearch(token, path) {
+  return get(url(`${ORIGINS_PYPI}/${path}`), token)
+}
+
+export function getPyPiRevisions(token, path) {
+  return get(url(`${ORIGINS_PYPI}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================
