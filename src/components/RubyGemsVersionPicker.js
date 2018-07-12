@@ -26,9 +26,8 @@ export default class RubyGemsVersionPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { namespace, name } = this.props.request
-      const path = namespace ? `${namespace}/${name}` : name
-      const options = await getRubyGemsRevisions(this.props.token, path)
+      const { name } = this.props.request
+      const options = await getRubyGemsRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
       console.log(error)
