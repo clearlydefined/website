@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { getNugetRevisions } from '../api/clearlyDefined'
 import { Typeahead } from 'react-bootstrap-typeahead'
 
-export default class NugetVersionPicker extends Component {
+export default class NuGetVersionPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,

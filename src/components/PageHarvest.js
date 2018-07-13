@@ -6,7 +6,16 @@ import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_HARVEST } from '../utils/routingConstants'
 import { harvestAction } from '../actions/harvestActions'
-import { HarvestQueueList, GitHubSelector, NpmSelector, MavenSelector, NuGetSelector, PyPiSelector, RubyGemsSelector, Section } from './'
+import {
+  HarvestQueueList,
+  GitHubSelector,
+  NpmSelector,
+  MavenSelector,
+  NuGetSelector,
+  PyPiSelector,
+  RubyGemsSelector,
+  Section
+} from './'
 import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
@@ -75,6 +84,7 @@ class PageHarvest extends Component {
         </Button>
         <Button name="pypi" onClick={this.onClick} active={activeProvider === 'pypi'}>
           PyPi
+        </Button>
         <Button name="rubygems" onClick={this.onClick} active={activeProvider === 'rubygems'}>
           RubyGems
         </Button>
@@ -100,8 +110,8 @@ class PageHarvest extends Component {
     return (
       <Grid className="main-container">
         <Row className="show-grid spacer">
-          <Col md={5}>{this.renderProviderButtons()}</Col>
-          <Col md={7}>
+          <Col md={6}>{this.renderProviderButtons()}</Col>
+          <Col md={6}>
             {activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
             {activeProvider === 'maven' && <MavenSelector onChange={this.onAddRequest} />}
             {activeProvider === 'npm' && <NpmSelector onChange={this.onAddRequest} />}
