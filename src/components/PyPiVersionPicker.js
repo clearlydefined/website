@@ -26,9 +26,8 @@ export default class PyPiVersionPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { namespace, name } = this.props.request
-      const path = namespace ? `${namespace}/${name}` : name
-      const options = await getPyPiRevisions(this.props.token, path)
+      const { name } = this.props.request
+      const options = await getPyPiRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
       console.log(error)
