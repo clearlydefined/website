@@ -10,13 +10,12 @@ import npm from '../images/n-large.png'
 
 export default class HarvestQueueList extends React.Component {
   static propTypes = {
-    list: PropTypes.object.isRequired,
+    list: PropTypes.array.isRequired,
     listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
-    fetchingRenderer: PropTypes.func,
     githubToken: PropTypes.string
   }
 
@@ -108,7 +107,7 @@ export default class HarvestQueueList extends React.Component {
 
   renderRow({ index, key, style }) {
     const { list } = this.props
-    const request = list.list[index]
+    const request = list[index]
     const clickHandler = () => {}
     return (
       <div key={key} style={style}>
@@ -125,7 +124,7 @@ export default class HarvestQueueList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer } = this.props
+    const { loadMoreRows, listHeight, noRowsRenderer, list } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
       <RowEntityList
@@ -135,7 +134,6 @@ export default class HarvestQueueList extends React.Component {
         rowRenderer={this.renderRow}
         rowHeight={50}
         noRowsRenderer={noRowsRenderer}
-        fetchingRenderer={fetchingRenderer}
         sortOrder={sortOrder}
         contentSeq={contentSeq}
       />

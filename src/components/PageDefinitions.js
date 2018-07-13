@@ -3,36 +3,81 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button } from 'react-bootstrap'
+import { Grid, Row, Col, Button, DropdownButton, MenuItem, Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
-import { FilterBar, ComponentList, Section, FacetSelect, ContributePrompt } from './'
+import { FilterBar, ComponentList, Section, ContributePrompt } from './'
 import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
-import { set, get, find } from 'lodash'
+import { set, get, find, filter, sortBy } from 'lodash'
 import { saveAs } from 'file-saver'
 import Dropzone from 'react-dropzone'
 
-const defaultFacets = [{ value: 'core', label: 'Core' }]
+const sorts = [
+  { value: 'license', label: 'License' },
+  { value: 'name', label: 'Name' },
+  { value: 'namespace', label: 'Namespace' },
+  { value: 'provider', label: 'Provider' },
+  { value: 'releaseDate', label: 'Release Date' },
+  { value: 'type', label: 'Type' }
+]
+
+const licenses = [
+  { value: 'apache-2.0', label: 'Apache-2.0' },
+  { value: 'bsd-2-clause', label: 'BSD-2-Clause' },
+  { value: 'cddl-1.0', label: 'CDDL-1.0' },
+  { value: 'epl-1.0', label: 'EPL-1.0' },
+  { value: 'gpl', label: 'GPL' },
+  { value: 'lgpl', label: 'LGPL' },
+  { value: 'mit', label: 'MIT' },
+  { value: 'mpl-2.0', label: 'MPL-2.0' },
+  { value: 'presence', label: 'Presence Of' },
+  { value: 'absence', label: 'Absence Of' }
+]
+
+const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+
+const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
 
 class PageDefinitions extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeFacets: defaultFacets.map(x => x.value), sequence: 0 }
+    this.state = {
+      activeFilters: {},
+      activeSort: null,
+      sequence: 0
+    }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
+    this.onSort = this.onSort.bind(this)
+    this.onFilter = this.onFilter.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
-    this.onRemoveAll = this.onRemoveAll.bind(this)
-    this.facetChange = this.facetChange.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
     this.doSave = this.doSave.bind(this)
+    this.renderFilterBar = this.renderFilterBar.bind(this)
+    this.name = this.name.bind(this)
+    this.namespace = this.namespace.bind(this)
+    this.provider = this.provider.bind(this)
+    this.type = this.type.bind(this)
+    this.releaseDate = this.releaseDate.bind(this)
+    this.license = this.license.bind(this)
+    this.transform = this.transform.bind(this)
+    this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
+  }
+
+  getDefinition(component) {
+    return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+  }
+
+  getValue(component, field) {
+    return get(component, field)
   }
 
   componentDidMount() {
@@ -187,9 +232,93 @@ class PageDefinitions extends Component {
     this.refs.contributeModal.open()
   }
 
-  facetChange(value) {
-    const activeFacets = (value || []).map(facet => facet.value)
-    this.setState({ ...this.state, activeFacets })
+  name(coordinates) {
+    return coordinates.name ? coordinates.name : null
+  }
+
+  namespace(coordinates) {
+    return coordinates.namespace ? coordinates.namespace : null
+  }
+
+  provider(coordinates) {
+    return coordinates.provider ? coordinates.provider : null
+  }
+
+  type(coordinates) {
+    return coordinates.type ? coordinates.type : null
+  }
+
+  releaseDate(coordinates) {
+    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+    const described = get(definition, 'described')
+    if (described && described.releaseDate) return described.releaseDate
+    return null
+  }
+
+  license(coordinates) {
+    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+    const licensed = get(definition, 'licensed')
+    if (licensed && licensed.declared) return licensed.declared
+    return null
+  }
+
+  getSort(eventKey) {
+    return this[eventKey]
+  }
+
+  onSort(eventKey) {
+    let activeSort = eventKey.value
+    if (this.state.activeSort === activeSort) activeSort = null
+    this.setState({ ...this.state, activeSort, sequence: this.state.sequence + 1 })
+    this.props.dispatch(uiBrowseUpdateList({ transform: this.createTransform(activeSort, this.state.activeFilters) }))
+  }
+
+  sortList(list, sortFunction) {
+    return list ? sortBy(list, sortFunction) : list
+  }
+
+  filterList(list, activeFilters) {
+    if (Object.keys(activeFilters).length === 0) return list
+    return filter(list, component => {
+      const defintion = this.getDefinition(component)
+      for (let filterType in activeFilters) {
+        const value = activeFilters[filterType]
+        const fieldValue = this.getValue(defintion, filterType)
+        if (value === 'presence') {
+          if (!fieldValue) return false
+        } else if (value === 'absence') {
+          if (fieldValue) return false
+        } else {
+          if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
+            return false
+          }
+        }
+      }
+      return true
+    })
+  }
+
+  onFilter(value) {
+    const activeFilters = Object.assign({}, this.state.activeFilters)
+    const filterValue = get(activeFilters, value.type)
+    if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
+    else activeFilters[value.type] = value.value
+    this.setState({ ...this.state, activeFilters })
+    this.props.dispatch(uiBrowseUpdateList({ transform: this.createTransform(this.state.activeSort, activeFilters) }))
+  }
+
+  transform(list, sort, filters) {
+    let newList = list
+    if (sort) {
+      const sortFunction = this.getSort(sort)
+      newList = this.sortList(newList, sortFunction)
+    }
+    if (filters) newList = this.filterList(newList, filters)
+    return newList
+  }
+
+  createTransform(sort, filters) {
+    return list => this.transform(list, sort, filters)
   }
 
   incrementSequence() {
@@ -200,6 +329,74 @@ class PageDefinitions extends Component {
     return <div>Select components from the list above ...</div>
   }
 
+  checkSort(sortType) {
+    return this.state.activeSort === sortType.value
+  }
+
+  checkFilter(filterType, id) {
+    const { activeFilters } = this.state
+    for (let filterId in activeFilters) {
+      const filter = activeFilters[filterId]
+      if (filterId === id && filter === filterType.value) return true
+    }
+    return false
+  }
+
+  renderSort(list, title, id) {
+    return (
+      <DropdownButton
+        className="list-button"
+        bsStyle={''}
+        pullRight
+        title={title}
+        disabled={!this.hasComponents()}
+        id={id}
+      >
+        {list.map(sortType => {
+          return (
+            <MenuItem onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
+              {sortType.label}
+              {this.checkSort(sortType) && <i className="fas fa-check pull-right" />}
+            </MenuItem>
+          )
+        })}
+      </DropdownButton>
+    )
+  }
+
+  renderFilter(list, title, id) {
+    return (
+      <DropdownButton
+        className="list-button"
+        bsStyle={''}
+        pullRight
+        title={title}
+        disabled={!this.hasComponents()}
+        id={id}
+      >
+        {list.map(filterType => {
+          return (
+            <MenuItem onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
+              {filterType.label}
+              {this.checkFilter(filterType, id) && <i className="fas fa-check pull-right" />}
+            </MenuItem>
+          )
+        })}
+      </DropdownButton>
+    )
+  }
+
+  renderFilterBar() {
+    return (
+      <div className="list-filter" align="right">
+        {this.renderSort(sorts, 'Sort By', 'sort')}
+        {this.renderFilter(licenses, 'License', 'licensed.declared')}
+        {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
+        {this.renderFilter(releaseDates, 'Release Date', 'described.releaseDate')}
+      </div>
+    )
+  }
+  
   collapseComponent(component) {
     this.onChangeComponent(component, { ...component, expanded: false })
   }
@@ -232,9 +429,13 @@ class PageDefinitions extends Component {
     )
   }
 
+  noRowsRenderer() {
+    return () => <div className={'list-noRows'}>Search for components above ...</div>
+  }
+
   render() {
     const { components, filterOptions, definitions, token } = this.props
-    const { activeFacets, sequence } = this.state
+    const { sequence } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -247,17 +448,18 @@ class PageDefinitions extends Component {
           <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
             <div className="section-body">
               <ComponentList
-                list={components}
+                list={components.transformedList}
+                listLength={get(components, 'headers.pagination.totalCount')}
                 listHeight={1000}
                 onRemove={this.onRemoveComponent}
                 onChange={this.onChangeComponent}
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
                 onCurate={this.onCurate}
+                renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
                 githubToken={token}
-                noRowsRenderer={this.noRowsRenderer}
-                activeFacets={activeFacets}
+                noRowsRenderer={this.noRowsRenderer()}
                 sequence={sequence}
               />
             </div>

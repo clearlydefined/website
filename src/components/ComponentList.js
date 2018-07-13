@@ -12,7 +12,8 @@ import { ROUTE_INSPECT } from '../utils/routingConstants'
 
 export default class ComponentList extends React.Component {
   static propTypes = {
-    list: PropTypes.object.isRequired,
+    list: PropTypes.array,
+    listLength: PropTypes.number,
     listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
@@ -21,8 +22,7 @@ export default class ComponentList extends React.Component {
     onCurate: PropTypes.func,
     onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
-    fetchingRenderer: PropTypes.func,
-    activeFacets: PropTypes.array,
+    renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
     githubToken: PropTypes.string,
     sequence: PropTypes.number
@@ -43,7 +43,6 @@ export default class ComponentList extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
-    if (newProps.activeFacets !== this.props.activeFacets) this.incrementSequence()
     if (newProps.sequence !== this.props.sequence) this.incrementSequence()
   }
 
@@ -90,7 +89,7 @@ export default class ComponentList extends React.Component {
   }
 
   rowHeight({ index }) {
-    const component = this.props.list.list[index]
+    const component = this.props.list[index]
     return component.expanded ? 150 : 50
   }
 
@@ -140,8 +139,8 @@ export default class ComponentList extends React.Component {
   }
 
   renderRow({ index, key, style }, toggleExpanded = null, showExpanded = false) {
-    const { list, activeFacets } = this.props
-    const component = list.list[index]
+    const { list } = this.props
+    const component = list[index]
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
     return (
@@ -150,7 +149,6 @@ export default class ComponentList extends React.Component {
           onClick={() => this.toggleExpanded(component)}
           definition={definition}
           component={component}
-          activeFacets={activeFacets}
           onChange={this.onEntryChange}
           renderButtons={this.renderButtons}
         />
@@ -159,20 +157,23 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer } = this.props
+    const { loadMoreRows, listHeight, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <RowEntityList
-        list={list}
-        loadMoreRows={loadMoreRows}
-        listHeight={listHeight}
-        rowRenderer={this.renderRow}
-        rowHeight={this.rowHeight}
-        noRowsRenderer={noRowsRenderer}
-        fetchingRenderer={fetchingRenderer}
-        sortOrder={sortOrder}
-        contentSeq={contentSeq}
-      />
+      <div>
+        {renderFilterBar()}
+        <RowEntityList
+          list={list}
+          listLength={listLength}
+          loadMoreRows={loadMoreRows}
+          listHeight={listHeight}
+          rowRenderer={this.renderRow}
+          rowHeight={this.rowHeight}
+          noRowsRenderer={noRowsRenderer}
+          sortOrder={sortOrder}
+          contentSeq={contentSeq}
+        />
+      </div>
     )
   }
 }
