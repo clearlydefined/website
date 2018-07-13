@@ -111,7 +111,6 @@ export default class ComponentList extends React.Component {
     const isSourceComponent = this.isSourceComponent(component)
     return (
       <div className="list-activity-area">
-        {/* <img className='list-buttons' width='45px' src={two} alt='score'/> */}
         <img className="list-buttons" src={getBadgeUrl(component)} alt="score" />
         <ButtonGroup>
           {!isSourceComponent && (
@@ -119,12 +118,6 @@ export default class ComponentList extends React.Component {
               <i className="fas fa-plus" />
               <span>&nbsp;Add source</span>
             </Button>
-          )}
-          {this.renderButtonWithTip(
-            <Button className="list-fa-button" onClick={this.curateComponent.bind(this, component)}>
-              <i className="fas fa-edit" />
-            </Button>,
-            'Curate this definition'
           )}
           {this.renderButtonWithTip(
             <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, component)}>

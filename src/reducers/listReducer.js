@@ -116,6 +116,15 @@ export default (name = '', transformer = null, comparator = null) => {
       }
     }
 
+    if (result.removeAll) {
+      return {
+        ...state,
+        sequence: ++state.sequence,
+        list: [],
+        transformedList: []
+      }
+    }
+
     if (result.update) {
       const newList = update(state.list, result.update, result.value, comparator)
       return {

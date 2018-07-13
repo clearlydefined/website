@@ -68,6 +68,8 @@ class PageDefinitions extends Component {
     this.releaseDate = this.releaseDate.bind(this)
     this.license = this.license.bind(this)
     this.transform = this.transform.bind(this)
+    this.onRemoveAll = this.onRemoveAll.bind(this)
+    this.collapseAll = this.collapseAll.bind(this)
   }
 
   getDefinition(component) {
@@ -157,6 +159,10 @@ class PageDefinitions extends Component {
 
   onRemoveComponent(component) {
     this.props.dispatch(uiBrowseUpdateList({ remove: component }))
+  }
+
+  onRemoveAll() {
+    this.props.dispatch(uiBrowseUpdateList({ removeAll: {} }))
   }
 
   onChangeComponent(component, newComponent) {
@@ -390,10 +396,28 @@ class PageDefinitions extends Component {
       </div>
     )
   }
+  
+  collapseComponent(component) {
+    this.onChangeComponent(component, { ...component, expanded: false })
+  }
+
+  collapseAll() {
+    const { components } = this.props
+    components.list.forEach(component => component.expanded && this.collapseComponent(component))
+    this.incrementSequence()
+  }
 
   renderButtons() {
     return (
       <div className="pull-right">
+        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
+          Clear All
+        </Button>
+        &nbsp;
+        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
+          Collapse All
+        </Button>
+        &nbsp;
         <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
           Save
         </Button>
