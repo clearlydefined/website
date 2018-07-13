@@ -102,6 +102,7 @@ export function getPyPiSearch(token, path) {
 
 export function getPyPiRevisions(token, path) {
   return get(url(`${ORIGINS_PYPI}/${path}/revisions`), token)
+}
 
 export function getRubyGemsSearch(token, path) {
   return get(url(`${ORIGINS_RUBYGEMS}/${path}`), token)
@@ -109,6 +110,7 @@ export function getRubyGemsSearch(token, path) {
 
 export function getRubyGemsRevisions(token, path) {
   return get(url(`${ORIGINS_RUBYGEMS}/${path}/revisions`), token)
+}
 
 export function getNugetSearch(token, path) {
   return get(url(`${ORIGINS_NUGET}/${path}`), token)

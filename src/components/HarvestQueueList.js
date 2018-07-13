@@ -9,7 +9,7 @@ import {
   GitHubCommitPicker,
   NpmVersionPicker,
   MavenVersionPicker,
-  PyPiVersionPicker
+  PyPiVersionPicker,
   NugetVersionPicker,
   RubyGemsVersionPicker
 } from './'
@@ -81,8 +81,10 @@ export default class HarvestQueueList extends React.Component {
         )}
         {request.provider === 'pypi' && (
           <PyPiVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
         {request.provider === 'rubygems' && (
           <RubyGemsVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
         {request.provider === 'nuget' && (
           <NugetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
