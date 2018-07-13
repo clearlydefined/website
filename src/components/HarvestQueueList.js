@@ -9,11 +9,13 @@ import {
   GitHubCommitPicker,
   NpmVersionPicker,
   MavenVersionPicker,
-  NugetVersionPicker
-} from '.'
+  NugetVersionPicker,
+  RubyGemsVersionPicker
+} from './'
 import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
+import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 
 export default class HarvestQueueList extends React.Component {
@@ -75,6 +77,8 @@ export default class HarvestQueueList extends React.Component {
         {request.provider === 'mavencentral' && (
           <MavenVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
+        {request.provider === 'rubygems' && (
+          <RubyGemsVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         {request.provider === 'nuget' && (
           <NugetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
@@ -108,6 +112,7 @@ export default class HarvestQueueList extends React.Component {
   getImage(request) {
     if (request.provider === 'github') return github
     if (request.provider === 'npmjs') return npm
+    if (request.provider === 'rubygems') return gem
     if (request.provider === 'nuget') return nuget
     return null
   }
