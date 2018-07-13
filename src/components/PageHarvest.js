@@ -97,7 +97,7 @@ class PageHarvest extends Component {
   }
 
   noRowsRenderer() {
-    return <div>Use the search box above to add components to harvest.</div>
+    return <div className={'list-noRows'}>Use the search box above to add components to harvest.</div>
   }
 
   render() {
@@ -118,7 +118,7 @@ class PageHarvest extends Component {
         <Section name={'Components to harvest'} actionButton={this.renderActionButton()}>
           <div className="section-body">
             <HarvestQueueList
-              list={queue}
+              list={queue.list}
               listHeight={1000}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}

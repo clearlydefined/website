@@ -30,6 +30,7 @@ const DEFINITIONS = 'definitions'
 const BADGES = 'badges'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
+const ORIGINS_NUGET = 'origins/nuget'
 const ORIGINS_MAVEN = 'origins/maven'
 const ORIGINS_RUBYGEMS = 'origins/rubygems'
 
@@ -100,6 +101,13 @@ export function getRubyGemsSearch(token, path) {
 
 export function getRubyGemsRevisions(token, path) {
   return get(url(`${ORIGINS_RUBYGEMS}/${path}/revisions`), token)
+
+export function getNugetSearch(token, path) {
+  return get(url(`${ORIGINS_NUGET}/${path}`), token)
+}
+
+export function getNugetRevisions(token, path) {
+  return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================
