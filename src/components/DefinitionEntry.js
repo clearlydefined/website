@@ -9,6 +9,8 @@ import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
+import gem from '../images/gem.png'
+import nuget from '../images/nuget.svg'
 import moment from 'moment'
 
 export default class DefinitionEntry extends React.Component {
@@ -123,6 +125,8 @@ export default class DefinitionEntry extends React.Component {
         return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
       case 'pypi':
         return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
+      case 'rubygems':
+        return `${this.getComponentUrl(coordinates)}/versions/${coordinates.revision}`
       default:
         return
     }
@@ -142,6 +146,8 @@ export default class DefinitionEntry extends React.Component {
         return `https://mvnrepository.com/artifact/${coordinates.namespace}/${coordinates.name}`
       case 'pypi':
         return `https://pypi.org/project/${coordinates.name}`
+      case 'rubygems':
+        return `https://rubygems.org/gems/${coordinates.name}`
       default:
         return
     }
@@ -342,6 +348,8 @@ export default class DefinitionEntry extends React.Component {
     if (definition.coordinates.provider === 'github') return github
     if (definition.coordinates.provider === 'npmjs') return npm
     if (definition.coordinates.provider === 'pypi') return pypi
+    if (definition.coordinates.provider === 'rubygems') return gem
+    if (definition.coordinates.provider === 'nuget') return nuget
     return null
   }
 

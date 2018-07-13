@@ -30,8 +30,10 @@ const DEFINITIONS = 'definitions'
 const BADGES = 'badges'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
+const ORIGINS_NUGET = 'origins/nuget'
 const ORIGINS_MAVEN = 'origins/maven'
 const ORIGINS_PYPI = 'origins/pypi'
+const ORIGINS_RUBYGEMS = 'origins/rubygems'
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
@@ -100,6 +102,20 @@ export function getPyPiSearch(token, path) {
 
 export function getPyPiRevisions(token, path) {
   return get(url(`${ORIGINS_PYPI}/${path}/revisions`), token)
+
+export function getRubyGemsSearch(token, path) {
+  return get(url(`${ORIGINS_RUBYGEMS}/${path}`), token)
+}
+
+export function getRubyGemsRevisions(token, path) {
+  return get(url(`${ORIGINS_RUBYGEMS}/${path}/revisions`), token)
+
+export function getNugetSearch(token, path) {
+  return get(url(`${ORIGINS_NUGET}/${path}`), token)
+}
+
+export function getNugetRevisions(token, path) {
+  return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================
