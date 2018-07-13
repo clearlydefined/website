@@ -32,6 +32,7 @@ const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
 const ORIGINS_NUGET = 'origins/nuget'
 const ORIGINS_MAVEN = 'origins/maven'
+const ORIGINS_PYPI = 'origins/pypi'
 const ORIGINS_RUBYGEMS = 'origins/rubygems'
 
 export function getHarvestResults(token, entity) {
@@ -94,6 +95,13 @@ export function getMavenSearch(token, path) {
 export function getMavenRevisions(token, path) {
   return get(url(`${ORIGINS_MAVEN}/${path}/revisions`), token)
 }
+
+export function getPyPiSearch(token, path) {
+  return get(url(`${ORIGINS_PYPI}/${path}`), token)
+}
+
+export function getPyPiRevisions(token, path) {
+  return get(url(`${ORIGINS_PYPI}/${path}/revisions`), token)
 
 export function getRubyGemsSearch(token, path) {
   return get(url(`${ORIGINS_RUBYGEMS}/${path}`), token)
