@@ -3,8 +3,8 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { getNugetSearch } from '../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
-import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 export default class NuGetSelector extends Component {
   static propTypes = {
@@ -21,13 +21,17 @@ export default class NuGetSelector extends Component {
   onChange(values) {
     const { onChange } = this.props
     const value = values.length === 0 ? null : values[0]
-    value && onChange && onChange({ type: 'npm', provider: 'npmjs', name: value.id }, 'package')
+    value && onChange && onChange({ type: 'nuget', provider: 'nuget', name: value.id }, 'package')
   }
 
   async getOptions(value) {
     try {
+      this.setState({ ...this.state, isLoading: true })
+      const options = await getNugetSearch(this.props.token, value)
+      this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
       console.log(error)
+      this.setState({ ...this.state, options: [], isLoading: false })
     }
   }
 
@@ -36,10 +40,9 @@ export default class NuGetSelector extends Component {
     return (
       <AsyncTypeahead
         options={options}
-        placeholder={'NuGet support coming soon...'}
+        placeholder={'Pick a Nuget to harvest'}
         onChange={this.onChange}
         labelKey="id"
-        disabled
         clearButton
         highlightOnlyResult
         emptyLabel=""

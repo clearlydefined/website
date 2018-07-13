@@ -30,6 +30,7 @@ const DEFINITIONS = 'definitions'
 const BADGES = 'badges'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
+const ORIGINS_NUGET = 'origins/nuget'
 const ORIGINS_MAVEN = 'origins/maven'
 
 export function getHarvestResults(token, entity) {
@@ -44,7 +45,6 @@ export function harvest(token, spec) {
 export function getCuration(token, entity) {
   return get(url(`${CURATIONS}/${entity.toPath()}`), token)
 }
-
 
 export function curate(token, spec) {
   return patch(url(`${CURATIONS}`), token, spec)
@@ -92,6 +92,14 @@ export function getMavenSearch(token, path) {
 
 export function getMavenRevisions(token, path) {
   return get(url(`${ORIGINS_MAVEN}/${path}/revisions`), token)
+}
+
+export function getNugetSearch(token, path) {
+  return get(url(`${ORIGINS_NUGET}/${path}`), token)
+}
+
+export function getNugetRevisions(token, path) {
+  return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================
