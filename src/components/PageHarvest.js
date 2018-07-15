@@ -6,7 +6,16 @@ import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { ROUTE_HARVEST } from '../utils/routingConstants'
 import { harvestAction } from '../actions/harvestActions'
-import { HarvestQueueList, GitHubSelector, NpmSelector, MavenSelector, NuGetSelector, Section } from './'
+import {
+  HarvestQueueList,
+  GitHubSelector,
+  NpmSelector,
+  MavenSelector,
+  NuGetSelector,
+  PyPiSelector,
+  RubyGemsSelector,
+  Section
+} from './'
 import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 
@@ -73,6 +82,12 @@ class PageHarvest extends Component {
         <Button name="nuget" onClick={this.onClick} active={activeProvider === 'nuget'}>
           NuGet
         </Button>
+        <Button name="pypi" onClick={this.onClick} active={activeProvider === 'pypi'}>
+          PyPi
+        </Button>
+        <Button name="rubygems" onClick={this.onClick} active={activeProvider === 'rubygems'}>
+          RubyGems
+        </Button>
       </ButtonGroup>
     )
   }
@@ -86,7 +101,7 @@ class PageHarvest extends Component {
   }
 
   noRowsRenderer() {
-    return <div>Use the search box above to add components to harvest.</div>
+    return <div className={'list-noRows'}>Use the search box above to add components to harvest.</div>
   }
 
   render() {
@@ -95,18 +110,20 @@ class PageHarvest extends Component {
     return (
       <Grid className="main-container">
         <Row className="show-grid spacer">
-          <Col md={4}>{this.renderProviderButtons()}</Col>
-          <Col md={8}>
+          <Col md={6}>{this.renderProviderButtons()}</Col>
+          <Col md={6}>
             {activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
             {activeProvider === 'maven' && <MavenSelector onChange={this.onAddRequest} />}
             {activeProvider === 'npm' && <NpmSelector onChange={this.onAddRequest} />}
             {activeProvider === 'nuget' && <NuGetSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
           </Col>
         </Row>
         <Section name={'Components to harvest'} actionButton={this.renderActionButton()}>
           <div className="section-body">
             <HarvestQueueList
-              list={queue}
+              list={queue.list}
               listHeight={1000}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}

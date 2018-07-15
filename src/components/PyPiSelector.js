@@ -3,10 +3,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getNugetSearch } from '../api/clearlyDefined'
+import { getPyPiSearch } from '../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
+import 'react-bootstrap-typeahead/css/Typeahead.css'
 
-export default class NuGetSelector extends Component {
+export default class PyPiSelector extends Component {
   static propTypes = {
     onChange: PropTypes.func
   }
@@ -21,13 +22,13 @@ export default class NuGetSelector extends Component {
   onChange(values) {
     const { onChange } = this.props
     const value = values.length === 0 ? null : values[0]
-    value && onChange && onChange({ type: 'nuget', provider: 'nuget', name: value.id }, 'package')
+    value && onChange && onChange({ type: 'pypi', provider: 'pypi', name: value.id }, 'package')
   }
 
   async getOptions(value) {
     try {
       this.setState({ ...this.state, isLoading: true })
-      const options = await getNugetSearch(this.props.token, value)
+      const options = await getPyPiSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
       console.log(error)
@@ -40,7 +41,7 @@ export default class NuGetSelector extends Component {
     return (
       <AsyncTypeahead
         options={options}
-        placeholder={'Pick a Nuget to harvest'}
+        placeholder={'Pick a PyPi to harvest'}
         onChange={this.onChange}
         labelKey="id"
         clearButton

@@ -34,6 +34,25 @@ const update = (list, item, newValue, comparator = null) => {
   return result
 }
 
+const sort = (list, sortValue) => {
+  return list ? _.sortBy(list, sortValue) : list
+}
+
+const transform = (list, transforms) => {
+  let newList = list
+  for (let transform in transforms) {
+    const transformFunction = transforms[transform].func
+    if (transform === 'sort') {
+      const sortFunction = transforms[transform].sortFunction
+      newList = transformFunction(newList, sortFunction)
+    } else if (transform === 'filter') {
+      const activeFilters = transforms[transform].activeFilters
+      newList = transformFunction(newList, activeFilters)
+    }
+  }
+  return newList
+}
+
 function computeTranformed(state, append, list, transformer) {
   if (!transformer) return state.transformedList
   const transformed = list.map(entry => transformer(entry))
@@ -78,32 +97,50 @@ export default (name = '', transformer = null, comparator = null) => {
     }
 
     if (result.add) {
+      const newList = add(state.list, result.add, comparator)
       return {
         ...state,
         sequence: ++state.sequence,
-        list: add(state.list, result.add, comparator),
-        transformedList: transformer ? add(state.transformedList, transformer(result.add)) : state.transformedList
+        list: newList,
+        transformedList: transformer ? transformer(newList) : newList
       }
     }
 
     if (result.remove) {
+      const newList = remove(state.list, result.remove, comparator)
       return {
         ...state,
         sequence: ++state.sequence,
-        list: remove(state.list, result.remove, comparator),
-        transformedList: transformer ? remove(state.transformedList, transformer(result.remove)) : state.transformedList
+        list: newList,
+        transformedList: transformer ? transform(newList, transformer) : newList
+      }
+    }
+
+    if (result.removeAll) {
+      return {
+        ...state,
+        sequence: ++state.sequence,
+        list: [],
+        transformedList: []
       }
     }
 
     if (result.update) {
-      const newTransformed = transformer ? transformer(result.value) : null
+      const newList = update(state.list, result.update, result.value, comparator)
       return {
         ...state,
         sequence: ++state.sequence,
-        list: update(state.list, result.update, result.value, comparator),
-        transformedList: transformer
-          ? update(state.transformedList, transformer(result.update), newTransformed)
-          : state.transformedList
+        list: newList,
+        transformedList: transformer ? transformer(newList) : newList
+      }
+    }
+
+    if (result.transform) {
+      transformer = result.transform
+      return {
+        ...state,
+        sequence: ++state.sequence,
+        transformedList: transformer ? transformer(state.list) : state.list
       }
     }
 
@@ -114,7 +151,7 @@ export default (name = '', transformer = null, comparator = null) => {
         isFetching: false,
         filter: filter,
         list: append ? state.list.concat(result.list) : result.list,
-        transformedList: computeTranformed(state, append, result.list, transformer),
+        transformedList: transformer ? transform(state.list, transformer) : state.list,
         hasMore: result.hasMore,
         headers: result.headers
       }

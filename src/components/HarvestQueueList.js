@@ -3,20 +3,31 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { RowEntityList, TwoLineEntry, GitHubCommitPicker, NpmVersionPicker, MavenVersionPicker } from './'
+import {
+  RowEntityList,
+  TwoLineEntry,
+  GitHubCommitPicker,
+  NpmVersionPicker,
+  MavenVersionPicker,
+  PyPiVersionPicker,
+  NugetVersionPicker,
+  RubyGemsVersionPicker
+} from './'
 import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
+import pypi from '../images/pypi.png'
+import gem from '../images/gem.png'
+import nuget from '../images/nuget.svg'
 
 export default class HarvestQueueList extends React.Component {
   static propTypes = {
-    list: PropTypes.object.isRequired,
+    list: PropTypes.array.isRequired,
     listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
-    fetchingRenderer: PropTypes.func,
     githubToken: PropTypes.string
   }
 
@@ -68,6 +79,15 @@ export default class HarvestQueueList extends React.Component {
         {request.provider === 'mavencentral' && (
           <MavenVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
+        {request.provider === 'pypi' && (
+          <PyPiVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
+        {request.provider === 'rubygems' && (
+          <RubyGemsVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
+        {request.provider === 'nuget' && (
+          <NugetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
         <i className="fas fa-times list-remove" onClick={this.removeRequest.bind(this, request)} />
       </div>
     )
@@ -98,6 +118,9 @@ export default class HarvestQueueList extends React.Component {
   getImage(request) {
     if (request.provider === 'github') return github
     if (request.provider === 'npmjs') return npm
+    if (request.provider === 'pypi') return pypi
+    if (request.provider === 'rubygems') return gem
+    if (request.provider === 'nuget') return nuget
     return null
   }
 
@@ -108,7 +131,7 @@ export default class HarvestQueueList extends React.Component {
 
   renderRow({ index, key, style }) {
     const { list } = this.props
-    const request = list.list[index]
+    const request = list[index]
     const clickHandler = () => {}
     return (
       <div key={key} style={style}>
@@ -125,7 +148,7 @@ export default class HarvestQueueList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, fetchingRenderer } = this.props
+    const { loadMoreRows, listHeight, noRowsRenderer, list } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
       <RowEntityList
@@ -135,7 +158,6 @@ export default class HarvestQueueList extends React.Component {
         rowRenderer={this.renderRow}
         rowHeight={50}
         noRowsRenderer={noRowsRenderer}
-        fetchingRenderer={fetchingRenderer}
         sortOrder={sortOrder}
         contentSeq={contentSeq}
       />

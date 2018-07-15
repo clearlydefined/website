@@ -8,6 +8,9 @@ import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
+import pypi from '../images/pypi.png'
+import gem from '../images/gem.png'
+import nuget from '../images/nuget.svg'
 import moment from 'moment'
 
 export default class DefinitionEntry extends React.Component {
@@ -71,17 +74,35 @@ export default class DefinitionEntry extends React.Component {
 
   renderHeadline(definition) {
     const { namespace, name, revision } = definition.coordinates
+    const componentUrl = this.getComponentUrl(definition.coordinates)
+    const revisionUrl = this.getRevisionUrl(definition.coordinates)
     const namespaceText = namespace ? namespace + '/' : ''
-    const sourceUrl = this.getSourceUrl(definition)
-    let revisionText = <span>&nbsp;&nbsp;&nbsp;{revision}</span>
-    const location = get(definition, 'described.sourceLocation')
-    if (!location || (definition.coordinates.provider === location.provider && revision === location.revision))
-      revisionText = ''
-    return (
+    const componentTag = componentUrl ? (
+      <span>
+        <a href={componentUrl} target="_blank">
+          {namespaceText}
+          {name}
+        </a>
+      </span>
+    ) : (
       <span>
         {namespaceText}
         {name}
-        {revisionText}&nbsp;&nbsp;&nbsp;{sourceUrl}
+      </span>
+    )
+    const revisionTag = revisionUrl ? (
+      <span>
+        &nbsp;&nbsp;&nbsp;<a href={revisionUrl} target="_blank">
+          {revision}
+        </a>
+      </span>
+    ) : (
+      <span>&nbsp;&nbsp;&nbsp;{revision}</span>
+    )
+    return (
+      <span>
+        {componentTag}
+        {revisionTag}
       </span>
     )
   }
@@ -89,6 +110,47 @@ export default class DefinitionEntry extends React.Component {
   renderMessage(definition) {
     const licenseExpression = definition ? get(definition, 'licensed.declared') : null
     return licenseExpression ? <span>{licenseExpression}</span> : <span>&nbsp;</span>
+  }
+
+  getRevisionUrl(coordinates) {
+    if (!coordinates.revision) return
+    switch (coordinates.provider) {
+      case 'github':
+        return `${this.getComponentUrl(coordinates)}/commit/${coordinates.revision}`
+      case 'npmjs':
+        return `${this.getComponentUrl(coordinates)}/v/${coordinates.revision}`
+      case 'nuget':
+        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
+      case 'mavencentral':
+        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
+      case 'pypi':
+        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
+      case 'rubygems':
+        return `${this.getComponentUrl(coordinates)}/versions/${coordinates.revision}`
+      default:
+        return
+    }
+  }
+
+  getComponentUrl(coordinates) {
+    switch (coordinates.provider) {
+      case 'github':
+        return `https://github.com/${coordinates.namespace}/${coordinates.name}`
+      case 'npmjs':
+        return `https://npmjs.com/package/${
+          coordinates.namespace ? coordinates.namespace + '/' + coordinates.name : coordinates.name
+        }`
+      case 'nuget':
+        return `https://nuget.org/packages/${coordinates.name}`
+      case 'mavencentral':
+        return `https://mvnrepository.com/artifact/${coordinates.namespace}/${coordinates.name}`
+      case 'pypi':
+        return `https://pypi.org/project/${coordinates.name}`
+      case 'rubygems':
+        return `https://rubygems.org/gems/${coordinates.name}`
+      default:
+        return
+    }
   }
 
   getSourceUrl(definition) {
@@ -232,7 +294,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={2}>{this.renderLabel('Release', true)}</Col>
             <Col md={10}>
               <InlineEditor
-                type="text"
+                type="date"
                 initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
                 value={this.printDate(this.getValue('described.releaseDate'))}
                 onChange={this.fieldChange('described.releaseDate')}
@@ -244,14 +306,7 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Facets', true)}</Col>
             <Col md={10}>
-              <InlineEditor
-                type="text"
-                initialValue={this.printArray(initialFacets)}
-                value={this.printArray(this.getValue('described.facets') || initialFacets)}
-                onChange={this.fieldChange('described.facets', isEqual, this.parseArray)}
-                validator={value => true}
-                placeholder={'Facets'}
-              />
+              <p className="list-singleLine"> &nbsp;&nbsp;&nbsp;&nbsp;{this.printArray(initialFacets)}</p>
             </Col>
           </Row>
         </Col>
@@ -292,6 +347,9 @@ export default class DefinitionEntry extends React.Component {
   getImage(definition) {
     if (definition.coordinates.provider === 'github') return github
     if (definition.coordinates.provider === 'npmjs') return npm
+    if (definition.coordinates.provider === 'pypi') return pypi
+    if (definition.coordinates.provider === 'rubygems') return gem
+    if (definition.coordinates.provider === 'nuget') return nuget
     return null
   }
 
