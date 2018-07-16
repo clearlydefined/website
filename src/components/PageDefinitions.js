@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, DropdownButton, MenuItem, Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap'
+import { Grid, Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
@@ -325,10 +325,6 @@ class PageDefinitions extends Component {
     this.setState({ ...this.state, sequence: this.state.sequence + 1 })
   }
 
-  noRowsRenderer() {
-    return <div>Select components from the list above ...</div>
-  }
-
   checkSort(sortType) {
     return this.state.activeSort === sortType.value
   }
@@ -346,15 +342,15 @@ class PageDefinitions extends Component {
     return (
       <DropdownButton
         className="list-button"
-        bsStyle={''}
+        bsStyle="default"
         pullRight
         title={title}
         disabled={!this.hasComponents()}
         id={id}
       >
-        {list.map(sortType => {
+        {list.map((sortType, index) => {
           return (
-            <MenuItem onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
+            <MenuItem key={index} onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
               {sortType.label}
               {this.checkSort(sortType) && <i className="fas fa-check pull-right" />}
             </MenuItem>
@@ -368,15 +364,15 @@ class PageDefinitions extends Component {
     return (
       <DropdownButton
         className="list-button"
-        bsStyle={''}
+        bsStyle="default"
         pullRight
         title={title}
         disabled={!this.hasComponents()}
         id={id}
       >
-        {list.map(filterType => {
+        {list.map((filterType, index) => {
           return (
-            <MenuItem onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
+            <MenuItem key={index} onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
               {filterType.label}
               {this.checkFilter(filterType, id) && <i className="fas fa-check pull-right" />}
             </MenuItem>
@@ -396,7 +392,7 @@ class PageDefinitions extends Component {
       </div>
     )
   }
-  
+
   collapseComponent(component) {
     this.onChangeComponent(component, { ...component, expanded: false })
   }

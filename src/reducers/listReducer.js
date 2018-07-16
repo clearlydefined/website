@@ -34,10 +34,6 @@ const update = (list, item, newValue, comparator = null) => {
   return result
 }
 
-const sort = (list, sortValue) => {
-  return list ? _.sortBy(list, sortValue) : list
-}
-
 const transform = (list, transforms) => {
   let newList = list
   for (let transform in transforms) {
@@ -51,12 +47,6 @@ const transform = (list, transforms) => {
     }
   }
   return newList
-}
-
-function computeTranformed(state, append, list, transformer) {
-  if (!transformer) return state.transformedList
-  const transformed = list.map(entry => transformer(entry))
-  return append ? state.transformedList.concat(transformed) : transformed
 }
 
 export default (name = '', transformer = null, comparator = null) => {
