@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
+export const ROUTE_DISCORD = '/discord'
 export const ROUTE_ABOUT = '/about'
 export const ROUTE_DEFINITIONS = '/definitions'
 export const ROUTE_INSPECT = '/inspect'
