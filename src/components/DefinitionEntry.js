@@ -127,6 +127,8 @@ export default class DefinitionEntry extends React.Component {
         return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
       case 'rubygems':
         return `${this.getComponentUrl(coordinates)}/versions/${coordinates.revision}`
+      case 'launchpad':
+        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
       default:
         return
     }
@@ -148,6 +150,8 @@ export default class DefinitionEntry extends React.Component {
         return `https://pypi.org/project/${coordinates.name}`
       case 'rubygems':
         return `https://rubygems.org/gems/${coordinates.name}`
+      case 'launchpad':
+        return `https://launchpad.net/${coordinates.name}`
       default:
         return
     }
@@ -350,6 +354,7 @@ export default class DefinitionEntry extends React.Component {
     if (definition.coordinates.provider === 'pypi') return pypi
     if (definition.coordinates.provider === 'rubygems') return gem
     if (definition.coordinates.provider === 'nuget') return nuget
+    if (definition.coordinates.provider === 'launchpad') return nuget
     return null
   }
 
