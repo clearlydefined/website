@@ -164,3 +164,14 @@
 .placeholder-text {
   color: #bdbdbd;
 }
+
+.two-line-entry {
+  display: flex;
+  flex-direction: column;
+}
+
+.view-pr__row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 30px;
+}

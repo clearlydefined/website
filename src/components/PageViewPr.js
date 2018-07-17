@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { uiViewPrGetData } from '../actions/ui'
 import { ROUTE_VIEW_PR } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
+import { DefinitionEntry } from './'
 
 class PageViewPr extends Component {
   constructor(props) {
@@ -20,9 +21,36 @@ class PageViewPr extends Component {
     dispatch(uiViewPrGetData(token, pr_number))
   }
 
+  renderComponent(component) {
+    return (
+      <div className="view-pr__row">
+        <DefinitionEntry
+          onChange={() => null}
+          onCurate={() => null}
+          onInspect={() => null}
+          renderButtons={() => null}
+          component={{ expanded: true }}
+          definition={component.current}
+          activeFacets={[]}
+        />
+        <DefinitionEntry
+          onChange={() => null}
+          onCurate={() => null}
+          onInspect={() => null}
+          renderButtons={() => null}
+          component={{ expanded: true }}
+          definition={component.proposed}
+          activeFacets={[]}
+        />
+      </div>
+    )
+  }
+
   render() {
     return (
-      <div>{this.props.componentsState.isFetching ? 'Fetching' : JSON.stringify(this.props.componentsState.item)}</div>
+      <div>
+        {!this.props.componentsState.isFetched ? 'Fetching' : this.props.componentsState.item.map(this.renderComponent)}
+      </div>
     )
   }
 }
