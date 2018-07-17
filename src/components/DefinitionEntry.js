@@ -115,7 +115,11 @@ export default class DefinitionEntry extends React.Component {
 
   renderMessage(definition) {
     const licenseExpression = definition ? get(definition, 'licensed.declared') : null
-    return licenseExpression ? <span>{licenseExpression}</span> : <span>&nbsp;</span>
+    return licenseExpression ? (
+      <span className={this.classIfDifferent('licensed.declared')}>{licenseExpression}</span>
+    ) : (
+      <span>&nbsp;</span>
+    )
   }
 
   getRevisionUrl(coordinates) {
