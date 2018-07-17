@@ -67,6 +67,12 @@ export default class DefinitionEntry extends React.Component {
     return get(this.props.definition, field)
   }
 
+  classIfDifferent(field) {
+    return this.props.otherDefinition && !isEqual(get(this.props.otherDefinition, field), this.getOriginalValue(field))
+      ? this.props.classOnDifference
+      : ''
+  }
+
   getValue(field) {
     const { component } = this.props
     return (component.changes && component.changes[field]) || this.getOriginalValue(field)
@@ -269,6 +275,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={3}>{this.renderLabel('Declared', true)}</Col>
             <Col md={9}>
               <InlineEditor
+                extraClass={this.classIfDifferent('licensed.declared')}
                 readOnly={readOnly}
                 type="text"
                 initialValue={this.getOriginalValue('licensed.declared')}
@@ -283,6 +290,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={3}>{this.renderLabel('Source', true)}</Col>
             <Col md={9}>
               <InlineEditor
+                extraClass={this.classIfDifferent('described.sourceLocation')}
                 readOnly={readOnly}
                 type="text"
                 initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
@@ -297,6 +305,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={3}>{this.renderLabel('Release', true)}</Col>
             <Col md={9}>
               <InlineEditor
+                extraClass={this.classIfDifferent('described.releaseDate')}
                 readOnly={readOnly}
                 type="date"
                 initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
@@ -310,7 +319,9 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={3}>{this.renderLabel('Facets', true)}</Col>
             <Col md={9}>
-              <p className="list-singleLine">{this.printArray(initialFacets)}</p>
+              <p className={`list-singleLine ${this.classIfDifferent('described.facets')}`}>
+                {this.printArray(initialFacets)}
+              </p>
             </Col>
           </Row>
         </Col>
@@ -318,13 +329,17 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={3}>{this.renderLabel('Discovered')}</Col>
             <Col md={9}>
-              <p className="list-singleLine">{get(licensed, 'discovered.expressions', []).join(', ')}</p>
+              <p className={`list-singleLine ${this.classIfDifferent('licensed.discovered.expressions')}`}>
+                {get(licensed, 'discovered.expressions', []).join(', ')}
+              </p>
             </Col>
           </Row>
           <Row>
             <Col md={3}>{this.renderLabel('Attribution', true)}</Col>
             <Col md={9}>
-              <p className="list-singleLine">{get(licensed, 'attribution.parties', []).join(', ')}</p>
+              <p className={`list-singleLine ${this.classIfDifferent('licensed.attribution.parties')}`}>
+                {get(licensed, 'attribution.parties', []).join(', ')}
+              </p>
             </Col>
           </Row>
           <Row>
@@ -340,7 +355,7 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={3}>{this.renderLabel('Tools')}</Col>
             <Col md={9}>
-              <p className="list-singleLine">{toolList.join(', ')}</p>
+              <p className={`list-singleLine ${this.classIfDifferent('described.tools')}`}>{toolList.join(', ')}</p>
             </Col>
           </Row>
         </Col>

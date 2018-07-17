@@ -32,6 +32,8 @@ class PageViewPr extends Component {
           renderButtons={() => null}
           component={{ expanded: true }}
           definition={component.current}
+          otherDefinition={component.proposed}
+          classOnDifference="red"
           activeFacets={[]}
         />
         <DefinitionEntry
@@ -42,6 +44,8 @@ class PageViewPr extends Component {
           renderButtons={() => null}
           component={{ expanded: true }}
           definition={component.proposed}
+          otherDefinition={component.current}
+          classOnDifference="green"
           activeFacets={[]}
         />
       </div>
