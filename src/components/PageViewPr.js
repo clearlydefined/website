@@ -53,11 +53,11 @@ class PageViewPr extends Component {
   }
 
   render() {
-    return (
-      <div>
-        {!this.props.componentsState.isFetched ? 'Fetching' : this.props.componentsState.item.map(this.renderComponent)}
-      </div>
-    )
+    if (this.props.componentsState.isFetching)
+      return <div className="placeholder-message">Fetching details on the components included in the pull request.</div>
+    if (this.props.componentsState.isFetched)
+      return <div>{this.props.componentsState.item.map(this.renderComponent)}</div>
+    return <div className="placeholder-message">If you continue seeing this message, try reloading the page.</div>
   }
 }
 
