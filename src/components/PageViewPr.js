@@ -25,6 +25,7 @@ class PageViewPr extends Component {
     return (
       <div className="view-pr__row">
         <DefinitionEntry
+          readOnly={true}
           onChange={() => null}
           onCurate={() => null}
           onInspect={() => null}
@@ -34,6 +35,7 @@ class PageViewPr extends Component {
           activeFacets={[]}
         />
         <DefinitionEntry
+          readOnly={true}
           onChange={() => null}
           onCurate={() => null}
           onInspect={() => null}

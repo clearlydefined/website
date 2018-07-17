@@ -146,6 +146,7 @@ export default class ComponentList extends React.Component {
     return (
       <div key={key} style={style}>
         <DefinitionEntry
+          readOnly={false}
           onClick={() => this.toggleExpanded(component)}
           definition={definition}
           component={component}

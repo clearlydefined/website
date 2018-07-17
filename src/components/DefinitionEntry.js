@@ -261,13 +261,15 @@ export default class DefinitionEntry extends React.Component {
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
+    const { readOnly } = this.props
     return (
       <Row>
         <Col md={5}>
           <Row>
-            <Col md={2}>{this.renderLabel('Declared', true)}</Col>
-            <Col md={10}>
+            <Col md={3}>{this.renderLabel('Declared', true)}</Col>
+            <Col md={9}>
               <InlineEditor
+                readOnly={readOnly}
                 type="text"
                 initialValue={this.getOriginalValue('licensed.declared')}
                 value={this.getValue('licensed.declared')}
@@ -278,9 +280,10 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Source', true)}</Col>
-            <Col md={10}>
+            <Col md={3}>{this.renderLabel('Source', true)}</Col>
+            <Col md={9}>
               <InlineEditor
+                readOnly={readOnly}
                 type="text"
                 initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                 value={this.printCoordinates(this.getValue('described.sourceLocation'))}
@@ -291,9 +294,10 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Release', true)}</Col>
-            <Col md={10}>
+            <Col md={3}>{this.renderLabel('Release', true)}</Col>
+            <Col md={9}>
               <InlineEditor
+                readOnly={readOnly}
                 type="date"
                 initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
                 value={this.printDate(this.getValue('described.releaseDate'))}
@@ -304,28 +308,28 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Facets', true)}</Col>
-            <Col md={10}>
-              <p className="list-singleLine"> &nbsp;&nbsp;&nbsp;&nbsp;{this.printArray(initialFacets)}</p>
+            <Col md={3}>{this.renderLabel('Facets', true)}</Col>
+            <Col md={9}>
+              <p className="list-singleLine">{this.printArray(initialFacets)}</p>
             </Col>
           </Row>
         </Col>
         <Col md={7}>
           <Row>
-            <Col md={2}>{this.renderLabel('Discovered')}</Col>
-            <Col md={10}>
+            <Col md={3}>{this.renderLabel('Discovered')}</Col>
+            <Col md={9}>
               <p className="list-singleLine">{get(licensed, 'discovered.expressions', []).join(', ')}</p>
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
-            <Col md={10}>
+            <Col md={3}>{this.renderLabel('Attribution', true)}</Col>
+            <Col md={9}>
               <p className="list-singleLine">{get(licensed, 'attribution.parties', []).join(', ')}</p>
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Files')}</Col>
-            <Col md={10}>
+            <Col md={3}>{this.renderLabel('Files')}</Col>
+            <Col md={9}>
               <p className="list-singleLine">
                 Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
                 <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
@@ -334,8 +338,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Tools')}</Col>
-            <Col md={10}>
+            <Col md={3}>{this.renderLabel('Tools')}</Col>
+            <Col md={9}>
               <p className="list-singleLine">{toolList.join(', ')}</p>
             </Col>
           </Row>
