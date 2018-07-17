@@ -326,7 +326,7 @@ class PageDefinitions extends Component {
   }
 
   noRowsRenderer() {
-    return <div>Select components from the list above ...</div>
+    return <div>Search for a component above</div>
   }
 
   checkSort(sortType) {
