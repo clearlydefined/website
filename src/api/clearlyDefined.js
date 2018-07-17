@@ -56,6 +56,10 @@ export function getDefinition(token, entity) {
   return get(url(`${DEFINITIONS}/${entity.toPath()}`), token)
 }
 
+export function getPrcomponents(token, entity) {
+  return get(url(`${CURATIONS}/pr/${entity}`), token)
+}
+
 export function getDefinitions(token, list) {
   return post(url(`${DEFINITIONS}`), token, list)
 }

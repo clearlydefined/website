@@ -4,6 +4,7 @@
 import { getCurationAction } from './curationActions'
 import { getDefinitionAction, previewDefinitionAction, getDefinitionSuggestionsAction } from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
+import { getPrComponentsAction } from './prActions'
 
 export const UI_NAVIGATION = 'UI_NAVIGATION'
 export const UI_REDIRECT = 'UI_REDIRECT'
@@ -16,6 +17,8 @@ export const UI_INSPECT_UPDATE_FILTER_LIST = 'UI_INSPECT_UPDATE_FILTER_LIST'
 export const UI_INSPECT_GET_CURATION = 'UI_INSPECT_GET_CURATION'
 export const UI_INSPECT_GET_DEFINITION = 'UI_INSPECT_GET_DEFINITION'
 export const UI_INSPECT_GET_HARVESTED = 'UI_INSPECT_GET_HARVESTED'
+
+export const UI_VIEW_PR_GET = 'UI_VIEW_PR_GET'
 
 export const UI_CURATE_UPDATE_FILTER = 'UI_CURATE_UPDATE_FILTER'
 export const UI_CURATE_UPDATE_FILTER_LIST = 'UI_CURATE_UPDATE_FILTER_LIST'
@@ -67,6 +70,10 @@ export function uiInspectGetDefinition(token, entity) {
 
 export function uiInspectGetHarvested(token, entity) {
   return getHarvestOutputAction(token, entity, UI_INSPECT_GET_HARVESTED)
+}
+
+export function uiViewPrGetData(token, entity) {
+  return getPrComponentsAction(token, entity, UI_VIEW_PR_GET)
 }
 
 export function uiCurateUpdateFilter(value) {
