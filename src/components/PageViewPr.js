@@ -23,7 +23,7 @@ class PageViewPr extends Component {
 
   renderComponent(component) {
     return (
-      <div className="view-pr__row">
+      <div key={component.path} className="view-pr__row">
         <DefinitionEntry
           readOnly={true}
           onChange={() => null}
