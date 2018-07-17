@@ -169,7 +169,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   getPercentage(count, total) {
-    return Math.round(((count || 0) / total) * 100)
+    return Math.round((count || 0) / total * 100)
   }
 
   foldFacets(definition, facets = null) {
