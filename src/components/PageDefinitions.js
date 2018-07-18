@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, DropdownButton, MenuItem, Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap'
+import { Grid, Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
@@ -325,10 +325,6 @@ class PageDefinitions extends Component {
     this.setState({ ...this.state, sequence: this.state.sequence + 1 })
   }
 
-  noRowsRenderer() {
-    return <div>Search for a component above</div>
-  }
-
   checkSort(sortType) {
     return this.state.activeSort === sortType.value
   }
@@ -430,7 +426,7 @@ class PageDefinitions extends Component {
   }
 
   noRowsRenderer() {
-    return () => <div className={'list-noRows'}>Search for components above ...</div>
+    return <div className="list-noRows">Search for components above ...</div>
   }
 
   render() {
@@ -459,7 +455,7 @@ class PageDefinitions extends Component {
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
                 githubToken={token}
-                noRowsRenderer={this.noRowsRenderer()}
+                noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
               />
             </div>
