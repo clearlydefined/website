@@ -324,6 +324,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={3}>{this.renderLabel('Facets', true)}</Col>
             <Col md={9}>
               <p className={`list-singleLine ${this.classIfDifferent('described.facets')}`}>
+                {readOnly ? null : <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>}
                 {this.printArray(initialFacets)}
               </p>
             </Col>
