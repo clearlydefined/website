@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react'
+import { flatten } from 'lodash'
 import { asyncActions } from './'
 import { curate, getCuration } from '../api/clearlyDefined'
 import { uiNotificationNew } from '../actions/ui'
@@ -45,9 +46,12 @@ export function curateAction(token, spec) {
       },
       error => {
         dispatch(actions.error(error))
-        if (error.status === 400)
-          dispatch(uiNotificationNew({ type: 'info', message: 'Incorrect contribution format.', timeout: 5000 }))
-        else dispatch(uiNotificationNew({ type: 'info', message: 'Failed contribution.', timeout: 5000 }))
+        if (error.status === 400) {
+          const errors = flatten(error.body.errors)
+          errors.forEach(e => {
+            dispatch(uiNotificationNew({ type: 'danger', message: `Contribution ERROR: ${e.error.message}` }))
+          })
+        } else dispatch(uiNotificationNew({ type: 'info', message: 'Failed contribution.', timeout: 5000 }))
       }
     )
   }

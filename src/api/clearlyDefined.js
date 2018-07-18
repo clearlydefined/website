@@ -45,7 +45,6 @@ export function getCuration(token, entity) {
   return get(url(`${CURATIONS}/${entity.toPath()}`), token)
 }
 
-
 export function curate(token, spec) {
   return patch(url(`${CURATIONS}`), token, spec)
 }
@@ -123,7 +122,18 @@ function handleResponse(response) {
   // reject if code is out of range 200-299
   if (!response || !response.ok) {
     const err = new Error(response ? response.statusText : 'Error')
-    if (response) err.status = response.status
+    if (response) {
+      err.status = response.status
+      return response
+        .json()
+        .then(body => {
+          err.body = body
+          throw err
+        })
+        .catch(e => {
+          throw err
+        })
+    }
     throw err
   }
   if (response.status === 204) {
