@@ -21,6 +21,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.1",
     "react-select": "^1.2.1",
+    "react-table": "6.8.6",
+    "react-tooltip": "3.6.1",
     "react-virtualized": "^9.19.1",
     "redux": "^3.7.2",
     "redux-persist": "^4.6.0",
