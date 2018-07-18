@@ -15,6 +15,7 @@ import {
   UI_CURATE_GET_DEFINITION_PROPOSED,
   UI_CURATE_DEFINITION_PREVIEW,
   UI_VIEW_PR_GET,
+  UI_VIEW_PR_GET_BASE_URL,
   UI_BROWSE_UPDATE_FILTER,
   UI_BROWSE_UPDATE_FILTER_LIST,
   UI_BROWSE_UPDATE_LIST,
@@ -95,7 +96,10 @@ const curate = combineReducers({
   previewDefinition: itemReducer(UI_CURATE_DEFINITION_PREVIEW)
 })
 
-const view_pr = itemReducer(UI_VIEW_PR_GET)
+const view_pr = combineReducers({
+  data: itemReducer(UI_VIEW_PR_GET),
+  base_url: itemReducer(UI_VIEW_PR_GET_BASE_URL)
+})
 
 const inspect = combineReducers({
   filter: valueReducer(UI_INSPECT_UPDATE_FILTER),

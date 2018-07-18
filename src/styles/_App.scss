@@ -170,12 +170,17 @@
   flex-direction: column;
 }
 
-.view-pr__row {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 30px;
+.view-pr {
+  &__row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+  }
+  &__link-back {
+    margin-top: 50px;
+    text-align: center;
+  }
 }
-
 .red {
   background-color: #FF7171;
   color: #000;

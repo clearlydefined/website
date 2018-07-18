@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { asyncActions } from './'
-import { getPrcomponents, getDefinition } from '../api/clearlyDefined'
+import { getPrcomponents, getDefinition, getCurationBaseUrl } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'
 
 export function getPrComponentsAction(token, pr_number, name) {
@@ -22,5 +22,12 @@ export function getPrComponentsAction(token, pr_number, name) {
       )
       .then(result => dispatch(actions.success(result)))
       .catch(error => dispatch(actions.error(error)))
+  }
+}
+
+export function getCurationBaseUrlAction(name) {
+  return dispatch => {
+    const actions = asyncActions(name)
+    getCurationBaseUrl().then(result => dispatch(actions.success(result)))
   }
 }
