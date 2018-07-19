@@ -74,8 +74,7 @@ export function getBadgeUrl(definition) {
     1: 'https://img.shields.io/badge/ClearlyDefined-1-yellow.svg',
     2: 'https://img.shields.io/badge/ClearlyDefined-2-brightgreen.svg'
   }
-
-  return scoreToUrl[definition.score];
+  return scoreToUrl[definition.score || 0]
 }
 
 export function getGitHubSearch(token, path) {
