@@ -28,26 +28,20 @@ class PageViewPr extends Component {
         <DefinitionEntry
           readOnly={true}
           onChange={() => null}
-          onCurate={() => null}
-          onInspect={() => null}
           renderButtons={() => null}
           component={{ expanded: true }}
           definition={component.current}
           otherDefinition={component.proposed}
           classOnDifference="red"
-          activeFacets={[]}
         />
         <DefinitionEntry
           readOnly={true}
           onChange={() => null}
-          onCurate={() => null}
-          onInspect={() => null}
           renderButtons={() => null}
           component={{ expanded: true }}
           definition={component.proposed}
           otherDefinition={component.current}
           classOnDifference="green"
-          activeFacets={[]}
         />
       </div>
     )
