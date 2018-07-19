@@ -35,7 +35,8 @@
     "node-sass": "^4.9.0",
     "npm-run-all": "^4.1.3",
     "react-test-renderer": "^16.4.1",
-    "redux-mock-store": "^1.5.3"
+    "redux-mock-store": "^1.5.3",
+    "serve": "^9.2.0"
   },
   "scripts": {
     "copy-monaco": "node ./src/utils/install-monaco.js",
