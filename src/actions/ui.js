@@ -20,6 +20,8 @@ export const UI_INSPECT_GET_HARVESTED = 'UI_INSPECT_GET_HARVESTED'
 
 export const UI_VIEW_PR_GET = 'UI_VIEW_PR_GET'
 export const UI_VIEW_PR_GET_BASE_URL = 'UI_VIEW_PR_GET_BASE_URL'
+export const UI_VIEW_PR_UPDATE_LIST = 'UI_VIEW_PR_UPDATE_LIST'
+export const UI_VIEW_PR_DEFINITIONS = 'UI_VIEW_PR_DEFINITIONS'
 
 export const UI_CURATE_UPDATE_FILTER = 'UI_CURATE_UPDATE_FILTER'
 export const UI_CURATE_UPDATE_FILTER_LIST = 'UI_CURATE_UPDATE_FILTER_LIST'
@@ -79,6 +81,14 @@ export function uiViewPrGetData(token, entity) {
 
 export function uiViewPrGetBaseUrl() {
   return getCurationBaseUrlAction(UI_VIEW_PR_GET_BASE_URL)
+}
+
+export function uiViewPrUpdateList(value) {
+  return { type: UI_VIEW_PR_UPDATE_LIST, result: value }
+}
+
+export function uiViewPrDefinitions(value) {
+  return { type: UI_VIEW_PR_DEFINITIONS, result: value }
 }
 
 export function uiCurateUpdateFilter(value) {

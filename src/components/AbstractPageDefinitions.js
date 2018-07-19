@@ -7,7 +7,7 @@ import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routing
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
 import { ComponentList, Section, ContributePrompt } from './'
-import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList } from '../actions/ui'
+import { uiNavigation, uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter, sortBy } from 'lodash'
 import { saveAs } from 'file-saver'
@@ -77,46 +77,11 @@ export default class AbstractPageDefinitions extends Component {
     return get(component, field)
   }
 
-  componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(uiNavigation({ to: ROUTE_DEFINITIONS }))
-  }
-
-  onAddComponent(value, after = null) {
-    const { dispatch, token, definitions } = this.props
-    const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
-    const path = component.toPath()
-    !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
-    dispatch(uiBrowseUpdateList({ add: component }))
-  }
+  onAddComponent(value, after = null) {}
 
   // can be implemented by subclasses to introduce a dropzone
   dropZone(child) {
     return child
-  }
-
-  loadListSpec(content, file) {
-    try {
-      const object = JSON.parse(content)
-      if (file.name.toLowerCase() === 'package-lock.json') return this.loadPackageLockFile(object.dependencies)
-      if (object.coordinates) return object
-      return 'No component coordinates found'
-    } catch (e) {
-      return e.message
-    }
-  }
-
-  loadPackageLockFile(dependencies) {
-    const coordinates = []
-    for (const dependency in dependencies) {
-      let [namespace, name] = dependency.split('/')
-      if (!name) {
-        name = namespace
-        namespace = null
-      }
-      coordinates.push({ type: 'npm', provider: 'npmjs', namespace, name, revision: dependencies[dependency].version })
-    }
-    return { coordinates }
   }
 
   onSearch(value) {
@@ -135,15 +100,15 @@ export default class AbstractPageDefinitions extends Component {
   }
 
   onRemoveComponent(component) {
-    this.props.dispatch(uiBrowseUpdateList({ remove: component }))
+    this.props.dispatch(this.updateList({ remove: component }))
   }
 
   onRemoveAll() {
-    this.props.dispatch(uiBrowseUpdateList({ removeAll: {} }))
+    this.props.dispatch(this.updateList({ removeAll: {} }))
   }
 
   onChangeComponent(component, newComponent) {
-    this.props.dispatch(uiBrowseUpdateList({ update: component, value: newComponent }))
+    this.props.dispatch(this.updateList({ update: component, value: newComponent }))
   }
 
   hasChanges() {
@@ -247,7 +212,7 @@ export default class AbstractPageDefinitions extends Component {
     let activeSort = eventKey.value
     if (this.state.activeSort === activeSort) activeSort = null
     this.setState({ ...this.state, activeSort, sequence: this.state.sequence + 1 })
-    this.props.dispatch(uiBrowseUpdateList({ transform: this.createTransform(activeSort, this.state.activeFilters) }))
+    this.props.dispatch(this.updateList({ transform: this.createTransform(activeSort, this.state.activeFilters) }))
   }
 
   sortList(list, sortFunction) {
@@ -281,7 +246,7 @@ export default class AbstractPageDefinitions extends Component {
     if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
     else activeFilters[value.type] = value.value
     this.setState({ ...this.state, activeFilters })
-    this.props.dispatch(uiBrowseUpdateList({ transform: this.createTransform(this.state.activeSort, activeFilters) }))
+    this.props.dispatch(this.updateList({ transform: this.createTransform(this.state.activeSort, activeFilters) }))
   }
 
   transform(list, sort, filters) {
@@ -380,6 +345,10 @@ export default class AbstractPageDefinitions extends Component {
     this.incrementSequence()
   }
 
+  updateList() {
+    throw Error('This method has to be implemented in a sub class')
+  }
+
   tableTitle() {
     throw Error('This method has to be implemented in a sub class')
   }
@@ -413,7 +382,7 @@ export default class AbstractPageDefinitions extends Component {
               <ComponentList
                 readOnly={this.readOnly()}
                 list={components.transformedList}
-                listLength={get(components, 'headers.pagination.totalCount')}
+                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 listHeight={1000}
                 onRemove={this.onRemoveComponent}
                 onChange={this.onChangeComponent}

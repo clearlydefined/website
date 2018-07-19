@@ -4,6 +4,7 @@
 import { asyncActions } from './'
 import { getPrcomponents, getDefinition, getCurationBaseUrl } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'
+import { uiViewPrUpdateList, uiViewPrDefinitions } from './ui'
 
 export function getPrComponentsAction(token, pr_number, name) {
   return dispatch => {
@@ -16,11 +17,24 @@ export function getPrComponentsAction(token, pr_number, name) {
             Promise.all([
               getDefinition(token, EntitySpec.fromPath(`${component}/pr/${pr_number}`)),
               getDefinition(token, EntitySpec.fromPath(`${component}`))
-            ]).then(([proposed, current]) => ({ proposed, current, path: component }))
+            ]).then(([proposed, current]) => ({
+              proposed,
+              current,
+              path: component,
+              component: EntitySpec.fromPath(`${component}/pr/${pr_number}`)
+            }))
           )
         )
       )
-      .then(result => dispatch(actions.success(result)))
+      .then(result => {
+        dispatch(actions.success(result))
+        result.forEach(x => dispatch(uiViewPrUpdateList({ add: x.component })))
+        const table = {}
+        result.forEach(x => {
+          table[x.component.toPath()] = Object.assign({}, x.proposed, { coordinates: x.component })
+        })
+        dispatch(uiViewPrDefinitions({ add: table }))
+      })
       .catch(error => dispatch(actions.error(error)))
   }
 }

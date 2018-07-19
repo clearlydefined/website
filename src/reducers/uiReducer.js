@@ -16,6 +16,8 @@ import {
   UI_CURATE_DEFINITION_PREVIEW,
   UI_VIEW_PR_GET,
   UI_VIEW_PR_GET_BASE_URL,
+  UI_VIEW_PR_UPDATE_LIST,
+  UI_VIEW_PR_DEFINITIONS,
   UI_BROWSE_UPDATE_FILTER,
   UI_BROWSE_UPDATE_FILTER_LIST,
   UI_BROWSE_UPDATE_LIST,
@@ -28,6 +30,7 @@ import {
   UI_INSPECT_GET_HARVESTED
 } from '../actions/ui'
 import listReducer from './listReducer'
+import tableReducer from './tableReducer'
 import { isEqual } from 'lodash'
 import valueReducer from './valueReducer'
 import itemReducer from './itemReducer'
@@ -98,7 +101,9 @@ const curate = combineReducers({
 
 const view_pr = combineReducers({
   data: itemReducer(UI_VIEW_PR_GET),
-  base_url: itemReducer(UI_VIEW_PR_GET_BASE_URL)
+  base_url: itemReducer(UI_VIEW_PR_GET_BASE_URL),
+  componentList: listReducer(UI_VIEW_PR_UPDATE_LIST, null, EntitySpec.isEquivalent),
+  definitions: tableReducer(UI_VIEW_PR_DEFINITIONS)
 })
 
 const inspect = combineReducers({

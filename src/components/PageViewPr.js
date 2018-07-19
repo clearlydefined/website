@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { uiViewPrGetData, uiViewPrGetBaseUrl } from '../actions/ui'
+import { Button } from 'react-bootstrap'
+import { uiViewPrGetData, uiViewPrGetBaseUrl, uiViewPrUpdateList } from '../actions/ui'
 import { ROUTE_VIEW_PR } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
 import { DefinitionEntry } from './'
+import AbstractPageDefinitions from './AbstractPageDefinitions'
 
-class PageViewPr extends Component {
+class PageViewPr extends AbstractPageDefinitions {
   constructor(props) {
     super(props)
-    this.state = {}
   }
 
   componentDidMount() {
@@ -22,61 +23,57 @@ class PageViewPr extends Component {
     dispatch(uiViewPrGetBaseUrl())
   }
 
-  renderComponent(component) {
-    return (
-      <div key={component.path} className="view-pr__row">
-        <DefinitionEntry
-          readOnly={true}
-          onChange={() => null}
-          renderButtons={() => null}
-          component={{ expanded: true }}
-          definition={component.current}
-          otherDefinition={component.proposed}
-          classOnDifference="red"
-        />
-        <DefinitionEntry
-          readOnly={true}
-          onChange={() => null}
-          renderButtons={() => null}
-          component={{ expanded: true }}
-          definition={component.proposed}
-          otherDefinition={component.current}
-          classOnDifference="green"
-        />
-      </div>
-    )
+  noRowsRenderer() {
+    return <div className="placeholder-message">Fetching details on the components included in the pull request.</div>
   }
 
-  renderContent() {
-    if (this.props.componentsState.isFetching)
-      return <div className="placeholder-message">Fetching details on the components included in the pull request.</div>
-    if (this.props.componentsState.isFetched)
-      return <div>{this.props.componentsState.item.map(this.renderComponent)}</div>
-    return <div className="placeholder-message">If you continue seeing this message, try reloading the page.</div>
-  }
-
-  render() {
-    const content = this.renderContent()
+  tableTitle() {
+    const { pr_number } = this.props
     const linkBack = this.props.base_url.isFetched ? (
-      <p className="view-pr__link-back">
-        <a href={`${this.props.base_url.item.url}/pull/${this.props.pr_number}`}>Back to Github</a>
-      </p>
-    ) : null
+      <a href={`${this.props.base_url.item.url}/pull/${pr_number}`}>#{pr_number}</a>
+    ) : (
+      `#${pr_number}`
+    )
+    return <span>Definitions from pull request {linkBack}</span>
+  }
+
+  renderSearchBar() {}
+
+  renderButtons() {
     return (
-      <div>
-        {content}
-        {linkBack}
+      <div className="pull-right">
+        &nbsp;
+        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
+          Collapse All
+        </Button>
+        &nbsp;
+        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
+          Save
+        </Button>
       </div>
     )
+  }
+
+  readOnly() {
+    return true
+  }
+
+  updateList(o) {
+    return uiViewPrUpdateList(o)
   }
 }
 
 function mapStateToProps(state, ownProps) {
+  const foo = state.ui.view_pr.data.item
   return {
     token: state.session.token,
     pr_number: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     componentsState: state.ui.view_pr.data,
-    base_url: state.ui.view_pr.base_url
+    definitions: state.ui.view_pr.definitions,
+    components: state.ui.view_pr.componentList,
+    base_url: state.ui.view_pr.base_url,
+    filterValue: state.ui.browse.filter,
+    filterOptions: state.ui.browse.filterList
   }
 }
 
