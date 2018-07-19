@@ -2,12 +2,11 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Grid, DropdownButton, MenuItem } from 'react-bootstrap'
 import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
-import { FilterBar, ComponentList, Section, ContributePrompt } from './'
+import { ComponentList, Section, ContributePrompt } from './'
 import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter, sortBy } from 'lodash'
@@ -403,43 +402,25 @@ export default class AbstractPageDefinitions extends Component {
     this.incrementSequence()
   }
 
+  renderSearchBar() {
+    throw Error('This method has to be implemented in a sub class')
+  }
+
   renderButtons() {
-    return (
-      <div className="pull-right">
-        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
-          Clear All
-        </Button>
-        &nbsp;
-        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
-          Collapse All
-        </Button>
-        &nbsp;
-        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
-          Save
-        </Button>
-        &nbsp;
-        <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
-          Contribute
-        </Button>
-      </div>
-    )
+    throw Error('This method has to be implemented in a sub class')
   }
 
   noRowsRenderer() {
-    return <div className="list-noRows">Search for components above ...</div>
+    throw Error('This method has to be implemented in a sub class')
   }
 
   render() {
-    const { components, filterOptions, definitions, token } = this.props
+    const { components, definitions, token } = this.props
     const { sequence } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
-        <Row className="show-grid spacer">
-          <Col md={10} mdOffset={1}>
-            <FilterBar options={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} clearOnChange />
-          </Col>
-        </Row>
+        {this.renderSearchBar()}
         <Section name={'Available definitions'} actionButton={this.renderButtons()}>
           <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
             <div className="section-body">
