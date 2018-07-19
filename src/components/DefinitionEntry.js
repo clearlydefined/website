@@ -281,7 +281,7 @@ export default class DefinitionEntry extends React.Component {
               <InlineEditor
                 extraClass={this.classIfDifferent('licensed.declared')}
                 readOnly={readOnly}
-                type="text"
+                type="license"
                 initialValue={this.getOriginalValue('licensed.declared')}
                 value={this.getValue('licensed.declared')}
                 onChange={this.fieldChange('licensed.declared')}

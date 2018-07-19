@@ -8,7 +8,6 @@ import {
   ROUTE_ROOT,
   ROUTE_DEFINITIONS,
   ROUTE_INSPECT,
-  ROUTE_CURATE,
   ROUTE_HARVEST,
   ROUTE_VIEW_PR,
   ROUTE_ABOUT
@@ -16,7 +15,7 @@ import {
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { App, PageLanding, PageCurate, PageDefinitions, PageInspect, PageHarvest } from './'
+import { App, PageLanding, PageDefinitions, PageInspect, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import PageViewPr from './PageViewPr'
@@ -54,7 +53,6 @@ export default class RehydrationDelayedProvider extends Component {
             <Switch>
               <Route path={ROUTE_DEFINITIONS} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
-              {/* <Route path={ROUTE_CURATE} component={withTracker(PageCurate)} /> */}
               <Route path={ROUTE_VIEW_PR} component={withTracker(PageViewPr)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />

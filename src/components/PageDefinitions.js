@@ -342,15 +342,15 @@ class PageDefinitions extends Component {
     return (
       <DropdownButton
         className="list-button"
-        bsStyle={''}
+        bsStyle="default"
         pullRight
         title={title}
         disabled={!this.hasComponents()}
         id={id}
       >
-        {list.map(sortType => {
+        {list.map((sortType, index) => {
           return (
-            <MenuItem onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
+            <MenuItem key={index} onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
               {sortType.label}
               {this.checkSort(sortType) && <i className="fas fa-check pull-right" />}
             </MenuItem>
@@ -364,15 +364,15 @@ class PageDefinitions extends Component {
     return (
       <DropdownButton
         className="list-button"
-        bsStyle={''}
+        bsStyle="default"
         pullRight
         title={title}
         disabled={!this.hasComponents()}
         id={id}
       >
-        {list.map(filterType => {
+        {list.map((filterType, index) => {
           return (
-            <MenuItem onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
+            <MenuItem key={index} onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
               {filterType.label}
               {this.checkFilter(filterType, id) && <i className="fas fa-check pull-right" />}
             </MenuItem>
@@ -392,7 +392,7 @@ class PageDefinitions extends Component {
       </div>
     )
   }
-  
+
   collapseComponent(component) {
     this.onChangeComponent(component, { ...component, expanded: false })
   }

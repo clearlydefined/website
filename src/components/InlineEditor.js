@@ -4,12 +4,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
+import { SpdxPicker } from './'
 
 export default class InlineEditor extends React.Component {
   static propTypes = {
-    initialValue: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['text', 'date']).isRequired,
+    initialValue: PropTypes.string,
+    value: PropTypes.string,
+    type: PropTypes.oneOf(['text', 'date', 'license']).isRequired,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string.isRequired
   }
@@ -27,22 +28,25 @@ export default class InlineEditor extends React.Component {
     if (ref && ref.focus) ref.focus()
   }
 
-  onChange = event => {
+  onChange = nextValue => {
     const { value, onChange } = this.props
-    const target = event.target
-
-    // check browser validation (if used)
-    if (!target.checkValidity()) return
 
     this.setState({ editing: false })
 
     // sanity check for empty textboxes
-    if (typeof target.value === 'string' && target.value.trim().length === 0) return this.renderValue()
+    if (typeof nextValue === 'string' && nextValue.trim().length === 0) return this.renderValue()
 
     // don't bother saving unchanged fields
-    if (target.value === value) return
+    if (nextValue === value) return
 
-    onChange(target.value)
+    onChange(nextValue)
+  }
+
+  onChangeEvent = event => {
+    const { target } = event
+
+    // check browser validation (if used)
+    if (target.checkValidity()) return this.onChange(target.value)
   }
 
   renderValue() {
@@ -60,8 +64,9 @@ export default class InlineEditor extends React.Component {
       )
 
     return React.cloneElement(this.editors[type](value), {
-      onBlur: this.onChange,
-      onKeyPress: e => e.key === 'Enter' && this.onChange(e),
+      onBlur: this.onChangeEvent,
+      onChange: this.onChange,
+      onKeyPress: e => e.key === 'Enter' && this.onChangeEvent(e),
       ref: this.focus
     })
   }
@@ -79,11 +84,13 @@ export default class InlineEditor extends React.Component {
 
   renderers = {
     text: value => value,
-    date: value => value
+    date: value => value,
+    license: value => value
   }
 
   editors = {
     text: value => <input size="45" type="text" defaultValue={value} />,
-    date: value => <input size="45" type="date" defaultValue={value} />
+    date: value => <input size="45" type="date" defaultValue={value} />,
+    license: value => <SpdxPicker value={value} />
   }
 }
