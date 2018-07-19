@@ -73,12 +73,12 @@ export default class InlineEditor extends React.Component {
 
   render() {
     return (
-      <div className="list-singleLine">
+      <span className="list-singleLine">
         {!this.props.readOnly && (
           <i className="fas fa-pencil-alt editable-marker" onClick={() => this.setState({ editing: true })} />
         )}
         {this.renderValue()}
-      </div>
+      </span>
     )
   }
 
