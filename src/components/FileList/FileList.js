@@ -2,10 +2,13 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import ReactTable from "react-table";
-import ReactTooltip from 'react-tooltip'
+import 'react-table/react-table.css'
 import treeTableHOC from "./treeTable";
 import FilterCustomComponent from './FilterCustomComponent'
-import 'react-table/react-table.css'
+import FacetsRenderer from './FacetsRenderer';
+import LicensesRenderer from './LicensesRenderer';
+import CopyrightsRenderer from './CopyrightsRenderer';
+
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
@@ -51,27 +54,18 @@ export default class FileList extends Component {
           Cell: (row) => <div style={{ paddingLeft: `${10 * (row.level - 1)}px` }}>{row.value}</div>
         }, {
           Header: "Facets",
-          accessor: "facets"
-        },
-        {
+          accessor: "facets",
+          Cell: (row) => <FacetsRenderer item={row} />
+        }, {
           Header: "Licenses",
           id: "license",
           accessor: "license",
-          Cell: row => (
-            <div data-tip={row.value}>
-              {row.value}
-            </div>
-          )
+          Cell: (row) => <LicensesRenderer item={row} />
         },
         {
           Header: "Copyrights",
           accessor: "attributions",
-          Cell: row => {
-            return <div data-tip={row.value && row.value.join('<br />')}>
-              {row.value}
-              <ReactTooltip multiline place="left" type="dark" effect="float" />
-            </div>
-          }
+          Cell: (row) => <CopyrightsRenderer item={row} />
         }
         ])
         }  //Merge columns array with other columns to show after the folders
@@ -99,6 +93,8 @@ const parsePaths = (data) => {
     //If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
       item['folder_0'] = '/';
+    } else {
+      folders.unshift("/")
     }
 
     //Add item[`folder_${index}`] to item object
@@ -121,6 +117,5 @@ const parsePaths = (data) => {
     })
     return item;
   })
-
   return res;
 }

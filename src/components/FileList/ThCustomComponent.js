@@ -7,6 +7,6 @@ import React, { Component } from 'react'
 export default class ThCustomComponent extends Component {
   render() {
     const { ri, style, defaultProps, ...rest } = this.props
-    return <defaultProps.ThComponent {...rest} style={{ ...style, textAlign: 'left', border: '0px' }} />
+    return <defaultProps.ThComponent {...rest} style={{ ...style, textAlign: 'left', border: '0px', padding: '0px', paddingTop: '7px', paddingBottom: '7px' }} />
   }
 }

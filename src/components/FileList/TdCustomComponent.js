@@ -7,6 +7,13 @@ import React, { Component } from 'react'
 export default class TdCustomComponent extends Component {
   render() {
     const { ri, style, defaultProps, ...rest } = this.props
-    return <defaultProps.TdComponent {...rest} style={{ ...style, textAlign: 'left', border: '0px' }} />
+
+    const customStyle = !style.width ? {
+      padding: '0px'
+    } : {
+        paddingTop: '7px', paddingBottom: '7px', paddingLeft: style.paddingLeft
+      }
+
+    return <defaultProps.TdComponent {...rest} style={{ ...style, textAlign: 'left', border: '0px', ...customStyle }} />
   }
 }

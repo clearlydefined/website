@@ -11,11 +11,11 @@ export default class TrCustomComponent extends Component {
       // The original value will be updated with the modified data
       ri.subRows = getSubrows(ri.subRows);
       const cell = { ...this.props.children[ri.level] }
-
+      console.log(ri.level)
       cell.props.style.flex = 'unset'
       cell.props.style.width = '100%'
       cell.props.style.maxWidth = 'unset'
-      cell.props.style.paddingLeft = `${treeTableIndent * ri.level}px`
+      cell.props.style.paddingLeft = `${10 * ri.level}px`
       cell.props.style.borderBottom = '1px solid rgba(128,128,128,0.2)'
 
       return (

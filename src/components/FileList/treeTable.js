@@ -95,7 +95,7 @@ export default Component => {
   }
   wrapper.displayName = 'RTTreeTable'
   wrapper.defaultProps = {
-    treeTableIndent: 10,
+    treeTableIndent: 2,
   }
 
   return wrapper
