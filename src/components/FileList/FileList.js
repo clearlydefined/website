@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import ReactTable from "react-table";
+import Modal from 'react-modal';
 import 'react-table/react-table.css'
 import treeTableHOC from "./treeTable";
 import FilterCustomComponent from './FilterCustomComponent'
@@ -19,7 +20,9 @@ export default class FileList extends Component {
     super(props);
 
     this.state = {
-      files: []
+      files: [],
+      showPopup: false,
+      expanded: {}
     }
   }
 
@@ -28,14 +31,38 @@ export default class FileList extends Component {
     nextProps.files && this.setState({ files: parsePaths(nextProps.files) })
   }
 
-  render() {
-    const { files } = this.state;
+  showPopup = (value) => {
+    this.setState({ showPopup: true })
+  }
 
+  handleRowExpanded(newExpanded, index, event) {
+    this.setState({
+      // we override newExpanded, keeping only current selected row expanded
+      expanded: { [index]: true }
+    });
+  }
+
+  render() {
+    const { files, showPopup } = this.state;
+    console.log(showPopup)
     return <div>
+
+      <Modal
+        ariaHideApp={false}
+        isOpen={showPopup}
+        onRequestClose={() => this.setState({ showPopup: false })}
+        contentLabel="Example Modal"
+      >
+        <div>I am a modal</div>
+
+      </Modal>
       <TreeTable
         showPagination={false}
         collapseOnSortingChange={false}
         filterable={false}
+        freezeWhenExpanded={true}
+        //expanded={this.state.expanded}
+        //onExpandedChange={(newExpanded, index, event) => this.handleRowExpanded(newExpanded, index, event)}
         defaultFilterMethod={(filter, row, column) => {
           const id = filter.pivotId || filter.id;
           return row[id] !== undefined
@@ -65,7 +92,7 @@ export default class FileList extends Component {
         {
           Header: "Copyrights",
           accessor: "attributions",
-          Cell: (row) => <CopyrightsRenderer item={row} />
+          Cell: (row) => <CopyrightsRenderer item={row} showPopup={this.showPopup} />
         }
         ])
         }  //Merge columns array with other columns to show after the folders

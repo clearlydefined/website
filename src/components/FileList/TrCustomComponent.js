@@ -9,9 +9,14 @@ export default class TrCustomComponent extends Component {
     const { ri, style, defaultProps, treeTableIndent, getSubrows, ...rest } = this.props
     if (ri && ri.groupedByPivot) {
       // The original value will be updated with the modified data
+
       ri.subRows = getSubrows(ri.subRows);
+
+      console.log(ri.subRows)
+
+
       const cell = { ...this.props.children[ri.level] }
-      console.log(ri.level)
+
       cell.props.style.flex = 'unset'
       cell.props.style.width = '100%'
       cell.props.style.maxWidth = 'unset'

@@ -3,11 +3,10 @@ import ReactTooltip from 'react-tooltip'
 
 export default class CopyrightsRenderer extends Component {
   render() {
-    const { item } = this.props;
+    const { item, showPopup } = this.props;
     return (
-      <div data-tip={item.value && item.value.join('<br />')}>
+      <div onClick={() => showPopup(item.value)}>
         {item.value}
-        <ReactTooltip multiline place="left" type="dark" effect="float" />
       </div>
     )
   }

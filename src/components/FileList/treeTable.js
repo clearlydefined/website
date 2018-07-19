@@ -43,7 +43,7 @@ export default Component => {
           let items = (this.getSubrows(subRow._subRows))
           items.map((item) => {
             item._pivotID = subRow._pivotID
-            item._nestingLevel -= 1
+            item._nestingLevel = subRow._nestingLevel
 
             subRows.push(item)
           })
