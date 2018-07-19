@@ -68,8 +68,14 @@ export function previewDefinition(token, entity, curation) {
   return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true }), token, curation)
 }
 
-export function getBadgeUrl(entity) {
-  return url(`${BADGES}/${entity.toPath()}`)
+export function getBadgeUrl(definition) {
+  const scoreToUrl = {
+    0: 'https://img.shields.io/badge/ClearlyDefined-0-red.svg',
+    1: 'https://img.shields.io/badge/ClearlyDefined-1-yellow.svg',
+    2: 'https://img.shields.io/badge/ClearlyDefined-2-brightgreen.svg'
+  }
+
+  return scoreToUrl[definition.score];
 }
 
 export function getGitHubSearch(token, path) {
