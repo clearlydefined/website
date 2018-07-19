@@ -396,6 +396,10 @@ export default class AbstractPageDefinitions extends Component {
     throw Error('This method has to be implemented in a sub class')
   }
 
+  readOnly() {
+    throw Error('This method has to be implemented in a sub class')
+  }
+
   render() {
     const { components, definitions, token } = this.props
     const { sequence } = this.state
@@ -407,6 +411,7 @@ export default class AbstractPageDefinitions extends Component {
           {this.dropZone(
             <div className="section-body">
               <ComponentList
+                readOnly={this.readOnly()}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount')}
                 listHeight={1000}

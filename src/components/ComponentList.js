@@ -108,12 +108,13 @@ export default class ComponentList extends React.Component {
 
   renderButtons(definition) {
     const component = EntitySpec.fromCoordinates(definition.coordinates)
+    const { readOnly } = this.props
     const isSourceComponent = this.isSourceComponent(component)
     return (
       <div className="list-activity-area">
         <img className="list-buttons" src={getBadgeUrl(definition)} alt="score" />
         <ButtonGroup>
-          {!isSourceComponent && (
+          {!isSourceComponent && !readOnly && (
             <Button className="list-hybrid-button" onClick={this.addSourceForComponent.bind(this, component)}>
               <i className="fas fa-plus" />
               <span>&nbsp;Add source</span>
@@ -127,7 +128,7 @@ export default class ComponentList extends React.Component {
           )}
           <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button" />
         </ButtonGroup>
-        <i className="fas fa-times list-remove" onClick={this.removeComponent.bind(this, component)} />
+        {!readOnly && <i className="fas fa-times list-remove" onClick={this.removeComponent.bind(this, component)} />}
       </div>
     )
   }
@@ -139,14 +140,14 @@ export default class ComponentList extends React.Component {
   }
 
   renderRow({ index, key, style }, toggleExpanded = null, showExpanded = false) {
-    const { list } = this.props
+    const { list, readOnly } = this.props
     const component = list[index]
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
     return (
       <div key={key} style={style}>
         <DefinitionEntry
-          readOnly={false}
+          readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
           definition={definition}
           component={component}

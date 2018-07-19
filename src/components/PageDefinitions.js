@@ -91,6 +91,10 @@ class PageDefinitions extends AbstractPageDefinitions {
       </Dropzone>
     )
   }
+
+  readOnly() {
+    return false
+  }
 }
 
 function mapStateToProps(state, ownProps) {
