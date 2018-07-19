@@ -175,23 +175,14 @@
   flex-direction: column;
 }
 
-.view-pr {
-  &__row {
+.definition {
+  &__line {
+    height: 25px;
     display: flex;
-    flex-direction: row;
-    margin-bottom: 30px;
   }
-  &__link-back {
-    margin-top: 50px;
-    text-align: center;
-  }
-}
-.red {
-  background-color: #FF7171;
-  color: #000;
-}
 
-.green {
-  background-color: #94FF71;
-  color: #000;
+  &__overlay-hover-catcher {
+    height: 20px;
+    max-width: 100%;
+  }
 }

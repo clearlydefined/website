@@ -116,12 +116,12 @@ export default class DefinitionEntry extends React.Component {
     )
   }
 
-  renderWithToolTipIfDifferent(field, content, placement = 'right') {
-    const toolTip = <Tooltip id="tooltip">Original: {get(this.props.otherDefinition, field)}</Tooltip>
+  renderWithToolTipIfDifferent(field, content, placement = 'right', transform = x => x) {
+    const toolTip = <Tooltip id="tooltip">Original: {transform(get(this.props.otherDefinition, field))}</Tooltip>
     return this.ifDifferent(
       field,
       <OverlayTrigger placement={placement} overlay={toolTip}>
-        <span>{content}</span>
+        <span className="definition__overlay-hover-catcher">{content}</span>
       </OverlayTrigger>,
       content
     )
@@ -293,7 +293,7 @@ export default class DefinitionEntry extends React.Component {
         <Col md={5}>
           <Row>
             <Col md={2}>{this.renderLabel('Declared', true)}</Col>
-            <Col md={10}>
+            <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <InlineEditor
@@ -311,7 +311,7 @@ export default class DefinitionEntry extends React.Component {
           </Row>
           <Row>
             <Col md={2}>{this.renderLabel('Source', true)}</Col>
-            <Col md={10}>
+            <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <InlineEditor
@@ -323,13 +323,15 @@ export default class DefinitionEntry extends React.Component {
                   onChange={this.fieldChange('described.sourceLocation', isEqual, this.parseCoordinates)}
                   validator={value => true}
                   placeholder={'Source location'}
-                />
+                />,
+                'right',
+                this.printCoordinates
               )}
             </Col>
           </Row>
           <Row>
             <Col md={2}>{this.renderLabel('Release', true)}</Col>
-            <Col md={10}>
+            <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
                 <InlineEditor
@@ -347,7 +349,7 @@ export default class DefinitionEntry extends React.Component {
           </Row>
           <Row>
             <Col md={2}>{this.renderLabel('Facets', true)}</Col>
-            <Col md={10}>
+            <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.facets',
                 <p className={`list-singleLine ${this.classIfDifferent('described.facets')}`}>
@@ -361,7 +363,7 @@ export default class DefinitionEntry extends React.Component {
         <Col md={7}>
           <Row>
             <Col md={2}>{this.renderLabel('Discovered')}</Col>
-            <Col md={10}>
+            <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'discovered.expressions',
                 <p className={`list-singleLine ${this.classIfDifferent('licensed.discovered.expressions')}`}>
@@ -372,7 +374,7 @@ export default class DefinitionEntry extends React.Component {
           </Row>
           <Row>
             <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
-            <Col md={10}>
+            <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'attribution.parties',
                 <p className={`list-singleLine ${this.classIfDifferent('licensed.attribution.parties')}`}>
@@ -383,7 +385,7 @@ export default class DefinitionEntry extends React.Component {
           </Row>
           <Row>
             <Col md={2}>{this.renderLabel('Files')}</Col>
-            <Col md={10}>
+            <Col md={10} className="definition__line">
               <p className="list-singleLine">
                 Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
                 <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
@@ -393,7 +395,7 @@ export default class DefinitionEntry extends React.Component {
           </Row>
           <Row>
             <Col md={2}>{this.renderLabel('Tools')}</Col>
-            <Col md={10}>
+            <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.tools',
                 <p className={`list-singleLine ${this.classIfDifferent('described.tools')}`}>{toolList.join(', ')}</p>,
