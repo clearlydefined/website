@@ -7,11 +7,10 @@ import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routing
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { curateAction } from '../actions/curationActions'
 import { ComponentList, Section, ContributePrompt } from './'
-import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList, uiNotificationNew } from '../actions/ui'
+import { uiNavigation, uiBrowseUpdateList, uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter, sortBy } from 'lodash'
 import { saveAs } from 'file-saver'
-import Dropzone from 'react-dropzone'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -48,7 +47,6 @@ export default class AbstractPageDefinitions extends Component {
       sequence: 0
     }
     this.onAddComponent = this.onAddComponent.bind(this)
-    this.onDrop = this.onDrop.bind(this)
     this.onSearch = this.onSearch.bind(this)
     this.onInspect = this.onInspect.bind(this)
     this.onCurate = this.onCurate.bind(this)
@@ -92,29 +90,9 @@ export default class AbstractPageDefinitions extends Component {
     dispatch(uiBrowseUpdateList({ add: component }))
   }
 
-  onDrop(acceptedFiles, rejectedFiles) {
-    const { dispatch, token, definitions } = this.props
-    dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
-    acceptedFiles.forEach(file => {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const listSpec = this.loadListSpec(reader.result, file)
-        if (typeof listSpec === 'string') {
-          const message = `Invalid component list file: ${listSpec}`
-          return dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
-        }
-        listSpec.coordinates.forEach(component => {
-          // TODO figure a way to add these in bulk. One by one will be painful for large lists
-          const spec = EntitySpec.validateAndCreate(component)
-          if (spec) {
-            const path = spec.toPath()
-            !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
-            dispatch(uiBrowseUpdateList({ add: spec }))
-          }
-        })
-      }
-      reader.readAsBinaryString(file)
-    })
+  // can be implemented by subclasses to introduce a dropzone
+  dropZone(child) {
+    return child
   }
 
   loadListSpec(content, file) {
@@ -402,6 +380,10 @@ export default class AbstractPageDefinitions extends Component {
     this.incrementSequence()
   }
 
+  tableTitle() {
+    throw Error('This method has to be implemented in a sub class')
+  }
+
   renderSearchBar() {
     throw Error('This method has to be implemented in a sub class')
   }
@@ -421,8 +403,8 @@ export default class AbstractPageDefinitions extends Component {
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
         {this.renderSearchBar()}
-        <Section name={'Available definitions'} actionButton={this.renderButtons()}>
-          <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
+        <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
+          {this.dropZone(
             <div className="section-body">
               <ComponentList
                 list={components.transformedList}
@@ -440,7 +422,7 @@ export default class AbstractPageDefinitions extends Component {
                 sequence={sequence}
               />
             </div>
-          </Dropzone>
+          )}
         </Section>
       </Grid>
     )
