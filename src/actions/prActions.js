@@ -31,7 +31,10 @@ export function getPrComponentsAction(token, pr_number, name) {
         result.forEach(x => dispatch(uiViewPrUpdateList({ add: x.component })))
         const table = {}
         result.forEach(x => {
-          table[x.component.toPath()] = Object.assign({}, x.proposed, { coordinates: x.component })
+          table[x.component.toPath()] = Object.assign({}, x.proposed, {
+            coordinates: x.component,
+            otherDefinition: x.current
+          })
         })
         dispatch(uiViewPrDefinitions({ add: table }))
       })

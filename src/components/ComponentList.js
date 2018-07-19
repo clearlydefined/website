@@ -114,12 +114,13 @@ export default class ComponentList extends React.Component {
       <div className="list-activity-area">
         <img className="list-buttons" src={getBadgeUrl(definition)} alt="score" />
         <ButtonGroup>
-          {!isSourceComponent && !readOnly && (
-            <Button className="list-hybrid-button" onClick={this.addSourceForComponent.bind(this, component)}>
-              <i className="fas fa-plus" />
-              <span>&nbsp;Add source</span>
-            </Button>
-          )}
+          {!isSourceComponent &&
+            !readOnly && (
+              <Button className="list-hybrid-button" onClick={this.addSourceForComponent.bind(this, component)}>
+                <i className="fas fa-plus" />
+                <span>&nbsp;Add source</span>
+              </Button>
+            )}
           {this.renderButtonWithTip(
             <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, component)}>
               <i className="fas fa-search" />
@@ -152,6 +153,8 @@ export default class ComponentList extends React.Component {
           definition={definition}
           component={component}
           onChange={this.onEntryChange}
+          otherDefinition={definition.otherDefinition}
+          classOnDifference="bg-info"
           renderButtons={this.renderButtons}
         />
       </div>
