@@ -63,12 +63,7 @@ export default class InlineEditor extends React.Component {
         </span>
       )
 
-    return React.cloneElement(this.editors[type](value), {
-      onBlur: this.onChangeEvent,
-      onChange: this.onChange,
-      onKeyPress: e => e.key === 'Enter' && this.onChangeEvent(e),
-      ref: this.focus
-    })
+    return React.cloneElement(this.editors[type](value), this.reactProps[type])
   }
 
   render() {
@@ -90,5 +85,24 @@ export default class InlineEditor extends React.Component {
     text: value => <input size="45" type="text" defaultValue={value} />,
     date: value => <input size="45" type="date" defaultValue={value} />,
     license: value => <SpdxPicker value={value} />
+  }
+
+  reactProps = {
+    text: {
+      onBlur: this.onChangeEvent,
+      onKeyPress: e => e.key === 'Enter' && this.onChangeEvent(e),
+      ref: this.focus
+    },
+    date: {
+      onBlur: this.onChangeEvent,
+      onKeyPress: e => e.key === 'Enter' && this.onChangeEvent(e),
+      ref: this.focus
+    },
+    license: {
+      onBlur: this.onChangeEvent,
+      onChange: this.onChange,
+      onKeyPress: e => e.key === 'Enter' && this.onChangeEvent(e),
+      ref: this.focus
+    }
   }
 }
