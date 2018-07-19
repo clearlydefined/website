@@ -292,8 +292,8 @@ export default class DefinitionEntry extends React.Component {
       <Row>
         <Col md={5}>
           <Row>
-            <Col md={3}>{this.renderLabel('Declared', true)}</Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Declared', true)}</Col>
+            <Col md={10}>
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <InlineEditor
@@ -310,8 +310,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={3}>{this.renderLabel('Source', true)}</Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Source', true)}</Col>
+            <Col md={10}>
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <InlineEditor
@@ -328,8 +328,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={3}>{this.renderLabel('Release', true)}</Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Release', true)}</Col>
+            <Col md={10}>
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
                 <InlineEditor
@@ -346,8 +346,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={3}>{this.renderLabel('Facets', true)}</Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Facets', true)}</Col>
+            <Col md={10}>
               {this.renderWithToolTipIfDifferent(
                 'described.facets',
                 <p className={`list-singleLine ${this.classIfDifferent('described.facets')}`}>
@@ -360,8 +360,8 @@ export default class DefinitionEntry extends React.Component {
         </Col>
         <Col md={7}>
           <Row>
-            <Col md={3}>{this.renderLabel('Discovered')}</Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Discovered')}</Col>
+            <Col md={10}>
               {this.renderWithToolTipIfDifferent(
                 'discovered.expressions',
                 <p className={`list-singleLine ${this.classIfDifferent('licensed.discovered.expressions')}`}>
@@ -371,8 +371,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={3}>{this.renderLabel('Attribution', true)}</Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
+            <Col md={10}>
               {this.renderWithToolTipIfDifferent(
                 'attribution.parties',
                 <p className={`list-singleLine ${this.classIfDifferent('licensed.attribution.parties')}`}>
@@ -382,8 +382,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={3}>{this.renderLabel('Files')}</Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Files')}</Col>
+            <Col md={10}>
               <p className="list-singleLine">
                 Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
                 <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
@@ -392,8 +392,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={3}>{this.renderLabel('Tools')}</Col>
-            <Col md={9}>
+            <Col md={2}>{this.renderLabel('Tools')}</Col>
+            <Col md={10}>
               {this.renderWithToolTipIfDifferent(
                 'described.tools',
                 <p className={`list-singleLine ${this.classIfDifferent('described.tools')}`}>{toolList.join(', ')}</p>,
