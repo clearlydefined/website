@@ -292,9 +292,9 @@ export default class AbstractPageDefinitions extends Component {
       >
         {list.map((sortType, index) => {
           return (
-            <MenuItem key={index} onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
-              {sortType.label}
-              {this.checkSort(sortType) && <i className="fas fa-check pull-right" />}
+            <MenuItem className="page-definitions__menu-item" key={index} onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
+              <span>{sortType.label}</span>
+              {this.checkSort(sortType) && <i className="fas fa-check" />}
             </MenuItem>
           )
         })}
@@ -314,9 +314,9 @@ export default class AbstractPageDefinitions extends Component {
       >
         {list.map((filterType, index) => {
           return (
-            <MenuItem key={index} onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
-              {filterType.label}
-              {this.checkFilter(filterType, id) && <i className="fas fa-check pull-right" />}
+            <MenuItem className="page-definitions__menu-item" key={index} onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
+              <span>{filterType.label}</span>
+              {this.checkFilter(filterType, id) && <i className="fas fa-check" />}
             </MenuItem>
           )
         })}
