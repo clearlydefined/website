@@ -135,7 +135,7 @@ export default class AbstractPageDefinitions extends Component {
   doSave() {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
-    const fileObject = { filter: null, sortBy: null, coordinates: spec }
+    const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
     const file = new File([JSON.stringify(fileObject, null, 2)], 'components.json')
     saveAs(file)
   }

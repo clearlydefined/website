@@ -80,13 +80,36 @@ class PageDefinitions extends AbstractPageDefinitions {
           const message = `Invalid component list file: ${listSpec}`
           return dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
         }
+        const definitionPromises = []
         listSpec.coordinates.forEach(component => {
           // TODO figure a way to add these in bulk. One by one will be painful for large lists
           const spec = EntitySpec.validateAndCreate(component)
           if (spec) {
             const path = spec.toPath()
-            !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
             dispatch(uiBrowseUpdateList({ add: spec }))
+            !definitions.entries[path] && definitionPromises.push(dispatch(getDefinitionsAction(token, [path])))
+          }
+        })
+
+        if (listSpec.filter) {
+          this.setState({ activeFilters: listSpec.filter })
+        }
+        if (listSpec.sortBy) {
+          this.setState({ activeSort: listSpec.sortBy })
+        }
+
+        Promise.all(definitionPromises).then(() => {
+          dispatch(
+            uiBrowseUpdateList({
+              transform: this.createTransform.call(
+                this,
+                listSpec.sortBy || this.state.activeSort,
+                listSpec.filter || this.state.activeFilters
+              )
+            })
+          )
+          if (listSpec.sortBy || listSpec.filter) {
+            this.setState({ sequence: this.state.sequence + 1 })
           }
         })
       }
