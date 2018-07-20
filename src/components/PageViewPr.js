@@ -7,7 +7,6 @@ import { Button } from 'react-bootstrap'
 import { uiViewPrGetData, uiViewPrGetBaseUrl, uiViewPrUpdateList } from '../actions/ui'
 import { ROUTE_VIEW_PR } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
-import { DefinitionEntry } from './'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 
 class PageViewPr extends AbstractPageDefinitions {
@@ -64,7 +63,6 @@ class PageViewPr extends AbstractPageDefinitions {
 }
 
 function mapStateToProps(state, ownProps) {
-  const foo = state.ui.view_pr.data.item
   return {
     token: state.session.token,
     pr_number: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
