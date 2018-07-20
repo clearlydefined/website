@@ -222,10 +222,10 @@ export default class AbstractPageDefinitions extends Component {
   filterList(list, activeFilters) {
     if (Object.keys(activeFilters).length === 0) return list
     return filter(list, component => {
-      const defintion = this.getDefinition(component)
+      const definition = this.getDefinition(component)
       for (let filterType in activeFilters) {
         const value = activeFilters[filterType]
-        const fieldValue = this.getValue(defintion, filterType)
+        const fieldValue = this.getValue(definition, filterType)
         if (value === 'presence') {
           if (!fieldValue) return false
         } else if (value === 'absence') {
