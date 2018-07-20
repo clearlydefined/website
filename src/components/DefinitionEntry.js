@@ -404,7 +404,7 @@ export default class DefinitionEntry extends React.Component {
                 'described.tools',
                 <p className={`list-singleLine ${this.classIfDifferent('described.tools')}`}>{toolList.join(', ')}</p>,
                 'bottom',
-                x => x.join(', ')
+                x => (x ? x.join(', ') : '')
               )}
             </Col>
           </Row>
