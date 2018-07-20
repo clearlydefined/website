@@ -117,7 +117,11 @@ export default class DefinitionEntry extends React.Component {
   }
 
   renderWithToolTipIfDifferent(field, content, placement = 'right', transform = x => x) {
-    const toolTip = <Tooltip id="tooltip">Original: {transform(get(this.props.otherDefinition, field))}</Tooltip>
+    const toolTip = (
+      <Tooltip id={`tooltip-${field}`} className="definition__tooltip">
+        Original: {transform(get(this.props.otherDefinition, field))}
+      </Tooltip>
+    )
     return this.ifDifferent(
       field,
       <OverlayTrigger placement={placement} overlay={toolTip}>
