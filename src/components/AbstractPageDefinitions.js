@@ -10,7 +10,6 @@ import { ComponentList, Section, ContributePrompt } from './'
 import { uiNavigation, uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter, sortBy } from 'lodash'
-import { saveAs } from 'file-saver'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -56,7 +55,6 @@ export default class AbstractPageDefinitions extends Component {
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
-    this.doSave = this.doSave.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
     this.name = this.name.bind(this)
     this.namespace = this.namespace.bind(this)
@@ -130,14 +128,6 @@ export default class AbstractPageDefinitions extends Component {
     const patches = this.buildContributeSpec(components.list)
     const spec = { description: description, patches }
     dispatch(curateAction(token, spec))
-  }
-
-  doSave() {
-    const { components } = this.props
-    const spec = this.buildSaveSpec(components.list)
-    const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-    const file = new File([JSON.stringify(fileObject, null, 2)], 'components.json')
-    saveAs(file)
   }
 
   buildContributeSpec(list) {

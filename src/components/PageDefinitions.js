@@ -5,6 +5,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Button } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
+import pako from 'pako'
+import base64js from 'base64-js'
+import { saveAs } from 'file-saver'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
@@ -17,10 +20,20 @@ class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
     super(props)
     this.onDrop = this.onDrop.bind(this)
+    this.doSave = this.doSave.bind(this)
+    this.doSaveAsUrl = this.doSaveAsUrl.bind(this)
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
+    const { dispatch, path } = this.props
+    if (path.length > 1) {
+      try {
+        const str = pako.inflate(base64js.toByteArray(path), { to: 'string' })
+        this.loadFromListSpec(JSON.parse(str))
+      } catch (e) {
+        dispatch(uiNotificationNew({ type: 'warning', message: 'Loading components from URL failed', timeout: 5000 }))
+      }
+    }
     dispatch(uiNavigation({ to: ROUTE_DEFINITIONS }))
   }
 
@@ -54,6 +67,10 @@ class PageDefinitions extends AbstractPageDefinitions {
           Save
         </Button>
         &nbsp;
+        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSaveAsUrl}>
+          Share URL
+        </Button>
+        &nbsp;
         <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
           Contribute
         </Button>
@@ -69,8 +86,33 @@ class PageDefinitions extends AbstractPageDefinitions {
     return <div className="list-noRows">Search for components above ...</div>
   }
 
+  doSave() {
+    const { components } = this.props
+    const spec = this.buildSaveSpec(components.list)
+    const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
+    const file = new File([JSON.stringify(fileObject, null, 2)], 'components.json')
+    saveAs(file)
+  }
+
+  doSaveAsUrl() {
+    const { dispatch, components } = this.props
+    const spec = this.buildSaveSpec(components.list)
+    const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
+    const url = `${document.location.origin}/definitions/${base64js.fromByteArray(
+      pako.deflate(JSON.stringify(fileObject))
+    )}`
+    const textArea = document.createElement('textarea')
+    textArea.value = url
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    dispatch(uiNotificationNew({ type: 'info', message: 'URL copied to clipboard', timeout: 5000 }))
+  }
+
   onDrop(acceptedFiles, rejectedFiles) {
-    const { dispatch, token, definitions } = this.props
+    const { dispatch } = this.props
     dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
     acceptedFiles.forEach(file => {
       const reader = new FileReader()
@@ -80,38 +122,7 @@ class PageDefinitions extends AbstractPageDefinitions {
           const message = `Invalid component list file: ${listSpec}`
           return dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
         }
-        const definitionPromises = []
-        listSpec.coordinates.forEach(component => {
-          // TODO figure a way to add these in bulk. One by one will be painful for large lists
-          const spec = EntitySpec.validateAndCreate(component)
-          if (spec) {
-            const path = spec.toPath()
-            dispatch(uiBrowseUpdateList({ add: spec }))
-            !definitions.entries[path] && definitionPromises.push(dispatch(getDefinitionsAction(token, [path])))
-          }
-        })
-
-        if (listSpec.filter) {
-          this.setState({ activeFilters: listSpec.filter })
-        }
-        if (listSpec.sortBy) {
-          this.setState({ activeSort: listSpec.sortBy })
-        }
-
-        Promise.all(definitionPromises).then(() => {
-          dispatch(
-            uiBrowseUpdateList({
-              transform: this.createTransform.call(
-                this,
-                listSpec.sortBy || this.state.activeSort,
-                listSpec.filter || this.state.activeFilters
-              )
-            })
-          )
-          if (listSpec.sortBy || listSpec.filter) {
-            this.setState({ sequence: this.state.sequence + 1 })
-          }
-        })
+        this.loadFromListSpec(listSpec)
       }
       reader.readAsBinaryString(file)
     })
@@ -160,12 +171,49 @@ class PageDefinitions extends AbstractPageDefinitions {
   readOnly() {
     return false
   }
+
+  loadFromListSpec(listSpec) {
+    const { dispatch, token, definitions } = this.props
+    const definitionPromises = []
+    listSpec.coordinates.forEach(component => {
+      // TODO figure a way to add these in bulk. One by one will be painful for large lists
+      const spec = EntitySpec.validateAndCreate(component)
+      if (spec) {
+        const path = spec.toPath()
+        dispatch(uiBrowseUpdateList({ add: spec }))
+        !definitions.entries[path] && definitionPromises.push(dispatch(getDefinitionsAction(token, [path])))
+      }
+    })
+
+    if (listSpec.filter) {
+      this.setState({ activeFilters: listSpec.filter })
+    }
+    if (listSpec.sortBy) {
+      this.setState({ activeSort: listSpec.sortBy })
+    }
+
+    Promise.all(definitionPromises).then(() => {
+      dispatch(
+        uiBrowseUpdateList({
+          transform: this.createTransform.call(
+            this,
+            listSpec.sortBy || this.state.activeSort,
+            listSpec.filter || this.state.activeFilters
+          )
+        })
+      )
+      if (listSpec.sortBy || listSpec.filter) {
+        this.setState({ sequence: this.state.sequence + 1 })
+      }
+    })
+  }
 }
 
 function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
     filterValue: state.ui.browse.filter,
+    path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     filterOptions: state.ui.browse.filterList,
     components: state.ui.browse.componentList,
     definitions: state.definition.bodies
