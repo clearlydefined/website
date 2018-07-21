@@ -12,6 +12,7 @@ export const apiHome = process.env.REACT_APP_SERVER || getServiceDefaultUrl()
 function getServiceDefaultUrl() {
   switch (process.env.NODE_ENV) {
     case 'development':
+      //TODO this need to be replaced when using a local enviroment, it should become API_LOCAL
       return API_DEVELOP
     case 'test':
       return API_DEVELOP
