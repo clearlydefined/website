@@ -12,9 +12,6 @@ export default class TrCustomComponent extends Component {
 
       ri.subRows = getSubrows(ri.subRows);
 
-      console.log(ri.subRows)
-
-
       const cell = { ...this.props.children[ri.level] }
 
       cell.props.style.flex = 'unset'

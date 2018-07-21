@@ -2,14 +2,12 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import ReactTable from "react-table";
-import Modal from 'react-modal';
 import 'react-table/react-table.css'
 import treeTableHOC from "./treeTable";
 import FilterCustomComponent from './FilterCustomComponent'
 import FacetsRenderer from './FacetsRenderer';
 import LicensesRenderer from './LicensesRenderer';
 import CopyrightsRenderer from './CopyrightsRenderer';
-
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
@@ -21,7 +19,6 @@ export default class FileList extends Component {
 
     this.state = {
       files: [],
-      showPopup: false,
       expanded: {}
     }
   }
@@ -29,10 +26,6 @@ export default class FileList extends Component {
   componentWillReceiveProps(nextProps) {
     //Data are parsed to create a tree-folder structure
     nextProps.files && this.setState({ files: parsePaths(nextProps.files) })
-  }
-
-  showPopup = (value) => {
-    this.setState({ showPopup: true })
   }
 
   handleRowExpanded(newExpanded, index, event) {
@@ -43,19 +36,9 @@ export default class FileList extends Component {
   }
 
   render() {
-    const { files, showPopup } = this.state;
-    console.log(showPopup)
+    const { files } = this.state;
+
     return <div>
-
-      <Modal
-        ariaHideApp={false}
-        isOpen={showPopup}
-        onRequestClose={() => this.setState({ showPopup: false })}
-        contentLabel="Example Modal"
-      >
-        <div>I am a modal</div>
-
-      </Modal>
       <TreeTable
         showPagination={false}
         collapseOnSortingChange={false}
