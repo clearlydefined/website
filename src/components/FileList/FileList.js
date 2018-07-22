@@ -23,16 +23,45 @@ export default class FileList extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+
+    if (!prevState.files && this.state.files || prevState.files.length != this.state.files.length) {
+      console.log(this.state)
+      this.forceUpdate()
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     //Data are parsed to create a tree-folder structure
     nextProps.files && this.setState({ files: parsePaths(nextProps.files) })
   }
 
-  handleRowExpanded(newExpanded, index, event) {
-    this.setState({
-      // we override newExpanded, keeping only current selected row expanded
-      expanded: { [index]: true }
-    });
+  /**
+   * Custom Function to sort data
+   * It would be called on each onSortedChange event of the Table
+   * For 'name' column, compares the whole path of the file
+   * For other columns, compares string values
+   * Arrays are converted to a string
+   * 
+   */
+  sortData = (sort) => {
+    const sortedData = this.state.files.sort((a, b) => {
+      if (sort[0].id === "name") {
+        a = a.path.toLowerCase();
+        b = b.path.toLowerCase();
+      } else {
+        a = a[sort[0].id] ? a[sort[0].id].toString().toLowerCase() : ''
+        b = b[sort[0].id] ? b[sort[0].id].toString().toLowerCase() : ''
+      }
+      if (a < b) {
+        return sort[0].desc ? 1 : -1;
+      }
+      if (a > b) {
+        return sort[0].desc ? -1 : 1;
+      }
+      return 0;
+    })
+    this.setState({ files: sortedData })
   }
 
   render() {
@@ -43,9 +72,9 @@ export default class FileList extends Component {
         showPagination={false}
         collapseOnSortingChange={false}
         filterable={false}
-        freezeWhenExpanded={true}
+        freezeWhenExpanded={false}
+        manual={true}
         //expanded={this.state.expanded}
-        //onExpandedChange={(newExpanded, index, event) => this.handleRowExpanded(newExpanded, index, event)}
         defaultFilterMethod={(filter, row, column) => {
           const id = filter.pivotId || filter.id;
           return row[id] !== undefined
@@ -55,6 +84,7 @@ export default class FileList extends Component {
             : true;
         }}
         noDataText="There are currently no files for this definition"
+        onSortedChange={(newSorted, column, shiftKey) => { this.sortData(newSorted) }}
         data={files}
         pivotBy={pathColums}
         columns={columns.concat([{
