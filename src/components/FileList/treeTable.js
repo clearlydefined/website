@@ -55,6 +55,7 @@ export default Component => {
     }
 
     getTrProps = (state, ri, ci, instance) => {
+
       return {
         ri,
         expanded: ri && ri.level === 0 && ri.row._pivotVal === "undefined" ? "true" : "false",

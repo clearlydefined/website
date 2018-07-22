@@ -24,16 +24,17 @@ export default class FileList extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-
     if (!prevState.files && this.state.files || prevState.files.length != this.state.files.length) {
-      console.log(this.state)
-      this.forceUpdate()
+      //this.forceUpdate()
     }
   }
 
   componentWillReceiveProps(nextProps) {
     //Data are parsed to create a tree-folder structure
-    nextProps.files && this.setState({ files: parsePaths(nextProps.files) })
+    if (nextProps.files) {
+      const files = parsePaths(nextProps.files);
+      nextProps.files && this.setState({ files, rawData: files })
+    }
   }
 
   /**
@@ -64,6 +65,22 @@ export default class FileList extends Component {
     this.setState({ files: sortedData })
   }
 
+  filterData = (filters) => {
+    if (this.state.rawData) {
+      const filteredData = this.state.rawData.filter((item) =>
+        filters.every((filter) => {
+          if (filter.id === "name") {
+            return item.path.toLowerCase().includes(filter.value.filterValue.toLowerCase())
+          } else {
+            const a = item[filter.id] ? item[filter.id].toString().toLowerCase() : ''
+            return a.includes(filter.value.filterValue.toLowerCase())
+          }
+        })
+      )
+      this.setState({ files: filteredData })
+    }
+  }
+
   render() {
     const { files } = this.state;
 
@@ -71,20 +88,14 @@ export default class FileList extends Component {
       <TreeTable
         showPagination={false}
         collapseOnSortingChange={false}
-        filterable={false}
+        filterable={true}
         freezeWhenExpanded={false}
         manual={true}
         //expanded={this.state.expanded}
-        defaultFilterMethod={(filter, row, column) => {
-          const id = filter.pivotId || filter.id;
-          return row[id] !== undefined
-            ? String(row[id])
-              .toLowerCase()
-              .includes(filter.value.toLowerCase())
-            : true;
-        }}
         noDataText="There are currently no files for this definition"
-        onSortedChange={(newSorted, column, shiftKey) => { this.sortData(newSorted) }}
+        onSortedChange={(newSorted) => this.sortData(newSorted)}
+        onFilteredChange={(filtered) => { this.filterData(filtered); return filtered; }}
+        onExpandedChange={(newExpanded, index) => console.log(newExpanded, index)}
         data={files}
         pivotBy={pathColums}
         columns={columns.concat([{
