@@ -227,8 +227,7 @@ export default class DefinitionEntry extends React.Component {
   parseCoordinates(value) {
     if (!value) return null
     const segments = value.split('/')
-    const idx = value.lastIndexOf('/', value.lastIndexOf('/') - 1)
-    const url = value.substring(0, idx)
+    const url = value.replace(/\/commit\/[a-z\d]+$/, '')
     return { type: 'git', provider: 'github', url, revision: segments[6] }
   }
 
