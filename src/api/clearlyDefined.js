@@ -27,7 +27,6 @@ function getServiceDefaultUrl() {
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
 const DEFINITIONS = 'definitions'
-const BADGES = 'badges'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
 const ORIGINS_NUGET = 'origins/nuget'
