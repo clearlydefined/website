@@ -77,7 +77,7 @@ export default class FileList extends Component {
           }
         })
       )
-      this.setState({ files: filteredData })
+      //this.setState({ files: filteredData })
     }
   }
 
@@ -90,11 +90,10 @@ export default class FileList extends Component {
         collapseOnSortingChange={false}
         filterable={true}
         freezeWhenExpanded={false}
-        manual={true}
+        manual={false}
         //expanded={this.state.expanded}
         noDataText="There are currently no files for this definition"
         onSortedChange={(newSorted) => this.sortData(newSorted)}
-        onFilteredChange={(filtered) => { this.filterData(filtered); return filtered; }}
         onExpandedChange={(newExpanded, index) => console.log(newExpanded, index)}
         data={files}
         pivotBy={pathColums}
@@ -102,21 +101,46 @@ export default class FileList extends Component {
           Header: "Name",
           accessor: "name",
           style: {},
-          Cell: (row) => <div style={{ paddingLeft: `${10 * (row.level - 1)}px` }}>{row.value}</div>
+          Cell: (row) => <div style={{ paddingLeft: `${10 * (row.level - 1)}px` }}>{row.value}</div>,
+          filterMethod: (filter, rows) => rows.filter(item => item._original ? item._original.path.toLowerCase().includes(filter.value.filterValue.toLowerCase()) : true),
+          filterAll: true
         }, {
           Header: "Facets",
           accessor: "facets",
-          Cell: (row) => <FacetsRenderer item={row} />
+          Cell: (row) => <FacetsRenderer item={row} />,
+          filterMethod: (filter, rows) => rows.filter(item => item._original && item._original.facets ? item._original.facets.toString().toLowerCase().includes(filter.value.filterValue.toLowerCase()) : true),
+          filterAll: true
         }, {
           Header: "Licenses",
           id: "license",
           accessor: "license",
-          Cell: (row) => <LicensesRenderer item={row} />
+          Cell: (row) => <LicensesRenderer item={row} />,
+          filterMethod: (filter, rows) => rows.filter(item => item._original ? item._original.license && item._original.license.toLowerCase().includes(filter.value.filterValue.toLowerCase()) : true),
+          filterAll: true
         },
         {
           Header: "Copyrights",
           accessor: "attributions",
-          Cell: (row) => <CopyrightsRenderer item={row} showPopup={this.showPopup} />
+          Cell: (row) => <CopyrightsRenderer item={row} showPopup={this.showPopup} />,
+          filterMethod: (filter, rows) => {
+            if (filter.value.filterValue) {
+              const res = rows.filter(item => {
+                if (item._original) {
+                  if (item._original.attributions) {
+                    return item._original.attributions.toString().toLowerCase().includes(filter.value.filterValue.toLowerCase())
+                  } else {
+                    return false;
+                  }
+                } else {
+                  return true;
+                }
+
+              })
+              return res;
+            }
+            else return rows
+          },
+          filterAll: true
         }
         ])
         }  //Merge columns array with other columns to show after the folders
