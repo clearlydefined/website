@@ -227,7 +227,9 @@ export default class DefinitionEntry extends React.Component {
   parseCoordinates(value) {
     if (!value) return null
     const segments = value.split('/')
-    return { type: 'git', provider: 'github', url: value, revision: segments[6] }
+    const idx = value.lastIndexOf('/', value.lastIndexOf('/') - 1)
+    const url = value.substring(0, idx)
+    return { type: 'git', provider: 'github', url, revision: segments[6] }
   }
 
   renderLabel(text, editable = false) {
