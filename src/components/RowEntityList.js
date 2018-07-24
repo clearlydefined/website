@@ -37,7 +37,6 @@ export default class RowEntityList extends React.Component {
       loadMoreRows,
       listHeight,
       listLength,
-      list,
       rowRenderer,
       noRowsRenderer,
       rowHeight,

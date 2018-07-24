@@ -111,7 +111,7 @@ export default class ComponentList extends React.Component {
     const isSourceComponent = this.isSourceComponent(component)
     return (
       <div className="list-activity-area">
-        <img className="list-buttons" src={getBadgeUrl(component)} alt="score" />
+        <img className="list-buttons" src={getBadgeUrl(definition)} alt="score" />
         <ButtonGroup>
           {!isSourceComponent && (
             <Button className="list-hybrid-button" onClick={this.addSourceForComponent.bind(this, component)}>

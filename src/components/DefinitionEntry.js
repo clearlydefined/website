@@ -227,7 +227,8 @@ export default class DefinitionEntry extends React.Component {
   parseCoordinates(value) {
     if (!value) return null
     const segments = value.split('/')
-    return { type: 'git', provider: 'github', url: value, revision: segments[6] }
+    const url = value.replace(/\/commit\/[a-z\d]+$/, '')
+    return { type: 'git', provider: 'github', url, revision: segments[6] }
   }
 
   renderLabel(text, editable = false) {
@@ -268,7 +269,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={2}>{this.renderLabel('Declared', true)}</Col>
             <Col md={10}>
               <InlineEditor
-                type="text"
+                type="license"
                 initialValue={this.getOriginalValue('licensed.declared')}
                 value={this.getValue('licensed.declared')}
                 onChange={this.fieldChange('licensed.declared')}

@@ -4,18 +4,11 @@
 // Delays loading untill the store is rehydrated
 import React, { Component } from 'react'
 import { persistStore, createTransform } from 'redux-persist'
-import {
-  ROUTE_ROOT,
-  ROUTE_DEFINITIONS,
-  ROUTE_INSPECT,
-  ROUTE_CURATE,
-  ROUTE_HARVEST,
-  ROUTE_ABOUT
-} from '../utils/routingConstants'
+import { ROUTE_ROOT, ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { App, PageLanding, PageCurate, PageDefinitions, PageInspect, PageHarvest } from './'
+import { App, PageLanding, PageDefinitions, PageInspect, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import withTracker from '../utils/withTracker'
@@ -52,7 +45,6 @@ export default class RehydrationDelayedProvider extends Component {
             <Switch>
               <Route path={ROUTE_DEFINITIONS} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
-              {/* <Route path={ROUTE_CURATE} component={withTracker(PageCurate)} /> */}
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
               <Route path={ROUTE_ROOT} component={withTracker(PageLanding)} />

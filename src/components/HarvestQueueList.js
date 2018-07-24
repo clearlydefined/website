@@ -10,7 +10,7 @@ import {
   NpmVersionPicker,
   MavenVersionPicker,
   PyPiVersionPicker,
-  NugetVersionPicker,
+  NuGetVersionPicker,
   RubyGemsVersionPicker
 } from './'
 import { clone } from 'lodash'
@@ -86,7 +86,7 @@ export default class HarvestQueueList extends React.Component {
           <RubyGemsVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
         {request.provider === 'nuget' && (
-          <NugetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+          <NuGetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
         <i className="fas fa-times list-remove" onClick={this.removeRequest.bind(this, request)} />
       </div>
