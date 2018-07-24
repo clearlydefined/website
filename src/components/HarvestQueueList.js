@@ -12,7 +12,7 @@ import {
   PyPiVersionPicker,
   NuGetVersionPicker,
   RubyGemsVersionPicker
-} from './'
+} from '.'
 import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
