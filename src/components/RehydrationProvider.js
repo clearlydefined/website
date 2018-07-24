@@ -15,7 +15,7 @@ import {
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { App, PageLanding, PageDefinitions, PageInspect, PageHarvest } from '.'
+import { App, PageLanding, PageDefinitions, PageInspect, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import withTracker from '../utils/withTracker'
