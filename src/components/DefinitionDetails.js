@@ -359,8 +359,47 @@ export default class DefinitionDetails extends React.Component {
     return <img className={`details-image${highlight ? ' list-highlight' : ''}`} src={image} alt="" />
   }
 
+  renderFacets(definition) {
+    return (
+      <div>
+        <Row>
+          <Col md={2}>core</Col>
+          <Col md={10}>Everything that is not in some other facet</Col>
+        </Row>
+        <Row>
+          <Col md={2}>data</Col>
+          <Col md={10}> **/*.csv</Col>
+        </Row>
+        <Row>
+          <Col md={2}>dev</Col>
+          <Col md={10} />
+        </Row>
+        <Row>
+          <Col md={2}>doc</Col>
+          <Col md={10} />
+        </Row>
+        <Row>
+          <Col md={2}>examples</Col>
+          <Col md={10}>src/examples/**/*.js</Col>
+        </Row>
+        <Row>
+          <Col md={2}>test</Col>
+          <Col md={10}>test/**/*.js, testrunner.js</Col>
+        </Row>
+      </div>
+    )
+  }
+
   renderFileList(definition) {
     return <FileList definition={definition} />
+  }
+
+  renderRawData(definition) {
+    return 'Likely a tabbed view of the different raw data forms (Harvested data, raw defintion, current curation)'
+  }
+
+  renderContributions(definition) {
+    return 'A list of all existing contributions (PRs) that have been made to the defintiion. This might be a standard "two line" entry list'
   }
 
   render() {
@@ -372,18 +411,11 @@ export default class DefinitionDetails extends React.Component {
           <Col md={11}>{this.renderHeadline(definition)}</Col>
         </Row>
         <Section name="Details">{this.renderPanel(definition)}</Section>
+        <Section name="Facets">{this.renderFacets(definition)}</Section>
         <Section name="Files">{this.renderFileList(definition)}</Section>
+        <Section name="Contributions">{this.renderContributions(definition)}</Section>
+        <Section name="Raw Data">{this.renderRawData(definition)}</Section>
       </div>
-      // <TwoLineEntry
-      //   highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
-      //   image={this.getImage(definition)}
-      //   letter={definition.coordinates.type.slice(0, 1).toUpperCase()}
-      //   headline={this.renderHeadline(definition)}
-      //   message={this.renderMessage(definition)}
-      //   buttons={renderButtons && renderButtons(definition)}
-      //   onClick={onClick}
-      //   panel={component.expanded ? this.renderPanel(definition) : null}
-      // />
     )
   }
 }
