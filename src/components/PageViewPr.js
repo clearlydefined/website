@@ -15,10 +15,10 @@ class PageViewPr extends AbstractPageDefinitions {
   }
 
   componentDidMount() {
-    const { dispatch, pr_number, token } = this.props
+    const { dispatch, prNumber, token } = this.props
 
     dispatch(uiNavigation({ to: ROUTE_VIEW_PR }))
-    dispatch(uiViewPrGetData(token, pr_number))
+    dispatch(uiViewPrGetData(token, prNumber))
   }
 
   noRowsRenderer() {
@@ -26,11 +26,11 @@ class PageViewPr extends AbstractPageDefinitions {
   }
 
   tableTitle() {
-    const { pr_number } = this.props
+    const { prNumber } = this.props
     const linkBack = this.props.url.isFetched ? (
-      <a href={this.props.url.item}>#{pr_number}</a>
+      <a href={this.props.url.item}>#{prNumber}</a>
     ) : (
-      `#${pr_number}`
+      `#${prNumber}`
     )
     return <span>Definitions from pull request {linkBack}</span>
   }
@@ -64,7 +64,7 @@ class PageViewPr extends AbstractPageDefinitions {
 function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
-    pr_number: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
+    prNumber: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     url: state.ui.view_pr.url,
     definitions: state.ui.view_pr.definitions,
     components: state.ui.view_pr.componentList,
