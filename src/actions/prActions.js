@@ -6,23 +6,23 @@ import { getContributionData, getDefinition } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'
 import { uiViewPrUpdateList, uiViewPrDefinitions, UI_VIEW_PR_GET_URL } from './ui'
 
-export function getPrDataAction(token, pr_number) {
+export function getPrDataAction(token, prNumber) {
   return dispatch => {
     const actions = asyncActions(UI_VIEW_PR_GET_URL)
     dispatch(actions.start())
-    return getContributionData(token, pr_number)
+    return getContributionData(token, prNumber)
       .then(({ changes, url }) => {
         dispatch(actions.success(url))
         return Promise.all(
           changes.map(component =>
             Promise.all([
-              getDefinition(token, EntitySpec.fromPath(`${component}/pr/${pr_number}`)),
+              getDefinition(token, EntitySpec.fromPath(`${component}/pr/${prNumber}`)),
               getDefinition(token, EntitySpec.fromPath(`${component}`))
             ]).then(([proposed, current]) => ({
               proposed,
               current,
               path: component,
-              component: EntitySpec.fromPath(`${component}/pr/${pr_number}`)
+              component: EntitySpec.fromPath(`${component}/pr/${prNumber}`)
             }))
           )
         )
