@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import { FormControl, FormGroup, Glyphicon } from 'react-bootstrap'
 import './FilterCustomComponent.css'
 
+/**
+ * Component that render an input type used as Filter
+ * It render also a filter icon
+ * 
+ */
 export default class FilterCustomComponent extends Component {
   constructor(props) {
     super(props);
@@ -11,11 +16,13 @@ export default class FilterCustomComponent extends Component {
     };
   }
 
+  /**
+   * Updates local state 
+   * then fire the callback to alert React-Table of the new filter
+   * 
+   */
   changeFilterValue = (filterValue) => {
-    // Update local state 
-    // then fire the callback to alert React-Table of the new filter
     this.setState({ filterValue: filterValue.target.value }, () => this.props.onChange(this.state));
-
   }
 
   render() {
