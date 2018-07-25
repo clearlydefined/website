@@ -4,7 +4,7 @@
 import { getCurationAction } from './curationActions'
 import { getDefinitionAction, previewDefinitionAction, getDefinitionSuggestionsAction } from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
-import { getPrComponentsAction, getCurationBaseUrlAction } from './prActions'
+import { getPrDataAction } from './prActions'
 
 export const UI_NAVIGATION = 'UI_NAVIGATION'
 export const UI_REDIRECT = 'UI_REDIRECT'
@@ -18,8 +18,7 @@ export const UI_INSPECT_GET_CURATION = 'UI_INSPECT_GET_CURATION'
 export const UI_INSPECT_GET_DEFINITION = 'UI_INSPECT_GET_DEFINITION'
 export const UI_INSPECT_GET_HARVESTED = 'UI_INSPECT_GET_HARVESTED'
 
-export const UI_VIEW_PR_GET = 'UI_VIEW_PR_GET'
-export const UI_VIEW_PR_GET_BASE_URL = 'UI_VIEW_PR_GET_BASE_URL'
+export const UI_VIEW_PR_GET_URL = 'UI_VIEW_PR_GET_URL'
 export const UI_VIEW_PR_UPDATE_LIST = 'UI_VIEW_PR_UPDATE_LIST'
 export const UI_VIEW_PR_DEFINITIONS = 'UI_VIEW_PR_DEFINITIONS'
 
@@ -76,11 +75,7 @@ export function uiInspectGetHarvested(token, entity) {
 }
 
 export function uiViewPrGetData(token, entity) {
-  return getPrComponentsAction(token, entity, UI_VIEW_PR_GET)
-}
-
-export function uiViewPrGetBaseUrl() {
-  return getCurationBaseUrlAction(UI_VIEW_PR_GET_BASE_URL)
+  return getPrDataAction(token, entity)
 }
 
 export function uiViewPrUpdateList(value) {

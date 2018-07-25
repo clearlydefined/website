@@ -14,8 +14,7 @@ import {
   UI_CURATE_GET_DEFINITION,
   UI_CURATE_GET_DEFINITION_PROPOSED,
   UI_CURATE_DEFINITION_PREVIEW,
-  UI_VIEW_PR_GET,
-  UI_VIEW_PR_GET_BASE_URL,
+  UI_VIEW_PR_GET_URL,
   UI_VIEW_PR_UPDATE_LIST,
   UI_VIEW_PR_DEFINITIONS,
   UI_BROWSE_UPDATE_FILTER,
@@ -100,8 +99,7 @@ const curate = combineReducers({
 })
 
 const view_pr = combineReducers({
-  data: itemReducer(UI_VIEW_PR_GET),
-  base_url: itemReducer(UI_VIEW_PR_GET_BASE_URL),
+  url: itemReducer(UI_VIEW_PR_GET_URL),
   componentList: listReducer(UI_VIEW_PR_UPDATE_LIST, null, EntitySpec.isEquivalent),
   definitions: tableReducer(UI_VIEW_PR_DEFINITIONS)
 })

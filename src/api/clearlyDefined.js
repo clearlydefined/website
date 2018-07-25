@@ -56,12 +56,8 @@ export function getDefinition(token, entity) {
   return get(url(`${DEFINITIONS}/${entity.toPath()}`), token)
 }
 
-export function getPrcomponents(token, entity) {
+export function getContributionData(token, entity) {
   return get(url(`${CURATIONS}/pr/${entity}`), token)
-}
-
-export function getCurationBaseUrl() {
-  return get(url(`${CURATIONS}/base_url`))
 }
 
 export function getDefinitions(token, list) {

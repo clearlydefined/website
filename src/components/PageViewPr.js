@@ -4,7 +4,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import { uiViewPrGetData, uiViewPrGetBaseUrl, uiViewPrUpdateList } from '../actions/ui'
+import { uiViewPrGetData, uiViewPrUpdateList } from '../actions/ui'
 import { ROUTE_VIEW_PR } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
@@ -19,7 +19,6 @@ class PageViewPr extends AbstractPageDefinitions {
 
     dispatch(uiNavigation({ to: ROUTE_VIEW_PR }))
     dispatch(uiViewPrGetData(token, pr_number))
-    dispatch(uiViewPrGetBaseUrl())
   }
 
   noRowsRenderer() {
@@ -28,8 +27,8 @@ class PageViewPr extends AbstractPageDefinitions {
 
   tableTitle() {
     const { pr_number } = this.props
-    const linkBack = this.props.base_url.isFetched ? (
-      <a href={`${this.props.base_url.item.url}/pull/${pr_number}`}>#{pr_number}</a>
+    const linkBack = this.props.url.isFetched ? (
+      <a href={`${this.props.url.item}/pull/${pr_number}`}>#{pr_number}</a>
     ) : (
       `#${pr_number}`
     )
@@ -66,7 +65,7 @@ function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
     pr_number: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
-    componentsState: state.ui.view_pr.data,
+    url: state.ui.view_pr.url,
     definitions: state.ui.view_pr.definitions,
     components: state.ui.view_pr.componentList,
     base_url: state.ui.view_pr.base_url,

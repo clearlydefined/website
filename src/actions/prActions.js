@@ -2,18 +2,19 @@
 // SPDX-License-Identifier: MIT
 
 import { asyncActions } from './'
-import { getPrcomponents, getDefinition, getCurationBaseUrl } from '../api/clearlyDefined'
+import { getContributionData, getDefinition } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'
-import { uiViewPrUpdateList, uiViewPrDefinitions } from './ui'
+import { uiViewPrUpdateList, uiViewPrDefinitions, UI_VIEW_PR_GET_URL } from './ui'
 
-export function getPrComponentsAction(token, pr_number, name) {
+export function getPrDataAction(token, pr_number) {
   return dispatch => {
-    const actions = asyncActions(name)
+    const actions = asyncActions(UI_VIEW_PR_GET_URL)
     dispatch(actions.start())
-    return getPrcomponents(token, pr_number)
-      .then(components =>
-        Promise.all(
-          components.map(component =>
+    return getContributionData(token, pr_number)
+      .then(({ changes, url }) => {
+        dispatch(actions.success(url))
+        return Promise.all(
+          changes.map(component =>
             Promise.all([
               getDefinition(token, EntitySpec.fromPath(`${component}/pr/${pr_number}`)),
               getDefinition(token, EntitySpec.fromPath(`${component}`))
@@ -25,9 +26,8 @@ export function getPrComponentsAction(token, pr_number, name) {
             }))
           )
         )
-      )
+      })
       .then(result => {
-        dispatch(actions.success(result))
         result.forEach(x => dispatch(uiViewPrUpdateList({ add: x.component })))
         const table = {}
         result.forEach(x => {
@@ -39,12 +39,5 @@ export function getPrComponentsAction(token, pr_number, name) {
         dispatch(uiViewPrDefinitions({ add: table }))
       })
       .catch(error => dispatch(actions.error(error)))
-  }
-}
-
-export function getCurationBaseUrlAction(name) {
-  return dispatch => {
-    const actions = asyncActions(name)
-    getCurationBaseUrl().then(result => dispatch(actions.success(result)))
   }
 }
