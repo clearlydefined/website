@@ -28,7 +28,7 @@ class PageViewPr extends AbstractPageDefinitions {
   tableTitle() {
     const { pr_number } = this.props
     const linkBack = this.props.url.isFetched ? (
-      <a href={`${this.props.url.item}/pull/${pr_number}`}>#{pr_number}</a>
+      <a href={this.props.url.item}>#{pr_number}</a>
     ) : (
       `#${pr_number}`
     )
@@ -68,7 +68,6 @@ function mapStateToProps(state, ownProps) {
     url: state.ui.view_pr.url,
     definitions: state.ui.view_pr.definitions,
     components: state.ui.view_pr.componentList,
-    base_url: state.ui.view_pr.base_url,
     filterValue: state.ui.browse.filter,
     filterOptions: state.ui.browse.filterList
   }
