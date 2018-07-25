@@ -78,6 +78,7 @@ export default Component => {
               show: col.accessor === "name" ? true : false,
               Header: col.accessor === "name" ? "Name" : '',
               show: true,
+              resizable: false,
               Pivot: cellInfo => <PivotCustomComponent {...cellInfo} defaultProps={Component.defaultProps} />
             }
             if (col.accessor !== "name") column.width = `${treeTableIndent}px`
@@ -88,7 +89,7 @@ export default Component => {
         ThComponent: (props) => <ThCustomComponent {...props} defaultProps={Component.defaultProps} />,
         TdComponent: (props) => <TdCustomComponent {...props} defaultProps={Component.defaultProps} />,
         TrComponent: (props) => <TrCustomComponent {...props} defaultProps={Component.defaultProps} treeTableIndent={treeTableIndent} getSubrows={this.getSubrows} />,
-        getTrProps,
+        getTrProps
       }
 
       return <Component {...rest} {...extra} ref={r => (this.wrappedInstance = r)} />

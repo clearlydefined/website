@@ -11,7 +11,7 @@ export default class PivotCustomComponent extends Component {
 
     return <div>
       <defaultProps.ExpanderComponent {...cellInfo} />
-      <defaultProps.PivotValueComponent {...cellInfo} />
+      <PivotValueCustomComponent {...cellInfo} />
     </div>
   }
 }

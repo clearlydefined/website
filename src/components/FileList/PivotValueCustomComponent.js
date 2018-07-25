@@ -8,6 +8,8 @@ export default class PivotValueCustomComponent extends Component {
   render() {
     const { defaultProps, ...cellInfo } = this.props;
 
-    return <defaultProps.PivotValueComponent {...cellInfo} />
+    return <span>
+      {cellInfo.value}
+    </span>
   }
 }
