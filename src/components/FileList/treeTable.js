@@ -41,7 +41,7 @@ export default Component => {
       subRows && subRows.forEach((subRow, index) => {
         if (subRow._pivotVal === "undefined" && subRow._subRows) {
           let items = (this.getSubrows(subRow._subRows))
-          items.map((item) => {
+          items.forEach((item) => {
             item._pivotID = subRow._pivotID
             item._nestingLevel = subRow._nestingLevel
 

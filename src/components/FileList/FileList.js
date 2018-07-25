@@ -132,9 +132,9 @@ const parsePaths = (data) => {
 
     //Add item[`folder_${index}`] to item object
     //If index is the last item, then is the name of the file
-    folders.map((p, index) => { if (index + 1 === folders.length) item.name = p; else { item[`folder_${index}`] = p; } })
+    folders.forEach((p, index) => { if (index + 1 === folders.length) item.name = p; else { item[`folder_${index}`] = p; } })
 
-    folders.map((p, index) => {
+    folders.forEach((p, index) => {
       if (index + 1 < folders.length && pathColums.indexOf(`folder_${index}`) === -1) {
 
         //Add folders_${index} to patchColumns array      
