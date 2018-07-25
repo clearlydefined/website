@@ -4,11 +4,11 @@
 import { asyncActions } from './'
 import { getContributionData, getDefinition } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'
-import { uiViewPrUpdateList, uiViewPrDefinitions, UI_VIEW_PR_GET_URL } from './ui'
+import { uiContributionUpdateList, uiContributionDefinitions, UI_CONTRIBUTION_GET_URL } from './ui'
 
 export function getPrDataAction(token, prNumber) {
   return dispatch => {
-    const actions = asyncActions(UI_VIEW_PR_GET_URL)
+    const actions = asyncActions(UI_CONTRIBUTION_GET_URL)
     dispatch(actions.start())
     return getContributionData(token, prNumber)
       .then(({ changes, url }) => {
@@ -28,7 +28,7 @@ export function getPrDataAction(token, prNumber) {
         )
       })
       .then(result => {
-        result.forEach(x => dispatch(uiViewPrUpdateList({ add: x.component })))
+        result.forEach(x => dispatch(uiContributionUpdateList({ add: x.component })))
         const table = {}
         result.forEach(x => {
           table[x.component.toPath()] = {
@@ -37,7 +37,7 @@ export function getPrDataAction(token, prNumber) {
             otherDefinition: x.current
           }
         })
-        dispatch(uiViewPrDefinitions({ add: table }))
+        dispatch(uiContributionDefinitions({ add: table }))
       })
       .catch(error => dispatch(actions.error(error)))
   }

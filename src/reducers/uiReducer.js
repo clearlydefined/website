@@ -14,9 +14,9 @@ import {
   UI_CURATE_GET_DEFINITION,
   UI_CURATE_GET_DEFINITION_PROPOSED,
   UI_CURATE_DEFINITION_PREVIEW,
-  UI_VIEW_PR_GET_URL,
-  UI_VIEW_PR_UPDATE_LIST,
-  UI_VIEW_PR_DEFINITIONS,
+  UI_CONTRIBUTION_GET_URL,
+  UI_CONTRIBUTION_UPDATE_LIST,
+  UI_CONTRIBUTION_DEFINITIONS,
   UI_BROWSE_UPDATE_FILTER,
   UI_BROWSE_UPDATE_FILTER_LIST,
   UI_BROWSE_UPDATE_LIST,
@@ -98,10 +98,10 @@ const curate = combineReducers({
   previewDefinition: itemReducer(UI_CURATE_DEFINITION_PREVIEW)
 })
 
-const view_pr = combineReducers({
-  url: itemReducer(UI_VIEW_PR_GET_URL),
-  componentList: listReducer(UI_VIEW_PR_UPDATE_LIST, null, EntitySpec.isEquivalent),
-  definitions: tableReducer(UI_VIEW_PR_DEFINITIONS)
+const contribution = combineReducers({
+  url: itemReducer(UI_CONTRIBUTION_GET_URL),
+  componentList: listReducer(UI_CONTRIBUTION_UPDATE_LIST, null, EntitySpec.isEquivalent),
+  definitions: tableReducer(UI_CONTRIBUTION_DEFINITIONS)
 })
 
 const inspect = combineReducers({
@@ -140,7 +140,7 @@ export default combineReducers({
   browse,
   inspect,
   curate,
-  view_pr,
+  contribution,
   harvest,
   notifications
 })

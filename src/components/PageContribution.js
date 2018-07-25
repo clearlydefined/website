@@ -4,12 +4,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
-import { uiViewPrGetData, uiViewPrUpdateList } from '../actions/ui'
-import { ROUTE_VIEW_PR } from '../utils/routingConstants'
+import { uiContributionGetData, uiContributionUpdateList } from '../actions/ui'
+import { ROUTE_CONTRIBUTION } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 
-class PageViewPr extends AbstractPageDefinitions {
+class PageContribution extends AbstractPageDefinitions {
   constructor(props) {
     super(props)
   }
@@ -17,8 +17,8 @@ class PageViewPr extends AbstractPageDefinitions {
   componentDidMount() {
     const { dispatch, prNumber, token } = this.props
 
-    dispatch(uiNavigation({ to: ROUTE_VIEW_PR }))
-    dispatch(uiViewPrGetData(token, prNumber))
+    dispatch(uiNavigation({ to: ROUTE_CONTRIBUTION }))
+    dispatch(uiContributionGetData(token, prNumber))
   }
 
   noRowsRenderer() {
@@ -53,7 +53,7 @@ class PageViewPr extends AbstractPageDefinitions {
   }
 
   updateList(o) {
-    return uiViewPrUpdateList(o)
+    return uiContributionUpdateList(o)
   }
 }
 
@@ -61,12 +61,12 @@ function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
     prNumber: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
-    url: state.ui.view_pr.url,
-    definitions: state.ui.view_pr.definitions,
-    components: state.ui.view_pr.componentList,
+    url: state.ui.contribution.url,
+    definitions: state.ui.contribution.definitions,
+    components: state.ui.contribution.componentList,
     filterValue: state.ui.browse.filter,
     filterOptions: state.ui.browse.filterList
   }
 }
 
-export default connect(mapStateToProps)(PageViewPr)
+export default connect(mapStateToProps)(PageContribution)
