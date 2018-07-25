@@ -380,7 +380,7 @@ export default class DefinitionEntry extends React.Component {
             <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
-                'attribution.parties',
+                'licensed.attribution.parties',
                 <p className={`list-singleLine ${this.classIfDifferent('licensed.attribution.parties')}`}>
                   {get(licensed, 'attribution.parties', []).join(', ')}
                 </p>
