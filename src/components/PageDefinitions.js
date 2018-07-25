@@ -101,14 +101,18 @@ class PageDefinitions extends AbstractPageDefinitions {
     const url = `${document.location.origin}/definitions/${base64js.fromByteArray(
       pako.deflate(JSON.stringify(fileObject))
     )}`
+    this.copyToClipboard(url, 'URL copied to clipboard')
+  }
+
+  copyToClipboard(text, message) {
     const textArea = document.createElement('textarea')
-    textArea.value = url
+    textArea.value = text
     document.body.appendChild(textArea)
     textArea.focus()
     textArea.select()
     document.execCommand('copy')
     document.body.removeChild(textArea)
-    dispatch(uiNotificationNew({ type: 'info', message: 'URL copied to clipboard', timeout: 5000 }))
+    this.props.dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
   }
 
   onDrop(acceptedFiles, rejectedFiles) {
