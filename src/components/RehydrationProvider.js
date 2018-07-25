@@ -19,6 +19,7 @@ import { App, PageLanding, PageDefinitions, PageInspect, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import withTracker from '../utils/withTracker'
+import PageDiscord from './PageDiscord';
 
 const store = configureStore()
 
@@ -53,6 +54,7 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_DEFINITIONS} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
+              <Route path={ROUTE_DISCORD} component={withTracker(PageDiscord)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
               <Route path={ROUTE_ROOT} component={withTracker(PageLanding)} />
