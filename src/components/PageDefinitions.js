@@ -28,8 +28,8 @@ class PageDefinitions extends AbstractPageDefinitions {
     const { dispatch, path } = this.props
     if (path.length > 1) {
       try {
-        const str = pako.inflate(base64js.toByteArray(path), { to: 'string' })
-        this.loadFromListSpec(JSON.parse(str))
+        const definitionSpec = pako.inflate(base64js.toByteArray(path), { to: 'string' })
+        this.loadFromListSpec(JSON.parse(definitionSpec))
       } catch (e) {
         dispatch(uiNotificationNew({ type: 'warning', message: 'Loading components from URL failed', timeout: 5000 }))
       }
