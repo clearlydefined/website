@@ -1,8 +1,10 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 
 /**
  * Custom Table Row Component used for render inside TreeTable structure
- * 
+ *
  */
 export default class TrCustomComponent extends Component {
   render() {
@@ -10,7 +12,7 @@ export default class TrCustomComponent extends Component {
     if (ri && ri.groupedByPivot) {
       // The original value will be updated with the modified data
 
-      ri.subRows = getSubrows(ri.subRows);
+      ri.subRows = getSubrows(ri.subRows)
 
       const cell = { ...this.props.children[ri.level] }
 
