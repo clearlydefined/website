@@ -25,6 +25,10 @@ const add = (list, item, comparator = null) => {
   return list && !_.find(list, test) ? [...list, item] : list
 }
 
+const addAll = (list, items) => {
+  return _.uniqWith(_.union(list, items), _.isEqual)
+}
+
 const update = (list, item, newValue, comparator = null) => {
   const test = comparator ? element => comparator(element, item) : element => element === item
   const entry = _.findIndex(list, test)
@@ -88,6 +92,16 @@ export default (name = '', transformer = null, comparator = null) => {
 
     if (result.add) {
       const newList = add(state.list, result.add, comparator)
+      return {
+        ...state,
+        sequence: ++state.sequence,
+        list: newList,
+        transformedList: transformer ? transformer(newList) : newList
+      }
+    }
+
+    if (result.addAll) {
+      const newList = addAll(state.list, result.addAll)
       return {
         ...state,
         sequence: ++state.sequence,
