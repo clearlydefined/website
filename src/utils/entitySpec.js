@@ -44,7 +44,7 @@ export default class EntitySpec {
   }
 
   static fromCoordinates(o) {
-    return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision)
+    return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision, o.pr)
   }
 
   static asRevisionless(o) {

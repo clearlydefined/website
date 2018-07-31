@@ -14,6 +14,9 @@ import {
   UI_CURATE_GET_DEFINITION,
   UI_CURATE_GET_DEFINITION_PROPOSED,
   UI_CURATE_DEFINITION_PREVIEW,
+  UI_CONTRIBUTION_GET_URL,
+  UI_CONTRIBUTION_UPDATE_LIST,
+  UI_CONTRIBUTION_DEFINITIONS,
   UI_BROWSE_UPDATE_FILTER,
   UI_BROWSE_UPDATE_FILTER_LIST,
   UI_BROWSE_UPDATE_LIST,
@@ -26,6 +29,7 @@ import {
   UI_INSPECT_GET_HARVESTED
 } from '../actions/ui'
 import listReducer from './listReducer'
+import tableReducer from './tableReducer'
 import { isEqual } from 'lodash'
 import valueReducer from './valueReducer'
 import itemReducer from './itemReducer'
@@ -94,6 +98,12 @@ const curate = combineReducers({
   previewDefinition: itemReducer(UI_CURATE_DEFINITION_PREVIEW)
 })
 
+const contribution = combineReducers({
+  url: itemReducer(UI_CONTRIBUTION_GET_URL),
+  componentList: listReducer(UI_CONTRIBUTION_UPDATE_LIST, null, EntitySpec.isEquivalent),
+  definitions: tableReducer(UI_CONTRIBUTION_DEFINITIONS)
+})
+
 const inspect = combineReducers({
   filter: valueReducer(UI_INSPECT_UPDATE_FILTER),
   filterList: listReducer(UI_INSPECT_UPDATE_FILTER_LIST),
@@ -130,6 +140,7 @@ export default combineReducers({
   browse,
   inspect,
   curate,
+  contribution,
   harvest,
   notifications
 })

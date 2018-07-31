@@ -23,7 +23,7 @@ export default class TwoLineEntry extends React.Component {
   render() {
     const { buttons, image, headline, message, onClick, letter, panel, highlight } = this.props
     return (
-      <div>
+      <div className="two-line-entry">
         <div className="list-row" onClick={onClick}>
           {image && <img className={`list-image${highlight ? ' list-highlight' : ''}`} src={image} alt="" />}
           {letter && !image && <span className="list-letter">{letter.slice(0, 1)}</span>}
