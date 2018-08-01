@@ -32,7 +32,7 @@ PopoverComponent.propTypes = {
   /**
    * values to show, it can be string o either an array
    */
-  values: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired
+  values: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
 }
 
 export default PopoverComponent
