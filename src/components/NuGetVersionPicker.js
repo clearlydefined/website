@@ -26,9 +26,8 @@ export default class NuGetVersionPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { namespace, name } = this.props.request
-      const path = namespace ? `${namespace}/${name}` : name
-      const options = await getNugetRevisions(this.props.token, path)
+      const { name } = this.props.request
+      const options = await getNugetRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
       console.log(error)

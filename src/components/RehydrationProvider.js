@@ -8,16 +8,18 @@ import {
   ROUTE_ROOT,
   ROUTE_DEFINITIONS,
   ROUTE_INSPECT,
-  ROUTE_CURATE,
   ROUTE_HARVEST,
-  ROUTE_ABOUT
+  ROUTE_CONTRIBUTION,
+  ROUTE_ABOUT,
+  ROUTE_DISCORD
 } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { App, PageLanding, PageCurate, PageDefinitions, PageInspect, PageHarvest } from './'
+import { App, PageLanding, PageDefinitions, PageInspect, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
+import PageContribution from './PageContribution'
 import withTracker from '../utils/withTracker'
 
 const store = configureStore()
@@ -52,9 +54,10 @@ export default class RehydrationDelayedProvider extends Component {
             <Switch>
               <Route path={ROUTE_DEFINITIONS} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
-              {/* <Route path={ROUTE_CURATE} component={withTracker(PageCurate)} /> */}
+              <Route path={ROUTE_CONTRIBUTION} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
+              <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
               <Route path={ROUTE_ROOT} component={withTracker(PageLanding)} />
             </Switch>
           </App>

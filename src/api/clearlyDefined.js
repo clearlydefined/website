@@ -28,7 +28,6 @@ function getServiceDefaultUrl() {
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
 const DEFINITIONS = 'definitions'
-const BADGES = 'badges'
 const ORIGINS_GITHUB = 'origins/github'
 const ORIGINS_NPM = 'origins/npm'
 const ORIGINS_NUGET = 'origins/nuget'
@@ -57,6 +56,10 @@ export function getDefinition(token, entity) {
   return get(url(`${DEFINITIONS}/${entity.toPath()}`), token)
 }
 
+export function getContributionData(token, entity) {
+  return get(url(`${CURATIONS}/pr/${entity}`), token)
+}
+
 export function getDefinitions(token, list) {
   return post(url(`${DEFINITIONS}`), token, list)
 }
@@ -69,8 +72,13 @@ export function previewDefinition(token, entity, curation) {
   return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true }), token, curation)
 }
 
-export function getBadgeUrl(entity) {
-  return url(`${BADGES}/${entity.toPath()}`)
+export function getBadgeUrl(definition) {
+  const scoreToUrl = {
+    0: 'https://img.shields.io/badge/ClearlyDefined-0-red.svg',
+    1: 'https://img.shields.io/badge/ClearlyDefined-1-yellow.svg',
+    2: 'https://img.shields.io/badge/ClearlyDefined-2-brightgreen.svg'
+  }
+  return scoreToUrl[definition.score || 0]
 }
 
 export function getGitHubSearch(token, path) {
@@ -150,7 +158,18 @@ function handleResponse(response) {
   // reject if code is out of range 200-299
   if (!response || !response.ok) {
     const err = new Error(response ? response.statusText : 'Error')
-    if (response) err.status = response.status
+    if (response) {
+      err.status = response.status
+      return response
+        .json()
+        .then(body => {
+          err.body = body
+          throw err
+        })
+        .catch(e => {
+          throw err
+        })
+    }
     throw err
   }
   if (response.status === 204) {

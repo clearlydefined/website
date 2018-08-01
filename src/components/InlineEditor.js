@@ -4,12 +4,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
+import { SpdxPicker } from './'
 
 export default class InlineEditor extends React.Component {
   static propTypes = {
-    initialValue: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    type: PropTypes.oneOf(['text', 'date']).isRequired,
+    initialValue: PropTypes.string,
+    value: PropTypes.string,
+    type: PropTypes.oneOf(['text', 'date', 'license']).isRequired,
     onChange: PropTypes.func.isRequired,
     placeholder: PropTypes.string.isRequired
   }
@@ -27,61 +28,80 @@ export default class InlineEditor extends React.Component {
     if (ref && ref.focus) ref.focus()
   }
 
-  onChange = event => {
-    const { value, onChange } = this.props
-    const target = event.target
+  onChange = nextValue => {
+    const { value, onChange, type } = this.props
 
-    // check browser validation (if used)
-    if (!target.checkValidity()) return
-
-    this.setState({ editing: false })
+    if (type !== 'date') this.setState({ editing: false })
 
     // sanity check for empty textboxes
-    if (typeof target.value === 'string' && target.value.trim().length === 0) return this.renderValue()
+    if (typeof nextValue === 'string' && nextValue.trim().length === 0) return this.renderValue()
 
     // don't bother saving unchanged fields
-    if (target.value === value) return
+    if (nextValue === value) return
 
-    onChange(target.value)
+    onChange(nextValue)
+  }
+
+  onChangeEvent = event => {
+    const { target } = event
+    this.setState({ editing: false })
+
+    // check browser validation (if used)
+    if (target.checkValidity()) return this.onChange(target.value)
   }
 
   renderValue() {
-    const { value, type, initialValue, placeholder } = this.props
+    const { value, type, initialValue, placeholder, extraClass } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
     if (!editing)
       return (
         <span
-          className={`editable-field ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
-          onClick={() => this.setState({ editing: true })}
+          className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
+          onClick={() => (this.props.readOnly ? null : this.setState({ editing: true }))}
         >
           {this.renderers[type](value) || placeholder}
         </span>
       )
 
-    return React.cloneElement(this.editors[type](value), {
-      onBlur: this.onChange,
-      onKeyPress: e => e.key === 'Enter' && this.onChange(e),
-      ref: this.focus
-    })
+    return React.cloneElement(this.editors[type](value), this.editorProps[type])
   }
 
   render() {
     return (
-      <div className="list-singleLine">
-        <i className="fas fa-pencil-alt editable-marker" onClick={() => this.setState({ editing: true })} />
+      <span className="list-singleLine">
+        {!this.props.readOnly && (
+          <i className="fas fa-pencil-alt editable-marker" onClick={() => this.setState({ editing: true })} />
+        )}
         {this.renderValue()}
-      </div>
+      </span>
     )
   }
 
   renderers = {
     text: value => value,
-    date: value => value
+    date: value => value,
+    license: value => value
   }
 
   editors = {
     text: value => <input size="45" type="text" defaultValue={value} />,
-    date: value => <input size="45" type="date" defaultValue={value} />
+    date: value => <input size="45" type="date" defaultValue={value} />,
+    license: value => <SpdxPicker value={value} />
+  }
+
+  editorDefaults = {
+    onBlur: this.onChangeEvent,
+    onKeyPress: e => e.key === 'Enter' && this.onChangeEvent(e),
+    ref: this.focus
+  }
+
+  editorProps = {
+    text: this.editorDefaults,
+    date: this.editorDefaults,
+    license: {
+      ...this.editorDefaults,
+      onChange: this.onChange
+    }
   }
 }

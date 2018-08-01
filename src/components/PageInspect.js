@@ -91,13 +91,15 @@ export class PageInspect extends Component {
   }
 
   renderInnerData(value, name, type = 'json', actionButton = null) {
+    const { readOnly } = this.props
     if (value.isFetching) return this.renderPlaceholder(`Loading the ${name}`)
     if (value.error && value.error.state !== 404)
       return this.renderPlaceholder(`There was a problem loading the ${name}`)
     if (!value.isFetched) return this.renderPlaceholder('Search for some part of a component name to see details')
     if (!value.item) return this.renderPlaceholder(`There are no ${name}`)
     const options = {
-      selectOnLineNumbers: true
+      selectOnLineNumbers: true,
+      readOnly: readOnly
     }
     return (
       <MonacoEditorWrapper
@@ -119,7 +121,7 @@ export class PageInspect extends Component {
   }
 
   renderCurationButton() {
-    return (
+    return this.props.readOnly ? null : (
       <Button
         bsStyle="success"
         className="pull-right add-curation-btn"
@@ -136,21 +138,23 @@ export class PageInspect extends Component {
   }
 
   render() {
-    const { filterOptions, filterValue, definition, curation, harvest, path } = this.props
+    const { filterOptions, filterValue, definition, curation, harvest, path, readOnly } = this.props
     return (
       <Grid className="main-container">
         <Row className="show-grid spacer">
           <Col md={9} mdOffset={1}>
-            <FilterBar
-              options={filterOptions}
-              value={filterValue}
-              onChange={this.filterChanged}
-              onSearch={this.onSearch}
-              defaultValue={path || ''}
-            />
+            {readOnly ? null : (
+              <FilterBar
+                options={filterOptions}
+                value={filterValue}
+                onChange={this.filterChanged}
+                onSearch={this.onSearch}
+                defaultValue={path || ''}
+              />
+            )}
           </Col>
           <Col md={1}>
-            <CopyUrlButton route={ROUTE_INSPECT} path={filterValue} bsStyle="default" />
+            {readOnly ? null : <CopyUrlButton route={ROUTE_INSPECT} path={filterValue} bsStyle="default" />}
           </Col>
         </Row>
         <Row className="show-grid">
@@ -167,9 +171,11 @@ export class PageInspect extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
+  const path = ownProps.location.pathname.slice(ownProps.match.url.length + 1)
   return {
     token: state.session.token,
-    path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
+    path,
+    readOnly: path.includes('/pr/'),
     filterValue: state.ui.inspect.filter,
     filterOptions: state.ui.inspect.filterList,
     definition: state.ui.inspect.definition,
