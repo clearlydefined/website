@@ -17,6 +17,7 @@ const sorts = [
   { value: 'namespace', label: 'Namespace' },
   { value: 'provider', label: 'Provider' },
   { value: 'releaseDate', label: 'Release Date' },
+  { value: 'score', label: 'Score' },
   { value: 'type', label: 'Type' }
 ]
 
@@ -62,6 +63,7 @@ export default class AbstractPageDefinitions extends Component {
     this.type = this.type.bind(this)
     this.releaseDate = this.releaseDate.bind(this)
     this.license = this.license.bind(this)
+    this.score = this.score.bind(this)
     this.transform = this.transform.bind(this)
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
@@ -194,6 +196,13 @@ export default class AbstractPageDefinitions extends Component {
     return null
   }
 
+  score(coordinates) {
+    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+    const score = get(definition, 'score')
+    if (score) return score
+    return null
+  }
+
   getSort(eventKey) {
     return this[eventKey]
   }
@@ -282,7 +291,12 @@ export default class AbstractPageDefinitions extends Component {
       >
         {list.map((sortType, index) => {
           return (
-            <MenuItem className="page-definitions__menu-item" key={index} onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
+            <MenuItem
+              className="page-definitions__menu-item"
+              key={index}
+              onSelect={this.onSort}
+              eventKey={{ type: id, value: sortType.value }}
+            >
               <span>{sortType.label}</span>
               {this.checkSort(sortType) && <i className="fas fa-check" />}
             </MenuItem>
@@ -304,7 +318,12 @@ export default class AbstractPageDefinitions extends Component {
       >
         {list.map((filterType, index) => {
           return (
-            <MenuItem className="page-definitions__menu-item" key={index} onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
+            <MenuItem
+              className="page-definitions__menu-item"
+              key={index}
+              onSelect={this.onFilter}
+              eventKey={{ type: id, value: filterType.value }}
+            >
               <span>{filterType.label}</span>
               {this.checkFilter(filterType, id) && <i className="fas fa-check" />}
             </MenuItem>
