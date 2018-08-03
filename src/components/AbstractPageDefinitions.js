@@ -184,23 +184,17 @@ export default class AbstractPageDefinitions extends Component {
 
   releaseDate(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    const described = get(definition, 'described')
-    if (described && described.releaseDate) return described.releaseDate
-    return null
+    return get(definition, 'described.releaseDate', null)
   }
 
   license(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    const licensed = get(definition, 'licensed')
-    if (licensed && licensed.declared) return licensed.declared
-    return null
+    return get(definition, 'licensed.declared', null)
   }
 
   score(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    const score = get(definition, 'score')
-    if (score) return score
-    return null
+    return get(definition, 'score', null)
   }
 
   getSort(eventKey) {
