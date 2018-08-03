@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-// Delays loading untill the store is rehydrated
+// Delays loading until the store is rehydrated
 import React, { Component } from 'react'
 import { persistStore, createTransform } from 'redux-persist'
 import {
