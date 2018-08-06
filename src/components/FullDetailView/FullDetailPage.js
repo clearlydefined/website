@@ -8,20 +8,24 @@ import { connect } from 'react-redux'
  *
  */
 export class FullDetailPage extends Component {
-  componentDidMount() {
-    console.log(this.props.path)
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      path: props.location.pathname.slice(props.match.url.length + 1)
+    }
   }
 
   render() {
-    return <div />
+    const { path } = this.state
+
+    return <div>{path}</div>
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  const path = ownProps.location.pathname.slice(ownProps.match.url.length + 1)
+function mapStateToProps(state) {
   return {
-    token: state.session.token,
-    path
+    token: state.session.token
   }
 }
 

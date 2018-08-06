@@ -56,7 +56,7 @@ export default class RehydrationDelayedProvider extends Component {
           <App className="App">
             <Switch>
               <Route path={ROUTE_DEFINITIONS} exact={true} component={withTracker(PageDefinitions)} />
-              <Route path={ROUTE_DETAIL} component={withTracker(FullDetailPage)} />
+              <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
               <Route path={ROUTE_CONTRIBUTION} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
