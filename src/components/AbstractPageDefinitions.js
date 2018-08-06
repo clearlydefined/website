@@ -10,6 +10,7 @@ import { ComponentList, Section, ContributePrompt } from './'
 import { uiNavigation, uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter, sortBy } from 'lodash'
+import { FullDetailModal } from './FullDetailView'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -43,7 +44,8 @@ export default class AbstractPageDefinitions extends Component {
     this.state = {
       activeFilters: {},
       activeSort: null,
-      sequence: 0
+      sequence: 0,
+      showFullDetail: false
     }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onSearch = this.onSearch.bind(this)
@@ -92,9 +94,22 @@ export default class AbstractPageDefinitions extends Component {
     this.props.history.push(url)
   }
 
+  /**
+   * Opens a Modal that shows the Full Detail View
+   *
+   */
   onInspect(component) {
-    const url = `${ROUTE_INSPECT}/${component.toPath()}`
-    this.props.history.push(url)
+    //const url = `${ROUTE_INSPECT}/${component.toPath()}`
+    //this.props.history.push(url)
+    this.setState({ currentDefinition: `${ROUTE_INSPECT}/${component.toPath()}`, showFullDetail: true })
+  }
+
+  /**
+   * Close the Full Detail Modal
+   *
+   */
+  onInspectClose = () => {
+    this.setState({ currentDefinition: null, showFullDetail: false })
   }
 
   onRemoveComponent(component) {
@@ -282,7 +297,12 @@ export default class AbstractPageDefinitions extends Component {
       >
         {list.map((sortType, index) => {
           return (
-            <MenuItem className="page-definitions__menu-item" key={index} onSelect={this.onSort} eventKey={{ type: id, value: sortType.value }}>
+            <MenuItem
+              className="page-definitions__menu-item"
+              key={index}
+              onSelect={this.onSort}
+              eventKey={{ type: id, value: sortType.value }}
+            >
               <span>{sortType.label}</span>
               {this.checkSort(sortType) && <i className="fas fa-check" />}
             </MenuItem>
@@ -304,7 +324,12 @@ export default class AbstractPageDefinitions extends Component {
       >
         {list.map((filterType, index) => {
           return (
-            <MenuItem className="page-definitions__menu-item" key={index} onSelect={this.onFilter} eventKey={{ type: id, value: filterType.value }}>
+            <MenuItem
+              className="page-definitions__menu-item"
+              key={index}
+              onSelect={this.onFilter}
+              eventKey={{ type: id, value: filterType.value }}
+            >
               <span>{filterType.label}</span>
               {this.checkFilter(filterType, id) && <i className="fas fa-check" />}
             </MenuItem>
@@ -361,7 +386,7 @@ export default class AbstractPageDefinitions extends Component {
 
   render() {
     const { components, definitions, token } = this.props
-    const { sequence } = this.state
+    const { sequence, showFullDetail } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -388,6 +413,7 @@ export default class AbstractPageDefinitions extends Component {
             </div>
           )}
         </Section>
+        <FullDetailModal visible={showFullDetail} onClose={this.onInspectClose} />
       </Grid>
     )
   }
