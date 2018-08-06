@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 class FacetsRenderer extends Component {
   render() {
     const { item } = this.props
-    return <div>{item.value}</div>
+    return <div>{item.value || 'core'}</div>
   }
 }
 
