@@ -21,7 +21,6 @@ import { App, PageLanding, PageDefinitions, PageInspect, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import PageContribution from './PageContribution'
-import PageFullDetail from './PageFullDetail'
 import withTracker from '../utils/withTracker'
 import { FullDetailPage } from './FullDetailView/FullDetailPage'
 
