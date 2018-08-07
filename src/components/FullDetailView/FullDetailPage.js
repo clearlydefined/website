@@ -1,14 +1,18 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { Grid } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
 import 'antd/dist/antd.css'
 import { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation } from '../../actions/ui'
 import EntitySpec from '../../utils/entitySpec'
 import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
+
+import FullDetailComponent from './FullDetailComponent'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
@@ -66,10 +70,24 @@ export class FullDetailPage extends Component {
         onCancel={() => this.handleClose()}
         width={'85%'}
       >
-        {path}
+        <FullDetailComponent
+          curation={curation}
+          definition={definition}
+          harvest={harvest}
+          path={path}
+          modalView={modalView}
+        />
       </Modal>
     ) : (
-      <div>{path}</div>
+        <Grid>
+          <FullDetailComponent
+            curation={curation}
+            definition={definition}
+            harvest={harvest}
+            path={path}
+            modalView={modalView}
+          />
+        </Grid>
     )
   }
 }
