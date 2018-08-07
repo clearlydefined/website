@@ -22,7 +22,7 @@ import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import PageContribution from './PageContribution'
 import withTracker from '../utils/withTracker'
-import { FullDetailPage } from './FullDetailView/FullDetailPage'
+import FullDetailPage from './FullDetailView/FullDetailPage'
 
 const store = configureStore()
 
@@ -41,8 +41,6 @@ export default class RehydrationDelayedProvider extends Component {
 
   componentWillMount() {
     persistStore(store, { whitelist: ['session'], transforms: [transformRemoveFetchErr] }, () => {
-      console.log('STORE RECOVERED!')
-      console.log(store.getState())
       this.setState({ rehydrated: true })
     })
   }
