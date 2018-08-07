@@ -1,18 +1,22 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { Grid, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
 import 'antd/dist/antd.css'
+
 import { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation } from '../../actions/ui'
-import EntitySpec from '../../utils/entitySpec'
-import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import { curateAction } from '../../actions/curationActions'
-import ContributePrompt from '../ContributePrompt'
+import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
+import EntitySpec from '../../utils/entitySpec'
 import Contribution from '../../utils/contribution'
-import { Button } from 'react-bootstrap'
+import ContributePrompt from '../ContributePrompt'
+import FullDetailComponent from './FullDetailComponent'
+
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
  * based on modalView property
@@ -91,17 +95,30 @@ export class FullDetailPage extends Component {
         onCancel={this.handleClose}
         width={'85%'}
       >
-        {path}
+        <FullDetailComponent
+          curation={curation}
+          definition={definition}
+          harvest={harvest}
+          path={path}
+          modalView={modalView}
+        />
       </Modal>
     ) : (
-      <div>
+      <Grid>
+        <FullDetailComponent
+          curation={curation}
+          definition={definition}
+          harvest={harvest}
+          path={path}
+          modalView={modalView}
+          renderContributeButton={
+            <Button bsStyle="success" disabled={!Contribution.hasChange(component)} onClick={this.doPromptContribute}>
+              Contribute
+            </Button>
+          }
+        />
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
-        {path}
-
-        <Button bsStyle="success" disabled={!Contribution.hasChange(component)} onClick={this.doPromptContribute}>
-          Contribute
-        </Button>
-      </div>
+      </Grid>
     )
   }
 }
