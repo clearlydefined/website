@@ -412,7 +412,13 @@ export default class AbstractPageDefinitions extends Component {
             </div>
           )}
         </Section>
-        <FullDetailPage modalView visible={showFullDetail} onClose={this.onInspectClose} path={currentDefinition} />
+        <FullDetailPage
+          modalView
+          visible={showFullDetail}
+          onClose={this.onInspectClose}
+          onSave={this.onChangeComponent}
+          path={currentDefinition}
+        />
       </Grid>
     )
   }
