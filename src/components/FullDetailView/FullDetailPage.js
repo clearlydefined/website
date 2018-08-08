@@ -3,22 +3,16 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-<<<<<<< HEAD
 import set from 'lodash/set'
 import find from 'lodash/find'
-=======
->>>>>>> 79640607c29dda7a97e7937e026dbdce61915096
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
 import 'antd/dist/antd.css'
 import { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation } from '../../actions/ui'
 import EntitySpec from '../../utils/entitySpec'
 import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
-<<<<<<< HEAD
 import { curateAction } from '../../actions/curationActions'
 import ContributePrompt from '../ContributePrompt'
-=======
->>>>>>> 79640607c29dda7a97e7937e026dbdce61915096
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
@@ -45,15 +39,11 @@ export class FullDetailPage extends Component {
     }
   }
 
-<<<<<<< HEAD
   /**
    * Get the data for the current definition
    *
    */
   handleNewSpec = newFilter => {
-=======
-  handleNewSpec(newFilter) {
->>>>>>> 79640607c29dda7a97e7937e026dbdce61915096
     const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested } = this.props
     if (!newFilter) {
       // TODO clear out the "current" values as we are not showing anything.
@@ -65,7 +55,6 @@ export class FullDetailPage extends Component {
     uiInspectGetHarvested(token, spec)
   }
 
-<<<<<<< HEAD
   /**
    * Check if the current component has listed changes
    *
@@ -79,14 +68,14 @@ export class FullDetailPage extends Component {
    *
    */
   doContribute = description => {
-    const { token, components } = this.props
+    /*const { token, components } = this.props
     const patches = this.buildContributeSpec(components.list)
     const spec = { description: description, patches }
-    curateAction(token, spec)
+    curateAction(token, spec)*/
   }
 
   /**
-   * Function that builds the Contribution data
+   * Function that builds the Contribution data for the specific definition
    *
    */
   buildContributeSpec = list => {
@@ -120,8 +109,6 @@ export class FullDetailPage extends Component {
     this.refs.contributeModal.open()
   }
 
-=======
->>>>>>> 79640607c29dda7a97e7937e026dbdce61915096
   handleSave = () => {}
 
   handleClose = () => {
@@ -144,14 +131,10 @@ export class FullDetailPage extends Component {
         {path}
       </Modal>
     ) : (
-<<<<<<< HEAD
       <div>
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
         {path}
       </div>
-=======
-      <div>{path}</div>
->>>>>>> 79640607c29dda7a97e7937e026dbdce61915096
     )
   }
 }
@@ -169,11 +152,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-<<<<<<< HEAD
     { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation, curateAction },
-=======
-    { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation },
->>>>>>> 79640607c29dda7a97e7937e026dbdce61915096
     dispatch
   )
 }
