@@ -5,11 +5,12 @@ import React, { Component } from 'react'
 import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Button from 'antd/lib/button'
+import Tabs from 'antd/lib/tabs'
 import { get, isEqual, union } from 'lodash'
 import moment from 'moment'
 
 import FileList from '../FileList'
-import { InlineEditor } from '../'
+import { InlineEditor, Section, MonacoEditorWrapper } from '../'
 
 import github from '../../images/GitHub-Mark-120px-plus.png'
 import npm from '../../images/n-large.png'
@@ -273,6 +274,35 @@ class FullDetailComponent extends Component {
     )
   }
 
+  renderPlaceholder(message) {
+    return (
+      <div className="placeholder-message inline section-body">
+        <span>{message}</span>
+      </div>
+    )
+  }
+
+  renderInnerData(value, name, type = 'json', actionButton = null) {
+    if (value.isFetching) return this.renderPlaceholder(`Loading the ${name}`)
+    if (value.error && value.error.state !== 404)
+      return this.renderPlaceholder(`There was a problem loading the ${name}`)
+    if (!value.isFetched) return this.renderPlaceholder('Search for some part of a component name to see details')
+    if (!value.item) return this.renderPlaceholder(`There are no ${name}`)
+    const options = {
+      selectOnLineNumbers: true,
+    }
+    return (
+      <MonacoEditorWrapper
+        height="400"
+        language={type}
+        value={value.transformed}
+        options={options}
+        editorDidMount={this.editorDidMount}
+      />
+    )
+  }
+
+
   renderHeader() {
     const { curation, definition, harvest, path, modalView } = this.props
 
@@ -318,7 +348,7 @@ class FullDetailComponent extends Component {
   render() {
     const { curation, definition, harvest, path } = this.props
 
-    if (!definition || !definition.item) return null
+    if (!definition || !definition.item || !curation || !harvest) return null
     console.log(definition)
 
     const item = definition.item
@@ -348,6 +378,21 @@ class FullDetailComponent extends Component {
             <FileList files={item.files} />
           </Col>
         </Row>
+        <Row>
+          <Col md={12}>
+            <Tabs>
+              <Tabs.TabPane tab="Current definition" key="1">
+                {this.renderInnerData(definition, 'Current definition', 'yaml')}
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Curations" key="2">
+                {this.renderInnerData(curation, 'Curations', 'json')}
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Harvested data" key="3">
+                {this.renderInnerData(harvest, 'Harvested data', 'json')}
+              </Tabs.TabPane>
+            </Tabs>
+          </Col>
+        </Row>
       </div>
     )
   }
@@ -355,7 +400,12 @@ class FullDetailComponent extends Component {
 
 FullDetailComponent.propTypes = {
   // onClose: PropTypes.func.isRequired,
+  curation: PropTypes.object.isRequired,
   definition: PropTypes.object.isRequired,
+  harvest: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
+  modalView: PropTypes.bool.isRequired,
+  renderContributeButton: PropTypes.element,
 }
 
 export default FullDetailComponent

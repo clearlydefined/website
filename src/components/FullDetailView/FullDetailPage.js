@@ -110,7 +110,7 @@ export class FullDetailPage extends Component {
           definition={definition}
           harvest={harvest}
           path={path}
-          modalView={modalView}
+          modalView={false}
           renderContributeButton={
             <Button bsStyle="success" disabled={!Contribution.hasChange(component)} onClick={this.doPromptContribute}>
               Contribute
