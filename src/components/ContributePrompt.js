@@ -43,9 +43,9 @@ export default class ContributePrompt extends Component {
   }
 
   render() {
-    const { description } = this.state
+    const { description, show } = this.state
     return (
-      <Modal show={this.state.show} onHide={this.close}>
+      <Modal show={show} onHide={this.close}>
         <Form>
           <Modal.Header closeButton>
             <Modal.Title>Describe the changes in this curation</Modal.Title>

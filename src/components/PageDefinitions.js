@@ -214,7 +214,6 @@ class PageDefinitions extends AbstractPageDefinitions {
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(ownProps)
   return {
     token: state.session.token,
     filterValue: state.ui.browse.filter,
