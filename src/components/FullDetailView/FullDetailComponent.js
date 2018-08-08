@@ -152,7 +152,6 @@ class FullDetailComponent extends Component {
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
-    const { readOnly } = this.props
     return (
       <Row>
         <Col md={5}>
@@ -163,7 +162,7 @@ class FullDetailComponent extends Component {
                 'licensed.declared',
                 <InlineEditor
                   extraClass={this.classIfDifferent('licensed.declared')}
-                  readOnly={readOnly}
+                  readOnly={false}
                   type="license"
                   initialValue={this.getOriginalValue('licensed.declared')}
                   value={this.getValue('licensed.declared')}
@@ -181,7 +180,7 @@ class FullDetailComponent extends Component {
                 'described.sourceLocation',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.sourceLocation')}
-                  readOnly={readOnly}
+                  readOnly={false}
                   type="text"
                   initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
@@ -201,7 +200,7 @@ class FullDetailComponent extends Component {
                 'described.releaseDate',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.releaseDate')}
-                  readOnly={readOnly}
+                  readOnly={false}
                   type="date"
                   initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
                   value={this.printDate(this.getValue('described.releaseDate'))}
@@ -218,7 +217,7 @@ class FullDetailComponent extends Component {
               {this.renderWithToolTipIfDifferent(
                 'described.facets',
                 <p className={`list-singleLine ${this.classIfDifferent('described.facets')}`}>
-                  {readOnly ? null : <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>}
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                   {this.printArray(initialFacets)}
                 </p>
               )}
