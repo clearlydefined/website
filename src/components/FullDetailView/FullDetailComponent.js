@@ -316,7 +316,7 @@ class FullDetailComponent extends Component {
           <p>commit id: {item.described.sourceLocation.revision}</p>
         </Col>
         <Col md={4} className="text-right">
-          {!modalView && <Button onClick={() => alert('Contribute')}>Contribute</Button>}
+          {!modalView && this.props.renderContributeButton}
           {' '}
           {<Button disabled={haveUnsavedChanges} onClick={this.handleSave}>Save</Button>}
           {' '}
