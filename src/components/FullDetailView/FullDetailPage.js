@@ -24,19 +24,19 @@ import FullDetailComponent from './FullDetailComponent'
  */
 export class FullDetailPage extends Component {
   componentDidMount() {
-    const { path, uiNavigation } = this.props
+    const { path, uiNavigation, component } = this.props
 
-    if (path) {
-      this.handleNewSpec()
+    if (path && component) {
+      this.handleNewSpec(component)
     }
     uiNavigation({ to: ROUTE_DEFINITIONS })
   }
 
   componentWillReceiveProps(nextProps) {
-    const { path } = nextProps
+    const { path, component } = nextProps
 
     if (path && path !== this.props.path) {
-      this.handleNewSpec()
+      this.handleNewSpec(component)
     }
   }
 
@@ -44,11 +44,13 @@ export class FullDetailPage extends Component {
    * Get the data for the current definition
    *
    */
-  handleNewSpec = () => {
-    const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, component } = this.props
-    uiInspectGetDefinition(token, component)
-    uiInspectGetCuration(token, component)
-    uiInspectGetHarvested(token, component)
+  handleNewSpec = component => {
+    const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested } = this.props
+    if (component) {
+      uiInspectGetDefinition(token, component)
+      uiInspectGetCuration(token, component)
+      uiInspectGetHarvested(token, component)
+    }
   }
 
   /**
@@ -130,6 +132,7 @@ function mapStateToProps(state, props) {
       ? props.location.pathname.slice(props.match.url.length + 1)
       : null
   const component = path ? EntitySpec.fromPath(path) : null
+
   return {
     path,
     component,
