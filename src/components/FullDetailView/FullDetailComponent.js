@@ -6,11 +6,14 @@ import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Button from 'antd/lib/button'
 import Tabs from 'antd/lib/tabs'
-import { get, isEqual, union } from 'lodash'
+import get from 'lodash/get'
+import isEqual from 'lodash/isEqual'
+import union from 'lodash/union'
 import moment from 'moment'
 
 import FileList from '../FileList'
-import { InlineEditor, Section, MonacoEditorWrapper } from '../'
+import InlineEditor from '../InlineEditor'
+import MonacoEditorWrapper from '../MonacoEditorWrapper'
 
 import github from '../../images/GitHub-Mark-120px-plus.png'
 import npm from '../../images/n-large.png'
@@ -21,17 +24,22 @@ import nuget from '../../images/nuget.svg'
 import 'antd/dist/antd.css'
 
 class FullDetailComponent extends Component {
-  constructor(props) {
-    super(props)
-  }
 
+  /**
+   *  Get image of definition based on the provider
+   *
+   * @param {*} item
+   * @returns image file
+   */
   getImage(item) {
-    if (item.coordinates.provider === 'github') return github
-    if (item.coordinates.provider === 'npmjs') return npm
-    if (item.coordinates.provider === 'pypi') return pypi
-    if (item.coordinates.provider === 'rubygems') return gem
-    if (item.coordinates.provider === 'nuget') return nuget
-    return null
+    switch(item.coordinates.provider) {
+      case 'github': return github
+      case 'npmjs': return npm
+      case 'pypi': return pypi
+      case 'rubygems': return gem
+      case 'nuget': return nuget
+      default: return null
+    }
   }
 
   handleSave = () => {}
@@ -74,15 +82,7 @@ class FullDetailComponent extends Component {
 
   getPercentage = (count, total) => Math.round((count || 0) / total * 100)
 
-  renderLabel(text, editable = false) {
-    return (
-      <p>
-        <b>
-          {text} <i className={false ? 'fas fa-pencil-alt' : ''} />
-        </b>
-      </p>
-    )
-  }
+  renderLabel = text => (<p><b>{text}</b></p>)
 
   renderWithToolTipIfDifferent(field, content, placement = 'right', transform = x => x) {
     const toolTip = (
@@ -156,7 +156,7 @@ class FullDetailComponent extends Component {
       <Row>
         <Col md={5}>
           <Row>
-            <Col md={2}>{this.renderLabel('Declared', true)}</Col>
+            <Col md={2}>{this.renderLabel('Declared')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
@@ -174,7 +174,7 @@ class FullDetailComponent extends Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Source', true)}</Col>
+            <Col md={2}>{this.renderLabel('Source')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
@@ -194,7 +194,7 @@ class FullDetailComponent extends Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Release', true)}</Col>
+            <Col md={2}>{this.renderLabel('Release')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
@@ -212,7 +212,7 @@ class FullDetailComponent extends Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Facets', true)}</Col>
+            <Col md={2}>{this.renderLabel('Facets')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.facets',
@@ -237,7 +237,7 @@ class FullDetailComponent extends Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
+            <Col md={2}>{this.renderLabel('Attribution')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.attribution.parties',
@@ -303,7 +303,7 @@ class FullDetailComponent extends Component {
 
 
   renderHeader() {
-    const { curation, definition, harvest, path, modalView } = this.props
+    const { definition, modalView } = this.props
 
     const item = definition.item
 
@@ -345,7 +345,7 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const { curation, definition, harvest, path } = this.props
+    const { curation, definition, harvest } = this.props
 
     if (!definition || !definition.item || !curation || !harvest) return null
     console.log(definition)
@@ -402,7 +402,6 @@ FullDetailComponent.propTypes = {
   curation: PropTypes.object.isRequired,
   definition: PropTypes.object.isRequired,
   harvest: PropTypes.object.isRequired,
-  path: PropTypes.string.isRequired,
   modalView: PropTypes.bool.isRequired,
   renderContributeButton: PropTypes.element,
 }
