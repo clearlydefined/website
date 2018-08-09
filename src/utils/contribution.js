@@ -1,5 +1,7 @@
 import set from 'lodash/set'
 import find from 'lodash/find'
+import isEqual from 'lodash/isEqual'
+import get from 'lodash/isEqual'
 import EntitySpec from './entitySpec'
 
 /**
@@ -42,11 +44,38 @@ export default class Contribution {
     return result
   }
 
-  /**
-   * Check if the current component has listed changes
-   *
-   */
-  static hasChange = entry => {
+  // Check if the current component has listed changes
+  static hasChange(entry) {
     return entry.changes && Object.getOwnPropertyNames(entry.changes).length
+  }
+
+  // Applies changes to the specific component
+  static onChange(component, changes, field, value) {
+    const isChanged = !isEqual(value, this.getOriginalValue(component, field))
+    const newChanges = { ...changes }
+    if (isChanged) newChanges[field] = value
+    else delete newChanges[field]
+    return newChanges
+  }
+
+  // Get the original value of the field into the definition
+  static getOriginalValue(component, field) {
+    return get(component, field)
+  }
+
+  // Get the value of the specific field into the definition
+  // Returns the updated value or the original one if not modified
+  static getValue(component, changes, field) {
+    return changes && changes[field] ? changes[field] : this.getOriginalValue(component, field) || ''
+  }
+
+  static ifDifferent(component, changes, field, then_, else_) {
+    return changes && changes[field] && !isEqual(changes[field], this.getOriginalValue(component, field))
+      ? then_
+      : else_
+  }
+
+  static classIfDifferent(component, changes, field, className) {
+    return this.ifDifferent(component, changes, field, className, '')
   }
 }

@@ -1,0 +1,14 @@
+.facetsEditor {
+  .item {
+    display: flex;
+  }
+  .column {
+    width: 200px;
+  }
+}
+
+.facets__isEdited {
+  background: red;
+  color: white;
+  padding: 10px;
+}

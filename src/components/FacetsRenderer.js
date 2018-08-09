@@ -10,7 +10,8 @@ import PropTypes from 'prop-types'
 class FacetsRenderer extends Component {
   render() {
     const { item } = this.props
-    return <div>{item.value}</div>
+    console.log(item)
+    return <div className={item.original.areFacetsDifferent}>{item.value}</div>
   }
 }
 

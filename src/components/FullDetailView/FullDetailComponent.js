@@ -14,6 +14,7 @@ import moment from 'moment'
 import FileList from '../FileList'
 import InlineEditor from '../InlineEditor'
 import MonacoEditorWrapper from '../MonacoEditorWrapper'
+import FacetsEditor from '../FacetsEditor'
 
 import github from '../../images/GitHub-Mark-120px-plus.png'
 import npm from '../../images/n-large.png'
@@ -22,9 +23,9 @@ import gem from '../../images/gem.png'
 import nuget from '../../images/nuget.svg'
 
 import 'antd/dist/antd.css'
+import Contribution from '../../utils/contribution'
 
 class FullDetailComponent extends Component {
-
   /**
    *  Get image of definition based on the provider
    *
@@ -32,13 +33,19 @@ class FullDetailComponent extends Component {
    * @returns image file
    */
   getImage(item) {
-    switch(item.coordinates.provider) {
-      case 'github': return github
-      case 'npmjs': return npm
-      case 'pypi': return pypi
-      case 'rubygems': return gem
-      case 'nuget': return nuget
-      default: return null
+    switch (item.coordinates.provider) {
+      case 'github':
+        return github
+      case 'npmjs':
+        return npm
+      case 'pypi':
+        return pypi
+      case 'rubygems':
+        return gem
+      case 'nuget':
+        return nuget
+      default:
+        return null
     }
   }
 
@@ -80,9 +87,13 @@ class FullDetailComponent extends Component {
 
   isSourceComponent = component => ['github', 'sourcearchive'].includes(component.provider)
 
-  getPercentage = (count, total) => Math.round((count || 0) / total * 100)
+  getPercentage = (count, total) => Math.round(((count || 0) / total) * 100)
 
-  renderLabel = text => (<p><b>{text}</b></p>)
+  renderLabel = text => (
+    <p>
+      <b>{text}</b>
+    </p>
+  )
 
   renderWithToolTipIfDifferent(field, content, placement = 'right', transform = x => x) {
     const toolTip = (
@@ -107,7 +118,7 @@ class FullDetailComponent extends Component {
 
   classIfDifferent = field => this.ifDifferent(field, this.props.classOnDifference, '')
 
-  getOriginalValue = field => get(this.props.definition, field);
+  getOriginalValue = field => get(this.props.definition, field)
 
   getValue = field => this.getOriginalValue(field)
 
@@ -127,9 +138,9 @@ class FullDetailComponent extends Component {
     return value ? `${value.url}/commit/${value.revision}` : null
   }
 
-  printDate = value => !value ? null : moment(value).format('YYYY-MM-DD')
+  printDate = value => (!value ? null : moment(value).format('YYYY-MM-DD'))
 
-  printArray = value => !value ? null : value.join(', ')
+  printArray = value => (!value ? null : value.join(', '))
 
   renderPanel(rawDefinition) {
     if (!rawDefinition)
@@ -288,7 +299,7 @@ class FullDetailComponent extends Component {
     if (!value.isFetched) return this.renderPlaceholder('Search for some part of a component name to see details')
     if (!value.item) return this.renderPlaceholder(`There are no ${name}`)
     const options = {
-      selectOnLineNumbers: true,
+      selectOnLineNumbers: true
     }
     return (
       <MonacoEditorWrapper
@@ -300,7 +311,6 @@ class FullDetailComponent extends Component {
       />
     )
   }
-
 
   renderHeader() {
     const { definition, modalView } = this.props
@@ -316,22 +326,15 @@ class FullDetailComponent extends Component {
           <p>commit id: {item.described.sourceLocation.revision}</p>
         </Col>
         <Col md={4} className="text-right">
-          {!modalView && this.props.renderContributeButton}
-          {' '}
-          {<Button disabled={haveUnsavedChanges} onClick={this.handleSave}>Save</Button>}
-          {' '}
-          {modalView && <Button onClick={this.handleClose}>Close</Button> }
+          {!modalView && this.props.renderContributeButton}{' '}
+          {
+            <Button disabled={haveUnsavedChanges} onClick={this.handleSave}>
+              Save
+            </Button>
+          }{' '}
+          {modalView && <Button onClick={this.handleClose}>Close</Button>}
         </Col>
       </Row>
-    )
-  }
-
-  renderFacetsEditor() {
-    return (
-      <div>
-        <h2>Facets editor</h2>
-        <p>facets editor goes here</p>
-      </div>
     )
   }
 
@@ -345,20 +348,17 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const { curation, definition, harvest } = this.props
+    const { curation, definition, harvest, component, changes, onChange, getValue, classIfDifferent } = this.props
 
     if (!definition || !definition.item || !curation || !harvest) return null
-    console.log(definition)
 
     const item = definition.item
-    const image = this.getImage(item);
+    const image = this.getImage(item)
 
     return (
       <div>
         <Row>
-          <Col md={1}>
-            {image && <img className={`list-image`} src={image} alt="" />}
-          </Col>
+          <Col md={1}>{image && <img className={`list-image`} src={image} alt="" />}</Col>
           <Col md={11}>
             {this.renderHeader()}
             {this.renderPanel(item)}
@@ -366,15 +366,19 @@ class FullDetailComponent extends Component {
         </Row>
         <Row>
           <Col md={6}>
-            {this.renderFacetsEditor()}
+            <FacetsEditor
+              definition={item}
+              onChange={onChange}
+              getValue={getValue}
+              changes={changes}
+              classIfDifferent={classIfDifferent}
+            />
           </Col>
-          <Col md={6}>
-            {this.renderContributions()}
-          </Col>
+          <Col md={6}>{this.renderContributions()}</Col>
         </Row>
         <Row>
           <Col md={12}>
-            <FileList files={item.files} />
+            <FileList files={item.files} changes={changes} component={item} />
           </Col>
         </Row>
         <Row>
@@ -403,7 +407,7 @@ FullDetailComponent.propTypes = {
   definition: PropTypes.object.isRequired,
   harvest: PropTypes.object.isRequired,
   modalView: PropTypes.bool.isRequired,
-  renderContributeButton: PropTypes.element,
+  renderContributeButton: PropTypes.element
 }
 
 export default FullDetailComponent

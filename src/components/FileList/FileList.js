@@ -3,11 +3,17 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
+import globToRegExp from 'glob-to-regexp'
+import pickBy from 'lodash/pickBy'
+import map from 'lodash/map'
+import isEqual from 'lodash/isEqual'
 import treeTableHOC from './treeTable'
 import FilterCustomComponent from './FilterCustomComponent'
 import FacetsRenderer from '../FacetsRenderer'
 import LicensesRenderer from '../LicensesRenderer'
 import CopyrightsRenderer from '../CopyrightsRenderer'
+import Contribution from '../../utils/contribution'
+import { describedColor } from '../Clearly'
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
@@ -29,13 +35,13 @@ export default class FileList extends Component {
   componentWillReceiveProps(nextProps) {
     //Data are parsed to create a tree-folder structure
     if (nextProps.files) {
-      const files = parsePaths(nextProps.files)
+      const files = parsePaths(nextProps.files, nextProps.changes, nextProps.component)
       nextProps.files && this.setState({ files, rawData: files })
     }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState.files.length !== this.state.files.length
+    return nextState.files.length !== this.state.files.length || !isEqual(nextProps.changes, this.props.changes)
   }
 
   generateColumns(columns) {
@@ -146,8 +152,22 @@ const pathColums = []
 const columns = []
 
 // Parse Path to retrieve the complete folder structure
-const parsePaths = data => {
-  return data.map(item => {
+const parsePaths = (data, changes, component) => {
+  const changedFacets = pickBy(changes, (item, index) => index.startsWith('described.facets'))
+  return data.map((item, index) => {
+    item.facets = map(changedFacets, (glob, facets) => {
+      if (!globToRegExp(glob).test(item.path)) return
+      return facets
+        .split('described.facets.')
+        .pop()
+        .trim()
+    })
+
+    item.areFacetsDifferent =
+      item.facets.length > 0 && isEqual(Contribution.getOriginalValue(component, `files[${index}].facets`), item.facets)
+        ? ''
+        : 'facets__isEdited'
+
     const folders = item.path.split('/')
 
     //If files are in the root folder, then they will grouped into a "/" folder
@@ -180,6 +200,7 @@ const parsePaths = data => {
         })
       }
     })
+    console.log(item)
     return item
   })
 }
