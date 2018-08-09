@@ -100,7 +100,9 @@ export class FullDetailPage extends Component {
   onChange(item, value) {
     const { component } = this.props
     const { changes } = this.state
-    this.setState({ changes: Contribution.onChange(component, changes, item, value) })
+    this.setState({ changes: Contribution.onChange(component, changes, item, value) }, () =>
+      console.log(this.state.changes)
+    )
   }
 
   getValue(field) {

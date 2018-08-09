@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import 'glob-to-regexp'
 import InlineEditor from '../InlineEditor'
 
 // Hardcoded, maybe it should be kept somewhere

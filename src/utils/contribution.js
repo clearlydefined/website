@@ -2,7 +2,6 @@ import set from 'lodash/set'
 import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/isEqual'
-import has from 'lodash/isEqual'
 import EntitySpec from './entitySpec'
 
 /**
@@ -64,7 +63,7 @@ export default class Contribution {
     return get(component, field)
   }
 
-  // Get the value of the specific field into the defintion
+  // Get the value of the specific field into the definition
   // Returns the updated value or the original one if not modified
   static getValue(component, changes, field) {
     return changes && changes[field] ? changes[field] : this.getOriginalValue(component, field) || ''
@@ -75,8 +74,8 @@ export default class Contribution {
       ? then_
       : else_
   }
+
   static classIfDifferent(component, changes, field, className) {
-    console.log(this.ifDifferent(component, changes, field, className, ''))
     return this.ifDifferent(component, changes, field, className, '')
   }
 }

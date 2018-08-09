@@ -348,7 +348,7 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const { curation, definition, harvest, changes, onChange, getValue, classIfDifferent } = this.props
+    const { curation, definition, harvest, component, changes, onChange, getValue, classIfDifferent } = this.props
 
     if (!definition || !definition.item || !curation || !harvest) return null
 
@@ -378,7 +378,7 @@ class FullDetailComponent extends Component {
         </Row>
         <Row>
           <Col md={12}>
-            <FileList files={item.files} />
+            <FileList files={item.files} changes={changes} component={item} />
           </Col>
         </Row>
         <Row>
