@@ -150,6 +150,8 @@ const parsePaths = data => {
   return data.map(item => {
     const folders = item.path.split('/')
 
+    if(!item.facets) item.facets = 'core'
+
     //If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
       item['folder_0'] = '/'
