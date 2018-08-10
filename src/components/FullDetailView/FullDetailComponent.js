@@ -23,7 +23,6 @@ import gem from '../../images/gem.png'
 import nuget from '../../images/nuget.svg'
 
 import 'antd/dist/antd.css'
-import Contribution from '../../utils/contribution'
 
 class FullDetailComponent extends Component {
   /**
@@ -340,13 +339,13 @@ class FullDetailComponent extends Component {
     return (
       <div>
         <h2>CONTRIBUTIONS</h2>
-        <p>contributions go here</p>
+        <p>No curations found for this component</p>
       </div>
     )
   }
 
   render() {
-    const { curation, definition, harvest, component, changes, onChange, getValue, classIfDifferent } = this.props
+    const { curation, definition, harvest, changes, onChange, getValue, classIfDifferent } = this.props
 
     if (!definition || !definition.item || !curation || !harvest) return null
 

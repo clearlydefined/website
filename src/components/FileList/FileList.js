@@ -33,7 +33,7 @@ export default class FileList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //Data are parsed to create a tree-folder structure
+    // Data are parsed to create a tree-folder structure
     if (nextProps.files) {
       const files = parsePaths(nextProps.files, nextProps.changes, nextProps.component)
       nextProps.files && this.setState({ files, rawData: files })
@@ -131,7 +131,7 @@ export default class FileList extends Component {
           }
           data={files}
           pivotBy={pathColums}
-          columns={this.generateColumns(columns)} //Merge columns array with other columns to show after the folders
+          columns={this.generateColumns(columns)} // Merge columns array with other columns to show after the folders
           FilterComponent={props => {
             return (
               !String(props.column.id)
@@ -175,17 +175,17 @@ const parsePaths = (files, changes, component) => {
 
     const folders = file.path.split('/')
 
-    if (!item.facets) item.facets = 'core'
+    if (!file.facets) file.facets = 'core'
 
-    //If files are in the root folder, then they will grouped into a "/" folder
+    // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
       file['folder_0'] = '/'
     } else {
       folders.unshift('/')
     }
 
-    //Add file[`folder_${index}`] to file object
-    //If index is the last file, then is the name of the file
+    // Add file[`folder_${index}`] to file object
+    // If index is the last file, then is the name of the file
     folders.forEach((p, index) => {
       if (index + 1 === folders.length) file.name = p
       else {
@@ -195,10 +195,10 @@ const parsePaths = (files, changes, component) => {
 
     folders.forEach((p, index) => {
       if (index + 1 < folders.length && pathColums.indexOf(`folder_${index}`) === -1) {
-        //Add folders_${index} to patchColumns array
+        // Add folders_${index} to patchColumns array
         pathColums.push(`folder_${index}`)
 
-        //Add folders_${index} to columns array
+        // Add folders_${index} to columns array
         columns.push({
           accessor: `folder_${index}`,
           show: false,
