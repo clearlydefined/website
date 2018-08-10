@@ -26,8 +26,9 @@ export default class Contribution {
    * @param {*} result
    * @param {*} component
    */
-  static buildContributeSpec(result, component) {
-    if (!this.hasChange(component)) return result
+  static buildContributeSpec(result, component, changes) {
+    if (!this.hasChange(changes)) return result
+
     const coord = EntitySpec.asRevisionless(component)
     const patch = find(result, p => {
       return EntitySpec.isEquivalent(p.coordinates, coord)
@@ -48,10 +49,10 @@ export default class Contribution {
 
   /**
    * Check if the current component has listed changes
-   * @param  {} component
+   * @param  {} changes
    */
-  static hasChange(component) {
-    return component.changes && Object.getOwnPropertyNames(component.changes).length
+  static hasChange(changes) {
+    return changes && Object.getOwnPropertyNames(changes).length
   }
 
   /**

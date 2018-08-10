@@ -8,7 +8,13 @@ import { Grid, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
 import 'antd/dist/antd.css'
-import { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation } from '../../actions/ui'
+import {
+  uiInspectGetDefinition,
+  uiInspectGetCuration,
+  uiInspectGetHarvested,
+  uiNavigation,
+  uiCurateGetDefinitionPreview
+} from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import EntitySpec from '../../utils/entitySpec'
@@ -70,12 +76,25 @@ export class FullDetailPage extends Component {
     }
   }
 
-  // Dispatch the action to save a contribution
+  /**
+   * Dispatch the action to save a contribution
+   * @param  {} description string that describes the contribution
+   */
   doContribute(description) {
-    const { token, component } = this.props
+    const { token, component, curateAction } = this.props
     const patches = Contribution.buildContributeSpec({}, component)
     const spec = { description: description, patches }
     curateAction(token, spec)
+  }
+
+  // Action that calls the remote API that return a preview of the definition
+  previewDefinition() {
+    const { token, component, uiCurateGetDefinitionPreview } = this.props
+    const { changes } = this.state
+    component.changes = changes
+    const patches = Contribution.buildContributeSpec([], component, changes)
+    console.log(patches)
+    uiCurateGetDefinitionPreview(token, component, patches)
   }
 
   // Shows the Modal to save a Contribution
@@ -100,9 +119,7 @@ export class FullDetailPage extends Component {
   onChange(item, value) {
     const { component } = this.props
     const { changes } = this.state
-    this.setState({ changes: Contribution.onChange(component, changes, item, value) }, () =>
-      console.log(this.state.changes)
-    )
+    this.setState({ changes: Contribution.onChange(component, changes, item, value) }, () => this.previewDefinition())
   }
 
   getValue(field) {
@@ -187,7 +204,14 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation, curateAction },
+    {
+      uiInspectGetDefinition,
+      uiInspectGetCuration,
+      uiInspectGetHarvested,
+      uiNavigation,
+      curateAction,
+      uiCurateGetDefinitionPreview
+    },
     dispatch
   )
 }
