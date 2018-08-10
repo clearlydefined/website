@@ -94,6 +94,7 @@ export class FullDetailPage extends Component {
   handleClose() {
     const { onClose } = this.props
     onClose()
+    this.setState({ visible: false });
   }
 
   // Function called when a data has been changed
@@ -123,6 +124,9 @@ export class FullDetailPage extends Component {
 
     return modalView ? (
       <Modal
+        closable={false}
+        // no need for default buttons
+        footer={null}
         centered
         destroyOnClose={true}
         visible={visible}
@@ -139,6 +143,7 @@ export class FullDetailPage extends Component {
           modalView={modalView}
           onChange={this.onChange}
           getValue={this.getValue}
+          handleClose={this.handleClose}
           classIfDifferent={this.classIfDifferent}
         />
       </Modal>
