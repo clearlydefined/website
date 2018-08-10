@@ -23,7 +23,6 @@ import gem from '../../images/gem.png'
 import nuget from '../../images/nuget.svg'
 
 import 'antd/dist/antd.css'
-import Contribution from '../../utils/contribution'
 
 class FullDetailComponent extends Component {
   /**
