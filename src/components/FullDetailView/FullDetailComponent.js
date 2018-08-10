@@ -171,7 +171,7 @@ class FullDetailComponent extends Component {
                 'licensed.declared',
                 <InlineEditor
                   extraClass={this.classIfDifferent('licensed.declared')}
-                  readOnly={false}
+                  readOnly={true}
                   type="license"
                   initialValue={this.getOriginalValue('licensed.declared')}
                   value={this.getValue('licensed.declared')}
@@ -189,7 +189,7 @@ class FullDetailComponent extends Component {
                 'described.sourceLocation',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.sourceLocation')}
-                  readOnly={false}
+                  readOnly={true}
                   type="text"
                   initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
@@ -209,7 +209,7 @@ class FullDetailComponent extends Component {
                 'described.releaseDate',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.releaseDate')}
-                  readOnly={false}
+                  readOnly={true}
                   type="date"
                   initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
                   value={this.printDate(this.getValue('described.releaseDate'))}

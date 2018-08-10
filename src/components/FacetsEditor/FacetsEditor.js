@@ -17,7 +17,7 @@ class FacetsEditor extends Component {
   static propTypes = {
     classIfDifferent: PropTypes.func.isRequired,
     getValue: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired
   }
 
   render() {
@@ -34,7 +34,7 @@ class FacetsEditor extends Component {
             <Col md={11}>
               <InlineEditor
                 extraClass={classIfDifferent(`described.facets.${item}`, 'facets__isEdited')}
-                readOnly={false}
+                readOnly={true}
                 type="text"
                 initialValue={''}
                 value={getValue(`described.facets.${item}`)}
