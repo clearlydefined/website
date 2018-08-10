@@ -7,13 +7,13 @@ import globToRegExp from 'glob-to-regexp'
 import pickBy from 'lodash/pickBy'
 import map from 'lodash/map'
 import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 import treeTableHOC from './treeTable'
 import FilterCustomComponent from './FilterCustomComponent'
 import FacetsRenderer from '../FacetsRenderer'
 import LicensesRenderer from '../LicensesRenderer'
 import CopyrightsRenderer from '../CopyrightsRenderer'
 import Contribution from '../../utils/contribution'
-import { describedColor } from '../Clearly'
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
@@ -175,7 +175,7 @@ const parsePaths = (files, changes, component) => {
 
     const folders = file.path.split('/')
 
-    if (!file.facets) file.facets = 'core'
+    if (!file.facets || isEmpty(file.facets)) file.facets = ['core']
 
     // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
