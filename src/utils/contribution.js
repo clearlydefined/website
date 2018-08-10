@@ -62,10 +62,10 @@ export default class Contribution {
    * @param  {} field
    * @param  {} value
    */
-  static onChange(component, changes, field, value) {
+  static onChange(component, changes, field, value, type) {
     const isChanged = !isEqual(value, this.getOriginalValue(component, field))
     const newChanges = { ...changes }
-    if (isChanged) newChanges[field] = value
+    if (isChanged) type === 'array' ? (newChanges[field] = value.split(',')) : (newChanges[field] = value)
     else delete newChanges[field]
     return newChanges
   }
@@ -87,7 +87,7 @@ export default class Contribution {
    * @param  {} field
    */
   static getValue(component, changes, field) {
-    return changes && changes[field] ? changes[field] : this.getOriginalValue(component, field) || ''
+    return changes && changes[field] ? changes[field].toString() : this.getOriginalValue(component, field) || ''
   }
   /**
    * Verify any difference between changes values and original values

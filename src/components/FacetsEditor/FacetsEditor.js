@@ -41,7 +41,7 @@ class FacetsEditor extends Component {
                   type="text"
                   initialValue={''}
                   value={getValue(`described.facets.${item}`)}
-                  onChange={value => onChange(`described.facets.${item}`, value)}
+                  onChange={value => onChange(`described.facets.${item}`, value, 'array')}
                   validator={value => true}
                   placeholder={`${item} facet`}
                 />

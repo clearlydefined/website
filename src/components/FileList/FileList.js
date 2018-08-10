@@ -160,7 +160,7 @@ const columns = []
 const parsePaths = (files, changes, component) => {
   const changedFacets = pickBy(changes, (item, index) => index.startsWith('described.facets'))
   return files.map((file, index) => {
-    file.facets = map(changedFacets, (glob, facets) => {
+    /*file.facets = map(changedFacets, (glob, facets) => {
       if (!globToRegExp(glob).test(file.path)) return
       return facets
         .split('described.facets.')
@@ -171,7 +171,7 @@ const parsePaths = (files, changes, component) => {
     file.areFacetsDifferent =
       file.facets.length > 0 && isEqual(Contribution.getOriginalValue(component, `files[${index}].facets`), file.facets)
         ? ''
-        : 'facets__isEdited'
+        : 'facets__isEdited'*/
 
     const folders = file.path.split('/')
 

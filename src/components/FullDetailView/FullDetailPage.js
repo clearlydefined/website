@@ -94,7 +94,7 @@ export class FullDetailPage extends Component {
     component.changes = changes
     const patches = Contribution.buildContributeSpec([], component, changes)
     console.log(patches)
-    uiCurateGetDefinitionPreview(token, component, patches)
+    uiCurateGetDefinitionPreview(token, component, patches[0])
   }
 
   // Shows the Modal to save a Contribution
@@ -116,10 +116,12 @@ export class FullDetailPage extends Component {
   }
 
   // Function called when a data has been changed
-  onChange(item, value) {
+  onChange(item, value, type) {
     const { component } = this.props
     const { changes } = this.state
-    this.setState({ changes: Contribution.onChange(component, changes, item, value) }, () => this.previewDefinition())
+    this.setState({ changes: Contribution.onChange(component, changes, item, value, type) }, () =>
+      this.previewDefinition()
+    )
   }
 
   getValue(field) {
