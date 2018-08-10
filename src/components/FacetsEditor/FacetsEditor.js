@@ -27,7 +27,7 @@ class FacetsEditor extends Component {
 
     return (
       <div className="facetsEditor">
-        <h1>Facets</h1>
+        <h2>FACETS</h2>
         <div>
           {facets.map(item => (
             <div key={item} className="item">
