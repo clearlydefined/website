@@ -11,8 +11,7 @@ import {
   ROUTE_HARVEST,
   ROUTE_CONTRIBUTION,
   ROUTE_ABOUT,
-  ROUTE_DISCORD,
-  ROUTE_DETAIL
+  ROUTE_DISCORD
 } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
