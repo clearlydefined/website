@@ -175,6 +175,8 @@ const parsePaths = (files, changes, component) => {
 
     const folders = file.path.split('/')
 
+    if (!item.facets) item.facets = 'core'
+
     //If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
       file['folder_0'] = '/'
