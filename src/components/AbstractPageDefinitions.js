@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { Grid, DropdownButton, MenuItem } from 'react-bootstrap'
-import { ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
+import { ROUTE_CURATE } from '../utils/routingConstants'
 import { curateAction } from '../actions/curationActions'
 import { ComponentList, Section, ContributePrompt } from './'
 import { uiBrowseUpdateFilterList } from '../actions/ui'
@@ -93,20 +93,12 @@ export default class AbstractPageDefinitions extends Component {
     this.props.history.push(url)
   }
 
-  /**
-   * Opens a Modal that shows the Full Detail View
-   *
-   */
+  // Opens a Modal that shows the Full Detail View
   onInspect(component) {
-    //const url = `${ROUTE_INSPECT}/${component.toPath()}`
-    //this.props.history.push(url)
     this.setState({ currentDefinition: `${component.toPath()}`, showFullDetail: true })
   }
 
-  /**
-   * Close the Full Detail Modal
-   *
-   */
+  // Close the Full Detail Modal
   onInspectClose = () => {
     this.setState({ currentDefinition: null, showFullDetail: false })
   }

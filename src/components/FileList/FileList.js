@@ -7,13 +7,13 @@ import globToRegExp from 'glob-to-regexp'
 import pickBy from 'lodash/pickBy'
 import map from 'lodash/map'
 import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 import treeTableHOC from './treeTable'
 import FilterCustomComponent from './FilterCustomComponent'
 import FacetsRenderer from '../FacetsRenderer'
 import LicensesRenderer from '../LicensesRenderer'
 import CopyrightsRenderer from '../CopyrightsRenderer'
 import Contribution from '../../utils/contribution'
-import { describedColor } from '../Clearly'
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
@@ -33,7 +33,7 @@ export default class FileList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //Data are parsed to create a tree-folder structure
+    // Data are parsed to create a tree-folder structure
     if (nextProps.files) {
       const files = parsePaths(nextProps.files, nextProps.changes, nextProps.component)
       nextProps.files && this.setState({ files, rawData: files })
@@ -131,7 +131,7 @@ export default class FileList extends Component {
           }
           data={files}
           pivotBy={pathColums}
-          columns={this.generateColumns(columns)} //Merge columns array with other columns to show after the folders
+          columns={this.generateColumns(columns)} // Merge columns array with other columns to show after the folders
           FilterComponent={props => {
             return (
               !String(props.column.id)
@@ -151,47 +151,54 @@ const TreeTable = treeTableHOC(ReactTable)
 const pathColums = []
 const columns = []
 
-// Parse Path to retrieve the complete folder structure
-const parsePaths = (data, changes, component) => {
+/**
+ * Parse Path to retrieve the complete folder structure
+ * @param  {} files
+ * @param  {} changes
+ * @param  {} component
+ */
+const parsePaths = (files, changes, component) => {
   const changedFacets = pickBy(changes, (item, index) => index.startsWith('described.facets'))
-  return data.map((item, index) => {
-    item.facets = map(changedFacets, (glob, facets) => {
-      if (!globToRegExp(glob).test(item.path)) return
+  return files.map((file, index) => {
+    file.facets = map(changedFacets, (glob, facets) => {
+      if (!globToRegExp(glob).test(file.path)) return
       return facets
         .split('described.facets.')
         .pop()
         .trim()
     })
 
-    item.areFacetsDifferent =
-      item.facets.length > 0 && isEqual(Contribution.getOriginalValue(component, `files[${index}].facets`), item.facets)
+    file.areFacetsDifferent =
+      file.facets.length > 0 && isEqual(Contribution.getOriginalValue(component, `files[${index}].facets`), file.facets)
         ? ''
         : 'facets__isEdited'
 
-    const folders = item.path.split('/')
+    const folders = file.path.split('/')
 
-    //If files are in the root folder, then they will grouped into a "/" folder
+    if (!file.facets || isEmpty(file.facets)) file.facets = ['core']
+
+    // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
-      item['folder_0'] = '/'
+      file['folder_0'] = '/'
     } else {
       folders.unshift('/')
     }
 
-    //Add item[`folder_${index}`] to item object
-    //If index is the last item, then is the name of the file
+    // Add file[`folder_${index}`] to file object
+    // If index is the last file, then is the name of the file
     folders.forEach((p, index) => {
-      if (index + 1 === folders.length) item.name = p
+      if (index + 1 === folders.length) file.name = p
       else {
-        item[`folder_${index}`] = p
+        file[`folder_${index}`] = p
       }
     })
 
     folders.forEach((p, index) => {
       if (index + 1 < folders.length && pathColums.indexOf(`folder_${index}`) === -1) {
-        //Add folders_${index} to patchColumns array
+        // Add folders_${index} to patchColumns array
         pathColums.push(`folder_${index}`)
 
-        //Add folders_${index} to columns array
+        // Add folders_${index} to columns array
         columns.push({
           accessor: `folder_${index}`,
           show: false,
@@ -200,7 +207,7 @@ const parsePaths = (data, changes, component) => {
         })
       }
     })
-    console.log(item)
-    return item
+
+    return file
   })
 }
