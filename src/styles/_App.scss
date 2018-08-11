@@ -169,3 +169,30 @@
 .placeholder-text {
   color: #bdbdbd;
 }
+
+.two-line-entry {
+  display: flex;
+  flex-direction: column;
+}
+
+.definition {
+  &__line {
+    height: 25px;
+    display: flex;
+  }
+
+  &__overlay-hover-catcher {
+    height: 20px;
+    max-width: 100%;
+  }
+  &__tooltip {
+    overflow-wrap: break-word;
+  }
+}
+
+.dropdown-menu .page-definitions__menu-item > a {
+  display: flex;
+  & > span:first-child {
+    flex-grow: 1;
+  }
+}

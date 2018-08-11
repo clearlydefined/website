@@ -9,6 +9,7 @@ import {
   ROUTE_DEFINITIONS,
   ROUTE_INSPECT,
   ROUTE_HARVEST,
+  ROUTE_CONTRIBUTION,
   ROUTE_ABOUT,
   ROUTE_DISCORD
 } from '../utils/routingConstants'
@@ -18,7 +19,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { App, PageLanding, PageDefinitions, PageInspect, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
+import PageContribution from './PageContribution'
 import withTracker from '../utils/withTracker'
+import FullDetailPage from './FullDetailView/FullDetailPage'
 
 const store = configureStore()
 
@@ -37,8 +40,6 @@ export default class RehydrationDelayedProvider extends Component {
 
   componentWillMount() {
     persistStore(store, { whitelist: ['session'], transforms: [transformRemoveFetchErr] }, () => {
-      console.log('STORE RECOVERED!')
-      console.log(store.getState())
       this.setState({ rehydrated: true })
     })
   }
@@ -50,8 +51,10 @@ export default class RehydrationDelayedProvider extends Component {
         <Router>
           <App className="App">
             <Switch>
-              <Route path={ROUTE_DEFINITIONS} component={withTracker(PageDefinitions)} />
+              <Route path={ROUTE_DEFINITIONS} exact={true} component={withTracker(PageDefinitions)} />
+              <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
+              <Route path={ROUTE_CONTRIBUTION} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />

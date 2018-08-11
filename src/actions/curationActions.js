@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react'
-import { flatten } from 'lodash'
+import flatten from 'lodash/flatten'
+
 import { asyncActions } from './'
 import { curate, getCuration } from '../api/clearlyDefined'
 import { uiNotificationNew } from '../actions/ui'

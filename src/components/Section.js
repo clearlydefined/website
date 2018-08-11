@@ -7,20 +7,18 @@ import { Row, Col } from 'react-bootstrap'
 
 export default class Section extends Component {
   static propTypes = {
-    name: PropTypes.string,
     actionButton: PropTypes.element
   }
 
   render() {
     const { name, actionButton, children } = this.props
-    const Name = name.charAt(0).toUpperCase() + name.slice(1)
     return (
       <div>
         <Row className="section-header">
-          <Col sm={7}>
-            <div className="section-title">{Name}</div>
+          <Col sm={6}>
+            <div className="section-title">{name}</div>
           </Col>
-          <Col sm={5}>
+          <Col sm={6}>
             <div className="section-button">{actionButton}</div>
           </Col>
         </Row>

@@ -1,0 +1,4 @@
+.ReactTable .rt-thead.-filters input,
+.ReactTable .rt-thead.-filters select {
+  border: 0px !important;
+}

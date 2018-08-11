@@ -29,9 +29,9 @@ export default class InlineEditor extends React.Component {
   }
 
   onChange = nextValue => {
-    const { value, onChange } = this.props
+    const { value, onChange, type } = this.props
 
-    this.setState({ editing: false })
+    if (type !== 'date') this.setState({ editing: false })
 
     // sanity check for empty textboxes
     if (typeof nextValue === 'string' && nextValue.trim().length === 0) return this.renderValue()
@@ -44,20 +44,21 @@ export default class InlineEditor extends React.Component {
 
   onChangeEvent = event => {
     const { target } = event
+    this.setState({ editing: false })
 
     // check browser validation (if used)
     if (target.checkValidity()) return this.onChange(target.value)
   }
 
   renderValue() {
-    const { value, type, initialValue, placeholder } = this.props
+    const { value, type, initialValue, placeholder, extraClass } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
     if (!editing)
       return (
         <span
-          className={`editable-field ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
-          onClick={() => this.setState({ editing: true })}
+          className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
+          onClick={() => (this.props.readOnly ? null : this.setState({ editing: true }))}
         >
           {this.renderers[type](value) || placeholder}
         </span>
@@ -68,10 +69,12 @@ export default class InlineEditor extends React.Component {
 
   render() {
     return (
-      <div className="list-singleLine">
-        <i className="fas fa-pencil-alt editable-marker" onClick={() => this.setState({ editing: true })} />
+      <span className="list-singleLine">
+        {!this.props.readOnly && (
+          <i className="fas fa-pencil-alt editable-marker" onClick={() => this.setState({ editing: true })} />
+        )}
         {this.renderValue()}
-      </div>
+      </span>
     )
   }
 

@@ -10,5 +10,8 @@ import ReactGA from 'react-ga'
 ReactGA.initialize(process.env['REACT_APP_GA_TRACKINGID'])
 ReactGA.pageview(window.location.pathname + window.location.search)
 
+if (!Array.prototype.includes)
+  alert('You need a browser that supports modern JavaScript features to view this site. Please switch to another browser.')
+
 ReactDOM.render(<RehydrationProvider />, document.getElementById('root'))
 unregister()
