@@ -95,7 +95,7 @@ class PageDefinitions extends AbstractPageDefinitions {
   }
 
   doSaveAsUrl() {
-    const { dispatch, components } = this.props
+    const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
     const url = `${document.location.origin}/definitions/${base64js.fromByteArray(
@@ -176,40 +176,25 @@ class PageDefinitions extends AbstractPageDefinitions {
     return false
   }
 
-  loadFromListSpec(listSpec) {
+  async loadFromListSpec(listSpec) {
     const { dispatch, token, definitions } = this.props
-    const definitionPromises = []
-    listSpec.coordinates.forEach(component => {
-      // TODO figure a way to add these in bulk. One by one will be painful for large lists
-      const spec = EntitySpec.validateAndCreate(component)
-      if (spec) {
-        const path = spec.toPath()
-        dispatch(uiBrowseUpdateList({ add: spec }))
-        !definitions.entries[path] && definitionPromises.push(dispatch(getDefinitionsAction(token, [path])))
-      }
-    })
+    if (listSpec.filter) this.setState({ activeFilters: listSpec.filter })
+    if (listSpec.sortBy) this.setState({ activeSort: listSpec.sortBy })
+    if (listSpec.sortBy || listSpec.filter) this.setState({ sequence: this.state.sequence + 1 })
 
-    if (listSpec.filter) {
-      this.setState({ activeFilters: listSpec.filter })
-    }
-    if (listSpec.sortBy) {
-      this.setState({ activeSort: listSpec.sortBy })
-    }
-
-    Promise.all(definitionPromises).then(() => {
-      dispatch(
-        uiBrowseUpdateList({
-          transform: this.createTransform.call(
-            this,
-            listSpec.sortBy || this.state.activeSort,
-            listSpec.filter || this.state.activeFilters
-          )
-        })
-      )
-      if (listSpec.sortBy || listSpec.filter) {
-        this.setState({ sequence: this.state.sequence + 1 })
-      }
-    })
+    const toAdd = listSpec.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
+    dispatch(uiBrowseUpdateList({ addAll: toAdd }))
+    const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
+    await dispatch(getDefinitionsAction(token, missingDefinitions))
+    dispatch(
+      uiBrowseUpdateList({
+        transform: this.createTransform.call(
+          this,
+          listSpec.sortBy || this.state.activeSort,
+          listSpec.filter || this.state.activeFilters
+        )
+      })
+    )
   }
 }
 
