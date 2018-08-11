@@ -21,6 +21,7 @@ import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import PageContribution from './PageContribution'
 import withTracker from '../utils/withTracker'
+import FullDetailPage from './FullDetailView/FullDetailPage'
 
 const store = configureStore()
 
@@ -39,8 +40,6 @@ export default class RehydrationDelayedProvider extends Component {
 
   componentWillMount() {
     persistStore(store, { whitelist: ['session'], transforms: [transformRemoveFetchErr] }, () => {
-      console.log('STORE RECOVERED!')
-      console.log(store.getState())
       this.setState({ rehydrated: true })
     })
   }
@@ -52,7 +51,8 @@ export default class RehydrationDelayedProvider extends Component {
         <Router>
           <App className="App">
             <Switch>
-              <Route path={ROUTE_DEFINITIONS} component={withTracker(PageDefinitions)} />
+              <Route path={ROUTE_DEFINITIONS} exact={true} component={withTracker(PageDefinitions)} />
+              <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
               <Route path={ROUTE_CONTRIBUTION} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />

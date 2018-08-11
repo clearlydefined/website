@@ -8,7 +8,7 @@ import { Button, OverlayTrigger, Tooltip, ButtonGroup } from 'react-bootstrap'
 import { get } from 'lodash'
 import EntitySpec from '../utils/entitySpec'
 import { getBadgeUrl } from '../api/clearlyDefined'
-import { ROUTE_INSPECT } from '../utils/routingConstants'
+import { ROUTE_DEFINITIONS } from '../utils/routingConstants'
 
 export default class ComponentList extends React.Component {
   static propTypes = {
@@ -80,6 +80,7 @@ export default class ComponentList extends React.Component {
   onEntryChange(component, changes) {
     const { onChange } = this.props
     const newComponent = { ...component, changes }
+    console.log(changes)
     onChange && onChange(component, newComponent)
     this.incrementSequence()
   }
@@ -127,7 +128,12 @@ export default class ComponentList extends React.Component {
             </Button>,
             'Dig into this definition'
           )}
-          <CopyUrlButton route={ROUTE_INSPECT} path={component.toPath()} bsStyle="default" className="list-fa-button" />
+          <CopyUrlButton
+            route={ROUTE_DEFINITIONS}
+            path={component.toPath()}
+            bsStyle="default"
+            className="list-fa-button"
+          />
         </ButtonGroup>
         {!readOnly && <i className="fas fa-times list-remove" onClick={this.removeComponent.bind(this, component)} />}
       </div>

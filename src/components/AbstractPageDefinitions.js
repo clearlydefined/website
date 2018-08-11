@@ -3,13 +3,13 @@
 
 import React, { Component } from 'react'
 import { Grid, DropdownButton, MenuItem } from 'react-bootstrap'
-import { ROUTE_DEFINITIONS, ROUTE_INSPECT, ROUTE_CURATE } from '../utils/routingConstants'
-import { getDefinitionsAction } from '../actions/definitionActions'
+import { ROUTE_CURATE } from '../utils/routingConstants'
 import { curateAction } from '../actions/curationActions'
 import { ComponentList, Section, ContributePrompt } from './'
-import { uiNavigation, uiBrowseUpdateFilterList } from '../actions/ui'
+import { uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter, sortBy } from 'lodash'
+import FullDetailPage from './FullDetailView/FullDetailPage'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -44,7 +44,8 @@ export default class AbstractPageDefinitions extends Component {
     this.state = {
       activeFilters: {},
       activeSort: null,
-      sequence: 0
+      sequence: 0,
+      showFullDetail: false
     }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onSearch = this.onSearch.bind(this)
@@ -94,9 +95,14 @@ export default class AbstractPageDefinitions extends Component {
     this.props.history.push(url)
   }
 
+  // Opens a Modal that shows the Full Detail View
   onInspect(component) {
-    const url = `${ROUTE_INSPECT}/${component.toPath()}`
-    this.props.history.push(url)
+    this.setState({ currentDefinition: `${component.toPath()}`, showFullDetail: true })
+  }
+
+  // Close the Full Detail Modal
+  onInspectClose = () => {
+    this.setState({ currentDefinition: null, showFullDetail: false })
   }
 
   onRemoveComponent(component) {
@@ -374,7 +380,7 @@ export default class AbstractPageDefinitions extends Component {
 
   render() {
     const { components, definitions, token } = this.props
-    const { sequence } = this.state
+    const { sequence, showFullDetail, currentDefinition } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -401,6 +407,13 @@ export default class AbstractPageDefinitions extends Component {
             </div>
           )}
         </Section>
+        <FullDetailPage
+          modalView
+          visible={showFullDetail}
+          onClose={this.onInspectClose}
+          onSave={this.onChangeComponent}
+          path={currentDefinition}
+        />
       </Grid>
     )
   }

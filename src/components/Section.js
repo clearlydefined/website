@@ -15,10 +15,10 @@ export default class Section extends Component {
     return (
       <div>
         <Row className="section-header">
-          <Col sm={7}>
+          <Col sm={6}>
             <div className="section-title">{name}</div>
           </Col>
-          <Col sm={5}>
+          <Col sm={6}>
             <div className="section-button">{actionButton}</div>
           </Col>
         </Row>
