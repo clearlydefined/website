@@ -115,7 +115,7 @@ class FullDetailComponent extends Component {
 
   classIfDifferent = field => this.ifDifferent(field, this.props.classOnDifference, '')
 
-  getOriginalValue = field => get(this.props.definition, field)
+  getOriginalValue = field => get(this.props.definition.item, field)
 
   getValue = field => this.getOriginalValue(field)
 
@@ -140,14 +140,7 @@ class FullDetailComponent extends Component {
   printArray = value => (!value ? null : value.join(', '))
 
   renderPanel(rawDefinition) {
-    if (!rawDefinition)
-      return (
-        <div className="list-noRows">
-          <div>'Nothing to see here'</div>
-        </div>
-      )
-
-    // TODO find a way of calling this less frequently. Relatively expensive.
+    // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed, described } = definition
     const initialFacets =
@@ -160,6 +153,7 @@ class FullDetailComponent extends Component {
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
+
     return (
       <Row>
         <Col md={5}>
@@ -170,12 +164,12 @@ class FullDetailComponent extends Component {
                 'licensed.declared',
                 <InlineEditor
                   extraClass={this.classIfDifferent('licensed.declared')}
-                  readOnly={true}
+                  readOnly
                   type="license"
                   initialValue={this.getOriginalValue('licensed.declared')}
                   value={this.getValue('licensed.declared')}
                   onChange={this.fieldChange('licensed.declared')}
-                  validator={value => true}
+                  validator
                   placeholder={'SPDX license'}
                 />
               )}
@@ -188,12 +182,12 @@ class FullDetailComponent extends Component {
                 'described.sourceLocation',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.sourceLocation')}
-                  readOnly={true}
+                  readOnly
                   type="text"
                   initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
                   onChange={this.fieldChange('described.sourceLocation', isEqual, this.parseCoordinates)}
-                  validator={value => true}
+                  validator
                   placeholder={'Source location'}
                 />,
                 'right',
@@ -208,12 +202,12 @@ class FullDetailComponent extends Component {
                 'described.releaseDate',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.releaseDate')}
-                  readOnly={true}
+                  readOnly
                   type="date"
                   initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
                   value={this.printDate(this.getValue('described.releaseDate'))}
                   onChange={this.fieldChange('described.releaseDate')}
-                  validator={value => true}
+                  validator
                   placeholder={'YYYY-MM-DD'}
                 />
               )}
@@ -225,7 +219,6 @@ class FullDetailComponent extends Component {
               {this.renderWithToolTipIfDifferent(
                 'described.facets',
                 <p className={`list-singleLine ${this.classIfDifferent('described.facets')}`}>
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                   {this.printArray(initialFacets)}
                 </p>
               )}
@@ -339,7 +332,7 @@ class FullDetailComponent extends Component {
     return (
       <div>
         <h2>CONTRIBUTIONS</h2>
-        <p>No curations found for this component</p>
+        <p>No contributions found for this component</p>
       </div>
     )
   }
