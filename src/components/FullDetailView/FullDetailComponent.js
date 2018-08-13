@@ -50,8 +50,6 @@ class FullDetailComponent extends Component {
 
   handleSave = () => {}
 
-  handleClose = () => {}
-
   foldFacets(definition, facets = null) {
     facets = facets || ['core', 'data', 'dev', 'docs', 'examples', 'tests']
     let files = 0
@@ -165,14 +163,14 @@ class FullDetailComponent extends Component {
     return (
       <Row>
         <Col md={5}>
-          <Row>
+          <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Declared')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <InlineEditor
                   extraClass={this.classIfDifferent('licensed.declared')}
-                  readOnly={false}
+                  readOnly={true}
                   type="license"
                   initialValue={this.getOriginalValue('licensed.declared')}
                   value={this.getValue('licensed.declared')}
@@ -183,14 +181,14 @@ class FullDetailComponent extends Component {
               )}
             </Col>
           </Row>
-          <Row>
+          <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Source')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.sourceLocation')}
-                  readOnly={false}
+                  readOnly={true}
                   type="text"
                   initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
@@ -203,14 +201,14 @@ class FullDetailComponent extends Component {
               )}
             </Col>
           </Row>
-          <Row>
+          <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Release')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.releaseDate')}
-                  readOnly={false}
+                  readOnly={true}
                   type="date"
                   initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
                   value={this.printDate(this.getValue('described.releaseDate'))}
@@ -221,7 +219,7 @@ class FullDetailComponent extends Component {
               )}
             </Col>
           </Row>
-          <Row>
+          <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Facets')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
@@ -235,7 +233,7 @@ class FullDetailComponent extends Component {
           </Row>
         </Col>
         <Col md={7}>
-          <Row>
+          <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Discovered')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
@@ -246,7 +244,7 @@ class FullDetailComponent extends Component {
               )}
             </Col>
           </Row>
-          <Row>
+          <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Attribution')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
@@ -257,7 +255,7 @@ class FullDetailComponent extends Component {
               )}
             </Col>
           </Row>
-          <Row>
+          <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Files')}</Col>
             <Col md={10} className="definition__line">
               <p className="list-singleLine">
@@ -267,7 +265,7 @@ class FullDetailComponent extends Component {
               </p>
             </Col>
           </Row>
-          <Row>
+          <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Tools')}</Col>
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
@@ -331,7 +329,7 @@ class FullDetailComponent extends Component {
               Save
             </Button>
           }{' '}
-          {modalView && <Button onClick={this.handleClose}>Close</Button>}
+          {modalView && <Button onClick={this.props.handleClose}>Close</Button>}
         </Col>
       </Row>
     )
@@ -340,14 +338,14 @@ class FullDetailComponent extends Component {
   renderContributions() {
     return (
       <div>
-        <h2>Contributions</h2>
-        <p>contributions go here</p>
+        <h2>CONTRIBUTIONS</h2>
+        <p>No curations found for this component</p>
       </div>
     )
   }
 
   render() {
-    const { curation, definition, harvest, component, changes, onChange, getValue, classIfDifferent } = this.props
+    const { curation, definition, harvest, changes, onChange, getValue, classIfDifferent } = this.props
 
     if (!definition || !definition.item || !curation || !harvest) return null
 
@@ -363,7 +361,7 @@ class FullDetailComponent extends Component {
             {this.renderPanel(item)}
           </Col>
         </Row>
-        <Row>
+        <Row className="top-space">
           <Col md={6}>
             <FacetsEditor
               definition={item}
@@ -375,7 +373,7 @@ class FullDetailComponent extends Component {
           </Col>
           <Col md={6}>{this.renderContributions()}</Col>
         </Row>
-        <Row>
+        <Row className="top-space">
           <Col md={12}>
             <FileList files={item.files} changes={changes} component={item} />
           </Col>
@@ -401,7 +399,7 @@ class FullDetailComponent extends Component {
 }
 
 FullDetailComponent.propTypes = {
-  // onClose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func,
   curation: PropTypes.object.isRequired,
   definition: PropTypes.object.isRequired,
   harvest: PropTypes.object.isRequired,

@@ -2,7 +2,15 @@
   display: inline-flex;
   align-items: baseline;
 
+  h2 {
+    text-transform: uppercase;
+  }
+
   p {
     padding-left: 5px;
   }
+}
+
+.fullDetaiView__modal {
+  font-family: 'Montserrat', sans-serif !important;
 }

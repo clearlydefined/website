@@ -43,15 +43,15 @@ export class FullDetailPage extends Component {
   }
 
   static propTypes = {
-    //Define if the visualization should be as a Modal or as a Page
+    // Define if the visualization should be as a Modal or as a Page
     modalView: PropTypes.bool,
-    //To be used together with `modalView` property: if true, set the Modal as visible
+    // To be used together with `modalView` property: if true, set the Modal as visible
     visible: PropTypes.bool,
-    //Callback function callable when data needs to be saved
+    // Callback function callable when data needs to be saved
     onSave: PropTypes.func,
-    //Callback function callable when the modal has been closed
+    // Callback function callable when the modal has been closed
     onClose: PropTypes.func,
-    //If `modalView` is set to true, than path MUST be passed, otherwise it will be catched from the URL
+    // If `modalView` is set to true, than path MUST be passed, otherwise it will be catched from the URL
     path: PropTypes.string
   }
 
@@ -91,10 +91,8 @@ export class FullDetailPage extends Component {
   previewDefinition() {
     const { token, component, uiCurateGetDefinitionPreview } = this.props
     const { changes } = this.state
-    component.changes = changes
-    const patches = Contribution.buildContributeSpec([], component, changes)
-    console.log(patches)
-    uiCurateGetDefinitionPreview(token, component, patches[0])
+    const patches = Contribution.buildPatch([], component, changes)
+    uiCurateGetDefinitionPreview(token, component, patches)
   }
 
   // Shows the Modal to save a Contribution
@@ -113,6 +111,7 @@ export class FullDetailPage extends Component {
   handleClose() {
     const { onClose } = this.props
     onClose()
+    this.setState({ visible: false })
   }
 
   // Function called when a data has been changed
@@ -137,17 +136,21 @@ export class FullDetailPage extends Component {
   }
 
   render() {
-    const { path, component, definition, curation, harvest, modalView, visible } = this.props
+    const { path, component, definition, curation, harvest, modalView, visible, previewDefinition } = this.props
     const { changes } = this.state
 
     return modalView ? (
       <Modal
+        closable={false}
+        // no need for default buttons
+        footer={null}
         centered
         destroyOnClose={true}
         visible={visible}
         onOk={this.handleSave}
         onCancel={this.handleClose}
         width={'85%'}
+        className="fullDetaiView__modal"
       >
         <FullDetailComponent
           changes={changes}
@@ -158,6 +161,7 @@ export class FullDetailPage extends Component {
           modalView={modalView}
           onChange={this.onChange}
           getValue={this.getValue}
+          handleClose={this.handleClose}
           classIfDifferent={this.classIfDifferent}
         />
       </Modal>
@@ -192,6 +196,7 @@ function mapStateToProps(state, props) {
       ? props.location.pathname.slice(props.match.url.length + 1)
       : null
   const component = path ? EntitySpec.fromPath(path) : null
+  const previewDefinition = !state.ui.curate.previewDefinition.isFetching && state.ui.curate.previewDefinition.item
 
   return {
     path,
@@ -200,7 +205,8 @@ function mapStateToProps(state, props) {
     token: state.session.token,
     definition: state.ui.inspect.definition,
     curation: state.ui.inspect.curation,
-    harvest: state.ui.inspect.harvested
+    harvest: state.ui.inspect.harvested,
+    previewDefinition
   }
 }
 
