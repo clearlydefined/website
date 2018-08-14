@@ -7,14 +7,22 @@ import { connect } from 'react-redux'
 import { Grid, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
+import cloneDeep from 'lodash/cloneDeep'
 import 'antd/dist/antd.css'
-import { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation } from '../../actions/ui'
+import {
+  uiInspectGetDefinition,
+  uiInspectGetCuration,
+  uiInspectGetHarvested,
+  uiNavigation,
+  uiCurateGetDefinitionPreview
+} from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import EntitySpec from '../../utils/entitySpec'
 import Contribution from '../../utils/contribution'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
+import Definition from '../../utils/definition'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
@@ -32,8 +40,6 @@ export class FullDetailPage extends Component {
     this.handleSave = this.handleSave.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.getValue = this.getValue.bind(this)
-    this.classIfDifferent = this.classIfDifferent.bind(this)
   }
 
   static propTypes = {
@@ -70,12 +76,23 @@ export class FullDetailPage extends Component {
     }
   }
 
-  // Dispatch the action to save a contribution
+  /**
+   * Dispatch the action to save a contribution
+   * @param  {} description string that describes the contribution
+   */
   doContribute(description) {
-    const { token, component } = this.props
+    const { token, component, curateAction } = this.props
     const patches = Contribution.buildContributeSpec({}, component)
     const spec = { description: description, patches }
     curateAction(token, spec)
+  }
+
+  // Action that calls the remote API that return a preview of the definition
+  previewDefinition() {
+    const { token, component, uiCurateGetDefinitionPreview } = this.props
+    const { changes } = this.state
+    const patches = Contribution.buildPatch([], component, changes)
+    uiCurateGetDefinitionPreview(token, component, patches)
   }
 
   // Shows the Modal to save a Contribution
@@ -98,29 +115,20 @@ export class FullDetailPage extends Component {
   }
 
   // Function called when a data has been changed
-  onChange(item, value) {
+  onChange(item, value, type) {
     const { component } = this.props
     const { changes } = this.state
-    this.setState({ changes: Contribution.onChange(component, changes, item, value) }, () =>
-      console.log(this.state.changes)
+    this.setState({ changes: Contribution.applyChanges(component, changes, item, value, type) }, () =>
+      this.previewDefinition()
     )
   }
 
-  getValue(field) {
-    const { component } = this.props
-    const { changes } = this.state
-    return Contribution.getValue(component, changes, field)
-  }
-
-  classIfDifferent(field, className) {
-    const { component } = this.props
-    const { changes } = this.state
-    return Contribution.classIfDifferent(component, changes, field, className)
-  }
-
   render() {
-    const { path, component, definition, curation, harvest, modalView, visible } = this.props
+    const { path, component, definition, curation, harvest, modalView, visible, previewDefinition } = this.props
     const { changes } = this.state
+
+    console.log(definition.item)
+    console.log(previewDefinition)
 
     return modalView ? (
       <Modal
@@ -143,9 +151,10 @@ export class FullDetailPage extends Component {
           path={path}
           modalView={modalView}
           onChange={this.onChange}
-          getValue={this.getValue}
           handleClose={this.handleClose}
-          classIfDifferent={this.classIfDifferent}
+          component={component}
+          changes={changes}
+          previewDefinition={previewDefinition}
         />
       </Modal>
     ) : (
@@ -158,8 +167,9 @@ export class FullDetailPage extends Component {
           path={path}
           modalView={false}
           onChange={this.onChange}
-          getValue={this.getValue}
-          classIfDifferent={this.classIfDifferent}
+          component={component}
+          changes={changes}
+          previewDefinition={previewDefinition}
           renderContributeButton={
             <Button bsStyle="success" disabled={!Contribution.hasChange(component)} onClick={this.doPromptContribute}>
               Contribute
@@ -173,27 +183,37 @@ export class FullDetailPage extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const path = props.path
-    ? props.path
-    : props.location
-      ? props.location.pathname.slice(props.match.url.length + 1)
-      : null
+  const path = Definition.getPathFromUrl(props)
   const component = path ? EntitySpec.fromPath(path) : null
+  const previewDefinition =
+    !state.ui.curate.previewDefinition.isFetching &&
+    Contribution.getChangesFromPreview(
+      Object.assign({}, state.ui.inspect.definition.item),
+      Object.assign({}, state.ui.curate.previewDefinition.item)
+    )
 
   return {
     path,
     component,
-    filterValue: state.ui.inspect.filter,
+    filterValue: state.ui.inspect.filter && cloneDeep(state.ui.inspect.filter),
     token: state.session.token,
-    definition: state.ui.inspect.definition,
-    curation: state.ui.inspect.curation,
-    harvest: state.ui.inspect.harvested
+    definition: state.ui.inspect.definition && cloneDeep(state.ui.inspect.definition),
+    curation: state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation),
+    harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
+    previewDefinition
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested, uiNavigation, curateAction },
+    {
+      uiInspectGetDefinition,
+      uiInspectGetCuration,
+      uiInspectGetHarvested,
+      uiNavigation,
+      curateAction,
+      uiCurateGetDefinitionPreview
+    },
     dispatch
   )
 }

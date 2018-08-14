@@ -3,7 +3,11 @@
 import set from 'lodash/set'
 import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
-import get from 'lodash/isEqual'
+import isArray from 'lodash/isArray'
+import get from 'lodash/get'
+import transform from 'lodash/transform'
+import differenceWith from 'lodash/differenceWith'
+import isObject from 'lodash/isObject'
 import EntitySpec from './entitySpec'
 
 /**
@@ -26,9 +30,10 @@ export default class Contribution {
    * @param {*} result initial object
    * @param {*} component original component
    */
-  static buildContributeSpec(result, component) {
-    if (!this.hasChange(component)) return result
-    const coord = EntitySpec.asRevisionless(component)
+  static buildContributeSpec(result, component, changes) {
+    if (!this.hasChange(changes)) return result
+
+    const coord = EntitySpec.fromCoordinates(component)
     const patch = find(result, p => {
       return EntitySpec.isEquivalent(p.coordinates, coord)
     })
@@ -47,11 +52,26 @@ export default class Contribution {
   }
 
   /**
-   * Check if the current component has listed changes
-   * @param  {} component original component
+   * Build a Patch for a specific component
+   * @param {*} result initial object
+   * @param {*} component original component
    */
-  static hasChange(component) {
-    return component.changes && Object.getOwnPropertyNames(component.changes).length
+  static buildPatch(result, component, changes) {
+    if (!this.hasChange(changes)) return result
+    component.changes = { ...changes }
+    const patchChanges = Object.getOwnPropertyNames(component.changes).reduce((result, change) => {
+      set(result, change, component.changes[change])
+      return result
+    }, {})
+    return patchChanges
+  }
+
+  /**
+   * Check if the current component has listed changes
+   * @param  {} changes
+   */
+  static hasChange(changes) {
+    return changes && Object.getOwnPropertyNames(changes).length
   }
 
   /**
@@ -61,10 +81,11 @@ export default class Contribution {
    * @param  {} field field to check
    * @param  {} value value to apply to the field
    */
-  static onChange(component, changes, field, value) {
+  static applyChanges(component, changes, field, value, type) {
     const isChanged = !isEqual(value, this.getOriginalValue(component, field))
     const newChanges = { ...changes }
-    if (isChanged) newChanges[field] = value
+    if (isChanged)
+      type === 'array' ? (newChanges[field] = value.replace(/\s/g, '').split(',')) : (newChanges[field] = value)
     else delete newChanges[field]
     return newChanges
   }
@@ -73,16 +94,23 @@ export default class Contribution {
     return get(component, field)
   }
 
+  static getUpdatedValue(preview, field) {
+    return get(preview, field)
+  }
+
   /**
    * Get the value of the specific field into the definition
    * Returns the updated value or the original one if not modified
    * @param  {} component original component
-   * @param  {} changes object containing changes
+   * @param  {} preview uptaded component sent back from the API after each change
    * @param  {} field field to check
    */
-  static getValue(component, changes, field) {
-    return changes && changes[field] ? changes[field] : this.getOriginalValue(component, field) || ''
+  static getValue(component, preview, field) {
+    return preview && this.getUpdatedValue(preview, field)
+      ? this.getUpdatedValue(preview, field)
+      : this.getOriginalValue(component, field) || ''
   }
+
   /**
    * Verify any difference between changes values and original values
    * If true, return the true statement
@@ -106,5 +134,39 @@ export default class Contribution {
    */
   static classIfDifferent(component, changes, field, className) {
     return this.ifDifferent(component, changes, field, className, '')
+  }
+
+  /**
+   * Check if the preview has some changes from the original definitions
+   * Returns an object containing each change
+   * @param {*} definition
+   * @param {*} preview
+   * @return {Object}        Return a new object who represent the diff
+   */
+  static getChangesFromPreview(definition, preview) {
+    if (!definition || !preview) return
+    return this.difference(preview, definition)
+  }
+
+  /**
+   * Deep diff between two object, using lodash
+   * @param  {Object} object Object compared
+   * @param  {Object} base   Object to compare with
+   * @return {Object}        Return a new object who represent the diff
+   */
+  static difference(object, base) {
+    return transform(object, (result, value, key) => {
+      if (isArray(value)) {
+        return (result[key] = differenceWith(object[key], base[key], isEqual))
+      }
+      if (!isEqual(value, base[key])) {
+        return (result[key] =
+          isArray(value) && isArray(base[key])
+            ? differenceWith(result[key], base[key], isEqual)
+            : isObject(value) && isObject(base[key])
+              ? this.difference(value, base[key])
+              : value)
+      }
+    })
   }
 }

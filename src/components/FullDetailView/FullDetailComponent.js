@@ -23,6 +23,7 @@ import gem from '../../images/gem.png'
 import nuget from '../../images/nuget.svg'
 
 import 'antd/dist/antd.css'
+import Contribution from '../../utils/contribution'
 
 class FullDetailComponent extends Component {
   /**
@@ -163,6 +164,7 @@ class FullDetailComponent extends Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <InlineEditor
+<<<<<<< HEAD
                   extraClass={this.classIfDifferent('licensed.declared')}
                   readOnly
                   type="license"
@@ -170,6 +172,19 @@ class FullDetailComponent extends Component {
                   value={this.getValue('licensed.declared')}
                   onChange={this.fieldChange('licensed.declared')}
                   validator
+=======
+                  extraClass={Contribution.classIfDifferent(
+                    this.props.component,
+                    this.props.previewDefinition,
+                    'licensed.declared'
+                  )}
+                  readOnly={false}
+                  type="license"
+                  initialValue={Contribution.getOriginalValue(this.props.component, 'licensed.declared')}
+                  value={Contribution.getValue(this.props.component, this.props.previewDefinition, 'licensed.declared')}
+                  onChange={value => this.props.onChange(`licensed.declared`, value)}
+                  validator={value => true}
+>>>>>>> feature/api-post
                   placeholder={'SPDX license'}
                 />
               )}
@@ -338,11 +353,11 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const { curation, definition, harvest, changes, onChange, getValue, classIfDifferent } = this.props
+    const { curation, definition, harvest, changes, onChange, previewDefinition } = this.props
 
     if (!definition || !definition.item || !curation || !harvest) return null
 
-    const item = definition.item
+    const item = { ...definition.item }
     const image = this.getImage(item)
 
     return (
@@ -356,19 +371,13 @@ class FullDetailComponent extends Component {
         </Row>
         <Row className="top-space">
           <Col md={6}>
-            <FacetsEditor
-              definition={item}
-              onChange={onChange}
-              getValue={getValue}
-              changes={changes}
-              classIfDifferent={classIfDifferent}
-            />
+            <FacetsEditor definition={item} onChange={onChange} previewDefinition={previewDefinition} />
           </Col>
           <Col md={6}>{this.renderContributions()}</Col>
         </Row>
         <Row className="top-space">
           <Col md={12}>
-            <FileList files={item.files} changes={changes} component={item} />
+            <FileList files={item.files} component={definition} previewDefinition={previewDefinition} />
           </Col>
         </Row>
         <Row>
