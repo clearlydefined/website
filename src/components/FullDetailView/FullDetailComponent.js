@@ -164,15 +164,6 @@ class FullDetailComponent extends Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <InlineEditor
-<<<<<<< HEAD
-                  extraClass={this.classIfDifferent('licensed.declared')}
-                  readOnly
-                  type="license"
-                  initialValue={this.getOriginalValue('licensed.declared')}
-                  value={this.getValue('licensed.declared')}
-                  onChange={this.fieldChange('licensed.declared')}
-                  validator
-=======
                   extraClass={Contribution.classIfDifferent(
                     this.props.component,
                     this.props.previewDefinition,
@@ -184,7 +175,6 @@ class FullDetailComponent extends Component {
                   value={Contribution.getValue(this.props.component, this.props.previewDefinition, 'licensed.declared')}
                   onChange={value => this.props.onChange(`licensed.declared`, value)}
                   validator={value => true}
->>>>>>> feature/api-post
                   placeholder={'SPDX license'}
                 />
               )}
