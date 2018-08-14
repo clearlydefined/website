@@ -3,9 +3,7 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import globToRegExp from 'glob-to-regexp'
-import pickBy from 'lodash/pickBy'
-import map from 'lodash/map'
+import transform from 'lodash/transform'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
 import treeTableHOC from './treeTable'
@@ -35,8 +33,8 @@ export default class FileList extends Component {
   componentWillReceiveProps(nextProps) {
     // Data are parsed to create a tree-folder structure
     if (nextProps.files) {
-      const files = parsePaths(nextProps.files, nextProps.changes, nextProps.component)
-      nextProps.files && this.setState({ files, rawData: files })
+      const files = parsePaths(nextProps.files, nextProps.component, nextProps.previewDefinition)
+      nextProps.files && this.setState({ files, rawData: files }, () => this.forceUpdate())
     }
   }
 
@@ -152,30 +150,16 @@ const pathColums = []
 const columns = []
 
 /**
- * Parse Path to retrieve the complete folder structure
- * @param  {} files
- * @param  {} changes
- * @param  {} component
+ * Parse each files path to retrieve the complete folder structure
+ * @param  {} files The files object coming from the definition
+ * @return {Object} Return a new object containing the files object modified
  */
-const parsePaths = (files, changes, component) => {
-  const changedFacets = pickBy(changes, (item, index) => index.startsWith('described.facets'))
-  return files.map((file, index) => {
-    /*file.facets = map(changedFacets, (glob, facets) => {
-      if (!globToRegExp(glob).test(file.path)) return
-      return facets
-        .split('described.facets.')
-        .pop()
-        .trim()
-    })
-
-    file.areFacetsDifferent =
-      file.facets.length > 0 && isEqual(Contribution.getOriginalValue(component, `files[${index}].facets`), file.facets)
-        ? ''
-        : 'facets__isEdited'*/
-
+const parsePaths = (files, component, preview) => {
+  return transform(files, (result, file, key) => {
     const folders = file.path.split('/')
 
-    if (!file.facets || isEmpty(file.facets)) file.facets = ['core']
+    //if (!file.facets || isEmpty(file.facets)) file.facets = ['core']
+    file.facets = Contribution.getValue(component, preview, `files[${key}].facets`)
 
     // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
@@ -207,7 +191,6 @@ const parsePaths = (files, changes, component) => {
         })
       }
     })
-
-    return file
+    result[key] = file
   })
 }

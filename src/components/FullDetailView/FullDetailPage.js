@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { Grid, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
+import cloneDeep from 'lodash/cloneDeep'
 import 'antd/dist/antd.css'
 import {
   uiInspectGetDefinition,
@@ -21,6 +22,7 @@ import EntitySpec from '../../utils/entitySpec'
 import Contribution from '../../utils/contribution'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
+import Definition from '../../utils/definition'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
@@ -38,8 +40,6 @@ export class FullDetailPage extends Component {
     this.handleSave = this.handleSave.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.getValue = this.getValue.bind(this)
-    this.classIfDifferent = this.classIfDifferent.bind(this)
   }
 
   static propTypes = {
@@ -118,26 +118,17 @@ export class FullDetailPage extends Component {
   onChange(item, value, type) {
     const { component } = this.props
     const { changes } = this.state
-    this.setState({ changes: Contribution.onChange(component, changes, item, value, type) }, () =>
+    this.setState({ changes: Contribution.applyChanges(component, changes, item, value, type) }, () =>
       this.previewDefinition()
     )
-  }
-
-  getValue(field) {
-    const { component } = this.props
-    const { changes } = this.state
-    return Contribution.getValue(component, changes, field)
-  }
-
-  classIfDifferent(field, className) {
-    const { component } = this.props
-    const { changes } = this.state
-    return Contribution.classIfDifferent(component, changes, field, className)
   }
 
   render() {
     const { path, component, definition, curation, harvest, modalView, visible, previewDefinition } = this.props
     const { changes } = this.state
+
+    console.log(definition.item)
+    console.log(previewDefinition)
 
     return modalView ? (
       <Modal
@@ -160,9 +151,10 @@ export class FullDetailPage extends Component {
           path={path}
           modalView={modalView}
           onChange={this.onChange}
-          getValue={this.getValue}
           handleClose={this.handleClose}
-          classIfDifferent={this.classIfDifferent}
+          component={component}
+          changes={changes}
+          previewDefinition={previewDefinition}
         />
       </Modal>
     ) : (
@@ -175,8 +167,9 @@ export class FullDetailPage extends Component {
           path={path}
           modalView={false}
           onChange={this.onChange}
-          getValue={this.getValue}
-          classIfDifferent={this.classIfDifferent}
+          component={component}
+          changes={changes}
+          previewDefinition={previewDefinition}
           renderContributeButton={
             <Button bsStyle="success" disabled={!Contribution.hasChange(component)} onClick={this.doPromptContribute}>
               Contribute
@@ -190,22 +183,23 @@ export class FullDetailPage extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const path = props.path
-    ? props.path
-    : props.location
-      ? props.location.pathname.slice(props.match.url.length + 1)
-      : null
+  const path = Definition.getPathFromUrl(props)
   const component = path ? EntitySpec.fromPath(path) : null
-  const previewDefinition = !state.ui.curate.previewDefinition.isFetching && state.ui.curate.previewDefinition.item
+  const previewDefinition =
+    !state.ui.curate.previewDefinition.isFetching &&
+    Contribution.getChangesFromPreview(
+      Object.assign({}, state.ui.inspect.definition.item),
+      Object.assign({}, state.ui.curate.previewDefinition.item)
+    )
 
   return {
     path,
     component,
-    filterValue: state.ui.inspect.filter,
+    filterValue: state.ui.inspect.filter && cloneDeep(state.ui.inspect.filter),
     token: state.session.token,
-    definition: state.ui.inspect.definition,
-    curation: state.ui.inspect.curation,
-    harvest: state.ui.inspect.harvested,
+    definition: state.ui.inspect.definition && cloneDeep(state.ui.inspect.definition),
+    curation: state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation),
+    harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
     previewDefinition
   }
 }
