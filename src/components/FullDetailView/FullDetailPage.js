@@ -132,7 +132,7 @@ export class FullDetailPage extends Component {
         // no need for default buttons
         footer={null}
         centered
-        destroyOnClose={true}
+        destroyOnClose
         visible={visible}
         onOk={this.handleSave}
         onCancel={this.handleClose}
@@ -145,6 +145,7 @@ export class FullDetailPage extends Component {
           definition={definition}
           harvest={harvest}
           path={path}
+          readOnly={false}
           modalView={modalView}
           onChange={this.onChange}
           handleClose={this.handleClose}
@@ -160,6 +161,7 @@ export class FullDetailPage extends Component {
           definition={definition}
           harvest={harvest}
           path={path}
+          readOnly={false}
           modalView={false}
           onChange={this.onChange}
           component={component}

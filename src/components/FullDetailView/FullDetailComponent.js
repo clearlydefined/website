@@ -2,9 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Row, Button, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import Button from 'antd/lib/button'
 import Tabs from 'antd/lib/tabs'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
@@ -141,6 +140,8 @@ class FullDetailComponent extends Component {
   printArray = value => (!value ? null : value.join(', '))
 
   renderPanel(rawDefinition) {
+    const { readOnly } = this.props
+
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed, described } = definition
@@ -169,7 +170,7 @@ class FullDetailComponent extends Component {
                     this.props.previewDefinition,
                     'licensed.declared'
                   )}
-                  readOnly={false}
+                  readOnly={readOnly}
                   type="license"
                   initialValue={Contribution.getOriginalValue(this.props.component, 'licensed.declared')}
                   value={Contribution.getValue(this.props.component, this.props.previewDefinition, 'licensed.declared')}
@@ -187,7 +188,7 @@ class FullDetailComponent extends Component {
                 'described.sourceLocation',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.sourceLocation')}
-                  readOnly
+                  readOnly={readOnly}
                   type="text"
                   initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
@@ -207,7 +208,7 @@ class FullDetailComponent extends Component {
                 'described.releaseDate',
                 <InlineEditor
                   extraClass={this.classIfDifferent('described.releaseDate')}
-                  readOnly
+                  readOnly={readOnly}
                   type="date"
                   initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
                   value={this.printDate(this.getValue('described.releaseDate'))}
@@ -321,13 +322,17 @@ class FullDetailComponent extends Component {
           <p>commit id: {item.described.sourceLocation.revision}</p>
         </Col>
         <Col md={4} className="text-right">
-          {!modalView && this.props.renderContributeButton}{' '}
           {
-            <Button disabled={haveUnsavedChanges} onClick={this.handleSave}>
+            <Button bsStyle="primary" disabled={haveUnsavedChanges} onClick={this.handleSave}>
               Save
             </Button>
           }{' '}
-          {modalView && <Button onClick={this.props.handleClose}>Close</Button>}
+          {!modalView && this.props.renderContributeButton}{' '}
+          {modalView && (
+            <Button disabled={haveUnsavedChanges} onClick={this.props.handleClose}>
+              Close
+            </Button>
+          )}
         </Col>
       </Row>
     )
@@ -396,6 +401,7 @@ FullDetailComponent.propTypes = {
   definition: PropTypes.object.isRequired,
   harvest: PropTypes.object.isRequired,
   modalView: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired,
   renderContributeButton: PropTypes.element
 }
 
