@@ -18,7 +18,6 @@ import {
 } from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
-import EntitySpec from '../../utils/entitySpec'
 import Contribution from '../../utils/contribution'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
@@ -127,9 +126,6 @@ export class FullDetailPage extends Component {
     const { path, component, definition, curation, harvest, modalView, visible, previewDefinition } = this.props
     const { changes } = this.state
 
-    console.log(definition.item)
-    console.log(previewDefinition)
-
     return modalView ? (
       <Modal
         closable={false}
@@ -153,7 +149,6 @@ export class FullDetailPage extends Component {
           onChange={this.onChange}
           handleClose={this.handleClose}
           component={component}
-          changes={changes}
           previewDefinition={previewDefinition}
         />
       </Modal>
@@ -168,7 +163,6 @@ export class FullDetailPage extends Component {
           modalView={false}
           onChange={this.onChange}
           component={component}
-          changes={changes}
           previewDefinition={previewDefinition}
           renderContributeButton={
             <Button bsStyle="success" disabled={!Contribution.hasChange(component)} onClick={this.doPromptContribute}>
@@ -184,13 +178,8 @@ export class FullDetailPage extends Component {
 
 function mapStateToProps(state, props) {
   const path = Definition.getPathFromUrl(props)
-  const component = path ? EntitySpec.fromPath(path) : null
-  const previewDefinition =
-    !state.ui.curate.previewDefinition.isFetching &&
-    Contribution.getChangesFromPreview(
-      Object.assign({}, state.ui.inspect.definition.item),
-      Object.assign({}, state.ui.curate.previewDefinition.item)
-    )
+  const component = Definition.getDefinitionEntity(path)
+  const previewDefinition = Definition.getDefinitionPreview(state)
 
   return {
     path,

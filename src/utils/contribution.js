@@ -79,6 +79,7 @@ export default class Contribution {
    * @param  {} changes object containing changes
    * @param  {} field field to check
    * @param  {} value value to apply to the field
+   * @param  {} type used to specify a type of field (e.g. array) to perform different kind of operations
    */
   static applyChanges(component, changes, field, value, type) {
     const isChanged = !isEqual(value, this.getOriginalValue(component, field))
@@ -114,25 +115,27 @@ export default class Contribution {
    * Verify any difference between changes values and original values
    * If true, return the true statement
    * @param  {} component original component
-   * @param  {} changes object containing changes
+   * @param  {} preview object containing changes
    * @param  {} field field to check
    * @param  {} then_ condition returned if true
    * @param  {} else_ condition returned if false
    */
-  static ifDifferent(component, changes, field, then_, else_) {
-    return changes && changes[field] && !isEqual(changes[field], this.getOriginalValue(component, field))
+  static ifDifferent(component, preview, field, then_, else_) {
+    return preview &&
+      this.getUpdatedValue(preview, field) &&
+      !isEqual(this.getUpdatedValue(preview, field), this.getOriginalValue(component, field))
       ? then_
       : else_
   }
   /**
    * Return a specific class name if the condition of difference it true
    * @param  {} component original component
-   * @param  {} changes object containing changes
+   * @param  {} preview object containing changes
    * @param  {} field field to check
    * @param  {} className className to apply if the field has some changes
    */
-  static classIfDifferent(component, changes, field, className) {
-    return this.ifDifferent(component, changes, field, className, '')
+  static classIfDifferent(component, preview, field, className) {
+    return this.ifDifferent(component, preview, field, className, '')
   }
 
   /**
@@ -140,7 +143,7 @@ export default class Contribution {
    * Returns an object containing each change
    * @param {*} definition
    * @param {*} preview
-   * @return {Object}        Return a new object who represent the diff
+   * @return {Object} Return a new object who represent the diff
    */
   static getChangesFromPreview(definition, preview) {
     if (!definition || !preview) return
@@ -151,7 +154,7 @@ export default class Contribution {
    * Deep diff between two object, using lodash
    * @param  {Object} object Object compared
    * @param  {Object} base   Object to compare with
-   * @return {Object}        Return a new object who represent the diff
+   * @return {Object} Return a new object who represent the diff
    */
   static difference(object, base) {
     return transform(object, (result, value, key) => {
