@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
@@ -19,7 +20,7 @@ FacetsRenderer.propTypes = {
    * item to show
    */
   item: PropTypes.shape({
-    value: PropTypes.array
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
   }).isRequired
 }
 

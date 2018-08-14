@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import set from 'lodash/set'
 import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
@@ -143,7 +144,7 @@ export default class Contribution {
    * Returns an object containing each change
    * @param {*} definition
    * @param {*} preview
-   * @return {Object} Return a new object who represent the diff
+   * @return {Object} Return a new object which represents the diff
    */
   static getChangesFromPreview(definition, preview) {
     if (!definition || !preview) return
@@ -154,7 +155,7 @@ export default class Contribution {
    * Deep diff between two object, using lodash
    * @param  {Object} object Object compared
    * @param  {Object} base   Object to compare with
-   * @return {Object} Return a new object who represent the diff
+   * @return {Object} Return a new object which represents the diff
    */
   static difference(object, base) {
     return transform(object, (result, value, key) => {
