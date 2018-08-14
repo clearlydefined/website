@@ -6,7 +6,6 @@ import isEqual from 'lodash/isEqual'
 import isArray from 'lodash/isArray'
 import get from 'lodash/get'
 import transform from 'lodash/transform'
-import differenceWith from 'lodash/differenceWith'
 import isObject from 'lodash/isObject'
 import EntitySpec from './entitySpec'
 
@@ -157,16 +156,34 @@ export default class Contribution {
   static difference(object, base) {
     return transform(object, (result, value, key) => {
       if (isArray(value)) {
-        return (result[key] = differenceWith(object[key], base[key], isEqual))
+        return (result[key] = this.differenceBetweenObject(object[key], base[key]))
       }
       if (!isEqual(value, base[key])) {
         return (result[key] =
           isArray(value) && isArray(base[key])
-            ? differenceWith(result[key], base[key], isEqual)
+            ? this.differenceBetweenObject(result[key], base[key])
             : isObject(value) && isObject(base[key])
               ? this.difference(value, base[key])
               : value)
       }
     })
+  }
+
+  // Compare 2 collections and returns a new array keeping the original keys
+  static differenceBetweenObject(a, b) {
+    let difference = []
+    a.map((itemA, index) => {
+      let find = false
+      b.map(itemB => {
+        if (isEqual(itemA, itemB)) {
+          find = true
+          return
+        }
+      })
+      if (!find) {
+        difference[index] = itemA
+      }
+    })
+    return difference
   }
 }
