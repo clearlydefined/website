@@ -11,13 +11,12 @@ export default class Definition {
   }
 
   static getDefinitionPreview(state) {
-    return (
-      !state.ui.curate.previewDefinition.isFetching &&
-      Contribution.getChangesFromPreview(
-        Object.assign({}, state.ui.inspect.definition.item),
-        Object.assign({}, state.ui.curate.previewDefinition.item)
-      )
-    )
+    return !state.ui.curate.previewDefinition.isFetching
+      ? Contribution.getChangesFromPreview(
+          Object.assign({}, state.ui.inspect.definition.item),
+          Object.assign({}, state.ui.curate.previewDefinition.item)
+        )
+      : {}
   }
 
   static getDefinitionEntity(path) {

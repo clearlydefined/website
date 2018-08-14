@@ -180,12 +180,14 @@ export default class Contribution {
       b.map(itemB => {
         if (isEqual(itemA, itemB)) {
           find = true
-          return
+          return false
         }
+        return false
       })
       if (!find) {
         difference[index] = itemA
       }
+      return false
     })
     return difference
   }
