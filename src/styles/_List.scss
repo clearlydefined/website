@@ -91,6 +91,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  input {
+    width: 90%;
+  }
 }
 
 .list-activity-area {

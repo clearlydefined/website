@@ -80,7 +80,6 @@ export default class ComponentList extends React.Component {
   onEntryChange(component, changes) {
     const { onChange } = this.props
     const newComponent = { ...component, changes }
-    console.log(changes)
     onChange && onChange(component, newComponent)
     this.incrementSequence()
   }
