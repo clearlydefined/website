@@ -101,12 +101,16 @@ export default class DefinitionEntry extends React.Component {
     )
     const revisionTag = revisionUrl ? (
       <span>
-        &nbsp;&nbsp;&nbsp;<a href={revisionUrl} target="_blank">
+        &nbsp;&nbsp;&nbsp;
+        <a href={revisionUrl} target="_blank">
           {revision}
         </a>
       </span>
     ) : (
-      <span>&nbsp;&nbsp;&nbsp;{revision}</span>
+      <span>
+        &nbsp;&nbsp;&nbsp;
+        {revision}
+      </span>
     )
     return (
       <span>
@@ -199,7 +203,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   getPercentage(count, total) {
-    return Math.round((count || 0) / total * 100)
+    return Math.round(((count || 0) / total) * 100)
   }
 
   foldFacets(definition, facets = null) {
@@ -279,7 +283,7 @@ export default class DefinitionEntry extends React.Component {
         </div>
       )
 
-    // TODO find a way of calling this less frequently. Relatively expensive.
+    // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed, described } = definition
     const initialFacets =

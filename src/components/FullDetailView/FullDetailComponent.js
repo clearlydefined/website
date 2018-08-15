@@ -140,7 +140,7 @@ class FullDetailComponent extends Component {
   printArray = value => (!value ? null : value.join(', '))
 
   renderPanel(rawDefinition) {
-    const { readOnly } = this.props
+    const { readOnly, previewDefinition } = this.props
 
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
@@ -156,6 +156,8 @@ class FullDetailComponent extends Component {
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
 
+    const { item } = definition
+
     return (
       <Row>
         <Col md={5}>
@@ -165,17 +167,13 @@ class FullDetailComponent extends Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <InlineEditor
-                  extraClass={Contribution.classIfDifferent(
-                    this.props.component,
-                    this.props.previewDefinition,
-                    'licensed.declared'
-                  )}
+                  extraClass={Contribution.classIfDifferent(item, previewDefinition, 'licensed.declared')}
                   readOnly={readOnly}
                   type="license"
-                  initialValue={Contribution.getOriginalValue(this.props.component, 'licensed.declared')}
-                  value={Contribution.getValue(this.props.component, this.props.previewDefinition, 'licensed.declared')}
+                  initialValue={Contribution.getOriginalValue(item, 'licensed.declared')}
+                  value={Contribution.getValue(item, previewDefinition, 'licensed.declared')}
                   onChange={value => this.props.onChange(`licensed.declared`, value)}
-                  validator={value => true}
+                  validator={true}
                   placeholder={'SPDX license'}
                 />
               )}

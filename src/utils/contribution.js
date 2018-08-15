@@ -123,7 +123,7 @@ export default class Contribution {
     if (preview && get(preview, field)) {
       return [{ value: get(preview, field), isDifferent: true }]
     }
-    return [{ value: get(component, field), isDifferent: false }] || ['']
+    return [{ value: get(component, field) || 'core', isDifferent: false }]
   }
 
   /**

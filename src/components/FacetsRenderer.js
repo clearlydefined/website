@@ -11,8 +11,8 @@ import PropTypes from 'prop-types'
 class FacetsRenderer extends Component {
   static propTypes = {
     item: PropTypes.shape({
-      value: PropTypes.array.isRequired
-    })
+      value: PropTypes.array
+    }).isRequired
   }
 
   render() {
