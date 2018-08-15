@@ -117,7 +117,7 @@ export default class FileList extends Component {
           filterable={true}
           freezeWhenExpanded={false}
           manual={false}
-          onFilteredChange={filtered => this.setState({ isFiltering: true })}
+          onFilteredChange={() => this.setState({ isFiltering: true })}
           noDataText={
             isFiltering ? "Current filters didn't match any data" : 'There are currently no files for this definition'
           }
@@ -144,7 +144,7 @@ const pathColums = []
 const columns = []
 
 /**
- * Parse each files path to retrieve the complete folder structure
+ * Parse each file's path to retrieve the complete folder structure
  * @param  {} files The files object coming from the definition
  * @return {Object} Return a new object containing the files object modified
  */
@@ -153,7 +153,7 @@ const parsePaths = (files, component, preview) => {
     const folders = file.path.split('/')
 
     //if (!file.facets || isEmpty(file.facets)) file.facets = ['core']
-    file.facets = Contribution.getValue(component, preview, `files[${key}].facets`)
+    file.facets = Contribution.getValueAndIfDifferent(component, preview, `files[${key}].facets`)
 
     // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {

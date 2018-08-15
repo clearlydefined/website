@@ -9,19 +9,24 @@ import PropTypes from 'prop-types'
  *
  */
 class FacetsRenderer extends Component {
+  static propTypes = {
+    item: PropTypes.shape({
+      value: PropTypes.array.isRequired
+    })
+  }
+
   render() {
     const { item } = this.props
-    return <div>{item.value || 'core'}</div>
+    return (
+      <div>
+        {item.value.map((val, i) => (
+          <span key={i} className={val.isDifferent ? 'facets__isEdited' : ''}>
+            {val.value || 'core'}
+          </span>
+        ))}
+      </div>
+    )
   }
-}
-
-FacetsRenderer.propTypes = {
-  /**
-   * item to show
-   */
-  item: PropTypes.shape({
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
-  }).isRequired
 }
 
 export default FacetsRenderer

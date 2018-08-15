@@ -102,14 +102,28 @@ export default class Contribution {
   /**
    * Get the value of the specific field into the definition
    * Returns the updated value or the original one if not modified
-   * @param  {} component original component
-   * @param  {} preview uptaded component sent back from the API after each change
-   * @param  {} field field to check
+   * @param  {Object} component original component
+   * @param  {Object} preview updated component sent back from the API after each change
+   * @param  {String} field field to check
    */
   static getValue(component, preview, field) {
     return preview && this.getUpdatedValue(preview, field)
       ? this.getUpdatedValue(preview, field)
       : this.getOriginalValue(component, field) || ''
+  }
+
+  /**
+   * Get the value AND if it was Updated of the specific field into the definition
+   * Returns the updated value or the original one if not modified
+   * @param  {Object} component original component
+   * @param  {Object} preview updated component sent back from the API after each change
+   * @param  {String} field field to check
+   */
+  static getValueAndIfDifferent(component, preview, field) {
+    if (preview && get(preview, field)) {
+      return [{ value: get(preview, field), isDifferent: true }]
+    }
+    return [{ value: get(component, field), isDifferent: false }] || ['']
   }
 
   /**
