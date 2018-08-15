@@ -128,6 +128,7 @@ export default class Contribution {
       ? then_
       : else_
   }
+
   /**
    * Return a specific class name if the condition of difference it true
    * @param  {} component original component
@@ -152,7 +153,7 @@ export default class Contribution {
   }
 
   /**
-   * Deep diff between two object, using lodash
+   * Deep diff between two objects, using lodash
    * @param  {Object} object Object compared
    * @param  {Object} base   Object to compare with
    * @return {Object} Return a new object which represents the diff
@@ -160,12 +161,12 @@ export default class Contribution {
   static difference(object, base) {
     return transform(object, (result, value, key) => {
       if (isArray(value)) {
-        return (result[key] = this.differenceBetweenObject(object[key], base[key]))
+        return (result[key] = this.differenceBetweenObjects(object[key], base[key]))
       }
       if (!isEqual(value, base[key])) {
         return (result[key] =
           isArray(value) && isArray(base[key])
-            ? this.differenceBetweenObject(result[key], base[key])
+            ? this.differenceBetweenObjects(result[key], base[key])
             : isObject(value) && isObject(base[key])
               ? this.difference(value, base[key])
               : value)
@@ -174,7 +175,7 @@ export default class Contribution {
   }
 
   // Compare 2 collections and returns a new array keeping the original keys
-  static differenceBetweenObject(a, b) {
+  static differenceBetweenObjects(a, b) {
     let difference = []
     a.map((itemA, index) => {
       let find = false

@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
@@ -17,16 +18,10 @@ import Contribution from '../../utils/contribution'
  *
  */
 export default class FileList extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      files: [],
-      expanded: {},
-      isFiltering: false
-    }
-
-    this.generateColumns.bind(this)
+  state = {
+    files: [],
+    expanded: {},
+    isFiltering: false
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,7 +36,7 @@ export default class FileList extends Component {
     return nextState.files.length !== this.state.files.length || !isEqual(nextProps.changes, this.props.changes)
   }
 
-  generateColumns(columns) {
+  generateColumns = columns => {
     return columns.concat([
       {
         Header: 'Name',

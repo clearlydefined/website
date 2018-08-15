@@ -3,11 +3,11 @@
 
 import Contribution from '../contribution'
 
-describe('differenceBetweenObject', () => {
+describe('differenceBetweenObjects', () => {
   it('should compute the difference between 2 array of strings', () => {
     const preview = ['scancode/2.9.0+b1', 'clearlydefined/1', 'curationsupplied']
     const definition = ['scancode/2.9.0+b1', 'clearlydefined/1']
-    expect(Contribution.differenceBetweenObject(preview, definition)).toEqual([
+    expect(Contribution.differenceBetweenObjects(preview, definition)).toEqual([
       undefined,
       undefined,
       'curationsupplied'
@@ -106,7 +106,7 @@ describe('differenceBetweenObject', () => {
       },
       { path: 'package/lib/zh-CN/diagnosticMessages.generated.json' }
     ]
-    expect(Contribution.differenceBetweenObject(preview, definition)).toEqual([
+    expect(Contribution.differenceBetweenObjects(preview, definition)).toEqual([
       undefined,
       {
         attributions: [
