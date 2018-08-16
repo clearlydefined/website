@@ -129,9 +129,9 @@ export class FullDetailPage extends Component {
       </AntdButton>
     )
     notification.open({
-      message: 'UnSaved Changes',
+      message: 'Unsaved Changes',
       description:
-        'Some information has been changed and are currently unsaved. Would you like to continue without saving?',
+        'Some information has been changed and is currently unsaved. Would you like to continue without saving?',
       btn,
       key,
       onClose: this.close
