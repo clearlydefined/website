@@ -34,10 +34,10 @@ class FullDetailComponent extends Component {
   )
 
   renderPanel(rawDefinition) {
-    const { readOnly, previewDefinition } = this.props
+    const { activeFacets, readOnly, onChange, previewDefinition } = this.props
 
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
-    const definition = Contribution.foldFacets(rawDefinition, this.props.activeFacets)
+    const definition = Contribution.foldFacets(rawDefinition, activeFacets)
 
     const { licensed, described } = definition
     const initialFacets =
@@ -64,7 +64,7 @@ class FullDetailComponent extends Component {
                 type="license"
                 initialValue={Contribution.getOriginalValue(definition, 'licensed.declared')}
                 value={Contribution.getValue(definition, previewDefinition, 'licensed.declared')}
-                onChange={value => this.props.onChange(`licensed.declared`, value)}
+                onChange={value => onChange(`licensed.declared`, value)}
                 validator={true}
                 placeholder={'SPDX license'}
               />
@@ -84,7 +84,7 @@ class FullDetailComponent extends Component {
                   Contribution.getValue(definition, previewDefinition, 'described.sourceLocation')
                 )}
                 onChange={value =>
-                  this.props.onChange(`described.sourceLocation`, value, null, Contribution.parseCoordinates)
+                  onChange(`described.sourceLocation`, value, null, Contribution.parseCoordinates)
                 }
                 validator
                 placeholder={'Source location'}
@@ -104,7 +104,7 @@ class FullDetailComponent extends Component {
                 value={Contribution.printDate(
                   Contribution.getValue(definition, previewDefinition, 'described.releaseDate')
                 )}
-                onChange={value => this.props.onChange(`described.releaseDate`, value)}
+                onChange={value => onChange(`described.releaseDate`, value)}
                 validator
                 placeholder={'YYYY-MM-DD'}
               />
