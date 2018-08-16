@@ -134,7 +134,8 @@ export class FullDetailPage extends Component {
         'Some information has been changed and is currently unsaved. Would you like to continue without saving?',
       btn,
       key,
-      onClose: this.close
+      onClose: this.close,
+      duration: 0
     })
   }
 
