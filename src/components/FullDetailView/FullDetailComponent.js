@@ -14,6 +14,17 @@ import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
 
 class FullDetailComponent extends Component {
+  static propTypes = {
+    handleClose: PropTypes.func,
+    curation: PropTypes.object.isRequired,
+    definition: PropTypes.object.isRequired,
+    harvest: PropTypes.object.isRequired,
+    modalView: PropTypes.bool.isRequired,
+    readOnly: PropTypes.bool.isRequired,
+    renderContributeButton: PropTypes.element,
+    previewDefinition: PropTypes.object
+  }
+
   handleSave = () => {}
 
   renderLabel = text => (
@@ -285,16 +296,6 @@ class FullDetailComponent extends Component {
       </div>
     )
   }
-}
-
-FullDetailComponent.propTypes = {
-  handleClose: PropTypes.func,
-  curation: PropTypes.object.isRequired,
-  definition: PropTypes.object.isRequired,
-  harvest: PropTypes.object.isRequired,
-  modalView: PropTypes.bool.isRequired,
-  readOnly: PropTypes.bool.isRequired,
-  renderContributeButton: PropTypes.element
 }
 
 export default FullDetailComponent

@@ -5,8 +5,11 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Grid, Button } from 'react-bootstrap'
+import isEmpty from 'lodash/isEmpty'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
+import AntdButton from 'antd/lib/button'
+import notification from 'antd/lib/notification'
 import cloneDeep from 'lodash/cloneDeep'
 import 'antd/dist/antd.css'
 import {
@@ -14,7 +17,8 @@ import {
   uiInspectGetCuration,
   uiInspectGetHarvested,
   uiNavigation,
-  uiCurateGetDefinitionPreview
+  uiCurateGetDefinitionPreview,
+  uiCurateResetDefinitionPreview
 } from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
@@ -39,6 +43,7 @@ export class FullDetailPage extends Component {
     this.handleSave = this.handleSave.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.close = this.close.bind(this)
   }
 
   static propTypes = {
@@ -108,9 +113,37 @@ export class FullDetailPage extends Component {
   }
 
   handleClose() {
-    const { onClose } = this.props
-    onClose()
-    this.setState({ visible: false })
+    const { previewDefinition, onClose } = this.props
+    if (isEmpty(previewDefinition)) return onClose()
+    const key = `open${Date.now()}`
+    const btn = (
+      <AntdButton
+        type="primary"
+        size="small"
+        onClick={() => {
+          this.close()
+          notification.close(key)
+        }}
+      >
+        Confirm
+      </AntdButton>
+    )
+    notification.open({
+      message: 'UnSaved Changes',
+      description:
+        'Some information has been changed and are currently unsaved. Would you like to continue without saving?',
+      btn,
+      key,
+      onClose: this.close
+    })
+  }
+
+  close() {
+    const { uiCurateResetDefinitionPreview, onClose } = this.props
+    this.setState({ visible: false, changes: {} }, () => {
+      uiCurateResetDefinitionPreview()
+      onClose()
+    })
   }
 
   // Function called when a data has been changed
@@ -124,7 +157,6 @@ export class FullDetailPage extends Component {
 
   render() {
     const { path, component, definition, curation, harvest, modalView, visible, previewDefinition } = this.props
-    const { changes } = this.state
 
     return modalView ? (
       <Modal
@@ -132,31 +164,29 @@ export class FullDetailPage extends Component {
         // no need for default buttons
         footer={null}
         centered
-        destroyOnClose
+        destroyOnClose={true}
         visible={visible}
-        onOk={this.handleSave}
-        onCancel={this.handleClose}
         width={'85%'}
         className="fullDetaiView__modal"
       >
-        <FullDetailComponent
-          changes={changes}
-          curation={curation}
-          definition={definition}
-          harvest={harvest}
-          path={path}
-          readOnly={false}
-          modalView={modalView}
-          onChange={this.onChange}
-          handleClose={this.handleClose}
-          component={component}
-          previewDefinition={previewDefinition}
-        />
+        {visible ? (
+          <FullDetailComponent
+            curation={curation}
+            definition={definition}
+            harvest={harvest}
+            path={path}
+            readOnly={false}
+            modalView={modalView}
+            onChange={this.onChange}
+            handleClose={this.handleClose}
+            component={component}
+            previewDefinition={previewDefinition}
+          />
+        ) : null}
       </Modal>
     ) : (
       <Grid>
         <FullDetailComponent
-          changes={changes}
           curation={curation}
           definition={definition}
           harvest={harvest}
@@ -203,7 +233,8 @@ function mapDispatchToProps(dispatch) {
       uiInspectGetHarvested,
       uiNavigation,
       curateAction,
-      uiCurateGetDefinitionPreview
+      uiCurateGetDefinitionPreview,
+      uiCurateResetDefinitionPreview
     },
     dispatch
   )
