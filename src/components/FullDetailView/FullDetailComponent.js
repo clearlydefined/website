@@ -2,89 +2,19 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Row, Button, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
 import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
-import union from 'lodash/union'
-import moment from 'moment'
-
 import FileList from '../FileList'
 import InlineEditor from '../InlineEditor'
 import MonacoEditorWrapper from '../MonacoEditorWrapper'
 import FacetsEditor from '../FacetsEditor'
-
-import github from '../../images/GitHub-Mark-120px-plus.png'
-import npm from '../../images/n-large.png'
-import pypi from '../../images/pypi.png'
-import gem from '../../images/gem.png'
-import nuget from '../../images/nuget.svg'
-
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
 
 class FullDetailComponent extends Component {
-  /**
-   *  Get image of definition based on the provider
-   *
-   * @param {*} item
-   * @returns image file
-   */
-  getImage(item) {
-    switch (item.coordinates.provider) {
-      case 'github':
-        return github
-      case 'npmjs':
-        return npm
-      case 'pypi':
-        return pypi
-      case 'rubygems':
-        return gem
-      case 'nuget':
-        return nuget
-      default:
-        return null
-    }
-  }
-
   handleSave = () => {}
-
-  foldFacets(definition, facets = null) {
-    facets = facets || ['core', 'data', 'dev', 'docs', 'examples', 'tests']
-    let files = 0
-    let attributionUnknown = 0
-    let discoveredUnknown = 0
-    let parties = []
-    let expressions = []
-    let declared = []
-
-    facets.forEach(name => {
-      const facet = get(definition, `licensed.facets.${name}`)
-      if (!facet) return
-      files += facet.files || 0
-      attributionUnknown += get(facet, 'attribution.unknown', 0)
-      parties = union(parties, get(facet, 'attribution.parties', []))
-      discoveredUnknown += get(facet, 'discovered.unknown', 0)
-      expressions = union(expressions, get(facet, 'discovered.expressions', []))
-      declared = union(declared, get(facet, 'declared', []))
-    })
-
-    return {
-      coordinates: definition.coordinates,
-      described: definition.described,
-      licensed: {
-        files,
-        declared,
-        discovered: { expressions, unknown: discoveredUnknown },
-        attribution: { parties, unknown: attributionUnknown }
-      }
-    }
-  }
-
-  isSourceComponent = component => ['github', 'sourcearchive'].includes(component.provider)
-
-  getPercentage = (count, total) => Math.round(((count || 0) / total) * 100)
 
   renderLabel = text => (
     <p>
@@ -92,71 +22,24 @@ class FullDetailComponent extends Component {
     </p>
   )
 
-  renderWithToolTipIfDifferent(field, content, placement = 'right', transform = x => x) {
-    const toolTip = (
-      <Tooltip id={`tooltip-${field}`} className="definition__tooltip">
-        Original: {transform(get(this.props.otherDefinition, field))}
-      </Tooltip>
-    )
-    return this.ifDifferent(
-      field,
-      <OverlayTrigger placement={placement} overlay={toolTip}>
-        <span className="definition__overlay-hover-catcher">{content}</span>
-      </OverlayTrigger>,
-      content
-    )
-  }
-
-  ifDifferent(field, then_, else_) {
-    return this.props.otherDefinition && !isEqual(get(this.props.otherDefinition, field), this.getOriginalValue(field))
-      ? then_
-      : else_
-  }
-
-  classIfDifferent = field => this.ifDifferent(field, this.props.classOnDifference, '')
-
-  getOriginalValue = field => get(this.props.definition.item, field)
-
-  getValue = field => this.getOriginalValue(field)
-
-  fieldChange(field, equality = isEqual, transform = a => a) {
-    const { onChange, component } = this.props
-    return value => {
-      const proposedValue = transform(value)
-      const isChanged = !equality(proposedValue, this.getOriginalValue(field))
-      const newChanges = { ...component.changes }
-      if (isChanged) newChanges[field] = proposedValue
-      else delete newChanges[field]
-      onChange && onChange(component, newChanges)
-    }
-  }
-
-  printCoordinates(value) {
-    return value ? `${value.url}/commit/${value.revision}` : null
-  }
-
-  printDate = value => (!value ? null : moment(value).format('YYYY-MM-DD'))
-
-  printArray = value => (!value ? null : value.join(', '))
-
   renderPanel(rawDefinition) {
     const { readOnly, previewDefinition } = this.props
 
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
-    const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
+    const definition = Contribution.foldFacets(rawDefinition, this.props.activeFacets)
+
     const { licensed, described } = definition
     const initialFacets =
-      get(described, 'facets') || this.isSourceComponent(definition.coordinates)
-        ? ['Core', 'Data', 'Dev', 'Doc', 'Examples', 'Tests']
+      Contribution.getValue(rawDefinition, previewDefinition, 'described.facets') ||
+      Contribution.isSourceComponent(definition.coordinates)
+        ? Contribution.mergeFacets(Contribution.getValue(rawDefinition, previewDefinition, 'described.facets'))
         : ['Core']
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
-    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
-    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
+    const unlicensedPercent = totalFiles ? Contribution.getPercentage(unlicensed, totalFiles) : '-'
+    const unattributedPercent = totalFiles ? Contribution.getPercentage(unattributed, totalFiles) : '-'
     const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
-
-    const { item } = definition
 
     return (
       <Row>
@@ -164,68 +47,70 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Declared')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'licensed.declared',
-                <InlineEditor
-                  extraClass={Contribution.classIfDifferent(item, previewDefinition, 'licensed.declared')}
-                  readOnly={readOnly}
-                  type="license"
-                  initialValue={Contribution.getOriginalValue(item, 'licensed.declared')}
-                  value={Contribution.getValue(item, previewDefinition, 'licensed.declared')}
-                  onChange={value => this.props.onChange(`licensed.declared`, value)}
-                  validator={true}
-                  placeholder={'SPDX license'}
-                />
-              )}
+              <InlineEditor
+                extraClass={Contribution.classIfDifferent(definition, previewDefinition, 'licensed.declared')}
+                readOnly={readOnly}
+                type="license"
+                initialValue={Contribution.getOriginalValue(definition, 'licensed.declared')}
+                value={Contribution.getValue(definition, previewDefinition, 'licensed.declared')}
+                onChange={value => this.props.onChange(`licensed.declared`, value)}
+                validator={true}
+                placeholder={'SPDX license'}
+              />
             </Col>
           </Row>
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Source')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'described.sourceLocation',
-                <InlineEditor
-                  extraClass={this.classIfDifferent('described.sourceLocation')}
-                  readOnly={readOnly}
-                  type="text"
-                  initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
-                  value={this.printCoordinates(this.getValue('described.sourceLocation'))}
-                  onChange={this.fieldChange('described.sourceLocation', isEqual, this.parseCoordinates)}
-                  validator
-                  placeholder={'Source location'}
-                />,
-                'right',
-                this.printCoordinates
-              )}
+              <InlineEditor
+                extraClass={Contribution.classIfDifferent(definition, previewDefinition, 'described.sourceLocation')}
+                readOnly={readOnly}
+                type="text"
+                initialValue={Contribution.printCoordinates(
+                  Contribution.getOriginalValue(definition, 'described.sourceLocation')
+                )}
+                value={Contribution.printCoordinates(
+                  Contribution.getValue(definition, previewDefinition, 'described.sourceLocation')
+                )}
+                onChange={value =>
+                  this.props.onChange(`described.sourceLocation`, value, null, Contribution.parseCoordinates)
+                }
+                validator
+                placeholder={'Source location'}
+              />
             </Col>
           </Row>
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Release')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'described.releaseDate',
-                <InlineEditor
-                  extraClass={this.classIfDifferent('described.releaseDate')}
-                  readOnly={readOnly}
-                  type="date"
-                  initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
-                  value={this.printDate(this.getValue('described.releaseDate'))}
-                  onChange={this.fieldChange('described.releaseDate')}
-                  validator
-                  placeholder={'YYYY-MM-DD'}
-                />
-              )}
+              <InlineEditor
+                extraClass={Contribution.classIfDifferent(definition, previewDefinition, 'described.releaseDate')}
+                readOnly={readOnly}
+                type="date"
+                initialValue={Contribution.printDate(
+                  Contribution.getOriginalValue(definition, 'described.releaseDate')
+                )}
+                value={Contribution.printDate(
+                  Contribution.getValue(definition, previewDefinition, 'described.releaseDate')
+                )}
+                onChange={value => this.props.onChange(`described.releaseDate`, value)}
+                validator
+                placeholder={'YYYY-MM-DD'}
+              />
             </Col>
           </Row>
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Facets')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'described.facets',
-                <p className={`list-singleLine ${this.classIfDifferent('described.facets')}`}>
-                  {this.printArray(initialFacets)}
-                </p>
-              )}
+              <p
+                className={`list-singleLine ${Contribution.classIfDifferent(
+                  definition,
+                  previewDefinition,
+                  'described.facets'
+                )}`}
+              >
+                {initialFacets && Contribution.printArray(initialFacets)}
+              </p>
             </Col>
           </Row>
         </Col>
@@ -233,23 +118,29 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Discovered')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'discovered.expressions',
-                <p className={`list-singleLine ${this.classIfDifferent('licensed.discovered.expressions')}`}>
-                  {get(licensed, 'discovered.expressions', []).join(', ')}
-                </p>
-              )}
+              <p
+                className={`list-singleLine ${Contribution.classIfDifferent(
+                  definition,
+                  previewDefinition,
+                  'licensed.discovered.expressions'
+                )}`}
+              >
+                {get(licensed, 'discovered.expressions', []).join(', ')}
+              </p>
             </Col>
           </Row>
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Attribution')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'licensed.attribution.parties',
-                <p className={`list-singleLine ${this.classIfDifferent('licensed.attribution.parties')}`}>
-                  {get(licensed, 'attribution.parties', []).join(', ')}
-                </p>
-              )}
+              <p
+                className={`list-singleLine ${Contribution.classIfDifferent(
+                  definition,
+                  previewDefinition,
+                  'licensed.attribution.parties'
+                )}`}
+              >
+                {get(licensed, 'attribution.parties', []).join(', ')}
+              </p>
             </Col>
           </Row>
           <Row className="no-gutters">
@@ -265,12 +156,15 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Tools')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'described.tools',
-                <p className={`list-singleLine ${this.classIfDifferent('described.tools')}`}>{toolList.join(', ')}</p>,
-                'bottom',
-                x => (x ? x.join(', ') : '')
-              )}
+              <p
+                className={`list-singleLine ${Contribution.classIfDifferent(
+                  definition,
+                  previewDefinition,
+                  'described.tools'
+                )}`}
+              >
+                {toolList.join(', ')}
+              </p>
             </Col>
           </Row>
         </Col>
@@ -351,7 +245,7 @@ class FullDetailComponent extends Component {
     if (!definition || !definition.item || !curation || !harvest) return null
 
     const item = { ...definition.item }
-    const image = this.getImage(item)
+    const image = Contribution.getImage(item)
 
     return (
       <div>

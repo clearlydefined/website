@@ -114,10 +114,10 @@ export class FullDetailPage extends Component {
   }
 
   // Function called when a data has been changed
-  onChange(item, value, type) {
+  onChange(item, value, type, transform) {
     const { component } = this.props
     const { changes } = this.state
-    this.setState({ changes: Contribution.applyChanges(component, changes, item, value, type) }, () =>
+    this.setState({ changes: Contribution.applyChanges(component, changes, item, value, type, transform) }, () =>
       this.previewDefinition()
     )
   }

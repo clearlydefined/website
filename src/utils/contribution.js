@@ -5,10 +5,18 @@ import set from 'lodash/set'
 import find from 'lodash/find'
 import isEqual from 'lodash/isEqual'
 import isArray from 'lodash/isArray'
+import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import transform from 'lodash/transform'
 import isObject from 'lodash/isObject'
+import union from 'lodash/union'
 import EntitySpec from './entitySpec'
+import github from '../images/GitHub-Mark-120px-plus.png'
+import npm from '../images/n-large.png'
+import pypi from '../images/pypi.png'
+import gem from '../images/gem.png'
+import nuget from '../images/nuget.svg'
+import moment from 'moment'
 
 /**
  * Abstract methods for Contribution
@@ -82,21 +90,24 @@ export default class Contribution {
    * @param  {} value value to apply to the field
    * @param  {} type used to specify a type of field (e.g. array) to perform different kind of operations
    */
-  static applyChanges(component, changes, field, value, type) {
-    const isChanged = !isEqual(value, this.getOriginalValue(component, field))
+  static applyChanges(component, changes, field, value, type, transform = a => a) {
+    const proposedValue = transform(value)
+    const isChanged = !isEqual(proposedValue, this.getOriginalValue(component, field))
     const newChanges = { ...changes }
     if (isChanged)
-      type === 'array' ? (newChanges[field] = value.replace(/\s/g, '').split(',')) : (newChanges[field] = value)
+      type === 'array'
+        ? (newChanges[field] = proposedValue.replace(/\s/g, '').split(','))
+        : (newChanges[field] = proposedValue)
     else delete newChanges[field]
     return newChanges
   }
 
   static getOriginalValue(component, field) {
-    return get(component, field)
+    return get(component, field) || ''
   }
 
   static getUpdatedValue(preview, field) {
-    return get(preview, field)
+    return get(preview, field) || ''
   }
 
   /**
@@ -162,7 +173,7 @@ export default class Contribution {
    * @return {Object} Return a new object which represents the diff
    */
   static getChangesFromPreview(definition, preview) {
-    if (!definition || !preview) return
+    if (isEmpty(definition) || isEmpty(preview)) return
     return this.difference(preview, definition)
   }
 
@@ -181,9 +192,7 @@ export default class Contribution {
         return (result[key] =
           isArray(value) && isArray(base[key])
             ? this.differenceBetweenObjects(result[key], base[key])
-            : isObject(value) && isObject(base[key])
-              ? this.difference(value, base[key])
-              : value)
+            : isObject(value) && isObject(base[key]) && value)
       }
     })
   }
@@ -207,4 +216,84 @@ export default class Contribution {
     })
     return difference
   }
+
+  static printCoordinates = value => (value && value.url ? `${value.url}/commit/${value.revision}` : value)
+
+  static printDate = value => (!value ? null : moment(value).format('YYYY-MM-DD'))
+
+  static printArray = value => (value && isArray(value) ? value.join(', ') : null)
+
+  static getPercentage = (count, total) => Math.round(((count || 0) / total) * 100)
+
+  static isSourceComponent = component => ['github', 'sourcearchive'].includes(component.provider)
+
+  /**
+   *  Get image of definition based on the provider
+   *
+   * @param {*} item
+   * @returns image file
+   */
+  static getImage(item) {
+    switch (item.coordinates.provider) {
+      case 'github':
+        return github
+      case 'npmjs':
+        return npm
+      case 'pypi':
+        return pypi
+      case 'rubygems':
+        return gem
+      case 'nuget':
+        return nuget
+      default:
+        return null
+    }
+  }
+
+  // Function that retrieve informations about facets from the definition
+  static foldFacets(definition, facets = null) {
+    facets = facets || ['core', 'data', 'dev', 'docs', 'examples', 'tests']
+    let files = 0
+    let attributionUnknown = 0
+    let discoveredUnknown = 0
+    let parties = []
+    let expressions = []
+    let declared = []
+
+    facets.forEach(name => {
+      const facet = get(definition, `licensed.facets.${name}`)
+      if (!facet) return
+      files += facet.files || 0
+      attributionUnknown += get(facet, 'attribution.unknown', 0)
+      parties = union(parties, get(facet, 'attribution.parties', []))
+      discoveredUnknown += get(facet, 'discovered.unknown', 0)
+      expressions = union(expressions, get(facet, 'discovered.expressions', []))
+      declared = get(definition, `licensed.declared`)
+    })
+
+    return {
+      coordinates: definition.coordinates,
+      described: definition.described,
+      licensed: {
+        files,
+        declared,
+        discovered: { expressions, unknown: discoveredUnknown },
+        attribution: { parties, unknown: attributionUnknown }
+      }
+    }
+  }
+
+  /**
+   * Function that get an url as a string, and return a sourceLocation object according to the definition schema
+   * @param {*} value updated url of the definition
+   * @returns a new object containing the schema for the sourceLocation
+   */
+  static parseCoordinates(value) {
+    if (!value) return null
+    const segments = value.split('/')
+    const url = value.replace(/\/commit\/[a-z\d]+$/, '')
+    return { type: 'git', provider: 'github', url, revision: segments[6] }
+  }
+
+  static mergeFacets = value => union(Object.keys(value), ['Core'])
 }
