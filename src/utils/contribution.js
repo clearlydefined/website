@@ -46,10 +46,7 @@ export default class Contribution {
       return EntitySpec.isEquivalent(p.coordinates, coord)
     })
     const revisionNumber = component.revision
-    const patchChanges = Object.getOwnPropertyNames(component.changes).reduce((result, change) => {
-      set(result, change, component.changes[change])
-      return result
-    }, {})
+    const patchChanges = this.buildPatch(result, component, changes)
     if (patch) {
       patch.revisions[revisionNumber] = patchChanges
     } else {
@@ -118,8 +115,8 @@ export default class Contribution {
    * @param  {String} field field to check
    */
   static getValue(component, preview, field) {
-    return preview && this.getUpdatedValue(component, preview, field)
-      ? this.getUpdatedValue(component, preview, field)
+    return preview && this.getUpdatedValue(preview, field)
+      ? this.getUpdatedValue(preview, field)
       : this.getOriginalValue(component, field) || ''
   }
 

@@ -90,7 +90,8 @@ export class FullDetailPage extends Component {
    */
   doContribute(description) {
     const { token, component, curateAction } = this.props
-    const patches = Contribution.buildContributeSpec({}, component)
+    const { changes } = this.state
+    const patches = Contribution.buildContributeSpec([], component, changes)
     const spec = { description: description, patches }
     curateAction(token, spec)
   }
@@ -107,8 +108,8 @@ export class FullDetailPage extends Component {
 
   // Shows the Modal to save a Contribution
   doPromptContribute() {
-    const { component } = this.props
-    if (!Contribution.hasChange(component)) return
+    const { changes } = this.state
+    if (isEmpty(changes)) return
     this.refs.contributeModal.open()
   }
 
@@ -172,8 +173,8 @@ export class FullDetailPage extends Component {
   }
 
   render() {
-    const { path, component, definition, curation, harvest, modalView, visible, previewDefinition } = this.props
-
+    const { path, definition, curation, harvest, modalView, visible, previewDefinition } = this.props
+    const { changes } = this.state
     return modalView ? (
       <Modal
         closable={false}
@@ -212,7 +213,7 @@ export class FullDetailPage extends Component {
           onChange={this.onChange}
           previewDefinition={previewDefinition}
           renderContributeButton={
-            <Button bsStyle="success" disabled={!Contribution.hasChange(component)} onClick={this.doPromptContribute}>
+            <Button bsStyle="success" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
               Contribute
             </Button>
           }
