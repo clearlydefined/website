@@ -295,5 +295,5 @@ export default class Contribution {
     return { type: 'git', provider: 'github', url, revision: segments[6] }
   }
 
-  static mergeFacets = value => union(Object.keys(value), ['core'])
+  static mergeFacets = value => union(['core'], Object.keys(value))
 }
