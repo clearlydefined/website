@@ -56,16 +56,20 @@ export default class FileList extends Component {
         accessor: 'facets',
         resizable: false,
         Cell: row => <FacetsRenderer item={row} />,
-        filterMethod: (filter, rows) =>
-          rows.filter(
-            item =>
-              item._original && item._original.facets
-                ? item._original.facets
-                    .toString()
-                    .toLowerCase()
-                    .includes(filter.value.filterValue.toLowerCase())
-                : true
-          ),
+        filterMethod: (filter, rows) => {
+          const filterValue = filter.value.filterValue.toLowerCase()
+          return rows.filter(item => {
+            if (item && item.facets && item.facets.length) {
+              // console.log(item.facets)
+              return (
+                item.facets.findIndex(f => {
+                  return f.value.includes(filterValue)
+                }) > -1
+              )
+            }
+            return true
+          })
+        },
         filterAll: true
       },
       {
@@ -155,8 +159,28 @@ const parsePaths = (files, component, preview) => {
   return transform(files, (result, file, key) => {
     const folders = file.path.split('/')
 
-    //if (!file.facets || isEmpty(file.facets)) file.facets = ['core']
-    file.facets = Contribution.getValueAndIfDifferent(component, preview, `files[${key}].facets`)
+    // file.facets = ['core', 'data']
+    if (preview.files && preview.files[key] && preview.files[key].facets) {
+      file.facets = preview.files[key].facets.map((_, index) =>
+        Contribution.getValueAndIfDifferent(component, preview, `files[${key}].facets[${index}]`)
+      )
+    } else {
+      // TODO: check if file.facets is empty
+      if (!files.facets) {
+        file.facets = [
+          {
+            value: 'core',
+            isDifferent: false
+          }
+        ]
+      } else {
+        file.facets = file.facets.map(f)
+      }
+    }
+
+    // file.facets = Contribution.getValueAndIfDifferent(component, preview, `files[${key}].facets`)
+
+    // if (file.name == 'package.json') console.log(file.facets)
 
     // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
