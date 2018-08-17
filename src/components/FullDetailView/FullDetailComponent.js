@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
+import Tag from 'antd/lib/tag'
 import get from 'lodash/get'
 import FileList from '../FileList'
 import InlineEditor from '../InlineEditor'
@@ -40,11 +41,12 @@ class FullDetailComponent extends Component {
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
 
     const { licensed, described } = definition
-    const initialFacets =
-      Contribution.getValue(rawDefinition, previewDefinition, 'described.facets') ||
-      Contribution.isSourceComponent(definition.coordinates)
-        ? Contribution.mergeFacets(Contribution.getValue(rawDefinition, previewDefinition, 'described.facets'))
-        : ['Core']
+
+    const previewFacets = Contribution.getValue(rawDefinition, previewDefinition, 'described.facets')
+    const facets =
+      previewFacets || Contribution.isSourceComponent(definition.coordinates)
+        ? Contribution.mergeFacets(previewFacets)
+        : ['core']
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
@@ -83,9 +85,7 @@ class FullDetailComponent extends Component {
                 value={Contribution.printCoordinates(
                   Contribution.getValue(definition, previewDefinition, 'described.sourceLocation')
                 )}
-                onChange={value =>
-                  onChange(`described.sourceLocation`, value, null, Contribution.parseCoordinates)
-                }
+                onChange={value => onChange(`described.sourceLocation`, value, null, Contribution.parseCoordinates)}
                 validator
                 placeholder={'Source location'}
               />
@@ -120,7 +120,7 @@ class FullDetailComponent extends Component {
                   'described.facets'
                 )}`}
               >
-                {initialFacets && Contribution.printArray(initialFacets)}
+                {facets && facets.map(facet => <Tag>{facet}</Tag>)}
               </p>
             </Col>
           </Row>

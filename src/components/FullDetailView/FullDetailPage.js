@@ -6,11 +6,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Grid, Button } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
+import cloneDeep from 'lodash/cloneDeep'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
 import AntdButton from 'antd/lib/button'
 import notification from 'antd/lib/notification'
-import cloneDeep from 'lodash/cloneDeep'
 import 'antd/dist/antd.css'
 import {
   uiInspectGetDefinition,
@@ -20,12 +20,12 @@ import {
   uiCurateGetDefinitionPreview,
   uiCurateResetDefinitionPreview
 } from '../../actions/ui'
-import { curateAction } from '../../actions/curationActions'
 import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
+import { curateAction } from '../../actions/curationActions'
 import Contribution from '../../utils/contribution'
+import Definition from '../../utils/definition'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
-import Definition from '../../utils/definition'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal

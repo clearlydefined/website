@@ -46,7 +46,7 @@ class FacetsEditor extends Component {
                 value={Contribution.getValue(component, previewDefinition, `described.facets.${item}`).toString()}
                 onChange={value => onChange(`described.facets.${item}`, value, 'array')}
                 validator
-                placeholder={`${item} facet`}
+                placeholder={`facet for ${item}`}
               />
             </Col>
           </Row>
