@@ -123,15 +123,31 @@ export default class Contribution {
   /**
    * Get the value AND if it was Updated of the specific field into the definition
    * Returns the updated value or the original one if not modified
+   *
    * @param  {Object} component original component
    * @param  {Object} preview updated component sent back from the API after each change
    * @param  {String} field field to check
    */
   static getValueAndIfDifferent(component, preview, field) {
+    const originalValues = get(component, field)
     if (preview && get(preview, field)) {
-      return [{ value: get(preview, field), isDifferent: true }]
+      return {
+        value: get(preview, field),
+        isDifferent: true
+      }
     }
-    return [{ value: get(component, field) || 'core', isDifferent: false }]
+    if (!originalValues || !originalValues.length) {
+      return [
+        {
+          value: 'core',
+          isDifferent: false
+        }
+      ]
+    }
+    return originalValues.map(value => ({
+      value: value || 'core',
+      isDifferent: false
+    }))
   }
 
   /**

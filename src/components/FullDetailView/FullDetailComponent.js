@@ -114,15 +114,15 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Facets')}</Col>
             <Col md={10} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'described.facets'
-                )}`}
+              <span
+              // className={`list-singleLine ${Contribution.classIfDifferent(
+              //   definition,
+              //   previewDefinition,
+              //   'described.facets'
+              // )}`}
               >
-                {facets && facets.map(facet => <Tag>{facet}</Tag>)}
-              </p>
+                {facets && facets.map((facet, i) => <Tag key={i}>{facet}</Tag>)}
+              </span>
             </Col>
           </Row>
         </Col>
@@ -228,13 +228,13 @@ class FullDetailComponent extends Component {
           </div>
         </Col>
         <Col md={4} className="text-right">
-          {
+          {modalView && (
             <Button bsStyle="primary" disabled={isEmpty(previewDefinition)} onClick={this.props.handleSave}>
-              Save
+              OK
             </Button>
-          }{' '}
+          )}{' '}
           {!modalView && this.props.renderContributeButton}{' '}
-          {modalView && <Button onClick={this.props.handleClose}>Close</Button>}
+          {modalView && <Button onClick={this.props.handleClose}>Cancel</Button>}
         </Col>
       </Row>
     )
