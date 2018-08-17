@@ -98,7 +98,7 @@ class PageDefinitions extends AbstractPageDefinitions {
     const { dispatch, components } = this.props
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-    const url = `${document.location.origin}/definitions/${base64js.fromByteArray(
+    const url = `${document.location.origin}${ROUTE_DEFINITIONS}/${base64js.fromByteArray(
       pako.deflate(JSON.stringify(fileObject))
     )}`
     this.copyToClipboard(url, 'URL copied to clipboard')

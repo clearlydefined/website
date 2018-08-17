@@ -7,6 +7,8 @@ import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
 import Tag from 'antd/lib/tag'
 import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
+import { getBadgeUrl } from '../../api/clearlyDefined'
 import FileList from '../FileList'
 import InlineEditor from '../InlineEditor'
 import MonacoEditorWrapper from '../MonacoEditorWrapper'
@@ -17,6 +19,7 @@ import Contribution from '../../utils/contribution'
 class FullDetailComponent extends Component {
   static propTypes = {
     handleClose: PropTypes.func,
+    handleSave: PropTypes.func,
     curation: PropTypes.object.isRequired,
     definition: PropTypes.object.isRequired,
     harvest: PropTypes.object.isRequired,
@@ -25,8 +28,6 @@ class FullDetailComponent extends Component {
     renderContributeButton: PropTypes.element,
     previewDefinition: PropTypes.object
   }
-
-  handleSave = () => {}
 
   renderLabel = text => (
     <p>
@@ -212,30 +213,28 @@ class FullDetailComponent extends Component {
   }
 
   renderHeader() {
-    const { definition, modalView } = this.props
-
-    const item = definition.item
-
-    const haveUnsavedChanges = false
+    const { definition, modalView, previewDefinition } = this.props
+    const { item } = definition
 
     return (
-      <Row>
-        <Col md={8} className="detail-header">
-          <h2>{item && item.coordinates.name}</h2>
-          <p>commit id: {item.described.sourceLocation.revision}</p>
+      <Row className="row-detail-header">
+        <Col md={8}>
+          <div className="detail-header">
+            <h2>{item && item.coordinates.name}</h2>
+            <p>commit id: {item.described.sourceLocation.revision}</p>
+          </div>
+          <div className="score-header">
+            <img className="list-buttons" src={getBadgeUrl(item)} alt="score" />
+          </div>
         </Col>
         <Col md={4} className="text-right">
           {
-            <Button bsStyle="primary" disabled={haveUnsavedChanges} onClick={this.handleSave}>
+            <Button bsStyle="primary" disabled={isEmpty(previewDefinition)} onClick={this.props.handleSave}>
               Save
             </Button>
           }{' '}
           {!modalView && this.props.renderContributeButton}{' '}
-          {modalView && (
-            <Button disabled={haveUnsavedChanges} onClick={this.props.handleClose}>
-              Close
-            </Button>
-          )}
+          {modalView && <Button onClick={this.props.handleClose}>Close</Button>}
         </Col>
       </Row>
     )

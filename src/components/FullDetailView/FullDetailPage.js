@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Grid, Button } from 'react-bootstrap'
@@ -67,17 +67,21 @@ export class FullDetailPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { path, component } = nextProps
-    if (path && path !== this.props.path) this.handleNewSpec(component)
+    if (path && path !== this.props.path) {
+      if (component.changes) {
+        this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
+      } else this.handleNewSpec(component)
+    }
   }
 
   // Get the data for the current definition
   handleNewSpec(component) {
     const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested } = this.props
-    if (component) {
-      uiInspectGetDefinition(token, component)
-      uiInspectGetCuration(token, component)
-      uiInspectGetHarvested(token, component)
-    }
+    if (!component) return false
+    uiInspectGetDefinition(token, component)
+    uiInspectGetCuration(token, component)
+    uiInspectGetHarvested(token, component)
+    this.previewDefinition()
   }
 
   /**
@@ -95,6 +99,8 @@ export class FullDetailPage extends Component {
   previewDefinition() {
     const { token, component, uiCurateGetDefinitionPreview } = this.props
     const { changes } = this.state
+    if (!component) return false
+
     const patches = Contribution.buildPatch([], component, changes)
     uiCurateGetDefinitionPreview(token, component, patches)
   }
@@ -106,10 +112,14 @@ export class FullDetailPage extends Component {
     this.refs.contributeModal.open()
   }
 
-  handleSave(changes) {
-    const { onSave, component } = this.props
+  handleSave() {
+    const { onSave, component, uiCurateResetDefinitionPreview } = this.props
+    const { changes } = this.state
     const newComponent = { ...component, changes }
-    onSave && onSave(component, newComponent)
+    this.setState({ changes: {} }, () => {
+      uiCurateResetDefinitionPreview()
+      onSave && onSave(component, newComponent)
+    })
   }
 
   handleClose() {
@@ -117,31 +127,36 @@ export class FullDetailPage extends Component {
     if (isEmpty(previewDefinition)) return onClose()
     const key = `open${Date.now()}`
     const btn = (
-      <AntdButton
-        type="primary"
-        size="small"
-        onClick={() => {
-          this.close()
-          notification.close(key)
-        }}
-      >
-        Confirm
-      </AntdButton>
+      <Fragment>
+        <AntdButton
+          type="primary"
+          size="small"
+          onClick={() => {
+            this.close()
+            notification.close(key)
+          }}
+        >
+          Confirm
+        </AntdButton>
+        <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
+          Dismiss Notification
+        </AntdButton>
+      </Fragment>
     )
     notification.open({
       message: 'Unsaved Changes',
       description:
-        'Some information has been changed and is currently unsaved. Would you like to continue without saving?',
+        'Some information have been changed and are currently unsaved. Are you sure to continue without saving?',
       btn,
       key,
-      onClose: this.close,
+      onClose: notification.close(key),
       duration: 0
     })
   }
 
   close() {
     const { uiCurateResetDefinitionPreview, onClose } = this.props
-    this.setState({ visible: false, changes: {} }, () => {
+    this.setState({ changes: {} }, () => {
       uiCurateResetDefinitionPreview()
       onClose()
     })
@@ -180,7 +195,7 @@ export class FullDetailPage extends Component {
             modalView={modalView}
             onChange={this.onChange}
             handleClose={this.handleClose}
-            component={component}
+            handleSave={this.handleSave}
             previewDefinition={previewDefinition}
           />
         ) : null}
@@ -195,7 +210,6 @@ export class FullDetailPage extends Component {
           readOnly={false}
           modalView={false}
           onChange={this.onChange}
-          component={component}
           previewDefinition={previewDefinition}
           renderContributeButton={
             <Button bsStyle="success" disabled={!Contribution.hasChange(component)} onClick={this.doPromptContribute}>
@@ -211,7 +225,7 @@ export class FullDetailPage extends Component {
 
 function mapStateToProps(state, props) {
   const path = Definition.getPathFromUrl(props)
-  const component = Definition.getDefinitionEntity(path)
+  const component = props.component || Definition.getDefinitionEntity(path)
   const previewDefinition = Definition.getDefinitionPreview(state)
 
   return {

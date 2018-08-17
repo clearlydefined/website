@@ -118,8 +118,8 @@ export default class Contribution {
    * @param  {String} field field to check
    */
   static getValue(component, preview, field) {
-    return preview && this.getUpdatedValue(preview, field)
-      ? this.getUpdatedValue(preview, field)
+    return preview && this.getUpdatedValue(component, preview, field)
+      ? this.getUpdatedValue(component, preview, field)
       : this.getOriginalValue(component, field) || ''
   }
 

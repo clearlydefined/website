@@ -78,9 +78,12 @@ export default class FileList extends Component {
           filter.value.filterValue
             ? rows.filter(
                 item =>
-                  item._original &&
-                  item._original.license &&
-                  item._original.license.toLowerCase().includes(filter.value.filterValue.toLowerCase())
+                  item._original && item._original.license
+                    ? item._original.license
+                        .toString()
+                        .toLowerCase()
+                        .includes(filter.value.filterValue.toLowerCase())
+                    : true
               )
             : rows,
         filterAll: true
