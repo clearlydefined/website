@@ -117,7 +117,7 @@ export default class FileList extends Component {
         <TreeTable
           showPagination={false}
           sortable={false}
-          filterable={true}
+          filterable
           freezeWhenExpanded={false}
           manual={false}
           onFilteredChange={() => this.setState({ isFiltering: true })}
