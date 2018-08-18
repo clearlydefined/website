@@ -213,9 +213,8 @@ class FullDetailComponent extends Component {
   }
 
   renderHeader() {
-    const { definition, modalView, previewDefinition } = this.props
+    const { definition, modalView, changes } = this.props
     const { item } = definition
-
     return (
       <Row className="row-detail-header">
         <Col md={8}>
@@ -229,7 +228,7 @@ class FullDetailComponent extends Component {
         </Col>
         <Col md={4} className="text-right">
           {modalView && (
-            <Button bsStyle="primary" disabled={isEmpty(previewDefinition)} onClick={this.props.handleSave}>
+            <Button bsStyle="primary" disabled={isEmpty(changes)} onClick={this.props.handleSave}>
               OK
             </Button>
           )}{' '}
