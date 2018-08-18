@@ -67,6 +67,7 @@ export class FullDetailPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { path, component } = nextProps
+
     if (path && path !== this.props.path) {
       if (component.changes) {
         this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
@@ -78,10 +79,11 @@ export class FullDetailPage extends Component {
   handleNewSpec(component) {
     const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested } = this.props
     if (!component) return false
+
     uiInspectGetDefinition(token, component)
     uiInspectGetCuration(token, component)
     uiInspectGetHarvested(token, component)
-    this.previewDefinition()
+    this.previewDefinition(component)
   }
 
   /**
@@ -97,13 +99,14 @@ export class FullDetailPage extends Component {
   }
 
   // Action that calls the remote API that return a preview of the definition
-  previewDefinition() {
+  previewDefinition(nextComponent) {
     const { token, component, uiCurateGetDefinitionPreview } = this.props
     const { changes } = this.state
-    if (!component) return false
+    if (!component && !nextComponent) return false
 
-    const patches = Contribution.buildPatch([], component, changes)
-    uiCurateGetDefinitionPreview(token, component, patches)
+    const previewComponent = nextComponent ? nextComponent : component
+    const patches = Contribution.buildPatch([], previewComponent, changes)
+    uiCurateGetDefinitionPreview(token, previewComponent, patches)
   }
 
   // Shows the Modal to save a Contribution
@@ -124,8 +127,9 @@ export class FullDetailPage extends Component {
   }
 
   handleClose() {
-    const { previewDefinition, onClose } = this.props
-    if (isEmpty(previewDefinition)) return onClose()
+    const { onClose } = this.props
+    const { changes } = this.state
+    if (isEmpty(changes)) return onClose()
     const key = `open${Date.now()}`
     const btn = (
       <Fragment>
@@ -198,6 +202,7 @@ export class FullDetailPage extends Component {
             handleClose={this.handleClose}
             handleSave={this.handleSave}
             previewDefinition={previewDefinition}
+            changes={changes}
           />
         ) : null}
       </Modal>
@@ -211,6 +216,7 @@ export class FullDetailPage extends Component {
           readOnly={false}
           modalView={false}
           onChange={this.onChange}
+          changes={changes}
           previewDefinition={previewDefinition}
           renderContributeButton={
             <Button bsStyle="success" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
