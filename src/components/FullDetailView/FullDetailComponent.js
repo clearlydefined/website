@@ -228,13 +228,13 @@ class FullDetailComponent extends Component {
           </div>
         </Col>
         <Col md={4} className="text-right">
-          {
+          {modalView && (
             <Button bsStyle="primary" disabled={isEmpty(previewDefinition)} onClick={this.props.handleSave}>
-              Save
+              OK
             </Button>
-          }{' '}
+          )}{' '}
           {!modalView && this.props.renderContributeButton}{' '}
-          {modalView && <Button onClick={this.props.handleClose}>Close</Button>}
+          {modalView && <Button onClick={this.props.handleClose}>Cancel</Button>}
         </Col>
       </Row>
     )

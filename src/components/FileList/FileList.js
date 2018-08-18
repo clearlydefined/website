@@ -159,8 +159,7 @@ const parsePaths = (files, component, preview) => {
   return transform(files, (result, file, key) => {
     const folders = file.path.split('/')
 
-    // file.facets = ['core', 'data']
-    if (preview.files && preview.files[key] && preview.files[key].facets) {
+    if (preview && preview.files && preview.files[key] && preview.files[key].facets) {
       file.facets = preview.files[key].facets.map((_, index) =>
         Contribution.getValueAndIfDifferent(component, preview, `files[${key}].facets[${index}]`)
       )
@@ -174,13 +173,14 @@ const parsePaths = (files, component, preview) => {
           }
         ]
       } else {
-        file.facets = file.facets.map(f)
+        file.facets = file.facets.map(f => {
+          return {
+            value: f,
+            isDifferent: false
+          }
+        })
       }
     }
-
-    // file.facets = Contribution.getValueAndIfDifferent(component, preview, `files[${key}].facets`)
-
-    // if (file.name == 'package.json') console.log(file.facets)
 
     // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
