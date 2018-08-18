@@ -17,6 +17,7 @@ const sorts = [
   { value: 'namespace', label: 'Namespace' },
   { value: 'provider', label: 'Provider' },
   { value: 'releaseDate', label: 'Release Date' },
+  { value: 'score', label: 'Score' },
   { value: 'type', label: 'Type' }
 ]
 
@@ -63,6 +64,7 @@ export default class AbstractPageDefinitions extends Component {
     this.type = this.type.bind(this)
     this.releaseDate = this.releaseDate.bind(this)
     this.license = this.license.bind(this)
+    this.score = this.score.bind(this)
     this.transform = this.transform.bind(this)
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
@@ -195,16 +197,17 @@ export default class AbstractPageDefinitions extends Component {
 
   releaseDate(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    const described = get(definition, 'described')
-    if (described && described.releaseDate) return described.releaseDate
-    return null
+    return get(definition, 'described.releaseDate', null)
   }
 
   license(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    const licensed = get(definition, 'licensed')
-    if (licensed && licensed.declared) return licensed.declared
-    return null
+    return get(definition, 'licensed.declared', null)
+  }
+
+  score(coordinates) {
+    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+    return get(definition, 'score', null)
   }
 
   getSort(eventKey) {
