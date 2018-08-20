@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
 import Tag from 'antd/lib/tag'
 import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 import isEmpty from 'lodash/isEmpty'
 import { getBadgeUrl } from '../../api/clearlyDefined'
 import FileList from '../FileList'
@@ -273,7 +274,12 @@ class FullDetailComponent extends Component {
         </Row>
         <Row className="top-space">
           <Col md={12}>
-            <FileList files={item.files} component={definition} previewDefinition={previewDefinition} />
+            <FileList
+              files={cloneDeep(item.files)}
+              onChange={onChange}
+              component={definition}
+              previewDefinition={previewDefinition}
+            />
           </Col>
         </Row>
         <Row>

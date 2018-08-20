@@ -108,7 +108,6 @@ export default class ComponentList extends React.Component {
 
   renderButtons(definition, currentComponent) {
     const component = EntitySpec.fromCoordinates(currentComponent)
-
     const { readOnly } = this.props
     const isSourceComponent = this.isSourceComponent(component)
     return (
@@ -148,7 +147,6 @@ export default class ComponentList extends React.Component {
 
   renderRow({ index, key, style }, toggleExpanded = null, showExpanded = false) {
     const { list, readOnly } = this.props
-
     const component = list[index]
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
@@ -171,7 +169,6 @@ export default class ComponentList extends React.Component {
   render() {
     const { loadMoreRows, listHeight, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
-
     return (
       <div>
         {renderFilterBar()}

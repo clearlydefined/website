@@ -38,7 +38,7 @@ class FacetsEditor extends Component {
                   component,
                   previewDefinition,
                   `described.facets.${item}`,
-                  'facets__isEdited'
+                  'facets--isEdited'
                 )}
                 readOnly={false}
                 type="text"

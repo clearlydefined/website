@@ -20,7 +20,7 @@ class FacetsRenderer extends Component {
     return (
       <div>
         {item.value.map((val, i) => (
-          <span key={i} className={val.isDifferent ? 'facets__isEdited' : ''}>
+          <span key={i} className={val.isDifferent ? 'facets--isEdited' : ''}>
             {val.value || 'core'}
           </span>
         ))}

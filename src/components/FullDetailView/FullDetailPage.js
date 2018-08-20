@@ -67,19 +67,15 @@ export class FullDetailPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { path, component } = nextProps
-
-    if (path && path !== this.props.path) {
-      if (component.changes) {
-        this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
-      } else this.handleNewSpec(component)
-    }
+    if (!path || path === this.props.path) return
+    if (component.changes) return this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
+    this.handleNewSpec(component)
   }
 
   // Get the data for the current definition
   handleNewSpec(component) {
     const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested } = this.props
-    if (!component) return false
-
+    if (!component) return
     uiInspectGetDefinition(token, component)
     uiInspectGetCuration(token, component)
     uiInspectGetHarvested(token, component)
@@ -131,7 +127,7 @@ export class FullDetailPage extends Component {
     const { changes } = this.state
     if (isEmpty(changes)) return onClose()
     const key = `open${Date.now()}`
-    const btn = (
+    const NotificationButtons = (
       <Fragment>
         <AntdButton
           type="primary"
@@ -152,7 +148,7 @@ export class FullDetailPage extends Component {
       message: 'Unsaved Changes',
       description:
         'Some information have been changed and are currently unsaved. Are you sure to continue without saving?',
-      btn,
+      NotificationButtons,
       key,
       onClose: notification.close(key),
       duration: 0
@@ -234,7 +230,7 @@ function mapStateToProps(state, props) {
   const path = Definition.getPathFromUrl(props)
   const component = props.component || Definition.getDefinitionEntity(path)
   const previewDefinition = Definition.getDefinitionPreview(state)
-
+  console.log(component, previewDefinition)
   return {
     path,
     component,

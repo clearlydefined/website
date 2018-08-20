@@ -7,8 +7,6 @@ import isEqual from 'lodash/isEqual'
 import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
-import transform from 'lodash/transform'
-import isObject from 'lodash/isObject'
 import union from 'lodash/union'
 import EntitySpec from './entitySpec'
 import github from '../images/GitHub-Mark-120px-plus.png'
@@ -17,6 +15,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
+import deepDiff from 'deep-diff'
 
 /**
  * Abstract methods for Contribution
@@ -128,14 +127,15 @@ export default class Contribution {
    * @param  {Object} preview updated component sent back from the API after each change
    * @param  {String} field field to check
    */
+
   static getValueAndIfDifferent(component, preview, field) {
-    const originalValues = get(component, field)
-    if (preview && get(preview, field)) {
+    if (preview) {
       return {
-        value: get(preview, field),
-        isDifferent: true
+        value: this.getValue(component, preview, field),
+        isDifferent: this.ifDifferent(component, preview, field, true, false)
       }
     }
+    const originalValues = get(component, field)
     if (!originalValues || !originalValues.length) {
       return [
         {
@@ -197,21 +197,20 @@ export default class Contribution {
    * @return {Object} Return a new object which represents the diff
    */
   static difference(object, base) {
-    return transform(object, (result, value, key) => {
-      if (isArray(value)) {
-        return (result[key] = this.differenceBetweenObjects(object[key], base[key]))
-      }
-      if (!isEqual(value, base[key])) {
-        return (result[key] =
-          isArray(value) && isArray(base[key])
-            ? this.differenceBetweenObjects(result[key], base[key])
-            : isObject(value) && isObject(base[key]) && value)
-      }
-    })
+    const changes = deepDiff.diff(base, object)
+    if (!changes || changes.length === 0) return {}
+    const newValue = {}
+    changes.forEach(change => deepDiff.applyChange(newValue, change, change))
+    return newValue
   }
 
   // Compare 2 collections and returns a new array keeping the original keys
   static differenceBetweenObjects(a, b) {
+    const changes = deepDiff.diff(a, b)
+    if (!changes || changes.length === 0) return null
+    const newValue = {}
+    changes.forEach(change => deepDiff.applyChange(newValue, change, change))
+
     let difference = []
     a.map((itemA, index) => {
       let find = false

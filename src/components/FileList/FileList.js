@@ -12,6 +12,7 @@ import FacetsRenderer from '../FacetsRenderer'
 import LicensesRenderer from '../LicensesRenderer'
 import CopyrightsRenderer from '../CopyrightsRenderer'
 import Contribution from '../../utils/contribution'
+import FileListSpec from '../../utils/filelist'
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
@@ -23,12 +24,20 @@ export default class FileList extends Component {
     expanded: {},
     isFiltering: false
   }
-
+  componentDidMount() {
+    // Data are parsed to create a tree-folder structure
+    const { files, component, previewDefinition } = this.props
+    if (files) {
+      const definitionFiles = parsePaths(files, component.item, previewDefinition)
+      files && this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
+    }
+  }
   componentWillReceiveProps(nextProps) {
     // Data are parsed to create a tree-folder structure
-    if (nextProps.files) {
-      const files = parsePaths(nextProps.files, nextProps.component, nextProps.previewDefinition)
-      nextProps.files && this.setState({ files, rawData: files }, () => this.forceUpdate())
+    const { files, component, previewDefinition } = nextProps
+    if (files) {
+      const definitionFiles = parsePaths(files, component.item, previewDefinition)
+      files && this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
     }
   }
 
@@ -96,7 +105,13 @@ export default class FileList extends Component {
         Header: 'Copyrights',
         accessor: 'attributions',
         resizable: false,
-        Cell: row => <CopyrightsRenderer item={row} showPopup={this.showPopup} />,
+        Cell: row => (
+          <CopyrightsRenderer
+            item={row}
+            showPopup={this.showPopup}
+            onSave={value => this.props.onChange(`files[${row.original.id}].attributions`, value)}
+          />
+        ),
         filterMethod: (filter, rows) => {
           if (!filter.value.filterValue) return rows
           return rows.filter(item => {
@@ -157,31 +172,11 @@ const columns = []
  */
 const parsePaths = (files, component, preview) => {
   return transform(files, (result, file, key) => {
+    file.id = key
     const folders = file.path.split('/')
-
-    if (preview && preview.files && preview.files[key] && preview.files[key].facets) {
-      file.facets = preview.files[key].facets.map((_, index) =>
-        Contribution.getValueAndIfDifferent(component, preview, `files[${key}].facets[${index}]`)
-      )
-    } else {
-      // TODO: check if file.facets is empty
-      if (!files.facets) {
-        file.facets = [
-          {
-            value: 'core',
-            isDifferent: false
-          }
-        ]
-      } else {
-        file.facets = file.facets.map(f => {
-          return {
-            value: f,
-            isDifferent: false
-          }
-        })
-      }
-    }
-
+    file.facets = FileListSpec.getFileFacets(file.facets, component, preview, key)
+    file.attributions = FileListSpec.getFileAttributions(file.attributions, component, preview, key)
+    console.log(file.attributions)
     // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
       file['folder_0'] = '/'
