@@ -11,7 +11,7 @@ import { saveAs } from 'file-saver'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { ROUTE_DEFINITIONS } from '../utils/routingConstants'
+import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 
 import AbstractPageDefinitions from './AbstractPageDefinitions'
@@ -98,7 +98,7 @@ class PageDefinitions extends AbstractPageDefinitions {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-    const url = `${document.location.origin}${ROUTE_DEFINITIONS}/${base64js.fromByteArray(
+    const url = `${document.location.origin}${ROUTE_SHARE}/${base64js.fromByteArray(
       pako.deflate(JSON.stringify(fileObject))
     )}`
     this.copyToClipboard(url, 'URL copied to clipboard')
