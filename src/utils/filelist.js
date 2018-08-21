@@ -1,5 +1,6 @@
 import Contribution from './contribution'
 import merge from 'lodash/merge'
+import mergeWith from 'lodash/mergeWith'
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
@@ -7,8 +8,13 @@ import merge from 'lodash/merge'
 export default class FileListSpec {
   static getFileFacets(facets, component, preview, key) {
     if (preview && preview.files && preview.files[key] && preview.files[key].facets) {
-      merge(preview.files[key].facets, component.files[key].facets)
-      return preview.files[key].facets.map((_, index) =>
+      const previewObject = Object.assign([], preview.files[key].facets)
+      if (previewObject.length >= component.files[key].facets.length) {
+        component.files[key].facets.map(
+          (attribution, index) => !previewObject[index] && (previewObject[index] = attribution)
+        )
+      }
+      return previewObject.map((_, index) =>
         Contribution.getValueAndIfDifferent(component, preview, `files[${key}].facets[${index}]`)
       )
     } else {
@@ -31,14 +37,19 @@ export default class FileListSpec {
   }
 
   static getFileAttributions(attributions, component, preview, key) {
-    if (preview && preview.files && preview.files[key] && preview.files[key].attributions) {
-      merge(preview.files[key].attributions, component.files[key].attributions)
-      return preview.files[key].attributions.map((_, index) =>
+    if (preview && preview.files && preview.files[key]) {
+      const previewObject = Object.assign([], preview.files[key].attributions)
+      if (previewObject.length >= component.files[key].attributions.length) {
+        component.files[key].attributions.map(
+          (attribution, index) => !previewObject[index] && (previewObject[index] = attribution)
+        )
+      }
+      return previewObject.map((_, index) =>
         Contribution.getValueAndIfDifferent(component, preview, `files[${key}].attributions[${index}]`)
       )
     } else {
       if (attributions) {
-        return attributions.map(f => {
+        return Object.assign([], attributions).map(f => {
           return {
             value: f,
             isDifferent: false

@@ -49,14 +49,14 @@ export default class InlineEditor extends React.Component {
   }
 
   renderValue() {
-    const { value, type, initialValue, placeholder, extraClass, readOnly } = this.props
+    const { value, type, initialValue, placeholder, extraClass, readOnly, onClick } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
     if (!editing)
       return (
         <span
           className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
-          onClick={() => (readOnly ? null : this.setState({ editing: true }))}
+          onClick={() => (readOnly ? null : this.setState({ editing: true }, () => onClick && onClick()))}
         >
           {this.renderers[type](value) || placeholder}
         </span>
@@ -66,10 +66,14 @@ export default class InlineEditor extends React.Component {
   }
 
   render() {
+    const { onClick } = this.props
     return (
       <span className="list-singleLine">
         {!this.props.readOnly && (
-          <i className="fas fa-pencil-alt editable-marker" onClick={() => this.setState({ editing: true })} />
+          <i
+            className="fas fa-pencil-alt editable-marker"
+            onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
+          />
         )}
         {this.renderValue()}
       </span>

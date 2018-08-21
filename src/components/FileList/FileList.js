@@ -46,6 +46,7 @@ export default class FileList extends Component {
   }
 
   generateColumns = columns => {
+    const { component, previewDefinition } = this.props
     return columns.concat([
       {
         Header: 'Name',
@@ -86,7 +87,32 @@ export default class FileList extends Component {
         id: 'license',
         accessor: 'license',
         resizable: false,
-        Cell: row => <LicensesRenderer item={row} />,
+        Cell: row =>
+          row.original && (
+            <LicensesRenderer
+              isDifferent={Contribution.ifDifferent(
+                component,
+                previewDefinition,
+                `files[${row.original.id}].license`,
+                true,
+                false
+              )}
+              value={Contribution.getValue(component.item, previewDefinition, `files[${row.original.id}].license`)}
+              onSave={value => {
+                this.props.onChange(`files[${row.original.id}]`, value, null, value => {
+                  return {
+                    path: row.original.path,
+                    attributions: Contribution.getValue(
+                      component,
+                      previewDefinition,
+                      `files[${row.original.id}].attributions`
+                    ),
+                    license: value
+                  }
+                })
+              }}
+            />
+          ),
         filterMethod: (filter, rows) =>
           filter.value.filterValue
             ? rows.filter(
@@ -109,7 +135,19 @@ export default class FileList extends Component {
           <CopyrightsRenderer
             item={row}
             showPopup={this.showPopup}
-            onSave={value => this.props.onChange(`files[${row.original.id}].attributions`, value)}
+            onSave={value => {
+              this.props.onChange(`files[${row.original.id}]`, value, null, value => {
+                return {
+                  path: row.original.path,
+                  license: Contribution.getValue(
+                    component.item,
+                    previewDefinition,
+                    `files[${row.original.id}].license`
+                  ),
+                  attributions: value
+                }
+              })
+            }}
           />
         ),
         filterMethod: (filter, rows) => {
@@ -176,7 +214,7 @@ const parsePaths = (files, component, preview) => {
     const folders = file.path.split('/')
     file.facets = FileListSpec.getFileFacets(file.facets, component, preview, key)
     file.attributions = FileListSpec.getFileAttributions(file.attributions, component, preview, key)
-    console.log(file.attributions)
+
     // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
       file['folder_0'] = '/'

@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { OverlayTrigger, ButtonToolbar } from 'react-bootstrap'
 import PopoverRenderer from './PopoverRenderer'
+import InlineEditor from './InlineEditor'
 
 /**
  * Specific renderer for Licenses data
@@ -12,19 +13,19 @@ import PopoverRenderer from './PopoverRenderer'
  */
 class LicensesRenderer extends Component {
   render() {
-    const { item } = this.props
+    const { value, isDifferent, onSave } = this.props
 
     return (
-      <ButtonToolbar>
-        <OverlayTrigger
-          trigger="click"
-          rootClose
-          placement="left"
-          overlay={<PopoverRenderer title="Licenses" values={item.value} />}
-        >
-          <div>{item.value}</div>
-        </OverlayTrigger>
-      </ButtonToolbar>
+      <InlineEditor
+        extraClass={isDifferent ? 'license--isEdited' : ''}
+        readOnly={false}
+        type={'license'}
+        initialValue={value}
+        value={value}
+        onChange={value => onSave(value)}
+        validator={true}
+        placeholder={'SPDX License'}
+      />
     )
   }
 }

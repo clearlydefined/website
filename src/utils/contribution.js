@@ -8,6 +8,7 @@ import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import union from 'lodash/union'
+import compact from 'lodash/compact'
 import EntitySpec from './entitySpec'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -67,6 +68,7 @@ export default class Contribution {
       set(result, change, component.changes[change])
       return result
     }, {})
+    if (patchChanges.files) patchChanges.files = compact(patchChanges.files)
     return patchChanges
   }
 
@@ -88,9 +90,8 @@ export default class Contribution {
    */
   static applyChanges(component, changes, field, value, type, transform = a => a) {
     const proposedValue = transform(value)
-    const isChanged = !isEqual(proposedValue, this.getOriginalValue(component, field))
     const newChanges = { ...changes }
-    if (isChanged)
+    if (!isEqual(proposedValue, this.getOriginalValue(component, field)))
       type === 'array'
         ? (newChanges[field] = proposedValue.replace(/\s/g, '').split(','))
         : (newChanges[field] = proposedValue)

@@ -4,6 +4,9 @@
   overflow-x: hidden;
   width: 100%;
 }
+.popoverRenderer__container {
+  width: 500px;
+}
 .popoverRenderer__title,
 .popoverRenderer__items {
   width: 100%;
@@ -23,6 +26,8 @@
 .popoverRenderer__items__value {
   width: 200px;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .popoverRenderer__items__value--isEdited {
   color: red;
