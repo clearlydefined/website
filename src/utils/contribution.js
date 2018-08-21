@@ -205,31 +205,6 @@ export default class Contribution {
     return newValue
   }
 
-  // Compare 2 collections and returns a new array keeping the original keys
-  static differenceBetweenObjects(a, b) {
-    const changes = deepDiff.diff(a, b)
-    if (!changes || changes.length === 0) return null
-    const newValue = {}
-    changes.forEach(change => deepDiff.applyChange(newValue, change, change))
-
-    let difference = []
-    a.map((itemA, index) => {
-      let find = false
-      b.map(itemB => {
-        if (isEqual(itemA, itemB)) {
-          find = true
-          return false
-        }
-        return false
-      })
-      if (!find) {
-        difference[index] = itemA
-      }
-      return false
-    })
-    return difference
-  }
-
   static printCoordinates = value => (value && value.url ? `${value.url}/commit/${value.revision}` : value)
 
   static printDate = value => (!value ? null : moment(value).format('YYYY-MM-DD'))
