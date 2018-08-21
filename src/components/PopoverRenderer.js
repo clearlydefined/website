@@ -3,7 +3,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isArray from 'lodash/isArray'
-import isEqual from 'lodash/isEqual'
 import isNumber from 'lodash/isNumber'
 import { Popover, Button, FormGroup, FormControl } from 'react-bootstrap'
 import InlineEditor from './InlineEditor'
@@ -155,11 +154,12 @@ class PopoverComponent extends Component {
 
   render() {
     const { showAddRow, values } = this.state
+    const { editorType, editorPlaceHolder, onSave, ...popoverProperties } = this.props
 
     return (
       <Popover
         id="popover-positioned-left"
-        {...this.props}
+        {...popoverProperties}
         title={this.renderPopoverTitle()}
         bsStyle={{ width: '500px' }}
       >

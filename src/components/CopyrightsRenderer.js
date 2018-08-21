@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { OverlayTrigger, ButtonToolbar, Button } from 'react-bootstrap'
+import { OverlayTrigger, ButtonToolbar } from 'react-bootstrap'
 import PopoverRenderer from './PopoverRenderer'
 
 /**
@@ -11,10 +11,6 @@ import PopoverRenderer from './PopoverRenderer'
  *
  */
 class CopyrightsRenderer extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const { item, onSave } = this.props
     return (

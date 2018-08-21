@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { OverlayTrigger, ButtonToolbar } from 'react-bootstrap'
-import PopoverRenderer from './PopoverRenderer'
 import InlineEditor from './InlineEditor'
 
 /**
@@ -34,9 +32,7 @@ LicensesRenderer.propTypes = {
   /**
    * item to show
    */
-  item: PropTypes.shape({
-    value: PropTypes.string
-  }).isRequired
+  value: PropTypes.string.isRequired
 }
 
 export default LicensesRenderer

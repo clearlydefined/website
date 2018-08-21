@@ -1,6 +1,4 @@
 import Contribution from './contribution'
-import merge from 'lodash/merge'
-import mergeWith from 'lodash/mergeWith'
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
