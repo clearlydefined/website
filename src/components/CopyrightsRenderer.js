@@ -31,7 +31,7 @@ class CopyrightsRenderer extends Component {
             />
           }
         >
-          <div>{item && item.value ? item.value[0].value : null}</div>
+          <div>{item && item.value && item.value[0] ? item.value[0].value : null}</div>
         </OverlayTrigger>
       </ButtonToolbar>
     )
