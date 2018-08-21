@@ -115,15 +115,7 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={2}>{this.renderLabel('Facets')}</Col>
             <Col md={10} className="definition__line">
-              <span
-              // className={`list-singleLine ${Contribution.classIfDifferent(
-              //   definition,
-              //   previewDefinition,
-              //   'described.facets'
-              // )}`}
-              >
-                {facets && facets.map((facet, i) => <Tag key={i}>{facet}</Tag>)}
-              </span>
+              <span>{facets && facets.map((facet, i) => <Tag key={i}>{facet}</Tag>)}</span>
             </Col>
           </Row>
         </Col>
