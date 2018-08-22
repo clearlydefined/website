@@ -104,7 +104,6 @@ export class FullDetailPage extends Component {
       isEmpty(changes)
     )
       return false
-    console.log(component, nextComponent, changes)
     const previewComponent = nextComponent ? nextComponent : component
     const patches = Contribution.buildPatch([], previewComponent, changes)
     uiCurateGetDefinitionPreview(token, previewComponent, patches)
