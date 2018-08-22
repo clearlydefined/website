@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Col, Grid, Row } from 'react-bootstrap'
 import InlineEditor from '../InlineEditor'
+import Contribution from '../../utils/contribution'
 
 // Hardcoded, maybe it should be kept somewhere else
 const facets = ['data', 'dev', 'docs', 'examples', 'tests']
@@ -15,13 +16,13 @@ const facets = ['data', 'dev', 'docs', 'examples', 'tests']
  */
 class FacetsEditor extends Component {
   static propTypes = {
-    classIfDifferent: PropTypes.func.isRequired,
-    getValue: PropTypes.func.isRequired,
+    component: PropTypes.object,
+    previewDefinition: PropTypes.object,
     onChange: PropTypes.func.isRequired
   }
 
   render() {
-    const { onChange, getValue, classIfDifferent } = this.props
+    const { onChange, component, previewDefinition } = this.props
 
     return (
       <Grid className="no-gutters">
@@ -33,14 +34,19 @@ class FacetsEditor extends Component {
             </Col>
             <Col md={11}>
               <InlineEditor
-                extraClass={classIfDifferent(`described.facets.${item}`, 'facets__isEdited')}
-                readOnly={true}
+                extraClass={Contribution.classIfDifferent(
+                  component,
+                  previewDefinition,
+                  `described.facets.${item}`,
+                  'facets--isEdited'
+                )}
+                readOnly={false}
                 type="text"
-                initialValue={''}
-                value={getValue(`described.facets.${item}`)}
-                onChange={value => onChange(`described.facets.${item}`, value)}
+                initialValue={Contribution.getOriginalValue(component, `described.facets.${item}`)}
+                value={Contribution.getValue(component, previewDefinition, `described.facets.${item}`).toString()}
+                onChange={value => onChange(`described.facets.${item}`, value, 'array')}
                 validator
-                placeholder={`${item} facet`}
+                placeholder={`facet for ${item}`}
               />
             </Col>
           </Row>

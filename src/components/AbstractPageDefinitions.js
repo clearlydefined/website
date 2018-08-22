@@ -97,12 +97,16 @@ export default class AbstractPageDefinitions extends Component {
 
   // Opens a Modal that shows the Full Detail View
   onInspect(component) {
-    this.setState({ currentDefinition: `${component.toPath()}`, showFullDetail: true })
+    this.setState({
+      currentDefinition: EntitySpec.fromCoordinates(component).toPath(),
+      currentComponent: EntitySpec.fromCoordinates(component),
+      showFullDetail: true
+    })
   }
 
   // Close the Full Detail Modal
   onInspectClose = () => {
-    this.setState({ currentDefinition: null, showFullDetail: false })
+    this.setState({ currentDefinition: null, currentComponent: null, showFullDetail: false })
   }
 
   onRemoveComponent(component) {
@@ -114,7 +118,10 @@ export default class AbstractPageDefinitions extends Component {
   }
 
   onChangeComponent(component, newComponent) {
-    this.props.dispatch(this.updateList({ update: component, value: newComponent }))
+    this.setState({ currentDefinition: null, showFullDetail: false }, () => {
+      this.incrementSequence()
+      this.props.dispatch(this.updateList({ update: component, value: newComponent }))
+    })
   }
 
   hasChanges() {
@@ -380,7 +387,8 @@ export default class AbstractPageDefinitions extends Component {
 
   render() {
     const { components, definitions, token } = this.props
-    const { sequence, showFullDetail, currentDefinition } = this.state
+    const { sequence, showFullDetail, currentDefinition, currentComponent } = this.state
+
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -413,6 +421,7 @@ export default class AbstractPageDefinitions extends Component {
           onClose={this.onInspectClose}
           onSave={this.onChangeComponent}
           path={currentDefinition}
+          component={currentComponent}
         />
       </Grid>
     )

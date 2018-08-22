@@ -80,7 +80,6 @@ export default class ComponentList extends React.Component {
   onEntryChange(component, changes) {
     const { onChange } = this.props
     const newComponent = { ...component, changes }
-    console.log(changes)
     onChange && onChange(component, newComponent)
     this.incrementSequence()
   }
@@ -107,8 +106,8 @@ export default class ComponentList extends React.Component {
     return ['github', 'sourcearchive'].includes(component.provider)
   }
 
-  renderButtons(definition) {
-    const component = EntitySpec.fromCoordinates(definition.coordinates)
+  renderButtons(definition, currentComponent) {
+    const component = EntitySpec.fromCoordinates(currentComponent)
     const { readOnly } = this.props
     const isSourceComponent = this.isSourceComponent(component)
     return (
@@ -123,7 +122,7 @@ export default class ComponentList extends React.Component {
               </Button>
             )}
           {this.renderButtonWithTip(
-            <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, component)}>
+            <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, currentComponent)}>
               <i className="fas fa-search" />
             </Button>,
             'Dig into this definition'
@@ -161,7 +160,7 @@ export default class ComponentList extends React.Component {
           onChange={this.onEntryChange}
           otherDefinition={definition.otherDefinition}
           classOnDifference="bg-info"
-          renderButtons={this.renderButtons}
+          renderButtons={() => this.renderButtons(definition, component)}
         />
       </div>
     )

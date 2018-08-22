@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-
+// DON'T COMMIT THIS FILE
 import 'whatwg-fetch'
 import { toPairs } from 'lodash'
 
@@ -9,10 +9,13 @@ export const API_DEVELOP = 'https://dev-api.clearlydefined.io'
 export const API_PROD = 'https://api.clearlydefined.io'
 export const apiHome = process.env.REACT_APP_SERVER || getServiceDefaultUrl()
 
+// Uncomment the next instruction to set your current enviroment as local, thus using API_LOCAL
+// DON'T COMMIT THIS FILE IF YOU CHANGED THIS INSTRUCTION
+// process.env.NODE_ENV = 'local'
+
 function getServiceDefaultUrl() {
   switch (process.env.NODE_ENV) {
     case 'development':
-      //TODO this need to be replaced when using a local enviroment, it should become API_LOCAL
       return API_DEVELOP
     case 'test':
       return API_DEVELOP

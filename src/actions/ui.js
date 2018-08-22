@@ -2,7 +2,12 @@
 // SPDX-License-Identifier: MIT
 
 import { getCurationAction } from './curationActions'
-import { getDefinitionAction, previewDefinitionAction, getDefinitionSuggestionsAction } from './definitionActions'
+import {
+  getDefinitionAction,
+  previewDefinitionAction,
+  getDefinitionSuggestionsAction,
+  resetPreviewDefinitionAction
+} from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
 import { getPrDataAction } from './prActions'
 
@@ -104,6 +109,10 @@ export function uiCurateGetDefinition(token, entity) {
 
 export function uiCurateGetDefinitionPreview(token, entity, curation) {
   return previewDefinitionAction(token, entity, curation, UI_CURATE_DEFINITION_PREVIEW)
+}
+
+export function uiCurateResetDefinitionPreview(token, entity) {
+  return resetPreviewDefinitionAction(token, entity, UI_CURATE_DEFINITION_PREVIEW)
 }
 
 export function uiBrowseUpdateFilter(value) {

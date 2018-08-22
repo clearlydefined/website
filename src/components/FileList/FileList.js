@@ -1,42 +1,43 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import globToRegExp from 'glob-to-regexp'
-import pickBy from 'lodash/pickBy'
-import map from 'lodash/map'
+import transform from 'lodash/transform'
 import isEqual from 'lodash/isEqual'
-import isEmpty from 'lodash/isEmpty'
 import treeTableHOC from './treeTable'
 import FilterCustomComponent from './FilterCustomComponent'
 import FacetsRenderer from '../FacetsRenderer'
 import LicensesRenderer from '../LicensesRenderer'
 import CopyrightsRenderer from '../CopyrightsRenderer'
 import Contribution from '../../utils/contribution'
+import FileListSpec from '../../utils/filelist'
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
  *
  */
 export default class FileList extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      files: [],
-      expanded: {},
-      isFiltering: false
-    }
-
-    this.generateColumns.bind(this)
+  state = {
+    files: [],
+    expanded: {},
+    isFiltering: false
   }
-
+  componentDidMount() {
+    // Data are parsed to create a tree-folder structure
+    const { files, component, previewDefinition } = this.props
+    if (files) {
+      const definitionFiles = parsePaths(files, component.item, previewDefinition)
+      files && this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
+    }
+  }
   componentWillReceiveProps(nextProps) {
     // Data are parsed to create a tree-folder structure
-    if (nextProps.files) {
-      const files = parsePaths(nextProps.files, nextProps.changes, nextProps.component)
-      nextProps.files && this.setState({ files, rawData: files })
+    const { files, component, previewDefinition } = nextProps
+    if (files) {
+      const definitionFiles = parsePaths(files, component.item, previewDefinition)
+      files && this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
     }
   }
 
@@ -44,7 +45,8 @@ export default class FileList extends Component {
     return nextState.files.length !== this.state.files.length || !isEqual(nextProps.changes, this.props.changes)
   }
 
-  generateColumns(columns) {
+  generateColumns = columns => {
+    const { component, previewDefinition } = this.props
     return columns.concat([
       {
         Header: 'Name',
@@ -64,16 +66,20 @@ export default class FileList extends Component {
         accessor: 'facets',
         resizable: false,
         Cell: row => <FacetsRenderer item={row} />,
-        filterMethod: (filter, rows) =>
-          rows.filter(
-            item =>
-              item._original && item._original.facets
-                ? item._original.facets
-                    .toString()
-                    .toLowerCase()
-                    .includes(filter.value.filterValue.toLowerCase())
-                : true
-          ),
+        filterMethod: (filter, rows) => {
+          const filterValue = filter.value.filterValue.toLowerCase()
+          return rows.filter(item => {
+            if (item && item.facets && item.facets.length) {
+              // console.log(item.facets)
+              return (
+                item.facets.findIndex(f => {
+                  return f.value.includes(filterValue)
+                }) > -1
+              )
+            }
+            return true
+          })
+        },
         filterAll: true
       },
       {
@@ -81,14 +87,42 @@ export default class FileList extends Component {
         id: 'license',
         accessor: 'license',
         resizable: false,
-        Cell: row => <LicensesRenderer item={row} />,
+        Cell: row =>
+          row.original && (
+            <LicensesRenderer
+              isDifferent={Contribution.ifDifferent(
+                component,
+                previewDefinition,
+                `files[${row.original.id}].license`,
+                true,
+                false
+              )}
+              value={Contribution.getValue(component.item, previewDefinition, `files[${row.original.id}].license`)}
+              onSave={value => {
+                this.props.onChange(`files[${row.original.id}]`, value, null, value => {
+                  return {
+                    path: row.original.path,
+                    attributions: Contribution.getValue(
+                      component,
+                      previewDefinition,
+                      `files[${row.original.id}].attributions`
+                    ),
+                    license: value
+                  }
+                })
+              }}
+            />
+          ),
         filterMethod: (filter, rows) =>
           filter.value.filterValue
             ? rows.filter(
                 item =>
-                  item._original &&
-                  item._original.license &&
-                  item._original.license.toLowerCase().includes(filter.value.filterValue.toLowerCase())
+                  item._original && item._original.license
+                    ? item._original.license
+                        .toString()
+                        .toLowerCase()
+                        .includes(filter.value.filterValue.toLowerCase())
+                    : true
               )
             : rows,
         filterAll: true
@@ -97,7 +131,25 @@ export default class FileList extends Component {
         Header: 'Copyrights',
         accessor: 'attributions',
         resizable: false,
-        Cell: row => <CopyrightsRenderer item={row} showPopup={this.showPopup} />,
+        Cell: row => (
+          <CopyrightsRenderer
+            item={row}
+            showPopup={this.showPopup}
+            onSave={value => {
+              this.props.onChange(`files[${row.original.id}]`, value, null, value => {
+                return {
+                  path: row.original.path,
+                  license: Contribution.getValue(
+                    component.item,
+                    previewDefinition,
+                    `files[${row.original.id}].license`
+                  ),
+                  attributions: value
+                }
+              })
+            }}
+          />
+        ),
         filterMethod: (filter, rows) => {
           if (!filter.value.filterValue) return rows
           return rows.filter(item => {
@@ -122,10 +174,10 @@ export default class FileList extends Component {
         <TreeTable
           showPagination={false}
           sortable={false}
-          filterable={true}
+          filterable
           freezeWhenExpanded={false}
           manual={false}
-          onFilteredChange={filtered => this.setState({ isFiltering: true })}
+          onFilteredChange={() => this.setState({ isFiltering: true })}
           noDataText={
             isFiltering ? "Current filters didn't match any data" : 'There are currently no files for this definition'
           }
@@ -152,30 +204,16 @@ const pathColums = []
 const columns = []
 
 /**
- * Parse Path to retrieve the complete folder structure
- * @param  {} files
- * @param  {} changes
- * @param  {} component
+ * Parse each file's path to retrieve the complete folder structure
+ * @param  {} files The files object coming from the definition
+ * @return {Object} Return a new object containing the files object modified
  */
-const parsePaths = (files, changes, component) => {
-  const changedFacets = pickBy(changes, (item, index) => index.startsWith('described.facets'))
-  return files.map((file, index) => {
-    file.facets = map(changedFacets, (glob, facets) => {
-      if (!globToRegExp(glob).test(file.path)) return
-      return facets
-        .split('described.facets.')
-        .pop()
-        .trim()
-    })
-
-    file.areFacetsDifferent =
-      file.facets.length > 0 && isEqual(Contribution.getOriginalValue(component, `files[${index}].facets`), file.facets)
-        ? ''
-        : 'facets__isEdited'
-
+const parsePaths = (files, component, preview) => {
+  return transform(files, (result, file, key) => {
+    file.id = key
     const folders = file.path.split('/')
-
-    if (!file.facets || isEmpty(file.facets)) file.facets = ['core']
+    file.facets = FileListSpec.getFileFacets(file.facets, component, preview, key)
+    file.attributions = FileListSpec.getFileAttributions(file.attributions, component, preview, key)
 
     // If files are in the root folder, then they will grouped into a "/" folder
     if (folders.length === 1) {
@@ -207,7 +245,6 @@ const parsePaths = (files, changes, component) => {
         })
       }
     })
-
-    return file
+    result[key] = file
   })
 }
