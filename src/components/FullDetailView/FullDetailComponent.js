@@ -213,7 +213,7 @@ class FullDetailComponent extends Component {
         <Col md={8}>
           <div className="detail-header">
             <h2>{item && item.coordinates.name}</h2>
-            <p>commit id: {item.described.sourceLocation.revision}</p>
+            {item.described.sourceLocation && <p>commit id: {item.described.sourceLocation.revision}</p>}
           </div>
           <div className="score-header">
             <img className="list-buttons" src={getBadgeUrl(item)} alt="score" />
