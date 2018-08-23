@@ -98,8 +98,12 @@ export class FullDetailPage extends Component {
   previewDefinition(nextComponent) {
     const { token, component, uiCurateGetDefinitionPreview } = this.props
     const { changes } = this.state
-    if (!component && !nextComponent) return false
-
+    if (
+      (!component || isEmpty(component.changes)) &&
+      (!nextComponent || isEmpty(nextComponent.changes)) &&
+      isEmpty(changes)
+    )
+      return false
     const previewComponent = nextComponent ? nextComponent : component
     const patches = Contribution.buildPatch([], previewComponent, changes)
     uiCurateGetDefinitionPreview(token, previewComponent, patches)
@@ -148,7 +152,7 @@ export class FullDetailPage extends Component {
       message: 'Unsaved Changes',
       description:
         'Some information have been changed and are currently unsaved. Are you sure to continue without saving?',
-      NotificationButtons,
+      btn: NotificationButtons,
       key,
       onClose: notification.close(key),
       duration: 0
