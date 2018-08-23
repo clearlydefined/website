@@ -14,10 +14,11 @@ class CopyrightsRenderer extends Component {
   render() {
     const { item, onSave } = this.props
     return (
-      <ButtonToolbar>
+      <div>
         <OverlayTrigger
           trigger="click"
           rootClose
+          container={document.getElementsByClassName('ReactTable')[0]}
           placement="left"
           overlay={
             <PopoverRenderer
@@ -33,7 +34,7 @@ class CopyrightsRenderer extends Component {
         >
           <div>{item && item.value && item.value[0] ? item.value[0].value : null}</div>
         </OverlayTrigger>
-      </ButtonToolbar>
+      </div>
     )
   }
 }
