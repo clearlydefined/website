@@ -3,6 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import Tag from 'antd/lib/tag'
 
 /**
  * Specific renderer for Facets
@@ -20,9 +21,9 @@ class FacetsRenderer extends Component {
     return (
       <div>
         {item.value.map((val, i) => (
-          <span key={i} className={val.isDifferent ? 'facets--isEdited' : ''}>
+          <Tag key={i} className={val.isDifferent ? 'facets--isEdited' : ''}>
             {val.value || 'core'}
-          </span>
+          </Tag>
         ))}
       </div>
     )
