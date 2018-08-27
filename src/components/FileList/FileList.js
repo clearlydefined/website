@@ -70,12 +70,7 @@ export default class FileList extends Component {
           const filterValue = filter.value.filterValue.toLowerCase()
           return rows.filter(item => {
             if (item && item.facets && item.facets.length) {
-              // console.log(item.facets)
-              return (
-                item.facets.findIndex(f => {
-                  return f.value.includes(filterValue)
-                }) > -1
-              )
+              return item.facets.findIndex(f => f.value.includes(filterValue)) > -1
             }
             return true
           })
@@ -152,13 +147,18 @@ export default class FileList extends Component {
         ),
         filterMethod: (filter, rows) => {
           if (!filter.value.filterValue) return rows
+          const filterValue = filter.value.filterValue.toLowerCase()
           return rows.filter(item => {
             if (!item._original) return true
             if (!item._original.attributions) return false
-            return item._original.attributions
-              .toString()
-              .toLowerCase()
-              .includes(filter.value.filterValue.toLowerCase())
+            return (
+              item._original.attributions.findIndex(a =>
+                a.value
+                  .toString()
+                  .toLowerCase()
+                  .includes(filterValue)
+              ) > -1
+            )
           })
         },
         filterAll: true
