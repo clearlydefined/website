@@ -4,8 +4,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Col, Grid, Row } from 'react-bootstrap'
-import InlineEditor from '../InlineEditor'
 import Contribution from '../../utils/contribution'
+import GlobsPicker from '../GlobsPicker'
 
 // Hardcoded, maybe it should be kept somewhere else
 const facets = ['data', 'dev', 'docs', 'examples', 'tests']
@@ -33,20 +33,15 @@ class FacetsEditor extends Component {
               <span>{item}</span>
             </Col>
             <Col md={11}>
-              <InlineEditor
-                extraClass={Contribution.classIfDifferent(
+              <GlobsPicker
+                className={Contribution.classIfDifferent(
                   component,
                   previewDefinition,
                   `described.facets.${item}`,
                   'facets--isEdited'
                 )}
-                readOnly={false}
-                type="text"
-                initialValue={Contribution.getOriginalValue(component, `described.facets.${item}`)}
-                value={Contribution.getValue(component, previewDefinition, `described.facets.${item}`).toString()}
-                onChange={value => onChange(`described.facets.${item}`, value, 'array')}
-                validator
-                placeholder={`facet for ${item}`}
+                globs={Contribution.getValue(component, previewDefinition, `described.facets.${item}`)}
+                onChange={value => onChange(`described.facets.${item}`, value)}
               />
             </Col>
           </Row>
