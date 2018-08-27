@@ -24,8 +24,8 @@ class CopyrightsRenderer extends Component {
             <PopoverRenderer
               title={'Copyrights'}
               values={item.value}
-              editable="true"
-              canadditems="true"
+              editable
+              canAdditems
               onSave={onSave}
               editorType={'text'}
               editorPlaceHolder={'Copyright'}
@@ -45,7 +45,9 @@ CopyrightsRenderer.propTypes = {
    */
   item: PropTypes.shape({
     value: PropTypes.array
-  }).isRequired
+  }).isRequired,
+
+  onSave: PropTypes.func.isRequired
 }
 
 export default CopyrightsRenderer
