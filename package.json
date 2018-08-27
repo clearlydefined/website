@@ -12,7 +12,7 @@
     "moment": "^2.22.2",
     "pako": "^1.0.6",
     "react": "^16.4.1",
-    "react-bootstrap": "^0.31.5",
+    "react-bootstrap": "^0.32.3",
     "react-bootstrap-typeahead": "^2.6.0",
     "react-bs-notifier": "^4.4.6",
     "react-copy-to-clipboard": "^5.0.1",
