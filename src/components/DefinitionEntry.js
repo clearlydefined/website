@@ -12,6 +12,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
+import Contribution from '../utils/contribution'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -255,14 +256,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   printCoordinates(value) {
-    return value ? `${value.url}/commit/${value.revision}` : null
-  }
-
-  parseCoordinates(value) {
-    if (!value) return null
-    const segments = value.split('/')
-    const url = value.replace(/\/commit\/[a-z\d]+$/, '')
-    return { type: 'git', provider: 'github', url, revision: segments[6] }
+    return value ? value.url : null
   }
 
   renderLabel(text, editable = false) {
@@ -329,7 +323,7 @@ export default class DefinitionEntry extends React.Component {
                   type="text"
                   initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
-                  onChange={this.fieldChange('described.sourceLocation', isEqual, this.parseCoordinates)}
+                  onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.parseCoordinates)}
                   validator={value => true}
                   placeholder={'Source location'}
                 />,

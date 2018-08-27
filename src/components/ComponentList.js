@@ -72,7 +72,7 @@ export default class ComponentList extends React.Component {
     event.stopPropagation()
     const definition = this.getDefinition(component)
     const sourceLocation = get(definition, 'described.sourceLocation')
-    const sourceEntity = sourceLocation && EntitySpec.fromSourceCoordinates(sourceLocation)
+    const sourceEntity = sourceLocation && EntitySpec.fromCoordinates(sourceLocation)
     const action = this.props.onAddComponent
     action && sourceEntity && action(sourceEntity, component)
   }
