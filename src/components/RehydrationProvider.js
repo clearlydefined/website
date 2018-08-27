@@ -11,7 +11,8 @@ import {
   ROUTE_HARVEST,
   ROUTE_CONTRIBUTION,
   ROUTE_ABOUT,
-  ROUTE_DISCORD
+  ROUTE_DISCORD,
+  ROUTE_SHARE
 } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
@@ -53,6 +54,7 @@ export default class RehydrationDelayedProvider extends Component {
             <Switch>
               <Route path={ROUTE_DEFINITIONS} exact={true} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
+              <Route path={ROUTE_SHARE} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
               <Route path={ROUTE_CONTRIBUTION} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />

@@ -12,6 +12,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
+import Contribution from '../utils/contribution'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -101,12 +102,16 @@ export default class DefinitionEntry extends React.Component {
     )
     const revisionTag = revisionUrl ? (
       <span>
-        &nbsp;&nbsp;&nbsp;<a href={revisionUrl} target="_blank">
+        &nbsp;&nbsp;&nbsp;
+        <a href={revisionUrl} target="_blank">
           {revision}
         </a>
       </span>
     ) : (
-      <span>&nbsp;&nbsp;&nbsp;{revision}</span>
+      <span>
+        &nbsp;&nbsp;&nbsp;
+        {revision}
+      </span>
     )
     return (
       <span>
@@ -199,7 +204,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   getPercentage(count, total) {
-    return Math.round((count || 0) / total * 100)
+    return Math.round(((count || 0) / total) * 100)
   }
 
   foldFacets(definition, facets = null) {
@@ -251,14 +256,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   printCoordinates(value) {
-    return value ? `${value.url}/commit/${value.revision}` : null
-  }
-
-  parseCoordinates(value) {
-    if (!value) return null
-    const segments = value.split('/')
-    const url = value.replace(/\/commit\/[a-z\d]+$/, '')
-    return { type: 'git', provider: 'github', url, revision: segments[6] }
+    return value ? value.url : null
   }
 
   renderLabel(text, editable = false) {
@@ -279,7 +277,7 @@ export default class DefinitionEntry extends React.Component {
         </div>
       )
 
-    // TODO find a way of calling this less frequently. Relatively expensive.
+    // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed, described } = definition
     const initialFacets =
@@ -325,7 +323,7 @@ export default class DefinitionEntry extends React.Component {
                   type="text"
                   initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
-                  onChange={this.fieldChange('described.sourceLocation', isEqual, this.parseCoordinates)}
+                  onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.parseCoordinates)}
                   validator={value => true}
                   placeholder={'Source location'}
                 />,

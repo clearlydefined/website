@@ -9,6 +9,7 @@ import { SpdxPicker } from './'
 export default class InlineEditor extends React.Component {
   static propTypes = {
     initialValue: PropTypes.string,
+    extraClass: PropTypes.string,
     value: PropTypes.string,
     type: PropTypes.oneOf(['text', 'date', 'license']).isRequired,
     onChange: PropTypes.func.isRequired,
@@ -19,10 +20,7 @@ export default class InlineEditor extends React.Component {
     type: 'text'
   }
 
-  constructor(props) {
-    super(props)
-    this.state = { editing: false }
-  }
+  state = { editing: false }
 
   focus = ref => {
     if (ref && ref.focus) ref.focus()
@@ -34,7 +32,7 @@ export default class InlineEditor extends React.Component {
     if (type !== 'date') this.setState({ editing: false })
 
     // sanity check for empty textboxes
-    if (typeof nextValue === 'string' && nextValue.trim().length === 0) return this.renderValue()
+    // if (typeof nextValue === 'string' && nextValue.trim().length === 0) return this.renderValue()
 
     // don't bother saving unchanged fields
     if (nextValue === value) return
@@ -51,14 +49,14 @@ export default class InlineEditor extends React.Component {
   }
 
   renderValue() {
-    const { value, type, initialValue, placeholder, extraClass } = this.props
+    const { value, type, initialValue, placeholder, extraClass, readOnly, onClick } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
     if (!editing)
       return (
         <span
           className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
-          onClick={() => (this.props.readOnly ? null : this.setState({ editing: true }))}
+          onClick={() => (readOnly ? null : this.setState({ editing: true }, () => onClick && onClick()))}
         >
           {this.renderers[type](value) || placeholder}
         </span>
@@ -68,10 +66,14 @@ export default class InlineEditor extends React.Component {
   }
 
   render() {
+    const { onClick } = this.props
     return (
       <span className="list-singleLine">
         {!this.props.readOnly && (
-          <i className="fas fa-pencil-alt editable-marker" onClick={() => this.setState({ editing: true })} />
+          <i
+            className="fas fa-pencil-alt editable-marker"
+            onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
+          />
         )}
         {this.renderValue()}
       </span>

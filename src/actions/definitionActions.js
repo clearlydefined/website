@@ -51,3 +51,11 @@ export function previewDefinitionAction(token, entity, curation, name) {
     )
   }
 }
+
+export function resetPreviewDefinitionAction(token, entity, name) {
+  return dispatch => {
+    const actions = asyncActions(name)
+    dispatch(actions.start())
+    return dispatch(actions.success({}))
+  }
+}

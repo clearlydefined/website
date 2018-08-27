@@ -12,19 +12,29 @@ import PopoverRenderer from './PopoverRenderer'
  */
 class CopyrightsRenderer extends Component {
   render() {
-    const { item } = this.props
-
+    const { item, onSave } = this.props
     return (
-      <ButtonToolbar>
+      <div>
         <OverlayTrigger
           trigger="click"
           rootClose
+          container={document.getElementsByClassName('ReactTable')[0]}
           placement="left"
-          overlay={<PopoverRenderer title="Copyrights" values={item.value} />}
+          overlay={
+            <PopoverRenderer
+              title={'Copyrights'}
+              values={item.value}
+              editable="true"
+              canadditems="true"
+              onSave={onSave}
+              editorType={'text'}
+              editorPlaceHolder={'Copyright'}
+            />
+          }
         >
-          <div>{item.value}</div>
+          <div>{item && item.value && item.value[0] ? item.value[0].value : null}</div>
         </OverlayTrigger>
-      </ButtonToolbar>
+      </div>
     )
   }
 }

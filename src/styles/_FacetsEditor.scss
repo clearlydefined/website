@@ -3,8 +3,8 @@
   padding-right: 0;
 }
 
-.facets__isEdited {
-  background: red;
-  color: white;
-  padding: 10px;
+.facets--isEdited,
+.isDifferent {
+  background: red !important;
+  color: white !important;
 }
