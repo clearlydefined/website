@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 const url = require('url')
+const { setIfValue } = require('./utils')
 
 const NAMESPACE = 0x4
 const NAME = 0x2
@@ -58,11 +59,11 @@ export default class EntitySpec {
   constructor(type, provider, namespace, name, revision = null, pr = null, changes = null) {
     this.type = type.toLowerCase()
     this.provider = provider.toLowerCase()
-    this.namespace = namespace === '-' ? null : normalize(namespace, this.provider, NAMESPACE)
+    setIfValue(this, 'namespace', namespace === '-' ? null : normalize(namespace, this.provider, NAMESPACE))
     this.name = normalize(name, this.provider, NAME)
-    this.revision = normalize(revision, this.provider, REVISION)
-    this.pr = pr
-    this.changes = changes
+    setIfValue(this, 'revision', normalize(revision, this.provider, REVISION))
+    setIfValue(this, 'pr', pr)
+    setIfValue(this, 'changes', changes)
   }
 
   toPath() {

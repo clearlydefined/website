@@ -256,7 +256,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   printCoordinates(value) {
-    return value ? `${value.url}/commit/${value.revision}` : null
+    return value ? value.url : null
   }
 
   renderLabel(text, editable = false) {
