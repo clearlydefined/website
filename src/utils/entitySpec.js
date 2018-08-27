@@ -32,17 +32,6 @@ export default class EntitySpec {
     return new EntitySpec(type, provider, namespace, name, revision, pr)
   }
 
-  static fromSourceCoordinates(coordinates) {
-    switch (coordinates.provider) {
-      case 'github':
-        // eslint-disable-next-line
-        const [blank, namespace, name] = url.parse(coordinates.url).pathname.split('/')
-        return new EntitySpec(coordinates.type, coordinates.provider, namespace, name, coordinates.revision)
-      default:
-        return null
-    }
-  }
-
   static fromCoordinates(o) {
     return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision, o.pr, o.changes)
   }
