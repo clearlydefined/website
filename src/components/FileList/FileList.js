@@ -112,11 +112,13 @@ export default class FileList extends Component {
           filter.value.filterValue
             ? rows.filter(
                 item =>
-                  item._original && item._original.license
+                  item._original
                     ? item._original.license
-                        .toString()
-                        .toLowerCase()
-                        .includes(filter.value.filterValue.toLowerCase())
+                      ? item._original.license
+                          .toString()
+                          .toLowerCase()
+                          .includes(filter.value.filterValue.toLowerCase())
+                      : false
                     : true
               )
             : rows,
