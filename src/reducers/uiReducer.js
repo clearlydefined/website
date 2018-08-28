@@ -44,7 +44,7 @@ import EntitySpec from '../utils/entitySpec'
  */
 const initialStateNavigation = [
   {
-    title: 'Browse',
+    title: 'Definitions',
     to: ROUTE_DEFINITIONS,
     protected: 0,
     isSelected: false
