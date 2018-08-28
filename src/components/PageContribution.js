@@ -5,7 +5,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { uiContributionGetData, uiContributionUpdateList } from '../actions/ui'
-import { ROUTE_CONTRIBUTION } from '../utils/routingConstants'
+import { ROUTE_CURATIONS } from '../utils/routingConstants'
 import { uiNavigation } from '../actions/ui'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 
@@ -16,8 +16,7 @@ class PageContribution extends AbstractPageDefinitions {
 
   componentDidMount() {
     const { dispatch, prNumber, token } = this.props
-
-    dispatch(uiNavigation({ to: ROUTE_CONTRIBUTION }))
+    dispatch(uiNavigation({ to: ROUTE_CURATIONS }))
     dispatch(uiContributionGetData(token, prNumber))
   }
 
