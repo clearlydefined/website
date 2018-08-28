@@ -28,7 +28,7 @@ export default class SocialIcons extends Component {
       <span className={this.props.className}>
         {github && this.renderLink(github, 'fab fa-github')}
         {website && this.renderLink(website, 'fas fa-globe')}
-        {email && this.renderLink('mailto:' + email, 'fas fa-envelope')}
+        {email && this.renderLink(email, 'fas fa-envelope')}
         {facebook && this.renderLink(facebook, 'fab fa-facebook')}
         {twitter && this.renderLink(twitter, 'fab fa-twitter')}
         {instagram && this.renderLink(instagram, 'fab fa-instagram')}
