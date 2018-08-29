@@ -1,13 +1,15 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Button } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import pako from 'pako'
 import base64js from 'base64-js'
 import { saveAs } from 'file-saver'
+import notification from 'antd/lib/notification'
+import AntdButton from 'antd/lib/button'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
@@ -52,6 +54,54 @@ class PageDefinitions extends AbstractPageDefinitions {
     )
   }
 
+  doRefreshAll = () => {
+    if (this.hasChanges()) {
+      const key = `open${Date.now()}`
+      const NotificationButtons = (
+        <Fragment>
+          <AntdButton
+            type="primary"
+            size="small"
+            onClick={() => {
+              this.refresh()
+              notification.close(key)
+            }}
+          >
+            Refresh
+          </AntdButton>
+          <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
+            Dismiss
+          </AntdButton>
+        </Fragment>
+      )
+      notification.open({
+        message: 'Unsaved Changes',
+        description: 'Some information have been changed and are currently unsaved. Are you sure to continue?',
+        btn: NotificationButtons,
+        key,
+        onClose: notification.close(key),
+        duration: 0
+      })
+    } else {
+      this.refresh()
+    }
+  }
+
+  refresh = () => {
+    const { components, dispatch, token } = this.props
+
+    this.onRemoveAll()
+    const definitions = this.buildSaveSpec(components.list)
+
+    definitions.forEach(definition => {
+      const path = definition.toPath()
+      dispatch(getDefinitionsAction(token, [path]))
+    })
+
+    dispatch(uiBrowseUpdateList({ addAll: definitions }))
+    dispatch(uiNotificationNew({ type: 'info', message: 'All components have been refreshed', timeout: 3000 }))
+  }
+
   renderButtons() {
     return (
       <div className="pull-right">
@@ -73,6 +123,10 @@ class PageDefinitions extends AbstractPageDefinitions {
         &nbsp;
         <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
           Contribute
+        </Button>
+        &nbsp;
+        <Button bsStyle="info" disabled={!this.hasComponents()} onClick={this.doRefreshAll}>
+          Refresh
         </Button>
       </div>
     )
