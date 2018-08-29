@@ -8,6 +8,7 @@ import { Button, OverlayTrigger, Tooltip, ButtonGroup } from 'react-bootstrap'
 import { get } from 'lodash'
 import EntitySpec from '../utils/entitySpec'
 import { getBadgeUrl } from '../api/clearlyDefined'
+import Definition from '../utils/definition'
 
 export default class ComponentList extends React.Component {
   static propTypes = {
@@ -109,9 +110,10 @@ export default class ComponentList extends React.Component {
     const component = EntitySpec.fromCoordinates(currentComponent)
     const { readOnly } = this.props
     const isSourceComponent = this.isSourceComponent(component)
+    const scores = Definition.computeScores(definition)
     return (
       <div className="list-activity-area">
-        <img className="list-buttons" src={getBadgeUrl(definition)} alt="score" />
+        {scores && <img className="list-buttons" src={getBadgeUrl(scores.tool, scores.effective)} alt="score" />}
         <ButtonGroup>
           {!isSourceComponent &&
             !readOnly && (
