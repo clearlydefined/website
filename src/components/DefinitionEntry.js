@@ -135,6 +135,7 @@ export default class DefinitionEntry extends React.Component {
       content
     )
   }
+
   renderMessage(definition) {
     const licenseExpression = definition ? get(definition, 'licensed.declared') : null
     return licenseExpression ? (
