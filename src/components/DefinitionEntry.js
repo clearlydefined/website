@@ -135,6 +135,7 @@ export default class DefinitionEntry extends React.Component {
       content
     )
   }
+
   renderMessage(definition) {
     const licenseExpression = definition ? get(definition, 'licensed.declared') : null
     return licenseExpression ? (
@@ -350,18 +351,6 @@ export default class DefinitionEntry extends React.Component {
               )}
             </Col>
           </Row>
-          <Row>
-            <Col md={2}>{this.renderLabel('Facets', true)}</Col>
-            <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'described.facets',
-                <p className={`list-singleLine ${this.classIfDifferent('described.facets')}`}>
-                  {readOnly ? null : <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>}
-                  {this.printArray(initialFacets)}
-                </p>
-              )}
-            </Col>
-          </Row>
         </Col>
         <Col md={7}>
           <Row>
@@ -394,17 +383,6 @@ export default class DefinitionEntry extends React.Component {
                 <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
                 <b>{isNaN(unattributed) ? '-' : `${unattributed} (${unattributedPercent}%)`}</b>
               </p>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={2}>{this.renderLabel('Tools')}</Col>
-            <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'described.tools',
-                <p className={`list-singleLine ${this.classIfDifferent('described.tools')}`}>{toolList.join(', ')}</p>,
-                'bottom',
-                x => (x ? x.join(', ') : '')
-              )}
             </Col>
           </Row>
         </Col>

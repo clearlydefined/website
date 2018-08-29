@@ -26,7 +26,6 @@ class FacetsEditor extends Component {
 
     return (
       <Grid className="no-gutters">
-        <h2>FACETS</h2>
         {facets.map(item => (
           <Row key={item}>
             <Col md={1}>
