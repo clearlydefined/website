@@ -93,16 +93,17 @@ export default class FileList extends Component {
                 false
               )}
               value={Contribution.getValue(component.item, previewDefinition, `files[${row.original.id}].license`)}
-              onSave={value => {
-                this.props.onChange(`files[${row.original.id}]`, value, null, value => {
+              onSave={license => {
+                this.props.onChange(`files[${row.original.id}]`, license, null, license => {
+                  const attributions = Contribution.getValue(
+                    component.item,
+                    previewDefinition,
+                    `files[${row.original.id}].attributions`
+                  )
                   return {
                     path: row.original.path,
-                    attributions: Contribution.getValue(
-                      component,
-                      previewDefinition,
-                      `files[${row.original.id}].attributions`
-                    ),
-                    license: value
+                    license,
+                    ...(attributions ? { attributions } : {})
                   }
                 })
               }}
