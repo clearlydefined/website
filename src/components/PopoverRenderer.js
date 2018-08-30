@@ -20,7 +20,13 @@ class PopoverComponent extends Component {
     /**
      * values to show, it can be string o either an array
      */
-    values: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+    values: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+
+    canAddItems: PropTypes.bool,
+    editable: PropTypes.bool,
+    onSave: PropTypes.func,
+    editorType: PropTypes.oneOf(['text', 'date', 'license']).isRequired,
+    editorPlaceHolder: PropTypes.string
   }
 
   constructor(props) {
@@ -49,7 +55,7 @@ class PopoverComponent extends Component {
       <div className="popoverRenderer__title">
         <span>{this.props.title}</span>
         <div className="popoverRenderer__title__buttons">
-          {this.props.canadditems && (
+          {this.props.canAddItems && (
             <Button onClick={() => this.showAddRow()} bsSize="xsmall">
               <i className="fas fa-plus" />
             </Button>
@@ -76,7 +82,7 @@ class PopoverComponent extends Component {
             {
               <InlineEditor
                 extraClass={item.isDifferent ? 'popoverRenderer__items__value--isEdited' : ''}
-                readOnly={false}
+                readOnly={!editable}
                 type={editorType}
                 initialValue={item.value || ''}
                 value={item.value || ''}
@@ -154,7 +160,7 @@ class PopoverComponent extends Component {
 
   render() {
     const { showAddRow, values } = this.state
-    const { editorType, editorPlaceHolder, onSave, ...popoverProperties } = this.props
+    const { canAdditems, editable, editorType, editorPlaceHolder, onSave, ...popoverProperties } = this.props
 
     return (
       <Popover

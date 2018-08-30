@@ -9,7 +9,7 @@ import {
   ROUTE_DEFINITIONS,
   ROUTE_INSPECT,
   ROUTE_HARVEST,
-  ROUTE_CONTRIBUTION,
+  ROUTE_CURATIONS,
   ROUTE_ABOUT,
   ROUTE_DISCORD,
   ROUTE_SHARE
@@ -56,7 +56,7 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
               <Route path={ROUTE_SHARE} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_INSPECT} component={withTracker(PageInspect)} />
-              <Route path={ROUTE_CONTRIBUTION} component={withTracker(PageContribution)} />
+              <Route path={ROUTE_CURATIONS} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />

@@ -11,8 +11,12 @@ import PopoverRenderer from './PopoverRenderer'
  *
  */
 class CopyrightsRenderer extends Component {
+  static defaultProps = {
+    readOnly: false
+  }
+
   render() {
-    const { item, onSave } = this.props
+    const { item, onSave, readOnly } = this.props
     return (
       <div>
         <OverlayTrigger
@@ -24,8 +28,8 @@ class CopyrightsRenderer extends Component {
             <PopoverRenderer
               title={'Copyrights'}
               values={item.value}
-              editable="true"
-              canadditems="true"
+              editable={!readOnly}
+              canAdditems={!readOnly}
               onSave={onSave}
               editorType={'text'}
               editorPlaceHolder={'Copyright'}
@@ -45,7 +49,10 @@ CopyrightsRenderer.propTypes = {
    */
   item: PropTypes.shape({
     value: PropTypes.array
-  }).isRequired
+  }).isRequired,
+
+  onSave: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool
 }
 
 export default CopyrightsRenderer

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import transform from 'lodash/transform'
@@ -19,11 +20,20 @@ import FileListSpec from '../../utils/filelist'
  *
  */
 export default class FileList extends Component {
+  static propTypes = {
+    readOnly: PropTypes.bool
+  }
+
+  static defaultProps = {
+    readOnly: false
+  }
+
   state = {
     files: [],
     expanded: {},
     isFiltering: false
   }
+
   componentDidMount() {
     // Data are parsed to create a tree-folder structure
     const { files, component, previewDefinition } = this.props
@@ -46,7 +56,7 @@ export default class FileList extends Component {
   }
 
   generateColumns = columns => {
-    const { component, previewDefinition } = this.props
+    const { component, previewDefinition, readOnly } = this.props
     return columns.concat([
       {
         Header: 'Name',
@@ -70,12 +80,7 @@ export default class FileList extends Component {
           const filterValue = filter.value.filterValue.toLowerCase()
           return rows.filter(item => {
             if (item && item.facets && item.facets.length) {
-              // console.log(item.facets)
-              return (
-                item.facets.findIndex(f => {
-                  return f.value.includes(filterValue)
-                }) > -1
-              )
+              return item.facets.findIndex(f => f.value.includes(filterValue)) > -1
             }
             return true
           })
@@ -90,6 +95,7 @@ export default class FileList extends Component {
         Cell: row =>
           row.original && (
             <LicensesRenderer
+              readOnly={readOnly}
               isDifferent={Contribution.ifDifferent(
                 component,
                 previewDefinition,
@@ -98,16 +104,17 @@ export default class FileList extends Component {
                 false
               )}
               value={Contribution.getValue(component.item, previewDefinition, `files[${row.original.id}].license`)}
-              onSave={value => {
-                this.props.onChange(`files[${row.original.id}]`, value, null, value => {
+              onSave={license => {
+                this.props.onChange(`files[${row.original.id}]`, license, null, license => {
+                  const attributions = Contribution.getValue(
+                    component.item,
+                    previewDefinition,
+                    `files[${row.original.id}].attributions`
+                  )
                   return {
                     path: row.original.path,
-                    attributions: Contribution.getValue(
-                      component,
-                      previewDefinition,
-                      `files[${row.original.id}].attributions`
-                    ),
-                    license: value
+                    license,
+                    ...(attributions ? { attributions } : {})
                   }
                 })
               }}
@@ -117,11 +124,13 @@ export default class FileList extends Component {
           filter.value.filterValue
             ? rows.filter(
                 item =>
-                  item._original && item._original.license
+                  item._original
                     ? item._original.license
-                        .toString()
-                        .toLowerCase()
-                        .includes(filter.value.filterValue.toLowerCase())
+                      ? item._original.license
+                          .toString()
+                          .toLowerCase()
+                          .includes(filter.value.filterValue.toLowerCase())
+                      : false
                     : true
               )
             : rows,
@@ -134,6 +143,7 @@ export default class FileList extends Component {
         Cell: row => (
           <CopyrightsRenderer
             item={row}
+            readOnly={readOnly}
             showPopup={this.showPopup}
             onSave={value => {
               this.props.onChange(`files[${row.original.id}]`, value, null, value => {
@@ -152,13 +162,18 @@ export default class FileList extends Component {
         ),
         filterMethod: (filter, rows) => {
           if (!filter.value.filterValue) return rows
+          const filterValue = filter.value.filterValue.toLowerCase()
           return rows.filter(item => {
             if (!item._original) return true
             if (!item._original.attributions) return false
-            return item._original.attributions
-              .toString()
-              .toLowerCase()
-              .includes(filter.value.filterValue.toLowerCase())
+            return (
+              item._original.attributions.findIndex(a =>
+                a.value
+                  .toString()
+                  .toLowerCase()
+                  .includes(filterValue)
+              ) > -1
+            )
           })
         },
         filterAll: true
@@ -174,6 +189,7 @@ export default class FileList extends Component {
         <TreeTable
           showPagination={false}
           sortable={false}
+          defaultPageSize={15}
           filterable
           freezeWhenExpanded={false}
           manual={false}

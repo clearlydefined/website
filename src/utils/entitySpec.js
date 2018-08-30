@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-const url = require('url')
 const { setIfValue } = require('./utils')
 
 const NAMESPACE = 0x4
