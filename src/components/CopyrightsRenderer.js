@@ -29,7 +29,7 @@ class CopyrightsRenderer extends Component {
               title={'Copyrights'}
               values={item.value}
               editable={!readOnly}
-              canAdditems={!readOnly}
+              canAddItems={!readOnly}
               onSave={onSave}
               editorType={'text'}
               editorPlaceHolder={'Copyright'}
