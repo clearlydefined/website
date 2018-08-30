@@ -75,13 +75,13 @@ export function previewDefinition(token, entity, curation) {
   return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true }), token, curation)
 }
 
-export function getBadgeUrl(definition) {
-  const scoreToUrl = {
-    0: 'https://img.shields.io/badge/ClearlyDefined-0-red.svg',
-    1: 'https://img.shields.io/badge/ClearlyDefined-1-yellow.svg',
-    2: 'https://img.shields.io/badge/ClearlyDefined-2-brightgreen.svg'
-  }
-  return scoreToUrl[definition.score || 0]
+export function getBadgeUrl(score1, score2) {
+  const topScore = 2
+  const colors = ['red', 'yellow', 'brightgreen']
+  const percentScore = (score1 + score2) / (2 * topScore)
+  const bucketSize = 1 / (colors.length - 1)
+  const color = colors[Math.ceil(percentScore / bucketSize)]
+  return `https://img.shields.io/badge/ClearlyDefined-${score1}%20%7C%20${score2}-${color}.svg`
 }
 
 export function getGitHubSearch(token, path) {

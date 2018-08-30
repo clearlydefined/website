@@ -10,10 +10,6 @@ import { uiNavigation } from '../actions/ui'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 
 class PageContribution extends AbstractPageDefinitions {
-  constructor(props) {
-    super(props)
-  }
-
   componentDidMount() {
     const { dispatch, prNumber, token } = this.props
     dispatch(uiNavigation({ to: ROUTE_CURATIONS }))

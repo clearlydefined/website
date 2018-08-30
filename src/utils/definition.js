@@ -22,4 +22,11 @@ export default class Definition {
   static getDefinitionEntity(path) {
     return path ? EntitySpec.fromPath(path) : null
   }
+
+  static computeScores(definition) {
+    if (!definition.described) return null
+    const tool = Math.ceil((definition.described.toolScore + definition.licensed.toolScore) / 2)
+    const effective = Math.ceil((definition.described.score + definition.licensed.score) / 2)
+    return { tool, effective }
+  }
 }

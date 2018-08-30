@@ -11,18 +11,18 @@ import InlineEditor from './InlineEditor'
  */
 class LicensesRenderer extends Component {
   render() {
-    const { value, isDifferent, onSave } = this.props
+    const { value, isDifferent, onSave, readOnly } = this.props
 
     return (
       <InlineEditor
         extraClass={isDifferent ? 'license--isEdited' : ''}
-        readOnly={false}
+        readOnly={readOnly}
         type={'license'}
         initialValue={value}
         value={value}
         onChange={value => onSave(value)}
         validator
-        placeholder={'SPDX License'}
+        placeholder={!readOnly ? 'SPDX License' : ''}
       />
     )
   }

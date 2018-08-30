@@ -11,7 +11,8 @@ export default class GlobPicker extends Component {
   static propTypes = {
     globs: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
     onBlur: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    readOnly: PropTypes.bool
   }
 
   constructor(props) {
@@ -51,7 +52,7 @@ export default class GlobPicker extends Component {
   saveInputRef = input => (this.input = input)
 
   render() {
-    const { globs, className } = this.props
+    const { globs, className, readOnly } = this.props
     const { inputVisible, inputValue } = this.state
 
     return (
@@ -60,7 +61,7 @@ export default class GlobPicker extends Component {
           globs.map(glob => {
             const isLongTag = glob.length > 20
             const globElem = (
-              <Tag className={className} key={glob} closable afterClose={() => this.handleClose(glob)}>
+              <Tag className={className} key={glob} closable={!readOnly} afterClose={() => this.handleClose(glob)}>
                 {isLongTag ? `${glob.slice(0, 20)}...` : glob}
               </Tag>
             )
@@ -72,7 +73,7 @@ export default class GlobPicker extends Component {
               globElem
             )
           })}
-        {inputVisible && (
+        {inputVisible ? (
           <Input
             ref={this.saveInputRef}
             type="text"
@@ -83,11 +84,12 @@ export default class GlobPicker extends Component {
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}
           />
-        )}
-        {!inputVisible && (
-          <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-            <Icon type="plus" /> Add a valid Glob expression
-          </Tag>
+        ) : (
+          !readOnly && (
+            <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
+              <Icon type="plus" /> Add a valid Glob expression
+            </Tag>
+          )
         )}
       </div>
     )

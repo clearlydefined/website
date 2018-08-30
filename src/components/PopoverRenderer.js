@@ -82,7 +82,7 @@ class PopoverComponent extends Component {
             {
               <InlineEditor
                 extraClass={item.isDifferent ? 'popoverRenderer__items__value--isEdited' : ''}
-                readOnly={false}
+                readOnly={!editable}
                 type={editorType}
                 initialValue={item.value || ''}
                 value={item.value || ''}
@@ -160,7 +160,7 @@ class PopoverComponent extends Component {
 
   render() {
     const { showAddRow, values } = this.state
-    const { editorType, editorPlaceHolder, onSave, ...popoverProperties } = this.props
+    const { canAdditems, editable, editorType, editorPlaceHolder, onSave, ...popoverProperties } = this.props
 
     return (
       <Popover
