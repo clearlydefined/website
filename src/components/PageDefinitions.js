@@ -95,6 +95,7 @@ class PageDefinitions extends AbstractPageDefinitions {
 
     definitions.forEach(definition => {
       const path = definition.toPath()
+      delete definition.changes
       dispatch(getDefinitionsAction(token, [path]))
     })
 
