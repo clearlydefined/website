@@ -81,12 +81,15 @@ export default class Contribution {
   }
 
   /**
+   *
    * Applies changes to the specific component
+   * @static
    * @param  {} component original component
    * @param  {} changes object containing changes
    * @param  {} field field to check
    * @param  {} value value to apply to the field
    * @param  {} type used to specify a type of field (e.g. array) to perform different kind of operations
+   * @param  {} [transform=a => a] function to transform the `value`. E.g. to parse the URL string and return a sourceLocation object
    */
   static applyChanges(component, changes, field, value, type, transform = a => a) {
     const proposedValue = transform(value)

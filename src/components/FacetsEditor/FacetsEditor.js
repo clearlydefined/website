@@ -22,7 +22,7 @@ class FacetsEditor extends Component {
   }
 
   render() {
-    const { onChange, component, previewDefinition } = this.props
+    const { onChange, component, previewDefinition, readOnly } = this.props
 
     return (
       <Grid className="no-gutters">
@@ -33,6 +33,7 @@ class FacetsEditor extends Component {
             </Col>
             <Col md={11}>
               <GlobsPicker
+                readOnly={readOnly}
                 className={Contribution.classIfDifferent(
                   component,
                   previewDefinition,

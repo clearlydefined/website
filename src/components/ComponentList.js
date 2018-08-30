@@ -56,10 +56,10 @@ export default class ComponentList extends React.Component {
     onRemove && onRemove(component)
   }
 
-  inspectComponent(component, event) {
+  inspectComponent(component, definition, event) {
     event.stopPropagation()
     const action = this.props.onInspect
-    action && action(component)
+    action && action(component, definition)
   }
 
   curateComponent(component, event) {
@@ -123,7 +123,7 @@ export default class ComponentList extends React.Component {
               </Button>
             )}
           {this.renderButtonWithTip(
-            <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, currentComponent)}>
+            <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, currentComponent, definition)}>
               <i className="fas fa-search" />
             </Button>,
             'Dig into this definition'

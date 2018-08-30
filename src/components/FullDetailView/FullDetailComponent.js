@@ -256,7 +256,8 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const { curation, definition, harvest, onChange, previewDefinition } = this.props
+    const { curation, definition, harvest, onChange, previewDefinition, readOnly } = this.props
+
     if (!definition || !definition.item || !curation || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
@@ -274,7 +275,12 @@ class FullDetailComponent extends Component {
               <Row>
                 <Col md={6}>
                   {this.renderLabel('Facets')}
-                  <FacetsEditor definition={item} onChange={onChange} previewDefinition={previewDefinition} />
+                  <FacetsEditor
+                    definition={item}
+                    onChange={onChange}
+                    previewDefinition={previewDefinition}
+                    readOnly={readOnly}
+                  />
                 </Col>
                 <Col md={6}>{this.renderContributions()}</Col>
               </Row>
@@ -290,6 +296,7 @@ class FullDetailComponent extends Component {
                     onChange={onChange}
                     component={definition}
                     previewDefinition={previewDefinition}
+                    readOnly={readOnly}
                   />
                 </Col>
               </Row>
