@@ -7,6 +7,7 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import transform from 'lodash/transform'
 import isEqual from 'lodash/isEqual'
+import get from 'lodash/get'
 import treeTableHOC from './treeTable'
 import FilterCustomComponent from './FilterCustomComponent'
 import FacetsRenderer from '../FacetsRenderer'
@@ -55,6 +56,22 @@ export default class FileList extends Component {
     return nextState.files.length !== this.state.files.length || !isEqual(nextProps.changes, this.props.changes)
   }
 
+  getNameCellEntry = (definition, row) => {
+    if (!row || !definition) return null
+    const { provider, namespace, name, revision } = definition.coordinates
+    const path = get(row, 'original.path')
+    if (provider !== 'github' || !path) return row.value
+    return (
+      <a
+        href={`https://github.com/${namespace}/${name}/blob/${revision}/${path}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {row.value}
+      </a>
+    )
+  }
+
   generateColumns = columns => {
     const { component, previewDefinition, readOnly } = this.props
     return columns.concat([
@@ -63,7 +80,9 @@ export default class FileList extends Component {
         accessor: 'name',
         resizable: false,
         style: {},
-        Cell: row => <div style={{ paddingLeft: `${10 * (row.level - 1)}px` }}>{row.value}</div>,
+        Cell: row => (
+          <div style={{ paddingLeft: `${10 * (row.level - 1)}px` }}>{this.getNameCellEntry(component.item, row)}</div>
+        ),
         filterMethod: (filter, rows) =>
           rows.filter(
             item =>
