@@ -196,3 +196,14 @@
     flex-grow: 1;
   }
 }
+
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+
+  span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
