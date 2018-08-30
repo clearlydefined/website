@@ -138,7 +138,9 @@ class PageDefinitions extends AbstractPageDefinitions {
         <MenuItem eventKey="2" onSelect={this.doSave}>
           File
         </MenuItem>
-        <MenuItem disabled>SPDX (not implemented)</MenuItem>
+        <MenuItem divider />
+        <MenuItem disabled>Definitions (Not implemented)</MenuItem>
+        <MenuItem disabled>SPDX (Not implemented)</MenuItem>
       </DropdownButton>
     )
   }
