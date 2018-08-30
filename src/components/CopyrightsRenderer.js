@@ -29,14 +29,22 @@ class CopyrightsRenderer extends Component {
               title={'Copyrights'}
               values={item.value}
               editable={!readOnly}
-              canAdditems={!readOnly}
+              canAddItems={!readOnly}
               onSave={onSave}
               editorType={'text'}
               editorPlaceHolder={'Copyright'}
             />
           }
         >
-          <div>{item && item.value && item.value[0] ? item.value[0].value : null}</div>
+          <div className="flexWrap">
+            {item &&
+              item.value &&
+              item.value.map((val, i) => (
+                <span key={i} className={val.isDifferent ? 'facets--isEdited' : ''}>
+                  {val.value}
+                </span>
+              ))}
+          </div>
         </OverlayTrigger>
       </div>
     )

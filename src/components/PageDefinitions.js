@@ -68,7 +68,7 @@ class PageDefinitions extends AbstractPageDefinitions {
             }}
           >
             Refresh
-          </AntdButton>
+          </AntdButton>{' '}
           <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
             Dismiss
           </AntdButton>
@@ -76,7 +76,7 @@ class PageDefinitions extends AbstractPageDefinitions {
       )
       notification.open({
         message: 'Unsaved Changes',
-        description: 'Some information have been changed and are currently unsaved. Are you sure to continue?',
+        description: 'Some information has been changed and is currently unsaved. Are you sure to continue?',
         btn: NotificationButtons,
         key,
         onClose: notification.close(key),
