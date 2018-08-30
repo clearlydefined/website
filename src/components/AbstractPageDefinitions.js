@@ -10,6 +10,7 @@ import { uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter, sortBy } from 'lodash'
 import FullDetailPage from './FullDetailView/FullDetailPage'
+import Definition from '../utils/definition'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -209,7 +210,8 @@ export default class AbstractPageDefinitions extends Component {
 
   score(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    return get(definition, 'score', null)
+    const scores = Definition.computeScores(definition)
+    return scores ? (scores.tool + scores.effective) / 2 : -1
   }
 
   getSort(eventKey) {

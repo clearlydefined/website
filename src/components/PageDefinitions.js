@@ -3,7 +3,7 @@
 
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Button } from 'react-bootstrap'
+import { Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import pako from 'pako'
 import base64js from 'base64-js'
@@ -106,30 +106,40 @@ class PageDefinitions extends AbstractPageDefinitions {
   renderButtons() {
     return (
       <div className="pull-right">
-        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
-          Clear All
+        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.doRefreshAll}>
+          Refresh
         </Button>
         &nbsp;
         <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
           Collapse All
         </Button>
         &nbsp;
-        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
-          Save
+        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
+          Clear All
         </Button>
         &nbsp;
-        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSaveAsUrl}>
-          Share URL
-        </Button>
+        {this.renderShareButton()}
         &nbsp;
         <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
           Contribute
         </Button>
-        &nbsp;
-        <Button bsStyle="info" disabled={!this.hasComponents()} onClick={this.doRefreshAll}>
-          Refresh
-        </Button>
       </div>
+    )
+  }
+
+  renderShareButton() {
+    const { components } = this.props
+    const disabled = components.list.length === 0
+    return (
+      <DropdownButton disabled={disabled} id={'sharedropdown'} title="Share" bsStyle="success">
+        <MenuItem eventKey="1" onSelect={this.doSaveAsUrl}>
+          URL
+        </MenuItem>
+        <MenuItem eventKey="2" onSelect={this.doSave}>
+          File
+        </MenuItem>
+        <MenuItem disabled>SPDX (not implemented)</MenuItem>
+      </DropdownButton>
     )
   }
 

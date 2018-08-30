@@ -31,11 +31,7 @@ class FullDetailComponent extends Component {
     previewDefinition: PropTypes.object
   }
 
-  renderLabel = text => (
-    <p>
-      <b>{text}</b>
-    </p>
-  )
+  renderLabel = text => <b>{text}</b>
 
   renderDescribed(rawDefinition) {
     const { activeFacets, readOnly, onChange, previewDefinition } = this.props
