@@ -189,6 +189,7 @@ export default class FileList extends Component {
         <TreeTable
           showPagination={false}
           sortable={false}
+          defaultPageSize={15}
           filterable
           freezeWhenExpanded={false}
           manual={false}
