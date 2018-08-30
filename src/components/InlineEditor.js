@@ -8,6 +8,7 @@ import { SpdxPicker } from './'
 
 export default class InlineEditor extends React.Component {
   static propTypes = {
+    readOnly: PropTypes.bool,
     initialValue: PropTypes.string,
     extraClass: PropTypes.string,
     value: PropTypes.string,
@@ -66,10 +67,10 @@ export default class InlineEditor extends React.Component {
   }
 
   render() {
-    const { onClick } = this.props
+    const { onClick, readOnly } = this.props
     return (
       <span className="list-singleLine">
-        {!this.props.readOnly && (
+        {!readOnly && (
           <i
             className="fas fa-pencil-alt editable-marker"
             onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
