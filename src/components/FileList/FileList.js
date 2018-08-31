@@ -141,17 +141,20 @@ export default class FileList extends Component {
           ),
         filterMethod: (filter, rows) =>
           filter.value.filterValue
-            ? rows.filter(
-                item =>
-                  item._original
-                    ? item._original.license
-                      ? item._original.license
-                          .toString()
-                          .toLowerCase()
-                          .includes(filter.value.filterValue.toLowerCase())
-                      : false
-                    : true
-              )
+            ? rows.filter(item => {
+                if (!item._original) return true
+                const value = Contribution.getValue(
+                  component.item,
+                  previewDefinition,
+                  `files[${item._original.id}].license`
+                )
+                return value
+                  ? value
+                      .toString()
+                      .toLowerCase()
+                      .includes(filter.value.filterValue.toLowerCase())
+                  : false
+              })
             : rows,
         filterAll: true
       },
