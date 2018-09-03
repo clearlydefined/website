@@ -11,7 +11,7 @@ import InlineEditor from './InlineEditor'
  * Data could be string or array of strings
  *
  */
-class PopoverComponent extends Component {
+class PopoverRenderer extends Component {
   static propTypes = {
     /**
      * title to show on the Popover
@@ -192,4 +192,4 @@ class PopoverComponent extends Component {
   }
 }
 
-export default PopoverComponent
+export default PopoverRenderer
