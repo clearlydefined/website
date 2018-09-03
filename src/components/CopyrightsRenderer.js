@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { OverlayTrigger, ButtonToolbar } from 'react-bootstrap'
+import { OverlayTrigger } from 'react-bootstrap'
 import PopoverRenderer from './PopoverRenderer'
 
 /**
@@ -15,13 +15,22 @@ class CopyrightsRenderer extends Component {
     readOnly: false
   }
 
+  state = {
+    hasChanges: false
+  }
+
+  setHasChanges = hasChanges => {
+    this.setState({ hasChanges })
+  }
+
   render() {
     const { item, onSave, readOnly } = this.props
+    const { hasChanges } = this.state
     return (
       <div>
         <OverlayTrigger
           trigger="click"
-          rootClose
+          rootClose={readOnly || !hasChanges} // hide overlay when the user clicks outside the overlay
           container={document.getElementsByClassName('ReactTable')[0]}
           placement="left"
           overlay={
@@ -31,6 +40,8 @@ class CopyrightsRenderer extends Component {
               editable={!readOnly}
               canAddItems={!readOnly}
               onSave={onSave}
+              hasChanges={hasChanges}
+              setHasChanges={this.setHasChanges}
               editorType={'text'}
               editorPlaceHolder={'Copyright'}
             />

@@ -24,7 +24,9 @@ class PopoverComponent extends Component {
 
     canAddItems: PropTypes.bool,
     editable: PropTypes.bool,
+    hasChanges: PropTypes.bool.isRequired,
     onSave: PropTypes.func,
+    setHasChanges: PropTypes.func,
     editorType: PropTypes.oneOf(['text', 'date', 'license']).isRequired,
     editorPlaceHolder: PropTypes.string
   }
@@ -35,7 +37,6 @@ class PopoverComponent extends Component {
     this.state = {
       showAddRow: false,
       values: null,
-      hasChanges: false,
       updatedText: ''
     }
 
@@ -56,12 +57,12 @@ class PopoverComponent extends Component {
         <span>{this.props.title}</span>
         <div className="popoverRenderer__title__buttons">
           {this.props.canAddItems && (
-            <Button onClick={() => this.showAddRow()} bsSize="xsmall">
+            <Button onClick={this.showAddRow} bsSize="xsmall">
               <i className="fas fa-plus" />
             </Button>
           )}
-          {this.state.hasChanges && (
-            <Button onClick={() => this.onSave()} bsSize="xsmall">
+          {this.props.hasChanges && (
+            <Button onClick={this.onSave} bsSize="xsmall">
               <i className="fas fa-check" /> Done
             </Button>
           )}
@@ -75,7 +76,7 @@ class PopoverComponent extends Component {
 
     return (
       item && (
-        <div key={`${item.value}_${index}`} className={`popoverRenderer__items`}>
+        <div key={`${item.value}_${index}`} className="popoverRenderer__items">
           <div
             className={`popoverRenderer__items__value ${item.isDifferent && 'popoverRenderer__items__value--isEdited'}`}
           >
@@ -87,7 +88,7 @@ class PopoverComponent extends Component {
                 initialValue={item.value || ''}
                 value={item.value || ''}
                 onChange={this.addItem}
-                validator={true}
+                validator
                 placeholder={editorPlaceHolder}
                 onClick={() => this.editRow(index)}
               />
@@ -139,28 +140,39 @@ class PopoverComponent extends Component {
   }
 
   editRow(index) {
-    this.setState({ showAddRow: false, currentItem: index }, () => console.log(this.state))
+    this.setState({ showAddRow: false, currentItem: index })
   }
 
   deleteRow(index) {
     const { values } = this.state
-    this.setState({ values: values.filter((_, itemIndex) => index !== itemIndex), hasChanges: true })
+    this.setState({ values: values.filter((_, itemIndex) => index !== itemIndex) })
+    this.props.setHasChanges(true)
   }
 
   addItem(value) {
     const { values, currentItem, updatedText } = this.state
     const updatedObject = { value: updatedText || value, isDifferent: true }
     isNumber(currentItem) ? (values[currentItem] = updatedObject) : values.push(updatedObject)
-    this.setState({ values, showAddRow: false, hasChanges: true, currentItem: null })
+    this.setState({ values, showAddRow: false, currentItem: null })
+    this.props.setHasChanges(true)
   }
 
-  onSave() {
+  onSave = () => {
     this.props.onSave(this.state.values.map(item => item.value))
   }
 
   render() {
     const { showAddRow, values } = this.state
-    const { canAdditems, editable, editorType, editorPlaceHolder, onSave, ...popoverProperties } = this.props
+    const {
+      canAddItems,
+      editable,
+      setHasChanges,
+      hasChanges,
+      editorType,
+      editorPlaceHolder,
+      onSave,
+      ...popoverProperties
+    } = this.props
 
     return (
       <Popover
