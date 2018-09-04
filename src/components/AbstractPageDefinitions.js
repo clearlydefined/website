@@ -97,6 +97,7 @@ export default class AbstractPageDefinitions extends Component {
 
   // Opens a Modal that shows the Full Detail View
   onInspect(component) {
+    console.log(component)
     this.setState({
       currentDefinition: EntitySpec.fromCoordinates(component).toPath(),
       currentComponent: EntitySpec.fromCoordinates(component),
@@ -388,7 +389,7 @@ export default class AbstractPageDefinitions extends Component {
   render() {
     const { components, definitions, token } = this.props
     const { sequence, showFullDetail, currentDefinition, currentComponent } = this.state
-
+    console.log(components, definitions)
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />

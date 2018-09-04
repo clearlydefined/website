@@ -234,6 +234,7 @@ function mapStateToProps(state, props) {
   const path = Definition.getPathFromUrl(props)
   const component = props.component || Definition.getDefinitionEntity(path)
   const previewDefinition = Definition.getDefinitionPreview(state)
+  console.log(component)
   return {
     path,
     component,
