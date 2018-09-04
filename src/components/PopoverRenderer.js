@@ -21,6 +21,7 @@ class PopoverRenderer extends Component {
     editorPlaceHolder: PropTypes.string,
     editorType: PropTypes.oneOf(['text', 'date', 'license']),
     hasChanges: PropTypes.bool.isRequired,
+    editRow: PropTypes.func,
     onSave: PropTypes.func,
     onShowAddRow: PropTypes.func,
     showAddRow: PropTypes.bool.isRequired,

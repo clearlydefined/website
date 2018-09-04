@@ -75,6 +75,7 @@ class CopyrightsRenderer extends Component {
               editable={!readOnly}
               editorPlaceHolder={'Copyright'}
               editorType={'text'}
+              editRow={this.editRow}
               hasChanges={hasChanges}
               onSave={this.onSave}
               onShowAddRow={this.onShowAddRow}
