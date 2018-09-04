@@ -1,5 +1,6 @@
 import Contribution from './contribution'
 import EntitySpec from './entitySpec'
+import { get } from 'lodash'
 
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
@@ -22,5 +23,12 @@ export default class Definition {
 
   static getDefinitionEntity(path) {
     return path ? EntitySpec.fromPath(path) : null
+  }
+
+  static computeScores(definition) {
+    if (!get(definition, 'described')) return null
+    const tool = Math.ceil((get(definition, 'described.toolScore', 0) + get(definition, 'licensed.toolScore', 0)) / 2)
+    const effective = Math.ceil((get(definition, 'described.score', 0) + get(definition, 'licensed.score', 0)) / 2)
+    return { tool, effective }
   }
 }

@@ -5,17 +5,18 @@ import React, { Component } from 'react'
 import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
-import Tag from 'antd/lib/tag'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import isEmpty from 'lodash/isEmpty'
 import { getBadgeUrl } from '../../api/clearlyDefined'
+import { Section } from '../'
 import FileList from '../FileList'
 import InlineEditor from '../InlineEditor'
 import MonacoEditorWrapper from '../MonacoEditorWrapper'
 import FacetsEditor from '../FacetsEditor'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
+import Definition from '../../utils/definition'
 
 class FullDetailComponent extends Component {
   static propTypes = {
@@ -30,53 +31,21 @@ class FullDetailComponent extends Component {
     previewDefinition: PropTypes.object
   }
 
-  renderLabel = text => (
-    <p>
-      <b>{text}</b>
-    </p>
-  )
+  renderLabel = text => <b>{text}</b>
 
-  renderPanel(rawDefinition) {
+  renderDescribed(rawDefinition) {
     const { activeFacets, readOnly, onChange, previewDefinition } = this.props
-
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
-
-    const { licensed, described } = definition
-
-    const previewFacets = Contribution.getValue(rawDefinition, previewDefinition, 'described.facets')
-    const facets =
-      previewFacets || Contribution.isSourceComponent(definition.coordinates)
-        ? Contribution.mergeFacets(previewFacets)
-        : ['core']
-    const totalFiles = get(licensed, 'files')
-    const unlicensed = get(licensed, 'discovered.unknown')
-    const unattributed = get(licensed, 'attribution.unknown')
-    const unlicensedPercent = totalFiles ? Contribution.getPercentage(unlicensed, totalFiles) : '-'
-    const unattributedPercent = totalFiles ? Contribution.getPercentage(unattributed, totalFiles) : '-'
+    const { described } = definition
     const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
 
     return (
       <Row>
-        <Col md={5}>
+        <Col md={6}>
           <Row className="no-gutters">
-            <Col md={2}>{this.renderLabel('Declared')}</Col>
-            <Col md={10} className="definition__line">
-              <InlineEditor
-                extraClass={Contribution.classIfDifferent(definition, previewDefinition, 'licensed.declared')}
-                readOnly={readOnly}
-                type="license"
-                initialValue={Contribution.getOriginalValue(definition, 'licensed.declared')}
-                value={Contribution.getValue(definition, previewDefinition, 'licensed.declared')}
-                onChange={value => onChange(`licensed.declared`, value)}
-                validator={true}
-                placeholder={'SPDX license'}
-              />
-            </Col>
-          </Row>
-          <Row className="no-gutters">
-            <Col md={2}>{this.renderLabel('Source')}</Col>
-            <Col md={10} className="definition__line">
+            <Col md={3}>{this.renderLabel('Source')}</Col>
+            <Col md={9} className="definition__line">
               <InlineEditor
                 extraClass={Contribution.classIfDifferent(definition, previewDefinition, 'described.sourceLocation')}
                 readOnly={readOnly}
@@ -94,8 +63,8 @@ class FullDetailComponent extends Component {
             </Col>
           </Row>
           <Row className="no-gutters">
-            <Col md={2}>{this.renderLabel('Release')}</Col>
-            <Col md={10} className="definition__line">
+            <Col md={3}>{this.renderLabel('Release')}</Col>
+            <Col md={9} className="definition__line">
               <InlineEditor
                 extraClass={Contribution.classIfDifferent(definition, previewDefinition, 'described.releaseDate')}
                 readOnly={readOnly}
@@ -112,55 +81,11 @@ class FullDetailComponent extends Component {
               />
             </Col>
           </Row>
-          <Row className="no-gutters">
-            <Col md={2}>{this.renderLabel('Facets')}</Col>
-            <Col md={10} className="definition__line">
-              <span>{facets && facets.map((facet, i) => <Tag key={i}>{facet}</Tag>)}</span>
-            </Col>
-          </Row>
         </Col>
-        <Col md={7}>
+        <Col md={6}>
           <Row className="no-gutters">
-            <Col md={2}>{this.renderLabel('Discovered')}</Col>
-            <Col md={10} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.discovered.expressions'
-                )}`}
-              >
-                {get(licensed, 'discovered.expressions', []).join(', ')}
-              </p>
-            </Col>
-          </Row>
-          <Row className="no-gutters">
-            <Col md={2}>{this.renderLabel('Attribution')}</Col>
-            <Col md={10} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.attribution.parties'
-                )}`}
-              >
-                {get(licensed, 'attribution.parties', []).join(', ')}
-              </p>
-            </Col>
-          </Row>
-          <Row className="no-gutters">
-            <Col md={2}>{this.renderLabel('Files')}</Col>
-            <Col md={10} className="definition__line">
-              <p className="list-singleLine">
-                Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
-                <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
-                <b>{isNaN(unattributed) ? '-' : `${unattributed} (${unattributedPercent}%)`}</b>
-              </p>
-            </Col>
-          </Row>
-          <Row className="no-gutters">
-            <Col md={2}>{this.renderLabel('Tools')}</Col>
-            <Col md={10} className="definition__line">
+            <Col md={3}>{this.renderLabel('Tools')}</Col>
+            <Col md={9} className="definition__line">
               <p
                 className={`list-singleLine ${Contribution.classIfDifferent(
                   definition,
@@ -208,15 +133,21 @@ class FullDetailComponent extends Component {
   renderHeader() {
     const { definition, modalView, changes } = this.props
     const { item } = definition
+    const scores = Definition.computeScores(item)
     return (
       <Row className="row-detail-header">
         <Col md={8}>
           <div className="detail-header">
-            <h2>{item && item.coordinates.name}</h2>
-            {item.described.sourceLocation && <p>commit id: {item.described.sourceLocation.revision}</p>}
-          </div>
-          <div className="score-header">
-            <img className="list-buttons" src={getBadgeUrl(item)} alt="score" />
+            <h2>
+              {item && item.coordinates.name}
+              &nbsp;&nbsp;
+              {scores && (
+                <span className="score-header">
+                  <img className="list-buttons" src={getBadgeUrl(scores.tool, scores.effective)} alt="score" />
+                </span>
+              )}
+            </h2>
+            <p>{item.coordinates.revision}</p>
           </div>
         </Col>
         <Col md={4} className="text-right">
@@ -232,61 +163,157 @@ class FullDetailComponent extends Component {
     )
   }
 
+  renderLicensed(rawDefinition) {
+    const { activeFacets, readOnly, onChange, previewDefinition } = this.props
+    // TODO: find a way of calling this method less frequently. It's relatively expensive.
+    const definition = Contribution.foldFacets(rawDefinition, activeFacets)
+    const { licensed } = definition
+    const totalFiles = get(licensed, 'files')
+    const unlicensed = get(licensed, 'discovered.unknown')
+    const unattributed = get(licensed, 'attribution.unknown')
+    const unlicensedPercent = totalFiles ? Contribution.getPercentage(unlicensed, totalFiles) : '-'
+    const unattributedPercent = totalFiles ? Contribution.getPercentage(unattributed, totalFiles) : '-'
+
+    return (
+      <Row>
+        <Col md={6}>
+          <Row className="no-gutters">
+            <Col md={3}>{this.renderLabel('Declared')}</Col>
+            <Col md={9} className="definition__line">
+              <InlineEditor
+                extraClass={Contribution.classIfDifferent(definition, previewDefinition, 'licensed.declared')}
+                readOnly={readOnly}
+                type="license"
+                initialValue={Contribution.getOriginalValue(definition, 'licensed.declared')}
+                value={Contribution.getValue(definition, previewDefinition, 'licensed.declared')}
+                onChange={value => onChange(`licensed.declared`, value)}
+                validator={true}
+                placeholder={'SPDX license'}
+              />
+            </Col>
+          </Row>
+          <Row className="no-gutters">
+            <Col md={3}>{this.renderLabel('Discovered')}</Col>
+            <Col md={9} className="definition__line">
+              <p
+                className={`list-singleLine ${Contribution.classIfDifferent(
+                  definition,
+                  previewDefinition,
+                  'licensed.discovered.expressions'
+                )}`}
+              >
+                {get(licensed, 'discovered.expressions', []).join(', ')}
+              </p>
+            </Col>
+          </Row>
+        </Col>
+        <Col md={6}>
+          <Row className="no-gutters">
+            <Col md={3}>{this.renderLabel('Attribution')}</Col>
+            <Col md={9} className="definition__line">
+              <p
+                className={`list-singleLine ${Contribution.classIfDifferent(
+                  definition,
+                  previewDefinition,
+                  'licensed.attribution.parties'
+                )}`}
+              >
+                {get(licensed, 'attribution.parties', []).join(', ')}
+              </p>
+            </Col>
+          </Row>
+          <Row className="no-gutters">
+            <Col md={3}>{this.renderLabel('Files')}</Col>
+            <Col md={9} className="definition__line">
+              <p className="list-singleLine">
+                Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
+                <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
+                <b>{isNaN(unattributed) ? '-' : `${unattributed} (${unattributedPercent}%)`}</b>
+              </p>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    )
+  }
+
   renderContributions() {
     return (
       <div>
-        <h2>CONTRIBUTIONS</h2>
-        <p>No contributions found for this component</p>
+        {this.renderLabel('Curations')}
+        <p>No curations found for this component</p>
       </div>
     )
   }
 
+  renderScore(domain) {
+    if (!domain) return null
+    return <img className="list-buttons" src={getBadgeUrl(domain.toolScore, domain.score)} alt="score" />
+  }
+
   render() {
-    const { curation, definition, harvest, onChange, previewDefinition } = this.props
+    const { curation, definition, harvest, onChange, previewDefinition, readOnly } = this.props
 
     if (!definition || !definition.item || !curation || !harvest) return null
-
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
-
     return (
       <div>
         <Row>
           <Col md={1}>{image && <img className={`list-image`} src={image} alt="" />}</Col>
-          <Col md={11}>
-            {this.renderHeader()}
-            {this.renderPanel(item)}
-          </Col>
-        </Row>
-        <Row className="top-space">
-          <Col md={6}>
-            <FacetsEditor definition={item} onChange={onChange} previewDefinition={previewDefinition} />
-          </Col>
-          <Col md={6}>{this.renderContributions()}</Col>
-        </Row>
-        <Row className="top-space">
-          <Col md={12}>
-            <FileList
-              files={cloneDeep(item.files)}
-              onChange={onChange}
-              component={definition}
-              previewDefinition={previewDefinition}
-            />
-          </Col>
+          <Col md={11}>{this.renderHeader()}</Col>
         </Row>
         <Row>
-          <Col md={12}>
-            <Tabs>
-              <Tabs.TabPane tab="Current definition" key="1">
-                {this.renderInnerData(definition, 'Current definition', 'yaml')}
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Curations" key="2">
-                {this.renderInnerData(curation, 'Curations', 'json')}
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Harvested data" key="3">
-                {this.renderInnerData(harvest, 'Harvested data', 'json')}
-              </Tabs.TabPane>
-            </Tabs>
+          <Col md={1} />
+          <Col md={11}>
+            <Section name={<span>Described {this.renderScore(item.described)}</span>}>
+              {this.renderDescribed(item)}
+              <Row>
+                <Col md={6}>
+                  {this.renderLabel('Facets')}
+                  <FacetsEditor
+                    definition={item}
+                    onChange={onChange}
+                    previewDefinition={previewDefinition}
+                    readOnly={readOnly}
+                  />
+                </Col>
+                <Col md={6}>{this.renderContributions()}</Col>
+              </Row>
+            </Section>
+            <Section name={<span>Licensed {this.renderScore(item.licensed)}</span>}>
+              {this.renderLicensed(item)}
+            </Section>
+            <Section name="Files">
+              <Row>
+                <Col md={11}>
+                  <FileList
+                    files={cloneDeep(item.files)}
+                    onChange={onChange}
+                    component={definition}
+                    previewDefinition={previewDefinition}
+                    readOnly={readOnly}
+                  />
+                </Col>
+              </Row>
+            </Section>
+            <Section name="Raw data">
+              <Row>
+                <Col md={11} offset-md={1}>
+                  <Tabs>
+                    <Tabs.TabPane tab="Current definition" key="1">
+                      {this.renderInnerData(definition, 'Current definition', 'yaml')}
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Curations" key="2">
+                      {this.renderInnerData(curation, 'Curations', 'json')}
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Harvested data" key="3">
+                      {this.renderInnerData(harvest, 'Harvested data', 'json')}
+                    </Tabs.TabPane>
+                  </Tabs>
+                </Col>
+              </Row>
+            </Section>
           </Col>
         </Row>
       </div>

@@ -11,8 +11,12 @@ import PopoverRenderer from './PopoverRenderer'
  *
  */
 class CopyrightsRenderer extends Component {
+  static defaultProps = {
+    readOnly: false
+  }
+
   render() {
-    const { item, onSave } = this.props
+    const { item, onSave, readOnly } = this.props
     return (
       <div>
         <OverlayTrigger
@@ -24,15 +28,23 @@ class CopyrightsRenderer extends Component {
             <PopoverRenderer
               title={'Copyrights'}
               values={item.value}
-              editable
-              canAdditems
+              editable={!readOnly}
+              canAddItems={!readOnly}
               onSave={onSave}
               editorType={'text'}
               editorPlaceHolder={'Copyright'}
             />
           }
         >
-          <div>{item && item.value && item.value[0] ? item.value[0].value : null}</div>
+          <div className="flexWrap">
+            {item &&
+              item.value &&
+              item.value.map((val, i) => (
+                <span key={i} className={val.isDifferent ? 'facets--isEdited' : ''}>
+                  {val.value}
+                </span>
+              ))}
+          </div>
         </OverlayTrigger>
       </div>
     )
@@ -47,7 +59,8 @@ CopyrightsRenderer.propTypes = {
     value: PropTypes.array
   }).isRequired,
 
-  onSave: PropTypes.func.isRequired
+  onSave: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool
 }
 
 export default CopyrightsRenderer

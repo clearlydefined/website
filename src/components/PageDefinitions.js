@@ -1,13 +1,15 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React from 'react'
+import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Button } from 'react-bootstrap'
+import { Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import pako from 'pako'
 import base64js from 'base64-js'
 import { saveAs } from 'file-saver'
+import notification from 'antd/lib/notification'
+import AntdButton from 'antd/lib/button'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
@@ -52,29 +54,94 @@ class PageDefinitions extends AbstractPageDefinitions {
     )
   }
 
+  doRefreshAll = () => {
+    if (this.hasChanges()) {
+      const key = `open${Date.now()}`
+      const NotificationButtons = (
+        <Fragment>
+          <AntdButton
+            type="primary"
+            size="small"
+            onClick={() => {
+              this.refresh()
+              notification.close(key)
+            }}
+          >
+            Refresh
+          </AntdButton>{' '}
+          <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
+            Dismiss
+          </AntdButton>
+        </Fragment>
+      )
+      notification.open({
+        message: 'Unsaved Changes',
+        description: 'Some information has been changed and is currently unsaved. Are you sure to continue?',
+        btn: NotificationButtons,
+        key,
+        onClose: notification.close(key),
+        duration: 0
+      })
+    } else {
+      this.refresh()
+    }
+  }
+
+  refresh = () => {
+    const { components, dispatch, token } = this.props
+
+    this.onRemoveAll()
+    const definitions = this.buildSaveSpec(components.list)
+
+    definitions.forEach(definition => {
+      const path = definition.toPath()
+      delete definition.changes
+      dispatch(getDefinitionsAction(token, [path]))
+    })
+
+    dispatch(uiBrowseUpdateList({ addAll: definitions }))
+    dispatch(uiNotificationNew({ type: 'info', message: 'All components have been refreshed', timeout: 3000 }))
+  }
+
   renderButtons() {
     return (
       <div className="pull-right">
-        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
-          Clear All
+        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.doRefreshAll}>
+          Refresh
         </Button>
         &nbsp;
         <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
           Collapse All
         </Button>
         &nbsp;
-        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSave}>
-          Save
+        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
+          Clear All
         </Button>
         &nbsp;
-        <Button bsStyle="success" disabled={!this.hasComponents()} onClick={this.doSaveAsUrl}>
-          Share URL
-        </Button>
+        {this.renderShareButton()}
         &nbsp;
         <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
           Contribute
         </Button>
       </div>
+    )
+  }
+
+  renderShareButton() {
+    const { components } = this.props
+    const disabled = components.list.length === 0
+    return (
+      <DropdownButton disabled={disabled} id={'sharedropdown'} title="Share" bsStyle="success">
+        <MenuItem eventKey="1" onSelect={this.doSaveAsUrl}>
+          URL
+        </MenuItem>
+        <MenuItem eventKey="2" onSelect={this.doSave}>
+          File
+        </MenuItem>
+        <MenuItem divider />
+        <MenuItem disabled>Definitions (Not implemented)</MenuItem>
+        <MenuItem disabled>SPDX (Not implemented)</MenuItem>
+      </DropdownButton>
     )
   }
 

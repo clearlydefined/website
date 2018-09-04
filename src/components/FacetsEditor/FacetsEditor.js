@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Col, Grid, Row } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import Contribution from '../../utils/contribution'
 import GlobsPicker from '../GlobsPicker'
 
@@ -22,18 +22,18 @@ class FacetsEditor extends Component {
   }
 
   render() {
-    const { onChange, component, previewDefinition } = this.props
+    const { onChange, component, previewDefinition, readOnly } = this.props
 
     return (
-      <Grid className="no-gutters">
-        <h2>FACETS</h2>
+      <div>
         {facets.map(item => (
           <Row key={item}>
-            <Col md={1}>
+            <Col md={3}>
               <span>{item}</span>
             </Col>
-            <Col md={11}>
+            <Col md={9}>
               <GlobsPicker
+                readOnly={readOnly}
                 className={Contribution.classIfDifferent(
                   component,
                   previewDefinition,
@@ -46,7 +46,7 @@ class FacetsEditor extends Component {
             </Col>
           </Row>
         ))}
-      </Grid>
+      </div>
     )
   }
 }

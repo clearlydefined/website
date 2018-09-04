@@ -10,6 +10,7 @@ import { uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import { set, get, find, filter, sortBy } from 'lodash'
 import FullDetailPage from './FullDetailView/FullDetailPage'
+import Definition from '../utils/definition'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -45,7 +46,8 @@ export default class AbstractPageDefinitions extends Component {
       activeFilters: {},
       activeSort: null,
       sequence: 0,
-      showFullDetail: false
+      showFullDetail: false,
+      path: null
     }
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onSearch = this.onSearch.bind(this)
@@ -96,10 +98,15 @@ export default class AbstractPageDefinitions extends Component {
   }
 
   // Opens a Modal that shows the Full Detail View
+<<<<<<< HEAD
   onInspect(component) {
     console.log(component)
+=======
+  onInspect(component, definition) {
+>>>>>>> 51be3d174fef8362b9101d89abde43eeba984bd5
     this.setState({
-      currentDefinition: EntitySpec.fromCoordinates(component).toPath(),
+      ...(definition ? { currentDefinition: definition } : {}),
+      path: EntitySpec.fromCoordinates(component).toPath(),
       currentComponent: EntitySpec.fromCoordinates(component),
       showFullDetail: true
     })
@@ -208,7 +215,8 @@ export default class AbstractPageDefinitions extends Component {
 
   score(coordinates) {
     const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    return get(definition, 'score', null)
+    const scores = Definition.computeScores(definition)
+    return scores ? (scores.tool + scores.effective) / 2 : -1
   }
 
   getSort(eventKey) {
@@ -388,8 +396,13 @@ export default class AbstractPageDefinitions extends Component {
 
   render() {
     const { components, definitions, token } = this.props
+<<<<<<< HEAD
     const { sequence, showFullDetail, currentDefinition, currentComponent } = this.state
     console.log(components, definitions)
+=======
+    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
+
+>>>>>>> 51be3d174fef8362b9101d89abde43eeba984bd5
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
@@ -416,14 +429,18 @@ export default class AbstractPageDefinitions extends Component {
             </div>
           )}
         </Section>
-        <FullDetailPage
-          modalView
-          visible={showFullDetail}
-          onClose={this.onInspectClose}
-          onSave={this.onChangeComponent}
-          path={currentDefinition}
-          component={currentComponent}
-        />
+        {currentDefinition && (
+          <FullDetailPage
+            modalView
+            visible={showFullDetail}
+            onClose={this.onInspectClose}
+            onSave={this.onChangeComponent}
+            path={path}
+            currentDefinition={currentDefinition}
+            component={currentComponent}
+            readOnly={this.readOnly()}
+          />
+        )}
       </Grid>
     )
   }
