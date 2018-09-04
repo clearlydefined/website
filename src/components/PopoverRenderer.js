@@ -100,6 +100,7 @@ class PopoverRenderer extends Component {
         <FormGroup className="popoverRenderer__items__formGroup">
           <FormControl
             type="text"
+            autoFocus
             placeholder="Enter text"
             value={updatedText}
             onChange={event => this.setState({ updatedText: event.target.value })}
@@ -115,21 +116,14 @@ class PopoverRenderer extends Component {
   }
 
   render() {
-    const {
-      canAddItems,
-      editable,
-      setHasChanges,
-      hasChanges,
-      editorType,
-      editorPlaceHolder,
-      onSave,
-      ...popoverProperties
-    } = this.props
+    const { values, showAddRow, placement, positionLeft, positionTop } = this.props
 
     return (
       <Popover
         id="popover-positioned-left"
-        {...popoverProperties}
+        placement={placement}
+        positionLeft={positionLeft}
+        positionTop={positionTop}
         title={this.renderPopoverTitle()}
         bsStyle={{ width: '500px' }}
       >
