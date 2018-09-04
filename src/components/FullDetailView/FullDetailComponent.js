@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
@@ -267,19 +267,21 @@ class FullDetailComponent extends Component {
           <Col md={1} />
           <Col md={11}>
             <Section name={<span>Described {this.renderScore(item.described)}</span>}>
-              {this.renderDescribed(item)}
-              <Row>
-                <Col md={6}>
-                  {this.renderLabel('Facets')}
-                  <FacetsEditor
-                    definition={item}
-                    onChange={onChange}
-                    previewDefinition={previewDefinition}
-                    readOnly={readOnly}
-                  />
-                </Col>
-                <Col md={6}>{this.renderContributions()}</Col>
-              </Row>
+              <Fragment>
+                {this.renderDescribed(item)}
+                <Row>
+                  <Col md={6}>
+                    {this.renderLabel('Facets')}
+                    <FacetsEditor
+                      definition={item}
+                      onChange={onChange}
+                      previewDefinition={previewDefinition}
+                      readOnly={readOnly}
+                    />
+                  </Col>
+                  <Col md={6}>{this.renderContributions()}</Col>
+                </Row>
+              </Fragment>
             </Section>
             <Section name={<span>Licensed {this.renderScore(item.licensed)}</span>}>
               {this.renderLicensed(item)}
