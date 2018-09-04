@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
-import { Row, Button, Col } from 'react-bootstrap'
+import React, { Component, Fragment } from 'react'
+import { Row, Button, Col, Popover, OverlayTrigger } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
 import get from 'lodash/get'
@@ -195,15 +195,7 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Discovered')}</Col>
             <Col md={9} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.discovered.expressions'
-                )}`}
-              >
-                {get(licensed, 'discovered.expressions', []).join(', ')}
-              </p>
+              {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
         </Col>
@@ -211,15 +203,7 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Attribution')}</Col>
             <Col md={9} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.attribution.parties'
-                )}`}
-              >
-                {get(licensed, 'attribution.parties', []).join(', ')}
-              </p>
+              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row className="no-gutters">
@@ -234,6 +218,33 @@ class FullDetailComponent extends Component {
           </Row>
         </Col>
       </Row>
+    )
+  }
+
+  renderPopover(licensed, key, title) {
+    const attributions = get(licensed, key, [])
+    if (!attributions) return null
+
+    return (
+      <OverlayTrigger
+        trigger="click"
+        placement="left"
+        overlay={
+          <Popover title={title}>
+            <div className="popoverRenderer popoverRenderer_scrollY">
+              {attributions.map((a, index) => (
+                <div key={`${a}_${index}`} className="popoverRenderer__items">
+                  <div className="popoverRenderer__items__value">
+                    <span>{a}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Popover>
+        }
+      >
+        <span className="popoverSpan">{attributions}</span>
+      </OverlayTrigger>
     )
   }
 
@@ -267,19 +278,21 @@ class FullDetailComponent extends Component {
           <Col md={1} />
           <Col md={11}>
             <Section name={<span>Described {this.renderScore(item.described)}</span>}>
-              {this.renderDescribed(item)}
-              <Row>
-                <Col md={6}>
-                  {this.renderLabel('Facets')}
-                  <FacetsEditor
-                    definition={item}
-                    onChange={onChange}
-                    previewDefinition={previewDefinition}
-                    readOnly={readOnly}
-                  />
-                </Col>
-                <Col md={6}>{this.renderContributions()}</Col>
-              </Row>
+              <Fragment>
+                {this.renderDescribed(item)}
+                <Row>
+                  <Col md={6}>
+                    {this.renderLabel('Facets')}
+                    <FacetsEditor
+                      definition={item}
+                      onChange={onChange}
+                      previewDefinition={previewDefinition}
+                      readOnly={readOnly}
+                    />
+                  </Col>
+                  <Col md={6}>{this.renderContributions()}</Col>
+                </Row>
+              </Fragment>
             </Section>
             <Section name={<span>Licensed {this.renderScore(item.licensed)}</span>}>
               {this.renderLicensed(item)}

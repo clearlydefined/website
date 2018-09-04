@@ -199,11 +199,11 @@ class PageDefinitions extends AbstractPageDefinitions {
     })
   }
 
-  onAddComponent(value, after = null) {
+  async onAddComponent(value, after = null) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
     const path = component.toPath()
-    !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
+    !definitions.entries[path] && (await dispatch(getDefinitionsAction(token, [path])))
     dispatch(uiBrowseUpdateList({ add: component }))
   }
 
