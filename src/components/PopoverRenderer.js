@@ -40,7 +40,13 @@ class PopoverRenderer extends Component {
         <span>{title}</span>
         <div className="popoverRenderer__title__buttons">
           {canAddItems && (
-            <Button onClick={onShowAddRow} bsSize="xsmall">
+            <Button
+              onClick={() => {
+                onShowAddRow()
+                this.setState({ updatedText: '' })
+              }}
+              bsSize="xsmall"
+            >
               <i className="fas fa-plus" />
             </Button>
           )}
@@ -104,7 +110,10 @@ class PopoverRenderer extends Component {
             placeholder="Enter text"
             value={updatedText}
             onChange={event => this.setState({ updatedText: event.target.value })}
-            onBlur={this.props.undoEdit}
+            onBlur={() => {
+              this.props.undoEdit()
+              this.setState({ updatedText: '' })
+            }}
             className="popoverRenderer__items__formControl"
           />
         </FormGroup>
