@@ -396,13 +396,8 @@ export default class AbstractPageDefinitions extends Component {
 
   render() {
     const { components, definitions, token } = this.props
-<<<<<<< HEAD
-    const { sequence, showFullDetail, currentDefinition, currentComponent } = this.state
-    console.log(components, definitions)
-=======
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
 
->>>>>>> 51be3d174fef8362b9101d89abde43eeba984bd5
     return (
       <Grid className="main-container">
         <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />

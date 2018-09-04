@@ -237,10 +237,6 @@ function mapStateToProps(state, props) {
 
   const path = Definition.getPathFromUrl(props)
   const component = props.component || Definition.getDefinitionEntity(path)
-<<<<<<< HEAD
-  const previewDefinition = Definition.getDefinitionPreview(state)
-  console.log(component)
-=======
 
   let previewDefinition, definition
 
@@ -252,7 +248,6 @@ function mapStateToProps(state, props) {
     definition = state.ui.inspect.definition && cloneDeep(state.ui.inspect.definition)
   }
 
->>>>>>> 51be3d174fef8362b9101d89abde43eeba984bd5
   return {
     path,
     component,
