@@ -371,7 +371,7 @@ export default class DefinitionEntry extends React.Component {
               <CopyrightsRenderer
                 item={{ value: get(licensed, 'attribution.parties', []).map(l => ({ value: l })) }}
                 readOnly
-                classIfDifferent={'bg-info'}
+                classIfDifferent={this.classIfDifferent('licensed.attribution.parties')}
               />
             </Col>
           </Row>

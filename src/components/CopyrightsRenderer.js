@@ -63,34 +63,32 @@ class CopyrightsRenderer extends Component {
     if (!values) return null
 
     return (
-      <div>
-        <OverlayTrigger
-          trigger="click"
-          rootClose={readOnly || !hasChanges} // hide overlay when the user clicks outside the overlay
-          container={container}
-          placement="left"
-          overlay={
-            <PopoverRenderer
-              addItem={this.addItem}
-              canAddItems={!readOnly}
-              deleteRow={this.deleteRow}
-              editable={!readOnly}
-              editorPlaceHolder={'Copyright'}
-              editorType={'text'}
-              editRow={this.editRow}
-              hasChanges={hasChanges}
-              onSave={this.onSave}
-              onShowAddRow={this.onShowAddRow}
-              showAddRow={showAddRow}
-              title={'Copyrights'}
-              undoEdit={this.undoEdit}
-              values={values}
-            />
-          }
-        >
-          <div className={classIfDifferent}>{values && values[0] ? values[0].value : null}</div>
-        </OverlayTrigger>
-      </div>
+      <OverlayTrigger
+        trigger="click"
+        rootClose={readOnly || !hasChanges} // hide overlay when the user clicks outside the overlay
+        container={container}
+        placement="left"
+        overlay={
+          <PopoverRenderer
+            addItem={this.addItem}
+            canAddItems={!readOnly}
+            deleteRow={this.deleteRow}
+            editable={!readOnly}
+            editorPlaceHolder={'Copyright'}
+            editorType={'text'}
+            editRow={this.editRow}
+            hasChanges={hasChanges}
+            onSave={this.onSave}
+            onShowAddRow={this.onShowAddRow}
+            showAddRow={showAddRow}
+            title={'Copyrights'}
+            undoEdit={this.undoEdit}
+            values={values}
+          />
+        }
+      >
+        <div className={`copyrightVal ${classIfDifferent}`}>{values && values[0] ? values[0].value : null}</div>
+      </OverlayTrigger>
     )
   }
 }
