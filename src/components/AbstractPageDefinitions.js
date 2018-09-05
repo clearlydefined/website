@@ -98,12 +98,7 @@ export default class AbstractPageDefinitions extends Component {
   }
 
   // Opens a Modal that shows the Full Detail View
-<<<<<<< HEAD
-  onInspect(component) {
-    console.log(component)
-=======
   onInspect(component, definition) {
->>>>>>> 51be3d174fef8362b9101d89abde43eeba984bd5
     this.setState({
       ...(definition ? { currentDefinition: definition } : {}),
       path: EntitySpec.fromCoordinates(component).toPath(),
