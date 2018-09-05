@@ -164,9 +164,9 @@ export default class FileList extends Component {
         resizable: false,
         Cell: row => (
           <CopyrightsRenderer
+            container={document.getElementsByClassName('ReactTable')[0]}
             item={row}
             readOnly={readOnly}
-            showPopup={this.showPopup}
             onSave={value => {
               this.props.onChange(`files[${row.original.id}]`, value, null, value => {
                 return {

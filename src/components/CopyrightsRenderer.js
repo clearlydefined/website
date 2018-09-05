@@ -15,7 +15,8 @@ import PopoverRenderer from './PopoverRenderer'
  */
 class CopyrightsRenderer extends Component {
   static defaultProps = {
-    readOnly: false
+    readOnly: false,
+    container: null
   }
 
   state = {
@@ -55,7 +56,7 @@ class CopyrightsRenderer extends Component {
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
   render() {
-    const { readOnly } = this.props
+    const { readOnly, container } = this.props
     const { hasChanges, values, showAddRow } = this.state
 
     if (!values) return null
@@ -65,7 +66,7 @@ class CopyrightsRenderer extends Component {
         <OverlayTrigger
           trigger="click"
           rootClose={readOnly || !hasChanges} // hide overlay when the user clicks outside the overlay
-          container={document.getElementsByClassName('ReactTable')[0]}
+          container={container}
           placement="left"
           overlay={
             <PopoverRenderer
@@ -101,8 +102,9 @@ CopyrightsRenderer.propTypes = {
     value: PropTypes.array
   }).isRequired,
 
-  onSave: PropTypes.func.isRequired,
-  readOnly: PropTypes.bool
+  onSave: PropTypes.func,
+  readOnly: PropTypes.bool,
+  container: PropTypes.instanceOf(Element)
 }
 
 export default CopyrightsRenderer
