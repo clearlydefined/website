@@ -13,6 +13,7 @@ import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
 import Contribution from '../utils/contribution'
+import CopyrightsRenderer from './CopyrightsRenderer'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -367,12 +368,11 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'licensed.attribution.parties',
-                <p className={`list-singleLine ${this.classIfDifferent('licensed.attribution.parties')}`}>
-                  {get(licensed, 'attribution.parties', []).join(', ')}
-                </p>
-              )}
+              <CopyrightsRenderer
+                item={{ value: get(licensed, 'attribution.parties', []).map(l => ({ value: l })) }}
+                readOnly
+                classIfDifferent={'bg-info'}
+              />
             </Col>
           </Row>
           <Row>

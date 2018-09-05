@@ -16,7 +16,8 @@ import PopoverRenderer from './PopoverRenderer'
 class CopyrightsRenderer extends Component {
   static defaultProps = {
     readOnly: false,
-    container: null
+    container: null,
+    classIfDifferent: ''
   }
 
   state = {
@@ -56,7 +57,7 @@ class CopyrightsRenderer extends Component {
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
   render() {
-    const { readOnly, container } = this.props
+    const { readOnly, container, classIfDifferent } = this.props
     const { hasChanges, values, showAddRow } = this.state
 
     if (!values) return null
@@ -87,7 +88,7 @@ class CopyrightsRenderer extends Component {
             />
           }
         >
-          <div>{values && values[0] ? values[0].value : null}</div>
+          <div className={classIfDifferent}>{values && values[0] ? values[0].value : null}</div>
         </OverlayTrigger>
       </div>
     )
@@ -104,7 +105,8 @@ CopyrightsRenderer.propTypes = {
 
   onSave: PropTypes.func,
   readOnly: PropTypes.bool,
-  container: PropTypes.instanceOf(Element)
+  container: PropTypes.instanceOf(Element),
+  classIfDifferent: PropTypes.string
 }
 
 export default CopyrightsRenderer
