@@ -14,6 +14,7 @@ import FileList from '../FileList'
 import InlineEditor from '../InlineEditor'
 import MonacoEditorWrapper from '../MonacoEditorWrapper'
 import FacetsEditor from '../FacetsEditor'
+import CopyrightsRenderer from '../CopyrightsRenderer'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
@@ -211,15 +212,10 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Attribution')}</Col>
             <Col md={9} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.attribution.parties'
-                )}`}
-              >
-                {get(licensed, 'attribution.parties', []).join(', ')}
-              </p>
+              <CopyrightsRenderer
+                item={{ value: get(licensed, 'attribution.parties', []).map(l => ({ value: l })) }}
+                readOnly
+              />
             </Col>
           </Row>
           <Row className="no-gutters">
