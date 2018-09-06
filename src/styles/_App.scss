@@ -208,9 +208,14 @@
   }
 }
 
-.copyrightVal {
-  cursor: pointer;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.copyrightContainer {
+  display: inherit;
+  width: 100%;
+
+  span {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
