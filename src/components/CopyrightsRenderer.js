@@ -24,11 +24,11 @@ class CopyrightsRenderer extends Component {
     currentItem: null,
     hasChanges: false,
     showAddRow: false,
-    values: null
+    values: []
   }
 
   componentDidMount() {
-    this.setState({ values: this.props.item.value })
+    this.props.item.value && this.setState({ values: this.props.item.value })
   }
 
   onShowAddRow = () => {
@@ -57,10 +57,10 @@ class CopyrightsRenderer extends Component {
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
   render() {
-    const { readOnly, container, classIfDifferent } = this.props
+    const { readOnly, container, classIfDifferent, placement } = this.props
     const { hasChanges, values, showAddRow } = this.state
 
-    if (!values) return null
+    if (!values.length && readOnly) return null
 
     return (
       <OverlayTrigger
@@ -87,7 +87,10 @@ class CopyrightsRenderer extends Component {
           />
         }
       >
-        <div className={`copyrightVal ${classIfDifferent}`}>{values && values[0] ? values[0].value : null}</div>
+        <div>
+          {!readOnly && <i className="fas fa-pencil-alt editable-marker" />}
+          <span className={`copyrightVal ${classIfDifferent}`}>{values && values[0] ? values[0].value : null}</span>
+        </div>
       </OverlayTrigger>
     )
   }
