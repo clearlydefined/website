@@ -196,15 +196,12 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Discovered')}</Col>
             <Col md={9} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.discovered.expressions'
-                )}`}
-              >
-                {get(licensed, 'discovered.expressions', []).join(', ')}
-              </p>
+              <CopyrightsRenderer
+                container={document.getElementsByClassName('ant-modal-body')[0]}
+                item={{ value: get(licensed, 'discovered.expressions', []).map(l => ({ value: l })) }}
+                readOnly
+                placement="right"
+              />
             </Col>
           </Row>
         </Col>

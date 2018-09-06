@@ -357,12 +357,11 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Discovered')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'discovered.expressions',
-                <p className={`list-singleLine ${this.classIfDifferent('licensed.discovered.expressions')}`}>
-                  {get(licensed, 'discovered.expressions', []).join(', ')}
-                </p>
-              )}
+              <CopyrightsRenderer
+                item={{ value: get(licensed, 'discovered.expressions', []).map(l => ({ value: l })) }}
+                readOnly
+                classIfDifferent={this.classIfDifferent('licensed.discovered.expressions')}
+              />
             </Col>
           </Row>
           <Row>

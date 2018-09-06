@@ -17,7 +17,8 @@ class CopyrightsRenderer extends Component {
   static defaultProps = {
     readOnly: false,
     container: null,
-    classIfDifferent: ''
+    classIfDifferent: '',
+    placement: 'left'
   }
 
   state = {
@@ -67,7 +68,7 @@ class CopyrightsRenderer extends Component {
         trigger="click"
         rootClose={readOnly || !hasChanges} // hide overlay when the user clicks outside the overlay
         container={container}
-        placement="left"
+        placement={placement}
         overlay={
           <PopoverRenderer
             addItem={this.addItem}
@@ -107,7 +108,8 @@ CopyrightsRenderer.propTypes = {
   onSave: PropTypes.func,
   readOnly: PropTypes.bool,
   container: PropTypes.instanceOf(Element),
-  classIfDifferent: PropTypes.string
+  classIfDifferent: PropTypes.string,
+  placement: PropTypes.string
 }
 
 export default CopyrightsRenderer
