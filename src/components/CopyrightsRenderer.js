@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
 import { OverlayTrigger } from 'react-bootstrap'
@@ -88,10 +88,10 @@ class CopyrightsRenderer extends Component {
           />
         }
       >
-        <div>
+        <Fragment>
           {!readOnly && <i className="fas fa-pencil-alt editable-marker" />}
           <span className={`copyrightVal ${classIfDifferent}`}>{values && values[0] ? values[0].value : null}</span>
-        </div>
+        </Fragment>
       </OverlayTrigger>
     )
   }
