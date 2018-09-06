@@ -213,6 +213,7 @@ class FullDetailComponent extends Component {
             <Col md={3}>{this.renderLabel('Attribution')}</Col>
             <Col md={9} className="definition__line">
               <CopyrightsRenderer
+                container={document.getElementsByClassName('ant-modal-body')[0]}
                 item={{ value: get(licensed, 'attribution.parties', []).map(l => ({ value: l })) }}
                 readOnly
               />
