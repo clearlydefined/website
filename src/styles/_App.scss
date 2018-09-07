@@ -219,3 +219,10 @@
     white-space: nowrap;
   }
 }
+
+.popoverSpan {
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

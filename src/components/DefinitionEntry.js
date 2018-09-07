@@ -4,7 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { TwoLineEntry, InlineEditor } from './'
-import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -357,21 +357,13 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Discovered')}</Col>
             <Col md={10} className="definition__line">
-              <CopyrightsRenderer
-                item={{ value: get(licensed, 'discovered.expressions', []).map(l => ({ value: l })) }}
-                readOnly
-                classIfDifferent={this.classIfDifferent('licensed.discovered.expressions')}
-              />
+              {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
           <Row>
             <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
             <Col md={10} className="definition__line">
-              <CopyrightsRenderer
-                item={{ value: get(licensed, 'attribution.parties', []).map(l => ({ value: l })) }}
-                readOnly
-                classIfDifferent={this.classIfDifferent('licensed.attribution.parties')}
-              />
+              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row>
@@ -386,6 +378,33 @@ export default class DefinitionEntry extends React.Component {
           </Row>
         </Col>
       </Row>
+    )
+  }
+
+  renderPopover(licensed, key, title) {
+    const attributions = get(licensed, key, [])
+    if (!attributions) return null
+
+    return (
+      <OverlayTrigger
+        trigger="click"
+        placement="left"
+        overlay={
+          <Popover title={title}>
+            <div className="popoverRenderer popoverRenderer_scrollY">
+              {attributions.map((a, index) => (
+                <div key={`${a}_${index}`} className="popoverRenderer__items">
+                  <div className="popoverRenderer__items__value">
+                    <span>{a}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Popover>
+        }
+      >
+        <span className="popoverSpan">{attributions}</span>
+      </OverlayTrigger>
     )
   }
 

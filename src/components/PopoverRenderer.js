@@ -63,7 +63,6 @@ class PopoverRenderer extends Component {
 
   renderRow(item, index) {
     const { editable, editorType, editorPlaceHolder, addItem, editRow } = this.props
-
     const extraClass = item.isDifferent ? 'popoverRenderer__items__value--isEdited' : ''
     return (
       item && (

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component, Fragment } from 'react'
-import { Row, Button, Col } from 'react-bootstrap'
+import { Row, Button, Col, Popover, OverlayTrigger } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
 import get from 'lodash/get'
@@ -14,7 +14,6 @@ import FileList from '../FileList'
 import InlineEditor from '../InlineEditor'
 import MonacoEditorWrapper from '../MonacoEditorWrapper'
 import FacetsEditor from '../FacetsEditor'
-import CopyrightsRenderer from '../CopyrightsRenderer'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
@@ -196,12 +195,7 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Discovered')}</Col>
             <Col md={9} className="definition__line">
-              <CopyrightsRenderer
-                container={document.getElementsByClassName('ant-modal-body')[0]}
-                item={{ value: get(licensed, 'discovered.expressions', []).map(l => ({ value: l })) }}
-                readOnly
-                placement="right"
-              />
+              {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
         </Col>
@@ -209,11 +203,7 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Attribution')}</Col>
             <Col md={9} className="definition__line">
-              <CopyrightsRenderer
-                container={document.getElementsByClassName('ant-modal-body')[0]}
-                item={{ value: get(licensed, 'attribution.parties', []).map(l => ({ value: l })) }}
-                readOnly
-              />
+              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row className="no-gutters">
@@ -228,6 +218,33 @@ class FullDetailComponent extends Component {
           </Row>
         </Col>
       </Row>
+    )
+  }
+
+  renderPopover(licensed, key, title) {
+    const attributions = get(licensed, key, [])
+    if (!attributions) return null
+
+    return (
+      <OverlayTrigger
+        trigger="click"
+        placement="left"
+        overlay={
+          <Popover title={title}>
+            <div className="popoverRenderer popoverRenderer_scrollY">
+              {attributions.map((a, index) => (
+                <div key={`${a}_${index}`} className="popoverRenderer__items">
+                  <div className="popoverRenderer__items__value">
+                    <span>{a}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Popover>
+        }
+      >
+        <span className="popoverSpan">{attributions}</span>
+      </OverlayTrigger>
     )
   }
 
