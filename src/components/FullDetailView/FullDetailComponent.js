@@ -222,17 +222,18 @@ class FullDetailComponent extends Component {
   }
 
   renderPopover(licensed, key, title) {
-    const attributions = get(licensed, key, [])
-    if (!attributions) return null
+    const values = get(licensed, key, [])
+    if (!values) return null
 
     return (
       <OverlayTrigger
         trigger="click"
         placement="left"
+        rootClose
         overlay={
-          <Popover title={title}>
+          <Popover title={title} id={title}>
             <div className="popoverRenderer popoverRenderer_scrollY">
-              {attributions.map((a, index) => (
+              {values.map((a, index) => (
                 <div key={`${a}_${index}`} className="popoverRenderer__items">
                   <div className="popoverRenderer__items__value">
                     <span>{a}</span>
@@ -243,7 +244,7 @@ class FullDetailComponent extends Component {
           </Popover>
         }
       >
-        <span className="popoverSpan">{attributions}</span>
+        <span className="popoverSpan">{values.join(', ')}</span>
       </OverlayTrigger>
     )
   }

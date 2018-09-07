@@ -13,7 +13,6 @@ import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
 import Contribution from '../utils/contribution'
-import CopyrightsRenderer from './CopyrightsRenderer'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -382,17 +381,18 @@ export default class DefinitionEntry extends React.Component {
   }
 
   renderPopover(licensed, key, title) {
-    const attributions = get(licensed, key, [])
-    if (!attributions) return null
+    const values = get(licensed, key, [])
+    if (!values) return null
 
     return (
       <OverlayTrigger
         trigger="click"
         placement="left"
+        rootClose
         overlay={
-          <Popover title={title}>
+          <Popover title={title} id={title}>
             <div className="popoverRenderer popoverRenderer_scrollY">
-              {attributions.map((a, index) => (
+              {values.map((a, index) => (
                 <div key={`${a}_${index}`} className="popoverRenderer__items">
                   <div className="popoverRenderer__items__value">
                     <span>{a}</span>
@@ -403,7 +403,7 @@ export default class DefinitionEntry extends React.Component {
           </Popover>
         }
       >
-        <span className="popoverSpan">{attributions}</span>
+        <span className="popoverSpan">{values.join(', ')}</span>
       </OverlayTrigger>
     )
   }
