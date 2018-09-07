@@ -56,6 +56,7 @@ export default class InlineEditor extends React.Component {
     if (!editing)
       return (
         <span
+          title={this.renderers[type](value)}
           className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
           onClick={() => (readOnly ? null : this.setState({ editing: true }, () => onClick && onClick()))}
         >

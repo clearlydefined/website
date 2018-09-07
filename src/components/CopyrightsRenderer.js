@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
+import isEqual from 'lodash/isEqual'
 import { OverlayTrigger } from 'react-bootstrap'
 
 import PopoverRenderer from './PopoverRenderer'
@@ -15,18 +16,21 @@ import PopoverRenderer from './PopoverRenderer'
  */
 class CopyrightsRenderer extends Component {
   static defaultProps = {
-    readOnly: false
+    readOnly: false,
+    container: null,
+    classIfDifferent: '',
+    placement: 'left'
   }
 
   state = {
     currentItem: null,
     hasChanges: false,
     showAddRow: false,
-    values: null
+    values: []
   }
 
   componentDidMount() {
-    this.setState({ values: this.props.item.value })
+    this.props.item.value && this.setState({ values: this.props.item.value })
   }
 
   onShowAddRow = () => {
@@ -55,40 +59,41 @@ class CopyrightsRenderer extends Component {
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
   render() {
-    const { readOnly } = this.props
+    const { readOnly, container, classIfDifferent, placement } = this.props
     const { hasChanges, values, showAddRow } = this.state
 
-    if (!values) return null
+    if (!values.length && readOnly) return null
 
     return (
-      <div>
-        <OverlayTrigger
-          trigger="click"
-          rootClose={readOnly || !hasChanges} // hide overlay when the user clicks outside the overlay
-          container={document.getElementsByClassName('ReactTable')[0]}
-          placement="left"
-          overlay={
-            <PopoverRenderer
-              addItem={this.addItem}
-              canAddItems={!readOnly}
-              deleteRow={this.deleteRow}
-              editable={!readOnly}
-              editorPlaceHolder={'Copyright'}
-              editorType={'text'}
-              editRow={this.editRow}
-              hasChanges={hasChanges}
-              onSave={this.onSave}
-              onShowAddRow={this.onShowAddRow}
-              showAddRow={showAddRow}
-              title={'Copyrights'}
-              undoEdit={this.undoEdit}
-              values={values}
-            />
-          }
-        >
-          <div>{values && values[0] ? values[0].value : null}</div>
-        </OverlayTrigger>
-      </div>
+      <OverlayTrigger
+        trigger="click"
+        rootClose={readOnly || !hasChanges} // hide overlay when the user clicks outside the overlay
+        container={container}
+        placement={placement}
+        overlay={
+          <PopoverRenderer
+            addItem={this.addItem}
+            canAddItems={!readOnly}
+            deleteRow={this.deleteRow}
+            editable={!readOnly}
+            editorPlaceHolder={'Copyright'}
+            editorType={'text'}
+            editRow={this.editRow}
+            hasChanges={hasChanges}
+            onSave={this.onSave}
+            onShowAddRow={this.onShowAddRow}
+            showAddRow={showAddRow}
+            title={'Copyrights'}
+            undoEdit={this.undoEdit}
+            values={values}
+          />
+        }
+      >
+        <div className="copyrightContainer">
+          {!readOnly && <i className="fas fa-pencil-alt editable-marker" />}
+          <span className={classIfDifferent}>{values && values[0] ? values[0].value : null}</span>
+        </div>
+      </OverlayTrigger>
     )
   }
 }
@@ -101,8 +106,11 @@ CopyrightsRenderer.propTypes = {
     value: PropTypes.array
   }).isRequired,
 
-  onSave: PropTypes.func.isRequired,
-  readOnly: PropTypes.bool
+  onSave: PropTypes.func,
+  readOnly: PropTypes.bool,
+  container: PropTypes.instanceOf(Element),
+  classIfDifferent: PropTypes.string,
+  placement: PropTypes.string
 }
 
 export default CopyrightsRenderer
