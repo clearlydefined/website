@@ -207,7 +207,6 @@ export default class FileList extends Component {
     const { files, isFiltering } = this.state
 
     return (
-      <div>
         <TreeTable
           showPagination={false}
           sortable={false}
@@ -230,7 +229,6 @@ export default class FileList extends Component {
             )
           }}
         />
-      </div>
     )
   }
 }

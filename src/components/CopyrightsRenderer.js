@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
+import isEqual from 'lodash/isEqual'
 import { OverlayTrigger } from 'react-bootstrap'
 
 import PopoverRenderer from './PopoverRenderer'
@@ -30,6 +31,10 @@ class CopyrightsRenderer extends Component {
 
   componentDidMount() {
     this.props.item.value && this.setState({ values: this.props.item.value })
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(nextProps.item.value, this.state.values)
   }
 
   onShowAddRow = () => {
