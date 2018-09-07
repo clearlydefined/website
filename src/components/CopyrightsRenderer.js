@@ -33,10 +33,6 @@ class CopyrightsRenderer extends Component {
     this.props.item.value && this.setState({ values: this.props.item.value })
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return !isEqual(nextProps.item.value, this.state.values)
-  }
-
   onShowAddRow = () => {
     this.setState({ showAddRow: true, currentItem: null })
   }
