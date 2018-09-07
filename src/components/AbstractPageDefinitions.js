@@ -3,13 +3,18 @@
 
 import React, { Component } from 'react'
 import { Grid, DropdownButton, MenuItem } from 'react-bootstrap'
+import compact from 'lodash/compact'
+import filter from 'lodash/filter'
+import find from 'lodash/find'
+import get from 'lodash/get'
+import set from 'lodash/set'
+import sortBy from 'lodash/sortBy'
 import { ROUTE_CURATE } from '../utils/routingConstants'
 import { curateAction } from '../actions/curationActions'
 import { ComponentList, Section, ContributePrompt } from './'
+import FullDetailPage from './FullDetailView/FullDetailPage'
 import { uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
-import { set, get, find, filter, sortBy } from 'lodash'
-import FullDetailPage from './FullDetailView/FullDetailPage'
 import Definition from '../utils/definition'
 
 const sorts = [
@@ -160,6 +165,7 @@ export default class AbstractPageDefinitions extends Component {
         set(result, change, component.changes[change])
         return result
       }, {})
+      if (patchChanges.files) patchChanges.files = compact(patchChanges.files)
       if (patch) {
         patch.revisions[revisionNumber] = patchChanges
       } else {
