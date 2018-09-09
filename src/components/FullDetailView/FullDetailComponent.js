@@ -229,6 +229,7 @@ class FullDetailComponent extends Component {
       <OverlayTrigger
         trigger="click"
         placement="left"
+        rootClose
         overlay={
           <Popover title={title} id={title}>
             <div className="popoverRenderer popoverRenderer_scrollY">
