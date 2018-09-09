@@ -230,7 +230,7 @@ class FullDetailComponent extends Component {
         trigger="click"
         placement="left"
         overlay={
-          <Popover title={title}>
+          <Popover title={title} id={title}>
             <div className="popoverRenderer popoverRenderer_scrollY">
               {attributions.map((a, index) => (
                 <div key={`${a}_${index}`} className="popoverRenderer__items">
