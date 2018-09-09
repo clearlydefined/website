@@ -67,7 +67,7 @@ class PopoverRenderer extends Component {
     return (
       item && (
         <div key={`${item.value}_${index}`} className="popoverRenderer__items">
-          <div className={`popoverRenderer__items__value ${extraClass}}`}>
+          <div className={`popoverRenderer__items__value ${extraClass}`}>
             {
               <InlineEditor
                 extraClass={extraClass}
