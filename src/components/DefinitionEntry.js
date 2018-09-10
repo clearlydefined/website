@@ -13,7 +13,6 @@ import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
 import Contribution from '../utils/contribution'
-import CopyrightsRenderer from './CopyrightsRenderer'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {

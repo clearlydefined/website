@@ -30,7 +30,7 @@ class CopyrightsRenderer extends Component {
   }
 
   componentDidMount() {
-    this.props.item.value && this.setState({ values: this.props.item.value })
+    this.props.item && this.setState({ values: this.props.item })
   }
 
   onShowAddRow = () => {
