@@ -76,7 +76,6 @@ export default Component => {
           if (rest.pivotBy && rest.pivotBy.includes(col.accessor)) {
             column = {
               accessor: col.accessor,
-              show: col.accessor === 'name' ? true : false,
               Header: col.accessor === 'name' ? 'Name' : '',
               show: true,
               resizable: false,

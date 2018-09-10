@@ -1,6 +1,6 @@
-import Contribution from './contribution'
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+import Contribution from './contribution'
 
 // Abstract methods for FileList
 export default class FileListSpec {

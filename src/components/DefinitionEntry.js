@@ -280,17 +280,17 @@ export default class DefinitionEntry extends React.Component {
 
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
-    const { licensed, described } = definition
-    const initialFacets =
-      get(described, 'facets') || this.isSourceComponent(definition.coordinates)
-        ? ['Core', 'Data', 'Dev', 'Doc', 'Examples', 'Tests']
-        : ['Core']
+    const { licensed } = definition
+    // const initialFacets =
+    //   get(described, 'facets') || this.isSourceComponent(definition.coordinates)
+    //     ? ['Core', 'Data', 'Dev', 'Doc', 'Examples', 'Tests']
+    //     : ['Core']
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
-    const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
+    // const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
     const { readOnly } = this.props
     return (
       <Row>

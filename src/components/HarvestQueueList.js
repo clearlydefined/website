@@ -106,7 +106,14 @@ export default class HarvestQueueList extends React.Component {
 
   renderMessage(request) {
     const { type, policy } = request
-    const nameText = type ? <span>{type}&nbsp;</span> : ''
+    const nameText = type ? (
+      <span>
+        {type}
+        &nbsp;
+      </span>
+    ) : (
+      ''
+    )
     const policyText = 'Policy: ' + policy ? policy : 'default'
     return (
       <span>

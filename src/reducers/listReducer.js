@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 export const initialState = {
   isFetching: false,
