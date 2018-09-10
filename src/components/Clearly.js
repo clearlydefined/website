@@ -20,7 +20,8 @@ export default class Clearly extends Component {
   render() {
     return (
       <span style={this.props.style}>
-        Clearly<span className="semi-bold">{this.props.children}</span>
+        Clearly
+        <span className="semi-bold">{this.props.children}</span>
       </span>
     )
   }

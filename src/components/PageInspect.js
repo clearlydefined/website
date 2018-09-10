@@ -161,7 +161,7 @@ export class PageInspect extends Component {
           {this.renderData(definition, 'Current definition', 'yaml', this.renderCurationButton())}
           {this.renderData(curation, 'Curations', 'json', this.renderCurationButton())}
           {this.renderData(harvest, 'Harvested data', 'json', this.renderHarvestButton())}
-          <Section name={"FileList View"}>
+          <Section name="FileList View">
             <FileList files={definition.item && definition.item.files} />
           </Section>
         </Row>

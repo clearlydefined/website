@@ -77,8 +77,8 @@ class PageLanding extends Component {
             <h3>
               Defining and knowing the license for an open source component is essential to a successful partnership.
               Communities choose a license with terms they like. {clearlyDefined} helps clarify that choice and enables
-              consumers to follow the terms by identifying key data such as license set, attribution parties, and
-              code location.{' '}
+              consumers to follow the terms by identifying key data such as license set, attribution parties, and code
+              location.{' '}
               <a href="https://docs.clearlydefined.io/clearly#licensed" target="_blank" rel="noopener noreferrer">
                 Learn more...
               </a>
