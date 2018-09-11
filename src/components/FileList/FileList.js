@@ -164,9 +164,9 @@ export default class FileList extends Component {
         resizable: false,
         Cell: row => (
           <CopyrightsRenderer
-            item={row}
+            container={document.getElementsByClassName('ReactTable')[0]}
+            item={row.value}
             readOnly={readOnly}
-            showPopup={this.showPopup}
             onSave={value => {
               this.props.onChange(`files[${row.original.id}]`, value, null, value => {
                 return {
@@ -207,30 +207,28 @@ export default class FileList extends Component {
     const { files, isFiltering } = this.state
 
     return (
-      <div>
-        <TreeTable
-          showPagination={false}
-          sortable={false}
-          defaultPageSize={15}
-          filterable
-          freezeWhenExpanded={false}
-          manual={false}
-          onFilteredChange={() => this.setState({ isFiltering: true })}
-          noDataText={
-            isFiltering ? "Current filters didn't match any data" : 'There are currently no files for this definition'
-          }
-          data={files}
-          pivotBy={pathColums}
-          columns={this.generateColumns(columns)} // Merge columns array with other columns to show after the folders
-          FilterComponent={props => {
-            return (
-              !String(props.column.id)
-                .toLowerCase()
-                .includes('folder_') && <FilterCustomComponent {...props} />
-            )
-          }}
-        />
-      </div>
+      <TreeTable
+        showPagination={false}
+        sortable={false}
+        defaultPageSize={15}
+        filterable
+        freezeWhenExpanded={false}
+        manual={false}
+        onFilteredChange={() => this.setState({ isFiltering: true })}
+        noDataText={
+          isFiltering ? "Current filters didn't match any data" : 'There are currently no files for this definition'
+        }
+        data={files}
+        pivotBy={pathColums}
+        columns={this.generateColumns(columns)} // Merge columns array with other columns to show after the folders
+        FilterComponent={props => {
+          return (
+            !String(props.column.id)
+              .toLowerCase()
+              .includes('folder_') && <FilterCustomComponent {...props} />
+          )
+        }}
+      />
     )
   }
 }

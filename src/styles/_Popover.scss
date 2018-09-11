@@ -1,7 +1,7 @@
 .popoverRenderer {
   max-height: 200px;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   width: 100%;
 }
 .popoverRenderer__container {
@@ -34,4 +34,13 @@
 }
 .popoverRenderer__items__formControl {
   width: 200px;
+}
+.popoverRenderer_scrollY {
+  .list-singleLine {
+    overflow: visible;
+  }
+
+  .popoverRenderer__items__value {
+    overflow: visible;
+  }
 }

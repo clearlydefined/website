@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component, Fragment } from 'react'
-import { Row, Button, Col } from 'react-bootstrap'
+import { Row, Button, Col, Popover, OverlayTrigger } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
 import get from 'lodash/get'
@@ -195,15 +195,7 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Discovered')}</Col>
             <Col md={9} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.discovered.expressions'
-                )}`}
-              >
-                {get(licensed, 'discovered.expressions', []).join(', ')}
-              </p>
+              {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
         </Col>
@@ -211,15 +203,7 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Attribution')}</Col>
             <Col md={9} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.attribution.parties'
-                )}`}
-              >
-                {get(licensed, 'attribution.parties', []).join(', ')}
-              </p>
+              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row className="no-gutters">
@@ -234,6 +218,34 @@ class FullDetailComponent extends Component {
           </Row>
         </Col>
       </Row>
+    )
+  }
+
+  renderPopover(licensed, key, title) {
+    const values = get(licensed, key, [])
+    if (!values) return null
+
+    return (
+      <OverlayTrigger
+        trigger="click"
+        placement="left"
+        rootClose
+        overlay={
+          <Popover title={title} id={title}>
+            <div className="popoverRenderer popoverRenderer_scrollY">
+              {values.map((a, index) => (
+                <div key={`${a}_${index}`} className="popoverRenderer__items">
+                  <div className="popoverRenderer__items__value">
+                    <span>{a}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Popover>
+        }
+      >
+        <span className="popoverSpan">{values.join(', ')}</span>
+      </OverlayTrigger>
     )
   }
 

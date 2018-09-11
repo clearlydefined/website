@@ -63,16 +63,14 @@ class PopoverRenderer extends Component {
 
   renderRow(item, index) {
     const { editable, editorType, editorPlaceHolder, addItem, editRow } = this.props
-
+    const extraClass = item.isDifferent ? 'popoverRenderer__items__value--isEdited' : ''
     return (
       item && (
         <div key={`${item.value}_${index}`} className="popoverRenderer__items">
-          <div
-            className={`popoverRenderer__items__value ${item.isDifferent && 'popoverRenderer__items__value--isEdited'}`}
-          >
+          <div className={`popoverRenderer__items__value ${extraClass}`}>
             {
               <InlineEditor
-                extraClass={item.isDifferent ? 'popoverRenderer__items__value--isEdited' : ''}
+                extraClass={extraClass}
                 readOnly={!editable}
                 type={editorType}
                 initialValue={item.value || ''}
@@ -126,7 +124,7 @@ class PopoverRenderer extends Component {
   }
 
   render() {
-    const { values, showAddRow, placement, positionLeft, positionTop } = this.props
+    const { editable, values, showAddRow, placement, positionLeft, positionTop } = this.props
 
     return (
       <Popover
@@ -137,7 +135,7 @@ class PopoverRenderer extends Component {
         title={this.renderPopoverTitle()}
         bsStyle={{ width: '500px' }}
       >
-        <div className="popoverRenderer">
+        <div className={`popoverRenderer ${editable ? '' : 'popoverRenderer_scrollY'}`}>
           {showAddRow && this.renderEditRow()}
           {values && isArray(values)
             ? values.map((item, index) => this.renderRow(item, index))
