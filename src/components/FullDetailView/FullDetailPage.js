@@ -65,7 +65,7 @@ export class FullDetailPage extends Component {
   }
 
   componentDidMount() {
-    const { path, uiNavigation, component } = this.props
+    const { uiNavigation, component } = this.props
     if (component.changes) {
       this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
     } else {

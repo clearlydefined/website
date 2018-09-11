@@ -32,7 +32,8 @@ export function curateAction(token, spec) {
           <div>
             Successfully contributed{' '}
             <a href={result.url} target="_blank">
-              PR#{result.prNumber}
+              PR#
+              {result.prNumber}
             </a>
           </div>
         )
