@@ -144,7 +144,7 @@ export default (name = '', transformer = null, comparator = null) => {
       return {
         ...state,
         sequence: ++state.sequence,
-        transformedList: transformer ? transformer(state.list) : state.list
+        transformedList: transformer(state.list)
       }
     }
 

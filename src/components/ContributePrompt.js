@@ -19,8 +19,6 @@ export default class ContributePrompt extends Component {
     actionHandler: PropTypes.func.isRequired
   }
 
-  static defaultProps = {}
-
   open() {
     this.setState({ show: true, description: '' })
   }

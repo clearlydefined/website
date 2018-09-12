@@ -19,7 +19,6 @@ export default class ComponentList extends React.Component {
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
     onChange: PropTypes.func,
-    onCurate: PropTypes.func,
     onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
@@ -60,12 +59,6 @@ export default class ComponentList extends React.Component {
     event.stopPropagation()
     const action = this.props.onInspect
     action && action(component, definition)
-  }
-
-  curateComponent(component, event) {
-    event.stopPropagation()
-    const action = this.props.onCurate
-    action && action(component)
   }
 
   addSourceForComponent(component, event) {

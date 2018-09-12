@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
-import isEqual from 'lodash/isEqual'
 import { OverlayTrigger } from 'react-bootstrap'
 
 import PopoverRenderer from './PopoverRenderer'
@@ -59,7 +58,7 @@ class CopyrightsRenderer extends Component {
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
   render() {
-    const { readOnly, container, classIfDifferent, placement } = this.props
+    const { readOnly, container, placement } = this.props
     const { hasChanges, values, showAddRow } = this.state
 
     if (!values.length && readOnly) return null
@@ -89,10 +88,7 @@ class CopyrightsRenderer extends Component {
           />
         }
       >
-        <div className="copyrightContainer">
-          {!readOnly && <i className="fas fa-pencil-alt editable-marker" />}
-          <span className={classIfDifferent}>{values && values[0] ? values[0].value : null}</span>
-        </div>
+        <div>{values[0] ? values[0].value : null}</div>
       </OverlayTrigger>
     )
   }
@@ -102,10 +98,7 @@ CopyrightsRenderer.propTypes = {
   /**
    * item to show
    */
-  item: PropTypes.shape({
-    value: PropTypes.array
-  }).isRequired,
-
+  item: PropTypes.array,
   onSave: PropTypes.func,
   readOnly: PropTypes.bool,
   container: PropTypes.instanceOf(Element),

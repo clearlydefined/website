@@ -41,7 +41,7 @@ class PageHarvest extends Component {
       return { tool: entry.tool || entry.type, coordinates: entry.toPath(), policy: entry.policy }
     })
     dispatch(harvestAction(token, requests))
-    // TODO clearly the harvest queue when everything is successfully queued
+    // TODO clear the harvest queue when everything is successfully queued
   }
 
   onAddRequest(value, tool) {
@@ -101,7 +101,7 @@ class PageHarvest extends Component {
   }
 
   noRowsRenderer() {
-    return <div className={'list-noRows'}>Use the search box above to add components to harvest.</div>
+    return <div className="list-noRows">Use the search box above to add components to harvest.</div>
   }
 
   render() {
