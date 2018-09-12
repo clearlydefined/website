@@ -24,16 +24,6 @@ import deepDiff from 'deep-diff'
  */
 export default class Contribution {
   /**
-   * Build Contribution Spec from a list of components
-   * @param {*} list list of components
-   */
-  static buildContributeSpecFromList(list) {
-    return list.reduce((result, component) => {
-      return this.buildContributeSpec(result, component)
-    }, [])
-  }
-
-  /**
    * Build Contribution Spec for a specific component
    * @param {*} result initial object
    * @param {*} component original component

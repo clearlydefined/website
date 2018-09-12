@@ -37,8 +37,9 @@ class FullDetailComponent extends Component {
     const { activeFacets, readOnly, onChange, previewDefinition } = this.props
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
-    const { described } = definition
-    const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
+    const toolList = get(definition.described, 'tools', []).map(
+      tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool)
+    )
 
     return (
       <Row>

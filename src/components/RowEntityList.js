@@ -12,7 +12,6 @@ export default class RowEntityList extends React.Component {
     listHeight: PropTypes.number,
     rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
     rowRenderer: PropTypes.func.isRequired,
-    allowExpand: PropTypes.bool,
     loadMoreRows: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     sortOrder: PropTypes.string,
@@ -28,8 +27,8 @@ export default class RowEntityList extends React.Component {
   constructor(props) {
     super(props)
     this.state = { expanded: [] }
-    this.isRowLoaded = this.isRowLoaded.bind(this)
     this.length = this.length.bind(this)
+    this.isRowLoaded = this.isRowLoaded.bind(this)
   }
 
   render() {

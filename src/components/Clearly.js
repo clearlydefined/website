@@ -13,7 +13,6 @@ export const definedColor = primaryColor
 
 export default class Clearly extends Component {
   static propTypes = {
-    word: PropTypes.string,
     style: PropTypes.object
   }
 

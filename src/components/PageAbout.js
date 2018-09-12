@@ -78,8 +78,7 @@ class PageAbout extends Component {
             <p>
               It’s still very early days and we don’t have all the answers. ClearlyDefined is still being defined. You
               can help. Come design the processes, make decisions, connect with projects, and build the community. Find
-              out more about{' '}
-              <a href="https://github.com/clearlydefined/clearlydefined/wiki/Get-Involved">how to get involved</a>.
+              out more about <a href="https://docs.clearlydefined.io/get-involved">how to get involved</a>.
             </p>
             <p>You can find us at:</p>
             <ul style={{ listStyleType: 'none' }}>

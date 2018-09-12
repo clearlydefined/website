@@ -17,7 +17,6 @@ class Header extends Component {
     super(props)
     this.doLogin = this.doLogin.bind(this)
     this.doLogout = this.doLogout.bind(this)
-    this.gotoDocs = this.gotoDocs.bind(this)
   }
 
   doLogout(e) {

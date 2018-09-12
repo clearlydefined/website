@@ -15,6 +15,8 @@ import LicensesRenderer from '../LicensesRenderer'
 import CopyrightsRenderer from '../CopyrightsRenderer'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
+// Import Custom TreeTable HOC
+const TreeTable = treeTableHOC(ReactTable)
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
@@ -40,7 +42,7 @@ export default class FileList extends Component {
     const { files, component, previewDefinition } = this.props
     if (files) {
       const definitionFiles = parsePaths(files, component.item, previewDefinition)
-      files && this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
+      this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -48,7 +50,7 @@ export default class FileList extends Component {
     const { files, component, previewDefinition } = nextProps
     if (files) {
       const definitionFiles = parsePaths(files, component.item, previewDefinition)
-      files && this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
+      this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
     }
   }
 
@@ -233,9 +235,6 @@ export default class FileList extends Component {
   }
 }
 
-// Import Custom TreeTable HOC
-const TreeTable = treeTableHOC(ReactTable)
-
 const pathColums = []
 const columns = []
 
@@ -262,9 +261,7 @@ const parsePaths = (files, component, preview) => {
     // If index is the last file, then is the name of the file
     folders.forEach((p, index) => {
       if (index + 1 === folders.length) file.name = p
-      else {
-        file[`folder_${index}`] = p
-      }
+      else file[`folder_${index}`] = p
     })
 
     folders.forEach((p, index) => {
