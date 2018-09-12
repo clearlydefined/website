@@ -12,6 +12,7 @@ export default class Definition {
   }
 
   static getDefinitionPreview(state) {
+    console.log(state.ui.inspect.definition)
     return !state.ui.curate.previewDefinition.isFetching
       ? Contribution.getChangesFromPreview(
           Object.assign({}, state.ui.inspect.definition.item),
