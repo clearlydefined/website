@@ -10,7 +10,7 @@ export default class App extends Component {
     return (
       <div className="App">
         <Header />
-        <main>{children}</main>
+        <main className="App-content">{children}</main>
         <Footer />
         <NotificationList />
       </div>
