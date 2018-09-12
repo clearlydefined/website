@@ -311,16 +311,12 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
             <Col md={10} className="definition__line">
-<<<<<<< HEAD
-              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
-=======
               {this.renderPopover(
                 licensed,
                 'attribution.parties',
                 'Attributions',
                 this.classIfDifferent('attribution.parties')
               )}
->>>>>>> 32ad060f973696505997bddad5515384bc4e833e
             </Col>
           </Row>
           <Row>
@@ -338,11 +334,7 @@ export default class DefinitionEntry extends React.Component {
     )
   }
 
-<<<<<<< HEAD
-  renderPopover(licensed, key, title) {
-=======
   renderPopover(licensed, key, title, classIfDifferent = '') {
->>>>>>> 32ad060f973696505997bddad5515384bc4e833e
     const values = get(licensed, key, [])
     if (!values) return null
 
@@ -365,11 +357,7 @@ export default class DefinitionEntry extends React.Component {
           </Popover>
         }
       >
-<<<<<<< HEAD
-        <span className="popoverSpan">{values.join(', ')}</span>
-=======
         <span className={`popoverSpan ${classIfDifferent}`}>{values.join(', ')}</span>
->>>>>>> 32ad060f973696505997bddad5515384bc4e833e
       </OverlayTrigger>
     )
   }

@@ -9,10 +9,6 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import set from 'lodash/set'
 import sortBy from 'lodash/sortBy'
-<<<<<<< HEAD
-import { ROUTE_CURATE } from '../utils/routingConstants'
-=======
->>>>>>> 32ad060f973696505997bddad5515384bc4e833e
 import { curateAction } from '../actions/curationActions'
 import { ComponentList, Section, ContributePrompt } from './'
 import FullDetailPage from './FullDetailView/FullDetailPage'
