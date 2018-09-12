@@ -15,7 +15,6 @@ import { uiNavigation, uiBrowseUpdateList, uiNotificationNew } from '../actions/
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
-
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 
 class PageDefinitions extends AbstractPageDefinitions {

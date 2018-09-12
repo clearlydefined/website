@@ -27,27 +27,6 @@ export default class DefinitionEntry extends React.Component {
 
   static defaultProps = {}
 
-  inspectComponent(component, event) {
-    event.stopPropagation()
-    const action = this.props.onInspect
-    action && action(component)
-  }
-
-  curateComponent(component, event) {
-    event.stopPropagation()
-    const action = this.props.onCurate
-    action && action(component)
-  }
-
-  renderButtonWithTip(button, tip) {
-    const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
-    return (
-      <OverlayTrigger placement="top" overlay={toolTip}>
-        {button}
-      </OverlayTrigger>
-    )
-  }
-
   isSourceComponent(component) {
     return ['github', 'sourcearchive'].includes(component.provider)
   }
@@ -69,10 +48,17 @@ export default class DefinitionEntry extends React.Component {
   }
 
   ifDifferent(field, then_, else_) {
+    if (field == 'attribution.parties') {
+      console.log(this.props.definition)
+      console.log(this.props.otherDefinition)
+      console.log(get(this.props.otherDefinition, field))
+      console.log(this.getOriginalValue(field))
+    }
     return this.props.otherDefinition && !isEqual(get(this.props.otherDefinition, field), this.getOriginalValue(field))
       ? then_
       : else_
   }
+
   classIfDifferent(field) {
     return this.ifDifferent(field, this.props.classOnDifference, '')
   }
@@ -189,21 +175,6 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
-  getSourceUrl(definition) {
-    const location = get(definition, 'described.sourceLocation')
-    if (!location) return ''
-    switch (location.provider) {
-      case 'github':
-        return (
-          <a href={`${location.url}/commit/${location.revision}`} target="_blank">
-            {location.revision}
-          </a>
-        )
-      default:
-        return ''
-    }
-  }
-
   getPercentage(count, total) {
     return Math.round(((count || 0) / total) * 100)
   }
@@ -240,34 +211,12 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
-  parseArray(value) {
-    return value ? value.split(',').map(v => v.trim()) : null
-  }
-
-  printArray(value) {
-    return value ? value.join(', ') : null
-  }
-
-  printDate(value) {
-    return value ? moment(value).format('YYYY-MM-DD') : null
-  }
-
-  parseDate(value) {
-    return moment(value)
-  }
-
   printCoordinates(value) {
     return value ? value.url : null
   }
 
-  renderLabel(text, editable = false) {
-    return (
-      <p>
-        <b>
-          {text} <i className={false ? 'fas fa-pencil-alt' : ''} />
-        </b>
-      </p>
-    )
+  renderLabel(text) {
+    return <b>{text}</b>
   }
 
   renderPanel(rawDefinition) {
@@ -342,8 +291,8 @@ export default class DefinitionEntry extends React.Component {
                   extraClass={this.classIfDifferent('described.releaseDate')}
                   readOnly={readOnly}
                   type="date"
-                  initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
-                  value={this.printDate(this.getValue('described.releaseDate'))}
+                  initialValue={Contribution.printDate(this.getOriginalValue('described.releaseDate'))}
+                  value={Contribution.printDate(this.getValue('described.releaseDate'))}
                   onChange={this.fieldChange('described.releaseDate')}
                   validator={value => true}
                   placeholder={'YYYY-MM-DD'}
@@ -362,7 +311,12 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
             <Col md={10} className="definition__line">
-              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
+              {this.renderPopover(
+                licensed,
+                'attribution.parties',
+                'Attributions',
+                this.classIfDifferent('attribution.parties')
+              )}
             </Col>
           </Row>
           <Row>
@@ -380,7 +334,7 @@ export default class DefinitionEntry extends React.Component {
     )
   }
 
-  renderPopover(licensed, key, title) {
+  renderPopover(licensed, key, title, classIfDifferent = '') {
     const values = get(licensed, key, [])
     if (!values) return null
 
@@ -403,7 +357,7 @@ export default class DefinitionEntry extends React.Component {
           </Popover>
         }
       >
-        <span className="popoverSpan">{values.join(', ')}</span>
+        <span className={`popoverSpan ${classIfDifferent}`}>{values.join(', ')}</span>
       </OverlayTrigger>
     )
   }

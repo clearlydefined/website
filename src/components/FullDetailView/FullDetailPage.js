@@ -48,6 +48,7 @@ export class FullDetailPage extends Component {
     this.handleClose = this.handleClose.bind(this)
     this.onChange = this.onChange.bind(this)
     this.close = this.close.bind(this)
+    this.contributeModal = React.createRef()
   }
 
   static propTypes = {
@@ -192,7 +193,7 @@ export class FullDetailPage extends Component {
         width={'85%'}
         className="fullDetaiView__modal"
       >
-        {visible ? (
+        {visible && (
           <FullDetailComponent
             curation={curation}
             definition={definition}
@@ -206,7 +207,7 @@ export class FullDetailPage extends Component {
             previewDefinition={previewDefinition}
             changes={changes}
           />
-        ) : null}
+        )}
       </Modal>
     ) : (
       <Grid>
@@ -226,7 +227,7 @@ export class FullDetailPage extends Component {
             </Button>
           }
         />
-        <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
+        <ContributePrompt ref={ref => (this.contributeModal = ref)} actionHandler={this.doContribute} />
       </Grid>
     )
   }

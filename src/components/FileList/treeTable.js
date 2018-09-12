@@ -17,16 +17,9 @@ import PivotCustomComponent from './PivotCustomComponent'
  */
 export default Component => {
   const wrapper = class RTTreeTable extends React.Component {
-    constructor(props) {
-      super(props)
-      this.getWrappedInstance.bind(this)
-      this.getTrProps.bind(this)
-      this.getSubrows.bind(this)
-    }
-
     // this is so we can expose the underlying ReactTable to get at the sortedData for selectAll
     getWrappedInstance = () => {
-      if (!this.wrappedInstance) console.warn('RTTreeTable - No wrapped instance')
+      if (!this.wrappedInstance) return console.warn('RTTreeTable - No wrapped instance')
       if (this.wrappedInstance.getWrappedInstance) return this.wrappedInstance.getWrappedInstance()
       else return this.wrappedInstance
     }

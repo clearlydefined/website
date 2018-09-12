@@ -7,10 +7,9 @@ import Input from 'antd/lib/input'
 import Tooltip from 'antd/lib/tooltip'
 import Icon from 'antd/lib/icon'
 
-export default class GlobPicker extends Component {
+export default class GlobsPicker extends Component {
   static propTypes = {
     globs: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
-    onBlur: PropTypes.func,
     onChange: PropTypes.func,
     readOnly: PropTypes.bool
   }
