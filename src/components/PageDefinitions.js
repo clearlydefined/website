@@ -10,6 +10,7 @@ import base64js from 'base64-js'
 import { saveAs } from 'file-saver'
 import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
+import chunk from 'lodash/chunk'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
@@ -87,20 +88,35 @@ class PageDefinitions extends AbstractPageDefinitions {
     }
   }
 
+  // Get an array of definitions asynchronous, split them into 100 chunks and alert the user when they're all done
+  getDefinitionsAndNotify(definitions, message) {
+    const { dispatch, token } = this.props
+    const chunks = chunk(definitions, 100)
+    let todo = chunks.length
+    for (let i = 0; i < chunks.length; i++) {
+      dispatch(getDefinitionsAction(token, chunks[i])).then(() => {
+        if (--todo === 0) {
+          dispatch(uiNotificationNew({ type: 'info', message, timeout: 3000 }))
+        }
+      })
+    }
+  }
+
   refresh = () => {
-    const { components, dispatch, token } = this.props
+    const { components, dispatch } = this.props
 
     this.onRemoveAll()
     const definitions = this.buildSaveSpec(components.list)
 
-    definitions.forEach(definition => {
-      const path = definition.toPath()
+    const definitionsToGet = []
+    definitions.map(definition => {
+      definitionsToGet.push(definition.toPath())
       delete definition.changes
-      dispatch(getDefinitionsAction(token, [path]))
     })
 
+    this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
+
     dispatch(uiBrowseUpdateList({ addAll: definitions }))
-    dispatch(uiNotificationNew({ type: 'info', message: 'All components have been refreshed', timeout: 3000 }))
   }
 
   renderButtons() {
@@ -243,16 +259,17 @@ class PageDefinitions extends AbstractPageDefinitions {
     return false
   }
 
-  async loadFromListSpec(listSpec) {
-    const { dispatch, token, definitions } = this.props
+  loadFromListSpec(listSpec) {
+    const { dispatch, definitions } = this.props
     if (listSpec.filter) this.setState({ activeFilters: listSpec.filter })
     if (listSpec.sortBy) this.setState({ activeSort: listSpec.sortBy })
     if (listSpec.sortBy || listSpec.filter) this.setState({ sequence: this.state.sequence + 1 })
 
-    const toAdd = listSpec.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
+    const toAdd = listSpec.coordinates.map(component => EntitySpec.validateAndCreate(component))
     dispatch(uiBrowseUpdateList({ addAll: toAdd }))
     const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
-    await dispatch(getDefinitionsAction(token, missingDefinitions))
+    this.getDefinitionsAndNotify(missingDefinitions, 'All components have been loaded')
+
     dispatch(
       uiBrowseUpdateList({
         transform: this.createTransform.call(
