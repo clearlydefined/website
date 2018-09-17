@@ -179,7 +179,7 @@ export default class AbstractPageDefinitions extends Component {
 
   doPromptContribute(proposal) {
     if (!this.hasChanges()) return
-    this.refs.contributeModal.open()
+    this.contributeModal.current.open()
   }
 
   name(coordinates) {
