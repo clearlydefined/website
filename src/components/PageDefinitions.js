@@ -92,14 +92,13 @@ class PageDefinitions extends AbstractPageDefinitions {
   getDefinitionsAndNotify(definitions, message) {
     const { dispatch, token } = this.props
     const chunks = chunk(definitions, 100)
-    let todo = chunks.length
-    for (let i = 0; i < chunks.length; i++) {
-      dispatch(getDefinitionsAction(token, chunks[i])).then(() => {
-        if (--todo === 0) {
-          dispatch(uiNotificationNew({ type: 'info', message, timeout: 3000 }))
-        }
-      })
-    }
+    Promise.all(chunks.map(chunk => dispatch(getDefinitionsAction(token, chunk))))
+      .then(() => dispatch(uiNotificationNew({ type: 'info', message, timeout: 3000 })))
+      .catch(() =>
+        dispatch(
+          uiNotificationNew({ type: 'danger', message: 'There was an issue retrieving components', timeout: 3000 })
+        )
+      )
   }
 
   refresh = () => {
