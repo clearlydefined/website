@@ -104,18 +104,18 @@ class PageDefinitions extends AbstractPageDefinitions {
   refresh = () => {
     const { components, dispatch } = this.props
 
-    this.onRemoveAll()
     const definitions = this.buildSaveSpec(components.list)
+    const definitionsToGet = definitions.map(definition => definition.toPath())
 
-    const definitionsToGet = []
-    definitions.map(definition => {
-      definitionsToGet.push(definition.toPath())
-      delete definition.changes
-    })
+    if (this.hasChanges()) {
+      dispatch(
+        uiBrowseUpdateList({
+          transform: list => list.map(({ changes, ...keepAttrs }) => keepAttrs)
+        })
+      )
+    }
 
     this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
-
-    dispatch(uiBrowseUpdateList({ addAll: definitions }))
   }
 
   renderButtons() {
