@@ -116,7 +116,7 @@ export class FullDetailPage extends Component {
   doPromptContribute() {
     const { changes } = this.state
     if (isEmpty(changes)) return
-    this.refs.contributeModal.open()
+    this.contributeModal.current.open()
   }
 
   handleSave() {

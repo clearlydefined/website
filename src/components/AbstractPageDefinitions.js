@@ -177,7 +177,7 @@ export default class AbstractPageDefinitions extends Component {
     }, [])
   }
 
-  doPromptContribute(proposal) {
+  doPromptContribute() {
     if (!this.hasChanges()) return
     this.contributeModal.current.open()
   }
