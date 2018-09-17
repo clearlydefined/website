@@ -227,7 +227,7 @@ export class FullDetailPage extends Component {
             </Button>
           }
         />
-        <ContributePrompt ref={ref => (this.contributeModal = ref)} actionHandler={this.doContribute} />
+        <ContributePrompt ref={this.contributeModal} actionHandler={this.doContribute} />
       </Grid>
     )
   }

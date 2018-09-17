@@ -155,8 +155,8 @@ class PageCurate extends Component {
     const searchWidth = isCurator ? 7 : 9
     return (
       <Grid className="main-container">
-        <ContributePrompt ref={ref => (this.contributeModal = ref)} actionHandler={this.doContribute} />
-        <ProposePrompt ref={ref => (this.proposeModal = ref)} actionHandler={this.doPropose} />
+        <ContributePrompt ref={this.contributeModal} actionHandler={this.doContribute} />
+        <ProposePrompt ref={this.proposeModal} actionHandler={this.doPropose} />
         <Row className="show-grid spacer">
           <Col md={searchWidth} mdOffset={1}>
             <FilterBar

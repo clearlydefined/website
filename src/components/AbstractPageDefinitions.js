@@ -394,7 +394,7 @@ export default class AbstractPageDefinitions extends Component {
 
     return (
       <Grid className="main-container">
-        <ContributePrompt ref={ref => (this.contributeModal = ref)} actionHandler={this.doContribute} />
+        <ContributePrompt ref={this.contributeModal} actionHandler={this.doContribute} />
         {this.renderSearchBar()}
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {this.dropZone(
