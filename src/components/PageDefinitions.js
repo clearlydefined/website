@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import pako from 'pako'
+import throat from 'throat'
 import base64js from 'base64-js'
 import { saveAs } from 'file-saver'
 import notification from 'antd/lib/notification'
@@ -92,7 +93,7 @@ class PageDefinitions extends AbstractPageDefinitions {
   getDefinitionsAndNotify(definitions, message) {
     const { dispatch, token } = this.props
     const chunks = chunk(definitions, 100)
-    Promise.all(chunks.map(chunk => dispatch(getDefinitionsAction(token, chunk))))
+    Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
       .then(() => dispatch(uiNotificationNew({ type: 'info', message, timeout: 3000 })))
       .catch(() =>
         dispatch(
@@ -104,9 +105,6 @@ class PageDefinitions extends AbstractPageDefinitions {
   refresh = () => {
     const { components, dispatch } = this.props
 
-    const definitions = this.buildSaveSpec(components.list)
-    const definitionsToGet = definitions.map(definition => definition.toPath())
-
     if (this.hasChanges()) {
       dispatch(
         uiBrowseUpdateList({
@@ -115,6 +113,8 @@ class PageDefinitions extends AbstractPageDefinitions {
       )
     }
 
+    const definitions = this.buildSaveSpec(components.list)
+    const definitionsToGet = definitions.map(definition => definition.toPath())
     this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
   }
 
@@ -264,7 +264,7 @@ class PageDefinitions extends AbstractPageDefinitions {
     if (listSpec.sortBy) this.setState({ activeSort: listSpec.sortBy })
     if (listSpec.sortBy || listSpec.filter) this.setState({ sequence: this.state.sequence + 1 })
 
-    const toAdd = listSpec.coordinates.map(component => EntitySpec.validateAndCreate(component))
+    const toAdd = listSpec.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
     dispatch(uiBrowseUpdateList({ addAll: toAdd }))
     const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
     this.getDefinitionsAndNotify(missingDefinitions, 'All components have been loaded')
