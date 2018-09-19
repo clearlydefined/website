@@ -29,6 +29,7 @@
     "redux-persist": "^4.6.0",
     "redux-thunk": "^2.3.0",
     "spdx-license-ids": "^3.0.0",
+    "throat": "^4.1.0",
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
