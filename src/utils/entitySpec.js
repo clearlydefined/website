@@ -23,11 +23,11 @@ function normalize(value, provider, property) {
 
 export default class EntitySpec {
   static fromPath(path) {
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-unused-vars
     const [full, type, provider, namespace, name, revision, prSpec] = path.match(
       /\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/
     )
-    // eslint-disable-next-line
+    // eslint-disable-next-line no-unused-vars
     const [blank, delimiter, pr] = prSpec ? prSpec.split('/') : []
     return new EntitySpec(type, provider, namespace, name, revision, pr)
   }

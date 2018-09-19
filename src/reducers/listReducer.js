@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 export const initialState = {
   isFetching: false,
@@ -144,7 +144,7 @@ export default (name = '', transformer = null, comparator = null) => {
       return {
         ...state,
         sequence: ++state.sequence,
-        transformedList: transformer ? transformer(state.list) : state.list
+        transformedList: transformer(state.list)
       }
     }
 

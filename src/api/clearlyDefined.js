@@ -169,7 +169,7 @@ function handleResponse(response) {
           err.body = body
           throw err
         })
-        .catch(e => {
+        .catch(() => {
           throw err
         })
     }

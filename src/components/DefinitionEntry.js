@@ -11,7 +11,6 @@ import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
-import moment from 'moment'
 import Contribution from '../utils/contribution'
 
 export default class DefinitionEntry extends React.Component {
@@ -26,27 +25,6 @@ export default class DefinitionEntry extends React.Component {
   }
 
   static defaultProps = {}
-
-  inspectComponent(component, event) {
-    event.stopPropagation()
-    const action = this.props.onInspect
-    action && action(component)
-  }
-
-  curateComponent(component, event) {
-    event.stopPropagation()
-    const action = this.props.onCurate
-    action && action(component)
-  }
-
-  renderButtonWithTip(button, tip) {
-    const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
-    return (
-      <OverlayTrigger placement="top" overlay={toolTip}>
-        {button}
-      </OverlayTrigger>
-    )
-  }
 
   isSourceComponent(component) {
     return ['github', 'sourcearchive'].includes(component.provider)
@@ -73,6 +51,7 @@ export default class DefinitionEntry extends React.Component {
       ? then_
       : else_
   }
+
   classIfDifferent(field) {
     return this.ifDifferent(field, this.props.classOnDifference, '')
   }
@@ -189,21 +168,6 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
-  getSourceUrl(definition) {
-    const location = get(definition, 'described.sourceLocation')
-    if (!location) return ''
-    switch (location.provider) {
-      case 'github':
-        return (
-          <a href={`${location.url}/commit/${location.revision}`} target="_blank">
-            {location.revision}
-          </a>
-        )
-      default:
-        return ''
-    }
-  }
-
   getPercentage(count, total) {
     return Math.round(((count || 0) / total) * 100)
   }
@@ -240,34 +204,12 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
-  parseArray(value) {
-    return value ? value.split(',').map(v => v.trim()) : null
-  }
-
-  printArray(value) {
-    return value ? value.join(', ') : null
-  }
-
-  printDate(value) {
-    return value ? moment(value).format('YYYY-MM-DD') : null
-  }
-
-  parseDate(value) {
-    return moment(value)
-  }
-
   printCoordinates(value) {
     return value ? value.url : null
   }
 
-  renderLabel(text, editable = false) {
-    return (
-      <p>
-        <b>
-          {text} <i className={false ? 'fas fa-pencil-alt' : ''} />
-        </b>
-      </p>
-    )
+  renderLabel(text) {
+    return <b>{text}</b>
   }
 
   renderPanel(rawDefinition) {
@@ -280,17 +222,12 @@ export default class DefinitionEntry extends React.Component {
 
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
-    const { licensed, described } = definition
-    const initialFacets =
-      get(described, 'facets') || this.isSourceComponent(definition.coordinates)
-        ? ['Core', 'Data', 'Dev', 'Doc', 'Examples', 'Tests']
-        : ['Core']
+    const { licensed } = definition
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
-    const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
     const { readOnly } = this.props
     return (
       <Row>
@@ -342,8 +279,8 @@ export default class DefinitionEntry extends React.Component {
                   extraClass={this.classIfDifferent('described.releaseDate')}
                   readOnly={readOnly}
                   type="date"
-                  initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
-                  value={this.printDate(this.getValue('described.releaseDate'))}
+                  initialValue={Contribution.printDate(this.getOriginalValue('described.releaseDate'))}
+                  value={Contribution.printDate(this.getValue('described.releaseDate'))}
                   onChange={this.fieldChange('described.releaseDate')}
                   validator={value => true}
                   placeholder={'YYYY-MM-DD'}

@@ -23,7 +23,6 @@ import {
   UI_HARVEST_UPDATE_FILTER,
   UI_HARVEST_UPDATE_QUEUE,
   UI_INSPECT_UPDATE_FILTER,
-  UI_INSPECT_UPDATE_FILTER_LIST,
   UI_INSPECT_GET_CURATION,
   UI_INSPECT_GET_DEFINITION,
   UI_INSPECT_GET_HARVESTED
@@ -106,7 +105,6 @@ const contribution = combineReducers({
 
 const inspect = combineReducers({
   filter: valueReducer(UI_INSPECT_UPDATE_FILTER),
-  filterList: listReducer(UI_INSPECT_UPDATE_FILTER_LIST),
   definition: itemReducer(UI_INSPECT_GET_DEFINITION, item => yaml.safeDump(item, { sortKeys: true })),
   curation: itemReducer(UI_INSPECT_GET_CURATION, item => yaml.safeDump(item, { sortKeys: true })),
   harvested: itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2))

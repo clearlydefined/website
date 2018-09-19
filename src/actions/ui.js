@@ -18,7 +18,6 @@ export const UI_NOTIFICATION_NEW = 'UI_NOTIFICATION_NEW'
 export const UI_NOTIFICATION_DELETE = 'UI_NOTIFICATION_DELETE'
 
 export const UI_INSPECT_UPDATE_FILTER = 'UI_INSPECT_UPDATE_FILTER'
-export const UI_INSPECT_UPDATE_FILTER_LIST = 'UI_INSPECT_UPDATE_FILTER_LIST'
 export const UI_INSPECT_GET_CURATION = 'UI_INSPECT_GET_CURATION'
 export const UI_INSPECT_GET_DEFINITION = 'UI_INSPECT_GET_DEFINITION'
 export const UI_INSPECT_GET_HARVESTED = 'UI_INSPECT_GET_HARVESTED'
@@ -57,14 +56,6 @@ export function uiNotificationNew(message) {
 
 export function uiNotificationDelete(message) {
   return { type: UI_NOTIFICATION_DELETE, message }
-}
-
-export function uiInspectUpdateFilter(value) {
-  return { type: UI_INSPECT_UPDATE_FILTER, value }
-}
-
-export function uiInspectUpdateFilterList(token, prefix) {
-  return getDefinitionSuggestionsAction(token, prefix, UI_INSPECT_UPDATE_FILTER_LIST)
 }
 
 export function uiInspectGetCuration(token, entity) {

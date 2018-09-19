@@ -31,7 +31,6 @@ class PageContribution extends AbstractPageDefinitions {
   renderButtons() {
     return (
       <div className="pull-right">
-        &nbsp;
         <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
           Collapse All
         </Button>

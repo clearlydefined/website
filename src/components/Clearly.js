@@ -13,14 +13,14 @@ export const definedColor = primaryColor
 
 export default class Clearly extends Component {
   static propTypes = {
-    word: PropTypes.string,
     style: PropTypes.object
   }
 
   render() {
     return (
       <span style={this.props.style}>
-        Clearly<span className="semi-bold">{this.props.children}</span>
+        Clearly
+        <span className="semi-bold">{this.props.children}</span>
       </span>
     )
   }

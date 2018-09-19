@@ -48,6 +48,7 @@ export class FullDetailPage extends Component {
     this.handleClose = this.handleClose.bind(this)
     this.onChange = this.onChange.bind(this)
     this.close = this.close.bind(this)
+    this.contributeModal = React.createRef()
   }
 
   static propTypes = {
@@ -65,7 +66,7 @@ export class FullDetailPage extends Component {
   }
 
   componentDidMount() {
-    const { path, uiNavigation, component } = this.props
+    const { uiNavigation, component } = this.props
     if (component.changes) {
       this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
     } else {
@@ -115,7 +116,7 @@ export class FullDetailPage extends Component {
   doPromptContribute() {
     const { changes } = this.state
     if (isEmpty(changes)) return
-    this.refs.contributeModal.open()
+    this.contributeModal.current.open()
   }
 
   handleSave() {
@@ -192,7 +193,7 @@ export class FullDetailPage extends Component {
         width={'85%'}
         className="fullDetaiView__modal"
       >
-        {visible ? (
+        {visible && (
           <FullDetailComponent
             curation={curation}
             definition={definition}
@@ -206,7 +207,7 @@ export class FullDetailPage extends Component {
             previewDefinition={previewDefinition}
             changes={changes}
           />
-        ) : null}
+        )}
       </Modal>
     ) : (
       <Grid>
@@ -226,7 +227,7 @@ export class FullDetailPage extends Component {
             </Button>
           }
         />
-        <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
+        <ContributePrompt ref={this.contributeModal} actionHandler={this.doContribute} />
       </Grid>
     )
   }
