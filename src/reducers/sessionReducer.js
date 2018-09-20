@@ -6,7 +6,8 @@ import { LOGIN, LOGOUT } from '../actions/sessionActions'
 const initialState = {
   isAnonymous: true,
   token: null,
-  isFetching: false
+  isFetching: false,
+  username: null
 }
 
 export default function sessionReducer(state = initialState, action) {
@@ -16,7 +17,8 @@ export default function sessionReducer(state = initialState, action) {
         ...state,
         isAnonymous: false,
         token: action.token,
-        permissions: action.permissions
+        permissions: action.permissions,
+        username: action.username
       }
     case LOGOUT:
       return { ...initialState }
