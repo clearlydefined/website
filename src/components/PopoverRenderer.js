@@ -79,6 +79,7 @@ class PopoverRenderer extends Component {
                 validator
                 placeholder={editorPlaceHolder}
                 onClick={() => editRow(index)}
+                revertable={false}
               />
             }
           </div>

@@ -391,7 +391,6 @@ export default class AbstractPageDefinitions extends Component {
   render() {
     const { components, definitions, token } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
-
     return (
       <Grid className="main-container">
         <ContributePrompt ref={this.contributeModal} actionHandler={this.doContribute} />
@@ -405,6 +404,7 @@ export default class AbstractPageDefinitions extends Component {
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 listHeight={1000}
                 onRemove={this.onRemoveComponent}
+                onRevert={this.revertDefinition}
                 onChange={this.onChangeComponent}
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
@@ -413,6 +413,7 @@ export default class AbstractPageDefinitions extends Component {
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
+                hasChange={this.hasChange}
               />
             </div>
           )}

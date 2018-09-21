@@ -139,6 +139,15 @@ export default (name = '', transformer = null, comparator = null) => {
       }
     }
 
+    if (result.updateAll) {
+      return {
+        ...state,
+        sequence: ++state.sequence,
+        list: result.updateAll,
+        transformedList: transformer ? transformer(result.updateAll) : result.updateAll
+      }
+    }
+
     if (result.transform) {
       transformer = result.transform
       return {
