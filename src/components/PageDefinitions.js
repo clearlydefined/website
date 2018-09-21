@@ -198,6 +198,7 @@ class PageDefinitions extends AbstractPageDefinitions {
 
   onDrop(acceptedFiles, rejectedFiles) {
     const { dispatch } = this.props
+    if (!acceptedFiles.length) return
     dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
     acceptedFiles.forEach(file => {
       const reader = new FileReader()
@@ -213,6 +214,11 @@ class PageDefinitions extends AbstractPageDefinitions {
     })
   }
 
+  onDropRejected = files => {
+    const fileNames = files.map(file => file.name).join(', ')
+    this.props.dispatch(uiNotificationNew({ type: 'danger', message: `Could not load: ${fileNames}`, timeout: 5000 }))
+  }
+
   onAddComponent(value, after = null) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
@@ -223,7 +229,13 @@ class PageDefinitions extends AbstractPageDefinitions {
 
   dropZone(child) {
     return (
-      <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
+      <Dropzone
+        accept="application/json"
+        disableClick
+        onDrop={this.onDrop}
+        onDropRejected={this.onDropRejected}
+        style={{ position: 'relative' }}
+      >
         {child}
       </Dropzone>
     )
