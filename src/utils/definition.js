@@ -30,4 +30,14 @@ export default class Definition {
     const effective = Math.ceil((get(definition, 'described.score', 0) + get(definition, 'licensed.score', 0)) / 2)
     return { tool, effective }
   }
+
+  /**
+   * Determine if a component doesn't have any data. In order to show in the UI in the list of Components
+   *
+   * @param {*} definition
+   * @returns {boolean}
+   */
+  static isDefinitionEmpty(definition) {
+    return definition.described && definition.described.sourceLocation === undefined
+  }
 }

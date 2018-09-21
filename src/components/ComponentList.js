@@ -104,25 +104,35 @@ export default class ComponentList extends React.Component {
     const { readOnly } = this.props
     const isSourceComponent = this.isSourceComponent(component)
     const scores = Definition.computeScores(definition)
+    const isDisabled = Definition.isDefinitionEmpty(definition)
     return (
       <div className="list-activity-area">
         {scores && <img className="list-buttons" src={getBadgeUrl(scores.tool, scores.effective)} alt="score" />}
         <ButtonGroup>
           {!isSourceComponent &&
-            !readOnly && (
-              <Button className="list-hybrid-button" onClick={this.addSourceForComponent.bind(this, component)}>
-                <i className="fas fa-plus" />
-                <span>&nbsp;Add source</span>
-              </Button>
+            !readOnly &&
+            this.renderButtonWithTip(
+              <Button onClick={this.addSourceForComponent.bind(this, component)}>
+                <i className="fas fa-code" />
+              </Button>,
+              'Add the definition for source that matches this package'
             )}
           {this.renderButtonWithTip(
-            <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, currentComponent, definition)}>
+            <Button
+              className="list-fa-button"
+              onClick={this.inspectComponent.bind(this, currentComponent, definition)}
+              disabled={isDisabled}
+            >
               <i className="fas fa-search" />
             </Button>,
             'Dig into this definition'
           )}
         </ButtonGroup>
-        {!readOnly && <i className="fas fa-times list-remove" onClick={this.removeComponent.bind(this, component)} />}
+        {!readOnly && (
+          <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
+            <i className="fas fa-times list-remove" />
+          </Button>
+        )}
       </div>
     )
   }
