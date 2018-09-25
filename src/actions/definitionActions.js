@@ -24,10 +24,7 @@ export function getDefinitionsAction(token, entities) {
     dispatch(actions.start())
     return getDefinitions(token, entities).then(
       result => dispatch(actions.success({ add: result })),
-      error => {
-        dispatch(actions.error(error))
-        throw error
-      }
+      error => dispatch(actions.error(error))
     )
   }
 }

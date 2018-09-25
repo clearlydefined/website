@@ -4,23 +4,36 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Button } from 'react-bootstrap'
+import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
 import { FieldGroup } from './'
 
 export default class ContributePrompt extends Component {
   constructor(props) {
     super(props)
-    this.state = { show: false }
+    this.state = { show: false, summary: '', details: '', resolution: '', type: 'select' }
+    this.canSubmit = this.canSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.okHandler = this.okHandler.bind(this)
     this.close = this.close.bind(this)
   }
 
   static propTypes = {
-    actionHandler: PropTypes.func.isRequired
+    actionHandler: PropTypes.func.isRequired,
+    onLogin: PropTypes.func.isRequired,
+    session: PropTypes.shape({
+      isAnonymous: PropTypes.bool,
+      username: PropTypes.string
+    }).isRequired
   }
 
   open() {
-    this.setState({ show: true, description: '' })
+    this.setState({
+      show: true,
+      summary: '',
+      details: '',
+      resolution: '',
+      type: 'select'
+    })
   }
 
   close() {
@@ -29,8 +42,8 @@ export default class ContributePrompt extends Component {
 
   okHandler(e) {
     this.close()
-    const { description } = this.state
-    this.props.actionHandler(description)
+    const { show, ...constributionInfo } = this.state
+    this.props.actionHandler(constributionInfo)
   }
 
   handleChange(event) {
@@ -40,8 +53,16 @@ export default class ContributePrompt extends Component {
     this.setState({ ...this.state, [name]: value })
   }
 
+  canSubmit() {
+    const { details, resolution, summary, type } = this.state
+
+    return type !== 'select' && summary.length > 0 && details.length > 0 && resolution.length > 0
+  }
+
   render() {
-    const { description, show } = this.state
+    const { details, summary, show, type, resolution } = this.state
+    const { session, onLogin } = this.props
+
     return (
       <Modal show={show} onHide={this.close}>
         <Form>
@@ -49,21 +70,78 @@ export default class ContributePrompt extends Component {
             <Modal.Title>Describe the changes in this curation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <div>
+              <FormGroup className="inlineBlock">
+                <ControlLabel>Contributor</ControlLabel>
+                <div>
+                  <FormControl.Static style={{ display: 'inline-block' }}>
+                    {session.isAnonymous ? 'anonymous' : `@${session.username}`}
+                  </FormControl.Static>{' '}
+                  {session.isAnonymous && (
+                    <Button bsStyle="success" onClick={onLogin}>
+                      Login
+                    </Button>
+                  )}
+                </div>
+              </FormGroup>
+              <FieldGroup
+                className="inlineBlock pull-right"
+                name="type"
+                label="Type"
+                value={type || 'select'}
+                onChange={this.handleChange}
+                placeholder="select"
+                componentClass="select"
+                required
+              >
+                <option value="select" disabled>
+                  select
+                </option>
+                <option value="missing">Missing</option>
+                <option value="incorrect">Incorrect</option>
+                <option value="incomplete">Incomplete</option>
+                <option value="ambiguous">Ambiguous</option>
+                <option value="other">Other</option>
+              </FieldGroup>
+            </div>
             <FieldGroup
-              name="description"
+              name="summary"
               type="text"
-              label="Description"
-              value={description || ''}
+              label="Summary"
+              value={summary || ''}
               onChange={this.handleChange}
-              placeholder="Short description of changes. Like a commit message..."
+              placeholder="Short summary of changes. Like a commit message. Maximum 100 characters"
               maxLength={100}
+              required
+            />
+            <FieldGroup
+              name="details"
+              type="text"
+              label="Details"
+              value={details || ''}
+              onChange={this.handleChange}
+              placeholder="Describe here the problem(s) being addressed"
+              maxLength={300}
               componentClass="textarea"
-              rows="10"
+              rows="3"
+              required
+            />
+            <FieldGroup
+              name="resolution"
+              type="text"
+              label="Resolution"
+              value={resolution || ''}
+              onChange={this.handleChange}
+              placeholder="What does this PR do to address the issue? Include references to docs where the new data was found and, for example, links to public conversations with the affected project team"
+              maxLength={300}
+              componentClass="textarea"
+              rows="3"
+              required
             />
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={this.close}>Cancel</Button>
-            <Button bsStyle="success" type="button" onClick={this.okHandler}>
+            <Button bsStyle="success" disabled={!this.canSubmit()} type="button" onClick={this.okHandler}>
               OK
             </Button>
           </Modal.Footer>

@@ -20,10 +20,12 @@ import {
   uiCurateGetDefinitionPreview,
   uiCurateResetDefinitionPreview
 } from '../../actions/ui'
-import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import { curateAction } from '../../actions/curationActions'
+import { login } from '../../actions/sessionActions'
+import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
+import Auth from '../../utils/auth'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
 
@@ -43,6 +45,7 @@ export class FullDetailPage extends Component {
     }
     this.handleNewSpec = this.handleNewSpec.bind(this)
     this.doContribute = this.doContribute.bind(this)
+    this.handleLogin = this.handleLogin.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -87,13 +90,13 @@ export class FullDetailPage extends Component {
 
   /**
    * Dispatch the action to save a contribution
-   * @param  {} description string that describes the contribution
+   * @param  {} constributionInfo object that describes the contribution
    */
-  doContribute(description) {
+  doContribute(constributionInfo) {
     const { token, component, curateAction } = this.props
     const { changes } = this.state
     const patches = Contribution.buildContributeSpec([], component, changes)
-    const spec = { description: description, patches }
+    const spec = { constributionInfo, patches }
     curateAction(token, spec)
   }
 
@@ -179,8 +182,15 @@ export class FullDetailPage extends Component {
     )
   }
 
+  handleLogin(e) {
+    e.preventDefault()
+    Auth.doLogin((token, permissions, username) => {
+      this.props.login(token, permissions, username)
+    })
+  }
+
   render() {
-    const { path, definition, curation, harvest, modalView, visible, previewDefinition, readOnly } = this.props
+    const { path, definition, curation, harvest, modalView, visible, previewDefinition, readOnly, session } = this.props
     const { changes } = this.state
     return modalView ? (
       <Modal
@@ -227,7 +237,12 @@ export class FullDetailPage extends Component {
             </Button>
           }
         />
-        <ContributePrompt ref={this.contributeModal} actionHandler={this.doContribute} />
+        <ContributePrompt
+          ref={this.contributeModal}
+          session={session}
+          onLogin={this.handleLogin}
+          actionHandler={this.doContribute}
+        />
       </Grid>
     )
   }
@@ -254,6 +269,7 @@ function mapStateToProps(state, props) {
     component,
     filterValue: state.ui.inspect.filter && cloneDeep(state.ui.inspect.filter),
     token: state.session.token,
+    session: state.session,
     definition,
     curation: state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation),
     harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
@@ -264,6 +280,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
+      login,
       uiInspectGetDefinition,
       uiInspectGetCuration,
       uiInspectGetHarvested,
