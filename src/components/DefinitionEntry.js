@@ -322,6 +322,9 @@ export default class DefinitionEntry extends React.Component {
 
   renderPopover(licensed, key, title) {
     const values = get(licensed, key, [])
+    // compare facets without folding
+    if (key === 'attribution.parties') key = 'licensed.facets'
+    const classIfDifferent = this.classIfDifferent(key)
     if (!values) return null
 
     return (
@@ -343,7 +346,7 @@ export default class DefinitionEntry extends React.Component {
           </Popover>
         }
       >
-        <span className="popoverSpan">{values.join(', ')}</span>
+        <span className={`popoverSpan ${classIfDifferent}`}>{values.join(', ')}</span>
       </OverlayTrigger>
     )
   }
