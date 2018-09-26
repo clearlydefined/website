@@ -35,28 +35,29 @@ export default class Definition {
   /**
    * Revert a list of definitions or a specific one, removing all the changes or only specific values
    * @param  {[]} components list of definitions
-   * @param  {{}} definition specific definition, if null the function will check all the definitions
-   * @param  {string} value string that identifies the specific value to revert, if null all the changes will be removed
+   * @param  {{}} definition specific definition, if null the function will check all the components
+   * @param  {string} key string that identifies the specific value to revert, if null all the changes will be removed
    */
-  static revert(components, definition, value) {
+  static revert(components, definition, key) {
     if (!components) return
     return components.map(component => {
-      const withoutChanges = this.revertChanges(component, value)
-      if (!definition) return withoutChanges
-      else if (isEqual(EntitySpec.fromCoordinates(definition), EntitySpec.fromCoordinates(component)))
-        return withoutChanges
+      const updatedChanges = this.revertChanges(component, key)
+      if (
+        !definition ||
+        (definition && isEqual(EntitySpec.fromCoordinates(definition), EntitySpec.fromCoordinates(component)))
+      )
+        return updatedChanges
       else return component
     })
   }
 
-  static revertChanges(component, value) {
-    if (value) {
-      const { [value]: omit, ...withoutChanges } = component.changes
-      component.changes = withoutChanges
-      return component
+  static revertChanges(component, key) {
+    if (key) {
+      const { [key]: omit, ...updatedChanges } = component.changes
+      return { ...component, changes: updatedChanges }
     } else {
-      const { changes, ...withoutChanges } = component
-      return withoutChanges
+      const { changes, ...updatedChanges } = component
+      return updatedChanges
     }
   }
 }
