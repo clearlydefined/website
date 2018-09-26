@@ -11,12 +11,14 @@ import base64js from 'base64-js'
 import { saveAs } from 'file-saver'
 import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
+import chunk from 'lodash/chunk'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew, uiRevertDefinition } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
+import NotificationButtons from './NotificationButtons'
 
 class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -59,27 +61,20 @@ class PageDefinitions extends AbstractPageDefinitions {
   doRefreshAll = () => {
     if (this.hasChanges()) {
       const key = `open${Date.now()}`
-      const NotificationButtons = (
-        <Fragment>
-          <AntdButton
-            type="primary"
-            size="small"
+      notification.open({
+        message: 'Unsaved Changes',
+        description: 'Some information has been changed and is currently unsaved. Are you sure to continue?',
+        btn: (
+          <NotificationButtons
             onClick={() => {
               this.refresh()
               notification.close(key)
             }}
-          >
-            Refresh
-          </AntdButton>{' '}
-          <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
-            Dismiss
-          </AntdButton>
-        </Fragment>
-      )
-      notification.open({
-        message: 'Unsaved Changes',
-        description: 'Some information has been changed and is currently unsaved. Are you sure to continue?',
-        btn: NotificationButtons,
+            onClose={() => notification.close(key)}
+            confirmText="Refresh"
+            dismissText="Dismiss"
+          />
+        ),
         key,
         onClose: notification.close(key),
         duration: 0
@@ -89,8 +84,21 @@ class PageDefinitions extends AbstractPageDefinitions {
     }
   }
 
+  // Get an array of definitions asynchronous, split them into 100 chunks and alert the user when they're all done
+  getDefinitionsAndNotify(definitions, message) {
+    const { dispatch, token } = this.props
+    const chunks = chunk(definitions, 100)
+    Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
+      .then(() => dispatch(uiNotificationNew({ type: 'info', message, timeout: 3000 })))
+      .catch(() =>
+        dispatch(
+          uiNotificationNew({ type: 'danger', message: 'There was an issue retrieving components', timeout: 3000 })
+        )
+      )
+  }
+
   refresh = () => {
-    const { components, dispatch, token } = this.props
+    const { components, dispatch } = this.props
 
     if (this.hasChanges()) {
       dispatch(
