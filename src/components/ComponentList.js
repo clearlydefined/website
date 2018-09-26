@@ -134,7 +134,7 @@ export default class ComponentList extends React.Component {
   }
 
   renderRow({ index, key, style }, toggleExpanded = null, showExpanded = false) {
-    const { list, readOnly } = this.props
+    const { list, readOnly, githubToken } = this.props
     const component = list[index]
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
@@ -148,6 +148,7 @@ export default class ComponentList extends React.Component {
           onChange={this.onEntryChange}
           otherDefinition={definition.otherDefinition}
           classOnDifference="bg-info"
+          token={githubToken}
           renderButtons={() => this.renderButtons(definition, component)}
         />
       </div>

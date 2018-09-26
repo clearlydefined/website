@@ -3,7 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, InlineEditor } from './'
+import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker } from './'
 import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
@@ -255,13 +255,14 @@ export default class DefinitionEntry extends React.Component {
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
-                <InlineEditor
+                <ModalEditor
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}
-                  type="text"
                   initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
                   onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.parseCoordinates)}
+                  editor={SourcePicker}
+                  token={this.props.token}
                   validator={value => true}
                   placeholder={'Source location'}
                 />,

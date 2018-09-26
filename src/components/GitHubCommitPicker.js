@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getGitHubRevisions } from '../api/clearlyDefined'
 import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
+import isEqual from 'lodash/isEqual'
 
 export default class GitHubCommitPicker extends Component {
   static propTypes = {
@@ -25,16 +26,24 @@ export default class GitHubCommitPicker extends Component {
   componentDidMount() {
     this.getOptions('')
   }
+  componentDidUpdate() {
+    if (this.state.shouldUpdate) this.getOptions('')
+  }
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(nextProps.request, this.props.request)) {
+      this.setState({ options: [], shouldUpdate: true })
+    }
+  }
 
   async getOptions(value) {
     try {
       const { namespace, name } = this.props.request
       const path = name ? `${namespace}/${name}` : name
       const options = await getGitHubRevisions(this.props.token, path)
-      this.setState({ ...this.state, options })
+      this.setState({ options, shouldUpdate: false })
     } catch (error) {
       console.log(error)
-      this.setState({ ...this.state, options: [] })
+      this.setState({ options: [], shouldUpdate: false })
     }
   }
 

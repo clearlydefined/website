@@ -271,17 +271,10 @@ export default class Contribution {
    */
   static parseCoordinates(value) {
     if (!value) return null
-    // TODO currently only GitHub is supported. Need a source location picker
-    // TODO validate that the URL is good. In the end we need a source picker
-    const segments = value.split('/')
-    return {
-      type: 'git',
-      provider: 'github',
-      namespace: segments[3],
-      name: segments[4],
-      url: value,
-      revision: segments[6]
-    }
+    // TODO currently only GitHub is supported.
+    if (value.provider !== 'github') return null
+    if (!(value.revision && value.revision.length > 0)) return null
+    return value
   }
 
   static mergeFacets = value => union(['core'], Object.keys(value))

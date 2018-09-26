@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import pako from 'pako'
-import throat from 'throat'
 import base64js from 'base64-js'
 import { saveAs } from 'file-saver'
 import notification from 'antd/lib/notification'
@@ -88,7 +87,7 @@ class PageDefinitions extends AbstractPageDefinitions {
   }
 
   refresh = () => {
-    const { components, dispatch, token } = this.props
+    const { components, dispatch } = this.props
 
     if (this.hasChanges()) {
       dispatch(

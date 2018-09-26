@@ -28,6 +28,7 @@ export default class HarvestQueueList extends React.Component {
     onRemove: PropTypes.func,
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
+    contentSeq: PropTypes.number,
     githubToken: PropTypes.string
   }
 
@@ -56,6 +57,12 @@ export default class HarvestQueueList extends React.Component {
     this.props.onChange(request, newRequest)
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.contentSeq !== nextProps.contentSeq) {
+      this.setState({ contentSeq: this.state.contentSeq + 1 })
+    }
+  }
+
   versionChanged(request, value) {
     const newRequest = clone(request)
     newRequest.revision = value
@@ -69,6 +76,7 @@ export default class HarvestQueueList extends React.Component {
         {request.provider === 'github' && (
           <GitHubCommitPicker
             request={request}
+            allowNew={true}
             token={this.props.githubToken}
             onChange={this.commitChanged.bind(this, request)}
           />
