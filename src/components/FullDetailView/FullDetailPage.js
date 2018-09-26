@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Grid, Button } from 'react-bootstrap'
@@ -10,7 +10,6 @@ import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
-import AntdButton from 'antd/lib/button'
 import notification from 'antd/lib/notification'
 import 'antd/dist/antd.css'
 import {
@@ -30,6 +29,7 @@ import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
+import NotificationButtons from '../NotificationButtons'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
@@ -143,28 +143,21 @@ export class FullDetailPage extends Component {
     const { changes } = this.state
     if (isEmpty(changes)) return onClose()
     const key = `open${Date.now()}`
-    const NotificationButtons = (
-      <Fragment>
-        <AntdButton
-          type="primary"
-          size="small"
-          onClick={() => {
-            this.close()
-            notification.close(key)
-          }}
-        >
-          Confirm
-        </AntdButton>
-        <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
-          Dismiss Notification
-        </AntdButton>
-      </Fragment>
-    )
     notification.open({
       message: 'Unsaved Changes',
       description:
         'Some information have been changed and are currently unsaved. Are you sure to continue without saving?',
-      btn: NotificationButtons,
+      btn: (
+        <NotificationButtons
+          onClick={() => {
+            this.close()
+            notification.close(key)
+          }}
+          onClose={() => notification.close(key)}
+          confirmText="Confirm"
+          dismissText="Dismiss Notification"
+        />
+      ),
       key,
       onClose: notification.close(key),
       duration: 0
@@ -181,29 +174,22 @@ export class FullDetailPage extends Component {
       return
     }
     const key = `open${Date.now()}`
-    const NotificationButtons = (
-      <Fragment>
-        <AntdButton
-          type="primary"
-          size="small"
+    notification.open({
+      message: 'Confirm Revert?',
+      description: 'Are you sure to revert all the unsaved changes from the current definition?',
+      btn: (
+        <NotificationButtons
           onClick={() =>
             this.setState({ changes: {} }, () => {
               uiCurateResetDefinitionPreview()
               notification.close(key)
             })
           }
-        >
-          Confirm
-        </AntdButton>
-        <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
-          Dismiss Notification
-        </AntdButton>
-      </Fragment>
-    )
-    notification.open({
-      message: 'Confirm Revert?',
-      description: 'Are you sure to revert all the unsaved changes from the current definition?',
-      btn: NotificationButtons,
+          onClose={() => notification.close(key)}
+          confirmText="Confirm"
+          dismissText="Dismiss Notification"
+        />
+      ),
       key,
       onClose: notification.close(key),
       duration: 0
