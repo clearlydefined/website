@@ -41,23 +41,18 @@ export default class Definition {
   static revert(components, definition, key) {
     if (!components) return
     return components.map(component => {
-      const updatedChanges = this.revertChanges(component, key)
-      if (
-        !definition ||
-        (definition && isEqual(EntitySpec.fromCoordinates(definition), EntitySpec.fromCoordinates(component)))
-      )
-        return updatedChanges
-      else return component
+      if (definition && !isEqual(EntitySpec.fromCoordinates(definition), EntitySpec.fromCoordinates(component)))
+        return component
+      return this.revertChanges(component, key)
     })
   }
 
   static revertChanges(component, key) {
-    if (key) {
-      const { [key]: omit, ...updatedChanges } = component.changes
-      return { ...component, changes: updatedChanges }
-    } else {
+    if (!key) {
       const { changes, ...updatedChanges } = component
       return updatedChanges
     }
+    const { [key]: omit, ...updatedChanges } = component.changes
+    return { ...component, changes: updatedChanges }
   }
 }
