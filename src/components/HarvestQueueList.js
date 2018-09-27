@@ -6,13 +6,14 @@ import PropTypes from 'prop-types'
 import {
   RowEntityList,
   TwoLineEntry,
-  GitHubCommitPicker,
   NpmVersionPicker,
   MavenVersionPicker,
   PyPiVersionPicker,
   NuGetVersionPicker,
   RubyGemsVersionPicker
 } from './'
+import { getGitHubRevisions } from '../api/clearlyDefined'
+import { GitHubCommitPicker } from 'clearlydefined-components'
 import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -70,6 +71,7 @@ export default class HarvestQueueList extends React.Component {
           <GitHubCommitPicker
             request={request}
             token={this.props.githubToken}
+            getGitHubRevisions={getGitHubRevisions}
             onChange={this.commitChanged.bind(this, request)}
           />
         )}

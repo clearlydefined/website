@@ -1,0 +1,60 @@
+{
+  "name": "clearlydefined-components",
+  "version": "0.1.0",
+  "description": "React UI components from ClearlyDefined",
+  "main": "lib/index.js",
+  "jsnext:main": "es/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build-es": "babel src --out-dir es --env-name esm",
+    "build-lib": "babel src --out-dir lib --env-name lib",
+    "build": "npm run build-es && npm run build-lib",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clearlydefined/website.git"
+  },
+  "peerDependencies": {
+    "react": "^16.4.1"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "react-bootstrap-typeahead": "^2.6.0",
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.15",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-dev-expression": "^0.2.1"
+  },
+  "keywords": [
+    "open",
+    "source",
+    "ClearlyDefined",
+    "license",
+    "github",
+    "foss",
+    "free",
+    "software"
+  ],
+  "author": "Microsoft Corporation",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/clearlydefined/website/issues"
+  },
+  "files": [
+    "lib",
+    "es"
+  ],
+  "homepage": "https://github.com/clearlydefined/website#readme"
+}
