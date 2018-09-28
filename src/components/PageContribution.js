@@ -54,6 +54,7 @@ class PageContribution extends AbstractPageDefinitions {
 function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
+    session: state.session,
     prNumber: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     url: state.ui.contribution.url,
     definitions: state.ui.contribution.definitions,

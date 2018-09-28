@@ -3,7 +3,7 @@
 
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Button, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Row, Col, Button, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Dropzone from 'react-dropzone'
 import pako from 'pako'
 import throat from 'throat'
@@ -13,11 +13,12 @@ import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
 import { FilterBar } from './'
-import { uiNavigation, uiBrowseUpdateList, uiNotificationNew } from '../actions/ui'
+import { uiNavigation, uiBrowseUpdateList, uiNotificationNew, uiRevertDefinition } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
+import NotificationButtons from './NotificationButtons'
 
 class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -25,6 +26,8 @@ class PageDefinitions extends AbstractPageDefinitions {
     this.onDrop = this.onDrop.bind(this)
     this.doSave = this.doSave.bind(this)
     this.doSaveAsUrl = this.doSaveAsUrl.bind(this)
+    this.revertAll = this.revertAll.bind(this)
+    this.revertDefinition = this.revertDefinition.bind(this)
   }
 
   componentDidMount() {
@@ -58,27 +61,20 @@ class PageDefinitions extends AbstractPageDefinitions {
   doRefreshAll = () => {
     if (this.hasChanges()) {
       const key = `open${Date.now()}`
-      const NotificationButtons = (
-        <Fragment>
-          <AntdButton
-            type="primary"
-            size="small"
+      notification.open({
+        message: 'Unsaved Changes',
+        description: 'Some information has been changed and is currently unsaved. Are you sure to continue?',
+        btn: (
+          <NotificationButtons
             onClick={() => {
               this.refresh()
               notification.close(key)
             }}
-          >
-            Refresh
-          </AntdButton>{' '}
-          <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
-            Dismiss
-          </AntdButton>
-        </Fragment>
-      )
-      notification.open({
-        message: 'Unsaved Changes',
-        description: 'Some information has been changed and is currently unsaved. Are you sure to continue?',
-        btn: NotificationButtons,
+            onClose={() => notification.close(key)}
+            confirmText="Refresh"
+            dismissText="Dismiss"
+          />
+        ),
         key,
         onClose: notification.close(key),
         duration: 0
@@ -117,9 +113,73 @@ class PageDefinitions extends AbstractPageDefinitions {
     this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
   }
 
+  revertAll() {
+    this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?')
+  }
+
+  revertDefinition(definition, value) {
+    this.revert(definition, 'Are you sure to revert all the unsaved changes from the selected definition?', value)
+  }
+
+  revert(definition, description, value) {
+    const { dispatch } = this.props
+    if (value) {
+      dispatch(uiRevertDefinition(definition, value))
+      this.incrementSequence()
+      return
+    }
+    const key = `open${Date.now()}`
+    const NotificationButtons = (
+      <Fragment>
+        <AntdButton
+          type="primary"
+          size="small"
+          onClick={() => {
+            dispatch(uiRevertDefinition(definition))
+            this.incrementSequence()
+            notification.close(key)
+          }}
+        >
+          Revert
+        </AntdButton>{' '}
+        <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
+          Dismiss
+        </AntdButton>
+      </Fragment>
+    )
+    notification.open({
+      message: 'Confirm Revert?',
+      description,
+      btn: NotificationButtons,
+      key,
+      onClose: notification.close(key),
+      duration: 0
+    })
+  }
+
+  tooltip(text) {
+    return <Tooltip id="tooltip">{text}</Tooltip>
+  }
+
+  renderButtonWithTip(button, tip) {
+    const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
+    return (
+      <OverlayTrigger placement="top" overlay={toolTip}>
+        {button}
+      </OverlayTrigger>
+    )
+  }
+
   renderButtons() {
     return (
       <div className="pull-right">
+        {this.renderButtonWithTip(
+          <Button bsStyle="danger" disabled={!this.hasChanges()} onClick={this.revertAll}>
+            <i className="fas fa-undo" />
+            <span>&nbsp;Revert Changes</span>
+          </Button>,
+          'Revert all changes of all the definitions'
+        )}
         <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.doRefreshAll}>
           Refresh
         </Button>
@@ -198,6 +258,7 @@ class PageDefinitions extends AbstractPageDefinitions {
 
   onDrop(acceptedFiles, rejectedFiles) {
     const { dispatch } = this.props
+    if (!acceptedFiles.length) return
     dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
     acceptedFiles.forEach(file => {
       const reader = new FileReader()
@@ -213,6 +274,11 @@ class PageDefinitions extends AbstractPageDefinitions {
     })
   }
 
+  onDropRejected = files => {
+    const fileNames = files.map(file => file.name).join(', ')
+    this.props.dispatch(uiNotificationNew({ type: 'danger', message: `Could not load: ${fileNames}`, timeout: 5000 }))
+  }
+
   onAddComponent(value, after = null) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
@@ -223,7 +289,13 @@ class PageDefinitions extends AbstractPageDefinitions {
 
   dropZone(child) {
     return (
-      <Dropzone disableClick onDrop={this.onDrop} style={{ position: 'relative' }}>
+      <Dropzone
+        accept="application/json"
+        disableClick
+        onDrop={this.onDrop}
+        onDropRejected={this.onDropRejected}
+        style={{ position: 'relative' }}
+      >
         {child}
       </Dropzone>
     )
@@ -287,7 +359,8 @@ function mapStateToProps(state, ownProps) {
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     filterOptions: state.ui.browse.filterList,
     components: state.ui.browse.componentList,
-    definitions: state.definition.bodies
+    definitions: state.definition.bodies,
+    session: state.session
   }
 }
 export default connect(mapStateToProps)(PageDefinitions)

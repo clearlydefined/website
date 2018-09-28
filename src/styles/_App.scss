@@ -133,6 +133,7 @@
 .editable-marker {
   font-size: x-small;
   padding-right: 4px;
+  cursor: pointer;
 }
 
 .editable-editor {
@@ -169,4 +170,8 @@
   & > span:first-child {
     flex-grow: 1;
   }
+}
+
+.fa-disabled{
+  opacity: 0.5;
 }

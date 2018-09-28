@@ -1,6 +1,7 @@
 import Contribution from './contribution'
 import EntitySpec from './entitySpec'
-import { get } from 'lodash'
+import get from 'lodash/get'
+import isEqual from 'lodash/isEqual'
 
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
@@ -39,5 +40,29 @@ export default class Definition {
    */
   static isDefinitionEmpty(definition) {
     return definition.described && definition.described.sourceLocation === undefined
+  }
+
+  /**
+   * Revert a list of definitions or a specific one, removing all the changes or only specific values
+   * @param  {[]} components list of definitions
+   * @param  {{}} definition specific definition, if null the function will check all the components
+   * @param  {string} key string that identifies the specific value to revert, if null all the changes will be removed
+   */
+  static revert(components, definition, key) {
+    if (!components) return
+    return components.map(component => {
+      if (definition && !isEqual(EntitySpec.fromCoordinates(definition), EntitySpec.fromCoordinates(component)))
+        return component
+      return this.revertChanges(component, key)
+    })
+  }
+
+  static revertChanges(component, key) {
+    if (!key) {
+      const { changes, ...updatedChanges } = component
+      return updatedChanges
+    }
+    const { [key]: omit, ...updatedChanges } = component.changes
+    return { ...component, changes: updatedChanges }
   }
 }

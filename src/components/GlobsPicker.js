@@ -30,7 +30,7 @@ export default class GlobsPicker extends Component {
   }
 
   showInput = () => {
-    this.setState({ inputVisible: true }, () => this.input.focus())
+    this.setState({ inputVisible: true }, () => this.saveInputRef.current.focus())
   }
 
   handleInputChange = e => {
@@ -50,11 +50,15 @@ export default class GlobsPicker extends Component {
   }
 
   render() {
-    const { globs, className, readOnly } = this.props
+    const { globs, className, readOnly, onRevert } = this.props
     const { inputVisible, inputValue } = this.state
 
     return (
       <div className="editable-editor">
+        <i
+          className={`fas fa-undo editable-marker ${!globs && 'fa-disabled'}`}
+          onClick={() => onRevert && globs && onRevert()}
+        />
         {globs &&
           globs.map(glob => {
             const isLongTag = glob.length > 20
