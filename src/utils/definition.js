@@ -38,7 +38,7 @@ export default class Definition {
    * @param {*} definition
    * @returns {boolean}
    */
-  static isDefinitionEmpty(definition) {
+  static isSourceEmpty(definition) {
     return definition.described && definition.described.sourceLocation === undefined
   }
 

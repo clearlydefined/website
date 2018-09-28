@@ -372,7 +372,7 @@ export default class DefinitionEntry extends React.Component {
         message={this.renderMessage(definition)}
         buttons={renderButtons && renderButtons(definition)}
         onClick={onClick}
-        isDisabled={Definition.isDefinitionEmpty(definition)}
+        isDisabled={Definition.isSourceEmpty(definition)}
         panel={component.expanded ? this.renderPanel(definition) : null}
       />
     )
