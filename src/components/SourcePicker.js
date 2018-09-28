@@ -31,7 +31,7 @@ export default class SourcePicker extends Component {
     this.setState({ selectedComponent: null })
   }
 
-  onClick(event, thing) {
+  onClick(event) {
     const activeProvider = event.target.name
     this.setState({ activeProvider })
   }
