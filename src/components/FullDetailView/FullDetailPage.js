@@ -1,15 +1,13 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Grid, Button } from 'react-bootstrap'
 import omitBy from 'lodash/omitBy'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 import PropTypes from 'prop-types'
-import Modal from 'antd/lib/modal'
 import notification from 'antd/lib/notification'
 import 'antd/dist/antd.css'
 import {
@@ -19,7 +17,9 @@ import {
   uiNavigation,
   uiCurateGetDefinitionPreview,
   uiCurateResetDefinitionPreview,
-  uiRevertDefinition
+  uiGetCurationsList,
+  uiRevertDefinition,
+  uiApplyCurationSuggestion
 } from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { login } from '../../actions/sessionActions'
@@ -27,15 +27,10 @@ import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
-import ContributePrompt from '../ContributePrompt'
-import FullDetailComponent from './FullDetailComponent'
 import NotificationButtons from '../NotificationButtons'
+import { AbstractFullDetailsView } from './AbstractFullDetailsView'
 
-/**
- * Component that renders the Full Detail View as a Page or as a Modal
- * based on modalView property
- */
-export class FullDetailPage extends Component {
+export class FullDetailPage extends AbstractFullDetailsView {
   static defaultProps = {
     readOnly: false
   }
@@ -44,6 +39,7 @@ export class FullDetailPage extends Component {
     super(props)
     this.state = {
       changes: {},
+      appliedSuggestions: [],
       sequence: 0
     }
     this.handleNewSpec = this.handleNewSpec.bind(this)
@@ -55,6 +51,7 @@ export class FullDetailPage extends Component {
     this.handleRevert = this.handleRevert.bind(this)
     this.onChange = this.onChange.bind(this)
     this.close = this.close.bind(this)
+    this.applyCurationSuggestion = this.applyCurationSuggestion.bind(this)
     this.contributeModal = React.createRef()
   }
 
@@ -84,11 +81,18 @@ export class FullDetailPage extends Component {
 
   // Get the data for the current definition
   handleNewSpec(component) {
-    const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested } = this.props
+    const {
+      token,
+      uiInspectGetDefinition,
+      uiInspectGetCuration,
+      uiInspectGetHarvested,
+      uiGetCurationsList
+    } = this.props
     if (!component) return
     uiInspectGetDefinition(token, component)
     uiInspectGetCuration(token, component)
     uiInspectGetHarvested(token, component)
+    uiGetCurationsList(token, component)
     this.previewDefinition(component)
   }
 
@@ -196,6 +200,17 @@ export class FullDetailPage extends Component {
     })
   }
 
+  handleSuggestions() {
+    const key = `open${Date.now()}`
+    notification.open({
+      description:
+        'Another version of this defition has some recently updated data. \n \n Take a look at them and decide if to keep each data or discard it.',
+      key,
+      onClose: notification.close(key),
+      duration: 0
+    })
+  }
+
   close() {
     const { uiCurateResetDefinitionPreview, onClose } = this.props
     this.setState({ changes: {} }, () => {
@@ -220,64 +235,10 @@ export class FullDetailPage extends Component {
     })
   }
 
-  render() {
-    const { path, definition, curation, harvest, modalView, visible, previewDefinition, readOnly, session } = this.props
-    const { changes } = this.state
-    return modalView ? (
-      <Modal
-        closable={false}
-        // no need for default buttons
-        footer={null}
-        centered
-        destroyOnClose={true}
-        visible={visible}
-        width={'85%'}
-        className="fullDetaiView__modal"
-      >
-        {visible && (
-          <FullDetailComponent
-            curation={curation}
-            definition={definition}
-            harvest={harvest}
-            path={path}
-            readOnly={readOnly}
-            modalView={modalView}
-            onChange={this.onChange}
-            handleClose={this.handleClose}
-            handleSave={this.handleSave}
-            handleRevert={this.handleRevert}
-            previewDefinition={previewDefinition}
-            changes={changes}
-          />
-        )}
-      </Modal>
-    ) : (
-      <Grid>
-        <FullDetailComponent
-          curation={curation}
-          definition={definition}
-          harvest={harvest}
-          path={path}
-          readOnly={readOnly}
-          modalView={false}
-          onChange={this.onChange}
-          changes={changes}
-          previewDefinition={previewDefinition}
-          handleRevert={this.handleRevert}
-          renderContributeButton={
-            <Button bsStyle="success" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
-              Contribute
-            </Button>
-          }
-        />
-        <ContributePrompt
-          ref={this.contributeModal}
-          session={session}
-          onLogin={this.handleLogin}
-          actionHandler={this.doContribute}
-        />
-      </Grid>
-    )
+  applyCurationSuggestion(suggestion) {
+    const { appliedSuggestions } = this.state
+    appliedSuggestions.push(suggestion)
+    this.setState({ appliedSuggestions })
   }
 }
 
@@ -286,6 +247,8 @@ function mapStateToProps(state, props) {
 
   const path = Definition.getPathFromUrl(props)
   const component = props.component || Definition.getDefinitionEntity(path)
+  const curation = state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation)
+  const latestCuration = state.ui.inspect.latestCuration && cloneDeep(state.ui.inspect.latestCuration)
 
   let previewDefinition, definition
 
@@ -304,9 +267,10 @@ function mapStateToProps(state, props) {
     token: state.session.token,
     session: state.session,
     definition,
-    curation: state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation),
+    curation,
     harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
-    previewDefinition
+    previewDefinition,
+    latestCuration
   }
 }
 
@@ -317,11 +281,13 @@ function mapDispatchToProps(dispatch) {
       uiInspectGetDefinition,
       uiInspectGetCuration,
       uiInspectGetHarvested,
+      uiGetCurationsList,
       uiNavigation,
       curateAction,
       uiCurateGetDefinitionPreview,
       uiCurateResetDefinitionPreview,
-      uiRevertDefinition
+      uiRevertDefinition,
+      uiApplyCurationSuggestion
     },
     dispatch
   )
