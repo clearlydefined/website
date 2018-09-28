@@ -18,8 +18,8 @@
     background: $color_black_10;
   }
 
-  &.isDisabled,
-  &.isDisabled:hover {
+  &.isEmpty,
+  &.isEmpty:hover {
     cursor: not-allowed;
 
     .list-image,
