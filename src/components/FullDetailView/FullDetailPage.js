@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Grid, Button } from 'react-bootstrap'
+import omitBy from 'lodash/omitBy'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 import PropTypes from 'prop-types'
 import Modal from 'antd/lib/modal'
-import AntdButton from 'antd/lib/button'
 import notification from 'antd/lib/notification'
 import 'antd/dist/antd.css'
 import {
@@ -18,7 +18,8 @@ import {
   uiInspectGetHarvested,
   uiNavigation,
   uiCurateGetDefinitionPreview,
-  uiCurateResetDefinitionPreview
+  uiCurateResetDefinitionPreview,
+  uiRevertDefinition
 } from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { login } from '../../actions/sessionActions'
@@ -28,6 +29,7 @@ import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
+import NotificationButtons from '../NotificationButtons'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
@@ -41,7 +43,8 @@ export class FullDetailPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      changes: {}
+      changes: {},
+      sequence: 0
     }
     this.handleNewSpec = this.handleNewSpec.bind(this)
     this.doContribute = this.doContribute.bind(this)
@@ -49,6 +52,7 @@ export class FullDetailPage extends Component {
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.handleSave = this.handleSave.bind(this)
     this.handleClose = this.handleClose.bind(this)
+    this.handleRevert = this.handleRevert.bind(this)
     this.onChange = this.onChange.bind(this)
     this.close = this.close.bind(this)
     this.contributeModal = React.createRef()
@@ -102,17 +106,19 @@ export class FullDetailPage extends Component {
 
   // Action that calls the remote API that return a preview of the definition
   previewDefinition(nextComponent) {
-    const { token, component, uiCurateGetDefinitionPreview } = this.props
+    const { token, component, uiCurateGetDefinitionPreview, uiCurateResetDefinitionPreview } = this.props
     const { changes } = this.state
     if (
       (!component || isEmpty(component.changes)) &&
       (!nextComponent || isEmpty(nextComponent.changes)) &&
       isEmpty(changes)
     )
-      return false
+      return uiCurateResetDefinitionPreview()
     const previewComponent = nextComponent ? nextComponent : component
     const patches = Contribution.buildPatch([], previewComponent, changes)
-    uiCurateGetDefinitionPreview(token, previewComponent, patches)
+    !isEmpty(patches)
+      ? uiCurateGetDefinitionPreview(token, previewComponent, patches)
+      : uiCurateResetDefinitionPreview()
   }
 
   // Shows the Modal to save a Contribution
@@ -137,28 +143,53 @@ export class FullDetailPage extends Component {
     const { changes } = this.state
     if (isEmpty(changes)) return onClose()
     const key = `open${Date.now()}`
-    const NotificationButtons = (
-      <Fragment>
-        <AntdButton
-          type="primary"
-          size="small"
-          onClick={() => {
-            this.close()
-            notification.close(key)
-          }}
-        >
-          Confirm
-        </AntdButton>
-        <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
-          Dismiss Notification
-        </AntdButton>
-      </Fragment>
-    )
     notification.open({
       message: 'Unsaved Changes',
       description:
         'Some information have been changed and are currently unsaved. Are you sure to continue without saving?',
-      btn: NotificationButtons,
+      btn: (
+        <NotificationButtons
+          onClick={() => {
+            this.close()
+            notification.close(key)
+          }}
+          onClose={() => notification.close(key)}
+          confirmText="Confirm"
+          dismissText="Dismiss Notification"
+        />
+      ),
+      key,
+      onClose: notification.close(key),
+      duration: 0
+    })
+  }
+
+  handleRevert(value) {
+    const { uiCurateResetDefinitionPreview } = this.props
+    const { changes } = this.state
+    if (isEmpty(changes)) return
+    if (value) {
+      const revertedChanges = omitBy(changes, (_, index) => index.startsWith(value))
+      this.setState({ changes: revertedChanges, sequence: this.state.sequence + 1 }, () => this.previewDefinition())
+      return
+    }
+    const key = `open${Date.now()}`
+    notification.open({
+      message: 'Confirm Revert?',
+      description: 'Are you sure to revert all the unsaved changes from the current definition?',
+      btn: (
+        <NotificationButtons
+          onClick={() =>
+            this.setState({ changes: {} }, () => {
+              uiCurateResetDefinitionPreview()
+              notification.close(key)
+            })
+          }
+          onClose={() => notification.close(key)}
+          confirmText="Confirm"
+          dismissText="Dismiss Notification"
+        />
+      ),
       key,
       onClose: notification.close(key),
       duration: 0
@@ -214,6 +245,7 @@ export class FullDetailPage extends Component {
             onChange={this.onChange}
             handleClose={this.handleClose}
             handleSave={this.handleSave}
+            handleRevert={this.handleRevert}
             previewDefinition={previewDefinition}
             changes={changes}
           />
@@ -231,6 +263,7 @@ export class FullDetailPage extends Component {
           onChange={this.onChange}
           changes={changes}
           previewDefinition={previewDefinition}
+          handleRevert={this.handleRevert}
           renderContributeButton={
             <Button bsStyle="success" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
               Contribute
@@ -287,7 +320,8 @@ function mapDispatchToProps(dispatch) {
       uiNavigation,
       curateAction,
       uiCurateGetDefinitionPreview,
-      uiCurateResetDefinitionPreview
+      uiCurateResetDefinitionPreview,
+      uiRevertDefinition
     },
     dispatch
   )

@@ -23,6 +23,7 @@ class LicensesRenderer extends Component {
         onChange={value => onSave(value)}
         validator
         placeholder={readOnly ? '' : 'SPDX License'}
+        revertable={false}
       />
     )
   }

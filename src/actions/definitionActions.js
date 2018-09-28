@@ -3,6 +3,8 @@
 
 import { asyncActions } from './'
 import { getDefinitions, getDefinition, previewDefinition, getDefinitionSuggestions } from '../api/clearlyDefined'
+import Definition from '../utils/definition'
+import { uiBrowseUpdateList } from './ui'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
@@ -57,5 +59,16 @@ export function resetPreviewDefinitionAction(token, entity, name) {
     const actions = asyncActions(name)
     dispatch(actions.start())
     return dispatch(actions.success({}))
+  }
+}
+
+export function revertDefinitionAction(definition, values, name) {
+  return (dispatch, getState) => {
+    const state = getState()
+    const actions = asyncActions(name)
+    dispatch(actions.start({ definition, values }))
+    const componentsWithoutChanges = Definition.revert(state.ui.browse.componentList.list, definition, values)
+    dispatch(uiBrowseUpdateList({ updateAll: componentsWithoutChanges }))
+    return dispatch(actions.success({ componentsWithoutChanges }))
   }
 }
