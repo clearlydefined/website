@@ -18,8 +18,7 @@ export default class SourcePicker extends Component {
 
   onAddRequest(value, tool) {
     const [namespace, name] = value.name.split('/')
-    const path = [value.type, value.provider, name ? namespace : '-', name || namespace].join('/')
-    const request = EntitySpec.fromPath(path)
+    const request = new EntitySpec(value.type, value.provider, namespace, name)
     request.tool = tool
     this.setState({ selectedComponent: request, contentSeq: this.state.contentSeq + 1 })
   }
