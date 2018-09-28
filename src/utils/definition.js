@@ -2,6 +2,7 @@ import Contribution from './contribution'
 import EntitySpec from './entitySpec'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
@@ -39,7 +40,7 @@ export default class Definition {
    * @returns {boolean}
    */
   static isDefinitionEmpty(definition) {
-    return !definition.described || (definition.described && !definition.described.releaseDate)
+    return !definition.described || (definition.described && isEmpty(definition.described.tools))
   }
 
   static isSourceEmpty(definition) {
