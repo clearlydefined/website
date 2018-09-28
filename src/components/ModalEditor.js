@@ -20,10 +20,7 @@ export default class ModalEditor extends React.Component {
 
   onChange = nextValue => {
     const { value, onChange } = this.props
-
-    // don't bother saving unchanged fields
     if (nextValue === value) return
-
     onChange(nextValue)
   }
 

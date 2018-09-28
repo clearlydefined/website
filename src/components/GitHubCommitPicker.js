@@ -26,13 +26,13 @@ export default class GitHubCommitPicker extends Component {
   componentDidMount() {
     this.getOptions('')
   }
+
   componentDidUpdate() {
     if (this.state.shouldUpdate) this.getOptions('')
   }
+
   componentWillReceiveProps(nextProps) {
-    if (!isEqual(nextProps.request, this.props.request)) {
-      this.setState({ options: [], shouldUpdate: true })
-    }
+    if (!isEqual(nextProps.request, this.props.request)) this.setState({ options: [], shouldUpdate: true })
   }
 
   async getOptions(value) {
