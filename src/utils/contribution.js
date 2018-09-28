@@ -269,12 +269,21 @@ export default class Contribution {
    * @param {*} value updated url of the definition
    * @returns a new object containing the schema for the sourceLocation
    */
-  static parseCoordinates(value) {
+  static validateAndCleanCoordinates(value) {
     if (!value) return null
     // TODO currently only GitHub is supported.
     if (value.provider !== 'github') return null
     if (!(value.revision && value.revision.length > 0)) return null
-    return value
+
+    // Get rid of extra keys and make url a plain property, not a getter
+    return {
+      type: value.type,
+      provider: value.provider,
+      namespace: value.namespace,
+      name: value.name,
+      url: value.url,
+      revision: value.revision
+    }
   }
 
   static mergeFacets = value => union(['core'], Object.keys(value))

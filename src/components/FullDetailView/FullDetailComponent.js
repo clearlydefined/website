@@ -9,9 +9,8 @@ import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import isEmpty from 'lodash/isEmpty'
 import { getBadgeUrl } from '../../api/clearlyDefined'
-import { Section } from '../'
+import { Section, InlineEditor, ModalEditor, SourcePicker } from '../'
 import FileList from '../FileList'
-import InlineEditor from '../InlineEditor'
 import MonacoEditorWrapper from '../MonacoEditorWrapper'
 import FacetsEditor from '../FacetsEditor'
 import 'antd/dist/antd.css'
@@ -47,17 +46,17 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Source')}</Col>
             <Col md={9} className="definition__line">
-              <InlineEditor
+              <ModalEditor
                 extraClass={Contribution.classIfDifferent(definition, previewDefinition, 'described.sourceLocation')}
                 readOnly={readOnly}
-                type="text"
                 initialValue={Contribution.printCoordinates(
                   Contribution.getOriginalValue(definition, 'described.sourceLocation')
                 )}
                 value={Contribution.printCoordinates(
                   Contribution.getValue(definition, previewDefinition, 'described.sourceLocation')
                 )}
-                onChange={value => onChange(`described.sourceLocation`, value, null, Contribution.parseCoordinates)}
+                onChange={value => onChange(`described.sourceLocation`, value, null, Contribution.validateAndCleanCoordinates)}
+                editor={SourcePicker}
                 validator
                 placeholder={'Source location'}
               />
