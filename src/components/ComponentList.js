@@ -109,6 +109,7 @@ export default class ComponentList extends React.Component {
     const { readOnly, hasChange } = this.props
     const isSourceComponent = this.isSourceComponent(component)
     const scores = Definition.computeScores(definition)
+    const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
     const isSourceEmpty = Definition.isSourceEmpty(definition)
     return (
       <div className="list-activity-area">
@@ -116,13 +117,14 @@ export default class ComponentList extends React.Component {
         <ButtonGroup>
           {!isSourceComponent &&
             !readOnly &&
+            !isSourceEmpty &&
             this.renderButtonWithTip(
               <Button onClick={this.addSourceForComponent.bind(this, component)}>
                 <i className="fas fa-code" />
               </Button>,
               'Add the definition for source that matches this package'
             )}
-          {!isSourceEmpty &&
+          {!isDefinitionEmpty &&
             this.renderButtonWithTip(
               <Button
                 className="list-fa-button"
@@ -133,7 +135,7 @@ export default class ComponentList extends React.Component {
               'Dig into this definition'
             )}
           {!readOnly &&
-            !isSourceEmpty &&
+            !isDefinitionEmpty &&
             this.renderButtonWithTip(
               <Button
                 className="list-fa-button"

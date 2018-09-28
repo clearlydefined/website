@@ -38,8 +38,12 @@ export default class Definition {
    * @param {*} definition
    * @returns {boolean}
    */
+  static isDefinitionEmpty(definition) {
+    return !definition.described || (definition.described && !definition.described.releaseDate)
+  }
+
   static isSourceEmpty(definition) {
-    return definition.described && definition.described.sourceLocation === undefined
+    return !definition.described || (definition.described && definition.described.sourceLocation === undefined)
   }
 
   /**

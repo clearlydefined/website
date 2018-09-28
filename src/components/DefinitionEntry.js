@@ -371,8 +371,8 @@ export default class DefinitionEntry extends React.Component {
         headline={this.renderHeadline(definition)}
         message={this.renderMessage(definition)}
         buttons={renderButtons && renderButtons(definition)}
-        onClick={onClick}
-        isEmpty={Definition.isSourceEmpty(definition)}
+        onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
+        isEmpty={Definition.isDefinitionEmpty(definition)}
         panel={component.expanded ? this.renderPanel(definition) : null}
       />
     )
