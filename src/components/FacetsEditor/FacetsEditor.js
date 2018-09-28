@@ -22,7 +22,7 @@ class FacetsEditor extends Component {
   }
 
   render() {
-    const { onChange, component, previewDefinition, readOnly } = this.props
+    const { onChange, component, previewDefinition, readOnly, onRevert } = this.props
 
     return (
       <div>
@@ -42,6 +42,7 @@ class FacetsEditor extends Component {
                 )}
                 globs={Contribution.getValue(component, previewDefinition, `described.facets.${item}`)}
                 onChange={value => onChange(`described.facets.${item}`, value)}
+                onRevert={() => onRevert(`described.facets.${item}`)}
               />
             </Col>
           </Row>

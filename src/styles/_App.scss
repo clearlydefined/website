@@ -172,36 +172,6 @@
   }
 }
 
-.flexWrap {
-  display: flex;
-  flex-wrap: wrap;
-
-  span {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-}
-
-.copyrightContainer {
-  display: inherit;
-  width: 100%;
-
-  span {
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
-.popoverSpan {
-  cursor: pointer;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.inlineBlock {
-  display: inline-block;
+.fa-disabled{
+  opacity: 0.5;
 }
