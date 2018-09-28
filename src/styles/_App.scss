@@ -189,3 +189,9 @@
 .dropdown-menu {
   z-index: 9001;
 }
+
+.popoverSpan {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
