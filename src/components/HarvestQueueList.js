@@ -58,9 +58,7 @@ export default class HarvestQueueList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.contentSeq !== nextProps.contentSeq) {
-      this.setState({ contentSeq: this.state.contentSeq + 1 })
-    }
+    if (this.props.contentSeq !== nextProps.contentSeq) this.setState({ contentSeq: this.state.contentSeq + 1 })
   }
 
   versionChanged(request, value) {
