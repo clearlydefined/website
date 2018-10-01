@@ -265,11 +265,11 @@ export default class Contribution {
   }
 
   /**
-   * Function that get an url as a string, and return a sourceLocation object according to the definition schema
-   * @param {*} value updated url of the definition
+   * Function that gets an EntitySpec and return a sourceLocation object according to the definition schema
+   * @param {*} value EntitySpec of the definition
    * @returns a new object containing the schema for the sourceLocation
    */
-  static validateAndCleanCoordinates(value) {
+  static toSourceLocation(value) {
     if (!value) return null
     // TODO currently only GitHub is supported.
     if (value.provider !== 'github') return null
