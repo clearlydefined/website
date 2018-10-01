@@ -46,7 +46,7 @@ export default class GitHubSelector extends Component {
       <AsyncTypeahead
         ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
         options={options}
-        placeholder={'Pick a login/repo to harvest'}
+        placeholder={'Pick a login/repo'}
         onChange={this.onChange}
         labelKey="id"
         clearButton
