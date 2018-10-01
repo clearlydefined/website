@@ -40,11 +40,11 @@ export default class Definition {
    * @returns {boolean}
    */
   static isDefinitionEmpty(definition) {
-    return !definition.described || (definition.described && isEmpty(definition.described.tools))
+    return isEmpty(get(definition, 'described.tools'))
   }
 
   static isSourceEmpty(definition) {
-    return !definition.described || (definition.described && definition.described.sourceLocation === undefined)
+    return !!get(definition, 'described.sourceLocation')
   }
 
   /**
