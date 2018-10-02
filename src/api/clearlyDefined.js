@@ -37,6 +37,7 @@ const ORIGINS_NUGET = 'origins/nuget'
 const ORIGINS_MAVEN = 'origins/maven'
 const ORIGINS_PYPI = 'origins/pypi'
 const ORIGINS_RUBYGEMS = 'origins/rubygems'
+const ORIGINS_LAUNCHPAD = 'origins/launchpad'
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
@@ -130,6 +131,14 @@ export function getNugetSearch(token, path) {
 
 export function getNugetRevisions(token, path) {
   return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
+}
+
+export function getLaunchpadSearch(token, path) {
+  return get(url(`${ORIGINS_LAUNCHPAD}/${path}`), token)
+}
+
+export function getLaunchpadRevisions(token, path) {
+  return get(url(`${ORIGINS_LAUNCHPAD}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================
