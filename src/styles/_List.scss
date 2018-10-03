@@ -13,14 +13,32 @@
   align-items: center;
   padding: 5px 15px 5px 10px;
   cursor: pointer;
+
+  &:hover {
+    background: $color_black_10;
+  }
+
+  &.isEmpty,
+  &.isEmpty:hover {
+    cursor: not-allowed;
+
+    .list-image,
+    .list-body {
+      opacity: 0.8;
+    }
+
+    .list-fa-button {
+      color: inherit;
+    }
+  }
+
+  .btn-link {
+    padding: 0;
+  }
 }
 
 .list-highlight-text {
   color: $color_highlight;
-}
-
-.list-row:hover {
-  background: $color_black_10;
 }
 
 .list-image {

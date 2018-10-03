@@ -2,6 +2,7 @@ import Contribution from './contribution'
 import EntitySpec from './entitySpec'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
@@ -30,6 +31,20 @@ export default class Definition {
     const tool = Math.ceil((get(definition, 'described.toolScore', 0) + get(definition, 'licensed.toolScore', 0)) / 2)
     const effective = Math.ceil((get(definition, 'described.score', 0) + get(definition, 'licensed.score', 0)) / 2)
     return { tool, effective }
+  }
+
+  /**
+   * Determine if a component doesn't have any data. In order to show in the UI in the list of Components
+   *
+   * @param {*} definition
+   * @returns {boolean}
+   */
+  static isDefinitionEmpty(definition) {
+    return isEmpty(get(definition, 'described.tools'))
+  }
+
+  static isSourceEmpty(definition) {
+    return !!get(definition, 'described.sourceLocation')
   }
 
   /**
