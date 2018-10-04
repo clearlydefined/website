@@ -94,7 +94,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
     uiInspectGetDefinition(token, component)
     uiInspectGetCuration(token, component)
     uiInspectGetHarvested(token, component)
-    uiGetCurationsList(token, component)
+    //uiGetCurationsList(token, component)
     this.previewDefinition(component)
   }
 

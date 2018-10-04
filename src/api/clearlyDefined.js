@@ -48,6 +48,12 @@ export function harvest(token, spec) {
   return post(url(HARVEST), token, spec)
 }
 
+/**
+ * Get details about a specific curation
+ * @param {*} token
+ * @param {*} entity
+ * @param {object} params can contain properties: expandedPrs, if true returns deeper information of each PR; pendingPrs, if true return also curations not already merged
+ */
 export function getCuration(token, entity, params = {}) {
   const { expandedPrs, pendingPrs } = params
   return get(
@@ -60,10 +66,10 @@ export function getCuration(token, entity, params = {}) {
 }
 
 /**
- * List all of the curations (if any) using the given coordinates as a pattern to match
+ * List all of the curations (if any) using the given coordinates as a pattern to match, despite the revision
  * @param  {} token
  * @param  {} entity
- * @param  {} params
+ * @param  {object} params can contain property: pendingPrs, if true returns also curations not already merged
  */
 export function getCurationList(token, entity, params = {}) {
   const { pendingPrs } = params
@@ -76,12 +82,7 @@ export function getCurationList(token, entity, params = {}) {
   )
 }
 
-/**
- * Get the curation in the given PR relative to the specified coordinates
- * @param  {} token
- * @param  {} entity
- * @param  {} prNumber
- */
+// Get the curation in the given PR relative to the specified coordinates
 export function getCurationData(token, entity, prNumber) {
   return get(url(`${CURATIONS}/${entity.toPath()}/pr/${prNumber}`), token)
 }
@@ -90,6 +91,12 @@ export function curate(token, spec) {
   return patch(url(`${CURATIONS}`), token, spec)
 }
 
+/**
+ * Get details about a specific definition
+ * @param {*} token
+ * @param {*} entity
+ * @param {object} params can contain properties: expandPrs, if true include deeper information for each PR like the title, message
+ */
 export function getDefinition(token, entity, params = {}) {
   const { expandPrs } = params
   return get(
