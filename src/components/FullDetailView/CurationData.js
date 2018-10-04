@@ -40,17 +40,17 @@ class CurationData extends Component {
     const { activeCuration } = this.state
     return (
       <div style={{ height: '400px', overflowY: 'auto' }}>
-        <Collapse bordered={false} accordion onChange={this.onChange}>
-          {curations ? (
-            curations.map(curation => (
+        {curations ? (
+          <Collapse bordered={false} accordion onChange={this.onChange}>
+            {curations.map(curation => (
               <Panel key={curation.number} header={<CurationRenderer curation={curation} />}>
                 <InnerDataSection value={activeCuration} name={'Curations'} type={'json'} />
               </Panel>
-            ))
-          ) : (
-            <p>No curations found for this component</p>
-          )}
-        </Collapse>
+            ))}
+          </Collapse>
+        ) : (
+          <p>No curations found for this component</p>
+        )}
       </div>
     )
   }

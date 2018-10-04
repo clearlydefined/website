@@ -22,13 +22,7 @@ export function getCurationAction(token, entity) {
   }
 }
 
-/**
- * List all of the curations (if any) using the given coordinates as a pattern to match
- * @param  {} token
- * @param  {} entity
- * @param  {} name
- * @param  {} params
- */
+// List all of the curations (if any) using the given coordinates as a pattern to match
 export function getCurationListAction(token, entity, name, params) {
   return dispatch => {
     const actions = asyncActions(name)
@@ -36,18 +30,14 @@ export function getCurationListAction(token, entity, name, params) {
     return getCurationList(token, entity, params).then(
       result => {
         dispatch(actions.success(result))
-        result && result.length > 0 && dispatch(uiGetCurationData(token, entity, result[0].number))
+        result && result.length > 0 && dispatch(uiGetCurationData(token, entity, result[0].number, true))
       },
       error => dispatch(actions.error(error))
     )
   }
 }
 
-/**
- * Get the curation in the given PR relative to the specified coordinates
- * @param  {} token
- * @param  {} entity
- */
+// Get the curation in the given PR relative to the specified coordinates
 export function getCurationDataAction(token, entity, name, prNumber) {
   return dispatch => {
     const actions = asyncActions(name)

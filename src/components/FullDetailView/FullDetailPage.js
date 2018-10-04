@@ -20,7 +20,7 @@ import {
   uiGetCurationsList,
   uiRevertDefinition,
   uiApplyCurationSuggestion,
-  uiInspectCurationData
+  uiGetCurationData
 } from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { login } from '../../actions/sessionActions'
@@ -244,8 +244,8 @@ export class FullDetailPage extends AbstractFullDetailsView {
   }
 
   getCurationData(prNumber) {
-    const { uiInspectCurationData, component, token } = this.props
-    uiInspectCurationData(token, component, prNumber)
+    const { uiGetCurationData, component, token } = this.props
+    uiGetCurationData(token, component, prNumber)
   }
 }
 
@@ -294,7 +294,7 @@ function mapDispatchToProps(dispatch) {
       uiCurateResetDefinitionPreview,
       uiRevertDefinition,
       uiApplyCurationSuggestion,
-      uiInspectCurationData
+      uiGetCurationData
     },
     dispatch
   )
