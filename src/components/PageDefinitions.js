@@ -18,6 +18,7 @@ import { getDefinitionsAction } from '../actions/definitionActions'
 import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
+import { getCurationAction } from '../actions/curationActions'
 import NotificationButtons from './NotificationButtons'
 
 class PageDefinitions extends AbstractPageDefinitions {
@@ -283,7 +284,9 @@ class PageDefinitions extends AbstractPageDefinitions {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
     const path = component.toPath()
-    !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
+    !definitions.entries[path] &&
+      dispatch(getDefinitionsAction(token, [path])) &&
+      dispatch(getCurationAction(token, component))
     dispatch(uiBrowseUpdateList({ add: component }))
   }
 
