@@ -57,6 +57,7 @@
     "start": "env-cmd ./configs/.env.development npm-run-all -p build watch-css start-js",
     "start:local": "env-cmd ./configs/.env.local npm-run-all -p build watch-css start-js",
     "build": "env-cmd ./configs/.env.production npm run build-css && npm run copy-monaco && react-scripts build",
+    "build:dev": "env-cmd ./configs/.env.development npm run build-css && npm run copy-monaco && react-scripts build",
     "test": "eslint src && react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start-prod": "npm run build && serve -s build"
