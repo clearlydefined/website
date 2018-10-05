@@ -55,8 +55,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-*/.env
-*/.env.*
+.env
 
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
@@ -71,9 +70,13 @@ typings/
 
 # misc
 .DS_Store
+.env
 .env.local
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
 
 npm-debug.log*
