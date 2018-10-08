@@ -4,7 +4,7 @@
 import 'whatwg-fetch'
 import { toPairs } from 'lodash'
 
-export const apiHome = process.env.REACT_APP_SERVER || process.env.REACT_APP_API_URL
+export const apiHome = process.env.REACT_APP_SERVER
 
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
