@@ -57,7 +57,7 @@
     "build-scripts": "npm-run-all -p build watch-css start-js",
     "start": "env-cmd --fallback ./.env npm run build-scripts",
     "start:dev-api": "env-cmd --fallback ./.env.development npm run build-scripts",
-    "start:local-api": "env-cmd --fallback ./.env.local npm run build-scripts",
+    "start:local-api": "env-cmd --fallback ./.env.localhost npm run build-scripts",
     "start:prod-api": "env-cmd --fallback ./.env.production npm run build-scripts",
     "build": "env-cmd --fallback ./.env.production npm run build-css && npm run copy-monaco && react-scripts build",
     "test": "eslint src && react-scripts test --env=jsdom",
