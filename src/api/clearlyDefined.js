@@ -4,29 +4,7 @@
 import 'whatwg-fetch'
 import { toPairs } from 'lodash'
 
-export const API_LOCAL = 'http://localhost:4000'
-export const API_DEVELOP = 'https://dev-api.clearlydefined.io'
-export const API_PROD = 'https://api.clearlydefined.io'
-export const apiHome = process.env.REACT_APP_SERVER || getServiceDefaultUrl()
-
-// Uncomment the next instruction to set your current enviroment as local, thus using API_LOCAL
-// DON'T COMMIT THIS FILE IF YOU CHANGED THIS INSTRUCTION
-// process.env.NODE_ENV = 'local'
-
-function getServiceDefaultUrl() {
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      return API_DEVELOP
-    case 'test':
-      return API_DEVELOP
-    case 'production':
-      // TODO this needs to be replaced when we do a prod deployment. We want a "production" build deployed in
-      // the dev environment but of course it will need to point to the dev server. Don't know how to do that.
-      return API_DEVELOP
-    default:
-      return API_LOCAL
-  }
-}
+export const apiHome = process.env.REACT_APP_SERVER
 
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
