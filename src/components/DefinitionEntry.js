@@ -12,6 +12,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
+import Definition from '../utils/definition'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -228,7 +229,7 @@ export default class DefinitionEntry extends React.Component {
     const unattributed = get(licensed, 'attribution.unknown')
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
-    const { readOnly } = this.props
+    const { readOnly, onRevert } = this.props
     return (
       <Row>
         <Col md={5}>
@@ -246,6 +247,7 @@ export default class DefinitionEntry extends React.Component {
                   onChange={this.fieldChange('licensed.declared')}
                   validator={value => true}
                   placeholder={'SPDX license'}
+                  onRevert={() => onRevert('licensed.declared')}
                 />
               )}
             </Col>
@@ -264,6 +266,7 @@ export default class DefinitionEntry extends React.Component {
                   onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.parseCoordinates)}
                   validator={value => true}
                   placeholder={'Source location'}
+                  onRevert={() => onRevert('described.sourceLocation')}
                 />,
                 'right',
                 this.printCoordinates
@@ -284,6 +287,7 @@ export default class DefinitionEntry extends React.Component {
                   onChange={this.fieldChange('described.releaseDate')}
                   validator={value => true}
                   placeholder={'YYYY-MM-DD'}
+                  onRevert={() => onRevert('described.releaseDate')}
                 />
               )}
             </Col>
@@ -367,7 +371,8 @@ export default class DefinitionEntry extends React.Component {
         headline={this.renderHeadline(definition)}
         message={this.renderMessage(definition)}
         buttons={renderButtons && renderButtons(definition)}
-        onClick={onClick}
+        onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
+        isEmpty={Definition.isDefinitionEmpty(definition)}
         panel={component.expanded ? this.renderPanel(definition) : null}
       />
     )

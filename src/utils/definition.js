@@ -1,6 +1,8 @@
 import Contribution from './contribution'
 import EntitySpec from './entitySpec'
-import { get } from 'lodash'
+import get from 'lodash/get'
+import isEqual from 'lodash/isEqual'
+import isEmpty from 'lodash/isEmpty'
 
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
@@ -29,5 +31,43 @@ export default class Definition {
     const tool = Math.ceil((get(definition, 'described.toolScore', 0) + get(definition, 'licensed.toolScore', 0)) / 2)
     const effective = Math.ceil((get(definition, 'described.score', 0) + get(definition, 'licensed.score', 0)) / 2)
     return { tool, effective }
+  }
+
+  /**
+   * Determine if a component doesn't have any data. In order to show in the UI in the list of Components
+   *
+   * @param {*} definition
+   * @returns {boolean}
+   */
+  static isDefinitionEmpty(definition) {
+    return isEmpty(get(definition, 'described.tools'))
+  }
+
+  static isSourceEmpty(definition) {
+    return !!get(definition, 'described.sourceLocation')
+  }
+
+  /**
+   * Revert a list of definitions or a specific one, removing all the changes or only specific values
+   * @param  {[]} components list of definitions
+   * @param  {{}} definition specific definition, if null the function will check all the components
+   * @param  {string} key string that identifies the specific value to revert, if null all the changes will be removed
+   */
+  static revert(components, definition, key) {
+    if (!components) return
+    return components.map(component => {
+      if (definition && !isEqual(EntitySpec.fromCoordinates(definition), EntitySpec.fromCoordinates(component)))
+        return component
+      return this.revertChanges(component, key)
+    })
+  }
+
+  static revertChanges(component, key) {
+    if (!key) {
+      const { changes, ...updatedChanges } = component
+      return updatedChanges
+    }
+    const { [key]: omit, ...updatedChanges } = component.changes
+    return { ...component, changes: updatedChanges }
   }
 }

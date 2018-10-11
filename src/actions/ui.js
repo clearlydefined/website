@@ -6,7 +6,8 @@ import {
   getDefinitionAction,
   previewDefinitionAction,
   getDefinitionSuggestionsAction,
-  resetPreviewDefinitionAction
+  resetPreviewDefinitionAction,
+  revertDefinitionAction
 } from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
 import { getPrDataAction } from './prActions'
@@ -33,6 +34,7 @@ export const UI_CURATE_GET_PROPOSED = 'UI_CURATE_GET_PROPOSED'
 export const UI_CURATE_GET_DEFINITION = 'UI_CURATE_GET_DEFINITION'
 export const UI_CURATE_GET_DEFINITION_PROPOSED = 'UI_CURATE_GET_DEFINITION_PROPOSED'
 export const UI_CURATE_DEFINITION_PREVIEW = 'UI_CURATE_DEFINITION_PREVIEW'
+export const UI_DEFINITION_REVERT = 'UI_DEFINITION_REVERT'
 
 export const UI_BROWSE_UPDATE_FILTER = 'UI_BROWSE_UPDATE_FILTER'
 export const UI_BROWSE_UPDATE_FILTER_LIST = 'UI_BROWSE_UPDATE_FILTER_LIST'
@@ -104,6 +106,10 @@ export function uiCurateGetDefinitionPreview(token, entity, curation) {
 
 export function uiCurateResetDefinitionPreview(token, entity) {
   return resetPreviewDefinitionAction(token, entity, UI_CURATE_DEFINITION_PREVIEW)
+}
+
+export function uiRevertDefinition(definition, values) {
+  return revertDefinitionAction(definition, values, UI_DEFINITION_REVERT)
 }
 
 export function uiBrowseUpdateFilter(value) {
