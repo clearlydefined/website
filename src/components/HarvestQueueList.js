@@ -13,7 +13,7 @@ import {
   RubyGemsVersionPicker
 } from './'
 import { getGitHubRevisions } from '../api/clearlyDefined'
-import { GitHubCommitPicker } from 'clearlydefined-components'
+import { GitHubCommitPicker } from '@clearlydefined/ui-components'
 import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'

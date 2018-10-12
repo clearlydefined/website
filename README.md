@@ -21,7 +21,7 @@ This sequence will get the code for site, fetch all the prerequisites, build the
 This simple setup uses the _development_ instance of the service. That may be highly volatile and will change without notice.
 Having said that, we use it all the time so you're probably good. If you want setup your own service (and crawler for that matter), use the [simple local system setup guide](https://docs.clearlydefined.io/contributing-code) that has only a few more steps and gets you running all of ClearlyDefined on you local machine.
 
-Some generally useful components are published as a separate NPM package and by default are used from NPM. In order to develop them run `npm link` (or possibly `sudo npm link` depending on your setup) in `components/` followed by `npm link clearlydefined-components` in the top level directory of this repository.
+Some generally useful components are published as a separate NPM package and by default are used from NPM. In order to develop them run `npm link ./components` (or possibly `sudo npm link ./components` depending on your setup) from a shell while in the root of this repository.
 
 # Contributing
 
