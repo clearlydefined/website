@@ -15,7 +15,7 @@ export function getCurationAction(token, entity) {
   return dispatch => {
     const actions = asyncActions(CURATION_BODIES)
     dispatch(actions.start())
-    return getCuration(token, entity, { expandedPrs: true }).then(
+    return getCuration(token, entity, { expand: ['prs'] }).then(
       result => dispatch(actions.success(result)),
       error => dispatch(actions.error(error))
     )

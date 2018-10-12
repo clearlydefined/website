@@ -52,14 +52,16 @@ export function harvest(token, spec) {
  * Get details about a specific curation
  * @param {*} token
  * @param {*} entity
- * @param {object} params can contain properties: expandedPrs, if true returns deeper information of each PR; pendingPrs, if true return also curations not already merged
+ * @param {object} params additional params added to the query string
+ * @param {array} params.expand contains informations about the detail to be returned (e.g. ['prs','foo','bars']);
+ * @param {string} params.state if === 'pending' return also curations not already merged
  */
 export function getCuration(token, entity, params = {}) {
-  const { expandedPrs, pendingPrs } = params
+  const { expand, state } = params
   return get(
     url(`${CURATIONS}/${entity.toPath()}`, {
-      expand: expandedPrs ? 'prs' : null,
-      state: pendingPrs ? 'pending' : null
+      expand,
+      state
     }),
     token
   )
@@ -69,14 +71,15 @@ export function getCuration(token, entity, params = {}) {
  * List all of the curations (if any) using the given coordinates as a pattern to match, despite the revision
  * @param  {} token
  * @param  {} entity
- * @param  {object} params can contain property: pendingPrs, if true returns also curations not already merged
+ * @param {object} params additional params added to the query string
+ * @param {string} params.state if === 'pending' return also curations not already merged
  */
 export function getCurationList(token, entity, params = {}) {
-  const { pendingPrs } = params
+  const { state } = params
   const entityWithoutRevision = EntitySpec.asRevisionless(entity)
   return get(
     url(`${CURATIONS}/${entityWithoutRevision.toPath()}`, {
-      state: pendingPrs ? 'pending' : null
+      state
     }),
     token
   )
