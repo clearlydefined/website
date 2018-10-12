@@ -28,7 +28,7 @@ import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
-import NotificationButtons from '../NotificationButtons'
+import NotificationButtons from '../Navigation/Ui/NotificationButtons'
 import { AbstractFullDetailsView } from './AbstractFullDetailsView'
 
 export class FullDetailPage extends AbstractFullDetailsView {

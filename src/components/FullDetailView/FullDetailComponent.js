@@ -4,24 +4,22 @@
 import React, { Component, Fragment } from 'react'
 import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import Tabs from 'antd/lib/tabs'
 import cloneDeep from 'lodash/cloneDeep'
 import find from 'lodash/find'
-import { getBadgeUrl } from '../../api/clearlyDefined'
 import { Section } from '../'
 import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
-import DescribedSection from './DescribedSection'
-import InnerDataSection from './InnerDataSection'
-import HeaderSection from './HeaderSection'
-import LabelRenderer from '../Renderers/LabelRenderer'
-import LicensedSection from './LicensedSections'
-import ButtonWithTooltip from '../Renderers/ButtonWithTooltip'
-import CurationsSection from './CurationsSection'
-import CurationData from './CurationData'
+import DescribedSection from '../Navigation/Sections/DescribedSection'
+import RawDataSection from '../Navigation/Sections/RawDataSection'
+import HeaderSection from '../Navigation/Sections/HeaderSection'
+import LabelRenderer from '../Navigation/Ui/LabelRenderer'
+import LicensedSection from '../Navigation/Sections/LicensedSections'
+import ButtonWithTooltip from '../Navigation/Ui/ButtonWithTooltip'
+import CurationsSection from '../Navigation/Sections/CurationsSection'
+import TitleWithScore from '../Navigation/Ui/TitleWithScore'
 
 class FullDetailComponent extends Component {
   static propTypes = {
@@ -37,11 +35,6 @@ class FullDetailComponent extends Component {
     previewDefinition: PropTypes.object,
     curationSuggestions: PropTypes.object,
     getCurationData: PropTypes.func
-  }
-
-  renderScore(domain) {
-    if (!domain) return null
-    return <img className="list-buttons" src={getBadgeUrl(domain.toolScore, domain.score)} alt="score" />
   }
 
   render() {
@@ -73,7 +66,7 @@ class FullDetailComponent extends Component {
         <Row>
           <Col md={1} />
           <Col md={11}>
-            <Section name={<span>Described {this.renderScore(item.described)}</span>}>
+            <Section name={<TitleWithScore title={'Described'} domain={item.described} />}>
               <Fragment>
                 <DescribedSection rawDefinition={item} {...this.props} />
                 <Row>
@@ -94,7 +87,7 @@ class FullDetailComponent extends Component {
                 </Row>
               </Fragment>
             </Section>
-            <Section name={<span>Licensed {this.renderScore(item.licensed)}</span>}>
+            <Section name={<TitleWithScore title={'Licensed'} domain={item.licensed} />}>
               <LicensedSection rawDefinition={item} {...this.props} />
             </Section>
             <Section
@@ -129,21 +122,13 @@ class FullDetailComponent extends Component {
             <Section name="Raw data">
               <Row>
                 <Col md={11} offset-md={1}>
-                  <Tabs>
-                    <Tabs.TabPane tab="Current definition" key="1">
-                      <InnerDataSection value={definition} name={'Current definition'} type={'yaml'} />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Curations" key="2">
-                      <CurationData
-                        curations={Definition.getPrs(item)}
-                        onChange={getCurationData}
-                        inspectedCuration={inspectedCuration}
-                      />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Harvested data" key="3">
-                      <InnerDataSection value={harvest} name={'Harvested data'} type={'json'} />
-                    </Tabs.TabPane>
-                  </Tabs>
+                  <RawDataSection
+                    definition={definition}
+                    item={item}
+                    getCurationData={getCurationData}
+                    inspectedCuration={inspectedCuration}
+                    harvest={harvest}
+                  />
                 </Col>
               </Row>
             </Section>

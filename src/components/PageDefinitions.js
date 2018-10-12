@@ -19,7 +19,7 @@ import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
-import NotificationButtons from './NotificationButtons'
+import NotificationButtons from './Navigation/Ui/NotificationButtons'
 
 class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {

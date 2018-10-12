@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Collapse from 'antd/lib/collapse'
 import isEqual from 'lodash/isEqual'
-import InnerDataSection from './InnerDataSection'
-import CurationRenderer from '../Renderers/CurationRenderer'
+import CurationRenderer from './CurationRenderer'
+import RawDataRenderer from './RawDataRenderer'
+
 const Panel = Collapse.Panel
 class CurationData extends Component {
   static propTypes = {
@@ -44,7 +45,7 @@ class CurationData extends Component {
           <Collapse bordered={false} accordion onChange={this.onChange}>
             {curations.map(curation => (
               <Panel key={curation.number} header={<CurationRenderer curation={curation} />}>
-                <InnerDataSection value={activeCuration} name={'Curations'} type={'json'} />
+                <RawDataRenderer value={activeCuration} name={'Curations'} type={'json'} />
               </Panel>
             ))}
           </Collapse>
