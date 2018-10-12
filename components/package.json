@@ -1,5 +1,5 @@
 {
-  "name": "clearlydefined-components",
+  "name": "@clearlydefined/ui-components",
   "version": "0.1.0",
   "description": "React UI components from ClearlyDefined",
   "main": "lib/index.js",
