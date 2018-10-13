@@ -10,14 +10,13 @@ import { ROUTE_ROOT } from '../utils/routingConstants'
 import { Nav, Navbar, NavItem } from 'react-bootstrap'
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap'
 import { filter, intersection } from 'lodash'
-import { url } from '../api/clearlyDefined'
+import Auth from '../utils/auth'
 
 class Header extends Component {
   constructor(props) {
     super(props)
-    this.doLogin = this.doLogin.bind(this)
+    this.handleLogin = this.handleLogin.bind(this)
     this.doLogout = this.doLogout.bind(this)
-    this.gotoDocs = this.gotoDocs.bind(this)
   }
 
   doLogout(e) {
@@ -25,16 +24,11 @@ class Header extends Component {
     this.props.dispatch(logout())
   }
 
-  doLogin(e) {
+  handleLogin(e) {
     e.preventDefault()
-    window.open(url('auth/github'))
-    const tokenListener = e => {
-      if (e.data.type === 'github-token') {
-        this.props.dispatch(login(e.data.token, e.data.permissions))
-        window.removeEventListener('message', tokenListener)
-      }
-    }
-    window.addEventListener('message', tokenListener)
+    Auth.doLogin((token, permissions, username) => {
+      this.props.dispatch(login(token, permissions, username))
+    })
   }
 
   gotoDocs() {
@@ -56,7 +50,7 @@ class Header extends Component {
     if (session.isAnonymous && !session.isFetching)
       return (
         <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>
-          <NavItem eventKey={1} onClick={this.doLogin}>
+          <NavItem eventKey={1} onClick={this.handleLogin}>
             Login
           </NavItem>
         </Nav>

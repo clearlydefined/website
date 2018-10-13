@@ -31,7 +31,6 @@ class PageContribution extends AbstractPageDefinitions {
   renderButtons() {
     return (
       <div className="pull-right">
-        &nbsp;
         <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
           Collapse All
         </Button>
@@ -55,6 +54,7 @@ class PageContribution extends AbstractPageDefinitions {
 function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
+    session: state.session,
     prNumber: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     url: state.ui.contribution.url,
     definitions: state.ui.contribution.definitions,

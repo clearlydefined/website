@@ -15,6 +15,8 @@ import LicensesRenderer from '../LicensesRenderer'
 import CopyrightsRenderer from '../CopyrightsRenderer'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
+// Import Custom TreeTable HOC
+const TreeTable = treeTableHOC(ReactTable)
 
 /**
  * A File List Tree-view, according to https://github.com/clearlydefined/website/issues/191
@@ -40,7 +42,7 @@ export default class FileList extends Component {
     const { files, component, previewDefinition } = this.props
     if (files) {
       const definitionFiles = parsePaths(files, component.item, previewDefinition)
-      files && this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
+      this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -48,7 +50,7 @@ export default class FileList extends Component {
     const { files, component, previewDefinition } = nextProps
     if (files) {
       const definitionFiles = parsePaths(files, component.item, previewDefinition)
-      files && this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
+      this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
     }
   }
 
@@ -141,17 +143,20 @@ export default class FileList extends Component {
           ),
         filterMethod: (filter, rows) =>
           filter.value.filterValue
-            ? rows.filter(
-                item =>
-                  item._original
-                    ? item._original.license
-                      ? item._original.license
-                          .toString()
-                          .toLowerCase()
-                          .includes(filter.value.filterValue.toLowerCase())
-                      : false
-                    : true
-              )
+            ? rows.filter(item => {
+                if (!item._original) return true
+                const value = Contribution.getValue(
+                  component.item,
+                  previewDefinition,
+                  `files[${item._original.id}].license`
+                )
+                return value
+                  ? value
+                      .toString()
+                      .toLowerCase()
+                      .includes(filter.value.filterValue.toLowerCase())
+                  : false
+              })
             : rows,
         filterAll: true
       },
@@ -161,9 +166,9 @@ export default class FileList extends Component {
         resizable: false,
         Cell: row => (
           <CopyrightsRenderer
-            item={row}
+            container={document.getElementsByClassName('ReactTable')[0]}
+            item={row.value}
             readOnly={readOnly}
-            showPopup={this.showPopup}
             onSave={value => {
               this.props.onChange(`files[${row.original.id}]`, value, null, value => {
                 return {
@@ -204,36 +209,31 @@ export default class FileList extends Component {
     const { files, isFiltering } = this.state
 
     return (
-      <div>
-        <TreeTable
-          showPagination={false}
-          sortable={false}
-          defaultPageSize={15}
-          filterable
-          freezeWhenExpanded={false}
-          manual={false}
-          onFilteredChange={() => this.setState({ isFiltering: true })}
-          noDataText={
-            isFiltering ? "Current filters didn't match any data" : 'There are currently no files for this definition'
-          }
-          data={files}
-          pivotBy={pathColums}
-          columns={this.generateColumns(columns)} // Merge columns array with other columns to show after the folders
-          FilterComponent={props => {
-            return (
-              !String(props.column.id)
-                .toLowerCase()
-                .includes('folder_') && <FilterCustomComponent {...props} />
-            )
-          }}
-        />
-      </div>
+      <TreeTable
+        showPagination={false}
+        sortable={false}
+        defaultPageSize={15}
+        filterable
+        freezeWhenExpanded={false}
+        manual={false}
+        onFilteredChange={() => this.setState({ isFiltering: true })}
+        noDataText={
+          isFiltering ? "Current filters didn't match any data" : 'There are currently no files for this definition'
+        }
+        data={files}
+        pivotBy={pathColums}
+        columns={this.generateColumns(columns)} // Merge columns array with other columns to show after the folders
+        FilterComponent={props => {
+          return (
+            !String(props.column.id)
+              .toLowerCase()
+              .includes('folder_') && <FilterCustomComponent {...props} />
+          )
+        }}
+      />
     )
   }
 }
-
-// Import Custom TreeTable HOC
-const TreeTable = treeTableHOC(ReactTable)
 
 const pathColums = []
 const columns = []
@@ -261,9 +261,7 @@ const parsePaths = (files, component, preview) => {
     // If index is the last file, then is the name of the file
     folders.forEach((p, index) => {
       if (index + 1 === folders.length) file.name = p
-      else {
-        file[`folder_${index}`] = p
-      }
+      else file[`folder_${index}`] = p
     })
 
     folders.forEach((p, index) => {

@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
-import { Row, Button, Col } from 'react-bootstrap'
+import React, { Component, Fragment } from 'react'
+import { Row, Button, Col, Popover, OverlayTrigger } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import Tabs from 'antd/lib/tabs'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import isEmpty from 'lodash/isEmpty'
+import find from 'lodash/find'
 import { getBadgeUrl } from '../../api/clearlyDefined'
 import { Section } from '../'
 import FileList from '../FileList'
@@ -17,11 +18,13 @@ import FacetsEditor from '../FacetsEditor'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
+import { Tooltip } from 'antd'
 
 class FullDetailComponent extends Component {
   static propTypes = {
     handleClose: PropTypes.func,
     handleSave: PropTypes.func,
+    handleRevert: PropTypes.func,
     curation: PropTypes.object.isRequired,
     definition: PropTypes.object.isRequired,
     harvest: PropTypes.object.isRequired,
@@ -37,8 +40,9 @@ class FullDetailComponent extends Component {
     const { activeFacets, readOnly, onChange, previewDefinition } = this.props
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
-    const { described } = definition
-    const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
+    const toolList = get(definition.described, 'tools', []).map(
+      tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool)
+    )
 
     return (
       <Row>
@@ -57,6 +61,7 @@ class FullDetailComponent extends Component {
                   Contribution.getValue(definition, previewDefinition, 'described.sourceLocation')
                 )}
                 onChange={value => onChange(`described.sourceLocation`, value, null, Contribution.parseCoordinates)}
+                onRevert={() => this.props.handleRevert('described.sourceLocation')}
                 validator
                 placeholder={'Source location'}
               />
@@ -76,6 +81,7 @@ class FullDetailComponent extends Component {
                   Contribution.getValue(definition, previewDefinition, 'described.releaseDate')
                 )}
                 onChange={value => onChange(`described.releaseDate`, value)}
+                onRevert={() => this.props.handleRevert('described.releaseDate')}
                 validator
                 placeholder={'YYYY-MM-DD'}
               />
@@ -151,6 +157,14 @@ class FullDetailComponent extends Component {
           </div>
         </Col>
         <Col md={4} className="text-right">
+          {!isEmpty(changes) &&
+            this.renderButtonWithTip(
+              <Button bsStyle="danger" onClick={() => this.props.handleRevert()}>
+                <i className="fas fa-undo" />
+                <span>&nbsp;Revert Changes</span>
+              </Button>,
+              'Revert all changes of the current definition'
+            )}{' '}
           {modalView && (
             <Button bsStyle="primary" disabled={isEmpty(changes)} onClick={this.props.handleSave}>
               OK
@@ -189,21 +203,14 @@ class FullDetailComponent extends Component {
                 onChange={value => onChange(`licensed.declared`, value)}
                 validator={true}
                 placeholder={'SPDX license'}
+                onRevert={() => this.props.handleRevert('licensed.declared')}
               />
             </Col>
           </Row>
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Discovered')}</Col>
             <Col md={9} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.discovered.expressions'
-                )}`}
-              >
-                {get(licensed, 'discovered.expressions', []).join(', ')}
-              </p>
+              {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
         </Col>
@@ -211,15 +218,7 @@ class FullDetailComponent extends Component {
           <Row className="no-gutters">
             <Col md={3}>{this.renderLabel('Attribution')}</Col>
             <Col md={9} className="definition__line">
-              <p
-                className={`list-singleLine ${Contribution.classIfDifferent(
-                  definition,
-                  previewDefinition,
-                  'licensed.attribution.parties'
-                )}`}
-              >
-                {get(licensed, 'attribution.parties', []).join(', ')}
-              </p>
+              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row className="no-gutters">
@@ -237,6 +236,34 @@ class FullDetailComponent extends Component {
     )
   }
 
+  renderPopover(licensed, key, title) {
+    const values = get(licensed, key, [])
+    if (!values) return null
+
+    return (
+      <OverlayTrigger
+        trigger="click"
+        placement="left"
+        rootClose
+        overlay={
+          <Popover title={title} id={title}>
+            <div className="popoverRenderer popoverRenderer_scrollY">
+              {values.map((a, index) => (
+                <div key={`${a}_${index}`} className="popoverRenderer__items">
+                  <div className="popoverRenderer__items__value">
+                    <span>{a}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Popover>
+        }
+      >
+        <span className="popoverSpan">{values.join(', ')}</span>
+      </OverlayTrigger>
+    )
+  }
+
   renderContributions() {
     return (
       <div>
@@ -251,9 +278,18 @@ class FullDetailComponent extends Component {
     return <img className="list-buttons" src={getBadgeUrl(domain.toolScore, domain.score)} alt="score" />
   }
 
-  render() {
-    const { curation, definition, harvest, onChange, previewDefinition, readOnly } = this.props
+  renderButtonWithTip(button, tip) {
+    const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
+    return (
+      <OverlayTrigger placement="top" overlay={toolTip}>
+        {button}
+      </OverlayTrigger>
+    )
+  }
 
+  render() {
+    const { curation, definition, harvest, onChange, previewDefinition, readOnly, handleRevert, changes } = this.props
+    const entry = find(changes, (_, key) => key && key.startsWith('files'))
     if (!definition || !definition.item || !curation || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
@@ -267,24 +303,41 @@ class FullDetailComponent extends Component {
           <Col md={1} />
           <Col md={11}>
             <Section name={<span>Described {this.renderScore(item.described)}</span>}>
-              {this.renderDescribed(item)}
-              <Row>
-                <Col md={6}>
-                  {this.renderLabel('Facets')}
-                  <FacetsEditor
-                    definition={item}
-                    onChange={onChange}
-                    previewDefinition={previewDefinition}
-                    readOnly={readOnly}
-                  />
-                </Col>
-                <Col md={6}>{this.renderContributions()}</Col>
-              </Row>
+              <Fragment>
+                {this.renderDescribed(item)}
+                <Row>
+                  <Col md={6}>
+                    {this.renderLabel('Facets')}
+                    <FacetsEditor
+                      definition={item}
+                      onChange={onChange}
+                      previewDefinition={previewDefinition}
+                      readOnly={readOnly}
+                      onRevert={handleRevert}
+                    />
+                  </Col>
+                  <Col md={6}>{this.renderContributions()}</Col>
+                </Row>
+              </Fragment>
             </Section>
             <Section name={<span>Licensed {this.renderScore(item.licensed)}</span>}>
               {this.renderLicensed(item)}
             </Section>
-            <Section name="Files">
+            <Section
+              name={
+                <section>
+                  <span>Files</span>
+                  &nbsp;
+                  {this.renderButtonWithTip(
+                    <Button bsStyle="danger" onClick={() => handleRevert('files')} disabled={entry === undefined}>
+                      <i className="fas fa-undo" />
+                      <span>&nbsp;Revert Changes</span>
+                    </Button>,
+                    'Revert all changes of all the definitions'
+                  )}
+                </section>
+              }
+            >
               <Row>
                 <Col md={11}>
                   <FileList

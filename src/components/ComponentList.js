@@ -3,12 +3,13 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { RowEntityList, DefinitionEntry } from './'
+import { RowEntityList, DefinitionEntry, CopyUrlButton } from './'
 import { Button, OverlayTrigger, Tooltip, ButtonGroup } from 'react-bootstrap'
 import { get } from 'lodash'
 import EntitySpec from '../utils/entitySpec'
 import { getBadgeUrl } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
+import { ROUTE_DEFINITIONS } from '../utils/routingConstants'
 
 export default class ComponentList extends React.Component {
   static propTypes = {
@@ -19,7 +20,6 @@ export default class ComponentList extends React.Component {
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
     onChange: PropTypes.func,
-    onCurate: PropTypes.func,
     onInspect: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
@@ -56,16 +56,15 @@ export default class ComponentList extends React.Component {
     onRemove && onRemove(component)
   }
 
+  revertComponent(component, param) {
+    const { onRevert } = this.props
+    onRevert && onRevert(component, param)
+  }
+
   inspectComponent(component, definition, event) {
     event.stopPropagation()
     const action = this.props.onInspect
     action && action(component, definition)
-  }
-
-  curateComponent(component, event) {
-    event.stopPropagation()
-    const action = this.props.onCurate
-    action && action(component)
   }
 
   addSourceForComponent(component, event) {
@@ -108,28 +107,58 @@ export default class ComponentList extends React.Component {
 
   renderButtons(definition, currentComponent) {
     const component = EntitySpec.fromCoordinates(currentComponent)
-    const { readOnly } = this.props
+    const { readOnly, hasChange } = this.props
     const isSourceComponent = this.isSourceComponent(component)
     const scores = Definition.computeScores(definition)
+    const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
+    const isSourceEmpty = Definition.isSourceEmpty(definition)
     return (
       <div className="list-activity-area">
         {scores && <img className="list-buttons" src={getBadgeUrl(scores.tool, scores.effective)} alt="score" />}
         <ButtonGroup>
           {!isSourceComponent &&
-            !readOnly && (
-              <Button className="list-hybrid-button" onClick={this.addSourceForComponent.bind(this, component)}>
-                <i className="fas fa-plus" />
-                <span>&nbsp;Add source</span>
-              </Button>
+            !readOnly &&
+            !isSourceEmpty &&
+            this.renderButtonWithTip(
+              <Button onClick={this.addSourceForComponent.bind(this, component)}>
+                <i className="fas fa-code" />
+              </Button>,
+              'Add the definition for source that matches this package'
             )}
-          {this.renderButtonWithTip(
-            <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, currentComponent, definition)}>
-              <i className="fas fa-search" />
-            </Button>,
-            'Dig into this definition'
-          )}
+          {!isDefinitionEmpty &&
+            this.renderButtonWithTip(
+              <Button
+                className="list-fa-button"
+                onClick={this.inspectComponent.bind(this, currentComponent, definition)}
+              >
+                <i className="fas fa-search" />
+              </Button>,
+              'Dig into this definition'
+            )}
+          <CopyUrlButton
+            route={ROUTE_DEFINITIONS}
+            path={component.toPath()}
+            bsStyle="default"
+            className="list-fa-button"
+          />
+          {!readOnly &&
+            !isDefinitionEmpty &&
+            this.renderButtonWithTip(
+              <Button
+                className="list-fa-button"
+                onClick={() => this.revertComponent(component)}
+                disabled={!hasChange(component)}
+              >
+                <i className="fas fa-undo" />
+              </Button>,
+              'Revert Changes of this Definition'
+            )}
         </ButtonGroup>
-        {!readOnly && <i className="fas fa-times list-remove" onClick={this.removeComponent.bind(this, component)} />}
+        {!readOnly && (
+          <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
+            <i className="fas fa-times list-remove" />
+          </Button>
+        )}
       </div>
     )
   }
@@ -156,6 +185,7 @@ export default class ComponentList extends React.Component {
           otherDefinition={definition.otherDefinition}
           classOnDifference="bg-info"
           renderButtons={() => this.renderButtons(definition, component)}
+          onRevert={param => this.revertComponent(component, param)}
         />
       </div>
     )

@@ -4,15 +4,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { TwoLineEntry, InlineEditor } from './'
-import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
-import moment from 'moment'
 import Contribution from '../utils/contribution'
+import Definition from '../utils/definition'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -26,27 +26,6 @@ export default class DefinitionEntry extends React.Component {
   }
 
   static defaultProps = {}
-
-  inspectComponent(component, event) {
-    event.stopPropagation()
-    const action = this.props.onInspect
-    action && action(component)
-  }
-
-  curateComponent(component, event) {
-    event.stopPropagation()
-    const action = this.props.onCurate
-    action && action(component)
-  }
-
-  renderButtonWithTip(button, tip) {
-    const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
-    return (
-      <OverlayTrigger placement="top" overlay={toolTip}>
-        {button}
-      </OverlayTrigger>
-    )
-  }
 
   isSourceComponent(component) {
     return ['github', 'sourcearchive'].includes(component.provider)
@@ -73,6 +52,7 @@ export default class DefinitionEntry extends React.Component {
       ? then_
       : else_
   }
+
   classIfDifferent(field) {
     return this.ifDifferent(field, this.props.classOnDifference, '')
   }
@@ -189,21 +169,6 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
-  getSourceUrl(definition) {
-    const location = get(definition, 'described.sourceLocation')
-    if (!location) return ''
-    switch (location.provider) {
-      case 'github':
-        return (
-          <a href={`${location.url}/commit/${location.revision}`} target="_blank">
-            {location.revision}
-          </a>
-        )
-      default:
-        return ''
-    }
-  }
-
   getPercentage(count, total) {
     return Math.round(((count || 0) / total) * 100)
   }
@@ -240,34 +205,12 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
-  parseArray(value) {
-    return value ? value.split(',').map(v => v.trim()) : null
-  }
-
-  printArray(value) {
-    return value ? value.join(', ') : null
-  }
-
-  printDate(value) {
-    return value ? moment(value).format('YYYY-MM-DD') : null
-  }
-
-  parseDate(value) {
-    return moment(value)
-  }
-
   printCoordinates(value) {
     return value ? value.url : null
   }
 
-  renderLabel(text, editable = false) {
-    return (
-      <p>
-        <b>
-          {text} <i className={false ? 'fas fa-pencil-alt' : ''} />
-        </b>
-      </p>
-    )
+  renderLabel(text) {
+    return <b>{text}</b>
   }
 
   renderPanel(rawDefinition) {
@@ -280,18 +223,13 @@ export default class DefinitionEntry extends React.Component {
 
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
-    const { licensed, described } = definition
-    const initialFacets =
-      get(described, 'facets') || this.isSourceComponent(definition.coordinates)
-        ? ['Core', 'Data', 'Dev', 'Doc', 'Examples', 'Tests']
-        : ['Core']
+    const { licensed } = definition
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')
     const unattributed = get(licensed, 'attribution.unknown')
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
-    const toolList = get(described, 'tools', []).map(tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool))
-    const { readOnly } = this.props
+    const { readOnly, onRevert } = this.props
     return (
       <Row>
         <Col md={5}>
@@ -309,6 +247,7 @@ export default class DefinitionEntry extends React.Component {
                   onChange={this.fieldChange('licensed.declared')}
                   validator={value => true}
                   placeholder={'SPDX license'}
+                  onRevert={() => onRevert('licensed.declared')}
                 />
               )}
             </Col>
@@ -327,6 +266,7 @@ export default class DefinitionEntry extends React.Component {
                   onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.parseCoordinates)}
                   validator={value => true}
                   placeholder={'Source location'}
+                  onRevert={() => onRevert('described.sourceLocation')}
                 />,
                 'right',
                 this.printCoordinates
@@ -342,11 +282,12 @@ export default class DefinitionEntry extends React.Component {
                   extraClass={this.classIfDifferent('described.releaseDate')}
                   readOnly={readOnly}
                   type="date"
-                  initialValue={this.printDate(this.getOriginalValue('described.releaseDate'))}
-                  value={this.printDate(this.getValue('described.releaseDate'))}
+                  initialValue={Contribution.printDate(this.getOriginalValue('described.releaseDate'))}
+                  value={Contribution.printDate(this.getValue('described.releaseDate'))}
                   onChange={this.fieldChange('described.releaseDate')}
                   validator={value => true}
                   placeholder={'YYYY-MM-DD'}
+                  onRevert={() => onRevert('described.releaseDate')}
                 />
               )}
             </Col>
@@ -356,23 +297,13 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Discovered')}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'discovered.expressions',
-                <p className={`list-singleLine ${this.classIfDifferent('licensed.discovered.expressions')}`}>
-                  {get(licensed, 'discovered.expressions', []).join(', ')}
-                </p>
-              )}
+              {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
           <Row>
             <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
             <Col md={10} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'licensed.attribution.parties',
-                <p className={`list-singleLine ${this.classIfDifferent('licensed.attribution.parties')}`}>
-                  {get(licensed, 'attribution.parties', []).join(', ')}
-                </p>
-              )}
+              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row>
@@ -387,6 +318,37 @@ export default class DefinitionEntry extends React.Component {
           </Row>
         </Col>
       </Row>
+    )
+  }
+
+  renderPopover(licensed, key, title) {
+    const values = get(licensed, key, [])
+    // compare facets without folding
+    if (key === 'attribution.parties') key = 'licensed.facets'
+    const classIfDifferent = this.classIfDifferent(key)
+    if (!values) return null
+
+    return (
+      <OverlayTrigger
+        trigger="click"
+        placement="left"
+        rootClose
+        overlay={
+          <Popover title={title} id={title}>
+            <div className="popoverRenderer popoverRenderer_scrollY">
+              {values.map((a, index) => (
+                <div key={`${a}_${index}`} className="popoverRenderer__items">
+                  <div className="popoverRenderer__items__value">
+                    <span>{a}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Popover>
+        }
+      >
+        <span className={`popoverSpan ${classIfDifferent}`}>{values.join(', ')}</span>
+      </OverlayTrigger>
     )
   }
 
@@ -409,7 +371,8 @@ export default class DefinitionEntry extends React.Component {
         headline={this.renderHeadline(definition)}
         message={this.renderMessage(definition)}
         buttons={renderButtons && renderButtons(definition)}
-        onClick={onClick}
+        onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
+        isEmpty={Definition.isDefinitionEmpty(definition)}
         panel={component.expanded ? this.renderPanel(definition) : null}
       />
     )

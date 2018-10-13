@@ -14,11 +14,14 @@ export default class InlineEditor extends React.Component {
     value: PropTypes.string,
     type: PropTypes.oneOf(['text', 'date', 'license']).isRequired,
     onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string.isRequired
+    placeholder: PropTypes.string.isRequired,
+    onRevert: PropTypes.func,
+    revertable: PropTypes.bool
   }
 
   static defaultProps = {
-    type: 'text'
+    type: 'text',
+    revertable: true
   }
 
   state = { editing: false }
@@ -56,6 +59,7 @@ export default class InlineEditor extends React.Component {
     if (!editing)
       return (
         <span
+          title={this.renderers[type](value)}
           className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
           onClick={() => (readOnly ? null : this.setState({ editing: true }, () => onClick && onClick()))}
         >
@@ -67,7 +71,8 @@ export default class InlineEditor extends React.Component {
   }
 
   render() {
-    const { onClick, readOnly } = this.props
+    const { onClick, readOnly, initialValue, value, onRevert, revertable } = this.props
+    const changed = initialValue !== value
     return (
       <span className="list-singleLine">
         {!readOnly && (
@@ -76,6 +81,13 @@ export default class InlineEditor extends React.Component {
             onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
           />
         )}
+        {!readOnly &&
+          revertable && (
+            <i
+              className={`fas fa-undo editable-marker ${!changed && 'fa-disabled'}`}
+              onClick={() => onRevert && changed && onRevert()}
+            />
+          )}
         {this.renderValue()}
       </span>
     )

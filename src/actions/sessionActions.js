@@ -7,8 +7,8 @@ import { uiRedirect } from './ui'
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 
-export function login(token, permissions) {
-  return dispatch => dispatch({ type: LOGIN, token, permissions })
+export function login(token, permissions, username) {
+  return dispatch => dispatch({ type: LOGIN, token, permissions, username })
 }
 
 export function logout(error) {

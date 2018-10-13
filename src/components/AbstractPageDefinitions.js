@@ -3,14 +3,20 @@
 
 import React, { Component } from 'react'
 import { Grid, DropdownButton, MenuItem } from 'react-bootstrap'
-import { ROUTE_CURATE } from '../utils/routingConstants'
+import compact from 'lodash/compact'
+import filter from 'lodash/filter'
+import find from 'lodash/find'
+import get from 'lodash/get'
+import set from 'lodash/set'
+import sortBy from 'lodash/sortBy'
 import { curateAction } from '../actions/curationActions'
+import { login } from '../actions/sessionActions'
 import { ComponentList, Section, ContributePrompt } from './'
+import FullDetailPage from './FullDetailView/FullDetailPage'
 import { uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
-import { set, get, find, filter, sortBy } from 'lodash'
-import FullDetailPage from './FullDetailView/FullDetailPage'
 import Definition from '../utils/definition'
+import Auth from '../utils/auth'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -52,13 +58,13 @@ export default class AbstractPageDefinitions extends Component {
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onSearch = this.onSearch.bind(this)
     this.onInspect = this.onInspect.bind(this)
-    this.onCurate = this.onCurate.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.onSort = this.onSort.bind(this)
     this.onFilter = this.onFilter.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
+    this.handleLogin = this.handleLogin.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
     this.name = this.name.bind(this)
     this.namespace = this.namespace.bind(this)
@@ -70,6 +76,7 @@ export default class AbstractPageDefinitions extends Component {
     this.transform = this.transform.bind(this)
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
+    this.contributeModal = React.createRef()
   }
 
   getDefinition(component) {
@@ -90,11 +97,6 @@ export default class AbstractPageDefinitions extends Component {
   onSearch(value) {
     const { dispatch, token } = this.props
     dispatch(uiBrowseUpdateFilterList(token, value))
-  }
-
-  onCurate(component) {
-    const url = `${ROUTE_CURATE}/${component.toPath()}`
-    this.props.history.push(url)
   }
 
   // Opens a Modal that shows the Full Detail View
@@ -141,10 +143,14 @@ export default class AbstractPageDefinitions extends Component {
     return entry.changes && Object.getOwnPropertyNames(entry.changes).length
   }
 
-  doContribute(description) {
+  /**
+   * Dispatch the action to save a contribution
+   * @param  {} constributionInfo object that describes the contribution
+   */
+  doContribute(constributionInfo) {
     const { dispatch, token, components } = this.props
     const patches = this.buildContributeSpec(components.list)
-    const spec = { description: description, patches }
+    const spec = { constributionInfo, patches }
     dispatch(curateAction(token, spec))
   }
 
@@ -160,6 +166,7 @@ export default class AbstractPageDefinitions extends Component {
         set(result, change, component.changes[change])
         return result
       }, {})
+      if (patchChanges.files) patchChanges.files = compact(patchChanges.files)
       if (patch) {
         patch.revisions[revisionNumber] = patchChanges
       } else {
@@ -177,9 +184,9 @@ export default class AbstractPageDefinitions extends Component {
     }, [])
   }
 
-  doPromptContribute(proposal) {
+  doPromptContribute() {
     if (!this.hasChanges()) return
-    this.refs.contributeModal.open()
+    this.contributeModal.current.open()
   }
 
   name(coordinates) {
@@ -259,8 +266,7 @@ export default class AbstractPageDefinitions extends Component {
     this.props.dispatch(this.updateList({ transform: this.createTransform(this.state.activeSort, activeFilters) }))
   }
 
-  transform(list, sort, filters) {
-    let newList = list
+  transform(newList, sort, filters) {
     if (sort) {
       const sortFunction = this.getSort(sort)
       newList = this.sortList(newList, sortFunction)
@@ -389,13 +395,24 @@ export default class AbstractPageDefinitions extends Component {
     throw Error('This method has to be implemented in a sub class')
   }
 
-  render() {
-    const { components, definitions, token } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
+  handleLogin(e) {
+    e.preventDefault()
+    Auth.doLogin((token, permissions, username) => {
+      this.props.dispatch(login(token, permissions, username))
+    })
+  }
 
+  render() {
+    const { components, definitions, token, session } = this.props
+    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">
-        <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
+        <ContributePrompt
+          ref={this.contributeModal}
+          session={session}
+          onLogin={this.handleLogin}
+          actionHandler={this.doContribute}
+        />
         {this.renderSearchBar()}
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {this.dropZone(
@@ -406,15 +423,16 @@ export default class AbstractPageDefinitions extends Component {
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 listHeight={1000}
                 onRemove={this.onRemoveComponent}
+                onRevert={this.revertDefinition}
                 onChange={this.onChangeComponent}
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
-                onCurate={this.onCurate}
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
                 githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
+                hasChange={this.hasChange}
               />
             </div>
           )}

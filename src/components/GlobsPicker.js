@@ -7,10 +7,9 @@ import Input from 'antd/lib/input'
 import Tooltip from 'antd/lib/tooltip'
 import Icon from 'antd/lib/icon'
 
-export default class GlobPicker extends Component {
+export default class GlobsPicker extends Component {
   static propTypes = {
     globs: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
-    onBlur: PropTypes.func,
     onChange: PropTypes.func,
     readOnly: PropTypes.bool
   }
@@ -21,6 +20,7 @@ export default class GlobPicker extends Component {
       inputVisible: false,
       inputValue: ''
     }
+    this.saveInputRef = React.createRef()
   }
 
   handleClose = removedglob => {
@@ -30,7 +30,7 @@ export default class GlobPicker extends Component {
   }
 
   showInput = () => {
-    this.setState({ inputVisible: true }, () => this.input.focus())
+    this.setState({ inputVisible: true }, () => this.saveInputRef.current.focus())
   }
 
   handleInputChange = e => {
@@ -49,14 +49,16 @@ export default class GlobPicker extends Component {
     onChange(newGlobs)
   }
 
-  saveInputRef = input => (this.input = input)
-
   render() {
-    const { globs, className, readOnly } = this.props
+    const { globs, className, readOnly, onRevert } = this.props
     const { inputVisible, inputValue } = this.state
 
     return (
       <div className="editable-editor">
+        <i
+          className={`fas fa-undo editable-marker ${!globs && 'fa-disabled'}`}
+          onClick={() => onRevert && globs && onRevert()}
+        />
         {globs &&
           globs.map(glob => {
             const isLongTag = glob.length > 20

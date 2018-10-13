@@ -1,67 +1,58 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isArray from 'lodash/isArray'
-import isNumber from 'lodash/isNumber'
 import { Popover, Button, FormGroup, FormControl } from 'react-bootstrap'
 import InlineEditor from './InlineEditor'
+
 /**
  * Component that renders a Popover
- * Data could be string or array of strings
+ * Data could be string or array of objects
  *
  */
-class PopoverComponent extends Component {
+class PopoverRenderer extends Component {
   static propTypes = {
-    /**
-     * title to show on the Popover
-     */
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-    /**
-     * values to show, it can be string o either an array
-     */
-    values: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-
-    canAddItems: PropTypes.bool,
+    addItem: PropTypes.func,
+    canAddItems: PropTypes.bool.isRequired,
+    deleteRow: PropTypes.func,
     editable: PropTypes.bool,
+    editorPlaceHolder: PropTypes.string,
+    editorType: PropTypes.oneOf(['text', 'date', 'license']),
+    hasChanges: PropTypes.bool.isRequired,
+    editRow: PropTypes.func,
     onSave: PropTypes.func,
-    editorType: PropTypes.oneOf(['text', 'date', 'license']).isRequired,
-    editorPlaceHolder: PropTypes.string
+    onShowAddRow: PropTypes.func,
+    showAddRow: PropTypes.bool.isRequired,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+    undoEdit: PropTypes.func,
+    values: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
   }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      showAddRow: false,
-      values: null,
-      hasChanges: false,
-      updatedText: ''
-    }
-
-    this.showAddRow = this.showAddRow.bind(this)
-    this.addItem = this.addItem.bind(this)
-    this.editRow = this.editRow.bind(this)
-    this.deleteRow = this.deleteRow.bind(this)
-    this.undoEdit = this.undoEdit.bind(this)
-  }
-
-  componentDidMount() {
-    this.setState({ values: this.props.values })
+  state = {
+    updatedText: ''
   }
 
   renderPopoverTitle() {
+    const { title, canAddItems, onShowAddRow, hasChanges, onSave } = this.props
     return (
       <div className="popoverRenderer__title">
-        <span>{this.props.title}</span>
+        <span>{title}</span>
         <div className="popoverRenderer__title__buttons">
-          {this.props.canAddItems && (
-            <Button onClick={() => this.showAddRow()} bsSize="xsmall">
+          {canAddItems && (
+            <Button
+              onClick={() => {
+                onShowAddRow()
+                this.setState({ updatedText: '' })
+              }}
+              bsSize="xsmall"
+            >
               <i className="fas fa-plus" />
             </Button>
           )}
-          {this.state.hasChanges && (
-            <Button onClick={() => this.onSave()} bsSize="xsmall">
+          {hasChanges && (
+            <Button onClick={onSave} bsSize="xsmall">
               <i className="fas fa-check" /> Done
             </Button>
           )}
@@ -71,25 +62,24 @@ class PopoverComponent extends Component {
   }
 
   renderRow(item, index) {
-    const { editable, editorType, editorPlaceHolder } = this.props
-
+    const { editable, editorType, editorPlaceHolder, addItem, editRow } = this.props
+    const extraClass = item.isDifferent ? 'popoverRenderer__items__value--isEdited' : ''
     return (
       item && (
-        <div key={`${item.value}_${index}`} className={`popoverRenderer__items`}>
-          <div
-            className={`popoverRenderer__items__value ${item.isDifferent && 'popoverRenderer__items__value--isEdited'}`}
-          >
+        <div key={`${item.value}_${index}`} className="popoverRenderer__items">
+          <div className={`popoverRenderer__items__value ${extraClass}`}>
             {
               <InlineEditor
-                extraClass={item.isDifferent ? 'popoverRenderer__items__value--isEdited' : ''}
+                extraClass={extraClass}
                 readOnly={!editable}
                 type={editorType}
                 initialValue={item.value || ''}
                 value={item.value || ''}
-                onChange={this.addItem}
-                validator={true}
+                onChange={addItem}
+                validator
                 placeholder={editorPlaceHolder}
-                onClick={() => this.editRow(index)}
+                onClick={() => editRow(index)}
+                revertable={false}
               />
             }
           </div>
@@ -102,7 +92,7 @@ class PopoverComponent extends Component {
   renderEditableButtons(index) {
     return (
       <div className="popoverRenderer__items__buttons">
-        <Button onClick={() => this.deleteRow(index)} bsSize="xsmall">
+        <Button onClick={() => this.props.deleteRow(index)} bsSize="xsmall">
           <i className="fas fa-trash-alt" />
         </Button>
       </div>
@@ -116,60 +106,37 @@ class PopoverComponent extends Component {
         <FormGroup className="popoverRenderer__items__formGroup">
           <FormControl
             type="text"
+            autoFocus
             placeholder="Enter text"
             value={updatedText}
             onChange={event => this.setState({ updatedText: event.target.value })}
-            onBlur={this.undoEdit}
+            onBlur={() => {
+              this.props.undoEdit()
+              this.setState({ updatedText: '' })
+            }}
             className="popoverRenderer__items__formControl"
           />
         </FormGroup>
-        <Button onMouseDown={() => this.addItem(index)} bsStyle="primary" bsSize="xsmall">
+        <Button onMouseDown={() => this.props.addItem(index, this.state.updatedText)} bsStyle="primary" bsSize="xsmall">
           <i className="fas fa-check" />
         </Button>
       </div>
     )
   }
 
-  showAddRow() {
-    this.setState({ showAddRow: true, currentItem: null, updatedText: '' })
-  }
-
-  undoEdit() {
-    this.setState({ showAddRow: false, currentItem: null, updatedText: '' })
-  }
-
-  editRow(index) {
-    this.setState({ showAddRow: false, currentItem: index }, () => console.log(this.state))
-  }
-
-  deleteRow(index) {
-    const { values } = this.state
-    this.setState({ values: values.filter((_, itemIndex) => index !== itemIndex), hasChanges: true })
-  }
-
-  addItem(value) {
-    const { values, currentItem, updatedText } = this.state
-    const updatedObject = { value: updatedText || value, isDifferent: true }
-    isNumber(currentItem) ? (values[currentItem] = updatedObject) : values.push(updatedObject)
-    this.setState({ values, showAddRow: false, hasChanges: true, currentItem: null })
-  }
-
-  onSave() {
-    this.props.onSave(this.state.values.map(item => item.value))
-  }
-
   render() {
-    const { showAddRow, values } = this.state
-    const { canAdditems, editable, editorType, editorPlaceHolder, onSave, ...popoverProperties } = this.props
+    const { editable, values, showAddRow, placement, positionLeft, positionTop } = this.props
 
     return (
       <Popover
         id="popover-positioned-left"
-        {...popoverProperties}
+        placement={placement}
+        positionLeft={positionLeft}
+        positionTop={positionTop}
         title={this.renderPopoverTitle()}
         bsStyle={{ width: '500px' }}
       >
-        <div className="popoverRenderer">
+        <div className={`popoverRenderer ${editable ? '' : 'popoverRenderer_scrollY'}`}>
           {showAddRow && this.renderEditRow()}
           {values && isArray(values)
             ? values.map((item, index) => this.renderRow(item, index))
@@ -180,4 +147,4 @@ class PopoverComponent extends Component {
   }
 }
 
-export default PopoverComponent
+export default PopoverRenderer
