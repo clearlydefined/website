@@ -3,31 +3,32 @@
 
 import React, { Component } from 'react'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
-import { HarvestQueueList, GitHubSelector, Section } from './'
+import { HarvestQueueList, GitHubSelector, GitHubCommitPicker, Section } from './'
 import EntitySpec from '../utils/entitySpec'
+import { clone } from 'lodash'
 
 export default class SourcePicker extends Component {
   constructor(props) {
     super(props)
     this.state = { activeProvider: 'github', contentSeq: 0 }
-    this.onAddRequest = this.onAddRequest.bind(this)
-    this.onChangeRequest = this.onChangeRequest.bind(this)
-    this.onRemoveRequest = this.onRemoveRequest.bind(this)
+    this.onSelectComponent = this.onSelectComponent.bind(this)
+    this.onChangeComponent = this.onChangeComponent.bind(this)
+    this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.onClick = this.onClick.bind(this)
   }
 
-  onAddRequest(value, tool) {
+  onSelectComponent(value, tool) {
     const [namespace, name] = value.name.split('/')
-    const request = new EntitySpec(value.type, value.provider, namespace, name)
-    request.tool = tool
-    this.setState({ selectedComponent: request, contentSeq: this.state.contentSeq + 1 })
+    const component = new EntitySpec(value.type, value.provider, namespace, name)
+    component.tool = tool
+    this.setState({ selectedComponent: component, contentSeq: this.state.contentSeq + 1 })
   }
 
-  onChangeRequest(request, newRequest) {
-    this.setState({ selectedComponent: newRequest })
+  onChangeComponent(component, newComponent) {
+    this.setState({ selectedComponent: newComponent })
   }
 
-  onRemoveRequest(request) {
+  onRemoveComponent(component) {
     this.setState({ selectedComponent: null })
   }
 
@@ -63,27 +64,38 @@ export default class SourcePicker extends Component {
     return <div className="list-noRows">Use the search box above to select a source.</div>
   }
 
+  commitChanged(component, value) {
+    const newComponent = clone(component)
+    newComponent.revision = value ? value.sha : null
+    this.onChangeComponent(component, newComponent)
+  }
+
   render() {
     const { activeProvider, selectedComponent, contentSeq } = this.state
     const { value } = this.props
     return (
       <Grid className="main-container">
         <Row className="show-grid spacer">
-          <Col md={6}>{this.renderProviderButtons()}</Col>
-          <Col md={6}>{activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}</Col>
+          <Col md={2}>{this.renderProviderButtons()}</Col>
+          <Col md={5}>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</Col>
+          <Col md={5}>
+            {selectedComponent &&
+              activeProvider === 'github' && (
+                <GitHubCommitPicker
+                  request={selectedComponent}
+                  allowNew={true}
+                  token={this.props.token}
+                  onChange={this.commitChanged.bind(this, selectedComponent)}
+                />
+              )}
+          </Col>
         </Row>
-        <Section name={selectedComponent ? selectedComponent.url : value} actionButton={this.renderActionButton()}>
-          <div className="section-body">
-            <HarvestQueueList
-              list={selectedComponent ? [selectedComponent] : []}
-              listHeight={500}
-              onRemove={this.onRemoveRequest}
-              onChange={this.onChangeRequest}
-              contentSeq={contentSeq}
-              noRowsRenderer={this.noRowsRenderer}
-            />
-          </div>
-        </Section>
+        <Row>
+          <a href={selectedComponent ? selectedComponent.url : value}>
+            {selectedComponent ? selectedComponent.url : value}
+          </a>
+          {this.renderActionButton()}
+        </Row>
       </Grid>
     )
   }
