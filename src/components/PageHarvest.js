@@ -127,7 +127,6 @@ class PageHarvest extends Component {
               listHeight={1000}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}
-              githubToken={token}
               noRowsRenderer={this.noRowsRenderer}
             />
           </div>

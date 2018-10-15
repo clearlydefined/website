@@ -263,7 +263,6 @@ export default class DefinitionEntry extends React.Component {
                   value={this.printCoordinates(this.getValue('described.sourceLocation'))}
                   onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.toSourceLocation)}
                   editor={SourcePicker}
-                  token={this.props.token}
                   validator={value => true}
                   placeholder={'Source location'}
                   onRevert={() => onRevert('described.sourceLocation')}

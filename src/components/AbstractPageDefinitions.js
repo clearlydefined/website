@@ -429,7 +429,6 @@ export default class AbstractPageDefinitions extends Component {
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
-                githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
                 hasChange={this.hasChange}

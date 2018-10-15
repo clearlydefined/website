@@ -65,7 +65,7 @@ export default class SourcePicker extends Component {
 
   render() {
     const { activeProvider, selectedComponent, contentSeq } = this.state
-    const { token, value } = this.props
+    const { value } = this.props
     return (
       <Grid className="main-container">
         <Row className="show-grid spacer">
@@ -79,7 +79,6 @@ export default class SourcePicker extends Component {
               listHeight={500}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}
-              githubToken={token}
               contentSeq={contentSeq}
               noRowsRenderer={this.noRowsRenderer}
             />

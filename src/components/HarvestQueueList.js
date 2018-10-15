@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import {
   RowEntityList,
@@ -20,7 +21,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 
-export default class HarvestQueueList extends React.Component {
+class HarvestQueueList extends React.Component {
   static propTypes = {
     list: PropTypes.array.isRequired,
     listHeight: PropTypes.number,
@@ -29,7 +30,6 @@ export default class HarvestQueueList extends React.Component {
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
     contentSeq: PropTypes.number,
-    githubToken: PropTypes.string
   }
 
   static defaultProps = {
@@ -75,7 +75,7 @@ export default class HarvestQueueList extends React.Component {
           <GitHubCommitPicker
             request={request}
             allowNew={true}
-            token={this.props.githubToken}
+            token={this.props.token}
             onChange={this.commitChanged.bind(this, request)}
           />
         )}
@@ -177,3 +177,10 @@ export default class HarvestQueueList extends React.Component {
     )
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  return {
+    token: state.session.token,
+  }
+}
+export default connect(mapStateToProps)(HarvestQueueList)
