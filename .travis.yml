@@ -1,6 +1,7 @@
 language: node_js
 # node version specified in .nvmrc
-
+before_script:
+  - npm link ./components
 cache:
   directories:
     - "node_modules"

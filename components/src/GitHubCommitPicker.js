@@ -3,16 +3,35 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getGitHubRevisions } from '../api/clearlyDefined'
 import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
+
+/**
+ * Render a Typeahead with the tags of a given Github repository
+ *
+ * Parameters:
+ *   request: An object of the form { namespace, name }, where namespace is the
+ *     owner of a repository
+ *   getGitHubRevisions: A function that takes (token, path), where path is
+ *     `${namespace}/${name}` and token is either a valid Github access token or
+ *     undefined. Return a Promise holding an array of { tag, sha }, where sha
+ *     is the hash of the commit the tag points to (i.e., not the hash of an
+ *     annotated tag itself, but the actual commit)
+ *   token: Optionally a valid Github token
+ *   onChange: Optional function to call when user select a commit (this
+ *     component is not very useful without an onChange, but does work without
+ *     one)
+ *   defaultInputValue: Passed to Typeahead
+ *   allowNew: Passed to Typeahead
+ */
 
 export default class GitHubCommitPicker extends Component {
   static propTypes = {
-    onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
+    getGitHubRevisions: PropTypes.func.isRequired,
+    token: PropTypes.string,
+    onChange: PropTypes.func,
     defaultInputValue: PropTypes.string,
-    allowNew: PropTypes.bool,
-    token: PropTypes.string
+    allowNew: PropTypes.bool
   }
 
   constructor(props) {
@@ -28,7 +47,8 @@ export default class GitHubCommitPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { namespace, name } = this.props.request
+      const { request, getGitHubRevisions } = this.props
+      const { namespace, name } = request
       const path = name ? `${namespace}/${name}` : name
       const options = await getGitHubRevisions(this.props.token, path)
       this.setState({ ...this.state, options })
