@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { Col, Row } from 'react-bootstrap'
 import Contribution from '../../utils/contribution'
 import GlobsPicker from '../GlobsPicker'
+import Curation from '../../utils/curation'
 
 // Hardcoded, maybe it should be kept somewhere else
 const facets = ['data', 'dev', 'docs', 'examples', 'tests']
@@ -22,7 +23,7 @@ class FacetsEditor extends Component {
   }
 
   render() {
-    const { onChange, component, previewDefinition, readOnly, onRevert } = this.props
+    const { onChange, component, previewDefinition, readOnly, onRevert, curationSuggestions } = this.props
 
     return (
       <div>
@@ -40,7 +41,12 @@ class FacetsEditor extends Component {
                   `described.facets.${item}`,
                   'facets--isEdited'
                 )}
-                globs={Contribution.getValue(component, previewDefinition, `described.facets.${item}`)}
+                globs={
+                  Curation.getValue(curationSuggestions, `described.facets.${item}`)
+                    ? Curation.getValue(curationSuggestions, `described.facets.${item}`)
+                    : Contribution.getValue(component, previewDefinition, `described.facets.${item}`)
+                }
+                suggested={Curation.getValue(curationSuggestions, `described.facets.${item}`)}
                 onChange={value => onChange(`described.facets.${item}`, value)}
                 onRevert={() => onRevert(`described.facets.${item}`)}
               />
