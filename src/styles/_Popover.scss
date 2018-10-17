@@ -44,3 +44,9 @@
     overflow: visible;
   }
 }
+
+.popoverSpan {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

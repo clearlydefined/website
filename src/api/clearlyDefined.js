@@ -5,29 +5,7 @@ import 'whatwg-fetch'
 import { toPairs } from 'lodash'
 import EntitySpec from '../utils/entitySpec'
 
-export const API_LOCAL = 'http://localhost:4000'
-export const API_DEVELOP = 'https://dev-api.clearlydefined.io'
-export const API_PROD = 'https://api.clearlydefined.io'
-export const apiHome = process.env.REACT_APP_SERVER || getServiceDefaultUrl()
-
-// Uncomment the next instruction to set your current enviroment as local, thus using API_LOCAL
-// DON'T COMMIT THIS FILE IF YOU CHANGED THIS INSTRUCTION
-// process.env.NODE_ENV = 'local'
-
-function getServiceDefaultUrl() {
-  switch (process.env.NODE_ENV) {
-    case 'development':
-      return API_DEVELOP
-    case 'test':
-      return API_DEVELOP
-    case 'production':
-      // TODO this needs to be replaced when we do a prod deployment. We want a "production" build deployed in
-      // the dev environment but of course it will need to point to the dev server. Don't know how to do that.
-      return API_DEVELOP
-    default:
-      return API_LOCAL
-  }
-}
+export const apiHome = process.env.REACT_APP_SERVER
 
 const CURATIONS = 'curations'
 const HARVEST = 'harvest'
@@ -48,40 +26,44 @@ export function harvest(token, spec) {
   return post(url(HARVEST), token, spec)
 }
 
+/**
+ * Get details about a specific curation
+ * @param {*} token
+ * @param {*} entity
+ * @param {object} params additional params added to the query string
+ * @param {array} params.expand contains informations about the detail to be returned (e.g. ['prs','foo','bars']);
+ * @param {string} params.state if === 'pending' return also curations not already merged
+ */
 export function getCuration(token, entity, params = {}) {
-  const { expandedPrs, pendingPrs } = params
+  const { expand, state } = params
   return get(
     url(`${CURATIONS}/${entity.toPath()}`, {
-      expanded: expandedPrs ? 'prs' : null,
-      state: pendingPrs ? 'pending' : null
+      expand,
+      state
     }),
     token
   )
 }
 
 /**
- * List all of the curations (if any) using the given coordinates as a pattern to match
+ * List all of the curations (if any) using the given coordinates as a pattern to match, despite the revision
  * @param  {} token
  * @param  {} entity
- * @param  {} params
+ * @param {object} params additional params added to the query string
+ * @param {string} params.state if === 'pending' return also curations not already merged
  */
 export function getCurationList(token, entity, params = {}) {
-  const { pendingPrs } = params
+  const { state } = params
   const entityWithoutRevision = EntitySpec.asRevisionless(entity)
   return get(
     url(`${CURATIONS}/${entityWithoutRevision.toPath()}`, {
-      state: pendingPrs ? 'pending' : null
+      state
     }),
     token
   )
 }
 
-/**
- * Get the curation in the given PR relative to the specified coordinates
- * @param  {} token
- * @param  {} entity
- * @param  {} prNumber
- */
+// Get the curation in the given PR relative to the specified coordinates
 export function getCurationData(token, entity, prNumber) {
   return get(url(`${CURATIONS}/${entity.toPath()}/pr/${prNumber}`), token)
 }
@@ -90,8 +72,20 @@ export function curate(token, spec) {
   return patch(url(`${CURATIONS}`), token, spec)
 }
 
-export function getDefinition(token, entity) {
-  return get(url(`${DEFINITIONS}/${entity.toPath()}`), token)
+/**
+ * Get details about a specific definition
+ * @param {*} token
+ * @param {*} entity
+ * @param {object} params can contain properties: expandPrs, if true include deeper information for each PR like the title, message
+ */
+export function getDefinition(token, entity, params = {}) {
+  const { expandPrs } = params
+  return get(
+    url(`${DEFINITIONS}/${entity.toPath()}`, {
+      expand: expandPrs ? 'prs' : null
+    }),
+    token
+  )
 }
 
 export function getContributionData(token, entity) {

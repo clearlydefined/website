@@ -19,7 +19,8 @@ import {
   uiCurateResetDefinitionPreview,
   uiGetCurationsList,
   uiRevertDefinition,
-  uiApplyCurationSuggestion
+  uiApplyCurationSuggestion,
+  uiGetCurationData
 } from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { login } from '../../actions/sessionActions'
@@ -27,7 +28,7 @@ import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
-import NotificationButtons from '../NotificationButtons'
+import NotificationButtons from '../Navigation/Ui/NotificationButtons'
 import { AbstractFullDetailsView } from './AbstractFullDetailsView'
 
 export class FullDetailPage extends AbstractFullDetailsView {
@@ -52,6 +53,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
     this.onChange = this.onChange.bind(this)
     this.close = this.close.bind(this)
     this.applyCurationSuggestion = this.applyCurationSuggestion.bind(this)
+    this.getCurationData = this.getCurationData.bind(this)
     this.contributeModal = React.createRef()
   }
 
@@ -92,7 +94,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
     uiInspectGetDefinition(token, component)
     uiInspectGetCuration(token, component)
     uiInspectGetHarvested(token, component)
-    uiGetCurationsList(token, component)
+    //uiGetCurationsList(token, component)
     this.previewDefinition(component)
   }
 
@@ -240,6 +242,11 @@ export class FullDetailPage extends AbstractFullDetailsView {
     appliedSuggestions.push(suggestion)
     this.setState({ appliedSuggestions })
   }
+
+  getCurationData(prNumber) {
+    const { uiGetCurationData, component, token } = this.props
+    uiGetCurationData(token, component, prNumber)
+  }
 }
 
 function mapStateToProps(state, props) {
@@ -270,7 +277,8 @@ function mapStateToProps(state, props) {
     curation,
     harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
     previewDefinition,
-    latestCuration
+    latestCuration: state.ui.inspect.latestCuration && cloneDeep(state.ui.inspect.latestCuration),
+    inspectedCuration: state.ui.inspect.inspectedCuration && cloneDeep(state.ui.inspect.inspectedCuration)
   }
 }
 
@@ -287,7 +295,8 @@ function mapDispatchToProps(dispatch) {
       uiCurateGetDefinitionPreview,
       uiCurateResetDefinitionPreview,
       uiRevertDefinition,
-      uiApplyCurationSuggestion
+      uiApplyCurationSuggestion,
+      uiGetCurationData
     },
     dispatch
   )

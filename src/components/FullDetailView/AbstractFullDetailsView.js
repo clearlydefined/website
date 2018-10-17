@@ -26,7 +26,8 @@ export class AbstractFullDetailsView extends Component {
       previewDefinition,
       readOnly,
       session,
-      latestCuration
+      latestCuration,
+      inspectedCuration
     } = this.props
     const { changes, appliedSuggestions } = this.state
     const curationSuggestions = Curation.getSuggestions(latestCuration.item, curation.item, appliedSuggestions)
@@ -57,6 +58,8 @@ export class AbstractFullDetailsView extends Component {
             changes={changes}
             curationSuggestions={curationSuggestions}
             applyCurationSuggestion={this.applyCurationSuggestion}
+            getCurationData={this.getCurationData}
+            inspectedCuration={inspectedCuration}
           />
         )}
       </Modal>
@@ -75,6 +78,8 @@ export class AbstractFullDetailsView extends Component {
           handleRevert={this.handleRevert}
           curationSuggestions={curationSuggestions}
           applyCurationSuggestion={this.applyCurationSuggestion}
+          getCurationData={this.getCurationData}
+          inspectedCuration={inspectedCuration}
           renderContributeButton={
             <Button bsStyle="success" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
               Contribute

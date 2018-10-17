@@ -13,7 +13,8 @@ export default class TwoLineEntry extends React.Component {
     message: PropTypes.element,
     onClick: PropTypes.func,
     panel: PropTypes.element,
-    highlight: PropTypes.bool
+    highlight: PropTypes.bool,
+    isEmpty: PropTypes.bool
   }
 
   static defaultProps = {
@@ -21,10 +22,10 @@ export default class TwoLineEntry extends React.Component {
   }
 
   render() {
-    const { buttons, image, headline, message, onClick, letter, panel, highlight } = this.props
+    const { buttons, image, headline, message, onClick, letter, panel, highlight, isEmpty } = this.props
     return (
       <div className="two-line-entry">
-        <div className="list-row" onClick={onClick}>
+        <div className={`list-row${isEmpty ? ' isEmpty' : ''}`} onClick={onClick}>
           {image && <img className={`list-image${highlight ? ' list-highlight' : ''}`} src={image} alt="" />}
           {letter && !image && <span className="list-letter">{letter.slice(0, 1)}</span>}
           <div className="list-body">
@@ -33,7 +34,7 @@ export default class TwoLineEntry extends React.Component {
           </div>
           {buttons}
         </div>
-        {panel && <div className="list-panel">{panel}</div>}
+        {!isEmpty && panel && <div className="list-panel">{panel}</div>}
       </div>
     )
   }

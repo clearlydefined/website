@@ -2,23 +2,24 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component, Fragment } from 'react'
-import { Row, Button, Col, OverlayTrigger } from 'react-bootstrap'
+import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import Tabs from 'antd/lib/tabs'
 import cloneDeep from 'lodash/cloneDeep'
 import find from 'lodash/find'
-import { getBadgeUrl } from '../../api/clearlyDefined'
 import { Section } from '../'
 import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
-import { Tooltip } from 'antd'
-import DescribedSection from './DescribedSection'
-import InnerDataSection from './InnerDataSection'
-import HeaderSection from './HeaderSection'
-import LabelRenderer from '../Renderers/LabelRenderer'
-import LicensedSection from './LicensedSections'
+import Definition from '../../utils/definition'
+import DescribedSection from '../Navigation/Sections/DescribedSection'
+import RawDataSection from '../Navigation/Sections/RawDataSection'
+import HeaderSection from '../Navigation/Sections/HeaderSection'
+import LabelRenderer from '../Navigation/Ui/LabelRenderer'
+import LicensedSection from '../Navigation/Sections/LicensedSections'
+import ButtonWithTooltip from '../Navigation/Ui/ButtonWithTooltip'
+import CurationsSection from '../Navigation/Sections/CurationsSection'
+import TitleWithScore from '../Navigation/Ui/TitleWithScore'
 
 class FullDetailComponent extends Component {
   static propTypes = {
@@ -32,30 +33,8 @@ class FullDetailComponent extends Component {
     readOnly: PropTypes.bool.isRequired,
     renderContributeButton: PropTypes.element,
     previewDefinition: PropTypes.object,
-    curationSuggestions: PropTypes.object
-  }
-
-  renderContributions() {
-    return (
-      <div>
-        <LabelRenderer text={'Curations'} />
-        <p>No curations found for this component</p>
-      </div>
-    )
-  }
-
-  renderScore(domain) {
-    if (!domain) return null
-    return <img className="list-buttons" src={getBadgeUrl(domain.toolScore, domain.score)} alt="score" />
-  }
-
-  renderButtonWithTip(button, tip) {
-    const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
-    return (
-      <OverlayTrigger placement="top" overlay={toolTip}>
-        {button}
-      </OverlayTrigger>
-    )
+    curationSuggestions: PropTypes.object,
+    getCurationData: PropTypes.func
   }
 
   render() {
@@ -68,7 +47,9 @@ class FullDetailComponent extends Component {
       readOnly,
       handleRevert,
       changes,
-      curationSuggestions
+      curationSuggestions,
+      getCurationData,
+      inspectedCuration
     } = this.props
     const entry = find(changes, (_, key) => key && key.startsWith('files'))
     if (!definition || !definition.item || !curation || !harvest) return null
@@ -85,7 +66,7 @@ class FullDetailComponent extends Component {
         <Row>
           <Col md={1} />
           <Col md={11}>
-            <Section name={<span>Described {this.renderScore(item.described)}</span>}>
+            <Section name={<TitleWithScore title={'Described'} domain={item.described} />}>
               <Fragment>
                 <DescribedSection rawDefinition={item} {...this.props} />
                 <Row>
@@ -100,11 +81,13 @@ class FullDetailComponent extends Component {
                       curationSuggestions={curationSuggestions}
                     />
                   </Col>
-                  <Col md={6}>{this.renderContributions()}</Col>
+                  <Col md={6}>
+                    <CurationsSection curations={Definition.getPrs(item)} />
+                  </Col>
                 </Row>
               </Fragment>
             </Section>
-            <Section name={<span>Licensed {this.renderScore(item.licensed)}</span>}>
+            <Section name={<TitleWithScore title={'Licensed'} domain={item.licensed} />}>
               <LicensedSection rawDefinition={item} {...this.props} />
             </Section>
             <Section
@@ -112,13 +95,15 @@ class FullDetailComponent extends Component {
                 <section>
                   <span>Files</span>
                   &nbsp;
-                  {this.renderButtonWithTip(
-                    <Button bsStyle="danger" onClick={() => handleRevert('files')} disabled={entry === undefined}>
-                      <i className="fas fa-undo" />
-                      <span>&nbsp;Revert Changes</span>
-                    </Button>,
-                    'Revert all changes of all the definitions'
-                  )}
+                  <ButtonWithTooltip
+                    button={
+                      <Button bsStyle="danger" onClick={() => handleRevert('files')} disabled={entry === undefined}>
+                        <i className="fas fa-undo" />
+                        <span>&nbsp;Revert Changes</span>
+                      </Button>
+                    }
+                    tooltip="Revert all changes of all the definitions"
+                  />
                 </section>
               }
             >
@@ -137,17 +122,13 @@ class FullDetailComponent extends Component {
             <Section name="Raw data">
               <Row>
                 <Col md={11} offset-md={1}>
-                  <Tabs>
-                    <Tabs.TabPane tab="Current definition" key="1">
-                      <InnerDataSection value={definition} name={'Current definition'} type={'yaml'} />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Curations" key="2">
-                      <InnerDataSection value={curation} name={'Curations'} type={'json'} />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab="Harvested data" key="3">
-                      <InnerDataSection value={harvest} name={'Harvested data'} type={'json'} />
-                    </Tabs.TabPane>
-                  </Tabs>
+                  <RawDataSection
+                    definition={definition}
+                    item={item}
+                    getCurationData={getCurationData}
+                    inspectedCuration={inspectedCuration}
+                    harvest={harvest}
+                  />
                 </Col>
               </Row>
             </Section>

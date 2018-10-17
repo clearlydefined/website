@@ -27,7 +27,8 @@ import {
   UI_INSPECT_GET_DEFINITION,
   UI_INSPECT_GET_HARVESTED,
   UI_GET_CURATIONS_LIST,
-  UI_GET_CURATION_DATA
+  UI_GET_CURATION_DATA,
+  UI_GET_LATEST_CURATION_DATA
 } from '../actions/ui'
 import listReducer from './listReducer'
 import tableReducer from './tableReducer'
@@ -111,7 +112,8 @@ const inspect = combineReducers({
   curation: itemReducer(UI_INSPECT_GET_CURATION, item => yaml.safeDump(item, { sortKeys: true })),
   harvested: itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2)),
   curationList: itemReducer(UI_GET_CURATIONS_LIST, item => yaml.safeDump(item, { sortKeys: true })),
-  latestCuration: itemReducer(UI_GET_CURATION_DATA, item => yaml.safeDump(item, { sortKeys: true }))
+  latestCuration: itemReducer(UI_GET_LATEST_CURATION_DATA, item => yaml.safeDump(item, { sortKeys: true })),
+  inspectedCuration: itemReducer(UI_GET_CURATION_DATA, item => yaml.safeDump(item, { sortKeys: true }))
 })
 
 const browse = combineReducers({
