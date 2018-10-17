@@ -15,6 +15,24 @@ const toLowerCaseMap = {
   mavencentralsource: NONE
 }
 
+const NPM_WEBSITE = 'npmjs.com'
+const GITHUB_WEBSITE = 'github.com'
+const MAVEN_WEBSITE = 'mvnrepository.com'
+const NUGET_WEBSITE = 'nuget.org'
+const PYPI_WEBSITE = 'pypi.org'
+const RUBYGEM_WEBSITE = 'rubygems.org'
+
+const providerPath = {
+  [NPM_WEBSITE]: 'npm/npmjs/-',
+  [GITHUB_WEBSITE]: 'git/github',
+  [PYPI_WEBSITE]: 'pypi/pypi/-',
+  [MAVEN_WEBSITE]: 'maven/mavencentral',
+  [NUGET_WEBSITE]: 'nuget/nuget/-',
+  [RUBYGEM_WEBSITE]: 'nuget/nuget/-'
+}
+
+const acceptedFilesValues = ['application/json']
+
 function normalize(value, provider, property) {
   if (!value) return value
   const mask = toLowerCaseMap[provider] || 0
@@ -30,6 +48,69 @@ export default class EntitySpec {
     // eslint-disable-next-line no-unused-vars
     const [blank, delimiter, pr] = prSpec ? prSpec.split('/') : []
     return new EntitySpec(type, provider, namespace, name, revision, pr)
+  }
+
+  static checkDroppedFiles(files) {
+    let acceptedFiles = []
+    let rejectedFiles = []
+
+    files.forEach(file => {
+      const acceptedType = acceptedFilesValues.find(el => el === file.type)
+
+      if (acceptedType) acceptedFiles.push(file)
+      else rejectedFiles.push(file)
+    })
+
+    return {
+      acceptedFiles,
+      rejectedFiles
+    }
+  }
+
+  static providerErrorsFallback(provider) {
+    return { errors: `${provider} need a version to be imported` }
+  }
+
+  static fromUrl(url) {
+    const urlObject = new URL(url)
+    const pathname = urlObject.pathname.startsWith('/') ? urlObject.pathname.slice(1) : urlObject.pathname
+    const hostname = urlObject.hostname.replace('www.', '')
+    let packageName, name, version, revision
+
+    switch (hostname) {
+      case NPM_WEBSITE:
+        ;[packageName, name, version, revision] = pathname.split('/')
+        return revision ? `${providerPath[hostname]}/${name}/${revision}` : this.providerErrorsFallback(hostname)
+
+      case GITHUB_WEBSITE:
+        ;[packageName, name, version, revision] = pathname.split('/')
+        return revision
+          ? `${providerPath[hostname]}/${packageName}/${name}/${revision}`
+          : this.providerErrorsFallback(GITHUB_WEBSITE)
+
+      case PYPI_WEBSITE:
+        ;[packageName, name, revision] = pathname.split('/')
+        return revision
+          ? `${providerPath[PYPI_WEBSITE]}/${name}/${revision}`
+          : this.providerErrorsFallback(PYPI_WEBSITE)
+
+      case MAVEN_WEBSITE:
+        ;[packageName, name, version, revision] = pathname.split('/')
+        return revision
+          ? `${providerPath[hostname]}/${name}/${version}/${revision}`
+          : `${providerPath[hostname]}/${name}/${version}`
+
+      case NUGET_WEBSITE:
+        ;[packageName, name, revision] = pathname.split('/')
+        return revision ? `${providerPath[hostname]}/${name}/${revision}` : `${providerPath[hostname]}/${packageName}`
+
+      case RUBYGEM_WEBSITE:
+        ;[packageName, name, version, revision] = pathname.split('/')
+        return revision ? `${providerPath[hostname]}/${name}/${revision}` : `${providerPath[hostname]}/${name}`
+
+      default:
+        return { errors: `${hostname} is not available as source provider` }
+    }
   }
 
   static fromCoordinates(o) {
