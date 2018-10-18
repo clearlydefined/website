@@ -21,7 +21,7 @@ import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 
-class PageDefinitions extends AbstractPageDefinitions {
+export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
     super(props)
     this.onDrop = this.onDrop.bind(this)
