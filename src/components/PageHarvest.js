@@ -106,7 +106,7 @@ class PageHarvest extends Component {
 
   render() {
     const { activeProvider } = this.state
-    const { queue, token } = this.props
+    const { queue } = this.props
     return (
       <Grid className="main-container">
         <Row className="show-grid spacer">

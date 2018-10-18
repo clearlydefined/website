@@ -403,7 +403,7 @@ export default class AbstractPageDefinitions extends Component {
   }
 
   render() {
-    const { components, definitions, token, session } = this.props
+    const { components, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">

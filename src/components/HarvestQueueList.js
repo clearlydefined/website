@@ -29,7 +29,6 @@ class HarvestQueueList extends React.Component {
     onRemove: PropTypes.func,
     onChange: PropTypes.func,
     noRowsRenderer: PropTypes.func,
-    contentSeq: PropTypes.number,
   }
 
   static defaultProps = {
@@ -53,18 +52,14 @@ class HarvestQueueList extends React.Component {
   commitChanged(request, value) {
     const newRequest = clone(request)
     newRequest.revision = value ? value.sha : null
-    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
+    this.setState({ contentSeq: this.state.contentSeq + 1 })
     this.props.onChange(request, newRequest)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.contentSeq !== nextProps.contentSeq) this.setState({ contentSeq: this.state.contentSeq + 1 })
   }
 
   versionChanged(request, value) {
     const newRequest = clone(request)
     newRequest.revision = value
-    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
+    this.setState({ contentSeq: this.state.contentSeq + 1 })
     this.props.onChange(request, newRequest)
   }
 

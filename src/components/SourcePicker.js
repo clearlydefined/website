@@ -4,14 +4,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
-import { HarvestQueueList, GitHubSelector, GitHubCommitPicker, Section } from './'
+import { GitHubSelector, GitHubCommitPicker } from './'
 import EntitySpec from '../utils/entitySpec'
 import { clone } from 'lodash'
 
 class SourcePicker extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeProvider: 'github', contentSeq: 0 }
+    this.state = { activeProvider: 'github' }
     this.onSelectComponent = this.onSelectComponent.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
@@ -22,7 +22,7 @@ class SourcePicker extends Component {
     const [namespace, name] = value.name.split('/')
     const component = new EntitySpec(value.type, value.provider, namespace, name)
     component.tool = tool
-    this.setState({ selectedComponent: component, contentSeq: this.state.contentSeq + 1 })
+    this.setState({ selectedComponent: component })
   }
 
   onChangeComponent(component, newComponent) {
@@ -72,7 +72,7 @@ class SourcePicker extends Component {
   }
 
   render() {
-    const { activeProvider, selectedComponent, contentSeq } = this.state
+    const { activeProvider, selectedComponent } = this.state
     const { value } = this.props
     return (
       <Grid className="main-container">
