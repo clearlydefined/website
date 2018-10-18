@@ -204,10 +204,6 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
-  printCoordinates(value) {
-    return value ? value.url : null
-  }
-
   renderLabel(text) {
     return <b>{text}</b>
   }
@@ -259,8 +255,8 @@ export default class DefinitionEntry extends React.Component {
                 <ModalEditor
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}
-                  initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
-                  value={this.printCoordinates(this.getValue('described.sourceLocation'))}
+                  initialValue={Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
+                  value={Contribution.printCoordinates(this.getValue('described.sourceLocation'))}
                   onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.toSourceLocation)}
                   editor={SourcePicker}
                   validator={value => true}
@@ -268,7 +264,7 @@ export default class DefinitionEntry extends React.Component {
                   onRevert={() => onRevert('described.sourceLocation')}
                 />,
                 'right',
-                this.printCoordinates
+                Contribution.printCoordinates
               )}
             </Col>
           </Row>

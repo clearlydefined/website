@@ -58,7 +58,7 @@ class FullDetailComponent extends Component {
                 value={Contribution.printCoordinates(
                   Contribution.getValue(definition, previewDefinition, 'described.sourceLocation')
                 )}
-                onChange={value => onChange(`described.sourceLocation`, value, null, Contribution.toSourceLocation)}
+                onChange={value => onChange('described.sourceLocation', value, null, Contribution.toSourceLocation)}
                 editor={SourcePicker}
                 onRevert={() => this.props.handleRevert('described.sourceLocation')}
                 validator

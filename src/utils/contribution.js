@@ -198,7 +198,7 @@ export default class Contribution {
     return newValue
   }
 
-  static printCoordinates = value => (value && value.url ? `${value.url}/commit/${value.revision}` : value)
+  static printCoordinates = value => value ? value.url : null
 
   static printDate = value => (!value ? null : moment(value).format('YYYY-MM-DD'))
 
