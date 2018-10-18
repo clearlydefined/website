@@ -2,12 +2,13 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { HarvestQueueList, GitHubSelector, GitHubCommitPicker, Section } from './'
 import EntitySpec from '../utils/entitySpec'
 import { clone } from 'lodash'
 
-export default class SourcePicker extends Component {
+class SourcePicker extends Component {
   constructor(props) {
     super(props)
     this.state = { activeProvider: 'github', contentSeq: 0 }
@@ -100,3 +101,10 @@ export default class SourcePicker extends Component {
     )
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  return {
+    token: state.session.token,
+  }
+}
+export default connect(mapStateToProps)(SourcePicker)

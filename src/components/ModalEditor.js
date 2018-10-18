@@ -25,7 +25,7 @@ export default class ModalEditor extends React.Component {
   }
 
   renderValue() {
-    const { value, initialValue, placeholder, extraClass, readOnly, onClick, editor, onChange, token } = this.props
+    const { value, initialValue, placeholder, extraClass, readOnly, onClick, editor, onChange } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
 
@@ -44,7 +44,6 @@ export default class ModalEditor extends React.Component {
               onChange(spec)
               this.setState({ editing: false })
             },
-            token,
             value
           })}
         </Modal>
