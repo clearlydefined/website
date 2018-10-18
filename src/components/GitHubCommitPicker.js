@@ -24,11 +24,18 @@ export default class GitHubCommitPicker extends Component {
   }
 
   componentDidMount() {
+    // use this synchronously updated flag to prevent calling setState if getGitHubRevisions returns
+    // after component has been unmounted already
+    this.isUnmounted = false
     this.getOptions('')
   }
 
   componentDidUpdate() {
     if (this.state.shouldUpdate) this.getOptions('')
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,10 +47,10 @@ export default class GitHubCommitPicker extends Component {
       const { namespace, name } = this.props.request
       const path = name ? `${namespace}/${name}` : name
       const options = await getGitHubRevisions(this.props.token, path)
-      this.setState({ options, shouldUpdate: false })
+      !this.isUnmounted && this.setState({ options, shouldUpdate: false })
     } catch (error) {
       console.log(error)
-      this.setState({ options: [], shouldUpdate: false })
+      !this.isUnmounted && this.setState({ options: [], shouldUpdate: false })
     }
   }
 
