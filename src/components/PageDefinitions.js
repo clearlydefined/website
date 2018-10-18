@@ -4,7 +4,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Button, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
-import Dropzone from 'react-dropzone'
 import pako from 'pako'
 import throat from 'throat'
 import base64js from 'base64-js'
@@ -257,11 +256,40 @@ class PageDefinitions extends AbstractPageDefinitions {
     this.props.dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
   }
 
-  onDrop(acceptedFiles, rejectedFiles) {
+  onDragOver = e => e.preventDefault()
+  onDragEnter = e => e.preventDefault()
+
+  onDrop = e => {
+    e.preventDefault()
+    const text = e.dataTransfer.getData('Text')
+
+    if (text) {
+      this.onTextDrop(text)
+    } else {
+      const files = Object.values(e.dataTransfer.files)
+      const checkedFiles = EntitySpec.checkDroppedFiles(files)
+      const { acceptedFiles, rejectedFiles } = checkedFiles
+
+      if (acceptedFiles.length) this.onFileDrop(acceptedFiles)
+      if (rejectedFiles.length) this.onDropRejected(rejectedFiles)
+    }
+  }
+
+  onTextDrop = url => {
     const { dispatch } = this.props
-    if (!acceptedFiles.length) return
+    const path = EntitySpec.fromUrl(url)
+
+    if (path.errors) dispatch(uiNotificationNew({ type: 'warning', message: path.errors, timeout: 5000 }))
+    else this.onAddComponent(path)
+  }
+
+  onFileDrop(files) {
+    const { dispatch } = this.props
+
+    if (!files.length) return
+
     dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
-    acceptedFiles.forEach(file => {
+    files.forEach(file => {
       const reader = new FileReader()
       reader.onload = () => {
         const listSpec = this.loadListSpec(reader.result, file)
@@ -292,15 +320,14 @@ class PageDefinitions extends AbstractPageDefinitions {
 
   dropZone(child) {
     return (
-      <Dropzone
-        accept="application/json"
-        disableClick
+      <div
+        onDragOver={this.onDragOver}
+        onDragEnter={this.onDragEnter}
         onDrop={this.onDrop}
-        onDropRejected={this.onDropRejected}
         style={{ position: 'relative' }}
       >
         {child}
-      </Dropzone>
+      </div>
     )
   }
 

@@ -16,7 +16,6 @@
     "react-bs-notifier": "^4.4.6",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.4.1",
-    "react-dropzone": "^4.2.11",
     "react-ga": "^2.5.3",
     "react-monaco-editor": "^0.13.0",
     "react-redux": "^5.0.7",
