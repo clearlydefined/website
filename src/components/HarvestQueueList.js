@@ -29,7 +29,7 @@ class HarvestQueueList extends React.Component {
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onChange: PropTypes.func,
-    noRowsRenderer: PropTypes.func,
+    noRowsRenderer: PropTypes.func
   }
 
   static defaultProps = {
@@ -176,7 +176,7 @@ class HarvestQueueList extends React.Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    token: state.session.token,
+    token: state.session.token
   }
 }
 export default connect(mapStateToProps)(HarvestQueueList)

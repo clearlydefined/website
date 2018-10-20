@@ -184,7 +184,7 @@ export default class Contribution {
     return difference(preview, definition)
   }
 
-  static printCoordinates = value => value ? value.url : null
+  static printCoordinates = value => (value ? value.url : null)
 
   static printDate = value => (!value ? null : moment(value).format('YYYY-MM-DD'))
 

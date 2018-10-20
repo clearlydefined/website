@@ -96,7 +96,7 @@ class SourcePicker extends Component {
 
 function mapStateToProps(state, ownProps) {
   return {
-    token: state.session.token,
+    token: state.session.token
   }
 }
 export default connect(mapStateToProps)(SourcePicker)
