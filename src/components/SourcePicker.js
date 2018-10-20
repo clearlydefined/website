@@ -15,7 +15,6 @@ class SourcePicker extends Component {
     this.state = { activeProvider: 'github' }
     this.onSelectComponent = this.onSelectComponent.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
-    this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.onClick = this.onClick.bind(this)
   }
 
@@ -28,10 +27,6 @@ class SourcePicker extends Component {
 
   onChangeComponent(component, newComponent) {
     this.setState({ selectedComponent: newComponent })
-  }
-
-  onRemoveComponent(component) {
-    this.setState({ selectedComponent: null })
   }
 
   onClick(event) {
@@ -60,10 +55,6 @@ class SourcePicker extends Component {
         Select
       </Button>
     )
-  }
-
-  noRowsRenderer() {
-    return <div className="list-noRows">Use the search box above to select a source.</div>
   }
 
   commitChanged(component, value) {
