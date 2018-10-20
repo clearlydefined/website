@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
 import { GitHubSelector, GitHubCommitPicker } from './'
+import { getGitHubRevisions } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'
 import { clone } from 'lodash'
 
@@ -85,7 +86,7 @@ class SourcePicker extends Component {
                 <GitHubCommitPicker
                   request={selectedComponent}
                   allowNew={true}
-                  token={this.props.token}
+                  getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
                   onChange={this.commitChanged.bind(this, selectedComponent)}
                 />
               )}

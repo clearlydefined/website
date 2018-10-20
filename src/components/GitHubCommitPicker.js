@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getGitHubRevisions } from '../api/clearlyDefined'
 import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
 import isEqual from 'lodash/isEqual'
 
@@ -11,9 +10,9 @@ export default class GitHubCommitPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
+    getGitHubRevisions: PropTypes.func.isRequired,
     defaultInputValue: PropTypes.string,
-    allowNew: PropTypes.bool,
-    token: PropTypes.string
+    allowNew: PropTypes.bool
   }
 
   constructor(props) {
@@ -44,9 +43,10 @@ export default class GitHubCommitPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { namespace, name } = this.props.request
+      const { request, getGitHubRevisions } = this.props
+      const { namespace, name } = request
       const path = name ? `${namespace}/${name}` : name
-      const options = await getGitHubRevisions(this.props.token, path)
+      const options = await getGitHubRevisions(path)
       !this.isUnmounted && this.setState({ options, shouldUpdate: false })
     } catch (error) {
       console.log(error)

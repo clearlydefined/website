@@ -14,6 +14,7 @@ import {
   NuGetVersionPicker,
   RubyGemsVersionPicker
 } from './'
+import { getGitHubRevisions } from '../api/clearlyDefined'
 import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -70,7 +71,7 @@ class HarvestQueueList extends React.Component {
           <GitHubCommitPicker
             request={request}
             allowNew={true}
-            token={this.props.token}
+            getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
             onChange={this.commitChanged.bind(this, request)}
           />
         )}
