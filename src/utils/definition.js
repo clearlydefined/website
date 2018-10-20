@@ -1,10 +1,11 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
 import Contribution from './contribution'
 import EntitySpec from './entitySpec'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
-
-// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
-// SPDX-License-Identifier: MIT
+import isEmpty from 'lodash/isEmpty'
+import union from 'lodash/union'
 
 // Abstract methods for Definition
 export default class Definition {
@@ -33,6 +34,20 @@ export default class Definition {
   }
 
   /**
+   * Determine if a component doesn't have any data. In order to show in the UI in the list of Components
+   *
+   * @param {*} definition
+   * @returns {boolean}
+   */
+  static isDefinitionEmpty(definition) {
+    return isEmpty(get(definition, 'described.tools'))
+  }
+
+  static isSourceEmpty(definition) {
+    return !get(definition, 'described.sourceLocation')
+  }
+
+  /**
    * Revert a list of definitions or a specific one, removing all the changes or only specific values
    * @param  {[]} components list of definitions
    * @param  {{}} definition specific definition, if null the function will check all the components
@@ -54,5 +69,30 @@ export default class Definition {
     }
     const { [key]: omit, ...updatedChanges } = component.changes
     return { ...component, changes: updatedChanges }
+  }
+
+  static isCurated(definition) {
+    return !isEmpty(get(definition, '_meta.merged'))
+  }
+
+  static hasPendingCurations(definition) {
+    return !isEmpty(get(definition, '_meta.pending'))
+  }
+
+  /**
+   * Return a list of PRs sorted by PR number
+   * @param {*} definition
+   */
+  static getPrs(definition) {
+    if (!get(definition, '_meta')) return
+    const { pending, merged } = get(definition, '_meta')
+    return union(
+      pending.map(item => {
+        return { ...item, status: 'pending' }
+      }),
+      merged.map(item => {
+        return { ...item, status: 'merged' }
+      })
+    )
   }
 }

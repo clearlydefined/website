@@ -12,6 +12,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
+import Definition from '../utils/definition'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -366,7 +367,8 @@ export default class DefinitionEntry extends React.Component {
         headline={this.renderHeadline(definition)}
         message={this.renderMessage(definition)}
         buttons={renderButtons && renderButtons(definition)}
-        onClick={onClick}
+        onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
+        isEmpty={Definition.isDefinitionEmpty(definition)}
         panel={component.expanded ? this.renderPanel(definition) : null}
       />
     )
