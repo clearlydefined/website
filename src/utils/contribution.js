@@ -16,7 +16,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
-import deepDiff from 'deep-diff'
+import { difference } from './utils'
 
 /**
  * Abstract methods for Contribution
@@ -181,21 +181,7 @@ export default class Contribution {
    */
   static getChangesFromPreview(definition, preview) {
     if (isEmpty(definition) || isEmpty(preview)) return
-    return this.difference(preview, definition)
-  }
-
-  /**
-   * Deep diff between two objects, using lodash
-   * @param  {Object} object Object compared
-   * @param  {Object} base   Object to compare with
-   * @return {Object} Return a new object which represents the diff
-   */
-  static difference(object, base) {
-    const changes = deepDiff.diff(base, object)
-    if (!changes || changes.length === 0) return {}
-    const newValue = {}
-    changes.forEach(change => deepDiff.applyChange(newValue, change, change))
-    return newValue
+    return difference(preview, definition)
   }
 
   static printCoordinates = value => (value && value.url ? `${value.url}/commit/${value.revision}` : value)
@@ -239,7 +225,7 @@ export default class Contribution {
     let discoveredUnknown = 0
     let parties = []
     let expressions = []
-    let declared = []
+    let declared = null
 
     facets.forEach(name => {
       const facet = get(definition, `licensed.facets.${name}`)

@@ -3,18 +3,19 @@
 // DON'T COMMIT THIS FILE
 import 'whatwg-fetch'
 import { toPairs } from 'lodash'
+import EntitySpec from '../utils/entitySpec'
 
 export const apiHome = process.env.REACT_APP_SERVER
 
-const CURATIONS = 'curations'
-const HARVEST = 'harvest'
-const DEFINITIONS = 'definitions'
-const ORIGINS_GITHUB = 'origins/github'
-const ORIGINS_NPM = 'origins/npm'
-const ORIGINS_NUGET = 'origins/nuget'
-const ORIGINS_MAVEN = 'origins/maven'
-const ORIGINS_PYPI = 'origins/pypi'
-const ORIGINS_RUBYGEMS = 'origins/rubygems'
+export const CURATIONS = 'curations'
+export const HARVEST = 'harvest'
+export const DEFINITIONS = 'definitions'
+export const ORIGINS_GITHUB = 'origins/github'
+export const ORIGINS_NPM = 'origins/npm'
+export const ORIGINS_NUGET = 'origins/nuget'
+export const ORIGINS_MAVEN = 'origins/maven'
+export const ORIGINS_PYPI = 'origins/pypi'
+export const ORIGINS_RUBYGEMS = 'origins/rubygems'
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
@@ -25,16 +26,66 @@ export function harvest(token, spec) {
   return post(url(HARVEST), token, spec)
 }
 
-export function getCuration(token, entity) {
-  return get(url(`${CURATIONS}/${entity.toPath()}`), token)
+/**
+ * Get details about a specific curation
+ * @param {*} token
+ * @param {*} entity
+ * @param {object} params additional params added to the query string
+ * @param {array} params.expand contains informations about the detail to be returned (e.g. ['prs','foo','bars']);
+ * @param {string} params.state if === 'pending' return also curations not already merged
+ */
+export function getCuration(token, entity, params = {}) {
+  const { expand, state } = params
+  return get(
+    url(`${CURATIONS}/${entity.toPath()}`, {
+      expand,
+      state
+    }),
+    token
+  )
+}
+
+/**
+ * List all of the curations (if any) using the given coordinates as a pattern to match, despite the revision
+ * @param  {} token
+ * @param  {} entity
+ * @param {object} params additional params added to the query string
+ * @param {string} params.state if === 'pending' return also curations not already merged
+ */
+export function getCurationList(token, entity, params = {}) {
+  const { state } = params
+  const entityWithoutRevision = EntitySpec.asRevisionless(entity)
+  return get(
+    url(`${CURATIONS}/${entityWithoutRevision.toPath()}`, {
+      state
+    }),
+    token
+  )
+}
+
+// Get the curation in the given PR relative to the specified coordinates
+export function getCurationData(token, entity, prNumber) {
+  return get(url(`${CURATIONS}/${entity.toPath()}/pr/${prNumber}`), token)
 }
 
 export function curate(token, spec) {
   return patch(url(`${CURATIONS}`), token, spec)
 }
 
-export function getDefinition(token, entity) {
-  return get(url(`${DEFINITIONS}/${entity.toPath()}`), token)
+/**
+ * Get details about a specific definition
+ * @param {*} token
+ * @param {*} entity
+ * @param {object} params can contain properties: expandPrs, if true include deeper information for each PR like the title, message
+ */
+export function getDefinition(token, entity, params = {}) {
+  const { expandPrs } = params
+  return get(
+    url(`${DEFINITIONS}/${entity.toPath()}`, {
+      expand: expandPrs ? 'prs' : null
+    }),
+    token
+  )
 }
 
 export function getContributionData(token, entity) {

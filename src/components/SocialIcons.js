@@ -16,7 +16,7 @@ export default class SocialIcons extends Component {
 
   renderLink(href, icon) {
     return (
-      <a href={href} target="_blank">
+      <a href={href} target="_blank" rel="noopener noreferrer">
         <i className={icon} />
       </a>
     )

@@ -13,7 +13,7 @@ export function getDefinitionAction(token, entity, name) {
   return dispatch => {
     const actions = asyncActions(name)
     dispatch(actions.start())
-    return getDefinition(token, entity).then(
+    return getDefinition(token, entity, { expandPrs: true }).then(
       result => dispatch(actions.success(result)),
       error => dispatch(actions.error(error))
     )

@@ -5,12 +5,19 @@
   align-items: baseline;
   margin: 0;
   padding: 0;
-  h2 {
-    margin: 0;
-    padding: 0;
-    font-size: 2.5em;
+  .header-title {
+    display: flex;
+    align-items: center;
+    h2 {
+      margin: 0;
+      padding: 0;
+      font-size: 2.5em;
+      .header-data {
+        display: flex;
+        align-items: center;
+      }
+    }
   }
-
   p {
     margin: 0;
     padding: 0;
@@ -24,4 +31,10 @@
 
 .fullDetaiView__modal {
   font-family: 'Montserrat', sans-serif !important;
+}
+
+.curationSection {
+  height: 120px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
