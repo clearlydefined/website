@@ -7,15 +7,15 @@ import EntitySpec from '../utils/entitySpec'
 
 export const apiHome = process.env.REACT_APP_SERVER
 
-const CURATIONS = 'curations'
-const HARVEST = 'harvest'
-const DEFINITIONS = 'definitions'
-const ORIGINS_GITHUB = 'origins/github'
-const ORIGINS_NPM = 'origins/npm'
-const ORIGINS_NUGET = 'origins/nuget'
-const ORIGINS_MAVEN = 'origins/maven'
-const ORIGINS_PYPI = 'origins/pypi'
-const ORIGINS_RUBYGEMS = 'origins/rubygems'
+export const CURATIONS = 'curations'
+export const HARVEST = 'harvest'
+export const DEFINITIONS = 'definitions'
+export const ORIGINS_GITHUB = 'origins/github'
+export const ORIGINS_NPM = 'origins/npm'
+export const ORIGINS_NUGET = 'origins/nuget'
+export const ORIGINS_MAVEN = 'origins/maven'
+export const ORIGINS_PYPI = 'origins/pypi'
+export const ORIGINS_RUBYGEMS = 'origins/rubygems'
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)

@@ -69,7 +69,7 @@ export default class DefinitionEntry extends React.Component {
     const namespaceText = namespace ? namespace + '/' : ''
     const componentTag = componentUrl ? (
       <span>
-        <a href={componentUrl} target="_blank">
+        <a href={componentUrl} target="_blank" rel="noopener noreferrer">
           {namespaceText}
           {name}
         </a>
@@ -83,7 +83,7 @@ export default class DefinitionEntry extends React.Component {
     const revisionTag = revisionUrl ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={revisionUrl} target="_blank">
+        <a href={revisionUrl} target="_blank" rel="noopener noreferrer">
           {revision}
         </a>
       </span>
