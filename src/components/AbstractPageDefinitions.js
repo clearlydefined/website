@@ -404,7 +404,7 @@ export default class AbstractPageDefinitions extends Component {
   }
 
   render() {
-    const { components, definitions, token, session } = this.props
+    const { components, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">
@@ -430,7 +430,6 @@ export default class AbstractPageDefinitions extends Component {
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
-                githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
                 hasChange={this.hasChange}

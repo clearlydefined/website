@@ -25,7 +25,6 @@ export default class ComponentList extends React.Component {
     noRowsRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
-    githubToken: PropTypes.string,
     sequence: PropTypes.number
   }
 

@@ -184,7 +184,7 @@ export default class Contribution {
     return difference(preview, definition)
   }
 
-  static printCoordinates = value => (value && value.url ? `${value.url}/commit/${value.revision}` : value)
+  static printCoordinates = value => (value ? value.url : null)
 
   static printDate = value => (!value ? null : moment(value).format('YYYY-MM-DD'))
 
@@ -251,22 +251,24 @@ export default class Contribution {
   }
 
   /**
-   * Function that get an url as a string, and return a sourceLocation object according to the definition schema
-   * @param {*} value updated url of the definition
+   * Function that gets an EntitySpec and return a sourceLocation object according to the definition schema
+   * @param {*} value EntitySpec of the definition
    * @returns a new object containing the schema for the sourceLocation
    */
-  static parseCoordinates(value) {
+  static toSourceLocation(value) {
     if (!value) return null
-    // TODO currently only GitHub is supported. Need a source location picker
-    // TODO validate that the URL is good. In the end we need a source picker
-    const segments = value.split('/')
+    // TODO currently only GitHub is supported.
+    if (value.provider !== 'github') return null
+    if (!(value.revision && value.revision.length > 0)) return null
+
+    // Get rid of extra keys and make url a plain property, not a getter
     return {
-      type: 'git',
-      provider: 'github',
-      namespace: segments[3],
-      name: segments[4],
-      url: value,
-      revision: segments[6]
+      type: value.type,
+      provider: value.provider,
+      namespace: value.namespace,
+      name: value.name,
+      url: value.url,
+      revision: value.revision
     }
   }
 

@@ -3,16 +3,16 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getGitHubRevisions } from '../api/clearlyDefined'
 import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
+import isEqual from 'lodash/isEqual'
 
 export default class GitHubCommitPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
+    getGitHubRevisions: PropTypes.func.isRequired,
     defaultInputValue: PropTypes.string,
-    allowNew: PropTypes.bool,
-    token: PropTypes.string
+    allowNew: PropTypes.bool
   }
 
   constructor(props) {
@@ -23,18 +23,34 @@ export default class GitHubCommitPicker extends Component {
   }
 
   componentDidMount() {
+    // use this synchronously updated flag to prevent calling setState if getGitHubRevisions returns
+    // after component has been unmounted already
+    this.isUnmounted = false
     this.getOptions('')
+  }
+
+  componentDidUpdate() {
+    if (this.state.shouldUpdate) this.getOptions('')
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(nextProps.request, this.props.request)) this.setState({ options: [], shouldUpdate: true })
   }
 
   async getOptions(value) {
     try {
-      const { namespace, name } = this.props.request
+      const { request, getGitHubRevisions } = this.props
+      const { namespace, name } = request
       const path = name ? `${namespace}/${name}` : name
-      const options = await getGitHubRevisions(this.props.token, path)
-      this.setState({ ...this.state, options })
+      const options = await getGitHubRevisions(path)
+      !this.isUnmounted && this.setState({ options, shouldUpdate: false })
     } catch (error) {
       console.log(error)
-      this.setState({ ...this.state, options: [] })
+      !this.isUnmounted && this.setState({ options: [], shouldUpdate: false })
     }
   }
 

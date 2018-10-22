@@ -165,6 +165,12 @@ export default class EntitySpec {
     setIfValue(this, 'changes', changes)
   }
 
+  get url() {
+    if (this.provider === 'github')
+      return `https://github.com/${this.namespace}/${this.name}${this.revision ? `/commit/${this.revision}` : ''}`
+    return null
+  }
+
   toPath() {
     const revisionPart = this.revision ? `/${this.revision}` : ''
     const prPart = this.pr ? `/pr/${this.pr}` : ''

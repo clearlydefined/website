@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import Contribution from '../../../utils/contribution'
 import TwoColumnsSection from '../Sections/TwoColumnsSection'
+import { SourcePicker } from '../..'
 
 class DescribedSection extends Component {
   static propTypes = {
@@ -40,7 +41,8 @@ class DescribedSection extends Component {
         field: 'described.sourceLocation',
         placeholder: 'Source Location',
         type: 'coordinates',
-        editable: true
+        editable: true,
+        editor: SourcePicker
       },
       {
         label: 'Tools',

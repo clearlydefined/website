@@ -20,6 +20,7 @@ class TwoColumnsSection extends Component {
         placeholder: PropTypes.string,
         type: PropTypes.string,
         editable: PropTypes.bool,
+        editor: PropTypes.func,
         multiple: PropTypes.bool,
         component: PropTypes.any
       })
@@ -35,6 +36,7 @@ class TwoColumnsSection extends Component {
           <Col md={6} key={`element_${index}`}>
             <EditableFieldRenderer
               editable={element.editable}
+              editor={element.editor}
               label={element.label}
               field={element.field}
               placeholder={element.placeholder || null}
