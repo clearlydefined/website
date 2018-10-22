@@ -254,6 +254,8 @@ function mapStateToProps(state, props) {
 
   const path = Definition.getPathFromUrl(props)
   const component = props.component || Definition.getDefinitionEntity(path)
+  const curation = state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation)
+  const latestCuration = state.ui.inspect.latestCuration && cloneDeep(state.ui.inspect.latestCuration)
 
   let previewDefinition, definition
 
@@ -272,7 +274,7 @@ function mapStateToProps(state, props) {
     token: state.session.token,
     session: state.session,
     definition,
-    curation: state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation),
+    curation,
     harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
     previewDefinition,
     latestCuration: state.ui.inspect.latestCuration && cloneDeep(state.ui.inspect.latestCuration),
