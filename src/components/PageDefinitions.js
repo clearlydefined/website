@@ -11,6 +11,7 @@ import { saveAs } from 'file-saver'
 import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
+import isEmpty from 'lodash/isEmpty'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew, uiRevertDefinition } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
@@ -20,7 +21,7 @@ import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 
-class PageDefinitions extends AbstractPageDefinitions {
+export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
     super(props)
     this.onDrop = this.onDrop.bind(this)
@@ -97,13 +98,15 @@ class PageDefinitions extends AbstractPageDefinitions {
       )
   }
 
-  refresh = () => {
+  refresh = removeDefinitions => {
     const { components, dispatch } = this.props
-
+    const refreshedData = removeDefinitions
+      ? components.list.filter(item => isEmpty(item.changes))
+      : components.list.map(({ changes, ...keepAttrs }) => keepAttrs)
     if (this.hasChanges()) {
       dispatch(
         uiBrowseUpdateList({
-          transform: list => list.map(({ changes, ...keepAttrs }) => keepAttrs)
+          updateAll: refreshedData
         })
       )
     }
