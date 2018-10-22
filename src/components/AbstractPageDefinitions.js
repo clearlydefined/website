@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Modal, Grid, DropdownButton, MenuItem, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
 import compact from 'lodash/compact'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
@@ -76,6 +76,7 @@ export default class AbstractPageDefinitions extends Component {
     this.transform = this.transform.bind(this)
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
+    this.renderPopup = this.renderPopup.bind(this)
     this.contributeModal = React.createRef()
   }
 
@@ -403,6 +404,38 @@ export default class AbstractPageDefinitions extends Component {
     })
   }
 
+  renderPopup() {
+    return (
+      <Modal show={this.state.visible} onHide={() => this.setState({ visible: false })}>
+        <Modal.Header closeButton>
+          <Modal.Title>Save the file with a name</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup>
+            <InputGroup>
+              <FormControl
+                type="text"
+                placeholder="Type a name to apply to the file that is going to be saved"
+                onChange={e => this.setState({ fileName: e.target.value })}
+              />
+              <InputGroup.Addon>.json</InputGroup.Addon>
+            </InputGroup>
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <div>
+            <FormGroup className="pull-right">
+              <Button onClick={() => this.setState({ visible: false })}>Cancel</Button>
+              <Button bsStyle="success" disabled={!this.state.fileName} type="button" onClick={() => this.doSave()}>
+                OK
+              </Button>
+            </FormGroup>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
   render() {
     const { components, definitions, token, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
@@ -450,6 +483,7 @@ export default class AbstractPageDefinitions extends Component {
             readOnly={this.readOnly()}
           />
         )}
+        {this.renderPopup()}
       </Grid>
     )
   }
