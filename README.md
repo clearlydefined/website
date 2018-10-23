@@ -14,7 +14,7 @@ If you are interested in working on the code for the website, follow the steps b
     - `REACT_APP_SERVER=https://dev-api.clearlydefined.io`
 1.  Change to the website repo directory (e.g., `cd <dir where you cloned website>`)
 1.  Run `npm install` in the root as well as in `./components`
-1.  Run `npm link ./components`
+1.  Run `npm link ./components` (use sudo if your global NPM directory is not writable by your user)
 1.  Run `npm start`
 
 This sequence will get the code for site, fetch all the prerequisites, build the site, start it running and open a browser on http://localhost:3000. In the end you should see the ClearlyDefined homepage in your browser.
