@@ -1,6 +1,6 @@
 language: node_js
 # node version specified in .nvmrc
-before_script:
+before_install:
   - sh -c 'cd ./components && npm install && npm pack && cd - && npm install $PWD/components/clearlydefined-ui-components-*.tgz'
 cache:
   directories:
