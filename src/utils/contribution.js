@@ -16,7 +16,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
-import deepDiff from 'deep-diff'
+import { difference } from './utils'
 
 /**
  * Abstract methods for Contribution
@@ -181,24 +181,10 @@ export default class Contribution {
    */
   static getChangesFromPreview(definition, preview) {
     if (isEmpty(definition) || isEmpty(preview)) return
-    return this.difference(preview, definition)
+    return difference(preview, definition)
   }
 
-  /**
-   * Deep diff between two objects, using lodash
-   * @param  {Object} object Object compared
-   * @param  {Object} base   Object to compare with
-   * @return {Object} Return a new object which represents the diff
-   */
-  static difference(object, base) {
-    const changes = deepDiff.diff(base, object)
-    if (!changes || changes.length === 0) return {}
-    const newValue = {}
-    changes.forEach(change => deepDiff.applyChange(newValue, change, change))
-    return newValue
-  }
-
-  static printCoordinates = value => (value && value.url ? `${value.url}/commit/${value.revision}` : value)
+  static printCoordinates = value => (value ? value.url : null)
 
   static printDate = value => (!value ? null : moment(value).format('YYYY-MM-DD'))
 
@@ -239,7 +225,7 @@ export default class Contribution {
     let discoveredUnknown = 0
     let parties = []
     let expressions = []
-    let declared = []
+    let declared = null
 
     facets.forEach(name => {
       const facet = get(definition, `licensed.facets.${name}`)
@@ -265,22 +251,24 @@ export default class Contribution {
   }
 
   /**
-   * Function that get an url as a string, and return a sourceLocation object according to the definition schema
-   * @param {*} value updated url of the definition
+   * Function that gets an EntitySpec and return a sourceLocation object according to the definition schema
+   * @param {*} value EntitySpec of the definition
    * @returns a new object containing the schema for the sourceLocation
    */
-  static parseCoordinates(value) {
+  static toSourceLocation(value) {
     if (!value) return null
-    // TODO currently only GitHub is supported. Need a source location picker
-    // TODO validate that the URL is good. In the end we need a source picker
-    const segments = value.split('/')
+    // TODO currently only GitHub is supported.
+    if (value.provider !== 'github') return null
+    if (!(value.revision && value.revision.length > 0)) return null
+
+    // Get rid of extra keys and make url a plain property, not a getter
     return {
-      type: 'git',
-      provider: 'github',
-      namespace: segments[3],
-      name: segments[4],
-      url: value,
-      revision: segments[6]
+      type: value.type,
+      provider: value.provider,
+      namespace: value.namespace,
+      name: value.name,
+      url: value.url,
+      revision: value.revision
     }
   }
 

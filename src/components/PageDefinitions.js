@@ -4,7 +4,6 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Button, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
-import Dropzone from 'react-dropzone'
 import pako from 'pako'
 import throat from 'throat'
 import base64js from 'base64-js'
@@ -12,15 +11,17 @@ import { saveAs } from 'file-saver'
 import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
+import isEmpty from 'lodash/isEmpty'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew, uiRevertDefinition } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
-import NotificationButtons from './NotificationButtons'
+import { getCurationAction } from '../actions/curationActions'
+import NotificationButtons from './Navigation/Ui/NotificationButtons'
 
-class PageDefinitions extends AbstractPageDefinitions {
+export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
     super(props)
     this.onDrop = this.onDrop.bind(this)
@@ -97,13 +98,15 @@ class PageDefinitions extends AbstractPageDefinitions {
       )
   }
 
-  refresh = () => {
+  refresh = removeDefinitions => {
     const { components, dispatch } = this.props
-
+    const refreshedData = removeDefinitions
+      ? components.list.filter(item => isEmpty(item.changes))
+      : components.list.map(({ changes, ...keepAttrs }) => keepAttrs)
     if (this.hasChanges()) {
       dispatch(
         uiBrowseUpdateList({
-          transform: list => list.map(({ changes, ...keepAttrs }) => keepAttrs)
+          updateAll: refreshedData
         })
       )
     }
@@ -209,7 +212,7 @@ class PageDefinitions extends AbstractPageDefinitions {
         <MenuItem eventKey="1" onSelect={this.doSaveAsUrl}>
           URL
         </MenuItem>
-        <MenuItem eventKey="2" onSelect={this.doSave}>
+        <MenuItem eventKey="2" onSelect={() => this.setState({ showSavePopup: true })}>
           File
         </MenuItem>
         <MenuItem divider />
@@ -231,7 +234,8 @@ class PageDefinitions extends AbstractPageDefinitions {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-    const file = new File([JSON.stringify(fileObject, null, 2)], 'components.json')
+    const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
+    this.setState({ showSavePopup: false, fileName: null })
     saveAs(file)
   }
 
@@ -256,11 +260,40 @@ class PageDefinitions extends AbstractPageDefinitions {
     this.props.dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
   }
 
-  onDrop(acceptedFiles, rejectedFiles) {
+  onDragOver = e => e.preventDefault()
+  onDragEnter = e => e.preventDefault()
+
+  onDrop = e => {
+    e.preventDefault()
+    const text = e.dataTransfer.getData('Text')
+
+    if (text) {
+      this.onTextDrop(text)
+    } else {
+      const files = Object.values(e.dataTransfer.files)
+      const checkedFiles = EntitySpec.checkDroppedFiles(files)
+      const { acceptedFiles, rejectedFiles } = checkedFiles
+
+      if (acceptedFiles.length) this.onFileDrop(acceptedFiles)
+      if (rejectedFiles.length) this.onDropRejected(rejectedFiles)
+    }
+  }
+
+  onTextDrop = url => {
     const { dispatch } = this.props
-    if (!acceptedFiles.length) return
+    const path = EntitySpec.fromUrl(url)
+
+    if (path.errors) dispatch(uiNotificationNew({ type: 'warning', message: path.errors, timeout: 5000 }))
+    else this.onAddComponent(path)
+  }
+
+  onFileDrop(files) {
+    const { dispatch } = this.props
+
+    if (!files.length) return
+
     dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
-    acceptedFiles.forEach(file => {
+    files.forEach(file => {
       const reader = new FileReader()
       reader.onload = () => {
         const listSpec = this.loadListSpec(reader.result, file)
@@ -283,21 +316,22 @@ class PageDefinitions extends AbstractPageDefinitions {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
     const path = component.toPath()
-    !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
+    !definitions.entries[path] &&
+      dispatch(getDefinitionsAction(token, [path])) &&
+      dispatch(getCurationAction(token, component))
     dispatch(uiBrowseUpdateList({ add: component }))
   }
 
   dropZone(child) {
     return (
-      <Dropzone
-        accept="application/json"
-        disableClick
+      <div
+        onDragOver={this.onDragOver}
+        onDragEnter={this.onDragEnter}
         onDrop={this.onDrop}
-        onDropRejected={this.onDropRejected}
         style={{ position: 'relative' }}
       >
         {child}
-      </Dropzone>
+      </div>
     )
   }
 

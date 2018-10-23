@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
+import isEqual from 'lodash/isEqual'
 
 /**
  * Render a Typeahead with the tags of a given Github repository
@@ -11,12 +12,10 @@ import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
  * Parameters:
  *   request: An object of the form { namespace, name }, where namespace is the
  *     owner of a repository
- *   getGitHubRevisions: A function that takes (token, path), where path is
- *     `${namespace}/${name}` and token is either a valid Github access token or
- *     undefined. Return a Promise holding an array of { tag, sha }, where sha
- *     is the hash of the commit the tag points to (i.e., not the hash of an
- *     annotated tag itself, but the actual commit)
- *   token: Optionally a valid Github token
+ *   getGitHubRevisions: A function that takes a path, where path is
+ *     `${namespace}/${name}`. Return a Promise holding an array of
+ *     { tag, sha }, where sha is the hash of the commit the tag points to
+ *     (i.e., not the hash of an annotated tag itself, but the actual commit)
  *   onChange: Optional function to call when user select a commit (this
  *     component is not very useful without an onChange, but does work without
  *     one)
@@ -28,7 +27,6 @@ export default class GitHubCommitPicker extends Component {
   static propTypes = {
     request: PropTypes.object.isRequired,
     getGitHubRevisions: PropTypes.func.isRequired,
-    token: PropTypes.string,
     onChange: PropTypes.func,
     defaultInputValue: PropTypes.string,
     allowNew: PropTypes.bool
@@ -42,7 +40,22 @@ export default class GitHubCommitPicker extends Component {
   }
 
   componentDidMount() {
+    // use this synchronously updated flag to prevent calling setState if getGitHubRevisions returns
+    // after component has been unmounted already
+    this.isUnmounted = false
     this.getOptions('')
+  }
+
+  componentDidUpdate() {
+    if (this.state.shouldUpdate) this.getOptions('')
+  }
+
+  componentWillUnmount() {
+    this.isUnmounted = true
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!isEqual(nextProps.request, this.props.request)) this.setState({ options: [], shouldUpdate: true })
   }
 
   async getOptions(value) {
@@ -50,11 +63,11 @@ export default class GitHubCommitPicker extends Component {
       const { request, getGitHubRevisions } = this.props
       const { namespace, name } = request
       const path = name ? `${namespace}/${name}` : name
-      const options = await getGitHubRevisions(this.props.token, path)
-      this.setState({ ...this.state, options })
+      const options = await getGitHubRevisions(path)
+      !this.isUnmounted && this.setState({ options, shouldUpdate: false })
     } catch (error) {
       console.log(error)
-      this.setState({ ...this.state, options: [] })
+      !this.isUnmounted && this.setState({ options: [], shouldUpdate: false })
     }
   }
 

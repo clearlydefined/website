@@ -3,7 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, InlineEditor } from './'
+import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker } from './'
 import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
@@ -69,7 +69,7 @@ export default class DefinitionEntry extends React.Component {
     const namespaceText = namespace ? namespace + '/' : ''
     const componentTag = componentUrl ? (
       <span>
-        <a href={componentUrl} target="_blank">
+        <a href={componentUrl} target="_blank" rel="noopener noreferrer">
           {namespaceText}
           {name}
         </a>
@@ -83,7 +83,7 @@ export default class DefinitionEntry extends React.Component {
     const revisionTag = revisionUrl ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={revisionUrl} target="_blank">
+        <a href={revisionUrl} target="_blank" rel="noopener noreferrer">
           {revision}
         </a>
       </span>
@@ -205,10 +205,6 @@ export default class DefinitionEntry extends React.Component {
     }
   }
 
-  printCoordinates(value) {
-    return value ? value.url : null
-  }
-
   renderLabel(text) {
     return <b>{text}</b>
   }
@@ -257,19 +253,19 @@ export default class DefinitionEntry extends React.Component {
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
-                <InlineEditor
+                <ModalEditor
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}
-                  type="text"
-                  initialValue={this.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
-                  value={this.printCoordinates(this.getValue('described.sourceLocation'))}
-                  onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.parseCoordinates)}
+                  initialValue={Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
+                  value={Contribution.printCoordinates(this.getValue('described.sourceLocation'))}
+                  onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.toSourceLocation)}
+                  editor={SourcePicker}
                   validator={value => true}
                   placeholder={'Source location'}
                   onRevert={() => onRevert('described.sourceLocation')}
                 />,
                 'right',
-                this.printCoordinates
+                Contribution.printCoordinates
               )}
             </Col>
           </Row>

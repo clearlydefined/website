@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { RowEntityList, DefinitionEntry, CopyUrlButton } from './'
 import { Button, OverlayTrigger, Tooltip, ButtonGroup } from 'react-bootstrap'
 import { get } from 'lodash'
+import { Tag } from 'antd'
 import EntitySpec from '../utils/entitySpec'
 import { getBadgeUrl } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
@@ -24,7 +25,6 @@ export default class ComponentList extends React.Component {
     noRowsRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
-    githubToken: PropTypes.string,
     sequence: PropTypes.number
   }
 
@@ -112,9 +112,13 @@ export default class ComponentList extends React.Component {
     const scores = Definition.computeScores(definition)
     const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
     const isSourceEmpty = Definition.isSourceEmpty(definition)
+    const isCurated = Definition.isCurated(definition)
+    const hasPendingCurations = Definition.hasPendingCurations(definition)
     return (
       <div className="list-activity-area">
         {scores && <img className="list-buttons" src={getBadgeUrl(scores.tool, scores.effective)} alt="score" />}
+        {isCurated && <Tag color="green">Curated</Tag>}
+        {hasPendingCurations && <Tag color="gold">Pending Curations</Tag>}
         <ButtonGroup>
           {!isSourceComponent &&
             !readOnly &&
