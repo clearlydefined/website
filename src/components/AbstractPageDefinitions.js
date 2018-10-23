@@ -482,7 +482,7 @@ export default class AbstractPageDefinitions extends Component {
             readOnly={this.readOnly()}
           />
         )}
-        {this.renderPopup()}
+        {this.renderSavePopup()}
       </Grid>
     )
   }
