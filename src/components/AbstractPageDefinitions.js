@@ -76,7 +76,7 @@ export default class AbstractPageDefinitions extends Component {
     this.transform = this.transform.bind(this)
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
-    this.renderPopup = this.renderPopup.bind(this)
+    this.renderSavePopup = this.renderSavePopup.bind(this)
     this.contributeModal = React.createRef()
   }
 
@@ -404,9 +404,9 @@ export default class AbstractPageDefinitions extends Component {
     })
   }
 
-  renderPopup() {
+  renderSavePopup() {
     return (
-      <Modal show={this.state.visible} onHide={() => this.setState({ visible: false })}>
+      <Modal show={this.state.showSavePopup} onHide={() => this.setState({ showSavePopup: false })}>
         <Modal.Header closeButton>
           <Modal.Title>Save the file with a name</Modal.Title>
         </Modal.Header>
@@ -425,7 +425,7 @@ export default class AbstractPageDefinitions extends Component {
         <Modal.Footer>
           <div>
             <FormGroup className="pull-right">
-              <Button onClick={() => this.setState({ visible: false })}>Cancel</Button>
+              <Button onClick={() => this.setState({ showSavePopup: false })}>Cancel</Button>
               <Button bsStyle="success" disabled={!this.state.fileName} type="button" onClick={() => this.doSave()}>
                 OK
               </Button>

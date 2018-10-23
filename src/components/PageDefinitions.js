@@ -212,7 +212,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
         <MenuItem eventKey="1" onSelect={this.doSaveAsUrl}>
           URL
         </MenuItem>
-        <MenuItem eventKey="2" onSelect={() => this.setState({ visible: true })}>
+        <MenuItem eventKey="2" onSelect={() => this.setState({ showSavePopup: true })}>
           File
         </MenuItem>
         <MenuItem divider />
@@ -235,7 +235,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
     const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
-    this.setState({ visible: false, fileName: null })
+    this.setState({ showSavePopup: false, fileName: null })
     saveAs(file)
   }
 
