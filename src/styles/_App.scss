@@ -172,6 +172,33 @@
   }
 }
 
-.fa-disabled{
+.fa-disabled {
   opacity: 0.5;
+}
+
+.modal {
+  &-dialog {
+    width: 1220px;
+    height: 480px;
+  }
+  &-content {
+    height: 100%;
+  }
+}
+
+.dropdown-menu {
+  z-index: 9001;
+}
+
+.horizontalBlock {
+  display: flex;
+}
+
+.bg-suggested {
+  background: green;
+  color: white;
+  padding: 2px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 4px;
 }

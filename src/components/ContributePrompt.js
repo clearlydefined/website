@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Form, Button } from 'react-bootstrap'
-import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
+import { FormGroup, ControlLabel, FormControl, Checkbox } from 'react-bootstrap'
 import { FieldGroup } from './'
 
 export default class ContributePrompt extends Component {
@@ -32,7 +32,8 @@ export default class ContributePrompt extends Component {
       summary: '',
       details: '',
       resolution: '',
-      type: 'select'
+      type: 'select',
+      removeDefinitions: false
     })
   }
 
@@ -140,10 +141,17 @@ export default class ContributePrompt extends Component {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.close}>Cancel</Button>
-            <Button bsStyle="success" disabled={!this.canSubmit()} type="button" onClick={this.okHandler}>
-              OK
-            </Button>
+            <div>
+              <Checkbox className="inlineBlock pull-left" name="removeDefinitions" onChange={this.handleChange}>
+                Remove contributed definitions from the list
+              </Checkbox>
+              <FormGroup className="pull-right">
+                <Button onClick={this.close}>Cancel</Button>
+                <Button bsStyle="success" disabled={!this.canSubmit()} type="button" onClick={this.okHandler}>
+                  OK
+                </Button>
+              </FormGroup>
+            </div>
           </Modal.Footer>
         </Form>
       </Modal>

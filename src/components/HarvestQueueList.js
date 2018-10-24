@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import {
   RowEntityList,
@@ -13,6 +14,7 @@ import {
   NuGetVersionPicker,
   RubyGemsVersionPicker
 } from './'
+import { getGitHubRevisions } from '../api/clearlyDefined'
 import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -20,15 +22,14 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import nuget from '../images/nuget.svg'
 
-export default class HarvestQueueList extends React.Component {
+class HarvestQueueList extends React.Component {
   static propTypes = {
     list: PropTypes.array.isRequired,
     listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onChange: PropTypes.func,
-    noRowsRenderer: PropTypes.func,
-    githubToken: PropTypes.string
+    noRowsRenderer: PropTypes.func
   }
 
   static defaultProps = {
@@ -52,14 +53,14 @@ export default class HarvestQueueList extends React.Component {
   commitChanged(request, value) {
     const newRequest = clone(request)
     newRequest.revision = value ? value.sha : null
-    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
+    this.setState({ contentSeq: this.state.contentSeq + 1 })
     this.props.onChange(request, newRequest)
   }
 
   versionChanged(request, value) {
     const newRequest = clone(request)
     newRequest.revision = value
-    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
+    this.setState({ contentSeq: this.state.contentSeq + 1 })
     this.props.onChange(request, newRequest)
   }
 
@@ -69,7 +70,8 @@ export default class HarvestQueueList extends React.Component {
         {request.provider === 'github' && (
           <GitHubCommitPicker
             request={request}
-            token={this.props.githubToken}
+            allowNew={true}
+            getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
             onChange={this.commitChanged.bind(this, request)}
           />
         )}
@@ -171,3 +173,10 @@ export default class HarvestQueueList extends React.Component {
     )
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  return {
+    token: state.session.token
+  }
+}
+export default connect(mapStateToProps)(HarvestQueueList)

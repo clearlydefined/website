@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Modal, Grid, DropdownButton, MenuItem, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
 import compact from 'lodash/compact'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
@@ -76,6 +76,7 @@ export default class AbstractPageDefinitions extends Component {
     this.transform = this.transform.bind(this)
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
+    this.renderSavePopup = this.renderSavePopup.bind(this)
     this.contributeModal = React.createRef()
   }
 
@@ -152,6 +153,7 @@ export default class AbstractPageDefinitions extends Component {
     const patches = this.buildContributeSpec(components.list)
     const spec = { constributionInfo, patches }
     dispatch(curateAction(token, spec))
+    this.refresh(constributionInfo.removeDefinitions)
   }
 
   buildContributeSpec(list) {
@@ -402,8 +404,40 @@ export default class AbstractPageDefinitions extends Component {
     })
   }
 
+  renderSavePopup() {
+    return (
+      <Modal show={this.state.showSavePopup} onHide={() => this.setState({ showSavePopup: false })}>
+        <Modal.Header closeButton>
+          <Modal.Title>Save the file with a name</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup>
+            <InputGroup>
+              <FormControl
+                type="text"
+                placeholder="Type a name to apply to the file that is going to be saved"
+                onChange={e => this.setState({ fileName: e.target.value })}
+              />
+              <InputGroup.Addon>.json</InputGroup.Addon>
+            </InputGroup>
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <div>
+            <FormGroup className="pull-right">
+              <Button onClick={() => this.setState({ showSavePopup: false })}>Cancel</Button>
+              <Button bsStyle="success" disabled={!this.state.fileName} type="button" onClick={() => this.doSave()}>
+                OK
+              </Button>
+            </FormGroup>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
   render() {
-    const { components, definitions, token, session } = this.props
+    const { components, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">
@@ -429,7 +463,6 @@ export default class AbstractPageDefinitions extends Component {
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
-                githubToken={token}
                 noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
                 hasChange={this.hasChange}
@@ -449,6 +482,7 @@ export default class AbstractPageDefinitions extends Component {
             readOnly={this.readOnly()}
           />
         )}
+        {this.renderSavePopup()}
       </Grid>
     )
   }
