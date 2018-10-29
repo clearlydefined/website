@@ -32,7 +32,7 @@ export default class TwoLineEntry extends React.Component {
       panel,
       highlight,
       isEmpty,
-      draggable
+      draggable,
       item
     } = this.props
     return (
