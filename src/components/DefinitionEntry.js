@@ -358,9 +358,11 @@ export default class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const { definition, onClick, renderButtons, component } = this.props
+    const { definition, onClick, renderButtons, component, draggable, onDragEnd } = this.props
     return (
       <TwoLineEntry
+        draggable={draggable}
+        item={component}
         highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
         image={this.getImage(definition)}
         letter={definition.coordinates.type.slice(0, 1).toUpperCase()}
@@ -370,6 +372,7 @@ export default class DefinitionEntry extends React.Component {
         onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
         isEmpty={Definition.isDefinitionEmpty(definition)}
         panel={component.expanded ? this.renderPanel(definition) : null}
+        onDragEnd={onDragEnd}
       />
     )
   }
