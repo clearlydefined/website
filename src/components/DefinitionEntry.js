@@ -358,7 +358,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const { definition, onClick, renderButtons, component, draggable, onDragEnd } = this.props
+    const { definition, onClick, renderButtons, component, draggable } = this.props
     return (
       <TwoLineEntry
         draggable={draggable}
@@ -372,7 +372,6 @@ export default class DefinitionEntry extends React.Component {
         onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
         isEmpty={Definition.isDefinitionEmpty(definition)}
         panel={component.expanded ? this.renderPanel(definition) : null}
-        onDragEnd={onDragEnd}
       />
     )
   }
