@@ -53,7 +53,8 @@ class HarvestQueueList extends React.Component {
   commitChanged(request, value) {
     const newRequest = clone(request)
     newRequest.revision = value ? value.sha : null
-    this.setState({ contentSeq: this.state.contentSeq + 1 })
+    newRequest.commit = value
+    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
     this.props.onChange(request, newRequest)
   }
 
@@ -159,6 +160,7 @@ class HarvestQueueList extends React.Component {
   render() {
     const { loadMoreRows, listHeight, noRowsRenderer, list } = this.props
     const { sortOrder, contentSeq } = this.state
+
     return (
       <RowEntityList
         list={list}
@@ -174,7 +176,7 @@ class HarvestQueueList extends React.Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     token: state.session.token
   }

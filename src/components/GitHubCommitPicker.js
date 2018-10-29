@@ -17,7 +17,7 @@ export default class GitHubCommitPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { customValues: [], options: [] }
+    this.state = { customValues: [], options: [], selected: props.request.commit ? [props.request.commit] : [] }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
@@ -29,16 +29,19 @@ export default class GitHubCommitPicker extends Component {
     this.getOptions('')
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState(prevState => ({
+      ...prevState,
+      selected: nextProps.request.commit ? [nextProps.request.commit] : []
+    }))
+  }
+
   componentDidUpdate() {
     if (this.state.shouldUpdate) this.getOptions('')
   }
 
   componentWillUnmount() {
     this.isUnmounted = true
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!isEqual(nextProps.request, this.props.request)) this.setState({ options: [], shouldUpdate: true })
   }
 
   async getOptions(value) {
@@ -58,6 +61,7 @@ export default class GitHubCommitPicker extends Component {
     const { onChange } = this.props
     if (!onChange) return
     let value = values.length === 0 ? null : values[0]
+
     if (!value) return onChange(value)
     if (value.customOption) {
       value = { tag: value.tag, sha: value.tag }
@@ -81,11 +85,13 @@ export default class GitHubCommitPicker extends Component {
 
   render() {
     const { defaultInputValue, allowNew } = this.props
-    const { customValues, options } = this.state
+    const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
+
     return (
       <div onClick={e => e.stopPropagation()}>
         <Typeahead
+          selected={selected}
           options={list}
           labelKey="tag"
           defaultInputValue={defaultInputValue}
