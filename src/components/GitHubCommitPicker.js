@@ -30,10 +30,7 @@ export default class GitHubCommitPicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(prevState => ({
-      ...prevState,
-      selected: nextProps.request.commit ? [nextProps.request.commit] : []
-    }))
+    this.setState({ ...this.state, selected: nextProps.request.commit ? [nextProps.request.commit] : [] })
   }
 
   componentDidUpdate() {

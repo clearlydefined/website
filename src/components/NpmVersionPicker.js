@@ -25,10 +25,7 @@ export default class NpmVersionPicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState(prevState => ({
-      ...prevState,
-      selected: nextProps.request.revision ? [nextProps.request.revision] : []
-    }))
+    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
   }
 
   async getOptions(value) {

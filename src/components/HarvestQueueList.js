@@ -160,7 +160,6 @@ class HarvestQueueList extends React.Component {
   render() {
     const { loadMoreRows, listHeight, noRowsRenderer, list } = this.props
     const { sortOrder, contentSeq } = this.state
-
     return (
       <RowEntityList
         list={list}
