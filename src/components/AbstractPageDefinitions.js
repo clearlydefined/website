@@ -20,6 +20,7 @@ import EntitySpec from '../utils/entitySpec'
 import Definition from '../utils/definition'
 import Auth from '../utils/auth'
 import VersionSelector from './Navigation/Ui/VersionSelector'
+import NotificationButtons from './Navigation/Ui/NotificationButtons'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -452,11 +453,10 @@ export default class AbstractPageDefinitions extends Component {
       return this.setState({ showVersionSelectorPopup: false }, async () => {
         if (selectedComponent.changes) {
           const key = `open${Date.now()}`
-          const NotificationButtons = (
-            <Fragment>
-              <AntdButton
-                type="primary"
-                size="small"
+          notification.open({
+            message: 'This definition has some changes. All the unsaved changes will be lost.',
+            btn: (
+              <NotificationButtons
                 onClick={async () => {
                   await this.onRemoveComponent(selectedComponent)
                   await this.onAddComponent(
@@ -464,18 +464,11 @@ export default class AbstractPageDefinitions extends Component {
                   )
                   notification.close(key)
                 }}
-              >
-                Confirm
-              </AntdButton>{' '}
-              <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
-                Dismiss
-              </AntdButton>
-            </Fragment>
-          )
-          notification.open({
-            message:
-              'This definition has some changes. Do you confirm to change the version? All the unsaved changes will be lost.',
-            btn: NotificationButtons,
+                onClose={() => notification.close(key)}
+                confirmText="Ok"
+                dismissText="Cancel"
+              />
+            ),
             key,
             onClose: notification.close(key),
             duration: 0
@@ -495,7 +488,7 @@ export default class AbstractPageDefinitions extends Component {
 
   renderVersionSelectopPopup() {
     const { multipleVersionSelection, selectedComponent, showVersionSelectorPopup } = this.state
-    return (
+    return showVersionSelectorPopup ? (
       <VersionSelector
         show={showVersionSelectorPopup}
         onClose={() => this.setState({ showVersionSelectorPopup: false, selectedComponent: null })}
@@ -503,7 +496,7 @@ export default class AbstractPageDefinitions extends Component {
         multiple={multipleVersionSelection}
         component={selectedComponent}
       />
-    )
+    ) : null
   }
 
   render() {

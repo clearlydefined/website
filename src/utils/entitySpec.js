@@ -181,22 +181,10 @@ export default class EntitySpec {
     return this.toPath()
   }
 
-  static getRevisionToKey(revision, definition) {
-    return definition.provider === 'github' ? revision.sha : revision
-  }
-
-  static getRevisionToString(revision, definition) {
-    return definition.provider === 'github'
-      ? revision.tag === revision.sha
-        ? revision.sha
-        : `${revision.tag} (${revision.sha})`
-      : revision
-  }
-
   static getEntityName(component) {
     return component.namespace ? `${component.namespace}/${component.name}` : component.name
   }
-  static getEntityType(component) {
+  static getEntityOrigin(component) {
     return component.provider === 'github' || component.provider === 'rubygems' ? component.provider : component.type
   }
 }

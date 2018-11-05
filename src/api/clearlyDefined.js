@@ -162,8 +162,8 @@ export function getNugetRevisions(token, path) {
   return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
 }
 
-export function getRevisions(token, path, namespace) {
-  return get(url(`${ORIGINS(namespace)}/${path}/revisions`), token)
+export function getRevisions(token, path, origin) {
+  return get(url(`${ORIGINS(origin)}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================
