@@ -17,6 +17,9 @@ import osi from '../images/partner-logos/osi_standard_logo.png'
 import qualcomm from '../images/partner-logos/qualcomm.jpg'
 import swh from '../images/partner-logos/swh.png'
 import sap from '../images/partner-logos/sap.png'
+import webyourmind from '../images/partner-logos/wym.png'
+import google from '../images/partner-logos/google.png'
+import codescoop from '../images/partner-logos/codescoop.png'
 
 const clearlyDefined = <Clearly>Defined</Clearly>
 
@@ -163,6 +166,23 @@ class PageAbout extends Component {
           <Col md={3}>
             <div className="about-cell">
               <img src={sap} width="160" className="about-image" alt="sap" />
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={3} mdOffset={2}>
+            <div className="about-cell">
+              <img src={webyourmind} width="190" className="about-image" alt="webyourmind" />
+            </div>
+          </Col>
+          <Col md={3}>
+            <div className="about-cell">
+              <img src={google} width="220" className="about-image" alt="google" />
+            </div>
+          </Col>
+          <Col md={3}>
+            <div className="about-cell">
+              <img src={codescoop} width="220" className="about-image" alt="codescoop" />
             </div>
           </Col>
         </Row>
