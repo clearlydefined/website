@@ -16,7 +16,14 @@ export const ORIGINS_NUGET = 'origins/nuget'
 export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
-export const ORIGINS = namespace => `origins/${namespace}`
+export const ORIGINS = {
+  git: ORIGINS_GITHUB,
+  npm: ORIGINS_NPM,
+  nuget: ORIGINS_NUGET,
+  maven: ORIGINS_MAVEN,
+  pypi: ORIGINS_PYPI,
+  gem: ORIGINS_RUBYGEMS
+}
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
@@ -163,7 +170,7 @@ export function getNugetRevisions(token, path) {
 }
 
 export function getRevisions(token, path, origin) {
-  return get(url(`${ORIGINS(origin)}/${path}/revisions`), token)
+  return get(url(`${origin}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================

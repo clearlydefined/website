@@ -97,7 +97,6 @@ export default class Definition {
   }
 
   static getRevisionToKey(revision, definition) {
-    console.log(revision)
     return definition.provider === 'github' ? revision.sha : revision
   }
 
