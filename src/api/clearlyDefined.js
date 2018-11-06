@@ -170,7 +170,7 @@ export function getNugetRevisions(token, path) {
 }
 
 export function getRevisions(token, path, origin) {
-  return get(url(`${origin}/${path}/revisions`), token)
+  return get(url(`${ORIGINS[origin]}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================

@@ -187,6 +187,6 @@ export default class EntitySpec {
     return component.namespace ? `${component.namespace}/${component.name}` : component.name
   }
   static getEntityOrigin(component) {
-    return ORIGINS[component.type]
+    return component.type
   }
 }
