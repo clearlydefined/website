@@ -19,6 +19,7 @@ const NPM_WEBSITE = 'npmjs.com'
 const GITHUB_WEBSITE = 'github.com'
 const MAVEN_WEBSITE = 'mvnrepository.com'
 const NUGET_WEBSITE = 'nuget.org'
+const CRATE_WEBSITE = 'crates.io'
 const PYPI_WEBSITE = 'pypi.org'
 const RUBYGEM_WEBSITE = 'rubygems.org'
 
@@ -28,10 +29,19 @@ const providerPath = {
   [PYPI_WEBSITE]: 'pypi/pypi/-',
   [MAVEN_WEBSITE]: 'maven/mavencentral',
   [NUGET_WEBSITE]: 'nuget/nuget/-',
+  [CRATE_WEBSITE]: 'crate/cratesio/-',
   [RUBYGEM_WEBSITE]: 'gem/rubygems/-'
 }
 
-const providerWebsiteValues = [NPM_WEBSITE, GITHUB_WEBSITE, MAVEN_WEBSITE, NUGET_WEBSITE, PYPI_WEBSITE, RUBYGEM_WEBSITE]
+const providerWebsiteValues = [
+  NPM_WEBSITE,
+  GITHUB_WEBSITE,
+  MAVEN_WEBSITE,
+  NUGET_WEBSITE,
+  CRATE_WEBSITE,
+  PYPI_WEBSITE,
+  RUBYGEM_WEBSITE
+]
 
 const acceptedFilesValues = ['application/json']
 
@@ -97,6 +107,7 @@ export default class EntitySpec {
           : this.providerErrorsFallback(hostname)
 
       case PYPI_WEBSITE:
+      case CRATE_WEBSITE:
       case NUGET_WEBSITE:
         ;[, name, revision] = pathname.split('/')
         return revision ? `${providerPath[hostname]}/${name}/${revision}` : this.providerErrorsFallback(hostname)
