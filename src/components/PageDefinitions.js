@@ -11,6 +11,7 @@ import { saveAs } from 'file-saver'
 import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
+import isObject from 'lodash/isObject'
 import isEmpty from 'lodash/isEmpty'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiNotificationNew, uiRevertDefinition } from '../actions/ui'
@@ -20,6 +21,7 @@ import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
+import { GistProvider, Provider } from '../utils/providers'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -215,6 +217,9 @@ export class PageDefinitions extends AbstractPageDefinitions {
         <MenuItem eventKey="2" onSelect={() => this.setState({ showSavePopup: true })}>
           File
         </MenuItem>
+        <MenuItem eventKey="3" onSelect={() => this.setState({ showSavePopup: true, saveType: 'gist' })}>
+          Gist
+        </MenuItem>
         <MenuItem divider />
         <MenuItem disabled>Definitions (Not implemented)</MenuItem>
         <MenuItem disabled>SPDX (Not implemented)</MenuItem>
@@ -231,12 +236,29 @@ export class PageDefinitions extends AbstractPageDefinitions {
   }
 
   doSave() {
-    const { components } = this.props
+    const { components, token } = this.props
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
     const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
     this.setState({ showSavePopup: false, fileName: null })
-    saveAs(file)
+    if (this.state.saveType === 'gist')
+      return GistProvider.save(token, `${this.state.fileName}.json`, JSON.stringify(fileObject)).then(res => {
+        return this.props.dispatch(
+          uiNotificationNew({
+            type: 'info',
+            message: (
+              <div>
+                A new Gist File has been created and is available{' '}
+                <a href={res} target="_blank">
+                  here
+                </a>
+              </div>
+            ),
+            timeout: 5000
+          })
+        )
+      })
+    else saveAs(file)
   }
 
   doSaveAsUrl() {
@@ -279,12 +301,17 @@ export class PageDefinitions extends AbstractPageDefinitions {
     }
   }
 
-  onTextDrop = url => {
+  onTextDrop = async url => {
     const { dispatch } = this.props
-    const path = EntitySpec.fromUrl(url)
-
-    if (path.errors) dispatch(uiNotificationNew({ type: 'warning', message: path.errors, timeout: 5000 }))
-    else this.onAddComponent(path)
+    const provider = new Provider()
+    const providerResult = await provider.setUrl(url)
+    if (typeof providerResult === 'boolean')
+      return dispatch(uiNotificationNew({ type: 'danger', message: 'Error loading non-URL string', timeout: 5000 }))
+    const providerContent = await provider.getContent()
+    if (providerContent.errors)
+      return dispatch(uiNotificationNew({ type: 'warning', message: providerContent.errors, timeout: 5000 }))
+    if (isObject(providerContent)) return this.loadFromListSpec(providerContent)
+    return this.onAddComponent(providerContent)
   }
 
   onFileDrop(files) {
