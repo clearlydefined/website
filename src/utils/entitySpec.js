@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-const { setIfValue } = require('./utils')
+import { setIfValue } from './utils'
 
 const NAMESPACE = 0x4
 const NAME = 0x2
@@ -15,25 +15,47 @@ const toLowerCaseMap = {
   mavencentralsource: NONE
 }
 
-const NPM_WEBSITE = 'npmjs.com'
-const GITHUB_WEBSITE = 'github.com'
-const MAVEN_WEBSITE = 'mvnrepository.com'
-const NUGET_WEBSITE = 'nuget.org'
-const PYPI_WEBSITE = 'pypi.org'
-const RUBYGEM_WEBSITE = 'rubygems.org'
+const entityMapping = [
+  { hostnames: ['npmjs.com', 'npmjs.org'], parser: npmParser },
+  { hostnames: ['github.com'], parser: githubParser },
+  { hostnames: ['mvnrepository.com'], parser: mavenParser },
+  { hostnames: ['nuget.org'], parser: nugetParser },
+  { hostnames: ['pypi.org'], parser: pypiParser },
+  { hostnames: ['rubygems.org'], parser: rubygemsParser }
+]
 
-const providerPath = {
-  [NPM_WEBSITE]: 'npm/npmjs',
-  [GITHUB_WEBSITE]: 'git/github',
-  [PYPI_WEBSITE]: 'pypi/pypi/-',
-  [MAVEN_WEBSITE]: 'maven/mavencentral',
-  [NUGET_WEBSITE]: 'nuget/nuget/-',
-  [RUBYGEM_WEBSITE]: 'gem/rubygems/-'
+function npmParser(host, path) {
+  let namespace, name, version
+  const pathSegments = path.split('/')
+  if (pathSegments.length === 5) [, namespace, name, , version] = pathSegments
+  else [, name, , version] = pathSegments
+  return new EntitySpec('npm', 'npmjs', namespace, name, version)
 }
 
-const providerWebsiteValues = [NPM_WEBSITE, GITHUB_WEBSITE, MAVEN_WEBSITE, NUGET_WEBSITE, PYPI_WEBSITE, RUBYGEM_WEBSITE]
+function githubParser(host, path, error) {
+  const [org, repo, , ref] = path.split('/')
+  return new EntitySpec('git', 'github', org, repo, ref)
+}
 
-const acceptedFilesValues = ['application/json']
+function mavenParser(host, path, error) {
+  const [, group, artifact, version] = path.split('/')
+  return new EntitySpec('maven', 'mavencentral', group, artifact, version)
+}
+
+function nugetParser(host, path, error) {
+  const [, name, version] = path.split('/')
+  return new EntitySpec('nuget', 'nuget', null, name, version)
+}
+
+function pypiParser(host, path, error) {
+  const [, name, version] = path.split('/')
+  return new EntitySpec('pypi', 'pypi', null, name, version)
+}
+
+function rubygemsParser(host, path, error) {
+  const [, name, , version] = path.split('/')
+  return new EntitySpec('gem', 'rubygems', null, name, version)
+}
 
 function normalize(value, provider, property) {
   if (!value) return value
@@ -43,93 +65,24 @@ function normalize(value, provider, property) {
 
 export default class EntitySpec {
   static fromPath(path) {
-    // eslint-disable-next-line no-unused-vars
-    const [full, type, provider, namespace, name, revision, prSpec] = path.match(
+    const [, type, provider, namespace, name, revision, prSpec] = path.match(
       /\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/
     )
-    // eslint-disable-next-line no-unused-vars
-    const [blank, delimiter, pr] = prSpec ? prSpec.split('/') : []
+    const [, , pr] = prSpec ? prSpec.split('/') : []
     return new EntitySpec(type, provider, namespace, name, revision, pr)
-  }
-
-  static checkDroppedFiles(files) {
-    let acceptedFiles = []
-    let rejectedFiles = []
-
-    files.forEach(file => {
-      const acceptedType = acceptedFilesValues.find(el => el === file.type)
-
-      if (acceptedType) acceptedFiles.push(file)
-      else rejectedFiles.push(file)
-    })
-
-    return {
-      acceptedFiles,
-      rejectedFiles
-    }
-  }
-
-  static extractPath(pathname, hostname) {
-    const path = pathname.split('/')
-    let packageName, nameSpace, name, version, revision
-
-    switch (hostname) {
-      case NPM_WEBSITE:
-        if (path.length === 5) {
-          ;[, nameSpace, name, , revision] = path
-        } else {
-          nameSpace = '-'
-          ;[, name, , revision] = path
-        }
-        return revision && `${providerPath[hostname]}/${nameSpace}/${name}/${revision}`
-
-      case GITHUB_WEBSITE:
-        ;[packageName, name, , revision] = pathname.split('/')
-        return revision
-          ? `${providerPath[hostname]}/${packageName}/${name}/${revision}`
-          : this.providerErrorsFallback(hostname)
-
-      case MAVEN_WEBSITE:
-        ;[, name, version, revision] = pathname.split('/')
-
-        return revision
-          ? `${providerPath[hostname]}/${name}/${version}/${revision}`
-          : this.providerErrorsFallback(hostname)
-
-      case PYPI_WEBSITE:
-      case NUGET_WEBSITE:
-        ;[, name, revision] = pathname.split('/')
-        return revision ? `${providerPath[hostname]}/${name}/${revision}` : this.providerErrorsFallback(hostname)
-
-      case RUBYGEM_WEBSITE:
-        ;[, name, , revision] = pathname.split('/')
-
-        return revision ? `${providerPath[hostname]}/${name}/${revision}` : this.providerErrorsFallback(hostname)
-
-      default:
-        return { errors: `${hostname} is not available as source provider` }
-    }
-  }
-
-  static checkValidHostname(hostname) {
-    return providerWebsiteValues.indexOf(hostname) >= 0 && true
-  }
-
-  static providerErrorsFallback(provider) {
-    return { errors: `${provider} need a version to be imported` }
   }
 
   static fromUrl(url) {
     const urlObject = new URL(url)
-    const pathname = urlObject.pathname.startsWith('/') ? urlObject.pathname.slice(1) : urlObject.pathname
-    const hostname = urlObject.hostname.replace('www.', '')
-    const validHostname = this.checkValidHostname(hostname)
+    const path = urlObject.pathname.startsWith('/') ? urlObject.pathname.slice(1) : urlObject.pathname
+    const hostname = urlObject.hostname.toLowerCase().replace('www.', '')
+    const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))
+    if (!entry) throw new Error(`${hostname} is not currently supported`)
+    return entry.parser(hostname, path)
+  }
 
-    if (!validHostname) return { errors: `${hostname} is not available as source provider` }
-
-    const path = this.extractPath(pathname, hostname)
-
-    return path ? path : this.providerErrorsFallback(hostname)
+  static _incompleteSpec(provider) {
+    throw new Error(`Components from ${provider} need version information`)
   }
 
   static fromCoordinates(o) {

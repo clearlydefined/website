@@ -20,7 +20,7 @@ import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
-import { isJson } from '../utils/utils'
+import { asObject } from '../utils/utils'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -267,44 +267,49 @@ export class PageDefinitions extends AbstractPageDefinitions {
   onDrop = e => {
     e.preventDefault()
     const text = e.dataTransfer.getData('Text')
-
-    if (text) {
-      this.onTextDrop(text)
-    } else {
-      const files = Object.values(e.dataTransfer.files)
-      const checkedFiles = EntitySpec.checkDroppedFiles(files)
-      const { acceptedFiles, rejectedFiles } = checkedFiles
-
-      if (acceptedFiles.length) this.onFileDrop(acceptedFiles)
-      if (rejectedFiles.length) this.onDropRejected(rejectedFiles)
-    }
+    if (text) return this.onTextDrop(text)
+    const files = Object.values(e.dataTransfer.files)
+    const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
+    if (acceptedFiles.length) this.onFileDrop(acceptedFiles)
+    if (rejectedFiles.length) this.onDropRejected(rejectedFiles)
   }
 
   onTextDrop = content => {
-    const { dispatch } = this.props
-    if (!isJson(content)) {
-      const path = EntitySpec.fromUrl(content)
-      if (path.errors) return dispatch(uiNotificationNew({ type: 'warning', message: path.errors, timeout: 5000 }))
-      else return this.onAddComponent(path)
+    const contentObject = asObject(content)
+    if (contentObject) return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
+    try {
+      return this.onAddComponent(EntitySpec.fromUrl(content))
+    } catch (error) {
+      return this.props.dispatch(uiNotificationNew({ type: 'warning', message: error.message, timeout: 5000 }))
     }
-    return this.onAddComponent(EntitySpec.fromCoordinates(JSON.parse(content)))
+  }
+
+  sortDroppedFiles(files) {
+    const acceptedFilesValues = ['application/json']
+    return files.reduce(
+      (result, file) => {
+        if (acceptedFilesValues.includes(file.type)) result.acceptedFiles.push(file)
+        else result.rejectedFiles.push(file)
+        return result
+      },
+      { acceptedFiles: [], rejectedFiles: [] }
+    )
   }
 
   onFileDrop(files) {
     const { dispatch } = this.props
-
     if (!files.length) return
-
     dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
     files.forEach(file => {
       const reader = new FileReader()
       reader.onload = () => {
-        const listSpec = this.loadListSpec(reader.result, file)
-        if (typeof listSpec === 'string') {
-          const message = `Invalid component list file: ${listSpec}`
+        try {
+          const listSpec = this.loadListSpec(reader.result, file)
+          this.loadFromListSpec(listSpec)
+        } catch (error) {
+          const message = `Invalid component list file: ${error.message}`
           return dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
         }
-        this.loadFromListSpec(listSpec)
       }
       reader.readAsBinaryString(file)
     })
@@ -315,10 +320,15 @@ export class PageDefinitions extends AbstractPageDefinitions {
     this.props.dispatch(uiNotificationNew({ type: 'danger', message: `Could not load: ${fileNames}`, timeout: 5000 }))
   }
 
-  onAddComponent(value, after = null) {
+  onAddComponent(value) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
     const path = component.toPath()
+    if (!component.revision)
+      return dispatch(
+        uiNotificationNew({ type: 'warning', message: `${path} needs version information`, timeout: 5000 })
+      )
+
     !definitions.entries[path] &&
       dispatch(getDefinitionsAction(token, [path])) &&
       dispatch(getCurationAction(token, component))
@@ -339,14 +349,10 @@ export class PageDefinitions extends AbstractPageDefinitions {
   }
 
   loadListSpec(content, file) {
-    try {
-      const object = JSON.parse(content)
-      if (file.name.toLowerCase() === 'package-lock.json') return this.loadPackageLockFile(object.dependencies)
-      if (object.coordinates) return object
-      return 'No component coordinates found'
-    } catch (e) {
-      return e.message
-    }
+    const object = JSON.parse(content)
+    if (file.name.toLowerCase() === 'package-lock.json') return this.loadPackageLockFile(object.dependencies)
+    if (object.coordinates) return object
+    throw new Error('No component coordinates found')
   }
 
   loadPackageLockFile(dependencies) {
@@ -376,7 +382,6 @@ export class PageDefinitions extends AbstractPageDefinitions {
     dispatch(uiBrowseUpdateList({ addAll: toAdd }))
     const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
     this.getDefinitionsAndNotify(missingDefinitions, 'All components have been loaded')
-
     dispatch(
       uiBrowseUpdateList({
         transform: this.createTransform.call(
