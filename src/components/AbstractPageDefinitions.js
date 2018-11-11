@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { Modal, Grid, DropdownButton, MenuItem, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
 import compact from 'lodash/compact'
 import filter from 'lodash/filter'
@@ -10,7 +10,6 @@ import get from 'lodash/get'
 import set from 'lodash/set'
 import sortBy from 'lodash/sortBy'
 import notification from 'antd/lib/notification'
-import AntdButton from 'antd/lib/button'
 import { curateAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import { ComponentList, Section, ContributePrompt } from './'
@@ -479,11 +478,11 @@ export default class AbstractPageDefinitions extends Component {
         }
       })
     }
-    this.setState({ showVersionSelectorPopup: false }, () => {
-      versions.map(version => {
+    this.setState({ showVersionSelectorPopup: false }, () =>
+      versions.map(version =>
         this.onAddComponent(EntitySpec.fromCoordinates({ ...selectedComponent, revision: version }))
-      })
-    })
+      )
+    )
   }
 
   renderVersionSelectopPopup() {

@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import { Modal, FormGroup, Button } from 'react-bootstrap'
 import { Select } from 'antd'
 import { getRevisions } from '../../../api/clearlyDefined'
-import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
 
 const Option = Select.Option

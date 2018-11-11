@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
-import isEqual from 'lodash/isEqual'
 
 export default class GitHubCommitPicker extends Component {
   static propTypes = {
