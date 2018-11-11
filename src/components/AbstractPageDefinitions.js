@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Modal, Grid, DropdownButton, MenuItem, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
 import compact from 'lodash/compact'
 import filter from 'lodash/filter'
@@ -9,6 +9,8 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import set from 'lodash/set'
 import sortBy from 'lodash/sortBy'
+import notification from 'antd/lib/notification'
+import AntdButton from 'antd/lib/button'
 import { curateAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import { ComponentList, Section, ContributePrompt } from './'
@@ -17,6 +19,8 @@ import { uiBrowseUpdateFilterList } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Definition from '../utils/definition'
 import Auth from '../utils/auth'
+import VersionSelector from './Navigation/Ui/VersionSelector'
+import NotificationButtons from './Navigation/Ui/NotificationButtons'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -77,6 +81,9 @@ export default class AbstractPageDefinitions extends Component {
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
     this.renderSavePopup = this.renderSavePopup.bind(this)
+    this.renderVersionSelectopPopup = this.renderVersionSelectopPopup.bind(this)
+    this.showVersionSelectorPopup = this.showVersionSelectorPopup.bind(this)
+    this.applySelectedVersions = this.applySelectedVersions.bind(this)
     this.contributeModal = React.createRef()
   }
 
@@ -436,6 +443,62 @@ export default class AbstractPageDefinitions extends Component {
     )
   }
 
+  showVersionSelectorPopup(component, multiple) {
+    this.setState({ showVersionSelectorPopup: true, multipleVersionSelection: multiple, selectedComponent: component })
+  }
+
+  applySelectedVersions(versions) {
+    const { multipleVersionSelection, selectedComponent } = this.state
+    if (!multipleVersionSelection) {
+      return this.setState({ showVersionSelectorPopup: false }, async () => {
+        if (selectedComponent.changes) {
+          const key = `open${Date.now()}`
+          notification.open({
+            message: 'This definition has some changes. All the unsaved changes will be lost.',
+            btn: (
+              <NotificationButtons
+                onClick={async () => {
+                  await this.onRemoveComponent(selectedComponent)
+                  await this.onAddComponent(
+                    EntitySpec.fromCoordinates({ ...selectedComponent, revision: versions, changes: {} })
+                  )
+                  notification.close(key)
+                }}
+                onClose={() => notification.close(key)}
+                confirmText="Ok"
+                dismissText="Cancel"
+              />
+            ),
+            key,
+            onClose: notification.close(key),
+            duration: 0
+          })
+        } else {
+          await this.onRemoveComponent(selectedComponent)
+          await this.onAddComponent(EntitySpec.fromCoordinates({ ...selectedComponent, revision: versions }))
+        }
+      })
+    }
+    this.setState({ showVersionSelectorPopup: false }, () => {
+      versions.map(version => {
+        this.onAddComponent(EntitySpec.fromCoordinates({ ...selectedComponent, revision: version }))
+      })
+    })
+  }
+
+  renderVersionSelectopPopup() {
+    const { multipleVersionSelection, selectedComponent, showVersionSelectorPopup } = this.state
+    return showVersionSelectorPopup ? (
+      <VersionSelector
+        show={showVersionSelectorPopup}
+        onClose={() => this.setState({ showVersionSelectorPopup: false, selectedComponent: null })}
+        onSave={this.applySelectedVersions}
+        multiple={multipleVersionSelection}
+        component={selectedComponent}
+      />
+    ) : null
+  }
+
   render() {
     const { components, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
@@ -466,6 +529,7 @@ export default class AbstractPageDefinitions extends Component {
                 noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
                 hasChange={this.hasChange}
+                showVersionSelectorPopup={this.showVersionSelectorPopup}
               />
             </div>
           )}
@@ -483,6 +547,7 @@ export default class AbstractPageDefinitions extends Component {
           />
         )}
         {this.renderSavePopup()}
+        {this.renderVersionSelectopPopup()}
       </Grid>
     )
   }

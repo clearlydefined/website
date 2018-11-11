@@ -5,11 +5,10 @@ import { OverlayTrigger } from 'react-bootstrap'
 import { Tooltip } from 'antd'
 
 const ButtonWithTooltip = ({ button, tip }) => {
-  const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
   return (
-    <OverlayTrigger placement="top" overlay={toolTip}>
+    <Tooltip placement="topLeft" title={tip} arrowPointAtCenter>
       {button}
-    </OverlayTrigger>
+    </Tooltip>
   )
 }
 

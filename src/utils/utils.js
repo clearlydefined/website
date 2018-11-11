@@ -34,4 +34,6 @@ function isJson(item) {
   return false
 }
 
-export { setIfValue, difference, isJson }
+const customLicenseIds = ['NONE', 'NOASSERTION']
+
+export { setIfValue, difference, customLicenseIds, isJson }

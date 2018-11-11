@@ -15,13 +15,17 @@ export default class RubyGemsVersionPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { customValues: [], options: [] }
+    this.state = { customValues: [], options: [], selected: props.request.revision ? [props.request.revision] : [] }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
 
   componentDidMount() {
     this.getOptions('')
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
   }
 
   async getOptions(value) {
@@ -54,10 +58,11 @@ export default class RubyGemsVersionPicker extends Component {
 
   render() {
     const { defaultInputValue } = this.props
-    const { customValues, options } = this.state
+    const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
     return (
       <Typeahead
+        selected={selected}
         options={list}
         // labelKey='id'
         defaultInputValue={defaultInputValue}
