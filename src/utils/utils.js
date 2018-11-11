@@ -18,4 +18,6 @@ function difference(object, base) {
   return newValue
 }
 
-export { setIfValue, difference }
+const customLicenseIds = ['NONE', 'NOASSERTION']
+
+export { setIfValue, difference, customLicenseIds }
