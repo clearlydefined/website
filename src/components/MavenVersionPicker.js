@@ -14,13 +14,17 @@ export default class MavenVersionPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { customValues: [], options: [] }
+    this.state = { customValues: [], options: [], selected: props.request.revision ? [props.request.revision] : [] }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
 
   componentDidMount() {
     this.getOptions('')
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
   }
 
   async getOptions(value) {
@@ -53,10 +57,11 @@ export default class MavenVersionPicker extends Component {
   }
 
   render() {
-    const { customValues, options } = this.state
+    const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
     return (
       <Typeahead
+        selected={selected}
         options={list}
         // labelKey='id'
         placeholder={options.length === 0 ? 'Could not fetch versions, type Maven version' : 'Pick a Maven version'}
