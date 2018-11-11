@@ -24,16 +24,12 @@ class VersionSelector extends Component {
   async componentDidMount() {
     const { component, token, multiple } = this.props
     if (!component) return
+    const fullname = component.namespace ? `${component.namespace}/${component.name}` : component.name
     try {
       const label = multiple
-        ? `Pick one or move versions of ${EntitySpec.getEntityName(component)} to add to the definitions list`
-        : `Pick a different version of ${EntitySpec.getEntityName(component)}`
-
-      const options = await getRevisions(
-        token,
-        EntitySpec.getEntityName(component),
-        EntitySpec.getEntityOrigin(component)
-      )
+        ? `Pick one or move versions of ${fullname} to add to the definitions list`
+        : `Pick a different version of ${fullname}`
+      const options = await getRevisions(token, fullname, component.type, component.provider)
       this.setState({ options, label })
     } catch (error) {
       console.log(error)
