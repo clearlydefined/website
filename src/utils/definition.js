@@ -95,4 +95,16 @@ export default class Definition {
       })
     )
   }
+
+  static getRevisionToKey(revision, definition) {
+    return definition.provider === 'github' ? revision.sha : revision
+  }
+
+  static getRevisionToString(revision, definition) {
+    return definition.provider === 'github'
+      ? revision.tag === revision.sha
+        ? revision.sha
+        : `${revision.tag} (${revision.sha})`
+      : revision
+  }
 }
