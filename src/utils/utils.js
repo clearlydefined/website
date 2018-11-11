@@ -18,22 +18,15 @@ function difference(object, base) {
   return newValue
 }
 
-function isJson(item) {
-  item = typeof item !== 'string' ? JSON.stringify(item) : item
-
+function asObject(item) {
+  if (typeof item !== 'string') return item
   try {
-    item = JSON.parse(item)
+    return JSON.parse(item)
   } catch (e) {
-    return false
+    return undefined
   }
-
-  if (typeof item === 'object' && item !== null) {
-    return true
-  }
-
-  return false
 }
 
 const customLicenseIds = ['NONE', 'NOASSERTION']
 
-export { setIfValue, difference, customLicenseIds, isJson }
+export { setIfValue, difference, customLicenseIds, asObject }

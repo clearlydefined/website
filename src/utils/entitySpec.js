@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-const { setIfValue } = require('./utils')
+import { setIfValue } from './utils'
 
 const NAMESPACE = 0x4
 const NAME = 0x2
@@ -31,10 +31,6 @@ const providerPath = {
   [RUBYGEM_WEBSITE]: 'gem/rubygems/-'
 }
 
-const providerWebsiteValues = [NPM_WEBSITE, GITHUB_WEBSITE, MAVEN_WEBSITE, NUGET_WEBSITE, PYPI_WEBSITE, RUBYGEM_WEBSITE]
-
-const acceptedFilesValues = ['application/json']
-
 function normalize(value, provider, property) {
   if (!value) return value
   const mask = toLowerCaseMap[provider] || 0
@@ -52,27 +48,9 @@ export default class EntitySpec {
     return new EntitySpec(type, provider, namespace, name, revision, pr)
   }
 
-  static checkDroppedFiles(files) {
-    let acceptedFiles = []
-    let rejectedFiles = []
-
-    files.forEach(file => {
-      const acceptedType = acceptedFilesValues.find(el => el === file.type)
-
-      if (acceptedType) acceptedFiles.push(file)
-      else rejectedFiles.push(file)
-    })
-
-    return {
-      acceptedFiles,
-      rejectedFiles
-    }
-  }
-
-  static extractPath(pathname, hostname) {
+  static _extractPath(pathname, hostname) {
     const path = pathname.split('/')
     let packageName, nameSpace, name, version, revision
-
     switch (hostname) {
       case NPM_WEBSITE:
         if (path.length === 5) {
@@ -87,49 +65,35 @@ export default class EntitySpec {
         ;[packageName, name, , revision] = pathname.split('/')
         return revision
           ? `${providerPath[hostname]}/${packageName}/${name}/${revision}`
-          : this.providerErrorsFallback(hostname)
+          : this._incompleteSpec(hostname)
 
       case MAVEN_WEBSITE:
         ;[, name, version, revision] = pathname.split('/')
-
-        return revision
-          ? `${providerPath[hostname]}/${name}/${version}/${revision}`
-          : this.providerErrorsFallback(hostname)
+        return revision ? `${providerPath[hostname]}/${name}/${version}/${revision}` : this._incompleteSpec(hostname)
 
       case PYPI_WEBSITE:
       case NUGET_WEBSITE:
         ;[, name, revision] = pathname.split('/')
-        return revision ? `${providerPath[hostname]}/${name}/${revision}` : this.providerErrorsFallback(hostname)
+        return revision ? `${providerPath[hostname]}/${name}/${revision}` : this._incompleteSpec(hostname)
 
       case RUBYGEM_WEBSITE:
         ;[, name, , revision] = pathname.split('/')
-
-        return revision ? `${providerPath[hostname]}/${name}/${revision}` : this.providerErrorsFallback(hostname)
+        return revision ? `${providerPath[hostname]}/${name}/${revision}` : this._incompleteSpec(hostname)
 
       default:
-        return { errors: `${hostname} is not available as source provider` }
+        throw new Error(`${hostname} is not currently supported`)
     }
   }
 
-  static checkValidHostname(hostname) {
-    return providerWebsiteValues.indexOf(hostname) >= 0 && true
-  }
-
-  static providerErrorsFallback(provider) {
-    return { errors: `${provider} need a version to be imported` }
+  static _incompleteSpec(provider) {
+    throw new Error(`Components from ${provider} need a version to be understood`)
   }
 
   static fromUrl(url) {
     const urlObject = new URL(url)
     const pathname = urlObject.pathname.startsWith('/') ? urlObject.pathname.slice(1) : urlObject.pathname
     const hostname = urlObject.hostname.replace('www.', '')
-    const validHostname = this.checkValidHostname(hostname)
-
-    if (!validHostname) return { errors: `${hostname} is not available as source provider` }
-
-    const path = this.extractPath(pathname, hostname)
-
-    return path ? path : this.providerErrorsFallback(hostname)
+    return this._extractPath(pathname, hostname)
   }
 
   static fromCoordinates(o) {
