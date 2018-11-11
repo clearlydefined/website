@@ -24,35 +24,39 @@ const entityMapping = [
   { hostnames: ['rubygems.org'], parser: rubygemsParser }
 ]
 
-function npmParser(host, path) {
+function npmParser(path) {
   let namespace, name, version
   const pathSegments = path.split('/')
-  if (pathSegments.length === 5) [, namespace, name, , version] = pathSegments
+  // if the first segment is a namespace name, use it
+  if (pathSegments[1].startsWith('@')) [, namespace, name, , version] = pathSegments
   else [, name, , version] = pathSegments
   return new EntitySpec('npm', 'npmjs', namespace, name, version)
 }
 
-function githubParser(host, path, error) {
-  const [org, repo, , ref] = path.split('/')
-  return new EntitySpec('git', 'github', org, repo, ref)
+function githubParser(path) {
+  const [org, repo, type, one, two] = path.split('/')
+  let version
+  if (type === 'commit') version = one
+  if (type === 'releases') version = two
+  return new EntitySpec('git', 'github', org, repo, version)
 }
 
-function mavenParser(host, path, error) {
+function mavenParser(path) {
   const [, group, artifact, version] = path.split('/')
   return new EntitySpec('maven', 'mavencentral', group, artifact, version)
 }
 
-function nugetParser(host, path, error) {
+function nugetParser(path) {
   const [, name, version] = path.split('/')
   return new EntitySpec('nuget', 'nuget', null, name, version)
 }
 
-function pypiParser(host, path, error) {
+function pypiParser(path) {
   const [, name, version] = path.split('/')
   return new EntitySpec('pypi', 'pypi', null, name, version)
 }
 
-function rubygemsParser(host, path, error) {
+function rubygemsParser(path) {
   const [, name, , version] = path.split('/')
   return new EntitySpec('gem', 'rubygems', null, name, version)
 }
@@ -78,7 +82,7 @@ export default class EntitySpec {
     const hostname = urlObject.hostname.toLowerCase().replace('www.', '')
     const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))
     if (!entry) throw new Error(`${hostname} is not currently supported`)
-    return entry.parser(hostname, path)
+    return entry.parser(path)
   }
 
   static _incompleteSpec(provider) {
