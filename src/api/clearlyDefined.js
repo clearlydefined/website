@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-// DON'T COMMIT THIS FILE
+
 import 'whatwg-fetch'
 import { toPairs } from 'lodash'
 import _ from 'lodash'
