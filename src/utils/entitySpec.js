@@ -1,5 +1,3 @@
-import { ORIGINS } from '../api/clearlyDefined'
-
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
@@ -181,12 +179,5 @@ export default class EntitySpec {
 
   toString() {
     return this.toPath()
-  }
-
-  static getEntityName(component) {
-    return component.namespace ? `${component.namespace}/${component.name}` : component.name
-  }
-  static getEntityOrigin(component) {
-    return component.type
   }
 }
