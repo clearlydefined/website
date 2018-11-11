@@ -358,9 +358,11 @@ export default class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const { definition, onClick, renderButtons, component } = this.props
+    const { definition, onClick, renderButtons, component, draggable } = this.props
     return (
       <TwoLineEntry
+        draggable={draggable}
+        item={component}
         highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
         image={this.getImage(definition)}
         letter={definition.coordinates.type.slice(0, 1).toUpperCase()}

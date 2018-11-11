@@ -20,6 +20,7 @@ import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
+import { isJson } from '../utils/utils'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -279,12 +280,14 @@ export class PageDefinitions extends AbstractPageDefinitions {
     }
   }
 
-  onTextDrop = url => {
+  onTextDrop = content => {
     const { dispatch } = this.props
-    const path = EntitySpec.fromUrl(url)
-
-    if (path.errors) dispatch(uiNotificationNew({ type: 'warning', message: path.errors, timeout: 5000 }))
-    else this.onAddComponent(path)
+    if (!isJson(content)) {
+      const path = EntitySpec.fromUrl(content)
+      if (path.errors) return dispatch(uiNotificationNew({ type: 'warning', message: path.errors, timeout: 5000 }))
+      else return this.onAddComponent(path)
+    }
+    return this.onAddComponent(EntitySpec.fromCoordinates(JSON.parse(content)))
   }
 
   onFileDrop(files) {
