@@ -267,8 +267,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
   onDrop = e => {
     e.preventDefault()
     const text = e.dataTransfer.getData('Text')
-    if (text) return
-    this.onTextDrop(text)
+    if (text) return this.onTextDrop(text)
     const files = Object.values(e.dataTransfer.files)
     const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
     if (acceptedFiles.length) this.onFileDrop(acceptedFiles)
@@ -276,21 +275,19 @@ export class PageDefinitions extends AbstractPageDefinitions {
   }
 
   onTextDrop = content => {
-    const { dispatch } = this.props
-    const contenttObject = asObject(content)
-    if (contenttObject) return this.onAddComponent(EntitySpec.fromCoordinates(contenttObject))
+    const contentObject = asObject(content)
+    if (contentObject) return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
     try {
-      const path = EntitySpec.fromUrl(content)
-      return this.onAddComponent(path)
+      return this.onAddComponent(EntitySpec.fromUrl(content))
     } catch (error) {
-      return dispatch(uiNotificationNew({ type: 'warning', message: error.message, timeout: 5000 }))
+      return this.props.dispatch(uiNotificationNew({ type: 'warning', message: error.message, timeout: 5000 }))
     }
   }
 
   sortDroppedFiles(files) {
     const acceptedFilesValues = ['application/json']
     return files.reduce(
-      (file, result) => {
+      (result, file) => {
         if (acceptedFilesValues.includes(file.type)) result.acceptedFiles.push(file)
         else result.rejectedFiles.push(file)
         return result
@@ -323,10 +320,15 @@ export class PageDefinitions extends AbstractPageDefinitions {
     this.props.dispatch(uiNotificationNew({ type: 'danger', message: `Could not load: ${fileNames}`, timeout: 5000 }))
   }
 
-  onAddComponent(value, after = null) {
+  onAddComponent(value) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
     const path = component.toPath()
+    if (!component.revision)
+      return dispatch(
+        uiNotificationNew({ type: 'warning', message: `${path} needs version information`, timeout: 5000 })
+      )
+
     !definitions.entries[path] &&
       dispatch(getDefinitionsAction(token, [path])) &&
       dispatch(getCurationAction(token, component))
