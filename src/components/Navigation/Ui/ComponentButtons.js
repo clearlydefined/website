@@ -53,8 +53,13 @@ export default class ComponentButtons extends Component {
     action && sourceEntity && action(sourceEntity, component)
   }
 
+  showVersionSelectorPopup(component, multiple, event) {
+    event.domEvent.stopPropagation()
+    this.props.showVersionSelectorPopup(component, multiple)
+  }
+
   render() {
-    const { definition, currentComponent, readOnly, hasChange, showVersionSelectorPopup } = this.props
+    const { definition, currentComponent, readOnly, hasChange } = this.props
     const component = EntitySpec.fromCoordinates(currentComponent)
     const isSourceComponent = this.isSourceComponent(component)
     const scores = Definition.computeScores(definition)
@@ -106,16 +111,16 @@ export default class ComponentButtons extends Component {
               <Dropdown
                 overlay={
                   <Menu>
-                    <Menu.Item onClick={() => showVersionSelectorPopup(currentComponent, false)}>
-                      Switch Version
+                    <Menu.Item onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}>
+                      Switch version
                     </Menu.Item>
-                    <Menu.Item onClick={() => showVersionSelectorPopup(currentComponent, true)}>
-                      Add more Versions
+                    <Menu.Item onClick={this.showVersionSelectorPopup.bind(this, currentComponent, true)}>
+                      Add more versions
                     </Menu.Item>
                   </Menu>
                 }
               >
-                <Button className="list-fa-button">
+                <Button className="list-fa-button" onClick={event => event.stopPropagation()}>
                   <i className="fas fa-exchange-alt" /> <Icon type="down" />
                 </Button>
               </Dropdown>
