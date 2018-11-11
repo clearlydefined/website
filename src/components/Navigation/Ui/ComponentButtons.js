@@ -23,10 +23,6 @@ export default class ComponentButtons extends Component {
     onRevert: PropTypes.func
   }
 
-  constructor(props) {
-    super(props)
-  }
-
   isSourceComponent(component) {
     return ['github', 'sourcearchive'].includes(component.provider)
   }
