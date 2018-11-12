@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-// DON'T COMMIT THIS FILE
+
 import 'whatwg-fetch'
 import { toPairs } from 'lodash'
+import _ from 'lodash'
 import EntitySpec from '../utils/entitySpec'
 
 export const apiHome = process.env.REACT_APP_SERVER
@@ -17,6 +18,14 @@ export const ORIGINS_CRATE = 'origin/crate'
 export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
+export const ORIGINS = {
+  github: { git: ORIGINS_GITHUB },
+  npmjs: { npm: ORIGINS_NPM },
+  nuget: { nuget: ORIGINS_NUGET },
+  mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
+  pypi: { pypi: ORIGINS_PYPI },
+  rubygems: { gem: ORIGINS_RUBYGEMS }
+}
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
@@ -168,6 +177,11 @@ export function getNugetSearch(token, path) {
 
 export function getNugetRevisions(token, path) {
   return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
+}
+
+export function getRevisions(token, path, type, provider) {
+  const origin = _.get(ORIGINS, `${provider}.${type}`)
+  return get(url(`${origin}/${path}/revisions`), token)
 }
 
 // ========================== utilities ====================

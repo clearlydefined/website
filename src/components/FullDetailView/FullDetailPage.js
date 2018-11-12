@@ -83,13 +83,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
   // Get the data for the current definition
   handleNewSpec(component) {
-    const {
-      token,
-      uiInspectGetDefinition,
-      uiInspectGetCuration,
-      uiInspectGetHarvested,
-      uiGetCurationsList
-    } = this.props
+    const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested } = this.props
     if (!component) return
     uiInspectGetDefinition(token, component)
     uiInspectGetCuration(token, component)
@@ -251,14 +245,10 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
 function mapStateToProps(state, props) {
   const { currentDefinition } = props
-
   const path = Definition.getPathFromUrl(props)
   const component = props.component || Definition.getDefinitionEntity(path)
   const curation = state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation)
-  const latestCuration = state.ui.inspect.latestCuration && cloneDeep(state.ui.inspect.latestCuration)
-
   let previewDefinition, definition
-
   if (currentDefinition && currentDefinition.otherDefinition) {
     previewDefinition = Contribution.getChangesFromPreview(currentDefinition.otherDefinition, currentDefinition)
     definition = { item: currentDefinition.otherDefinition }
