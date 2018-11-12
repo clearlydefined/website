@@ -10,6 +10,7 @@ import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
+import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
@@ -137,6 +138,8 @@ export default class DefinitionEntry extends React.Component {
         return `${this.getComponentUrl(coordinates)}/v/${coordinates.revision}`
       case 'nuget':
         return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
+      case 'cratesio':
+        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
       case 'mavencentral':
         return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
       case 'pypi':
@@ -158,6 +161,8 @@ export default class DefinitionEntry extends React.Component {
         }`
       case 'nuget':
         return `https://nuget.org/packages/${coordinates.name}`
+      case 'cratesio':
+        return `https://crates.io/crates/${coordinates.name}`
       case 'mavencentral':
         return `https://mvnrepository.com/artifact/${coordinates.namespace}/${coordinates.name}`
       case 'pypi':
@@ -351,6 +356,7 @@ export default class DefinitionEntry extends React.Component {
   getImage(definition) {
     if (definition.coordinates.provider === 'github') return github
     if (definition.coordinates.provider === 'npmjs') return npm
+    if (definition.coordinates.provider === 'cratesio') return cargo
     if (definition.coordinates.provider === 'pypi') return pypi
     if (definition.coordinates.provider === 'rubygems') return gem
     if (definition.coordinates.provider === 'nuget') return nuget

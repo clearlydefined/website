@@ -14,6 +14,7 @@ export const DEFINITIONS = 'definitions'
 export const ORIGINS_GITHUB = 'origins/github'
 export const ORIGINS_NPM = 'origins/npm'
 export const ORIGINS_NUGET = 'origins/nuget'
+export const ORIGINS_CRATE = 'origin/crate'
 export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
@@ -160,6 +161,14 @@ export function getRubyGemsSearch(token, path) {
 
 export function getRubyGemsRevisions(token, path) {
   return get(url(`${ORIGINS_RUBYGEMS}/${path}/revisions`), token)
+}
+
+export function getCrateSearch(token, path) {
+  return get(url(`${ORIGINS_CRATE}/${path}`), token)
+}
+
+export function getCrateRevisions(token, path) {
+  return get(url(`${ORIGINS_CRATE}/${path}/revisions`), token)
 }
 
 export function getNugetSearch(token, path) {

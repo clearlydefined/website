@@ -14,6 +14,7 @@ import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
+import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import moment from 'moment'
 import { difference } from './utils'
@@ -210,6 +211,8 @@ export default class Contribution {
         return pypi
       case 'rubygems':
         return gem
+      case 'cratesio':
+        return cargo
       case 'nuget':
         return nuget
       default:

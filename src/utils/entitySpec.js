@@ -20,6 +20,7 @@ const entityMapping = [
   { hostnames: ['github.com'], parser: githubParser },
   { hostnames: ['mvnrepository.com'], parser: mavenParser },
   { hostnames: ['nuget.org'], parser: nugetParser },
+  { hostnames: ['crates.io'], parser: cratesParser },
   { hostnames: ['pypi.org'], parser: pypiParser },
   { hostnames: ['rubygems.org'], parser: rubygemsParser }
 ]
@@ -54,6 +55,11 @@ function nugetParser(path) {
 function pypiParser(path) {
   const [, name, version] = path.split('/')
   return new EntitySpec('pypi', 'pypi', null, name, version)
+}
+
+function cratesParser(path) {
+  const [, name, version] = path.split('/')
+  return new EntitySpec('crate', 'cratesio', null, name, version)
 }
 
 function rubygemsParser(path) {
