@@ -22,6 +22,7 @@ export const ORIGINS = {
   github: { git: ORIGINS_GITHUB },
   npmjs: { npm: ORIGINS_NPM },
   nuget: { nuget: ORIGINS_NUGET },
+  cratesio: { crate: ORIGINS_CRATE },
   mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
   pypi: { pypi: ORIGINS_PYPI },
   rubygems: { gem: ORIGINS_RUBYGEMS }
