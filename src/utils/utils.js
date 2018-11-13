@@ -18,4 +18,15 @@ function difference(object, base) {
   return newValue
 }
 
-export { setIfValue, difference }
+function asObject(item) {
+  if (typeof item !== 'string') return item
+  try {
+    return JSON.parse(item)
+  } catch (e) {
+    return undefined
+  }
+}
+
+const customLicenseIds = ['NONE', 'NOASSERTION']
+
+export { setIfValue, difference, customLicenseIds, asObject }

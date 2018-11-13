@@ -11,6 +11,7 @@ import {
   NpmVersionPicker,
   MavenVersionPicker,
   PyPiVersionPicker,
+  CrateVersionPicker,
   NuGetVersionPicker,
   RubyGemsVersionPicker
 } from './'
@@ -20,6 +21,7 @@ import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
+import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 
 class HarvestQueueList extends React.Component {
@@ -53,7 +55,8 @@ class HarvestQueueList extends React.Component {
   commitChanged(request, value) {
     const newRequest = clone(request)
     newRequest.revision = value ? value.sha : null
-    this.setState({ contentSeq: this.state.contentSeq + 1 })
+    newRequest.commit = value
+    this.setState({ ...this.state, contentSeq: this.state.contentSeq + 1 })
     this.props.onChange(request, newRequest)
   }
 
@@ -86,6 +89,9 @@ class HarvestQueueList extends React.Component {
         )}
         {request.provider === 'rubygems' && (
           <RubyGemsVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
+        {request.provider === 'cratesio' && (
+          <CrateVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
         {request.provider === 'nuget' && (
           <NuGetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
@@ -129,6 +135,7 @@ class HarvestQueueList extends React.Component {
     if (request.provider === 'npmjs') return npm
     if (request.provider === 'pypi') return pypi
     if (request.provider === 'rubygems') return gem
+    if (request.provider === 'cratesio') return cargo
     if (request.provider === 'nuget') return nuget
     return null
   }
@@ -174,7 +181,7 @@ class HarvestQueueList extends React.Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     token: state.session.token
   }

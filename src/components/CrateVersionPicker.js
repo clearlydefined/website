@@ -3,18 +3,19 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getMavenRevisions } from '../api/clearlyDefined'
+import { getCrateRevisions } from '../api/clearlyDefined'
 import { Typeahead } from 'react-bootstrap-typeahead'
 
-export default class MavenVersionPicker extends Component {
+export default class CrateVersionPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
-    request: PropTypes.object.isRequired
+    request: PropTypes.object.isRequired,
+    defaultInputValue: PropTypes.string
   }
 
   constructor(props) {
     super(props)
-    this.state = { customValues: [], options: [], selected: props.request.revision ? [props.request.revision] : [] }
+    this.state = { customValues: [], options: [] }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
@@ -23,15 +24,10 @@ export default class MavenVersionPicker extends Component {
     this.getOptions('')
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
-  }
-
   async getOptions(value) {
     try {
-      const { namespace, name } = this.props.request
-      const path = namespace ? `${namespace}/${name}` : name
-      const options = await getMavenRevisions(this.props.token, path.replace(':', '/'))
+      const { name } = this.props.request
+      const options = await getCrateRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
       console.log(error)
@@ -57,14 +53,15 @@ export default class MavenVersionPicker extends Component {
   }
 
   render() {
-    const { customValues, options, selected } = this.state
+    const { defaultInputValue } = this.props
+    const { customValues, options } = this.state
     const list = customValues.concat(options)
     return (
       <Typeahead
-        selected={selected}
         options={list}
         // labelKey='id'
-        placeholder={options.length === 0 ? 'Could not fetch versions, type Maven version' : 'Pick a Maven version'}
+        defaultInputValue={defaultInputValue}
+        placeholder={options.length === 0 ? 'Could not fetch versions, type a Crate version' : 'Pick a Crate version'}
         onChange={this.onChange}
         bodyContainer
         clearButton
