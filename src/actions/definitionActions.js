@@ -2,7 +2,13 @@
 // SPDX-License-Identifier: MIT
 
 import { asyncActions } from './'
-import { getDefinitions, getDefinition, previewDefinition, getDefinitionSuggestions } from '../api/clearlyDefined'
+import {
+  getDefinitions,
+  getDefinition,
+  previewDefinition,
+  getDefinitionSuggestions,
+  getSuggestedData
+} from '../api/clearlyDefined'
 import Definition from '../utils/definition'
 import { uiBrowseUpdateList } from './ui'
 
@@ -70,5 +76,17 @@ export function revertDefinitionAction(definition, values, name) {
     const componentsWithoutChanges = Definition.revert(state.ui.browse.componentList.list, definition, values)
     dispatch(uiBrowseUpdateList({ updateAll: componentsWithoutChanges }))
     return dispatch(actions.success({ componentsWithoutChanges }))
+  }
+}
+
+export function getDefinitionSuggestedDataAction(token, prefix, name) {
+  return dispatch => {
+    if (!prefix) return null
+    const actions = asyncActions(name)
+    dispatch(actions.start())
+    return getSuggestedData(token, prefix).then(
+      result => dispatch(actions.success(result)),
+      error => dispatch(actions.error(error))
+    )
   }
 }

@@ -267,7 +267,6 @@ function mapStateToProps(state, props) {
     curation,
     harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
     previewDefinition,
-    latestCuration: state.ui.inspect.latestCuration && cloneDeep(state.ui.inspect.latestCuration),
     inspectedCuration: state.ui.inspect.inspectedCuration && cloneDeep(state.ui.inspect.inspectedCuration)
   }
 }

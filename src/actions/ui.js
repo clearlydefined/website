@@ -7,7 +7,8 @@ import {
   previewDefinitionAction,
   getDefinitionSuggestionsAction,
   resetPreviewDefinitionAction,
-  revertDefinitionAction
+  revertDefinitionAction,
+  getDefinitionSuggestedDataAction
 } from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
 import { getPrDataAction } from './prActions'
@@ -22,9 +23,9 @@ export const UI_INSPECT_UPDATE_FILTER = 'UI_INSPECT_UPDATE_FILTER'
 export const UI_INSPECT_GET_CURATION = 'UI_INSPECT_GET_CURATION'
 export const UI_INSPECT_GET_DEFINITION = 'UI_INSPECT_GET_DEFINITION'
 export const UI_INSPECT_GET_HARVESTED = 'UI_INSPECT_GET_HARVESTED'
+export const UI_INSPECT_GET_SUGGESTIONS = 'UI_INSPECT_GET_SUGGESTIONS'
 
 export const UI_GET_CURATION_DATA = 'UI_GET_CURATION_DATA'
-export const UI_GET_LATEST_CURATION_DATA = 'UI_GET_LATEST_CURATION_DATA'
 export const UI_GET_CURATIONS_LIST = 'UI_GET_CURATIONS_LIST'
 
 export const UI_CONTRIBUTION_GET_URL = 'UI_CONTRIBUTION_GET_URL'
@@ -82,8 +83,8 @@ export function uiContributionGetData(token, entity) {
 }
 
 // Get the curation in the given PR relative to the specified coordinates
-export function uiGetCurationData(token, entity, prNumber, getLatest) {
-  return getCurationDataAction(token, entity, getLatest ? UI_GET_LATEST_CURATION_DATA : UI_GET_CURATION_DATA, prNumber)
+export function uiGetCurationData(token, entity, prNumber) {
+  return getCurationDataAction(token, entity, UI_GET_CURATION_DATA, prNumber)
 }
 
 export function uiApplyCurationSuggestion(value) {
@@ -148,4 +149,8 @@ export function uiHarvestUpdateFilter(value) {
 
 export function uiHarvestUpdateQueue(value) {
   return { type: UI_HARVEST_UPDATE_QUEUE, result: value }
+}
+
+export function uiInspectGetSuggestions(token, prefix) {
+  return getDefinitionSuggestedDataAction(token, prefix, UI_INSPECT_GET_SUGGESTIONS)
 }

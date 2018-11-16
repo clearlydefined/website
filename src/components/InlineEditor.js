@@ -9,6 +9,7 @@ import { SpdxPicker } from './'
 import withSuggestions from '../utils/withSuggestions'
 class InlineEditor extends React.Component {
   static propTypes = {
+    field: PropTypes.string.isRequired,
     readOnly: PropTypes.bool,
     initialValue: PropTypes.string,
     extraClass: PropTypes.string,

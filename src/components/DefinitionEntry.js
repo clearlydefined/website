@@ -240,6 +240,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <InlineEditor
+                  field={'licensed.declared'}
                   extraClass={this.classIfDifferent('licensed.declared')}
                   readOnly={readOnly}
                   type="license"
