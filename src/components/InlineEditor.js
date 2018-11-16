@@ -6,8 +6,8 @@ import PropTypes from 'prop-types'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import Tooltip from 'antd/lib/tooltip'
 import { SpdxPicker } from './'
-
-export default class InlineEditor extends React.Component {
+import withSuggestions from '../utils/withSuggestions'
+class InlineEditor extends React.Component {
   static propTypes = {
     readOnly: PropTypes.bool,
     initialValue: PropTypes.string,
@@ -170,3 +170,5 @@ export default class InlineEditor extends React.Component {
     }
   }
 }
+
+export default withSuggestions(InlineEditor)
