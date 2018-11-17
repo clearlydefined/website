@@ -15,7 +15,7 @@ import SuggestionsList from '../components/Navigation/Ui/Suggestions/Suggestions
  */
 
 function withSuggestions(WrappedComponent, options = {}) {
-  return class EnhanceSuggestions extends WrappedComponent {
+  class EnhanceSuggestions extends WrappedComponent {
     state = {
       showSuggestions: false
     }
@@ -23,30 +23,28 @@ function withSuggestions(WrappedComponent, options = {}) {
     render() {
       const { suggestedData } = this.props
       const { showSuggestions } = this.state
-      console.log(suggestedData)
       return (
         <Fragment>
           <div>
             {super.render()}
             <span>|</span>
-            <span
-              onClick={this.setState(() => {
-                return { showSuggestions: !showSuggestions }
-              })}
-            >
-              Suggestions
-            </span>
+            <span onClick={() => this.setState({ showSuggestions: !showSuggestions })}>Suggestions</span>
           </div>
           {showSuggestions && <SuggestionsList items={suggestedData} />}
         </Fragment>
       )
     }
   }
+
+  return connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(EnhanceSuggestions)
 }
 
 function mapStateToProps(state, props) {
   return {
-    suggestedData: get(state.ui.inspect.suggestedData, props.field)
+    suggestedData: get(state.ui.inspect.suggestedData.item, props.field)
   }
 }
 
@@ -54,7 +52,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({}, dispatch)
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withSuggestions)
+export default withSuggestions

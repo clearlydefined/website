@@ -151,6 +151,6 @@ export function uiHarvestUpdateQueue(value) {
   return { type: UI_HARVEST_UPDATE_QUEUE, result: value }
 }
 
-export function uiInspectGetSuggestions(token, prefix) {
-  return getDefinitionSuggestedDataAction(token, prefix, UI_INSPECT_GET_SUGGESTIONS)
+export function uiInspectGetSuggestions(token, entity) {
+  return getDefinitionSuggestedDataAction(token, entity, UI_INSPECT_GET_SUGGESTIONS)
 }

@@ -106,6 +106,7 @@ class EditableFieldRenderer extends Component {
         />
       ) : (
         <InlineEditor
+          field={field}
           extraClass={Contribution.classIfDifferent(definition, previewDefinition, field)}
           readOnly={readOnly}
           type={type && type !== 'coordinates' ? type : 'text'}

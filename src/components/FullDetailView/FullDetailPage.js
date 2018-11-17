@@ -20,7 +20,8 @@ import {
   uiGetCurationsList,
   uiRevertDefinition,
   uiApplyCurationSuggestion,
-  uiGetCurationData
+  uiGetCurationData,
+  uiInspectGetSuggestions
 } from '../../actions/ui'
 import { curateAction } from '../../actions/curationActions'
 import { login } from '../../actions/sessionActions'
@@ -83,11 +84,18 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
   // Get the data for the current definition
   handleNewSpec(component) {
-    const { token, uiInspectGetDefinition, uiInspectGetCuration, uiInspectGetHarvested } = this.props
+    const {
+      token,
+      uiInspectGetDefinition,
+      uiInspectGetCuration,
+      uiInspectGetHarvested,
+      uiInspectGetSuggestions
+    } = this.props
     if (!component) return
     uiInspectGetDefinition(token, component)
     uiInspectGetCuration(token, component)
     uiInspectGetHarvested(token, component)
+    uiInspectGetSuggestions(token, component)
     //uiGetCurationsList(token, component)
     this.previewDefinition(component)
   }
@@ -285,7 +293,8 @@ function mapDispatchToProps(dispatch) {
       uiCurateResetDefinitionPreview,
       uiRevertDefinition,
       uiApplyCurationSuggestion,
-      uiGetCurationData
+      uiGetCurationData,
+      uiInspectGetSuggestions
     },
     dispatch
   )

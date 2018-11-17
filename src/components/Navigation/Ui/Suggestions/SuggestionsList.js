@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 class SuggestionsList extends Component {
   render() {
-    return <div />
+    return <div>{this.props.items}</div>
   }
 }
 
