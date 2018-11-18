@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 import { setIfValue } from './utils'
-import findIndex from 'lodash/findIndex'
 
 const NAMESPACE = 0x4
 const NAME = 0x2
@@ -86,21 +85,9 @@ export default class EntitySpec {
     const urlObject = new URL(url)
     const path = urlObject.pathname.startsWith('/') ? urlObject.pathname.slice(1) : urlObject.pathname
     const hostname = urlObject.hostname.toLowerCase().replace('www.', '')
-    const entry = this._findParser(hostname, path)
+    const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))
     if (!entry) throw new Error(`${hostname} is not currently supported`)
     return entry.parser(path)
-  }
-
-  static _findParser(hostname, path) {
-    return entityMapping.find(entry => {
-      return (
-        findIndex(entry.hostnames, pattern => {
-          if (typeof pattern === 'string') return pattern === hostname
-          if (pattern instanceof RegExp) return pattern.test(hostname + '/' + path)
-          return false
-        }) >= 0
-      )
-    })
   }
 
   static fromCoordinates(o) {
