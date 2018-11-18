@@ -12,7 +12,6 @@ import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
-import last from 'lodash/last'
 import trim from 'lodash/trim'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiWarning, uiDanger } from '../actions/ui'
@@ -352,7 +351,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
       const url = new URL(trim(urlSpec, '/'))
       if (url.hostname !== 'github.com') return false
       const [, org, , type, number] = url.pathname.split('/')
-      if (org != 'clearlydefined' || type !== 'pull') return false
+      if (org !== 'clearlydefined' || type !== 'pull') return false
       this.props.history.push(`${ROUTE_CURATIONS}/${number}`)
       return true
     } catch (exception) {
