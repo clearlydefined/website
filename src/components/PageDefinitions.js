@@ -12,10 +12,12 @@ import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
+import last from 'lodash/last'
+import trim from 'lodash/trim'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiWarning, uiDanger } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
+import { ROUTE_CURATIONS, ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
@@ -228,7 +230,24 @@ export class PageDefinitions extends AbstractPageDefinitions {
   }
 
   noRowsRenderer() {
-    return <div className="list-noRows">Search for components above ...</div>
+    return (
+      <div className="list-noRows">
+        <div>
+          <p>Search for components in the above search bar or drag and drop...</p>
+          <ul>
+            <li>the URL for a component version/commit from nuget.org, github.com, npmjs.com, ... </li>
+            <li>
+              the URL for curation PR from{' '}
+              <a href="https://github.com/clearlydefined/curated-data">
+                https://github.com/clearlydefined/curated-data
+              </a>
+              , ...{' '}
+            </li>
+            <li>a saved ClearlyDefined component list, package-lock.json, project-log.json, ... </li>
+          </ul>
+        </div>
+      </div>
+    )
   }
 
   doSave() {
@@ -305,15 +324,42 @@ export class PageDefinitions extends AbstractPageDefinitions {
 
   onTextDrop = content => {
     try {
-      const contentObject = asObject(content)
-      // if the dropped text can be directly interpreted as JSON, assume it's a list
-      if (contentObject) return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
-      // if it's a URL to a gist, load the gist files
-      if (content.startsWith('https://gist.github.com')) return this.onGistDrop(content)
-      // otherwise, assume it's a URL and try to add the component from its natural habitat.
-      return this.onAddComponent(EntitySpec.fromUrl(content))
+      if (this.onDropObject(content) !== false) return
+      if (this.onDropGist(content) !== false) return
+      if (this.onDropEntityUrl(content) !== false) return
+      if (this.onDropPrURL(content) !== false) return
+      // TODO notify the user that they dropped something bogus
     } catch (error) {
       return uiWarning(this.props.dispatch, error.message)
+    }
+  }
+
+  onDropGist(content) {
+    if (!content.startsWith('https://gist.github.com')) return false
+    return this.onGistDrop(content)
+  }
+
+  onDropEntityUrl(content) {
+    const spec = EntitySpec.fromUrl(content)
+    if (!spec) return false
+    return this.onAddComponent(spec)
+  }
+
+  onDropObject(content) {
+    const contentObject = asObject(content)
+    if (!contentObject) return false
+    return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
+  }
+
+  onDropPrURL(urlSpec) {
+    try {
+      const url = new URL(trim(urlSpec, '/'))
+      if (!new RegExp('clearlydefined/curated-data/pull/', 'ig').test(url.pathname)) return false
+      const pr = last(url.pathname.split('/'))
+      this.props.history.push(`${ROUTE_CURATIONS}/${pr}`)
+      return true
+    } catch (exception) {
+      return false
     }
   }
 
