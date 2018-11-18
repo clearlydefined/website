@@ -13,7 +13,7 @@ import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
 import { FilterBar } from './'
-import { uiNavigation, uiBrowseUpdateList, uiNotificationNew, uiRevertDefinition } from '../actions/ui'
+import { uiNavigation, uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiWarning, uiDanger } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
@@ -21,6 +21,7 @@ import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { asObject } from '../utils/utils'
+import { getGist, saveGist } from '../api/github'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -39,7 +40,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
         const definitionSpec = pako.inflate(base64js.toByteArray(path), { to: 'string' })
         this.loadFromListSpec(JSON.parse(definitionSpec))
       } catch (e) {
-        dispatch(uiNotificationNew({ type: 'warning', message: 'Loading components from URL failed', timeout: 5000 }))
+        uiWarning(dispatch, 'Loading components from URL failed')
       }
     }
     dispatch(uiNavigation({ to: ROUTE_DEFINITIONS }))
@@ -91,12 +92,8 @@ export class PageDefinitions extends AbstractPageDefinitions {
     const { dispatch, token } = this.props
     const chunks = chunk(definitions, 100)
     Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
-      .then(() => dispatch(uiNotificationNew({ type: 'info', message, timeout: 3000 })))
-      .catch(() =>
-        dispatch(
-          uiNotificationNew({ type: 'danger', message: 'There was an issue retrieving components', timeout: 3000 })
-        )
-      )
+      .then(() => uiInfo(dispatch, message))
+      .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
   }
 
   refresh = removeDefinitions => {
@@ -216,6 +213,9 @@ export class PageDefinitions extends AbstractPageDefinitions {
         <MenuItem eventKey="2" onSelect={() => this.setState({ showSavePopup: true })}>
           File
         </MenuItem>
+        <MenuItem eventKey="3" onSelect={() => this.setState({ showSavePopup: true, saveType: 'gist' })}>
+          Gist
+        </MenuItem>
         <MenuItem divider />
         <MenuItem disabled>Definitions (Not implemented)</MenuItem>
         <MenuItem disabled>SPDX (Not implemented)</MenuItem>
@@ -234,10 +234,39 @@ export class PageDefinitions extends AbstractPageDefinitions {
   doSave() {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
-    const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-    const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
+    this.saveSpec(spec)
     this.setState({ showSavePopup: false, fileName: null })
-    saveAs(file)
+  }
+
+  // capture this work in a serpate method so it can be spun off without waiting but still capture rejections
+  async saveSpec(spec) {
+    const { dispatch } = this.props
+    try {
+      const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
+      if (this.state.saveType === 'gist') await this.createGist(this.state.fileName, fileObject)
+      else {
+        const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
+        saveAs(file)
+      }
+    } catch (error) {
+      if (error.status === 404)
+        return uiWarning(dispatch, "Could not create Gist. Likely you've not given us permission")
+      uiWarning(dispatch, error.message)
+    }
+  }
+
+  async createGist(name, content) {
+    const { token, dispatch } = this.props
+    const url = await saveGist(token, `${name}.json`, JSON.stringify(content))
+    const message = (
+      <div>
+        A new Gist File has been created and is available{' '}
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          here
+        </a>
+      </div>
+    )
+    return uiInfo(dispatch, message)
   }
 
   doSaveAsUrl() {
@@ -258,7 +287,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
     textArea.select()
     document.execCommand('copy')
     document.body.removeChild(textArea)
-    this.props.dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
+    uiInfo(this.props.dispatch, message)
   }
 
   onDragOver = e => e.preventDefault()
@@ -275,12 +304,16 @@ export class PageDefinitions extends AbstractPageDefinitions {
   }
 
   onTextDrop = content => {
-    const contentObject = asObject(content)
-    if (contentObject) return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
     try {
+      const contentObject = asObject(content)
+      // if the dropped text can be directly interpreted as JSON, assume it's a list
+      if (contentObject) return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
+      // if it's a URL to a gist, load the gist files
+      if (content.startsWith('https://gist.github.com')) return this.onGistDrop(content)
+      // otherwise, assume it's a URL and try to add the component from its natural habitat.
       return this.onAddComponent(EntitySpec.fromUrl(content))
     } catch (error) {
-      return this.props.dispatch(uiNotificationNew({ type: 'warning', message: error.message, timeout: 5000 }))
+      return uiWarning(this.props.dispatch, error.message)
     }
   }
 
@@ -296,38 +329,38 @@ export class PageDefinitions extends AbstractPageDefinitions {
     )
   }
 
+  async onGistDrop(urlString) {
+    uiInfo(this.props.dispatch, 'Loading component list from gist')
+    const url = new URL(urlString)
+    const [, , id] = url.pathname.split('/')
+    if (!id) throw new Error(`Gist url ${url} is malformed`)
+    const content = await getGist(id)
+    if (!content || !Object.keys(content).length) throw new Error(`Gist at ${url} could not be loaded or was empty`)
+    for (let name in content) {
+      this.loadComponentList(content[name], name)
+    }
+  }
+
   onFileDrop(files) {
-    const { dispatch } = this.props
     if (!files.length) return
-    dispatch(uiNotificationNew({ type: 'info', message: 'Loading component list from file(s)', timeout: 5000 }))
+    uiInfo(this.props.dispatch, 'Loading component list from file(s)')
     files.forEach(file => {
       const reader = new FileReader()
-      reader.onload = () => {
-        try {
-          const listSpec = this.loadListSpec(reader.result, file)
-          this.loadFromListSpec(listSpec)
-        } catch (error) {
-          const message = `Invalid component list file: ${error.message}`
-          return dispatch(uiNotificationNew({ type: 'info', message, timeout: 5000 }))
-        }
-      }
+      reader.onload = () => this.loadComponentList(reader.result, file.name)
       reader.readAsBinaryString(file)
     })
   }
 
   onDropRejected = files => {
     const fileNames = files.map(file => file.name).join(', ')
-    this.props.dispatch(uiNotificationNew({ type: 'danger', message: `Could not load: ${fileNames}`, timeout: 5000 }))
+    uiWarning(this.props.dispatch, `Could not load: ${fileNames}`)
   }
 
   onAddComponent(value) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
     const path = component.toPath()
-    if (!component.revision)
-      return dispatch(
-        uiNotificationNew({ type: 'warning', message: `${path} needs version information`, timeout: 5000 })
-      )
+    if (!component.revision) return uiWarning(dispatch, `${path} needs version information`)
 
     !definitions.entries[path] &&
       dispatch(getDefinitionsAction(token, [path])) &&
@@ -348,14 +381,30 @@ export class PageDefinitions extends AbstractPageDefinitions {
     )
   }
 
-  loadListSpec(content, file) {
-    const object = JSON.parse(content)
-    if (file.name.toLowerCase() === 'package-lock.json') return this.loadPackageLockFile(object.dependencies)
-    if (object.coordinates) return object
-    throw new Error('No component coordinates found')
+  loadComponentList(content, name) {
+    const list = this.getList(content)
+    if (!list) return uiWarning(this.props.dispatch, `Invalid component list file: ${name}`)
+    this.loadFromListSpec(list)
   }
 
-  loadPackageLockFile(dependencies) {
+  getList(content) {
+    const object = typeof content === 'string' ? JSON.parse(content) : content
+    if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
+    if (this.isClearlyDefinedList(object)) return object
+    return null
+  }
+
+  isPackageLock(content) {
+    // TODO better, more definitive test here
+    return !!content.dependencies
+  }
+
+  isClearlyDefinedList(content) {
+    // TODO better, more definitive test here
+    return !!content.coordinates
+  }
+
+  getListFromPackageLock(dependencies) {
     const coordinates = []
     for (const dependency in dependencies) {
       let [namespace, name] = dependency.split('/')
@@ -368,17 +417,13 @@ export class PageDefinitions extends AbstractPageDefinitions {
     return { coordinates }
   }
 
-  readOnly() {
-    return false
-  }
-
-  loadFromListSpec(listSpec) {
+  loadFromListSpec(list) {
     const { dispatch, definitions } = this.props
-    if (listSpec.filter) this.setState({ activeFilters: listSpec.filter })
-    if (listSpec.sortBy) this.setState({ activeSort: listSpec.sortBy })
-    if (listSpec.sortBy || listSpec.filter) this.setState({ sequence: this.state.sequence + 1 })
+    if (list.filter) this.setState({ activeFilters: list.filter })
+    if (list.sortBy) this.setState({ activeSort: list.sortBy })
+    if (list.sortBy || list.filter) this.setState({ sequence: this.state.sequence + 1 })
 
-    const toAdd = listSpec.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
+    const toAdd = list.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
     dispatch(uiBrowseUpdateList({ addAll: toAdd }))
     const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
     this.getDefinitionsAndNotify(missingDefinitions, 'All components have been loaded')
@@ -386,11 +431,15 @@ export class PageDefinitions extends AbstractPageDefinitions {
       uiBrowseUpdateList({
         transform: this.createTransform.call(
           this,
-          listSpec.sortBy || this.state.activeSort,
-          listSpec.filter || this.state.activeFilters
+          list.sortBy || this.state.activeSort,
+          list.filter || this.state.activeFilters
         )
       })
     )
+  }
+
+  readOnly() {
+    return false
   }
 }
 
