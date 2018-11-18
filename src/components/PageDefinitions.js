@@ -314,53 +314,70 @@ export class PageDefinitions extends AbstractPageDefinitions {
 
   onDrop = e => {
     e.preventDefault()
-    const text = e.dataTransfer.getData('Text')
-    if (text) return this.onTextDrop(text)
-    const files = Object.values(e.dataTransfer.files)
-    const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
-    if (acceptedFiles.length) this.onFileDrop(acceptedFiles)
-    if (rejectedFiles.length) this.onDropRejected(rejectedFiles)
-  }
-
-  onTextDrop = content => {
     try {
-      if (this.onDropObject(content) !== false) return
-      if (this.onDropGist(content) !== false) return
-      if (this.onDropEntityUrl(content) !== false) return
-      if (this.onDropPrURL(content) !== false) return
+      if (this.handleTextDrop(e) !== false) return
+      if (this.handleDropFiles(e) !== false) return
       // TODO notify the user that they dropped something bogus
     } catch (error) {
       return uiWarning(this.props.dispatch, error.message)
     }
   }
 
-  onDropGist(content) {
-    if (!content.startsWith('https://gist.github.com')) return false
-    return this.onGistDrop(content)
+  handleTextDrop = async event => {
+    const text = event.dataTransfer.getData('Text')
+    if (!text) return false
+    if (this.handleDropObject(text) !== false) return
+    if ((await this.handleDropGist(text)) !== false) return
+    if (this.handleDropEntityUrl(text) !== false) return
+    if (this.handleDropPrURL(text) !== false) return
   }
 
-  onDropEntityUrl(content) {
+  // handle dropping a URL to an npm, github repo/release, nuget package, ...
+  handleDropEntityUrl(content) {
     const spec = EntitySpec.fromUrl(content)
     if (!spec) return false
     return this.onAddComponent(spec)
   }
 
-  onDropObject(content) {
+  // dropping an actual definition, an object that has `coordinates`
+  handleDropObject(content) {
     const contentObject = asObject(content)
     if (!contentObject) return false
     return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
   }
 
-  onDropPrURL(urlSpec) {
+  // handle dropping a url pointing to a curation PR
+  handleDropPrURL(urlSpec) {
     try {
       const url = new URL(trim(urlSpec, '/'))
-      if (!new RegExp('clearlydefined/curated-data/pull/', 'ig').test(url.pathname)) return false
-      const pr = last(url.pathname.split('/'))
-      this.props.history.push(`${ROUTE_CURATIONS}/${pr}`)
+      if (url.hostname !== 'github.com') return false
+      const [, org, , type, number] = url.pathname.split('/')
+      if (org != 'clearlydefined' || type !== 'pull') return false
+      this.props.history.push(`${ROUTE_CURATIONS}/${number}`)
       return true
     } catch (exception) {
       return false
     }
+  }
+
+  // handle dropping a url to a Gist that contains a ClearlyDefined coordinate list
+  async handleDropGist(urlString) {
+    if (!urlString.startsWith('https://gist.github.com')) return false
+    uiInfo(this.props.dispatch, 'Loading component list from gist')
+    const url = new URL(urlString)
+    const [, , id] = url.pathname.split('/')
+    if (!id) throw new Error(`Gist url ${url} is malformed`)
+    const content = await getGist(id)
+    if (!content || !Object.keys(content).length) throw new Error(`Gist at ${url} could not be loaded or was empty`)
+    for (let name in content) this.loadComponentList(content[name], name)
+  }
+
+  handleDropFiles(event) {
+    const files = Object.values(event.dataTransfer.files)
+    if (!files) return false
+    const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
+    if (acceptedFiles.length) this.handleDropAcceptedFiles(acceptedFiles)
+    if (rejectedFiles.length) this.handleDropRejectedFiles(rejectedFiles)
   }
 
   sortDroppedFiles(files) {
@@ -375,20 +392,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
     )
   }
 
-  async onGistDrop(urlString) {
-    uiInfo(this.props.dispatch, 'Loading component list from gist')
-    const url = new URL(urlString)
-    const [, , id] = url.pathname.split('/')
-    if (!id) throw new Error(`Gist url ${url} is malformed`)
-    const content = await getGist(id)
-    if (!content || !Object.keys(content).length) throw new Error(`Gist at ${url} could not be loaded or was empty`)
-    for (let name in content) {
-      this.loadComponentList(content[name], name)
-    }
-  }
-
-  onFileDrop(files) {
-    if (!files.length) return
+  handleDropAcceptedFiles(files) {
     uiInfo(this.props.dispatch, 'Loading component list from file(s)')
     files.forEach(file => {
       const reader = new FileReader()
@@ -397,7 +401,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
     })
   }
 
-  onDropRejected = files => {
+  handleDropRejectedFiles = files => {
     const fileNames = files.map(file => file.name).join(', ')
     uiWarning(this.props.dispatch, `Could not load: ${fileNames}`)
   }
