@@ -38,7 +38,7 @@ function githubParser(path) {
   const [org, repo, type, one, two] = path.split('/')
   const version = type === 'commit' ? one : type === 'releases' ? two : null
   // if there is no version but there is something after repo, it's not for us so return
-  if (!version && type) return false
+  if (!version && type) return null
   return new EntitySpec('git', 'github', org, repo, version)
 }
 

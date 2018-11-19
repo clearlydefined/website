@@ -311,14 +311,15 @@ export class PageDefinitions extends AbstractPageDefinitions {
   onDragOver = e => e.preventDefault()
   onDragEnter = e => e.preventDefault()
 
-  onDrop = e => {
+  onDrop = async e => {
     e.preventDefault()
+    e.persist()
     try {
-      if (this.handleTextDrop(e) !== false) return
+      if ((await this.handleTextDrop(e)) !== false) return
       if (this.handleDropFiles(e) !== false) return
-      // TODO notify the user that they dropped something bogus
+      uiWarning(this.props.dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
     } catch (error) {
-      return uiWarning(this.props.dispatch, error.message)
+      uiWarning(this.props.dispatch, error.message)
     }
   }
 
@@ -329,20 +330,21 @@ export class PageDefinitions extends AbstractPageDefinitions {
     if ((await this.handleDropGist(text)) !== false) return
     if (this.handleDropEntityUrl(text) !== false) return
     if (this.handleDropPrURL(text) !== false) return
+    return false
   }
 
   // handle dropping a URL to an npm, github repo/release, nuget package, ...
   handleDropEntityUrl(content) {
     const spec = EntitySpec.fromUrl(content)
     if (!spec) return false
-    return this.onAddComponent(spec)
+    this.onAddComponent(spec)
   }
 
   // dropping an actual definition, an object that has `coordinates`
   handleDropObject(content) {
     const contentObject = asObject(content)
     if (!contentObject) return false
-    return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
+    this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
   }
 
   // handle dropping a url pointing to a curation PR
@@ -353,7 +355,6 @@ export class PageDefinitions extends AbstractPageDefinitions {
       const [, org, , type, number] = url.pathname.split('/')
       if (org !== 'clearlydefined' || type !== 'pull') return false
       this.props.history.push(`${ROUTE_CURATIONS}/${number}`)
-      return true
     } catch (exception) {
       return false
     }
@@ -373,7 +374,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
 
   handleDropFiles(event) {
     const files = Object.values(event.dataTransfer.files)
-    if (!files) return false
+    if (!files || !files.length) return false
     const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
     if (acceptedFiles.length) this.handleDropAcceptedFiles(acceptedFiles)
     if (rejectedFiles.length) this.handleDropRejectedFiles(rejectedFiles)
