@@ -94,13 +94,13 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
   /**
    * Dispatch the action to save a contribution
-   * @param  {} constributionInfo object that describes the contribution
+   * @param  {} contributionInfo object that describes the contribution
    */
-  doContribute(constributionInfo) {
+  doContribute(contributionInfo) {
     const { token, component, curateAction } = this.props
     const { changes } = this.state
     const patches = Contribution.buildContributeSpec([], component, changes)
-    const spec = { constributionInfo, patches }
+    const spec = { contributionInfo, patches }
     curateAction(token, spec)
   }
 

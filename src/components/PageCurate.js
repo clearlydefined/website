@@ -62,12 +62,12 @@ class PageCurate extends Component {
 
   /**
    * Dispatch the action to save a curation
-   * @param  {} constributionInfo object that describes the curation
+   * @param  {} contributionInfo object that describes the curation
    */
-  doContribute(constributionInfo) {
+  doContribute(contributionInfo) {
     const { dispatch, token } = this.props
     const { proposal, entitySpec } = this.state
-    const spec = { constributionInfo, patch: proposal }
+    const spec = { contributionInfo, patch: proposal }
     dispatch(curateAction(token, entitySpec, spec))
   }
 
