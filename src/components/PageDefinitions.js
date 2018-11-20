@@ -12,10 +12,11 @@ import notification from 'antd/lib/notification'
 import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
+import trim from 'lodash/trim'
 import { FilterBar } from './'
 import { uiNavigation, uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiWarning, uiDanger } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
+import { ROUTE_CURATIONS, ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import EntitySpec from '../utils/entitySpec'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 import { getCurationAction } from '../actions/curationActions'
@@ -228,7 +229,24 @@ export class PageDefinitions extends AbstractPageDefinitions {
   }
 
   noRowsRenderer() {
-    return <div className="list-noRows">Search for components above ...</div>
+    return (
+      <div className="list-noRows">
+        <div>
+          <p>Search for components in the above search bar or drag and drop...</p>
+          <ul>
+            <li>the URL for a component version/commit from nuget.org, github.com, npmjs.com, ... </li>
+            <li>
+              the URL for curation PR from{' '}
+              <a href="https://github.com/clearlydefined/curated-data">
+                https://github.com/clearlydefined/curated-data
+              </a>
+              , ...{' '}
+            </li>
+            <li>a saved ClearlyDefined component list, package-lock.json, project-log.json, ... </li>
+          </ul>
+        </div>
+      </div>
+    )
   }
 
   doSave() {
@@ -293,28 +311,73 @@ export class PageDefinitions extends AbstractPageDefinitions {
   onDragOver = e => e.preventDefault()
   onDragEnter = e => e.preventDefault()
 
-  onDrop = e => {
+  onDrop = async e => {
     e.preventDefault()
-    const text = e.dataTransfer.getData('Text')
-    if (text) return this.onTextDrop(text)
-    const files = Object.values(e.dataTransfer.files)
-    const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
-    if (acceptedFiles.length) this.onFileDrop(acceptedFiles)
-    if (rejectedFiles.length) this.onDropRejected(rejectedFiles)
+    e.persist()
+    try {
+      if ((await this.handleTextDrop(e)) !== false) return
+      if (this.handleDropFiles(e) !== false) return
+      uiWarning(this.props.dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
+    } catch (error) {
+      uiWarning(this.props.dispatch, error.message)
+    }
   }
 
-  onTextDrop = content => {
+  handleTextDrop = async event => {
+    const text = event.dataTransfer.getData('Text')
+    if (!text) return false
+    if (this.handleDropObject(text) !== false) return
+    if ((await this.handleDropGist(text)) !== false) return
+    if (this.handleDropEntityUrl(text) !== false) return
+    if (this.handleDropPrURL(text) !== false) return
+    return false
+  }
+
+  // handle dropping a URL to an npm, github repo/release, nuget package, ...
+  handleDropEntityUrl(content) {
+    const spec = EntitySpec.fromUrl(content)
+    if (!spec) return false
+    this.onAddComponent(spec)
+  }
+
+  // dropping an actual definition, an object that has `coordinates`
+  handleDropObject(content) {
+    const contentObject = asObject(content)
+    if (!contentObject) return false
+    this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
+  }
+
+  // handle dropping a url pointing to a curation PR
+  handleDropPrURL(urlSpec) {
     try {
-      const contentObject = asObject(content)
-      // if the dropped text can be directly interpreted as JSON, assume it's a list
-      if (contentObject) return this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
-      // if it's a URL to a gist, load the gist files
-      if (content.startsWith('https://gist.github.com')) return this.onGistDrop(content)
-      // otherwise, assume it's a URL and try to add the component from its natural habitat.
-      return this.onAddComponent(EntitySpec.fromUrl(content))
-    } catch (error) {
-      return uiWarning(this.props.dispatch, error.message)
+      const url = new URL(trim(urlSpec, '/'))
+      if (url.hostname !== 'github.com') return false
+      const [, org, , type, number] = url.pathname.split('/')
+      if (org !== 'clearlydefined' || type !== 'pull') return false
+      this.props.history.push(`${ROUTE_CURATIONS}/${number}`)
+    } catch (exception) {
+      return false
     }
+  }
+
+  // handle dropping a url to a Gist that contains a ClearlyDefined coordinate list
+  async handleDropGist(urlString) {
+    if (!urlString.startsWith('https://gist.github.com')) return false
+    uiInfo(this.props.dispatch, 'Loading component list from gist')
+    const url = new URL(urlString)
+    const [, , id] = url.pathname.split('/')
+    if (!id) throw new Error(`Gist url ${url} is malformed`)
+    const content = await getGist(id)
+    if (!content || !Object.keys(content).length) throw new Error(`Gist at ${url} could not be loaded or was empty`)
+    for (let name in content) this.loadComponentList(content[name], name)
+  }
+
+  handleDropFiles(event) {
+    const files = Object.values(event.dataTransfer.files)
+    if (!files || !files.length) return false
+    const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
+    if (acceptedFiles.length) this.handleDropAcceptedFiles(acceptedFiles)
+    if (rejectedFiles.length) this.handleDropRejectedFiles(rejectedFiles)
   }
 
   sortDroppedFiles(files) {
@@ -329,20 +392,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
     )
   }
 
-  async onGistDrop(urlString) {
-    uiInfo(this.props.dispatch, 'Loading component list from gist')
-    const url = new URL(urlString)
-    const [, , id] = url.pathname.split('/')
-    if (!id) throw new Error(`Gist url ${url} is malformed`)
-    const content = await getGist(id)
-    if (!content || !Object.keys(content).length) throw new Error(`Gist at ${url} could not be loaded or was empty`)
-    for (let name in content) {
-      this.loadComponentList(content[name], name)
-    }
-  }
-
-  onFileDrop(files) {
-    if (!files.length) return
+  handleDropAcceptedFiles(files) {
     uiInfo(this.props.dispatch, 'Loading component list from file(s)')
     files.forEach(file => {
       const reader = new FileReader()
@@ -351,7 +401,7 @@ export class PageDefinitions extends AbstractPageDefinitions {
     })
   }
 
-  onDropRejected = files => {
+  handleDropRejectedFiles = files => {
     const fileNames = files.map(file => file.name).join(', ')
     uiWarning(this.props.dispatch, `Could not load: ${fileNames}`)
   }
