@@ -167,6 +167,7 @@ export default class FileList extends Component {
         resizable: false,
         Cell: row => (
           <CopyrightsRenderer
+            field={row.original && `files[${row.original.id}].attributions`}
             container={document.getElementsByClassName('ReactTable')[0]}
             item={row.value}
             readOnly={readOnly}

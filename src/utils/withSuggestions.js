@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-import React, { Fragment } from 'react'
+import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import get from 'lodash/get'
@@ -18,12 +18,10 @@ function withSuggestions(WrappedComponent, options = {}) {
     render() {
       const { suggestedData, field } = this.props
       return (
-        <Fragment>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {super.render()}
-            {suggestedData && <SuggestionsList field={field} items={suggestedData} />}
-          </div>
-        </Fragment>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <WrappedComponent {...this.props} />
+          {suggestedData && <SuggestionsList field={field} items={suggestedData} />}
+        </div>
       )
     }
   }

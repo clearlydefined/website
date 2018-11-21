@@ -7,12 +7,25 @@ import isNumber from 'lodash/isNumber'
 import { OverlayTrigger } from 'react-bootstrap'
 
 import PopoverRenderer from './PopoverRenderer'
+import withSuggestions from '../utils/withSuggestions'
 
 /**
  * Specific renderer for Copyrights data
  * It show the first Copyright, and if clicked opens a Popover containing a list of details
  *
  */
+
+class Content extends Component {
+  render() {
+    const { classIfDifferent, values, readOnly, onClick } = this.props
+    return (
+      <div className="copyrightContainer" onClick={onClick}>
+        {!readOnly && <i className="fas fa-pencil-alt editable-marker" />}
+        <span className={classIfDifferent}>{values && values[0] ? values[0].value : null}</span>
+      </div>
+    )
+  }
+}
 class CopyrightsRenderer extends Component {
   static defaultProps = {
     readOnly: false,
@@ -58,8 +71,10 @@ class CopyrightsRenderer extends Component {
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
   render() {
-    const { readOnly, container, placement, classIfDifferent } = this.props
+    const { readOnly, container, placement, classIfDifferent, field } = this.props
     const { hasChanges, values, showAddRow } = this.state
+
+    const EnhancedCopyrights = withSuggestions(Content)
 
     if (!values.length && readOnly) return null
 
@@ -88,10 +103,7 @@ class CopyrightsRenderer extends Component {
           />
         }
       >
-        <div className="copyrightContainer">
-          {!readOnly && <i className="fas fa-pencil-alt editable-marker" />}
-          <span className={classIfDifferent}>{values && values[0] ? values[0].value : null}</span>
-        </div>
+        <EnhancedCopyrights field={field} readOnly={readOnly} classIfDifferent={classIfDifferent} values={values} />
       </OverlayTrigger>
     )
   }
