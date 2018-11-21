@@ -60,6 +60,7 @@
     "start:prod-api": "env-cmd --fallback ./.env.production npm run build-scripts",
     "build": "env-cmd --fallback ./.env.production npm run build-css && npm run copy-monaco && react-scripts build",
     "test": "eslint src && react-scripts test --env=jsdom",
+    "test": "eslint src && react-scripts test --env=jsdom --coverage",
     "eject": "react-scripts eject"
   },
   "browserslist": {
