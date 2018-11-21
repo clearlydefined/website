@@ -9,11 +9,8 @@ import SuggestionsList from '../components/Navigation/Ui/Suggestions/Suggestions
 /**
  * HoC that manage the suggestion functionality for a Component
  * It retrieves suggested data for the specified field and show those into a selectable list
- * @param {*} WrappedComponent
- * @param {*} options
  */
-
-function withSuggestions(WrappedComponent, options = {}) {
+function withSuggestions(WrappedComponent) {
   class EnhanceSuggestions extends Component {
     constructor(props) {
       super(props)
