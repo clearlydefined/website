@@ -116,6 +116,7 @@ export default class FileList extends Component {
         Cell: row =>
           row.original && (
             <LicensesRenderer
+              field={`files[${row.original.id}].license`}
               readOnly={readOnly}
               isDifferent={Contribution.ifDifferent(
                 component,

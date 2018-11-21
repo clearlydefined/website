@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-
 import React, { Fragment } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -16,21 +15,14 @@ import SuggestionsList from '../components/Navigation/Ui/Suggestions/Suggestions
 
 function withSuggestions(WrappedComponent, options = {}) {
   class EnhanceSuggestions extends WrappedComponent {
-    state = {
-      showSuggestions: false
-    }
-
     render() {
-      const { suggestedData } = this.props
-      const { showSuggestions } = this.state
+      const { suggestedData, field } = this.props
       return (
         <Fragment>
-          <div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             {super.render()}
-            <span>|</span>
-            <span onClick={() => this.setState({ showSuggestions: !showSuggestions })}>Suggestions</span>
+            {suggestedData && <SuggestionsList field={field} items={suggestedData} />}
           </div>
-          {showSuggestions && <SuggestionsList items={suggestedData} />}
         </Fragment>
       )
     }
