@@ -4,6 +4,6 @@ import SuggestionsList from '../Suggestions/SuggestionsList'
 
 describe('SuggestionsList', () => {
   it('renders without crashing', () => {
-    shallow(<SuggestionsList />)
+    shallow(<SuggestionsList items={[{ value: 'test', version: 'test.1.0' }]} />)
   })
 })
