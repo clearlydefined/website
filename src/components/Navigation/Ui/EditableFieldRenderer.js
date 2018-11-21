@@ -79,7 +79,6 @@ class EditableFieldRenderer extends Component {
       readOnly,
       onChange,
       handleRevert,
-      applyCurationSuggestion,
       type,
       value,
       editable,
@@ -117,7 +116,6 @@ class EditableFieldRenderer extends Component {
           validator
           placeholder={placeholder}
           suggested={suggested}
-          onApplySuggestion={() => applyCurationSuggestion(field)}
         />
       )
 

@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-import React from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import get from 'lodash/get'
@@ -14,13 +14,24 @@ import SuggestionsList from '../components/Navigation/Ui/Suggestions/Suggestions
  */
 
 function withSuggestions(WrappedComponent, options = {}) {
-  class EnhanceSuggestions extends WrappedComponent {
+  class EnhanceSuggestions extends Component {
+    constructor(props) {
+      super(props)
+      this.cmp = React.createRef()
+    }
+    /**
+     * Once a suggestion is applied, then it will added as a change for the current field
+     */
+    applySuggestion = suggestion => {
+      this.cmp.current.onChange(suggestion)
+    }
+
     render() {
       const { suggestedData, field } = this.props
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <WrappedComponent {...this.props} />
-          {suggestedData && <SuggestionsList field={field} items={suggestedData} />}
+          <WrappedComponent {...this.props} ref={this.cmp} />
+          {suggestedData && <SuggestionsList field={field} items={suggestedData} onSelect={this.applySuggestion} />}
         </div>
       )
     }

@@ -16,6 +16,10 @@ import withSuggestions from '../utils/withSuggestions'
  */
 
 class Content extends Component {
+  onChange = async suggestion => {
+    await this.props.onChange(suggestion)
+  }
+
   render() {
     const { classIfDifferent, values, readOnly, onClick } = this.props
     return (
@@ -61,14 +65,19 @@ class CopyrightsRenderer extends Component {
     this.setState({ values: this.state.values.filter((_, itemIndex) => index !== itemIndex), hasChanges: true })
   }
 
-  addItem = (value, updatedText) => {
+  addItem = async (value, updatedText) => {
     const { values, currentItem } = this.state
     const updatedObject = { value: updatedText || value, isDifferent: true }
     isNumber(currentItem) ? (values[currentItem] = updatedObject) : values.push(updatedObject)
-    this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true })
+    await this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true })
   }
 
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
+
+  onChange = async suggestion => {
+    await this.addItem(suggestion)
+    await this.onSave()
+  }
 
   render() {
     const { readOnly, container, placement, classIfDifferent, field } = this.props
@@ -103,7 +112,13 @@ class CopyrightsRenderer extends Component {
           />
         }
       >
-        <EnhancedCopyrights field={field} readOnly={readOnly} classIfDifferent={classIfDifferent} values={values} />
+        <EnhancedCopyrights
+          field={field}
+          readOnly={readOnly}
+          classIfDifferent={classIfDifferent}
+          values={values}
+          onChange={this.onChange}
+        />
       </OverlayTrigger>
     )
   }
