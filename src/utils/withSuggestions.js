@@ -19,9 +19,8 @@ function withSuggestions(WrappedComponent, options = {}) {
       super(props)
       this.cmp = React.createRef()
     }
-    /**
-     * Once a suggestion is applied, then it will added as a change for the current field
-     */
+
+    //Once a suggestion is applied, then it will added as a change for the current field
     applySuggestion = suggestion => {
       this.cmp.current.onChange(suggestion)
     }

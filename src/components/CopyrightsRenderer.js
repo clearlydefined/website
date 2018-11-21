@@ -14,8 +14,7 @@ import withSuggestions from '../utils/withSuggestions'
  * It show the first Copyright, and if clicked opens a Popover containing a list of details
  *
  */
-
-class Content extends Component {
+class CopyrightsContent extends Component {
   onChange = async suggestion => {
     await this.props.onChange(suggestion)
   }
@@ -83,7 +82,7 @@ class CopyrightsRenderer extends Component {
     const { readOnly, container, placement, classIfDifferent, field } = this.props
     const { hasChanges, values, showAddRow } = this.state
 
-    const EnhancedCopyrights = withSuggestions(Content)
+    const EnhancedCopyrights = withSuggestions(CopyrightsContent)
 
     if (!values.length && readOnly) return null
 
