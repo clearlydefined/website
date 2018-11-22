@@ -61,4 +61,4 @@ management via Redux is likely one of the key culprits.
 
 Having some folks who have a proven deep understanding Redux and React take a look at the setup and help it mature into
 a world-class React app would be fantastic.
- 
+  
