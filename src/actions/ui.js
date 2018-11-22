@@ -58,6 +58,19 @@ export function uiRedirect(to) {
 }
 
 let nextNotificationId = 0
+
+export function uiInfo(dispatch, message, timeout = 5000) {
+  dispatch(uiNotificationNew({ type: 'info', message, timeout }))
+}
+
+export function uiWarning(dispatch, message, timeout = 5000) {
+  dispatch(uiNotificationNew({ type: 'warning', message, timeout }))
+}
+
+export function uiDanger(dispatch, message, timeout = 5000) {
+  dispatch(uiNotificationNew({ type: 'danger', message, timeout }))
+}
+
 export function uiNotificationNew(message) {
   return { type: UI_NOTIFICATION_NEW, message: { ...message, id: nextNotificationId++ } }
 }

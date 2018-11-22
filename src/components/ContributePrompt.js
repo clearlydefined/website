@@ -43,8 +43,8 @@ export default class ContributePrompt extends Component {
 
   okHandler(e) {
     this.close()
-    const { show, ...constributionInfo } = this.state
-    this.props.actionHandler(constributionInfo)
+    const { show, ...contributionInfo } = this.state
+    this.props.actionHandler(contributionInfo)
   }
 
   handleChange(event) {

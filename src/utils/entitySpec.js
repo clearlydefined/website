@@ -36,9 +36,9 @@ function npmParser(path) {
 
 function githubParser(path) {
   const [org, repo, type, one, two] = path.split('/')
-  let version
-  if (type === 'commit') version = one
-  if (type === 'releases') version = two
+  const version = type === 'commit' ? one : type === 'releases' ? two : null
+  // if there is no version but there is something after repo, it's not for us so return
+  if (!version && type) return null
   return new EntitySpec('git', 'github', org, repo, version)
 }
 
@@ -89,10 +89,6 @@ export default class EntitySpec {
     const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))
     if (!entry) throw new Error(`${hostname} is not currently supported`)
     return entry.parser(path)
-  }
-
-  static _incompleteSpec(provider) {
-    throw new Error(`Components from ${provider} need version information`)
   }
 
   static fromCoordinates(o) {
