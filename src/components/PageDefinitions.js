@@ -1,19 +1,17 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Button, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Grid, Button, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import pako from 'pako'
-import throat from 'throat'
+
 import base64js from 'base64-js'
 import { saveAs } from 'file-saver'
 import notification from 'antd/lib/notification'
-import AntdButton from 'antd/lib/button'
-import chunk from 'lodash/chunk'
-import isEmpty from 'lodash/isEmpty'
+
 import trim from 'lodash/trim'
-import { FilterBar } from './'
+import get from 'lodash/get'
 import { uiNavigation, uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiWarning, uiDanger } from '../actions/ui'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { ROUTE_CURATIONS, ROUTE_DEFINITIONS, ROUTE_SHARE } from '../utils/routingConstants'
@@ -23,11 +21,15 @@ import { getCurationAction } from '../actions/curationActions'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { asObject } from '../utils/utils'
 import { getGist, saveGist } from '../api/github'
+import SearchBar from './Navigation/Ui/SearchBar'
+import { ComponentList, Section, ContributePrompt } from './'
+import FullDetailPage from './FullDetailView/FullDetailPage'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
     super(props)
     this.onDrop = this.onDrop.bind(this)
+    this.onAddComponent = this.onAddComponent.bind(this)
     this.doSave = this.doSave.bind(this)
     this.doSaveAsUrl = this.doSaveAsUrl.bind(this)
     this.revertAll = this.revertAll.bind(this)
@@ -49,17 +51,6 @@ export class PageDefinitions extends AbstractPageDefinitions {
 
   tableTitle() {
     return 'Available definitions'
-  }
-
-  renderSearchBar() {
-    const { filterOptions } = this.props
-    return (
-      <Row className="show-grid spacer">
-        <Col md={10} mdOffset={1}>
-          <FilterBar options={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} clearOnChange />
-        </Col>
-      </Row>
-    )
   }
 
   doRefreshAll = () => {
@@ -86,77 +77,6 @@ export class PageDefinitions extends AbstractPageDefinitions {
     } else {
       this.refresh()
     }
-  }
-
-  // Get an array of definitions asynchronous, split them into 100 chunks and alert the user when they're all done
-  getDefinitionsAndNotify(definitions, message) {
-    const { dispatch, token } = this.props
-    const chunks = chunk(definitions, 100)
-    Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
-      .then(() => uiInfo(dispatch, message))
-      .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
-  }
-
-  refresh = removeDefinitions => {
-    const { components, dispatch } = this.props
-    const refreshedData = removeDefinitions
-      ? components.list.filter(item => isEmpty(item.changes))
-      : components.list.map(({ changes, ...keepAttrs }) => keepAttrs)
-    if (this.hasChanges()) {
-      dispatch(
-        uiBrowseUpdateList({
-          updateAll: refreshedData
-        })
-      )
-    }
-
-    const definitions = this.buildSaveSpec(components.list)
-    const definitionsToGet = definitions.map(definition => definition.toPath())
-    this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
-  }
-
-  revertAll() {
-    this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?')
-  }
-
-  revertDefinition(definition, value) {
-    this.revert(definition, 'Are you sure to revert all the unsaved changes from the selected definition?', value)
-  }
-
-  revert(definition, description, value) {
-    const { dispatch } = this.props
-    if (value) {
-      dispatch(uiRevertDefinition(definition, value))
-      this.incrementSequence()
-      return
-    }
-    const key = `open${Date.now()}`
-    const NotificationButtons = (
-      <Fragment>
-        <AntdButton
-          type="primary"
-          size="small"
-          onClick={() => {
-            dispatch(uiRevertDefinition(definition))
-            this.incrementSequence()
-            notification.close(key)
-          }}
-        >
-          Revert
-        </AntdButton>{' '}
-        <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
-          Dismiss
-        </AntdButton>
-      </Fragment>
-    )
-    notification.open({
-      message: 'Confirm Revert?',
-      description,
-      btn: NotificationButtons,
-      key,
-      onClose: notification.close(key),
-      duration: 0
-    })
   }
 
   tooltip(text) {
@@ -490,6 +410,59 @@ export class PageDefinitions extends AbstractPageDefinitions {
 
   readOnly() {
     return false
+  }
+
+  render() {
+    const { components, definitions, session, filterOptions } = this.props
+    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
+    return (
+      <Grid className="main-container">
+        <ContributePrompt
+          ref={this.contributeModal}
+          session={session}
+          onLogin={this.handleLogin}
+          actionHandler={this.doContribute}
+        />
+        <SearchBar filterOptions={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} />
+        <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
+          {this.dropZone(
+            <div className="section-body">
+              <ComponentList
+                readOnly={this.readOnly()}
+                list={components.transformedList}
+                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+                listHeight={1000}
+                onRemove={this.onRemoveComponent}
+                onRevert={this.revertDefinition}
+                onChange={this.onChangeComponent}
+                onAddComponent={this.onAddComponent}
+                onInspect={this.onInspect}
+                renderFilterBar={this.renderFilterBar}
+                definitions={definitions}
+                noRowsRenderer={this.noRowsRenderer}
+                sequence={sequence}
+                hasChange={this.hasChange}
+                showVersionSelectorPopup={this.showVersionSelectorPopup}
+              />
+            </div>
+          )}
+        </Section>
+        {currentDefinition && (
+          <FullDetailPage
+            modalView
+            visible={showFullDetail}
+            onClose={this.onInspectClose}
+            onSave={this.onChangeComponent}
+            path={path}
+            currentDefinition={currentDefinition}
+            component={currentComponent}
+            readOnly={this.readOnly()}
+          />
+        )}
+        {this.renderSavePopup()}
+        {this.renderVersionSelectopPopup()}
+      </Grid>
+    )
   }
 }
 

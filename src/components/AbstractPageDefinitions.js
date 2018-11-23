@@ -1,25 +1,36 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Modal, Grid, DropdownButton, MenuItem, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
+import throat from 'throat'
 import compact from 'lodash/compact'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
 import get from 'lodash/get'
 import set from 'lodash/set'
 import sortBy from 'lodash/sortBy'
+import AntdButton from 'antd/lib/button'
+import chunk from 'lodash/chunk'
+import isEmpty from 'lodash/isEmpty'
 import notification from 'antd/lib/notification'
 import { curateAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
-import { ComponentList, Section, ContributePrompt } from './'
-import FullDetailPage from './FullDetailView/FullDetailPage'
-import { uiBrowseUpdateFilterList } from '../actions/ui'
+import {
+  uiBrowseUpdateFilterList,
+  uiNavigation,
+  uiBrowseUpdateList,
+  uiRevertDefinition,
+  uiInfo,
+  uiWarning,
+  uiDanger
+} from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Definition from '../utils/definition'
 import Auth from '../utils/auth'
 import VersionSelector from './Navigation/Ui/VersionSelector'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
+import SearchBar from './Navigation/Ui/SearchBar'
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -93,8 +104,6 @@ export default class AbstractPageDefinitions extends Component {
   getValue(component, field) {
     return get(component, field)
   }
-
-  onAddComponent(value, after = null) {}
 
   // can be implemented by subclasses to introduce a dropzone
   dropZone(child) {
@@ -498,56 +507,74 @@ export default class AbstractPageDefinitions extends Component {
     ) : null
   }
 
-  render() {
-    const { components, definitions, session } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
-    return (
-      <Grid className="main-container">
-        <ContributePrompt
-          ref={this.contributeModal}
-          session={session}
-          onLogin={this.handleLogin}
-          actionHandler={this.doContribute}
-        />
-        {this.renderSearchBar()}
-        <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
-          {this.dropZone(
-            <div className="section-body">
-              <ComponentList
-                readOnly={this.readOnly()}
-                list={components.transformedList}
-                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                listHeight={1000}
-                onRemove={this.onRemoveComponent}
-                onRevert={this.revertDefinition}
-                onChange={this.onChangeComponent}
-                onAddComponent={this.onAddComponent}
-                onInspect={this.onInspect}
-                renderFilterBar={this.renderFilterBar}
-                definitions={definitions}
-                noRowsRenderer={this.noRowsRenderer}
-                sequence={sequence}
-                hasChange={this.hasChange}
-                showVersionSelectorPopup={this.showVersionSelectorPopup}
-              />
-            </div>
-          )}
-        </Section>
-        {currentDefinition && (
-          <FullDetailPage
-            modalView
-            visible={showFullDetail}
-            onClose={this.onInspectClose}
-            onSave={this.onChangeComponent}
-            path={path}
-            currentDefinition={currentDefinition}
-            component={currentComponent}
-            readOnly={this.readOnly()}
-          />
-        )}
-        {this.renderSavePopup()}
-        {this.renderVersionSelectopPopup()}
-      </Grid>
+  // Get an array of definitions asynchronous, split them into 100 chunks and alert the user when they're all done
+  getDefinitionsAndNotify(definitions, message) {
+    const { dispatch, token, getDefinitionsAction } = this.props
+    const chunks = chunk(definitions, 100)
+    Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
+      .then(() => uiInfo(dispatch, message))
+      .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
+  }
+
+  refresh = removeDefinitions => {
+    const { components, dispatch } = this.props
+    const refreshedData = removeDefinitions
+      ? components.list.filter(item => isEmpty(item.changes))
+      : components.list.map(({ changes, ...keepAttrs }) => keepAttrs)
+    if (this.hasChanges()) {
+      dispatch(
+        uiBrowseUpdateList({
+          updateAll: refreshedData
+        })
+      )
+    }
+
+    const definitions = this.buildSaveSpec(components.list)
+    const definitionsToGet = definitions.map(definition => definition.toPath())
+    this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
+  }
+
+  revertAll() {
+    this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?')
+  }
+
+  revertDefinition(definition, value) {
+    this.revert(definition, 'Are you sure to revert all the unsaved changes from the selected definition?', value)
+  }
+
+  revert(definition, description, value) {
+    const { dispatch } = this.props
+    if (value) {
+      dispatch(uiRevertDefinition(definition, value))
+      this.incrementSequence()
+      return
+    }
+    const key = `open${Date.now()}`
+    const NotificationButtons = (
+      <Fragment>
+        <AntdButton
+          type="primary"
+          size="small"
+          onClick={() => {
+            dispatch(uiRevertDefinition(definition))
+            this.incrementSequence()
+            notification.close(key)
+          }}
+        >
+          Revert
+        </AntdButton>{' '}
+        <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
+          Dismiss
+        </AntdButton>
+      </Fragment>
     )
+    notification.open({
+      message: 'Confirm Revert?',
+      description,
+      btn: NotificationButtons,
+      key,
+      onClose: notification.close(key),
+      duration: 0
+    })
   }
 }
