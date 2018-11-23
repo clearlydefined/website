@@ -7,10 +7,13 @@ class SuggestionsList extends Component {
   render() {
     const { items, onSelect } = this.props
     return (
-      <div className="suggestionsIcon">
+      <div className="suggestionsWrapper">
         <Dropdown
           overlay={
             <Menu>
+              <Menu.Item disabled>
+                <span className="suggestionsWrapper__listHeader">Suggestions</span>
+              </Menu.Item>
               {items.map(item => (
                 <Menu.Item
                   className="page-definitions__menu-item"

@@ -1,13 +1,23 @@
-.suggestionsIcon {
+.suggestionsWrapper {
   margin-left: 3px;
   color: lightblue;
+  cursor: pointer;
+}
+.suggestionsWrapper__listHeader {
+  color: black;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
 }
 .suggestionRenderer {
   display: flex;
+  font-family: 'Montserrat', sans-serif;
 }
 .suggestionValue {
-  width: 100px;
+  width: 300px;
   p {
+    width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin: 0;
     padding: 0;
   }
