@@ -6,7 +6,7 @@ import isArray from 'lodash/isArray'
 const SuggestionRenderer = ({ item }) => (
   <div className="suggestionRenderer">
     <div className="suggestionValue">
-      {isArray(item.value) ? item.value.map(value => <p>{value}</p>) : <p>{item.value}</p>}
+      {isArray(item.value) ? item.value.map(value => <p key={value}>{value}</p>) : <p>{item.value}</p>}
     </div>
     <div className="suggestionData">
       {item.version && <p>Version: {item.version}</p>}
