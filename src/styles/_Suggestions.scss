@@ -1,0 +1,22 @@
+.suggestionsIcon {
+  margin-left: 3px;
+  color: lightblue;
+}
+.suggestionRenderer {
+  display: flex;
+}
+.suggestionValue {
+  width: 100px;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+}
+.suggestionData {
+  margin-left: 30px;
+  font-size: 10px;
+  color: grey;
+  p {
+    margin: 0px;
+  }
+}

@@ -50,6 +50,10 @@ class GlobsPicker extends Component {
     onChange(newGlobs)
   }
 
+  onChange = suggestion => {
+    this.props.onChange(suggestion)
+  }
+
   render() {
     const { globs, className, readOnly, onRevert } = this.props
     const { inputVisible, inputValue } = this.state
