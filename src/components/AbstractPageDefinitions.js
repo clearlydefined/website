@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component, Fragment } from 'react'
-import { Modal, Grid, DropdownButton, MenuItem, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
+import { Modal, DropdownButton, MenuItem, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
 import throat from 'throat'
 import compact from 'lodash/compact'
 import filter from 'lodash/filter'
@@ -18,7 +18,6 @@ import { curateAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import {
   uiBrowseUpdateFilterList,
-  uiNavigation,
   uiBrowseUpdateList,
   uiRevertDefinition,
   uiInfo,
@@ -30,34 +29,17 @@ import Definition from '../utils/definition'
 import Auth from '../utils/auth'
 import VersionSelector from './Navigation/Ui/VersionSelector'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
-import SearchBar from './Navigation/Ui/SearchBar'
-
-const sorts = [
-  { value: 'license', label: 'License' },
-  { value: 'name', label: 'Name' },
-  { value: 'namespace', label: 'Namespace' },
-  { value: 'provider', label: 'Provider' },
-  { value: 'releaseDate', label: 'Release Date' },
-  { value: 'score', label: 'Score' },
-  { value: 'type', label: 'Type' }
-]
-
-const licenses = [
-  { value: 'apache-2.0', label: 'Apache-2.0' },
-  { value: 'bsd-2-clause', label: 'BSD-2-Clause' },
-  { value: 'cddl-1.0', label: 'CDDL-1.0' },
-  { value: 'epl-1.0', label: 'EPL-1.0' },
-  { value: 'gpl', label: 'GPL' },
-  { value: 'lgpl', label: 'LGPL' },
-  { value: 'mit', label: 'MIT' },
-  { value: 'mpl-2.0', label: 'MPL-2.0' },
-  { value: 'presence', label: 'Presence Of' },
-  { value: 'absence', label: 'Absence Of' }
-]
-
-const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
-
-const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+import { sorts, licenses, sources, releaseDates } from '../utils/utils'
+import { getDefinitionsAction } from '../actions/definitionActions'
+import { saveAs } from 'file-saver'
+import trim from 'lodash/trim'
+import { ROUTE_CURATIONS, ROUTE_SHARE } from '../utils/routingConstants'
+import { getCurationAction } from '../actions/curationActions'
+import { asObject } from '../utils/utils'
+import { getGist, saveGist } from '../api/github'
+import base64js from 'base64-js'
+import pako from 'pako'
+import SortList from './Navigation/Ui/SortList'
 
 export default class AbstractPageDefinitions extends Component {
   constructor(props) {
@@ -103,11 +85,6 @@ export default class AbstractPageDefinitions extends Component {
 
   getValue(component, field) {
     return get(component, field)
-  }
-
-  // can be implemented by subclasses to introduce a dropzone
-  dropZone(child) {
-    return child
   }
 
   onSearch(value) {
@@ -300,10 +277,6 @@ export default class AbstractPageDefinitions extends Component {
     this.setState({ ...this.state, sequence: this.state.sequence + 1 })
   }
 
-  checkSort(sortType) {
-    return this.state.activeSort === sortType.value
-  }
-
   checkFilter(filterType, id) {
     const { activeFilters } = this.state
     for (let filterId in activeFilters) {
@@ -311,33 +284,6 @@ export default class AbstractPageDefinitions extends Component {
       if (filterId === id && filter === filterType.value) return true
     }
     return false
-  }
-
-  renderSort(list, title, id) {
-    return (
-      <DropdownButton
-        className="list-button"
-        bsStyle="default"
-        pullRight
-        title={title}
-        disabled={!this.hasComponents()}
-        id={id}
-      >
-        {list.map((sortType, index) => {
-          return (
-            <MenuItem
-              className="page-definitions__menu-item"
-              key={index}
-              onSelect={this.onSort}
-              eventKey={{ type: id, value: sortType.value }}
-            >
-              <span>{sortType.label}</span>
-              {this.checkSort(sortType) && <i className="fas fa-check" />}
-            </MenuItem>
-          )
-        })}
-      </DropdownButton>
-    )
   }
 
   renderFilter(list, title, id) {
@@ -370,7 +316,14 @@ export default class AbstractPageDefinitions extends Component {
   renderFilterBar() {
     return (
       <div className="list-filter" align="right">
-        {this.renderSort(sorts, 'Sort By', 'sort')}
+        <SortList
+          list={sorts}
+          title={'Sort By'}
+          id={'sort'}
+          disabled={!this.hasComponents()}
+          value={this.state.activeSort}
+          onSort={this.onSort}
+        />
         {this.renderFilter(licenses, 'License', 'licensed.declared')}
         {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
         {this.renderFilter(releaseDates, 'Release Date', 'described.releaseDate')}
@@ -386,30 +339,6 @@ export default class AbstractPageDefinitions extends Component {
     const { components } = this.props
     components.list.forEach(component => component.expanded && this.collapseComponent(component))
     this.incrementSequence()
-  }
-
-  updateList() {
-    throw Error('This method has to be implemented in a sub class')
-  }
-
-  tableTitle() {
-    throw Error('This method has to be implemented in a sub class')
-  }
-
-  renderSearchBar() {
-    throw Error('This method has to be implemented in a sub class')
-  }
-
-  renderButtons() {
-    throw Error('This method has to be implemented in a sub class')
-  }
-
-  noRowsRenderer() {
-    throw Error('This method has to be implemented in a sub class')
-  }
-
-  readOnly() {
-    throw Error('This method has to be implemented in a sub class')
   }
 
   handleLogin(e) {
@@ -576,5 +505,243 @@ export default class AbstractPageDefinitions extends Component {
       onClose: notification.close(key),
       duration: 0
     })
+  }
+
+  doSave() {
+    const { components } = this.props
+    const spec = this.buildSaveSpec(components.list)
+    this.saveSpec(spec)
+    this.setState({ showSavePopup: false, fileName: null })
+  }
+
+  async saveSpec(spec) {
+    const { dispatch } = this.props
+    try {
+      const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
+      if (this.state.saveType === 'gist') await this.createGist(this.state.fileName, fileObject)
+      else {
+        const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
+        saveAs(file)
+      }
+    } catch (error) {
+      if (error.status === 404)
+        return uiWarning(dispatch, "Could not create Gist. Likely you've not given us permission")
+      uiWarning(dispatch, error.message)
+    }
+  }
+
+  async createGist(name, content) {
+    const { token, dispatch } = this.props
+    const url = await saveGist(token, `${name}.json`, JSON.stringify(content))
+    const message = (
+      <div>
+        A new Gist File has been created and is available{' '}
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          here
+        </a>
+      </div>
+    )
+    return uiInfo(dispatch, message)
+  }
+
+  doSaveAsUrl() {
+    const { components } = this.props
+    const spec = this.buildSaveSpec(components.list)
+    const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
+    const url = `${document.location.origin}${ROUTE_SHARE}/${base64js.fromByteArray(
+      pako.deflate(JSON.stringify(fileObject))
+    )}`
+    this.copyToClipboard(url, 'URL copied to clipboard')
+  }
+
+  copyToClipboard(text, message) {
+    const textArea = document.createElement('textarea')
+    textArea.value = text
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    uiInfo(this.props.dispatch, message)
+  }
+
+  onDragOver = e => e.preventDefault()
+  onDragEnter = e => e.preventDefault()
+
+  onDrop = async e => {
+    e.preventDefault()
+    e.persist()
+    try {
+      if ((await this.handleTextDrop(e)) !== false) return
+      if (this.handleDropFiles(e) !== false) return
+      uiWarning(this.props.dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
+    } catch (error) {
+      uiWarning(this.props.dispatch, error.message)
+    }
+  }
+
+  handleTextDrop = async event => {
+    const text = event.dataTransfer.getData('Text')
+    if (!text) return false
+    if (this.handleDropObject(text) !== false) return
+    if ((await this.handleDropGist(text)) !== false) return
+    if (this.handleDropEntityUrl(text) !== false) return
+    if (this.handleDropPrURL(text) !== false) return
+    return false
+  }
+
+  // handle dropping a URL to an npm, github repo/release, nuget package, ...
+  handleDropEntityUrl(content) {
+    const spec = EntitySpec.fromUrl(content)
+    if (!spec) return false
+    this.onAddComponent(spec)
+  }
+
+  // dropping an actual definition, an object that has `coordinates`
+  handleDropObject(content) {
+    const contentObject = asObject(content)
+    if (!contentObject) return false
+    this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
+  }
+
+  // handle dropping a url pointing to a curation PR
+  handleDropPrURL(urlSpec) {
+    try {
+      const url = new URL(trim(urlSpec, '/'))
+      if (url.hostname !== 'github.com') return false
+      const [, org, , type, number] = url.pathname.split('/')
+      if (org !== 'clearlydefined' || type !== 'pull') return false
+      this.props.history.push(`${ROUTE_CURATIONS}/${number}`)
+    } catch (exception) {
+      return false
+    }
+  }
+
+  // handle dropping a url to a Gist that contains a ClearlyDefined coordinate list
+  async handleDropGist(urlString) {
+    if (!urlString.startsWith('https://gist.github.com')) return false
+    uiInfo(this.props.dispatch, 'Loading component list from gist')
+    const url = new URL(urlString)
+    const [, , id] = url.pathname.split('/')
+    if (!id) throw new Error(`Gist url ${url} is malformed`)
+    const content = await getGist(id)
+    if (!content || !Object.keys(content).length) throw new Error(`Gist at ${url} could not be loaded or was empty`)
+    for (let name in content) this.loadComponentList(content[name], name)
+  }
+
+  handleDropFiles(event) {
+    const files = Object.values(event.dataTransfer.files)
+    if (!files || !files.length) return false
+    const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
+    if (acceptedFiles.length) this.handleDropAcceptedFiles(acceptedFiles)
+    if (rejectedFiles.length) this.handleDropRejectedFiles(rejectedFiles)
+  }
+
+  sortDroppedFiles(files) {
+    const acceptedFilesValues = ['application/json']
+    return files.reduce(
+      (result, file) => {
+        if (acceptedFilesValues.includes(file.type)) result.acceptedFiles.push(file)
+        else result.rejectedFiles.push(file)
+        return result
+      },
+      { acceptedFiles: [], rejectedFiles: [] }
+    )
+  }
+
+  handleDropAcceptedFiles(files) {
+    uiInfo(this.props.dispatch, 'Loading component list from file(s)')
+    files.forEach(file => {
+      const reader = new FileReader()
+      reader.onload = () => this.loadComponentList(reader.result, file.name)
+      reader.readAsBinaryString(file)
+    })
+  }
+
+  handleDropRejectedFiles = files => {
+    const fileNames = files.map(file => file.name).join(', ')
+    uiWarning(this.props.dispatch, `Could not load: ${fileNames}`)
+  }
+
+  onAddComponent(value) {
+    const { dispatch, token, definitions } = this.props
+    const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
+    const path = component.toPath()
+    if (!component.revision) return uiWarning(dispatch, `${path} needs version information`)
+
+    !definitions.entries[path] &&
+      dispatch(getDefinitionsAction(token, [path])) &&
+      dispatch(getCurationAction(token, component))
+    dispatch(uiBrowseUpdateList({ add: component }))
+  }
+
+  dropZone(child) {
+    return (
+      <div
+        onDragOver={this.onDragOver}
+        onDragEnter={this.onDragEnter}
+        onDrop={this.onDrop}
+        style={{ position: 'relative' }}
+      >
+        {child}
+      </div>
+    )
+  }
+
+  loadComponentList(content, name) {
+    const list = this.getList(content)
+    if (!list) return uiWarning(this.props.dispatch, `Invalid component list file: ${name}`)
+    this.loadFromListSpec(list)
+  }
+
+  getList(content) {
+    const object = typeof content === 'string' ? JSON.parse(content) : content
+    if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
+    if (this.isClearlyDefinedList(object)) return object
+    return null
+  }
+
+  isPackageLock(content) {
+    // TODO better, more definitive test here
+    return !!content.dependencies
+  }
+
+  isClearlyDefinedList(content) {
+    // TODO better, more definitive test here
+    return !!content.coordinates
+  }
+
+  getListFromPackageLock(dependencies) {
+    const coordinates = []
+    for (const dependency in dependencies) {
+      let [namespace, name] = dependency.split('/')
+      if (!name) {
+        name = namespace
+        namespace = null
+      }
+      coordinates.push({ type: 'npm', provider: 'npmjs', namespace, name, revision: dependencies[dependency].version })
+    }
+    return { coordinates }
+  }
+
+  loadFromListSpec(list) {
+    const { dispatch, definitions } = this.props
+    if (list.filter) this.setState({ activeFilters: list.filter })
+    if (list.sortBy) this.setState({ activeSort: list.sortBy })
+    if (list.sortBy || list.filter) this.setState({ sequence: this.state.sequence + 1 })
+
+    const toAdd = list.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
+    dispatch(uiBrowseUpdateList({ addAll: toAdd }))
+    const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
+    this.getDefinitionsAndNotify(missingDefinitions, 'All components have been loaded')
+    dispatch(
+      uiBrowseUpdateList({
+        transform: this.createTransform.call(
+          this,
+          list.sortBy || this.state.activeSort,
+          list.filter || this.state.activeFilters
+        )
+      })
+    )
   }
 }
