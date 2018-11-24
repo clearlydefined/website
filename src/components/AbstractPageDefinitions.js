@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import throat from 'throat'
 import compact from 'lodash/compact'
 import filter from 'lodash/filter'
@@ -9,7 +9,6 @@ import find from 'lodash/find'
 import get from 'lodash/get'
 import set from 'lodash/set'
 import sortBy from 'lodash/sortBy'
-import AntdButton from 'antd/lib/button'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
 import notification from 'antd/lib/notification'
@@ -24,19 +23,19 @@ import {
   uiDanger
 } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
-import Definition from '../utils/definition'
 import Auth from '../utils/auth'
 import VersionSelector from './Navigation/Ui/VersionSelector'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { saveAs } from 'file-saver'
-import trim from 'lodash/trim'
+
 import { ROUTE_CURATIONS, ROUTE_SHARE } from '../utils/routingConstants'
 import { getCurationAction } from '../actions/curationActions'
-import { asObject } from '../utils/utils'
+
 import { getGist, saveGist } from '../api/github'
 import base64js from 'base64-js'
 import pako from 'pako'
+import Drop from '../utils/drop'
 
 export default class AbstractPageDefinitions extends Component {
   constructor(props) {
@@ -54,6 +53,7 @@ export default class AbstractPageDefinitions extends Component {
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.onSort = this.onSort.bind(this)
     this.onFilter = this.onFilter.bind(this)
+    this.loadComponentList = this.loadComponentList.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
@@ -447,98 +447,12 @@ export default class AbstractPageDefinitions extends Component {
   onDragEnter = e => e.preventDefault()
 
   onDrop = async e => {
-    e.preventDefault()
-    e.persist()
+    const dropHandler = new Drop(this.props.dispatch, this.loadComponentList)
     try {
-      if ((await this.handleTextDrop(e)) !== false) return
-      if (this.handleDropFiles(e) !== false) return
-      uiWarning(this.props.dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
+      await dropHandler.onDrop(e)
     } catch (error) {
-      uiWarning(this.props.dispatch, error.message)
+      console.log(error)
     }
-  }
-
-  handleTextDrop = async event => {
-    const text = event.dataTransfer.getData('Text')
-    if (!text) return false
-    if (this.handleDropObject(text) !== false) return
-    if ((await this.handleDropGist(text)) !== false) return
-    if (this.handleDropEntityUrl(text) !== false) return
-    if (this.handleDropPrURL(text) !== false) return
-    return false
-  }
-
-  // handle dropping a URL to an npm, github repo/release, nuget package, ...
-  handleDropEntityUrl(content) {
-    const spec = EntitySpec.fromUrl(content)
-    if (!spec) return false
-    this.onAddComponent(spec)
-  }
-
-  // dropping an actual definition, an object that has `coordinates`
-  handleDropObject(content) {
-    const contentObject = asObject(content)
-    if (!contentObject) return false
-    this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
-  }
-
-  // handle dropping a url pointing to a curation PR
-  handleDropPrURL(urlSpec) {
-    try {
-      const url = new URL(trim(urlSpec, '/'))
-      if (url.hostname !== 'github.com') return false
-      const [, org, , type, number] = url.pathname.split('/')
-      if (org !== 'clearlydefined' || type !== 'pull') return false
-      this.props.history.push(`${ROUTE_CURATIONS}/${number}`)
-    } catch (exception) {
-      return false
-    }
-  }
-
-  // handle dropping a url to a Gist that contains a ClearlyDefined coordinate list
-  async handleDropGist(urlString) {
-    if (!urlString.startsWith('https://gist.github.com')) return false
-    uiInfo(this.props.dispatch, 'Loading component list from gist')
-    const url = new URL(urlString)
-    const [, , id] = url.pathname.split('/')
-    if (!id) throw new Error(`Gist url ${url} is malformed`)
-    const content = await getGist(id)
-    if (!content || !Object.keys(content).length) throw new Error(`Gist at ${url} could not be loaded or was empty`)
-    for (let name in content) this.loadComponentList(content[name], name)
-  }
-
-  handleDropFiles(event) {
-    const files = Object.values(event.dataTransfer.files)
-    if (!files || !files.length) return false
-    const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
-    if (acceptedFiles.length) this.handleDropAcceptedFiles(acceptedFiles)
-    if (rejectedFiles.length) this.handleDropRejectedFiles(rejectedFiles)
-  }
-
-  sortDroppedFiles(files) {
-    const acceptedFilesValues = ['application/json']
-    return files.reduce(
-      (result, file) => {
-        if (acceptedFilesValues.includes(file.type)) result.acceptedFiles.push(file)
-        else result.rejectedFiles.push(file)
-        return result
-      },
-      { acceptedFiles: [], rejectedFiles: [] }
-    )
-  }
-
-  handleDropAcceptedFiles(files) {
-    uiInfo(this.props.dispatch, 'Loading component list from file(s)')
-    files.forEach(file => {
-      const reader = new FileReader()
-      reader.onload = () => this.loadComponentList(reader.result, file.name)
-      reader.readAsBinaryString(file)
-    })
-  }
-
-  handleDropRejectedFiles = files => {
-    const fileNames = files.map(file => file.name).join(', ')
-    uiWarning(this.props.dispatch, `Could not load: ${fileNames}`)
   }
 
   onAddComponent(value) {
@@ -573,9 +487,13 @@ export default class AbstractPageDefinitions extends Component {
   }
 
   getList(content) {
-    const object = typeof content === 'string' ? JSON.parse(content) : content
-    if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
-    if (this.isClearlyDefinedList(object)) return object
+    try {
+      const object = typeof content === 'string' ? JSON.parse(content) : content
+      if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
+      if (this.isClearlyDefinedList(object)) return object
+    } catch (error) {
+      console.log(error)
+    }
     return null
   }
 
