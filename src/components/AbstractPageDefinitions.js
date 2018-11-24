@@ -59,13 +59,6 @@ export default class AbstractPageDefinitions extends Component {
     this.doContribute = this.doContribute.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
-    this.name = this.name.bind(this)
-    this.namespace = this.namespace.bind(this)
-    this.provider = this.provider.bind(this)
-    this.type = this.type.bind(this)
-    this.releaseDate = this.releaseDate.bind(this)
-    this.license = this.license.bind(this)
-    this.score = this.score.bind(this)
     this.transform = this.transform.bind(this)
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
@@ -178,38 +171,6 @@ export default class AbstractPageDefinitions extends Component {
   doPromptContribute() {
     if (!this.hasChanges()) return
     this.contributeModal.current.open()
-  }
-
-  name(coordinates) {
-    return coordinates.name ? coordinates.name : null
-  }
-
-  namespace(coordinates) {
-    return coordinates.namespace ? coordinates.namespace : null
-  }
-
-  provider(coordinates) {
-    return coordinates.provider ? coordinates.provider : null
-  }
-
-  type(coordinates) {
-    return coordinates.type ? coordinates.type : null
-  }
-
-  releaseDate(coordinates) {
-    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    return get(definition, 'described.releaseDate', null)
-  }
-
-  license(coordinates) {
-    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    return get(definition, 'licensed.declared', null)
-  }
-
-  score(coordinates) {
-    const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-    const scores = Definition.computeScores(definition)
-    return scores ? (scores.tool + scores.effective) / 2 : -1
   }
 
   getSort(eventKey) {
