@@ -4,17 +4,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import pako from 'pako'
-import { Grid, Button, DropdownButton, MenuItem, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import {
+  Modal,
+  FormGroup,
+  InputGroup,
+  FormControl,
+  Grid,
+  Button,
+  DropdownButton,
+  MenuItem,
+  OverlayTrigger,
+  Tooltip
+} from 'react-bootstrap'
 import base64js from 'base64-js'
 import notification from 'antd/lib/notification'
 import get from 'lodash/get'
-import { uiNavigation, uiBrowseUpdateList, uiWarning } from '../actions/ui'
+import { uiNavigation, uiWarning } from '../actions/ui'
 import { ROUTE_DEFINITIONS } from '../utils/routingConstants'
 import AbstractPageDefinitions from './AbstractPageDefinitions'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import SearchBar from './Navigation/Ui/SearchBar'
 import { ComponentList, Section, ContributePrompt } from './'
 import FullDetailPage from './FullDetailView/FullDetailPage'
+import SortList from './Navigation/Ui/SortList'
+import { sorts, licenses, sources, releaseDates } from '../utils/utils'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -135,8 +148,49 @@ export class PageDefinitions extends AbstractPageDefinitions {
     )
   }
 
-  updateList(o) {
-    return uiBrowseUpdateList(o)
+  renderFilter(list, title, id) {
+    return (
+      <DropdownButton
+        className="list-button"
+        bsStyle="default"
+        pullRight
+        title={title}
+        disabled={!this.hasComponents()}
+        id={id}
+      >
+        {list.map((filterType, index) => {
+          return (
+            <MenuItem
+              className="page-definitions__menu-item"
+              key={index}
+              onSelect={this.onFilter}
+              eventKey={{ type: id, value: filterType.value }}
+            >
+              <span>{filterType.label}</span>
+              {this.checkFilter(filterType, id) && <i className="fas fa-check" />}
+            </MenuItem>
+          )
+        })}
+      </DropdownButton>
+    )
+  }
+
+  renderFilterBar() {
+    return (
+      <div className="list-filter" align="right">
+        <SortList
+          list={sorts}
+          title={'Sort By'}
+          id={'sort'}
+          disabled={!this.hasComponents()}
+          value={this.state.activeSort}
+          onSort={this.onSort}
+        />
+        {this.renderFilter(licenses, 'License', 'licensed.declared')}
+        {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
+        {this.renderFilter(releaseDates, 'Release Date', 'described.releaseDate')}
+      </div>
+    )
   }
 
   noRowsRenderer() {
@@ -162,6 +216,38 @@ export class PageDefinitions extends AbstractPageDefinitions {
 
   readOnly() {
     return false
+  }
+
+  renderSavePopup() {
+    return (
+      <Modal show={this.state.showSavePopup} onHide={() => this.setState({ showSavePopup: false })}>
+        <Modal.Header closeButton>
+          <Modal.Title>Save the file with a name</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup>
+            <InputGroup>
+              <FormControl
+                type="text"
+                placeholder="Type a name to apply to the file that is going to be saved"
+                onChange={e => this.setState({ fileName: e.target.value })}
+              />
+              <InputGroup.Addon>.json</InputGroup.Addon>
+            </InputGroup>
+          </FormGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <div>
+            <FormGroup className="pull-right">
+              <Button onClick={() => this.setState({ showSavePopup: false })}>Cancel</Button>
+              <Button bsStyle="success" disabled={!this.state.fileName} type="button" onClick={() => this.doSave()}>
+                OK
+              </Button>
+            </FormGroup>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    )
   }
 
   render() {

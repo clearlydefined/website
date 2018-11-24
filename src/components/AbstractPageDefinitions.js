@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component, Fragment } from 'react'
-import { Modal, DropdownButton, MenuItem, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
 import throat from 'throat'
 import compact from 'lodash/compact'
 import filter from 'lodash/filter'
@@ -29,7 +28,6 @@ import Definition from '../utils/definition'
 import Auth from '../utils/auth'
 import VersionSelector from './Navigation/Ui/VersionSelector'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
-import { sorts, licenses, sources, releaseDates } from '../utils/utils'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { saveAs } from 'file-saver'
 import trim from 'lodash/trim'
@@ -39,7 +37,6 @@ import { asObject } from '../utils/utils'
 import { getGist, saveGist } from '../api/github'
 import base64js from 'base64-js'
 import pako from 'pako'
-import SortList from './Navigation/Ui/SortList'
 
 export default class AbstractPageDefinitions extends Component {
   constructor(props) {
@@ -286,51 +283,6 @@ export default class AbstractPageDefinitions extends Component {
     return false
   }
 
-  renderFilter(list, title, id) {
-    return (
-      <DropdownButton
-        className="list-button"
-        bsStyle="default"
-        pullRight
-        title={title}
-        disabled={!this.hasComponents()}
-        id={id}
-      >
-        {list.map((filterType, index) => {
-          return (
-            <MenuItem
-              className="page-definitions__menu-item"
-              key={index}
-              onSelect={this.onFilter}
-              eventKey={{ type: id, value: filterType.value }}
-            >
-              <span>{filterType.label}</span>
-              {this.checkFilter(filterType, id) && <i className="fas fa-check" />}
-            </MenuItem>
-          )
-        })}
-      </DropdownButton>
-    )
-  }
-
-  renderFilterBar() {
-    return (
-      <div className="list-filter" align="right">
-        <SortList
-          list={sorts}
-          title={'Sort By'}
-          id={'sort'}
-          disabled={!this.hasComponents()}
-          value={this.state.activeSort}
-          onSort={this.onSort}
-        />
-        {this.renderFilter(licenses, 'License', 'licensed.declared')}
-        {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
-        {this.renderFilter(releaseDates, 'Release Date', 'described.releaseDate')}
-      </div>
-    )
-  }
-
   collapseComponent(component) {
     this.onChangeComponent(component, { ...component, expanded: false })
   }
@@ -348,36 +300,8 @@ export default class AbstractPageDefinitions extends Component {
     })
   }
 
-  renderSavePopup() {
-    return (
-      <Modal show={this.state.showSavePopup} onHide={() => this.setState({ showSavePopup: false })}>
-        <Modal.Header closeButton>
-          <Modal.Title>Save the file with a name</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormGroup>
-            <InputGroup>
-              <FormControl
-                type="text"
-                placeholder="Type a name to apply to the file that is going to be saved"
-                onChange={e => this.setState({ fileName: e.target.value })}
-              />
-              <InputGroup.Addon>.json</InputGroup.Addon>
-            </InputGroup>
-          </FormGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <div>
-            <FormGroup className="pull-right">
-              <Button onClick={() => this.setState({ showSavePopup: false })}>Cancel</Button>
-              <Button bsStyle="success" disabled={!this.state.fileName} type="button" onClick={() => this.doSave()}>
-                OK
-              </Button>
-            </FormGroup>
-          </div>
-        </Modal.Footer>
-      </Modal>
-    )
+  updateList(o) {
+    return uiBrowseUpdateList(o)
   }
 
   showVersionSelectorPopup(component, multiple) {
@@ -479,28 +403,21 @@ export default class AbstractPageDefinitions extends Component {
       return
     }
     const key = `open${Date.now()}`
-    const NotificationButtons = (
-      <Fragment>
-        <AntdButton
-          type="primary"
-          size="small"
+    notification.open({
+      message: 'Confirm Revert?',
+      description,
+      btn: (
+        <NotificationButtons
           onClick={() => {
             dispatch(uiRevertDefinition(definition))
             this.incrementSequence()
             notification.close(key)
           }}
-        >
-          Revert
-        </AntdButton>{' '}
-        <AntdButton type="secondary" size="small" onClick={() => notification.close(key)}>
-          Dismiss
-        </AntdButton>
-      </Fragment>
-    )
-    notification.open({
-      message: 'Confirm Revert?',
-      description,
-      btn: NotificationButtons,
+          onClose={() => notification.close(key)}
+          confirmText="Revert"
+          dismissText="Dismiss"
+        />
+      ),
       key,
       onClose: notification.close(key),
       duration: 0
