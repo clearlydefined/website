@@ -28,11 +28,11 @@ import { ComponentList, Section, ContributePrompt } from './'
 import FullDetailPage from './FullDetailView/FullDetailPage'
 import SortList from './Navigation/Ui/SortList'
 import { sorts, licenses, sources, releaseDates } from '../utils/utils'
+import DropComponent from './Navigation/Ui/DropComponent'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
     super(props)
-    this.onDrop = this.onDrop.bind(this)
     this.onAddComponent = this.onAddComponent.bind(this)
     this.doSave = this.doSave.bind(this)
     this.doSaveAsUrl = this.doSaveAsUrl.bind(this)
@@ -263,27 +263,29 @@ export class PageDefinitions extends AbstractPageDefinitions {
         />
         <SearchBar filterOptions={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} />
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
-          {this.dropZone(
-            <div className="section-body">
-              <ComponentList
-                readOnly={this.readOnly()}
-                list={components.transformedList}
-                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                listHeight={1000}
-                onRemove={this.onRemoveComponent}
-                onRevert={this.revertDefinition}
-                onChange={this.onChangeComponent}
-                onAddComponent={this.onAddComponent}
-                onInspect={this.onInspect}
-                renderFilterBar={this.renderFilterBar}
-                definitions={definitions}
-                noRowsRenderer={this.noRowsRenderer}
-                sequence={sequence}
-                hasChange={this.hasChange}
-                showVersionSelectorPopup={this.showVersionSelectorPopup}
-              />
-            </div>
-          )}
+          {
+            <DropComponent onLoad={this.loadComponentList}>
+              <div className="section-body">
+                <ComponentList
+                  readOnly={this.readOnly()}
+                  list={components.transformedList}
+                  listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+                  listHeight={1000}
+                  onRemove={this.onRemoveComponent}
+                  onRevert={this.revertDefinition}
+                  onChange={this.onChangeComponent}
+                  onAddComponent={this.onAddComponent}
+                  onInspect={this.onInspect}
+                  renderFilterBar={this.renderFilterBar}
+                  definitions={definitions}
+                  noRowsRenderer={this.noRowsRenderer}
+                  sequence={sequence}
+                  hasChange={this.hasChange}
+                  showVersionSelectorPopup={this.showVersionSelectorPopup}
+                />
+              </div>
+            </DropComponent>
+          }
         </Section>
         {currentDefinition && (
           <FullDetailPage

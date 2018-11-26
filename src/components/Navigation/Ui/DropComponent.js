@@ -1,34 +1,40 @@
-// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
-// SPDX-License-Identifier: MIT
-
-import EntitySpec from './entitySpec'
-import { asObject } from '../utils/utils'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { asObject } from '../../../utils/utils'
 import trim from 'lodash/trim'
-import { ROUTE_CURATIONS } from '../utils/routingConstants'
-import { getGist } from '../api/github'
-import { uiInfo, uiWarning } from '../actions/ui'
+import { ROUTE_CURATIONS } from '../../../utils/routingConstants'
+import { getGist } from '../../../api/github'
+import { uiInfo, uiWarning } from '../../../actions/ui'
+import EntitySpec from '../../../utils/entitySpec'
 
-/**
- * Abstract methods for Dropping functionality
- *
- */
-export default class Drop {
-  constructor(dispatch, loadComponentList) {
-    this.dispatch = dispatch
-    this.loadComponentList = loadComponentList
+class DropComponent extends Component {
+  static propTypes = {
+    prop: PropTypes
   }
 
+  constructor(props) {
+    super(props)
+    this.onDrop = this.onDrop.bind(this)
+    console.log(this.props)
+  }
+
+  onDragOver = e => e.preventDefault()
+  onDragEnter = e => e.preventDefault()
+
   async onDrop(event) {
+    const { dispatch } = this.props
     event.preventDefault()
     event.persist()
     try {
       let result
       if ((result = await this.handleTextDrop(event)) !== false) return result
       if ((result = await this.handleDropFiles(event)) !== false) return result
-      uiWarning(this.dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
+      uiWarning(dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
       return Promise.reject('ClearlyDefined does not understand whatever it is you just dropped')
     } catch (error) {
-      uiWarning(this.dispatch, error.message)
+      uiWarning(dispatch, error.message)
       return Promise.reject(error.message)
     }
   }
@@ -72,14 +78,15 @@ export default class Drop {
 
   // handle dropping a url to a Gist that contains a ClearlyDefined coordinate list
   async handleDropGist(urlString) {
+    const { dispatch, onLoad } = this.props
     if (!urlString.startsWith('https://gist.github.com')) return false
-    uiInfo(this.dispatch, 'Loading component list from gist')
+    uiInfo(dispatch, 'Loading component list from gist')
     const url = new URL(urlString)
     const [, , id] = url.pathname.split('/')
     if (!id) throw new Error(`Gist url ${url} is malformed`)
     const content = await getGist(id)
     if (!content || !Object.keys(content).length) throw new Error(`Gist at ${url} could not be loaded or was empty`)
-    for (let name in content) this.loadComponentList(content[name], name)
+    for (let name in content) onLoad(content[name], name)
   }
 
   async handleDropFiles(event) {
@@ -103,16 +110,46 @@ export default class Drop {
   }
 
   handleDropAcceptedFiles(files) {
-    uiInfo(this.dispatch, 'Loading component list from file(s)')
+    const { dispatch, onLoad } = this.props
+    uiInfo(dispatch, 'Loading component list from file(s)')
     files.forEach(file => {
       const reader = new FileReader()
-      reader.onload = () => this.loadComponentList(reader.result, file.name)
+      reader.onload = () => onLoad(reader.result, file.name)
       reader.readAsBinaryString(file)
     })
   }
 
   handleDropRejectedFiles = files => {
+    const { dispatch } = this.props
     const fileNames = files.map(file => file.name).join(', ')
-    uiWarning(this.dispatch, `Could not load: ${fileNames}`)
+    uiWarning(dispatch, `Could not load: ${fileNames}`)
+  }
+
+  render() {
+    return (
+      <div
+        onDragOver={this.onDragOver}
+        onDragEnter={this.onDragEnter}
+        onDrop={this.onDrop}
+        style={{ position: 'relative' }}
+      >
+        {this.props.children}
+      </div>
+    )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    token: state.session.token
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ dispatch }, dispatch)
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DropComponent)

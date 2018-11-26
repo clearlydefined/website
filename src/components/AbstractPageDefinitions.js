@@ -29,13 +29,12 @@ import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { saveAs } from 'file-saver'
 
-import { ROUTE_CURATIONS, ROUTE_SHARE } from '../utils/routingConstants'
+import { ROUTE_SHARE } from '../utils/routingConstants'
 import { getCurationAction } from '../actions/curationActions'
 
-import { getGist, saveGist } from '../api/github'
+import { saveGist } from '../api/github'
 import base64js from 'base64-js'
 import pako from 'pako'
-import Drop from '../utils/drop'
 
 export default class AbstractPageDefinitions extends Component {
   constructor(props) {
@@ -443,18 +442,6 @@ export default class AbstractPageDefinitions extends Component {
     uiInfo(this.props.dispatch, message)
   }
 
-  onDragOver = e => e.preventDefault()
-  onDragEnter = e => e.preventDefault()
-
-  onDrop = async e => {
-    const dropHandler = new Drop(this.props.dispatch, this.loadComponentList)
-    try {
-      await dropHandler.onDrop(e)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   onAddComponent(value) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
@@ -465,19 +452,6 @@ export default class AbstractPageDefinitions extends Component {
       dispatch(getDefinitionsAction(token, [path])) &&
       dispatch(getCurationAction(token, component))
     dispatch(uiBrowseUpdateList({ add: component }))
-  }
-
-  dropZone(child) {
-    return (
-      <div
-        onDragOver={this.onDragOver}
-        onDragEnter={this.onDragEnter}
-        onDrop={this.onDrop}
-        style={{ position: 'relative' }}
-      >
-        {child}
-      </div>
-    )
   }
 
   loadComponentList(content, name) {
