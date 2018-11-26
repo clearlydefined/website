@@ -29,6 +29,7 @@ import FullDetailPage from './FullDetailView/FullDetailPage'
 import SortList from './Navigation/Ui/SortList'
 import { sorts, licenses, sources, releaseDates } from '../utils/utils'
 import DropComponent from './Navigation/Ui/DropComponent'
+import FilterList from './Navigation/Ui/FilterList'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -148,33 +149,6 @@ export class PageDefinitions extends AbstractPageDefinitions {
     )
   }
 
-  renderFilter(list, title, id) {
-    return (
-      <DropdownButton
-        className="list-button"
-        bsStyle="default"
-        pullRight
-        title={title}
-        disabled={!this.hasComponents()}
-        id={id}
-      >
-        {list.map((filterType, index) => {
-          return (
-            <MenuItem
-              className="page-definitions__menu-item"
-              key={index}
-              onSelect={this.onFilter}
-              eventKey={{ type: id, value: filterType.value }}
-            >
-              <span>{filterType.label}</span>
-              {this.checkFilter(filterType, id) && <i className="fas fa-check" />}
-            </MenuItem>
-          )
-        })}
-      </DropdownButton>
-    )
-  }
-
   renderFilterBar() {
     return (
       <div className="list-filter" align="right">
@@ -186,9 +160,30 @@ export class PageDefinitions extends AbstractPageDefinitions {
           value={this.state.activeSort}
           onSort={this.onSort}
         />
-        {this.renderFilter(licenses, 'License', 'licensed.declared')}
-        {this.renderFilter(sources, 'Source', 'described.sourceLocation')}
-        {this.renderFilter(releaseDates, 'Release Date', 'described.releaseDate')}
+        <FilterList
+          list={licenses}
+          title={'License'}
+          id={'licensed.declared'}
+          disabled={!this.hasComponents()}
+          value={this.state.activeFilters}
+          onFilter={this.onFilter}
+        />
+        <FilterList
+          list={sources}
+          title={'Source'}
+          id={'described.sourceLocation'}
+          disabled={!this.hasComponents()}
+          value={this.state.activeFilters}
+          onFilter={this.onFilter}
+        />
+        <FilterList
+          list={releaseDates}
+          title={'Release Date'}
+          id={'described.releaseDate'}
+          disabled={!this.hasComponents()}
+          value={this.state.activeFilters}
+          onFilter={this.onFilter}
+        />
       </div>
     )
   }
