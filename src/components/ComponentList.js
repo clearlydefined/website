@@ -81,7 +81,8 @@ export default class ComponentList extends React.Component {
       onInspect,
       onRemove,
       onRevert,
-      showVersionSelectorPopup
+      showVersionSelectorPopup,
+      hideVersionSelector
     } = this.props
     const component = list[index]
     let definition = this.getDefinition(component)
@@ -109,6 +110,7 @@ export default class ComponentList extends React.Component {
               onRemove={onRemove}
               getDefinition={this.getDefinition}
               showVersionSelectorPopup={showVersionSelectorPopup}
+              hideVersionSelector={hideVersionSelector}
             />
           )}
           onRevert={param => this.revertComponent(component, param)}

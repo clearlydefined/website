@@ -30,7 +30,7 @@ export class AbstractFullDetailsView extends Component {
       inspectedCuration
     } = this.props
     const { changes, appliedSuggestions } = this.state
-    const curationSuggestions = Curation.getSuggestions(latestCuration.item, curation.item, appliedSuggestions)
+    const curationSuggestions = {}
 
     return modalView ? (
       <Modal

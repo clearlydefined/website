@@ -1,17 +1,21 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { uiNavigation } from '../../../actions/ui'
-import { ROUTE_BROWSE } from '../../../utils/routingConstants'
-import AbstractPageDefinitions from '../../AbstractPageDefinitions'
+import { uiNavigation } from '../../../../actions/ui'
+import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
+import UserManagedList from '../../../UserManagedList'
 
-class PageBrowse extends AbstractPageDefinitions {
+class PageBrowse extends UserManagedList {
   constructor(props) {
     super(props)
   }
 
   componentDidMount() {
     uiNavigation({ to: ROUTE_BROWSE })
+  }
+
+  render() {
+    return <div />
   }
 }
 

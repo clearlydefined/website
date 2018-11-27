@@ -30,12 +30,15 @@ import { saveAs } from 'file-saver'
 
 import { ROUTE_SHARE } from '../utils/routingConstants'
 import { getCurationAction } from '../actions/curationActions'
-
 import { saveGist } from '../api/github'
 import base64js from 'base64-js'
 import pako from 'pako'
 
-export default class AbstractPageDefinitions extends Component {
+/**
+ * Abstracts methods for user-managed list
+ * Implements and expose all the methods used in any list that need an interaction by the user
+ */
+export default class UserManagedList extends Component {
   constructor(props) {
     super(props)
     this.state = {

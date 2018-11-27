@@ -8,19 +8,19 @@ import { Modal, FormGroup, InputGroup, FormControl, Grid, Button, Tooltip } from
 import base64js from 'base64-js'
 import notification from 'antd/lib/notification'
 import get from 'lodash/get'
-import { uiNavigation, uiWarning } from '../actions/ui'
-import { ROUTE_DEFINITIONS } from '../utils/routingConstants'
-import AbstractPageDefinitions from './AbstractPageDefinitions'
-import NotificationButtons from './Navigation/Ui/NotificationButtons'
-import SearchBar from './Navigation/Ui/SearchBar'
-import { ComponentList, Section, ContributePrompt } from './'
-import FullDetailPage from './FullDetailView/FullDetailPage'
-import DropComponent from './Navigation/Ui/DropComponent'
-import FilterBar from './Navigation/Sections/FilterBar'
-import VersionSelector from './Navigation/Ui/VersionSelector'
-import ButtonsBar from './Navigation/Sections/ButtonsBar'
+import { uiNavigation, uiWarning } from '../../../../actions/ui'
+import { ROUTE_DEFINITIONS } from '../../../../utils/routingConstants'
+import NotificationButtons from '../../Ui/NotificationButtons'
+import SearchBar from '../../Ui/SearchBar'
+import { ComponentList, Section, ContributePrompt } from '../../../'
+import FullDetailPage from '../../../FullDetailView/FullDetailPage'
+import DropComponent from '../../Ui/DropComponent'
+import FilterBar from '../../Sections/FilterBar'
+import VersionSelector from '../../Ui/VersionSelector'
+import ButtonsBar from './ButtonsBar'
+import UserManagedList from '../../../UserManagedList'
 
-export class PageDefinitions extends AbstractPageDefinitions {
+export class PageDefinitions extends UserManagedList {
   constructor(props) {
     super(props)
     this.onAddComponent = this.onAddComponent.bind(this)

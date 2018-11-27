@@ -73,6 +73,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
   componentDidMount() {
     const { uiNavigation, component } = this.props
+    console.log(this.props)
     if (component.changes) {
       this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
     } else {
