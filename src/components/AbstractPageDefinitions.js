@@ -24,7 +24,6 @@ import {
 } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
-import VersionSelector from './Navigation/Ui/VersionSelector'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { saveAs } from 'file-saver'
@@ -57,12 +56,9 @@ export default class AbstractPageDefinitions extends Component {
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
-    this.renderFilterBar = this.renderFilterBar.bind(this)
     this.transform = this.transform.bind(this)
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.collapseAll = this.collapseAll.bind(this)
-    this.renderSavePopup = this.renderSavePopup.bind(this)
-    this.renderVersionSelectopPopup = this.renderVersionSelectopPopup.bind(this)
     this.showVersionSelectorPopup = this.showVersionSelectorPopup.bind(this)
     this.applySelectedVersions = this.applySelectedVersions.bind(this)
     this.contributeModal = React.createRef()
@@ -305,19 +301,6 @@ export default class AbstractPageDefinitions extends Component {
         this.onAddComponent(EntitySpec.fromCoordinates({ ...selectedComponent, revision: version }))
       )
     )
-  }
-
-  renderVersionSelectopPopup() {
-    const { multipleVersionSelection, selectedComponent, showVersionSelectorPopup } = this.state
-    return showVersionSelectorPopup ? (
-      <VersionSelector
-        show={showVersionSelectorPopup}
-        onClose={() => this.setState({ showVersionSelectorPopup: false, selectedComponent: null })}
-        onSave={this.applySelectedVersions}
-        multiple={multipleVersionSelection}
-        component={selectedComponent}
-      />
-    ) : null
   }
 
   // Get an array of definitions asynchronous, split them into 100 chunks and alert the user when they're all done

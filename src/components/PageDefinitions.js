@@ -4,18 +4,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import pako from 'pako'
-import {
-  Modal,
-  FormGroup,
-  InputGroup,
-  FormControl,
-  Grid,
-  Button,
-  DropdownButton,
-  MenuItem,
-  OverlayTrigger,
-  Tooltip
-} from 'react-bootstrap'
+import { Modal, FormGroup, InputGroup, FormControl, Grid, Button, Tooltip } from 'react-bootstrap'
 import base64js from 'base64-js'
 import notification from 'antd/lib/notification'
 import get from 'lodash/get'
@@ -26,10 +15,10 @@ import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import SearchBar from './Navigation/Ui/SearchBar'
 import { ComponentList, Section, ContributePrompt } from './'
 import FullDetailPage from './FullDetailView/FullDetailPage'
-import SortList from './Navigation/Ui/SortList'
-import { sorts, licenses, sources, releaseDates } from '../utils/utils'
 import DropComponent from './Navigation/Ui/DropComponent'
-import FilterList from './Navigation/Ui/FilterList'
+import FilterBar from './Navigation/Sections/FilterBar'
+import VersionSelector from './Navigation/Ui/VersionSelector'
+import ButtonsBar from './Navigation/Sections/ButtonsBar'
 
 export class PageDefinitions extends AbstractPageDefinitions {
   constructor(props) {
@@ -39,6 +28,9 @@ export class PageDefinitions extends AbstractPageDefinitions {
     this.doSaveAsUrl = this.doSaveAsUrl.bind(this)
     this.revertAll = this.revertAll.bind(this)
     this.revertDefinition = this.revertDefinition.bind(this)
+    this.renderVersionSelectopPopup = this.renderVersionSelectopPopup.bind(this)
+    this.renderSavePopup = this.renderSavePopup.bind(this)
+    this.renderFilterBar = this.renderFilterBar.bind(this)
   }
 
   componentDidMount() {
@@ -88,103 +80,32 @@ export class PageDefinitions extends AbstractPageDefinitions {
     return <Tooltip id="tooltip">{text}</Tooltip>
   }
 
-  renderButtonWithTip(button, tip) {
-    const toolTip = <Tooltip id="tooltip">{tip}</Tooltip>
-    return (
-      <OverlayTrigger placement="top" overlay={toolTip}>
-        {button}
-      </OverlayTrigger>
-    )
-  }
-
   renderButtons() {
     return (
-      <div className="pull-right">
-        {this.renderButtonWithTip(
-          <Button bsStyle="danger" disabled={!this.hasChanges()} onClick={this.revertAll}>
-            <i className="fas fa-undo" />
-            <span>&nbsp;Revert Changes</span>
-          </Button>,
-          'Revert all changes of all the definitions'
-        )}
-        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.doRefreshAll}>
-          Refresh
-        </Button>
-        &nbsp;
-        <Button bsStyle="default" disabled={!this.hasComponents()} onClick={this.collapseAll}>
-          Collapse All
-        </Button>
-        &nbsp;
-        <Button bsStyle="danger" disabled={!this.hasComponents()} onClick={this.onRemoveAll}>
-          Clear All
-        </Button>
-        &nbsp;
-        {this.renderShareButton()}
-        &nbsp;
-        <Button bsStyle="success" disabled={!this.hasChanges()} onClick={this.doPromptContribute}>
-          Contribute
-        </Button>
-      </div>
-    )
-  }
-
-  renderShareButton() {
-    const { components } = this.props
-    const disabled = components.list.length === 0
-    return (
-      <DropdownButton disabled={disabled} id={'sharedropdown'} title="Share" bsStyle="success">
-        <MenuItem eventKey="1" onSelect={this.doSaveAsUrl}>
-          URL
-        </MenuItem>
-        <MenuItem eventKey="2" onSelect={() => this.setState({ showSavePopup: true })}>
-          File
-        </MenuItem>
-        <MenuItem eventKey="3" onSelect={() => this.setState({ showSavePopup: true, saveType: 'gist' })}>
-          Gist
-        </MenuItem>
-        <MenuItem divider />
-        <MenuItem disabled>Definitions (Not implemented)</MenuItem>
-        <MenuItem disabled>SPDX (Not implemented)</MenuItem>
-      </DropdownButton>
+      <ButtonsBar
+        components={this.props.components}
+        hasChanges={!this.hasChanges()}
+        revertAll={this.revertAll}
+        doRefreshAll={this.doRefreshAll}
+        collapseAll={this.collapseAll}
+        onRemoveAll={this.onRemoveAll}
+        doPromptContribute={this.doPromptContribute}
+        shareUrl={this.doSaveAsUrl}
+        shareFile={() => this.setState({ showSavePopup: true })}
+        shareGist={() => this.setState({ showSavePopup: true, saveType: 'gist' })}
+      />
     )
   }
 
   renderFilterBar() {
     return (
-      <div className="list-filter" align="right">
-        <SortList
-          list={sorts}
-          title={'Sort By'}
-          id={'sort'}
-          disabled={!this.hasComponents()}
-          value={this.state.activeSort}
-          onSort={this.onSort}
-        />
-        <FilterList
-          list={licenses}
-          title={'License'}
-          id={'licensed.declared'}
-          disabled={!this.hasComponents()}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
-        <FilterList
-          list={sources}
-          title={'Source'}
-          id={'described.sourceLocation'}
-          disabled={!this.hasComponents()}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
-        <FilterList
-          list={releaseDates}
-          title={'Release Date'}
-          id={'described.releaseDate'}
-          disabled={!this.hasComponents()}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
-      </div>
+      <FilterBar
+        activeSort={this.state.activeSort}
+        activeFilters={this.state.activeFilters}
+        onFilter={this.onFilter}
+        onSort={this.onSort}
+        hasComponents={!this.hasComponents()}
+      />
     )
   }
 
@@ -243,6 +164,19 @@ export class PageDefinitions extends AbstractPageDefinitions {
         </Modal.Footer>
       </Modal>
     )
+  }
+
+  renderVersionSelectopPopup() {
+    const { multipleVersionSelection, selectedComponent, showVersionSelectorPopup } = this.state
+    return showVersionSelectorPopup ? (
+      <VersionSelector
+        show={showVersionSelectorPopup}
+        onClose={() => this.setState({ showVersionSelectorPopup: false, selectedComponent: null })}
+        onSave={this.applySelectedVersions}
+        multiple={multipleVersionSelection}
+        component={selectedComponent}
+      />
+    ) : null
   }
 
   render() {
