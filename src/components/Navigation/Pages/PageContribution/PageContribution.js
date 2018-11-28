@@ -3,7 +3,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, Button } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import { uiContributionGetData, uiContributionUpdateList } from '../../../../actions/ui'
 import { ROUTE_CURATIONS } from '../../../../utils/routingConstants'
