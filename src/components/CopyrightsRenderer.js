@@ -29,6 +29,9 @@ class CopyrightsContent extends Component {
     )
   }
 }
+
+const EnhancedCopyrights = withSuggestions(CopyrightsContent)
+
 class CopyrightsRenderer extends Component {
   static defaultProps = {
     readOnly: false,
@@ -64,26 +67,24 @@ class CopyrightsRenderer extends Component {
     this.setState({ values: this.state.values.filter((_, itemIndex) => index !== itemIndex), hasChanges: true })
   }
 
-  addItem = async (value, updatedText) => {
+  addItem = (value, updatedText, forceSave = false) => {
     const { values, currentItem } = this.state
     const updatedObject = { value: updatedText || value, isDifferent: true }
     isNumber(currentItem) ? (values[currentItem] = updatedObject) : values.push(updatedObject)
-    await this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true })
+    this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true }, () => {
+      if (forceSave) this.onSave()
+    })
   }
 
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
-  onChange = async suggestion => {
-    await this.addItem(suggestion)
-    await this.onSave()
+  onChange = suggestion => {
+    this.addItem(suggestion, null, true)
   }
 
   render() {
     const { readOnly, container, placement, classIfDifferent, field } = this.props
     const { hasChanges, values, showAddRow } = this.state
-
-    const EnhancedCopyrights = withSuggestions(CopyrightsContent)
-
     if (!values.length && readOnly) return null
 
     return (
