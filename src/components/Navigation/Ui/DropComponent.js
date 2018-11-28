@@ -11,13 +11,13 @@ import EntitySpec from '../../../utils/entitySpec'
 
 class DropComponent extends Component {
   static propTypes = {
-    prop: PropTypes
+    children: PropTypes.node.isRequired,
+    onLoad: PropTypes.func
   }
 
   constructor(props) {
     super(props)
     this.onDrop = this.onDrop.bind(this)
-    console.log(this.props)
   }
 
   onDragOver = e => e.preventDefault()
