@@ -21,8 +21,9 @@ import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 
 /**
- * Abstracts methods for user-managed list
- * Implements and expose all the methods used in any list that need an interaction by the user
+ * Abstracts methods for system-managed list
+ * Implements and expose all the methods used in any list that is read-only
+ * The user can only export data from this kind of list, without the allowance to import or drop new data
  */
 export default class SystemManagedList extends Component {
   constructor(props) {

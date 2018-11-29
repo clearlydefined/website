@@ -24,6 +24,7 @@ import PageContribution from './Navigation/Pages/PageContribution'
 import withTracker from '../utils/withTracker'
 import FullDetailPage from './FullDetailView/FullDetailPage'
 import PageDefinitions from './Navigation/Pages/PageDefinitions'
+import PageBrowse from './Navigation/Pages/PageBrowse'
 
 const store = configureStore()
 
@@ -59,6 +60,7 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_CURATIONS} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
+              <Route path={ROUTE_BROWSE} component={withTracker(PageBrowse)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
               <Route path={ROUTE_ROOT} component={withTracker(PageLanding)} />
             </Switch>

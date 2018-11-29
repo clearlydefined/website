@@ -9,7 +9,7 @@ class FilterList extends Component {
     title: PropTypes.string,
     id: PropTypes.string,
     disabled: PropTypes.bool,
-    value: PropTypes.string,
+    value: PropTypes.object,
     onFilter: PropTypes.func.isRequired
   }
   render() {

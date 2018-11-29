@@ -17,7 +17,7 @@ import SystemManagedList from './SystemManagedList'
 
 /**
  * Abstracts methods for user-managed list
- * Implements and expose all the methods used in any list that need an interaction by the user
+ * Extends the method of a system-managed list, implementing and exposing all the methods used in any list that need an interaction by the user (import or modify data)
  */
 export default class UserManagedList extends SystemManagedList {
   constructor(props) {
