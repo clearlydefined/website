@@ -5,17 +5,17 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid } from 'react-bootstrap'
 import get from 'lodash/get'
-import { uiContributionGetData, uiContributionUpdateList } from '../../../../actions/ui'
+import { uiContributionGetData } from '../../../../actions/ui'
 import { ROUTE_CURATIONS } from '../../../../utils/routingConstants'
 import { uiNavigation } from '../../../../actions/ui'
-import UserManagedList from '../../../UserManagedList'
 import Section from '../../../Section'
 import ComponentList from '../../../ComponentList'
 import ButtonsBar from './ButtonsBar'
 import FilterBar from '../../Sections/FilterBar'
 import FullDetailPage from '../../../FullDetailView/FullDetailPage'
+import SystemManagedList from '../../../SystemManagedList'
 
-class PageContribution extends UserManagedList {
+class PageContribution extends SystemManagedList {
   constructor(props) {
     super(props)
     this.renderFilterBar = this.renderFilterBar.bind(this)
@@ -34,14 +34,6 @@ class PageContribution extends UserManagedList {
     const { prNumber } = this.props
     const linkBack = this.props.url.isFetched ? <a href={this.props.url.item}>#{prNumber}</a> : `#${prNumber}`
     return <span>Definitions from pull request {linkBack}</span>
-  }
-
-  readOnly() {
-    return true
-  }
-
-  updateList(o) {
-    return uiContributionUpdateList(o)
   }
 
   renderButtons() {
@@ -69,7 +61,7 @@ class PageContribution extends UserManagedList {
           {
             <div className="section-body">
               <ComponentList
-                readOnly={this.readOnly()}
+                readOnly={this.readOnly}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 listHeight={1000}
@@ -96,7 +88,7 @@ class PageContribution extends UserManagedList {
               path={path}
               currentDefinition={currentDefinition}
               component={currentComponent}
-              readOnly={this.readOnly()}
+              readOnly={this.readOnly}
             />
           )}
         </Section>

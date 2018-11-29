@@ -130,10 +130,6 @@ export class PageDefinitions extends UserManagedList {
     )
   }
 
-  readOnly() {
-    return false
-  }
-
   renderSavePopup() {
     return (
       <Modal show={this.state.showSavePopup} onHide={() => this.setState({ showSavePopup: false })}>
@@ -196,7 +192,7 @@ export class PageDefinitions extends UserManagedList {
             <DropComponent onLoad={this.loadComponentList}>
               <div className="section-body">
                 <ComponentList
-                  readOnly={this.readOnly()}
+                  readOnly={this.readOnly}
                   list={components.transformedList}
                   listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                   listHeight={1000}
@@ -225,7 +221,7 @@ export class PageDefinitions extends UserManagedList {
             path={path}
             currentDefinition={currentDefinition}
             component={currentComponent}
-            readOnly={this.readOnly()}
+            readOnly={this.readOnly}
           />
         )}
         {this.renderSavePopup()}

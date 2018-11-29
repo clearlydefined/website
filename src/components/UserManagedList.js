@@ -29,6 +29,7 @@ export default class UserManagedList extends SystemManagedList {
       showFullDetail: false,
       path: null
     }
+    this.readOnly = false
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.loadComponentList = this.loadComponentList.bind(this)

@@ -57,18 +57,6 @@ const initialStateNavigation = [
     protected: 0,
     isSelected: false
   },
-  /*{
-    title: 'Inspect',
-    to: ROUTE_INSPECT,
-    protected: 0,
-    isSelected: false
-  },*/
-  // {
-  //   title: 'Curate',
-  //   to: ROUTE_CURATE,
-  //   protected: 0,
-  //   isSelected: false
-  // },
   {
     title: 'Harvest',
     to: ROUTE_HARVEST,

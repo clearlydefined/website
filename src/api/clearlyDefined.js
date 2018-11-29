@@ -103,6 +103,11 @@ export function getContributionData(token, entity) {
   return get(url(`${CURATIONS}/pr/${entity}`), token)
 }
 
+export function getLowScoreDefinitions(token, list) {
+  //TODO call specific API
+  return post(url(`${DEFINITIONS}`), token, list)
+}
+
 export function getDefinitions(token, list) {
   return post(url(`${DEFINITIONS}`), token, list)
 }

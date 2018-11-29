@@ -6,7 +6,7 @@ import { sorts, licenses, sources, releaseDates } from '../../../utils/utils'
 
 export default class FilterBar extends Component {
   static propTypes = {
-    activeSort: PropTypes.object,
+    activeSort: PropTypes.string,
     activeFilters: PropTypes.object,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,

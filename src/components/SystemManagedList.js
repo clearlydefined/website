@@ -35,6 +35,7 @@ export default class SystemManagedList extends Component {
       showFullDetail: false,
       path: null
     }
+    this.readOnly = true
     this.getDefinition = this.getDefinition.bind(this)
     this.getValue = this.getValue.bind(this)
     this.hasChanges = this.hasChanges.bind(this)
@@ -148,7 +149,7 @@ export default class SystemManagedList extends Component {
     let activeSort = eventKey.value
     if (this.state.activeSort === activeSort) activeSort = null
     this.setState({ ...this.state, activeSort, sequence: this.state.sequence + 1 })
-    this.props.dispatch(this.updateList({ transform: this.createTransform(activeSort, this.state.activeFilters) }))
+    this.updateList({ transform: this.createTransform(activeSort, this.state.activeFilters) })
   }
 
   sortList(list, sortFunction) {
@@ -182,7 +183,7 @@ export default class SystemManagedList extends Component {
     if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
     else activeFilters[value.type] = value.value
     this.setState({ ...this.state, activeFilters })
-    this.props.dispatch(this.updateList({ transform: this.createTransform(this.state.activeSort, activeFilters) }))
+    this.updateList({ transform: this.createTransform(this.state.activeSort, activeFilters) })
   }
 
   transform(newList, sort, filters) {
@@ -224,7 +225,7 @@ export default class SystemManagedList extends Component {
   onChangeComponent(component, newComponent) {
     this.setState({ currentDefinition: null, showFullDetail: false }, () => {
       this.incrementSequence()
-      this.props.dispatch(this.updateList({ update: component, value: newComponent }))
+      this.updateList({ update: component, value: newComponent })
     })
   }
 
@@ -236,7 +237,7 @@ export default class SystemManagedList extends Component {
   }
 
   updateList(o) {
-    return uiBrowseUpdateList(o)
+    this.props.dispatch(uiBrowseUpdateList(o))
   }
 
   revertAll() {

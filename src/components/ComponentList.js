@@ -3,6 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import isEqual from 'lodash/isEqual'
 import { RowEntityList, DefinitionEntry } from './'
 import EntitySpec from '../utils/entitySpec'
 import ComponentButtons from './Navigation/Ui/ComponentButtons'
@@ -39,6 +40,7 @@ export default class ComponentList extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
     if (newProps.sequence !== this.props.sequence) this.incrementSequence()
+    if (!isEqual(newProps.list, this.props.list.sequence)) this.incrementSequence()
   }
 
   getDefinition(component) {

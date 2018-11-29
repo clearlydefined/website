@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
-import { uiNavigation } from '../../../../actions/ui'
+import { uiNavigation, uiBrowseGet } from '../../../../actions/ui'
 import SystemManagedList from '../../../SystemManagedList'
 import Section from '../../../Section'
 import ComponentList from '../../../ComponentList'
@@ -27,8 +27,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(uiNavigation({ to: ROUTE_BROWSE }))
+    this.props.dispatch(uiNavigation({ to: ROUTE_BROWSE }))
   }
 
   noRowsRenderer() {
@@ -39,14 +38,6 @@ class PageBrowse extends SystemManagedList {
 
   tableTitle() {
     return <span>Browse Definitions</span>
-  }
-
-  readOnly() {
-    return true
-  }
-
-  updateList() {
-    return
   }
 
   renderButtons() {
@@ -65,10 +56,12 @@ class PageBrowse extends SystemManagedList {
     )
   }
 
-  onProviderSelection(event, thing) {
+  onProviderSelection(event) {
     const target = event.target
     const activeProvider = target.name
     this.setState({ ...this.state, activeProvider })
+    // Call action to retrieve definitions from the server
+    this.props.dispatch(uiBrowseGet(this.props.token, activeProvider))
   }
 
   render() {
@@ -81,7 +74,7 @@ class PageBrowse extends SystemManagedList {
           {
             <div className="section-body">
               <ComponentList
-                readOnly={this.readOnly()}
+                readOnly={this.readOnly}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 listHeight={1000}
@@ -108,7 +101,7 @@ class PageBrowse extends SystemManagedList {
               path={path}
               currentDefinition={currentDefinition}
               component={currentComponent}
-              readOnly={this.readOnly()}
+              readOnly={this.readOnly}
             />
           )}
         </Section>
@@ -117,13 +110,13 @@ class PageBrowse extends SystemManagedList {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     token: state.session.token,
     session: state.session,
     url: state.ui.contribution.url,
-    definitions: state.ui.contribution.definitions,
-    components: state.ui.contribution.componentList,
+    definitions: state.definition.bodies,
+    components: state.ui.browse.componentList,
     filterValue: state.ui.browse.filter,
     filterOptions: state.ui.browse.filterList
   }
