@@ -51,12 +51,12 @@ const initialStateNavigation = [
     protected: 0,
     isSelected: false
   },
-  {
+  /*{
     title: 'Browse',
     to: ROUTE_BROWSE,
     protected: 0,
     isSelected: false
-  },
+  },*/
   {
     title: 'Harvest',
     to: ROUTE_HARVEST,
