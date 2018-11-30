@@ -4,7 +4,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import pako from 'pako'
-import { Modal, FormGroup, InputGroup, FormControl, Grid, Button, Tooltip } from 'react-bootstrap'
+import { Grid, Tooltip } from 'react-bootstrap'
 import base64js from 'base64-js'
 import notification from 'antd/lib/notification'
 import get from 'lodash/get'
@@ -19,6 +19,7 @@ import FilterBar from '../../Sections/FilterBar'
 import VersionSelector from '../../Ui/VersionSelector'
 import ButtonsBar from './ButtonsBar'
 import UserManagedList from '../../../UserManagedList'
+import SavePopUp from '../../Ui/SavePopUp'
 
 export class PageDefinitions extends UserManagedList {
   constructor(props) {
@@ -130,38 +131,6 @@ export class PageDefinitions extends UserManagedList {
     )
   }
 
-  renderSavePopup() {
-    return (
-      <Modal show={this.state.showSavePopup} onHide={() => this.setState({ showSavePopup: false })}>
-        <Modal.Header closeButton>
-          <Modal.Title>Save the file with a name</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormGroup>
-            <InputGroup>
-              <FormControl
-                type="text"
-                placeholder="Type a name to apply to the file that is going to be saved"
-                onChange={e => this.setState({ fileName: e.target.value })}
-              />
-              <InputGroup.Addon>.json</InputGroup.Addon>
-            </InputGroup>
-          </FormGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <div>
-            <FormGroup className="pull-right">
-              <Button onClick={() => this.setState({ showSavePopup: false })}>Cancel</Button>
-              <Button bsStyle="success" disabled={!this.state.fileName} type="button" onClick={() => this.doSave()}>
-                OK
-              </Button>
-            </FormGroup>
-          </div>
-        </Modal.Footer>
-      </Modal>
-    )
-  }
-
   renderVersionSelectopPopup() {
     const { multipleVersionSelection, selectedComponent, showVersionSelectorPopup } = this.state
     return showVersionSelectorPopup ? (
@@ -224,7 +193,11 @@ export class PageDefinitions extends UserManagedList {
             readOnly={this.readOnly}
           />
         )}
-        {this.renderSavePopup()}
+        <SavePopUp
+          show={this.state.showSavePopup}
+          onHide={() => this.setState({ showSavePopup: false })}
+          onSave={fileName => this.setState({ fileName }, this.doSave)}
+        />
         {this.renderVersionSelectopPopup()}
       </Grid>
     )

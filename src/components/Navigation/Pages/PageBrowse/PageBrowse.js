@@ -14,6 +14,7 @@ import ButtonsBar from './ButtonsBar'
 import FilterBar from '../../Sections/FilterBar'
 import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import ProviderButtons from '../../Ui/ProviderButtons'
+import ContributePrompt from '../../../ContributePrompt'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -41,7 +42,16 @@ class PageBrowse extends SystemManagedList {
   }
 
   renderButtons() {
-    return <ButtonsBar hasChanges={!this.hasChanges()} collapseAll={this.collapseAll} doSave={this.doSave} />
+    return (
+      <ButtonsBar
+        hasChanges={!this.hasChanges()}
+        revertAll={this.revertAll}
+        doRefreshAll={this.doRefreshAll}
+        collapseAll={this.collapseAll}
+        onRemoveAll={this.onRemoveAll}
+        doPromptContribute={this.doPromptContribute}
+      />
+    )
   }
 
   renderFilterBar() {
@@ -60,15 +70,20 @@ class PageBrowse extends SystemManagedList {
     const target = event.target
     const activeProvider = target.name
     this.setState({ ...this.state, activeProvider })
-    // Call action to retrieve definitions from the server
     this.props.dispatch(uiBrowseGet(this.props.token, activeProvider))
   }
 
   render() {
-    const { components, definitions } = this.props
+    const { components, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition, activeProvider } = this.state
     return (
       <Grid className="main-container">
+        <ContributePrompt
+          ref={this.contributeModal}
+          session={session}
+          onLogin={this.handleLogin}
+          actionHandler={this.doContribute}
+        />
         <ProviderButtons onClick={this.onProviderSelection} activeProvider={activeProvider} />
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
@@ -101,7 +116,7 @@ class PageBrowse extends SystemManagedList {
               path={path}
               currentDefinition={currentDefinition}
               component={currentComponent}
-              readOnly={this.readOnly}
+              readOnly={false}
             />
           )}
         </Section>

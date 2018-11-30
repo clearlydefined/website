@@ -3,16 +3,16 @@
 
 import React from 'react'
 import notification from 'antd/lib/notification'
+import { saveAs } from 'file-saver'
+import base64js from 'base64-js'
+import pako from 'pako'
+import { ROUTE_SHARE } from '../utils/routingConstants'
+import { saveGist } from '../api/github'
 import { uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { saveAs } from 'file-saver'
-import { ROUTE_SHARE } from '../utils/routingConstants'
 import { getCurationAction } from '../actions/curationActions'
-import { saveGist } from '../api/github'
-import base64js from 'base64-js'
-import pako from 'pako'
 import SystemManagedList from './SystemManagedList'
 
 /**
@@ -36,6 +36,10 @@ export default class UserManagedList extends SystemManagedList {
     this.onRemoveAll = this.onRemoveAll.bind(this)
     this.showVersionSelectorPopup = this.showVersionSelectorPopup.bind(this)
     this.applySelectedVersions = this.applySelectedVersions.bind(this)
+    this.doSave = this.doSave.bind(this)
+    this.doSaveAsUrl = this.doSaveAsUrl.bind(this)
+    this.createGist = this.createGist.bind(this)
+    this.saveSpec = this.saveSpec.bind(this)
   }
 
   onRemoveComponent(component) {
@@ -126,64 +130,6 @@ export default class UserManagedList extends SystemManagedList {
     })
   }
 
-  doSave() {
-    const { components } = this.props
-    const spec = this.buildSaveSpec(components.list)
-    this.saveSpec(spec)
-    this.setState({ showSavePopup: false, fileName: null })
-  }
-
-  async saveSpec(spec) {
-    const { dispatch } = this.props
-    try {
-      const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-      if (this.state.saveType === 'gist') await this.createGist(this.state.fileName, fileObject)
-      else {
-        const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
-        saveAs(file)
-      }
-    } catch (error) {
-      if (error.status === 404)
-        return uiWarning(dispatch, "Could not create Gist. Likely you've not given us permission")
-      uiWarning(dispatch, error.message)
-    }
-  }
-
-  async createGist(name, content) {
-    const { token, dispatch } = this.props
-    const url = await saveGist(token, `${name}.json`, JSON.stringify(content))
-    const message = (
-      <div>
-        A new Gist File has been created and is available{' '}
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          here
-        </a>
-      </div>
-    )
-    return uiInfo(dispatch, message)
-  }
-
-  doSaveAsUrl() {
-    const { components } = this.props
-    const spec = this.buildSaveSpec(components.list)
-    const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-    const url = `${document.location.origin}${ROUTE_SHARE}/${base64js.fromByteArray(
-      pako.deflate(JSON.stringify(fileObject))
-    )}`
-    this.copyToClipboard(url, 'URL copied to clipboard')
-  }
-
-  copyToClipboard(text, message) {
-    const textArea = document.createElement('textarea')
-    textArea.value = text
-    document.body.appendChild(textArea)
-    textArea.focus()
-    textArea.select()
-    document.execCommand('copy')
-    document.body.removeChild(textArea)
-    uiInfo(this.props.dispatch, message)
-  }
-
   onAddComponent(value) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
@@ -255,5 +201,71 @@ export default class UserManagedList extends SystemManagedList {
         )
       })
     )
+  }
+
+  buildSaveSpec(list) {
+    return list.reduce((result, component) => {
+      result.push(EntitySpec.fromCoordinates(component))
+      return result
+    }, [])
+  }
+
+  doSave() {
+    const { components } = this.props
+    const spec = this.buildSaveSpec(components.list)
+    this.saveSpec(spec)
+    this.setState({ showSavePopup: false, fileName: null })
+  }
+
+  async saveSpec(spec) {
+    const { dispatch } = this.props
+    try {
+      const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
+      if (this.state.saveType === 'gist') await this.createGist(this.state.fileName, fileObject)
+      else {
+        const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
+        saveAs(file)
+      }
+    } catch (error) {
+      if (error.status === 404)
+        return uiWarning(dispatch, "Could not create Gist. Likely you've not given us permission")
+      uiWarning(dispatch, error.message)
+    }
+  }
+
+  async createGist(name, content) {
+    console.log('createGist')
+    const { token, dispatch } = this.props
+    const url = await saveGist(token, `${name}.json`, JSON.stringify(content))
+    const message = (
+      <div>
+        A new Gist File has been created and is available{' '}
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          here
+        </a>
+      </div>
+    )
+    return uiInfo(dispatch, message)
+  }
+
+  doSaveAsUrl() {
+    const { components } = this.props
+    const spec = this.buildSaveSpec(components.list)
+    const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
+    const url = `${document.location.origin}${ROUTE_SHARE}/${base64js.fromByteArray(
+      pako.deflate(JSON.stringify(fileObject))
+    )}`
+    this.copyToClipboard(url, 'URL copied to clipboard')
+  }
+
+  copyToClipboard(text, message) {
+    const textArea = document.createElement('textarea')
+    textArea.value = text
+    document.body.appendChild(textArea)
+    textArea.focus()
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    uiInfo(this.props.dispatch, message)
   }
 }

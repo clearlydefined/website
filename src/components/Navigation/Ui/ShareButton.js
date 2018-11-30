@@ -9,7 +9,7 @@ export default class ShareButton extends Component {
 
   render() {
     const { components, onSelect } = this.props
-    const disabled = components.list.length === 0
+    const disabled = !components || components.list.length === 0
     return (
       <DropdownButton disabled={disabled} id={'sharedropdown'} title="Share" bsStyle="success">
         <MenuItem eventKey="1" onSelect={() => onSelect('url')}>

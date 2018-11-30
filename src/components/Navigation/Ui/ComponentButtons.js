@@ -60,7 +60,6 @@ export default class ComponentButtons extends Component {
 
   render() {
     const { definition, currentComponent, readOnly, hasChange, hideVersionSelector } = this.props
-
     const component = EntitySpec.fromCoordinates(currentComponent)
     const isSourceComponent = this.isSourceComponent(component)
     const scores = Definition.computeScores(definition)
@@ -68,7 +67,6 @@ export default class ComponentButtons extends Component {
     const isSourceEmpty = Definition.isSourceEmpty(definition)
     const isCurated = Definition.isCurated(definition)
     const hasPendingCurations = Definition.hasPendingCurations(definition)
-    console.log(definition, isDefinitionEmpty)
     return (
       <div className="list-activity-area">
         {scores && <img className="list-buttons" src={getBadgeUrl(scores.tool, scores.effective)} alt="score" />}
