@@ -129,11 +129,8 @@ function mapStateToProps(state) {
   return {
     token: state.session.token,
     session: state.session,
-    url: state.ui.contribution.url,
     definitions: state.definition.bodies,
-    components: state.ui.browse.componentList,
-    filterValue: state.ui.browse.filter,
-    filterOptions: state.ui.browse.filterList
+    components: state.ui.browse.componentList
   }
 }
 
