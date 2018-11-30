@@ -15,8 +15,8 @@ import withSuggestions from '../utils/withSuggestions'
  *
  */
 class CopyrightsContent extends Component {
-  onChange = async suggestion => {
-    await this.props.onChange(suggestion)
+  onChange = suggestion => {
+    this.props.onChange(suggestion)
   }
 
   render() {
@@ -71,16 +71,12 @@ class CopyrightsRenderer extends Component {
     const { values, currentItem } = this.state
     const updatedObject = { value: updatedText || value, isDifferent: true }
     isNumber(currentItem) ? (values[currentItem] = updatedObject) : values.push(updatedObject)
-    this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true }, () => {
-      if (forceSave) this.onSave()
-    })
+    this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true }, () => forceSave && this.onSave())
   }
 
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
-  onChange = suggestion => {
-    this.addItem(suggestion, null, true)
-  }
+  onChange = suggestion => this.addItem(suggestion, null, true)
 
   render() {
     const { readOnly, container, placement, classIfDifferent, field } = this.props

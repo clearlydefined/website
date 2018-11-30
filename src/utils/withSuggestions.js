@@ -33,20 +33,13 @@ function withSuggestions(WrappedComponent) {
     }
   }
 
-  return connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(EnhanceSuggestions)
+  return connect(mapStateToProps)(EnhanceSuggestions)
 }
 
 function mapStateToProps(state, props) {
   return {
     suggestedData: get(state.ui.inspect.suggestedData.item, props.field)
   }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({}, dispatch)
 }
 
 export default withSuggestions
