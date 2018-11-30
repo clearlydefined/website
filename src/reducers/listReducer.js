@@ -140,7 +140,6 @@ export default (name = '', transformer = null, comparator = null) => {
     }
 
     if (result.updateAll) {
-      console.log(result)
       return {
         ...state,
         sequence: ++state.sequence,

@@ -91,6 +91,13 @@ export default class EntitySpec {
     return entry.parser(path)
   }
 
+  static fromString(path) {
+    if (!path) return null
+    path = path.startsWith('/') ? path.slice(1) : path
+    const [type, provider, namespace, name, revision] = path.split('/')
+    return new EntitySpec(type, provider, namespace, name, revision)
+  }
+
   static fromCoordinates(o) {
     return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision, o.pr, o.changes)
   }

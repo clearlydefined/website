@@ -83,11 +83,11 @@ export function revertDefinitionAction(definition, values, name) {
   }
 }
 
-export function browseDefinitionsAction(token, entities, name) {
+export function browseDefinitionsAction(token, entity, name) {
   return dispatch => {
     const actions = asyncActions(name)
     dispatch(actions.start())
-    return getLowScoreDefinitions(token, ['npm/npmjs/-/async/2.6.0']).then(
+    return getLowScoreDefinitions(token, entity).then(
       result => {
         dispatch(actions.success({ add: result }))
         const toAdd = map(result, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)

@@ -30,7 +30,6 @@ export class PageDefinitions extends UserManagedList {
     this.revertAll = this.revertAll.bind(this)
     this.revertDefinition = this.revertDefinition.bind(this)
     this.renderVersionSelectopPopup = this.renderVersionSelectopPopup.bind(this)
-    this.renderSavePopup = this.renderSavePopup.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
   }
 
