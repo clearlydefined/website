@@ -7,8 +7,7 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import spdxLicenseIds from 'spdx-license-ids'
 import deprecatedSpdxLicenseIds from 'spdx-license-ids/deprecated'
 import { customLicenseIds } from '../utils/utils'
-const identifiers = [...customLicenseIds, ...spdxLicenseIds, ...deprecatedSpdxLicenseIds]
-
+const identifiers = [...customLicenseIds, ...spdxLicenseIds.sort(), ...deprecatedSpdxLicenseIds.sort()]
 export default class SpdxPicker extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
