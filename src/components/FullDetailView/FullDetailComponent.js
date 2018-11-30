@@ -96,6 +96,7 @@ class FullDetailComponent extends Component {
                   <span>Files</span>
                   &nbsp;
                   <ButtonWithTooltip
+                    disabled={entry === undefined}
                     button={
                       <Button bsStyle="danger" onClick={() => handleRevert('files')} disabled={entry === undefined}>
                         <i className="fas fa-undo" />
