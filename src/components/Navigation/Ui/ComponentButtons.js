@@ -129,7 +129,7 @@ export default class ComponentButtons extends Component {
           {!readOnly &&
             !isDefinitionEmpty && (
               <ButtonWithTooltip
-                tip={'Revert Changes of this Definition'}
+                tip={hasChange(component) && 'Revert Changes of this Definition'}
                 button={
                   <Button
                     className="list-fa-button"
