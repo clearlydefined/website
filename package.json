@@ -47,7 +47,7 @@
     "prettier": "^1.14.2",
     "react-test-renderer": "^16.4.1",
     "redux-mock-store": "^1.5.3",
-    "serve": "^9.2.0"
+    "serve": "^10.0.2"
   },
   "scripts": {
     "copy-monaco": "node ./src/utils/install-monaco.js",
