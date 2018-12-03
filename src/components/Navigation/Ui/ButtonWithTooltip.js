@@ -3,7 +3,7 @@
 import React from 'react'
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
-const ButtonWithTooltip = ({ children, tip, id }) => {
+const ButtonWithTooltip = ({ children, tip }) => {
   return (
     <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip">{tip}</Tooltip>}>
       {children}
