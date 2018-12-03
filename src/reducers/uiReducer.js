@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { ROUTE_DEFINITIONS, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
+import { ROUTE_DEFINITIONS, ROUTE_HARVEST, ROUTE_ABOUT, ROUTE_BROWSE } from '../utils/routingConstants'
 import {
   UI_NAVIGATION,
   UI_NOTIFICATION_NEW,
@@ -52,17 +52,11 @@ const initialStateNavigation = [
     isSelected: false
   },
   /*{
-    title: 'Inspect',
-    to: ROUTE_INSPECT,
+    title: 'Browse',
+    to: ROUTE_BROWSE,
     protected: 0,
     isSelected: false
   },*/
-  // {
-  //   title: 'Curate',
-  //   to: ROUTE_CURATE,
-  //   protected: 0,
-  //   isSelected: false
-  // },
   {
     title: 'Harvest',
     to: ROUTE_HARVEST,

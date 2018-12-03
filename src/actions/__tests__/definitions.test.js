@@ -22,12 +22,12 @@ const mockedDefinition = {
       projectWebsite: 'https://caolan.github.io/async/',
       issueTracker: 'https://github.com/caolan/async/issues',
       tools: ['scancode/2.2.1', 'clearlydefined/1', 'curation/63b2dde4188849a660de4ebe44f301f34c2e7886'],
-      toolScore: 2,
-      score: 2
+      toolScore: { total: 2 },
+      score: { total: 2 }
     },
     licensed: {
       declared: 'Apache-2.0',
-      toolScore: 2,
+      toolScore: { total: 2 },
       facets: {
         core: {
           attribution: { unknown: 2, parties: ['Copyright (c) 2010-2017 Caolan McMahon'] },
@@ -35,7 +35,7 @@ const mockedDefinition = {
           files: 3
         }
       },
-      score: 2
+      score: { total: 2 }
     },
     files: [
       { path: 'package/bower.json' },
