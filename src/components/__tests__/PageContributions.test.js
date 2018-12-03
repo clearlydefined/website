@@ -2,10 +2,10 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import ConnectedPageDefinitions, { PageDefinitions } from '../Navigation/Pages/PageDefinitions'
+import ConnectedPageContribution, { PageContribution } from '../Navigation/Pages/PageContribution'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
-describe('PageDefinitions', () => {
+describe('PageContribution', () => {
   it('renders without crashing', () => {
     const store = mockStore({
       session: { token: '' },
@@ -14,6 +14,9 @@ describe('PageDefinitions', () => {
           filter: {},
           filterList: {},
           componentList: {}
+        },
+        contribution: {
+          url: {}
         }
       },
       definition: {
@@ -22,10 +25,10 @@ describe('PageDefinitions', () => {
     })
 
     const props = {
-      match: { path: '/definitions', url: '/definitions', isExact: true, params: {} },
-      location: { pathname: '/definitions', search: '', hash: '', key: 'ip23w9' }
+      match: { path: '/contribution', url: '/contribution', isExact: true, params: {} },
+      location: { pathname: '/contribution', search: '', hash: '', key: 'ip23w9' }
     }
 
-    shallow(<ConnectedPageDefinitions store={store} {...props} />)
+    shallow(<ConnectedPageContribution store={store} {...props} />)
   })
 })

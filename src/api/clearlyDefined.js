@@ -11,6 +11,7 @@ const apiHome = process.env.REACT_APP_SERVER
 export const CURATIONS = 'curations'
 export const HARVEST = 'harvest'
 export const DEFINITIONS = 'definitions'
+export const BROWSE = 'browse'
 export const ORIGINS_GITHUB = 'origins/github'
 export const ORIGINS_NPM = 'origins/npm'
 export const ORIGINS_NUGET = 'origins/nuget'
@@ -101,6 +102,10 @@ export function getDefinition(token, entity, params = {}) {
 
 export function getContributionData(token, entity) {
   return get(url(`${CURATIONS}/pr/${entity}`), token)
+}
+
+export async function browseDefinitions(token, entity) {
+  return await getList(url(BROWSE, { pattern: entity }), token)
 }
 
 export function getDefinitions(token, list) {
