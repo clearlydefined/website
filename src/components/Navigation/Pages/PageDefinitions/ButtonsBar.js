@@ -35,7 +35,7 @@ export default class ButtonsBar extends Component {
     const { components, hasChanges, revertAll, doRefreshAll, collapseAll, onRemoveAll, doPromptContribute } = this.props
     return (
       <div className="pull-right">
-        <ButtonWithTooltip tooltip="Revert all changes of all the definitions">
+        <ButtonWithTooltip tip="Revert all changes of all the definitions">
           <Button bsStyle="danger" disabled={hasChanges} onClick={revertAll}>
             <i className="fas fa-undo" />
             <span>&nbsp;Revert Changes</span>
