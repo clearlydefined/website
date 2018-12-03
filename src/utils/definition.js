@@ -28,8 +28,12 @@ export default class Definition {
 
   static computeScores(definition) {
     if (!get(definition, 'described')) return null
-    const tool = Math.ceil((get(definition, 'described.toolScore', 0) + get(definition, 'licensed.toolScore', 0)) / 2)
-    const effective = Math.ceil((get(definition, 'described.score', 0) + get(definition, 'licensed.score', 0)) / 2)
+    const tool = Math.ceil(
+      (get(definition, 'described.toolScore.total', 0) + get(definition, 'licensed.toolScore.total', 0)) / 2
+    )
+    const effective = Math.ceil(
+      (get(definition, 'described.score.total', 0) + get(definition, 'licensed.score.total', 0)) / 2
+    )
     return { tool, effective }
   }
 
