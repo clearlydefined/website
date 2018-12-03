@@ -13,7 +13,7 @@ import {
   browseDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiBrowseUpdateList, uiInfo, uiDanger } from './ui'
+import { uiBrowseUpdateList, uiDanger } from './ui'
 import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
