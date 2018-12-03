@@ -116,7 +116,9 @@ export function previewDefinition(token, entity, curation) {
 }
 
 export function getBadgeUrl(score1, score2) {
-  const topScore = 2
+  score1 = score1 || 0
+  score2 = score2 || 0
+  const topScore = 100
   const colors = ['red', 'yellow', 'brightgreen']
   const percentScore = (score1 + score2) / (2 * topScore)
   const bucketSize = 1 / (colors.length - 1)
