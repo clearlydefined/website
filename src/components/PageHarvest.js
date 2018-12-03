@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
+import { Grid, Row, Col, Button } from 'react-bootstrap'
 import { ROUTE_HARVEST } from '../utils/routingConstants'
 import { harvestAction } from '../actions/harvestActions'
 import {
@@ -19,6 +19,7 @@ import {
 } from './'
 import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
+import ProviderButtons from './Navigation/Ui/ProviderButtons'
 
 class PageHarvest extends Component {
   constructor(props) {
@@ -69,31 +70,7 @@ class PageHarvest extends Component {
 
   renderProviderButtons() {
     const { activeProvider } = this.state
-    return (
-      <ButtonGroup>
-        <Button name="github" onClick={this.onClick} active={activeProvider === 'github'}>
-          GitHub
-        </Button>
-        <Button name="maven" onClick={this.onClick} active={activeProvider === 'maven'}>
-          Maven
-        </Button>
-        <Button name="npm" onClick={this.onClick} active={activeProvider === 'npm'}>
-          NPM
-        </Button>
-        <Button name="nuget" onClick={this.onClick} active={activeProvider === 'nuget'}>
-          NuGet
-        </Button>
-        <Button name="crate" onClick={this.onClick} active={activeProvider === 'crate'}>
-          Crate
-        </Button>
-        <Button name="pypi" onClick={this.onClick} active={activeProvider === 'pypi'}>
-          PyPi
-        </Button>
-        <Button name="rubygems" onClick={this.onClick} active={activeProvider === 'rubygems'}>
-          RubyGems
-        </Button>
-      </ButtonGroup>
-    )
+    return <ProviderButtons activeProvider={activeProvider} onClick={this.onClick} />
   }
 
   renderActionButton() {

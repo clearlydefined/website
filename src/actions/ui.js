@@ -7,7 +7,8 @@ import {
   previewDefinitionAction,
   getDefinitionSuggestionsAction,
   resetPreviewDefinitionAction,
-  revertDefinitionAction
+  revertDefinitionAction,
+  browseDefinitionsAction
 } from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
 import { getPrDataAction } from './prActions'
@@ -41,6 +42,7 @@ export const UI_CURATE_GET_DEFINITION_PROPOSED = 'UI_CURATE_GET_DEFINITION_PROPO
 export const UI_CURATE_DEFINITION_PREVIEW = 'UI_CURATE_DEFINITION_PREVIEW'
 export const UI_DEFINITION_REVERT = 'UI_DEFINITION_REVERT'
 
+export const UI_BROWSE_GET = 'UI_BROWSE_GET'
 export const UI_BROWSE_UPDATE_FILTER = 'UI_BROWSE_UPDATE_FILTER'
 export const UI_BROWSE_UPDATE_FILTER_LIST = 'UI_BROWSE_UPDATE_FILTER_LIST'
 export const UI_BROWSE_UPDATE_LIST = 'UI_BROWSE_UPDATE_LIST'
@@ -57,6 +59,19 @@ export function uiRedirect(to) {
 }
 
 let nextNotificationId = 0
+
+export function uiInfo(dispatch, message, timeout = 5000) {
+  dispatch(uiNotificationNew({ type: 'info', message, timeout }))
+}
+
+export function uiWarning(dispatch, message, timeout = 5000) {
+  dispatch(uiNotificationNew({ type: 'warning', message, timeout }))
+}
+
+export function uiDanger(dispatch, message, timeout = 5000) {
+  dispatch(uiNotificationNew({ type: 'danger', message, timeout }))
+}
+
 export function uiNotificationNew(message) {
   return { type: UI_NOTIFICATION_NEW, message: { ...message, id: nextNotificationId++ } }
 }
@@ -128,6 +143,10 @@ export function uiCurateResetDefinitionPreview(token, entity) {
 
 export function uiRevertDefinition(definition, values) {
   return revertDefinitionAction(definition, values, UI_DEFINITION_REVERT)
+}
+
+export function uiBrowseGet(token, entity) {
+  return browseDefinitionsAction(token, entity, UI_BROWSE_GET)
 }
 
 export function uiBrowseUpdateFilter(value) {

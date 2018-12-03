@@ -55,10 +55,12 @@ export default class GlobsPicker extends Component {
 
     return (
       <div className="editable-editor">
-        <i
-          className={`fas fa-undo editable-marker ${!globs && 'fa-disabled'}`}
-          onClick={() => onRevert && globs && onRevert()}
-        />
+        {!readOnly && (
+          <i
+            className={`fas fa-undo editable-marker ${!globs && 'fa-disabled'}`}
+            onClick={() => onRevert && globs && onRevert()}
+          />
+        )}
         {globs &&
           globs.map(glob => {
             const isLongTag = glob.length > 20

@@ -49,15 +49,12 @@ export default class HeaderSection extends Component {
         </Col>
         <Col md={4} className="text-right">
           {!isEmpty(changes) && (
-            <ButtonWithTooltip
-              button={
-                <Button bsStyle="danger" onClick={() => handleRevert()}>
-                  <i className="fas fa-undo" />
-                  <span>&nbsp;Revert Changes</span>
-                </Button>
-              }
-              tip="Revert all changes of the current definition"
-            />
+            <ButtonWithTooltip tip="Revert all changes of the current definition">
+              <Button bsStyle="danger" onClick={() => handleRevert()}>
+                <i className="fas fa-undo" />
+                <span>&nbsp;Revert Changes</span>
+              </Button>
+            </ButtonWithTooltip>
           )}{' '}
           {modalView && (
             <Button bsStyle="primary" disabled={isEmpty(changes)} onClick={handleSave}>
