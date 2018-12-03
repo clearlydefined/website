@@ -2,9 +2,19 @@
 // SPDX-License-Identifier: MIT
 
 import { asyncActions } from './'
-import { getDefinitions, getDefinition, previewDefinition, getDefinitionSuggestions } from '../api/clearlyDefined'
+import map from 'lodash/map'
+import chunk from 'lodash/chunk'
+import throat from 'throat'
+import {
+  getDefinitions,
+  getDefinition,
+  previewDefinition,
+  getDefinitionSuggestions,
+  browseDefinitions
+} from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiBrowseUpdateList } from './ui'
+import { uiBrowseUpdateList, uiDanger } from './ui'
+import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
@@ -70,5 +80,26 @@ export function revertDefinitionAction(definition, values, name) {
     const componentsWithoutChanges = Definition.revert(state.ui.browse.componentList.list, definition, values)
     dispatch(uiBrowseUpdateList({ updateAll: componentsWithoutChanges }))
     return dispatch(actions.success({ componentsWithoutChanges }))
+  }
+}
+
+export function browseDefinitionsAction(token, entity, name) {
+  return async dispatch => {
+    const actions = asyncActions(name)
+    dispatch(actions.start())
+    try {
+      const result = await browseDefinitions(token, entity)
+      dispatch(actions.success({ add: result }))
+      const toAdd = map(result, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
+      dispatch(uiBrowseUpdateList({ updateAll: toAdd }))
+      const chunks = chunk(map(toAdd, component => EntitySpec.fromCoordinates(component).toPath(), 100))
+      try {
+        await Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
+      } catch (error) {
+        uiDanger(dispatch, 'There was an issue retrieving components')
+      }
+    } catch (error) {
+      dispatch(actions.error(error))
+    }
   }
 }

@@ -2,10 +2,10 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import ConnectedPageDefinitions, { PageDefinitions } from '../Navigation/Pages/PageDefinitions'
+import ConnectedPageBrowse, { PageBrowse } from '../Navigation/Pages/PageBrowse'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
-describe('PageDefinitions', () => {
+describe('PageBrowse', () => {
   it('renders without crashing', () => {
     const store = mockStore({
       session: { token: '' },
@@ -22,10 +22,10 @@ describe('PageDefinitions', () => {
     })
 
     const props = {
-      match: { path: '/definitions', url: '/definitions', isExact: true, params: {} },
-      location: { pathname: '/definitions', search: '', hash: '', key: 'ip23w9' }
+      match: { path: '/browse', url: '/browse', isExact: true, params: {} },
+      location: { pathname: '/browse', search: '', hash: '', key: 'ip23w9' }
     }
 
-    shallow(<ConnectedPageDefinitions store={store} {...props} />)
+    shallow(<ConnectedPageBrowse store={store} {...props} />)
   })
 })

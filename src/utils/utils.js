@@ -29,4 +29,31 @@ function asObject(item) {
 
 const customLicenseIds = ['NONE', 'NOASSERTION']
 
-export { setIfValue, difference, customLicenseIds, asObject }
+const sorts = [
+  { value: 'license', label: 'License' },
+  { value: 'name', label: 'Name' },
+  { value: 'namespace', label: 'Namespace' },
+  { value: 'provider', label: 'Provider' },
+  { value: 'releaseDate', label: 'Release Date' },
+  { value: 'score', label: 'Score' },
+  { value: 'type', label: 'Type' }
+]
+
+const licenses = [
+  { value: 'apache-2.0', label: 'Apache-2.0' },
+  { value: 'bsd-2-clause', label: 'BSD-2-Clause' },
+  { value: 'cddl-1.0', label: 'CDDL-1.0' },
+  { value: 'epl-1.0', label: 'EPL-1.0' },
+  { value: 'gpl', label: 'GPL' },
+  { value: 'lgpl', label: 'LGPL' },
+  { value: 'mit', label: 'MIT' },
+  { value: 'mpl-2.0', label: 'MPL-2.0' },
+  { value: 'presence', label: 'Presence Of' },
+  { value: 'absence', label: 'Absence Of' }
+]
+
+const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+
+const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+
+export { setIfValue, difference, customLicenseIds, asObject, sorts, licenses, sources, releaseDates }
