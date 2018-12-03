@@ -14,6 +14,5 @@ export async function getGist(id) {
   for (let file in gist.files) {
     gist.files[file] = JSON.parse(gist.files[file].content)
   }
-  console.log(gist.files)
   return gist.files
 }

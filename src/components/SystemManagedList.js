@@ -19,6 +19,7 @@ import { uiBrowseUpdateFilterList, uiBrowseUpdateList, uiRevertDefinition, uiInf
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
+import Definition from '../utils/definition'
 
 /**
  * Abstracts methods for system-managed list
@@ -145,7 +146,26 @@ export default class SystemManagedList extends Component {
   }
 
   getSort(eventKey) {
-    return this[eventKey]
+    const sorts = {
+      name: coordinates => (coordinates.name ? coordinates.name : null),
+      namespace: coordinates => (coordinates.namespace ? coordinates.namespace : null),
+      provider: coordinates => (coordinates.provider ? coordinates.provider : null),
+      type: coordinates => (coordinates.type ? coordinates.type : null),
+      releaseDate: coordinates => {
+        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        return get(definition, 'described.releaseDate', null)
+      },
+      license: coordinates => {
+        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        return get(definition, 'licensed.declared', null)
+      },
+      score: coordinates => {
+        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        const scores = Definition.computeScores(definition)
+        return scores ? (scores.tool + scores.effective) / 2 : -1
+      }
+    }
+    return sorts[eventKey]
   }
 
   onSort(eventKey) {

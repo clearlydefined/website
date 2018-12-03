@@ -18,10 +18,10 @@ export default class ShareButton extends Component {
         <MenuItem eventKey="2" onSelect={() => onSelect('file')}>
           File
         </MenuItem>
-        <MenuItem eventKey="3" onSelect={() => onSelect('gist')}>
+        <MenuItem divider />
+        <MenuItem disabled eventKey="3" onSelect={() => onSelect('gist')}>
           Gist
         </MenuItem>
-        <MenuItem divider />
         <MenuItem disabled>Definitions (Not implemented)</MenuItem>
         <MenuItem disabled>SPDX (Not implemented)</MenuItem>
       </DropdownButton>
