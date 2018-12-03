@@ -109,6 +109,7 @@ export default class ComponentButtons extends Component {
             tip={'Switch or add other versions of this definition'}
             button={
               <Dropdown
+                trigger={'click'}
                 overlay={
                   <Menu>
                     <Menu.Item onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}>
