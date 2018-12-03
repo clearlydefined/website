@@ -93,43 +93,6 @@ export default class UserManagedList extends SystemManagedList {
     )
   }
 
-  revertAll() {
-    this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?')
-  }
-
-  revertDefinition(definition, value) {
-    this.revert(definition, 'Are you sure to revert all the unsaved changes from the selected definition?', value)
-  }
-
-  revert(definition, description, value) {
-    const { dispatch } = this.props
-    if (value) {
-      dispatch(uiRevertDefinition(definition, value))
-      this.incrementSequence()
-      return
-    }
-    const key = `open${Date.now()}`
-    notification.open({
-      message: 'Confirm Revert?',
-      description,
-      btn: (
-        <NotificationButtons
-          onClick={() => {
-            dispatch(uiRevertDefinition(definition))
-            this.incrementSequence()
-            notification.close(key)
-          }}
-          onClose={() => notification.close(key)}
-          confirmText="Revert"
-          dismissText="Dismiss"
-        />
-      ),
-      key,
-      onClose: notification.close(key),
-      duration: 0
-    })
-  }
-
   onAddComponent(value) {
     const { dispatch, token, definitions } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value

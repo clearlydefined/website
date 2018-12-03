@@ -104,7 +104,7 @@ export function getContributionData(token, entity) {
   return get(url(`${CURATIONS}/pr/${entity}`), token)
 }
 
-export async function getLowScoreDefinitions(token, entity) {
+export async function browseDefinitions(token, entity) {
   return await getList(url(BROWSE, { pattern: entity }), token)
 }
 

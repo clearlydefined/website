@@ -36,8 +36,7 @@ const sorts = [
   { value: 'provider', label: 'Provider' },
   { value: 'releaseDate', label: 'Release Date' },
   { value: 'score', label: 'Score' },
-  { value: 'type', label: 'Type' },
-  { value: 'popularity', label: 'Popularity' }
+  { value: 'type', label: 'Type' }
 ]
 
 const licenses = [

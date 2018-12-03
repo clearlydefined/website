@@ -10,7 +10,7 @@ import {
   getDefinition,
   previewDefinition,
   getDefinitionSuggestions,
-  getLowScoreDefinitions
+  browseDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
 import { uiBrowseUpdateList, uiInfo, uiDanger } from './ui'
@@ -84,20 +84,22 @@ export function revertDefinitionAction(definition, values, name) {
 }
 
 export function browseDefinitionsAction(token, entity, name) {
-  return dispatch => {
+  return async dispatch => {
     const actions = asyncActions(name)
     dispatch(actions.start())
-    return getLowScoreDefinitions(token, entity).then(
-      result => {
-        dispatch(actions.success({ add: result }))
-        const toAdd = map(result, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
-        dispatch(uiBrowseUpdateList({ updateAll: toAdd }))
-        const chunks = chunk(map(toAdd, component => EntitySpec.fromCoordinates(component).toPath(), 100))
-        Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
-          .then(() => uiInfo(dispatch, 'All components have been loaded'))
-          .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
-      },
-      error => dispatch(actions.error(error))
-    )
+    try {
+      const result = await browseDefinitions(token, entity)
+      dispatch(actions.success({ add: result }))
+      const toAdd = map(result, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
+      dispatch(uiBrowseUpdateList({ updateAll: toAdd }))
+      const chunks = chunk(map(toAdd, component => EntitySpec.fromCoordinates(component).toPath(), 100))
+      try {
+        await Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
+      } catch (error) {
+        uiDanger(dispatch, 'There was an issue retrieving components')
+      }
+    } catch (error) {
+      dispatch(actions.error(error))
+    }
   }
 }
