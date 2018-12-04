@@ -33,7 +33,7 @@ class PageBrowse extends SystemManagedList {
 
   noRowsRenderer() {
     return (
-      <div className="list-noRows">Select a Provider to retrieve a list of definition that needs to be curated</div>
+      <div className="list-noRows">Select a Provider to retrieve a list of definitions that need to be curated</div>
     )
   }
 
