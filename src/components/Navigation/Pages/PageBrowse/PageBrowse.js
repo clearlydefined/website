@@ -25,6 +25,7 @@ class PageBrowse extends SystemManagedList {
     this.state = { activeProvider: 'github' }
     this.onProviderSelection = this.onProviderSelection.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
+    this.storeList = 'browse'
   }
 
   componentDidMount() {

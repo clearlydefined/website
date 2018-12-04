@@ -19,6 +19,7 @@ class PageContribution extends SystemManagedList {
   constructor(props) {
     super(props)
     this.renderFilterBar = this.renderFilterBar.bind(this)
+    this.storeList = 'contributions'
   }
   componentDidMount() {
     const { dispatch, prNumber, token } = this.props

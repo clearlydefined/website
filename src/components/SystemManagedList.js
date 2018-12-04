@@ -15,7 +15,14 @@ import notification from 'antd/lib/notification'
 import { curateAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { uiBrowseUpdateFilterList, uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiDanger } from '../actions/ui'
+import {
+  uiBrowseUpdateFilterList,
+  uiBrowseUpdateList,
+  uiRevertDefinition,
+  uiInfo,
+  uiDanger,
+  uiContributionUpdateList
+} from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
@@ -260,7 +267,14 @@ export default class SystemManagedList extends Component {
   }
 
   updateList(o) {
-    this.props.dispatch(uiBrowseUpdateList(o))
+    switch (this.storeList) {
+      case 'browse':
+        return this.props.dispatch(uiBrowseUpdateList(o))
+      case 'contributions':
+        return this.props.dispatch(uiContributionUpdateList(o))
+      default:
+        return null
+    }
   }
 
   revertAll() {
