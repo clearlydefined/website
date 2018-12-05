@@ -30,6 +30,7 @@ If you want to test the development running e2e tests, there are 2 npm script th
 
 You can write your own tests, just create a new file inside the `e2e/tests/` folder.
 All e2e are written using `jest` and `puppeteer`.
+Note that e2e tests runs using only a local service setup, so you need to configure the `service` repo as well in your local environment.
 
 # Contributing
 

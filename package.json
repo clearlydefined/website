@@ -64,7 +64,7 @@
     "build": "env-cmd --fallback ./.env.production npm run build-css && npm run copy-monaco && react-scripts build",
     "test": "eslint src && react-scripts test --env=jsdom --coverage",
     "eject": "react-scripts eject",
-    "e2e:start": "BROWSER=none PORT=3333 npm start",
+    "e2e:start": "BROWSER=none PORT=3333 npm run start:local-api",
     "e2e:test": "jest -c e2e/jest.config.js"
   },
   "browserslist": {
