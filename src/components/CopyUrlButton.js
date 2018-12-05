@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import ButtonWithTooltip from './Navigation/Ui/ButtonWithTooltip'
 
 export default class CopyUrlButton extends Component {
   static propTypes = {
@@ -52,7 +53,7 @@ export default class CopyUrlButton extends Component {
   }
 
   renderTooltip() {
-    return <Tooltip id="tooltip">{this.state.copied ? 'Copied!' : 'Copy URL to clipboard'}</Tooltip>
+    return this.state.copied ? 'Copied!' : 'Copy URL to clipboard'
   }
 
   render() {
@@ -61,11 +62,11 @@ export default class CopyUrlButton extends Component {
 
     return (
       <CopyToClipboard text={this.renderUrl()} onCopy={this.onCopy}>
-        <OverlayTrigger placement="top" overlay={this.renderTooltip()} shouldUpdatePosition={true}>
+        <ButtonWithTooltip tip={this.renderTooltip()}>
           <Button bsStyle={bsStyle} className={className} disabled={isDisabled} onClick={this.onClick}>
             <i className="fas fa-copy" />
           </Button>
-        </OverlayTrigger>
+        </ButtonWithTooltip>
       </CopyToClipboard>
     )
   }
