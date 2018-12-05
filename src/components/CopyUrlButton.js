@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import ButtonWithTooltip from './Navigation/Ui/ButtonWithTooltip'
 
