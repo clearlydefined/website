@@ -6,7 +6,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 const ButtonWithTooltip = ({ children, tip }) => {
   return (
     <OverlayTrigger rootClose placement="top" overlay={<Tooltip id="tooltip">{tip}</Tooltip>}>
-      <div class="tooltipWrapper">{children}</div>
+      <div className="tooltipWrapper">{children}</div>
     </OverlayTrigger>
   )
 }
