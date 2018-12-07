@@ -17,7 +17,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import LicensePickerUtils from './utils'
 import valid from 'spdx-expression-validate'
-import SpdxPicker from './SpdxPicker'
+import SpdxPicker from '../SpdxPicker'
 
 /**
  * A standalone SPDX License Picker
