@@ -4,18 +4,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import LicensePickerUtils from './utils'
-
-/**
- * A standalone SPDX License Picker
- * It allows to build a license string based on license expression rules:
- * https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
- */
-// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
-// SPDX-License-Identifier: MIT
-
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import LicensePickerUtils from './utils'
 import valid from 'spdx-expression-validate'
 import SpdxPicker from '../SpdxPicker'
 
