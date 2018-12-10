@@ -24,6 +24,12 @@ describe('CurationRenderer', () => {
     expect(wrapper.find(TwoLineEntry).exists()).toBeTruthy()
     expect(wrapper.find(TwoLineEntry).props().message).toEqual(<span>@{testCuration.contributor}</span>)
   })
+  it('check the onClick function', () => {
+    const parentClick = jest.fn()
+    const wrapper = shallow(<CurationRenderer curation={testCuration} onClick={parentClick} />)
+    wrapper.find(TwoLineEntry).simulate('click')
+    expect(parentClick).toHaveBeenCalled()
+  })
   it('renders a green color for a merged curation', () => {
     const wrapper = shallow(<CurationRenderer curation={testCuration} />)
     const twoline = wrapper.find(TwoLineEntry)
