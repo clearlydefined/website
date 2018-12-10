@@ -18,4 +18,12 @@ describe('CurationData', () => {
     expect(wrapper.find(Panel).exists()).toBeTruthy()
     expect(wrapper.find(Panel).length).toBe(mockedCurations.length)
   })
+  it('checks if onChange function is called', async () => {
+    const parentChange = jest.fn()
+    const mockedCurations = [{ number: 100 }, { number: 10 }]
+    const wrapper = shallow(<CurationData curations={mockedCurations} onChange={parentChange} />)
+    const wrapperCollapse = wrapper.find(Collapse)
+    wrapperCollapse.simulate('change')
+    expect(parentChange).toHaveBeenCalled()
+  })
 })

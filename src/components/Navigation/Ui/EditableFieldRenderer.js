@@ -19,7 +19,7 @@ class EditableFieldRenderer extends Component {
     readOnly: PropTypes.bool,
     onChange: PropTypes.func,
     handleRevert: PropTypes.func,
-    curationSuggestions: PropTypes.func,
+    curationSuggestions: PropTypes.object,
     applyCurationSuggestion: PropTypes.func,
     type: PropTypes.string,
     value: PropTypes.any,
