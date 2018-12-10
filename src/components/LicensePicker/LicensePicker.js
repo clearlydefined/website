@@ -1,11 +1,10 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import LicensePickerUtils from './utils'
 import valid from 'spdx-expression-validate'
-import SpdxPicker from '../SpdxPicker'
+import RuleRenderer from './RuleRenderer'
 
 /**
  * A standalone SPDX License Picker
@@ -62,7 +61,7 @@ export default class LicensePicker extends Component {
     })
   }
 
-  componentDidUpdate(_, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const { rules, sequence } = this.state
     if (sequence !== prevState.sequence) {
       const licenseExpression = LicensePickerUtils.getLicenseString(rules)
@@ -78,25 +77,16 @@ export default class LicensePicker extends Component {
         <div>
           License Expression: <span style={{ background: `${isValid ? 'green' : 'red'}` }}>{licenseExpression}</span>
         </div>
-
         {rules.map((rule, index) => (
-          <div key={index}>
-            <SpdxPicker value={rule.license} onChange={value => this.updateLicense(value, index)} />
-            <div>
-              <input
-                type="checkbox"
-                onChange={event => this.considerLaterVersions(event.target.checked, index)}
-                value="+"
-              />
-              Any later version
-            </div>
-            <select onChange={event => this.changeRulesOperator(event.target.value, index)}>
-              <option />
-              <option>WITH</option>
-              <option>AND</option>
-              <option>OR</option>
-            </select>
-          </div>
+          <RuleRenderer
+            key={index}
+            index={index}
+            rule={rule}
+            changeRulesOperator={this.changeRulesOperator}
+            updateLicense={this.updateLicense}
+            considerLaterVersions={this.considerLaterVersions}
+            addNewGroup={this.addNewGroup}
+          />
         ))}
       </div>
     )
