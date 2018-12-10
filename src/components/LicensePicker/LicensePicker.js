@@ -20,11 +20,13 @@ export default class LicensePicker extends Component {
       operator: '',
       laterVersions: false
     }
+    this.state = {
+      rules: [this.ruleObject],
+      sequence: 0
+    }
   }
-
-  state = {
-    rules: [],
-    sequence: 0
+  static propTypes = {
+    //prop: PropTypes
   }
 
   updateLicense = (value, index) => {
@@ -42,10 +44,13 @@ export default class LicensePicker extends Component {
   changeRulesOperator = (value, index) => {
     const rules = [...this.state.rules]
     rules[index] = { ...rules[index], operator: value || '' }
-    this.setState({
-      rules,
-      sequence: this.state.sequence + 1
-    })
+    this.setState(
+      {
+        rules,
+        sequence: this.state.sequence + 1
+      },
+      () => index === this.state.rules.length - 1 && this.addNewRule()
+    )
   }
 
   considerLaterVersions = (value, index) => {
@@ -74,7 +79,6 @@ export default class LicensePicker extends Component {
           License Expression: <span style={{ background: `${isValid ? 'green' : 'red'}` }}>{licenseExpression}</span>
         </div>
 
-        <button onClick={this.addNewRule}>Add new Rule</button>
         {rules.map((rule, index) => (
           <div key={index}>
             <SpdxPicker value={rule.license} onChange={value => this.updateLicense(value, index)} />
@@ -87,6 +91,7 @@ export default class LicensePicker extends Component {
               Any later version
             </div>
             <select onChange={event => this.changeRulesOperator(event.target.value, index)}>
+              <option />
               <option>WITH</option>
               <option>AND</option>
               <option>OR</option>
