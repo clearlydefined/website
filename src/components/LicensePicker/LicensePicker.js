@@ -62,7 +62,7 @@ export default class LicensePicker extends Component {
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     const { rules, sequence } = this.state
     if (sequence !== prevState.sequence) {
       const licenseExpression = LicensePickerUtils.getLicenseString(rules)
