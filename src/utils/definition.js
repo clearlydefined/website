@@ -91,12 +91,14 @@ export default class Definition {
     if (!get(definition, '_meta')) return
     const { pending, merged } = get(definition, '_meta')
     return union(
-      pending.map(item => {
-        return { ...item, status: 'pending' }
-      }),
-      merged.map(item => {
-        return { ...item, status: 'merged' }
-      })
+      pending &&
+        pending.map(item => {
+          return { ...item, status: 'pending' }
+        }),
+      merged &&
+        merged.map(item => {
+          return { ...item, status: 'merged' }
+        })
     )
   }
 
