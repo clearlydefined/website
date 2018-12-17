@@ -206,3 +206,10 @@
 .modal-content {
   height: auto;
 }
+.tooltipWrapper {
+  display: inline-block;
+}
+
+.tooltipWrapper [disabled] {
+  pointer-events: none;
+}
