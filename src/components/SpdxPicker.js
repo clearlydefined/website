@@ -47,7 +47,6 @@ export default class SpdxPicker extends Component {
           ref={ref => (this._typeahead = ref)}
           bodyContainer
           highlightOnlyResult
-          autoFocus
           selectHintOnEnter
           clearButton
         />
