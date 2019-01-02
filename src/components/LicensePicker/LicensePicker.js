@@ -20,61 +20,56 @@ export default class LicensePicker extends Component {
     super(props)
     this.ruleObject = {
       license: '',
-      operator: '',
-      laterVersions: false,
-      childrens: []
+      conjunction: '',
+      plus: false
     }
+    this.licenseObject = {}
     this.state = {
-      rules: [{ ...this.ruleObject, id: new Date() }],
+      rules: {},
       sequence: 0
     }
   }
   static propTypes = {
-    //prop: PropTypes
+    value: PropTypes.string //existing license
+  }
+
+  componentDidMount() {
+    this.setState({
+      licenseExpression: this.props.value,
+      rules: LicensePickerUtils.parseLicense(this.props.value),
+      isValid: this.props.value ? valid(this.props.value) : false
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { rules, sequence } = this.state
     if (sequence !== prevState.sequence) {
-      const licenseExpression = LicensePickerUtils.getLicenseString(rules)
-      this.setState({ licenseExpression, isValid: valid(licenseExpression) })
+      const licenseExpression = LicensePickerUtils.stringify(rules)
+      this.setState({ ...this.state, licenseExpression, isValid: valid(licenseExpression) })
     }
   }
 
-  updateLicense = async (value, id) => {
-    const rules = [...this.state.rules]
-    const path = await LicensePickerUtils.findPath(rules, id)
-    if (!value && path !== '0') {
-      unset(rules, `${path}`)
-    } else set(rules, `${path}.license`, value || '')
+  updateLicense = async (value, path) => {
+    const rules = { ...this.state.rules }
+    const currentPath = [...path, 'license']
+    if (!value && currentPath !== ['license']) {
+      unset(rules, `${currentPath}`)
+    } else set(rules, toPath(currentPath), value || '')
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }
 
-  addNewRule = (path, id) => {
-    const rules = [...this.state.rules]
-    const pathArray = toPath(path)
-    if (pathArray.length === 1) rules.push({ ...this.ruleObject, id: new Date() })
-    else {
-      pathArray.splice(pathArray.length - 1)
-      const rule = get(rules, pathArray)
-      if (rule[rule.length - 1].id !== id) return
-      rule.push({ ...this.ruleObject, id: new Date() })
-      set(rules, pathArray, rule)
-    }
-    this.setState({ rules })
+  changeRulesConjunction = async (value, path) => {
+    const rules = { ...this.state.rules }
+    return this.setState({
+      rules: LicensePickerUtils.createRules(value, rules, path),
+      sequence: this.state.sequence + 1
+    })
   }
 
-  changeRulesOperator = async (value, id) => {
-    const rules = [...this.state.rules]
-    const path = await LicensePickerUtils.findPath(rules, id)
-    set(rules, `${path}.operator`, value || '')
-    this.setState({ rules, sequence: this.state.sequence + 1 }, () => value !== '' && this.addNewRule(path, id))
-  }
-
-  considerLaterVersions = async (value, id) => {
-    const rules = [...this.state.rules]
-    const path = await LicensePickerUtils.findPath(rules, id)
-    set(rules, `${path}.laterVersions`, value || '')
+  considerLaterVersions = async (value, path) => {
+    const rules = { ...this.state.rules }
+    const currentPath = [...path, 'plus']
+    set(rules, toPath(currentPath), value || false)
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }
 
@@ -95,17 +90,13 @@ export default class LicensePicker extends Component {
         <div>
           License Expression: <span style={{ background: `${isValid ? 'green' : 'red'}` }}>{licenseExpression}</span>
         </div>
-        {rules.map((rule, index) => (
-          <RuleRenderer
-            key={index}
-            index={index}
-            rule={rule}
-            changeRulesOperator={this.changeRulesOperator}
-            updateLicense={this.updateLicense}
-            considerLaterVersions={this.considerLaterVersions}
-            addNewGroup={this.addNewGroup}
-          />
-        ))}
+        <RuleRenderer
+          rule={rules}
+          changeRulesOperator={this.changeRulesConjunction}
+          updateLicense={this.updateLicense}
+          considerLaterVersions={this.considerLaterVersions}
+          addNewGroup={this.addNewGroup}
+        />
       </div>
     )
   }

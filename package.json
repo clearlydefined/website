@@ -28,7 +28,8 @@
     "redux": "^3.7.2",
     "redux-persist": "^4.6.0",
     "redux-thunk": "^2.3.0",
-    "spdx-expression-validate": "1.0.2",
+    "spdx-expression-parse": "^3.0.0",
+    "spdx-expression-validate": "^1.0.2",
     "spdx-license-ids": "^3.0.2",
     "throat": "^4.1.0",
     "whatwg-fetch": "^2.0.4"

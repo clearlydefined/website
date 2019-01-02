@@ -4,8 +4,8 @@ import RuleRenderer from '../RuleRenderer'
 
 const ruleObject = {
   license: '',
-  operator: '',
-  laterVersions: false
+  conjunction: '',
+  plus: false
 }
 
 describe('LicensePicker', () => {
