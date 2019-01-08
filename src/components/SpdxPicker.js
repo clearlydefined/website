@@ -39,7 +39,7 @@ export default class SpdxPicker extends Component {
     return (
       <div className="editable-editor">
         <Typeahead
-          defaultInputValue={value}
+          selected={[value] || []}
           options={identifiers}
           onBlur={onBlur}
           onKeyDown={e => this.onKeyPress(e, onChange)}

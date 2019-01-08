@@ -1,5 +1,4 @@
 import LicensePickerUtils from '../utils'
-import valid from 'spdx-expression-validate'
 
 const testRules = {
   left: { license: 'Apache-2.0' },

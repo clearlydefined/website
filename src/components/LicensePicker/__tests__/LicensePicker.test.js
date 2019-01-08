@@ -2,6 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import LicensePicker from '../LicensePicker'
 import LicensePickerUtils from '../utils'
+
 const license = 'Apache-2.0 AND MIT'
 describe('LicensePicker', () => {
   it('renders without crashing', () => {
@@ -163,6 +164,40 @@ describe('LicensePicker', () => {
         },
         conjunction: 'and',
         right: { left: { license: 'MIT' }, conjunction: 'or', right: { license: 'GPL-1.0-only' } }
+      }
+    })
+  })
+  it('add a new group', () => {
+    const testLicense = 'Apache-2.0'
+    const wrapper = shallow(<LicensePicker value={testLicense} />)
+    const instance = wrapper.instance()
+    instance.addNewGroup([])
+    expect(wrapper.state('rules')).toEqual({
+      left: { license: 'Apache-2.0' },
+      conjunction: 'and',
+      right: {
+        left: { license: '' },
+        conjunction: 'and',
+        right: { license: '' }
+      }
+    })
+  })
+  it('add a new nested group', () => {
+    const testLicense = 'Apache-2.0 OR (MIT OR GPL-1.0-only)'
+    const wrapper = shallow(<LicensePicker value={testLicense} />)
+    const instance = wrapper.instance()
+    instance.addNewGroup(['right'])
+    expect(wrapper.state('rules')).toEqual({
+      left: { license: 'Apache-2.0' },
+      conjunction: 'or',
+      right: {
+        left: { license: 'MIT' },
+        conjunction: 'or',
+        right: {
+          left: { license: 'GPL-1.0-only' },
+          conjunction: 'or',
+          right: { left: { license: '' }, conjunction: 'and', right: { license: '' } }
+        }
       }
     })
   })

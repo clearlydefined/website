@@ -5,10 +5,9 @@ import PropTypes from 'prop-types'
 import LicensePickerUtils from './utils'
 import valid from 'spdx-expression-validate'
 import set from 'lodash/set'
-import get from 'lodash/get'
 import unset from 'lodash/unset'
 import toPath from 'lodash/toPath'
-import RuleRenderer from './RuleRenderer'
+import RuleBuilder from './RuleBuilder'
 
 /**
  * A standalone SPDX License Picker
@@ -18,12 +17,6 @@ import RuleRenderer from './RuleRenderer'
 export default class LicensePicker extends Component {
   constructor(props) {
     super(props)
-    this.ruleObject = {
-      license: '',
-      conjunction: '',
-      plus: false
-    }
-    this.licenseObject = {}
     this.state = {
       rules: {},
       sequence: 0
@@ -41,7 +34,7 @@ export default class LicensePicker extends Component {
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     const { rules, sequence } = this.state
     if (sequence !== prevState.sequence) {
       const licenseExpression = LicensePickerUtils.stringify(rules)
@@ -73,14 +66,21 @@ export default class LicensePicker extends Component {
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }
 
-  addNewGroup = async rule => {
-    // Add a children rule related to the index element
-    const rules = [...this.state.rules]
-    const path = await LicensePickerUtils.findPath(rules, rule.id)
-    const childrens = [...get(rules, `${path}.childrens`)]
-    childrens.push({ ...this.ruleObject, id: new Date() })
-    set(rules, `${path}.childrens`, childrens)
-    this.setState({ rules })
+  addNewGroup = async path => {
+    // Add a children rule related to the rule element
+    const rules = { ...this.state.rules }
+    return this.setState({
+      rules: LicensePickerUtils.createGroup(rules, path),
+      sequence: this.state.sequence + 1
+    })
+  }
+
+  removeRule = async rule => {
+    const rules = { ...this.state.rules }
+    return this.setState({
+      rules: LicensePickerUtils.removeRule(rules, rule),
+      sequence: this.state.sequence + 1
+    })
   }
 
   render() {
@@ -90,12 +90,13 @@ export default class LicensePicker extends Component {
         <div>
           License Expression: <span style={{ background: `${isValid ? 'green' : 'red'}` }}>{licenseExpression}</span>
         </div>
-        <RuleRenderer
+        <RuleBuilder
           rule={rules}
           changeRulesOperator={this.changeRulesConjunction}
           updateLicense={this.updateLicense}
           considerLaterVersions={this.considerLaterVersions}
           addNewGroup={this.addNewGroup}
+          removeRule={this.removeRule}
         />
       </div>
     )
