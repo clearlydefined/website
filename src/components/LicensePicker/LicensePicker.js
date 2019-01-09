@@ -24,7 +24,9 @@ export default class LicensePicker extends Component {
     }
   }
   static propTypes = {
-    value: PropTypes.string //existing license
+    value: PropTypes.string, //existing license
+    onChange: PropTypes.func, //callback function called when saving
+    onClose: PropTypes.func //callback function called when closing the modal
   }
 
   componentDidMount() {
@@ -85,12 +87,8 @@ export default class LicensePicker extends Component {
     })
   }
 
-  saveLicense = () => {
-    this.props
-  }
-
   render() {
-    const { onSave, onClose } = this.props
+    const { onChange, onClose } = this.props
     const { rules, licenseExpression, isValid } = this.state
     return (
       <div className="spdx-picker">
@@ -100,7 +98,7 @@ export default class LicensePicker extends Component {
             <span style={{ background: `${isValid ? 'green' : 'red'}` }}>{licenseExpression}</span>
           </Col>
           <Col md={2} className="spdx-picker-header-buttons">
-            <Button bsStyle="success" disabled={false} onClick={() => onSave(licenseExpression)}>
+            <Button bsStyle="success" disabled={false} onClick={() => onChange(licenseExpression)}>
               Save
             </Button>
             <Button bsStyle="danger" disabled={false} onClick={onClose}>

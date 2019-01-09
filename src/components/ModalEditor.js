@@ -44,6 +44,7 @@ export default class ModalEditor extends React.Component {
               onChange(spec)
               this.setState({ editing: false })
             },
+            onClose: () => this.setState({ editing: false }),
             value
           })}
         </Modal>
