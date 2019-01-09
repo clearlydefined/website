@@ -201,4 +201,25 @@ describe('LicensePicker', () => {
       }
     })
   })
+  it('set the license with later version', () => {
+    const testLicense = 'Apache-2.0'
+    const wrapper = shallow(<LicensePicker value={testLicense} />)
+    const instance = wrapper.instance()
+    instance.considerLaterVersions(true, [])
+    expect(wrapper.state('rules')).toEqual({ license: 'Apache-2.0', plus: true })
+  })
+  it('removes a rule', () => {
+    const testLicense = 'Apache-2.0 OR MIT'
+    const wrapper = shallow(<LicensePicker value={testLicense} />)
+    const instance = wrapper.instance()
+    instance.removeRule(['right'])
+    expect(wrapper.state('rules')).toEqual({ license: 'Apache-2.0' })
+  })
+  it('change the value of a license', () => {
+    const testLicense = 'Apache-2.0'
+    const wrapper = shallow(<LicensePicker value={testLicense} />)
+    const instance = wrapper.instance()
+    instance.updateLicense('MIT', [])
+    expect(wrapper.state('rules')).toEqual({ license: 'MIT' })
+  })
 })

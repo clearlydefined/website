@@ -29,6 +29,12 @@ export default class LicensePickerUtils {
     return left && `${left} ${!isNil(right) && obj.conjunction ? `${obj.conjunction.toUpperCase()} ${right}` : ''}`
   }
 
+  /**
+   * Creates a new License Object in the specified path
+   * @param  {} obj original rules object
+   * @param  {} path where to create the new group
+   * @returns updated object rules
+   */
   static createGroup(obj, path) {
     if (path.length > 1 && obj.hasOwnProperty(path[0]) && obj[path[0]].hasOwnProperty(path[1])) {
       obj[path[0]] = this.createGroup(obj[path[0]], path.slice(1))
@@ -49,6 +55,13 @@ export default class LicensePickerUtils {
     }
   }
 
+  /**
+   * Creates a new License Rules in the specified path
+   * @param  {} conjunction used conjuction to merge the new rules objects
+   * @param  {} obj current object rules
+   * @param  {} path where apply the change
+   * @returns updated object rules
+   */
   static createRules(conjunction, obj, path) {
     if (path.length > 1 && obj.hasOwnProperty(path[0]) && obj[path[0]].hasOwnProperty(path[1])) {
       obj[path[0]] = this.createRules(conjunction, obj[path[0]], path.slice(1))
@@ -88,6 +101,12 @@ export default class LicensePickerUtils {
     return { conjunction, left, right: right || { license: '' } }
   }
 
+  /**
+   * Removes a specific rule from a path
+   * @param  {} rules original rules object
+   * @param  {} path from where to remove the rule
+   * @returns updated object rules
+   */
   static removeRule(rules, path) {
     const parentPath = path.slice(0, path.length - 1)
     const pathToRemove = path[path.length - 1]
