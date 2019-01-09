@@ -14,8 +14,7 @@ import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
-import LicensePicker from './LicensePicker'
-
+import { LicensePicker } from '@clearlydefined/ui-components'
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
     onChange: PropTypes.func,

@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ModalEditor from './ModalEditor'
-import LicensePicker from './LicensePicker'
+import { LicensePicker } from '@clearlydefined/ui-components'
 
 /**
  * Specific renderer for Licenses data
