@@ -2,13 +2,14 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import LicensePickerUtils from './utils'
 import valid from 'spdx-expression-validate'
 import set from 'lodash/set'
 import unset from 'lodash/unset'
 import toPath from 'lodash/toPath'
+import { Button, Row, Col } from 'react-bootstrap'
 import RuleBuilder from './RuleBuilder'
-
+import LicensePickerUtils from './utils'
+import './style.css'
 /**
  * A standalone SPDX License Picker
  * It allows to build a license string based on license expression rules:
@@ -43,6 +44,7 @@ export default class LicensePicker extends Component {
   }
 
   updateLicense = async (value, path) => {
+    if (!value) return
     const rules = { ...this.state.rules }
     const currentPath = [...path, 'license']
     if (!value && currentPath !== ['license']) {
@@ -83,21 +85,41 @@ export default class LicensePicker extends Component {
     })
   }
 
+  saveLicense = () => {
+    this.props
+  }
+
   render() {
+    const { onSave, onClose } = this.props
     const { rules, licenseExpression, isValid } = this.state
     return (
-      <div>
-        <div>
-          License Expression: <span style={{ background: `${isValid ? 'green' : 'red'}` }}>{licenseExpression}</span>
-        </div>
-        <RuleBuilder
-          rule={rules}
-          changeRulesOperator={this.changeRulesConjunction}
-          updateLicense={this.updateLicense}
-          considerLaterVersions={this.considerLaterVersions}
-          addNewGroup={this.addNewGroup}
-          removeRule={this.removeRule}
-        />
+      <div className="spdx-picker">
+        <Row>
+          <Col md={10} className="spdx-picker-header-title">
+            <h2>License Expression: </h2>
+            <span style={{ background: `${isValid ? 'green' : 'red'}` }}>{licenseExpression}</span>
+          </Col>
+          <Col md={2} className="spdx-picker-header-buttons">
+            <Button bsStyle="success" disabled={false} onClick={() => onSave(licenseExpression)}>
+              Save
+            </Button>
+            <Button bsStyle="danger" disabled={false} onClick={onClose}>
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <RuleBuilder
+              rule={rules}
+              changeRulesOperator={this.changeRulesConjunction}
+              updateLicense={this.updateLicense}
+              considerLaterVersions={this.considerLaterVersions}
+              addNewGroup={this.addNewGroup}
+              removeRule={this.removeRule}
+            />
+          </Col>
+        </Row>
       </div>
     )
   }
