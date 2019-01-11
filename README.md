@@ -11,9 +11,11 @@ If you are interested in working on the code for the website, follow the steps b
 1.  The site is based on [React]() so you need to [install NPM]().
 1.  Clone [this repo](https://github.com/clearlydefined/website.git) using `git clone https://github.com/clearlydefined/website.git` or equivalent.
 1.  In a command shell, set the following environment variable (the syntax will depend on your choice of shell):
-    * `REACT_APP_SERVER=https://dev-api.clearlydefined.io`
+    - `REACT_APP_SERVER=https://dev-api.clearlydefined.io`
 1.  Change to the website repo directory (e.g., `cd <dir where you cloned website>`)
-1.  Run `npm install`
+1.  First run `npm install` inside the `./components` folder
+1.  Run `npm install` in the root folder
+1.  Run `npm link ./components` from the root folder (use sudo if your global NPM directory is not writable by your user)
 1.  Run `npm start`
 
 This sequence will get the code for site, fetch all the prerequisites, build the site, start it running and open a browser on http://localhost:3000. In the end you should see the ClearlyDefined homepage in your browser.
@@ -44,8 +46,8 @@ a mess of work to make that happen.
 
 Currently there are few affordances for a normal user to contribute a little bit of data for a component let alone anything for a component that is not already in the system.
 
-* YAML is ok to read but is less fun to create. Certainly for non-techies. Certainly without auto-complete and schema validation. Those could be added to the editors (there are issues for that) but it is still not the most approachable.
-* There is no story for contributing data for something that is not already “in the system”. You can’t pick it from the selection box for example. The only option is to queue it for harvesting. Harvest queuing is not exposed to the masses at this point.
+- YAML is ok to read but is less fun to create. Certainly for non-techies. Certainly without auto-complete and schema validation. Those could be added to the editors (there are issues for that) but it is still not the most approachable.
+- There is no story for contributing data for something that is not already “in the system”. You can’t pick it from the selection box for example. The only option is to queue it for harvesting. Harvest queuing is not exposed to the masses at this point.
 
 We need a simple perhaps form-based experience where users can fill in the data they have and create whole new definition
 entries in the system. One idea is to enable some lightweight scanning that just does top level licenses, source location,
