@@ -1,0 +1,57 @@
+{
+  "name": "@clearlydefined/ui-components",
+  "version": "0.2.0",
+  "description": "React UI components from ClearlyDefined",
+  "main": "lib/index.js",
+  "jsnext:main": "es/index.js",
+  "module": "es/index.js",
+  "scripts": {
+    "build-es": "babel src --out-dir es --env-name esm --copy-files",
+    "build-lib": "babel src --out-dir lib --env-name lib --copy-files",
+    "build": "npm run build-es && npm run build-lib",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clearlydefined/website.git"
+  },
+  "peerDependencies": {
+    "react": "^16.4.1"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "lodash": "^4.17.10",
+    "react-bootstrap": "^0.32.4",
+    "react-bootstrap-typeahead": "^2.6.0",
+    "spdx-expression-validate": "^1.0.2",
+    "spdx-license-ids": "^3.0.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-plugin-css-modules-transform": "^1.6.2"
+  },
+  "keywords": [
+    "open",
+    "source",
+    "ClearlyDefined",
+    "license",
+    "github",
+    "foss",
+    "free",
+    "software"
+  ],
+  "author": "Microsoft Corporation",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/clearlydefined/website/issues"
+  },
+  "files": [
+    "lib",
+    "es"
+  ],
+  "homepage": "https://github.com/clearlydefined/website#readme"
+}
