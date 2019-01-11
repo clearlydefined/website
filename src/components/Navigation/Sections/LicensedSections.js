@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import Contribution from '../../../utils/contribution'
 import TwoColumnsSection from '../Sections/TwoColumnsSection'
-import LicensePicker from '../../LicensePicker'
+import { LicensePicker } from '@clearlydefined/ui-components'
 
 class LicensedSection extends Component {
   static propTypes = {

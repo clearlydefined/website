@@ -6,8 +6,8 @@
   "jsnext:main": "es/index.js",
   "module": "es/index.js",
   "scripts": {
-    "build-es": "babel src --out-dir es --env-name esm",
-    "build-lib": "babel src --out-dir lib --env-name lib",
+    "build-es": "babel src --out-dir es --env-name esm --copy-files",
+    "build-lib": "babel src --out-dir lib --env-name lib --copy-files",
     "build": "npm run build-es && npm run build-lib",
     "prepack": "npm run build"
   },
@@ -20,22 +20,19 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "lodash": "^4.17.10",
+    "react-bootstrap": "^0.32.4",
     "react-bootstrap-typeahead": "^2.6.0",
-    "lodash": "^4.17.10"
+    "spdx-expression-validate": "^1.0.2",
+    "spdx-license-ids": "^3.0.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
-    "@babel/plugin-proposal-export-default-from": "^7.0.0",
-    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.15",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-dev-expression": "^0.2.1"
+    "babel-plugin-css-modules-transform": "^1.6.2"
   },
   "keywords": [
     "open",
