@@ -14,77 +14,88 @@ export default class LicensePickerUtils {
   }
 
   // Returns a license string based on the rules in input, following the specification of https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
-  static stringify(obj) {
-    if (!obj) return null
-    if (obj.hasOwnProperty('noassertion')) return NOASSERTION
-    if (obj.license) return `${obj.license}${obj.plus ? '+' : ''}${obj.exception ? ` WITH ${obj.exception}` : ''}`
+  static toString(expression) {
+    if (!expression) return null
+    if (expression.hasOwnProperty('noassertion')) return NOASSERTION
+    if (expression.license)
+      return `${expression.license}${expression.plus ? '+' : ''}${
+        expression.exception ? ` WITH ${expression.exception}` : ''
+      }`
     const left =
-      obj.left && obj.left.conjunction && obj.left.conjunction.toLowerCase() === 'or'
-        ? `(${this.stringify(obj.left)})`
-        : this.stringify(obj.left)
+      get(expression, 'left.conjunction', '').toLowerCase() === 'or'
+        ? `(${this.toString(expression.left)})`
+        : this.toString(expression.left)
     const right =
-      obj.right && obj.right.conjunction && obj.right.conjunction.toLowerCase() === 'or'
-        ? `(${this.stringify(obj.right)})`
-        : this.stringify(obj.right)
-    return left && `${left} ${!isNil(right) && obj.conjunction ? `${obj.conjunction.toUpperCase()} ${right}` : ''}`
+      get(expression, 'right.conjunction', '').toLowerCase() === 'or'
+        ? `(${this.toString(expression.right)})`
+        : this.toString(expression.right)
+    return (
+      left &&
+      `${left} ${!isNil(right) && expression.conjunction ? `${expression.conjunction.toUpperCase()} ${right}` : ''}`
+    )
   }
 
   /**
-   * Creates a new License Object in the specified path
-   * @param  {} obj original rules object
+   * Creates a new License expressionect in the specified path
+   * @param  {} expression original rules expressionect
    * @param  {} path where to create the new group
-   * @returns updated object rules
+   * @returns updated expressionect rules
    */
-  static createGroup(obj, path) {
-    if (path.length > 1 && obj.hasOwnProperty(path[0]) && obj[path[0]].hasOwnProperty(path[1])) {
-      obj[path[0]] = this.createGroup(obj[path[0]], path.slice(1))
-      return obj
+  static createGroup(expression, path) {
+    if (path.length > 1 && expression.hasOwnProperty(path[0]) && expression[path[0]].hasOwnProperty(path[1])) {
+      expression[path[0]] = this.createGroup(expression[path[0]], path.slice(1))
+      return expression
     }
     if (path.length === 0)
       return {
-        left: obj,
+        left: expression,
         conjunction: 'and',
         right: this.createGroupObject()
       }
     return {
-      ...obj,
+      ...expression,
       [path[0]]: {
-        ...obj[path[0]],
-        right: this.createRuleObject(obj[path[0]].conjunction, obj[path[0]].right, this.createGroupObject())
+        ...expression[path[0]],
+        right: this.createRuleObject(
+          expression[path[0]].conjunction,
+          expression[path[0]].right,
+          this.createGroupObject()
+        )
       }
     }
   }
 
   /**
    * Creates a new License Rules in the specified path
-   * @param  {} conjunction used conjuction to merge the new rules objects
-   * @param  {} obj current object rules
+   * @param  {} conjunction used conjuction to merge the new rules expressionects
+   * @param  {} expression current expressionect rules
    * @param  {} path where apply the change
-   * @returns updated object rules
+   * @returns updated expressionect rules
    */
-  static createRules(conjunction, obj, path) {
-    if (path.length > 1 && obj.hasOwnProperty(path[0]) && obj[path[0]].hasOwnProperty(path[1])) {
-      obj[path[0]] = this.createRules(conjunction, obj[path[0]], path.slice(1))
-      return obj
+  static createRules(conjunction, expression, path) {
+    if (path.length > 1 && expression.hasOwnProperty(path[0]) && expression[path[0]].hasOwnProperty(path[1])) {
+      expression[path[0]] = this.createRules(conjunction, expression[path[0]], path.slice(1))
+      return expression
     }
-    if (path.length === 0) return this.createRuleObject(conjunction, obj.left || obj, obj.right && obj.right)
-    const ruleConjunction = obj[path[0]] && obj[path[0]].conjunction ? obj.conjunction : conjunction
+    if (path.length === 0) return this.createRuleObject(conjunction, expression.left || expression, expression.right)
+    const ruleConjunction =
+      expression[path[0]] && expression[path[0]].conjunction ? expression.conjunction : conjunction
     const left =
       path[0] === 'left'
-        ? obj.left && obj.left.conjunction
-          ? this.createRuleObject(conjunction, obj.left.left, obj.left.right)
-          : obj.left
-        : obj.right && obj.right.conjunction
-          ? obj.left
-          : obj.conjunction !== conjunction
-            ? obj
-            : obj.left
+        ? get(expression, 'left.conjunction')
+          ? this.createRuleObject(conjunction, expression.left.left, expression.left.right)
+          : expression.left
+        : expression.right && expression.right.conjunction
+          ? expression.left
+          : expression.conjunction !== conjunction
+            ? expression
+            : expression.left
     const right =
       path[0] === 'left'
-        ? obj.right
-        : obj.right && obj.right.conjunction
-          ? this.createRuleObject(conjunction, obj.right.left, obj.right.right)
-          : obj.conjunction === conjunction && this.createRuleObject(conjunction, obj.right)
+        ? expression.right
+        : get(expression, 'right.conjunction')
+          ? this.createRuleObject(conjunction, expression.right.left, expression.right.right)
+          : expression.conjunction === conjunction && this.createRuleObject(conjunction, expression.right)
 
     return this.createRuleObject(ruleConjunction, left, right)
   }
@@ -103,9 +114,9 @@ export default class LicensePickerUtils {
 
   /**
    * Removes a specific rule from a path
-   * @param  {} rules original rules object
+   * @param  {} rules original rules expressionect
    * @param  {} path from where to remove the rule
-   * @returns updated object rules
+   * @returns updated expressionect rules
    */
   static removeRule(rules, path) {
     const parentPath = path.slice(0, path.length - 1)

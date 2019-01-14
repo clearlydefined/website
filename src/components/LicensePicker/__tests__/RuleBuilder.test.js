@@ -46,7 +46,7 @@ describe('RuleBuilder', () => {
     addNewGroupButton.simulate('click')
     expect(addNewGroup).toHaveBeenCalled()
   })
-  it('checks if addNewGroup callback is called', async () => {
+  it('checks if removeRule callback is called', async () => {
     const removeRule = jest.fn()
     const wrapper = shallow(
       <RuleBuilder
@@ -59,7 +59,7 @@ describe('RuleBuilder', () => {
       />
     )
     const removeRuleButton = wrapper.find('#removeRule')
-    removeRuleButton.simulate('click')
+    removeRuleButton.last().simulate('click')
     expect(removeRule).toHaveBeenCalled()
   })
 })

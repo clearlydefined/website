@@ -38,8 +38,12 @@ export default class RuleBuilder extends Component {
           </ToggleButton>
         </ToggleButtonGroup>
         <div>
-          <Button onClick={() => changeRulesOperator('AND', path)}>Add Rule</Button>
-          <Button onClick={() => addNewGroup(path)}>Add Group</Button>
+          <Button id="changeRulesOperator" onClick={() => changeRulesOperator('AND', path)}>
+            Add Rule
+          </Button>
+          <Button id="addNewGroup" onClick={() => addNewGroup(path)}>
+            Add Group
+          </Button>
         </div>
       </Col>
     )
@@ -56,7 +60,7 @@ export default class RuleBuilder extends Component {
             : null}
           <Col md={4} className="flex-center">
             <SpdxPicker value={rule.license} onChange={value => updateLicense(value, path)} />
-            {rule.license !== '' && (
+            {rule.license && (
               <Fragment>
                 <div>
                   <input
@@ -68,7 +72,11 @@ export default class RuleBuilder extends Component {
                 </div>
               </Fragment>
             )}
-            {path.length > 0 && <Button onClick={() => removeRule(path)}>x</Button>}
+            {path.length > 0 && (
+              <Button id="removeRule" onClick={() => removeRule(path)}>
+                x
+              </Button>
+            )}
           </Col>
         </Col>
       )
