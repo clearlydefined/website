@@ -5,10 +5,13 @@
   display: flex;
   align-items: center; }
 
-.is-valid {
+.spdx-picker-expression {
+  padding: 5px; }
+
+.spdx-picker-expression.is-valid {
   background: green; }
 
-.is-not-valid {
+.spdx-picker-expression.is-not-valid {
   background: red; }
 
 .spdx-picker-header-title > h2 {
@@ -29,15 +32,15 @@
   margin: 2px; }
 
 .spdx-picker-rule {
-  padding: '10px'; }
+  padding: 10px; }
 
 .header-row {
-  padding: '0px';
-  display: 'flex';
-  justify-content: 'space-between'; }
+  padding: 0px;
+  display: flex;
+  justify-content: space-between; }
 
 .spdx-picker-group {
-  padding: '10px';
-  padding-right: '0px';
-  background: 'lightgrey';
-  border: '1px solid black'; }
+  padding: 10px;
+  padding-right: 0px;
+  background: lightgrey;
+  border: 1px solid black; }

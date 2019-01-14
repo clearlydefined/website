@@ -22,6 +22,7 @@ export default class LicensePicker extends Component {
       sequence: 0
     }
   }
+
   static propTypes = {
     value: PropTypes.string, //existing license
     onChange: PropTypes.func, //callback function called when saving
@@ -92,7 +93,9 @@ export default class LicensePicker extends Component {
         <Row>
           <Col md={10} className="spdx-picker-header-title flex-center">
             <h2>License Expression: </h2>
-            <span className={isValid ? 'is-valid' : 'is-not-valid'}>{licenseExpression}</span>
+            <span className={`spdx-picker-expression ${isValid ? 'is-valid' : 'is-not-valid'}`}>
+              {licenseExpression}
+            </span>
           </Col>
           <Col md={2} className="spdx-picker-header-buttons">
             <Button bsStyle="success" disabled={false} onClick={() => onChange(licenseExpression)}>

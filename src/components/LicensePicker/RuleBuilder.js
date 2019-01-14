@@ -6,9 +6,6 @@ import { ToggleButtonGroup, ToggleButton, Button, Row, Col } from 'react-bootstr
 import SpdxPicker from '../SpdxPicker'
 
 export default class RuleBuilder extends Component {
-  constructor(props) {
-    super(props)
-  }
   static propTypes = {
     rule: PropTypes.object, //object containing current license rules
     changeRulesOperator: PropTypes.func, //callback function called when switching a conjunction operator
@@ -17,33 +14,46 @@ export default class RuleBuilder extends Component {
     addNewGroup: PropTypes.func, //callback function called when adding a new license group object
     removeRule: PropTypes.func //callback function called when removing a single license or a group
   }
+
+  renderHeaderRow = (rule, path, conjunction, showAddRule = false) => {
+    const { changeRulesOperator, addNewGroup } = this.props
+    return (
+      <Col md={12} className="header-row">
+        <ToggleButtonGroup
+          type="radio"
+          name="conjunction"
+          defaultValue={conjunction}
+          onChange={value => changeRulesOperator(value, path)}
+        >
+          {showAddRule && (!rule.left || !rule.right) ? (
+            <Button id="changeRulesOperator" onClick={() => changeRulesOperator('AND', path)}>
+              Add Rule
+            </Button>
+          ) : null}
+          <ToggleButton value={'AND'} disabled={rule.license === ''}>
+            AND
+          </ToggleButton>
+          <ToggleButton value={'OR'} disabled={rule.license === ''}>
+            OR
+          </ToggleButton>
+        </ToggleButtonGroup>
+        <div>
+          <Button onClick={() => changeRulesOperator('AND', path)}>Add Rule</Button>
+          <Button onClick={() => addNewGroup(path)}>Add Group</Button>
+        </div>
+      </Col>
+    )
+  }
+
   renderRule = (rule, path, conjunction = null, parentRule = {}) => {
-    const { changeRulesOperator, updateLicense, considerLaterVersions, addNewGroup, removeRule } = this.props
+    const { updateLicense, considerLaterVersions, removeRule } = this.props
     const currentPath = path[path.length - 1]
     if (rule.license || rule.license === '')
       return (
         <Col md={12} className="spdx-picker-rule">
-          {currentPath !== 'right' && (!parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right')) ? (
-            <Col md={12} className="header-row">
-              <ToggleButtonGroup
-                type="radio"
-                name="conjunction"
-                defaultValue={conjunction}
-                onChange={value => changeRulesOperator(value, path)}
-              >
-                <ToggleButton value={'AND'} disabled={rule.license === ''}>
-                  AND
-                </ToggleButton>
-                <ToggleButton value={'OR'} disabled={rule.license === ''}>
-                  OR
-                </ToggleButton>
-              </ToggleButtonGroup>
-              <div>
-                <Button onClick={() => changeRulesOperator('AND', path)}>Add Rule</Button>
-                <Button onClick={() => addNewGroup(path)}>Add Group</Button>
-              </div>
-            </Col>
-          ) : null}
+          {currentPath !== 'right' && (!parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right'))
+            ? this.renderHeaderRow(rule, path, conjunction)
+            : null}
           <Col md={4} className="flex-center">
             <SpdxPicker value={rule.license} onChange={value => updateLicense(value, path)} />
             {rule.license !== '' && (
@@ -62,38 +72,10 @@ export default class RuleBuilder extends Component {
           </Col>
         </Col>
       )
+
     return (
       <Col md={12} className="spdx-picker-group">
-        <Col md={12} className=".header-row">
-          <ToggleButtonGroup
-            type="radio"
-            name="conjunction"
-            defaultValue={rule.conjunction}
-            onChange={value => changeRulesOperator(value, path)}
-          >
-            <ToggleButton value={'AND'} disabled={rule.license === ''}>
-              AND
-            </ToggleButton>
-            <ToggleButton value={'OR'} disabled={rule.license === ''}>
-              OR
-            </ToggleButton>
-          </ToggleButtonGroup>
-          <div>
-            {!rule.left || !rule.right ? (
-              <Button id="changeRulesOperator" onClick={() => changeRulesOperator('AND', path)}>
-                Add Rule
-              </Button>
-            ) : null}
-            <Button id="addNewGroup" onClick={() => addNewGroup(path)}>
-              Add Group
-            </Button>
-            {path.length > 0 && (
-              <Button id="removeRule" onClick={() => removeRule(path)}>
-                x
-              </Button>
-            )}
-          </div>
-        </Col>
+        {this.renderHeaderRow(rule, path, rule.conjunction, true)}
         <div>
           {this.renderRule(
             rule.left,
