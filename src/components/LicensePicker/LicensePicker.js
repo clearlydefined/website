@@ -90,9 +90,9 @@ export default class LicensePicker extends Component {
     return (
       <div className="spdx-picker">
         <Row>
-          <Col md={10} className="spdx-picker-header-title">
+          <Col md={10} className="spdx-picker-header-title flex-center">
             <h2>License Expression: </h2>
-            <span style={{ background: `${isValid ? 'green' : 'red'}` }}>{licenseExpression}</span>
+            <span className={isValid ? 'is-valid' : 'is-not-valid'}>{licenseExpression}</span>
           </Col>
           <Col md={2} className="spdx-picker-header-buttons">
             <Button bsStyle="success" disabled={false} onClick={() => onChange(licenseExpression)}>

@@ -22,9 +22,9 @@ export default class RuleBuilder extends Component {
     const currentPath = path[path.length - 1]
     if (rule.license || rule.license === '')
       return (
-        <Col md={12} style={{ padding: '10px' }}>
+        <Col md={12} className="spdx-picker-rule">
           {currentPath !== 'right' && (!parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right')) ? (
-            <Col md={12} style={{ padding: '0px', display: 'flex', justifyContent: 'space-between' }}>
+            <Col md={12} className="header-row">
               <ToggleButtonGroup
                 type="radio"
                 name="conjunction"
@@ -44,7 +44,7 @@ export default class RuleBuilder extends Component {
               </div>
             </Col>
           ) : null}
-          <Col md={4} style={{ display: 'flex', alignItems: 'center' }}>
+          <Col md={4} className="flex-center">
             <SpdxPicker value={rule.license} onChange={value => updateLicense(value, path)} />
             {rule.license !== '' && (
               <Fragment>
@@ -63,8 +63,8 @@ export default class RuleBuilder extends Component {
         </Col>
       )
     return (
-      <Col md={12} style={{ padding: '10px', paddingRight: '0px', background: 'lightgrey', border: '1px solid black' }}>
-        <Col md={12} style={{ padding: '0px', display: 'flex', justifyContent: 'space-between' }}>
+      <Col md={12} className="spdx-picker-group">
+        <Col md={12} className=".header-row">
           <ToggleButtonGroup
             type="radio"
             name="conjunction"
@@ -113,7 +113,7 @@ export default class RuleBuilder extends Component {
     const { rule } = this.props
     return (
       <Row>
-        <Col md={12} style={{ display: 'flex' }}>
+        <Col md={12} className="flex">
           {Object.keys(rule).length > 0 ? this.renderRule(rule, []) : ''}
         </Col>
       </Row>
