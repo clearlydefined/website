@@ -40,18 +40,16 @@ export default class FileList extends Component {
   componentDidMount() {
     // Data are parsed to create a tree-folder structure
     const { files, component, previewDefinition } = this.props
-    if (files) {
-      const definitionFiles = parsePaths(files, component.item, previewDefinition)
-      this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
-    }
+    if (!files) return this.setState({ files: [] }, () => this.forceUpdate())
+    const definitionFiles = parsePaths(files, component.item, previewDefinition)
+    this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
   }
   componentWillReceiveProps(nextProps) {
     // Data are parsed to create a tree-folder structure
     const { files, component, previewDefinition } = nextProps
-    if (files) {
-      const definitionFiles = parsePaths(files, component.item, previewDefinition)
-      this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
-    }
+    if (!files) return this.setState({ files: [] }, () => this.forceUpdate())
+    const definitionFiles = parsePaths(files, component.item, previewDefinition)
+    this.setState({ files: definitionFiles, rawData: definitionFiles }, () => this.forceUpdate())
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -209,7 +207,6 @@ export default class FileList extends Component {
 
   render() {
     const { files, isFiltering } = this.state
-
     return (
       <TreeTable
         showPagination={false}

@@ -15,10 +15,18 @@ import notification from 'antd/lib/notification'
 import { curateAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { uiBrowseUpdateFilterList, uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiDanger } from '../actions/ui'
+import {
+  uiBrowseUpdateFilterList,
+  uiBrowseUpdateList,
+  uiRevertDefinition,
+  uiInfo,
+  uiDanger,
+  uiContributionUpdateList
+} from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
+import Definition from '../utils/definition'
 
 /**
  * Abstracts methods for system-managed list
@@ -145,7 +153,26 @@ export default class SystemManagedList extends Component {
   }
 
   getSort(eventKey) {
-    return this[eventKey]
+    const sorts = {
+      name: coordinates => (coordinates.name ? coordinates.name : null),
+      namespace: coordinates => (coordinates.namespace ? coordinates.namespace : null),
+      provider: coordinates => (coordinates.provider ? coordinates.provider : null),
+      type: coordinates => (coordinates.type ? coordinates.type : null),
+      releaseDate: coordinates => {
+        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        return get(definition, 'described.releaseDate', null)
+      },
+      license: coordinates => {
+        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        return get(definition, 'licensed.declared', null)
+      },
+      score: coordinates => {
+        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        const scores = Definition.computeScores(definition)
+        return scores ? (scores.tool + scores.effective) / 2 : -1
+      }
+    }
+    return sorts[eventKey]
   }
 
   onSort(eventKey) {
@@ -240,7 +267,14 @@ export default class SystemManagedList extends Component {
   }
 
   updateList(o) {
-    this.props.dispatch(uiBrowseUpdateList(o))
+    switch (this.storeList) {
+      case 'browse':
+        return this.props.dispatch(uiBrowseUpdateList(o))
+      case 'contributions':
+        return this.props.dispatch(uiContributionUpdateList(o))
+      default:
+        return null
+    }
   }
 
   revertAll() {

@@ -25,6 +25,7 @@ class PageBrowse extends SystemManagedList {
     this.state = { activeProvider: 'github' }
     this.onProviderSelection = this.onProviderSelection.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
+    this.storeList = 'browse'
   }
 
   componentDidMount() {
@@ -33,7 +34,7 @@ class PageBrowse extends SystemManagedList {
 
   noRowsRenderer() {
     return (
-      <div className="list-noRows">Select a Provider to retrieve a list of definition that needs to be curated</div>
+      <div className="list-noRows">Select a Provider to retrieve a list of definitions that need to be curated</div>
     )
   }
 

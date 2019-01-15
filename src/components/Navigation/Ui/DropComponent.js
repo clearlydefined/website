@@ -12,7 +12,8 @@ import EntitySpec from '../../../utils/entitySpec'
 class DropComponent extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    onLoad: PropTypes.func
+    onLoad: PropTypes.func,
+    onAddComponent: PropTypes.func
   }
 
   constructor(props) {
@@ -53,14 +54,14 @@ class DropComponent extends Component {
   handleDropEntityUrl(content) {
     const spec = EntitySpec.fromUrl(content)
     if (!spec) return false
-    this.onAddComponent(spec)
+    this.props.onAddComponent(spec)
   }
 
   // dropping an actual definition, an object that has `coordinates`
   handleDropObject(content) {
     const contentObject = asObject(content)
     if (!contentObject) return false
-    this.onAddComponent(EntitySpec.fromCoordinates(contentObject))
+    this.props.onAddComponent(EntitySpec.fromCoordinates(contentObject))
   }
 
   // handle dropping a url pointing to a curation PR

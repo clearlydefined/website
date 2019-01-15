@@ -79,25 +79,21 @@ export default class ComponentButtons extends Component {
               <ButtonWithTooltip
                 name="addSourceComponent"
                 tip={'Add the definition for source that matches this package'}
-                button={
-                  <Button className="list-fa-button" onClick={this.addSourceForComponent.bind(this, component)}>
-                    <i className="fas fa-code" />
-                  </Button>
-                }
-              />
+              >
+                <Button className="list-fa-button" onClick={this.addSourceForComponent.bind(this, component)}>
+                  <i className="fas fa-code" />
+                </Button>
+              </ButtonWithTooltip>
             )}
           {!isDefinitionEmpty && (
-            <ButtonWithTooltip
-              tip={'Dig into this definition'}
-              button={
-                <Button
-                  className="list-fa-button"
-                  onClick={this.inspectComponent.bind(this, currentComponent, definition)}
-                >
-                  <i className="fas fa-search" />
-                </Button>
-              }
-            />
+            <ButtonWithTooltip tip={'Dig into this definition'}>
+              <Button
+                className="list-fa-button"
+                onClick={this.inspectComponent.bind(this, currentComponent, definition)}
+              >
+                <i className="fas fa-search" />
+              </Button>
+            </ButtonWithTooltip>
           )}
           <CopyUrlButton
             route={ROUTE_DEFINITIONS}
@@ -106,10 +102,10 @@ export default class ComponentButtons extends Component {
             className="list-fa-button"
           />
           {!hideVersionSelector && (
-            <ButtonWithTooltip
-              tip={'Switch or add other versions of this definition'}
-              button={
+            <ButtonWithTooltip tip={'Switch or add other versions of this definition'}>
+              <div>
                 <Dropdown
+                  trigger={['click']}
                   overlay={
                     <Menu>
                       <Menu.Item onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}>
@@ -125,23 +121,20 @@ export default class ComponentButtons extends Component {
                     <i className="fas fa-exchange-alt" /> <Icon type="down" />
                   </Button>
                 </Dropdown>
-              }
-            />
+              </div>
+            </ButtonWithTooltip>
           )}
           {!readOnly &&
             !isDefinitionEmpty && (
-              <ButtonWithTooltip
-                tip={'Revert Changes of this Definition'}
-                button={
-                  <Button
-                    className="list-fa-button"
-                    onClick={() => this.revertComponent(component)}
-                    disabled={!hasChange(component)}
-                  >
-                    <i className="fas fa-undo" />
-                  </Button>
-                }
-              />
+              <ButtonWithTooltip tip={'Revert Changes of this Definition'}>
+                <Button
+                  className="list-fa-button"
+                  onClick={() => this.revertComponent(component)}
+                  disabled={!hasChange(component)}
+                >
+                  <i className="fas fa-undo" />
+                </Button>
+              </ButtonWithTooltip>
             )}
         </ButtonGroup>
         {!readOnly && (

@@ -43,11 +43,11 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   onRemoveComponent(component) {
-    this.props.dispatch(this.updateList({ remove: component }))
+    this.updateList({ remove: component })
   }
 
   onRemoveAll() {
-    this.props.dispatch(this.updateList({ removeAll: {} }))
+    this.updateList({ removeAll: {} })
   }
 
   showVersionSelectorPopup(component, multiple) {
@@ -197,7 +197,6 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   async createGist(name, content) {
-    console.log('createGist')
     const { token, dispatch } = this.props
     const url = await saveGist(token, `${name}.json`, JSON.stringify(content))
     const message = (

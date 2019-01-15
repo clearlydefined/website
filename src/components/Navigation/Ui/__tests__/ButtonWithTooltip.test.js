@@ -7,7 +7,15 @@ describe('ButtonWithTooltip', () => {
     shallow(<ButtonWithTooltip />)
   })
   it('render a button as a child', async () => {
-    const wrapper = shallow(<ButtonWithTooltip button={<button>Test</button>} />)
-    expect(wrapper.props().children).toEqual(<button>Test</button>)
+    const wrapper = shallow(
+      <ButtonWithTooltip>
+        <button>Test</button>
+      </ButtonWithTooltip>
+    )
+    expect(wrapper.props().children).toEqual(
+      <div className="tooltipWrapper">
+        <button>Test</button>
+      </div>
+    )
   })
 })

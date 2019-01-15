@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 import React from 'react'
-import { Tooltip } from 'antd'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 
-const ButtonWithTooltip = ({ button, tip }) => {
+const ButtonWithTooltip = ({ children, tip }) => {
   return (
-    <Tooltip placement="topLeft" title={tip} arrowPointAtCenter>
-      {button}
-    </Tooltip>
+    <OverlayTrigger rootClose placement="top" overlay={<Tooltip id="tooltip">{tip}</Tooltip>}>
+      <div className="tooltipWrapper">{children}</div>
+    </OverlayTrigger>
   )
 }
 

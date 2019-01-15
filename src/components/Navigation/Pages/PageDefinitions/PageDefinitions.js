@@ -31,6 +31,7 @@ export class PageDefinitions extends UserManagedList {
     this.revertDefinition = this.revertDefinition.bind(this)
     this.renderVersionSelectopPopup = this.renderVersionSelectopPopup.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
+    this.storeList = 'browse'
   }
 
   componentDidMount() {
@@ -157,7 +158,7 @@ export class PageDefinitions extends UserManagedList {
         <SearchBar filterOptions={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} />
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <DropComponent onLoad={this.loadComponentList}>
+            <DropComponent onLoad={this.loadComponentList} onAddComponent={this.onAddComponent}>
               <div className="section-body">
                 <ComponentList
                   readOnly={this.readOnly}
