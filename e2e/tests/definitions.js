@@ -24,7 +24,26 @@ describe('Definitions page', () => {
       '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-body > div.list-headline > span > span:nth-child(1) > a'
     )
     const text = await (await componentTitle.getProperty('textContent')).jsonValue()
-    await expect(page).toMatch('async')
-    await page.screenshot({ path: 'screenshot.png' })
+    await expect(text).toMatch('async')
+    await page.waitForSelector(
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > img'
+    )
+    await page.waitForSelector(
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > .btn-group'
+    )
+    await page.waitForSelector(
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > .btn-group'
+    )
+  })
+
+  test('should display a modal after clicking on a component in the list', async () => {
+    await page.waitForSelector(
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > div > div:nth-child(2) > button'
+    )
+    await page.click(
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > div > div:nth-child(2) > button'
+    )
+    await page.waitFor(4000)
+    page.waitForSelector('body > div:nth-child(8) > div > div.ant-modal-wrap.ant-modal-centered > div')
   })
 })
