@@ -33,7 +33,10 @@
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
     "babel-eslint": "^9.0.0",
+    "babel-jest": "^23.6.0",
+    "babel-preset-env": "^1.7.0",
     "cpx": "^1.5.0",
     "env-cmd": "^8.0.2",
     "enzyme": "^3.3.0",
@@ -64,7 +67,7 @@
     "build": "env-cmd --fallback ./.env.production npm run build-css && npm run copy-monaco && react-scripts build",
     "test": "eslint src && react-scripts test --env=jsdom --coverage",
     "eject": "react-scripts eject",
-    "e2e:start": "BROWSER=none PORT=3333 npm run start:local-api",
+    "e2e:start": "PORT=3333 npm run start:local-api",
     "e2e:test": "jest -c e2e/jest.config.js"
   },
   "browserslist": {
