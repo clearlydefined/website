@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 describe('Definitions page', () => {
   beforeAll(async () => {
     await page.goto(`${__HOST__}/definitions`, { timeout: 40000, waitUntil: 'domcontentloaded' })
@@ -15,7 +16,7 @@ describe('Definitions page', () => {
     await page.type('.rbt-input-main', 'async')
     await page.waitFor(2000)
     await page.waitForSelector('.rbt-menu>li')
-    let element = await page.$('.rbt-menu li:nth-child(0n+2) a')
+    let element = await page.$('.rbt-menu li:nth-child(1) a')
     element.click()
     await page.waitForSelector('.ReactVirtualized__Grid__innerScrollContainer')
     await page.waitFor(2000)
@@ -25,24 +26,68 @@ describe('Definitions page', () => {
     )
     const text = await (await componentTitle.getProperty('textContent')).jsonValue()
     await expect(text).toMatch('async')
-    await page.waitForSelector(
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > img'
-    )
-    await page.waitForSelector(
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > .btn-group'
-    )
-    await page.waitForSelector(
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > .btn-group'
-    )
+    const activityArea =
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area'
+    await page.waitForSelector(`${activityArea} > img`)
+    await page.waitForSelector(`${activityArea} > .btn-group`)
+
+    const codeButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(1) > button > i`)
+    const codeButtonContent = await (await codeButtonElement.getProperty('className')).jsonValue()
+    await expect(codeButtonContent).toMatch('fas fa-code')
+
+    const inspectButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(2) > button > i`)
+    const inspectButtonContent = await (await inspectButtonElement.getProperty('className')).jsonValue()
+    await expect(inspectButtonContent).toMatch('fas fa-search')
+
+    const copyButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(3) > button > i`)
+    const copyButtonContent = await (await copyButtonElement.getProperty('className')).jsonValue()
+    await expect(copyButtonContent).toMatch('fas fa-copy')
+
+    const switchButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(4) > div > button > i`)
+    const switchButtonContent = await (await switchButtonElement.getProperty('className')).jsonValue()
+    await expect(switchButtonContent).toMatch('fas fa-exchange-alt')
+
+    const undoButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(5) > button > i`)
+    const undoButtonContent = await (await undoButtonElement.getProperty('className')).jsonValue()
+    await expect(undoButtonContent).toMatch('fas fa-undo')
+
+    const removeButtonElement = await page.$(`${activityArea} > button > i`)
+    const removeButtonContent = await (await removeButtonElement.getProperty('className')).jsonValue()
+    await expect(removeButtonContent).toMatch('fas fa-times list-remove')
   })
 
-  test('should display a modal after clicking on a component in the list', async () => {
-    await page.waitForSelector(
+  test('should display the detail after clicking on a component in the list', async () => {
+    const firstElement =
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1)'
+    await page.click(firstElement)
+    await page.waitForSelector(`${firstElement} > div > div.list-panel`)
+    const component =
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div.list-panel > div'
+    const declaredElement = await page.$(`${component} > div.col-md-5 > div:nth-child(1) > div.col-md-2 > b`)
+    const declaredContent = await (await declaredElement.getProperty('textContent')).jsonValue()
+    await expect(declaredContent).toMatch('Declared')
+    const sourceElement = await page.$(`${component} > div.col-md-5 > div:nth-child(2) > div.col-md-2 > b`)
+    const sourceContent = await (await sourceElement.getProperty('textContent')).jsonValue()
+    await expect(sourceContent).toMatch('Source')
+    const releaseElement = await page.$(`${component} > div.col-md-5 > div:nth-child(3) > div.col-md-2 > b`)
+    const releaseContent = await (await releaseElement.getProperty('textContent')).jsonValue()
+    await expect(releaseContent).toMatch('Release')
+    const discoveredElement = await page.$(`${component} > div.col-md-7 > div:nth-child(1) > div.col-md-2 > b`)
+    const discoveredContent = await (await discoveredElement.getProperty('textContent')).jsonValue()
+    await expect(discoveredContent).toMatch('Discovered')
+    const attributionElement = await page.$(`${component} > div.col-md-7 > div:nth-child(2) > div.col-md-2 > b`)
+    const attributionContent = await (await attributionElement.getProperty('textContent')).jsonValue()
+    await expect(attributionContent).toMatch('Attribution')
+    const filesElement = await page.$(`${component} > div.col-md-7 > div:nth-child(3) > div.col-md-2 > b`)
+    const filesContent = await (await filesElement.getProperty('textContent')).jsonValue()
+    await expect(filesContent).toMatch('Files')
+  })
+
+  test('should display a modal after clicking on the inspect button of a definition the list', async () => {
+    const inspectButton =
       '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > div > div:nth-child(2) > button'
-    )
-    await page.click(
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > div > div:nth-child(2) > button'
-    )
+    await page.waitForSelector(inspectButton)
+    await page.click(inspectButton)
     await page.waitFor(4000)
     page.waitForSelector('body > div:nth-child(8) > div > div.ant-modal-wrap.ant-modal-centered > div')
   })
