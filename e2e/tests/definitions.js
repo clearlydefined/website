@@ -83,6 +83,19 @@ describe('Definitions page', () => {
     await expect(filesContent).toMatch('Files')
   })
 
+  test('should edit a license of a component in the list', async () => {
+    const component =
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div'
+    const licenseField = `${component} > div.list-panel > div > div.col-md-5 > div:nth-child(1) > div.definition__line.col-md-10 > span.list-singleLine`
+
+    await page.waitForSelector(`${licenseField} > span.editable-field`)
+    await page.click(`${licenseField} > span.editable-field`)
+    await page.waitForSelector(`${licenseField} > div.editable-editor`)
+    await page.click('#rbt-menu-item-1')
+    await page.waitForSelector(`${licenseField} > span.editable-field.bg-info`)
+    await page.waitForSelector(`${component} > div.list-row > img.list-image.list-highlight`)
+  })
+
   test('should display a modal after clicking on the inspect button of a definition the list', async () => {
     const inspectButton =
       '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > div > div:nth-child(2) > button'
