@@ -3,6 +3,7 @@
 
 describe('Definitions page', () => {
   beforeAll(async () => {
+    await page.setViewport({ width: 1920, height: 1080 })
     await page.goto(`${__HOST__}/definitions`, { timeout: 40000, waitUntil: 'domcontentloaded' })
   })
 
@@ -91,9 +92,40 @@ describe('Definitions page', () => {
     await page.waitForSelector(`${licenseField} > span.editable-field`)
     await page.click(`${licenseField} > span.editable-field`)
     await page.waitForSelector(`${licenseField} > div.editable-editor`)
+    const inputValue = await page.$eval(
+      `${licenseField} > div > div > div.rbt-input.form-control > div > div > input`,
+      el => el.value
+    )
+    for (let i = 0; i < inputValue.length; i++) {
+      await page.keyboard.press('Backspace')
+    }
+    await page.type(`${licenseField} > div > div > div.rbt-input.form-control > div > div > input`, 'MIT')
     await page.click('#rbt-menu-item-1')
+
     await page.waitForSelector(`${licenseField} > span.editable-field.bg-info`)
     await page.waitForSelector(`${component} > div.list-row > img.list-image.list-highlight`)
+  })
+
+  test('should open a modal while attempt to change a source location of a component in the list', async () => {
+    const component =
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div'
+    const sourceField = `${component} > div.list-panel > div > div.col-md-5 > div:nth-child(2) > div.definition__line.col-md-10 > span.list-singleLine > span`
+
+    await page.waitForSelector(`${sourceField} > span.editable-field`)
+    await page.click(`${sourceField} > span.editable-field`)
+    await page.waitForSelector(`body > div:nth-child(8) > div.fade.in.modal > div.modal-dialog`)
+    await page.click(`body > div:nth-child(8) > div.fade.in.modal > div > div > div > div:nth-child(2) > button`)
+  })
+
+  test('should show an input field while attempting to change the release date of a component in the list', async () => {
+    const component =
+      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div'
+
+    const dateField = `${component} > div.list-panel > div > div.col-md-5 > div:nth-child(3) > div.definition__line.col-md-10 > span.list-singleLine`
+
+    await page.waitForSelector(`${dateField} > span`)
+    await page.click(`${dateField} > span`)
+    await page.waitForSelector(`${dateField} > input`)
   })
 
   test('should display a modal after clicking on the inspect button of a definition the list', async () => {
