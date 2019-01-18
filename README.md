@@ -23,14 +23,18 @@ Since you are not forced to consume only the local APIs, but you can even consum
 
 ### Running e2e Tests
 
-If you want to test the development running e2e tests, there are 2 npm script that you can run:
+If you want to test the development running e2e tests, just simply run:
 
-- `npm run e2e:start` builds the application and starts a background browser session, using Chromium, on your localhost:3333
 - `npm run e2e:test` runs all the test that are saved into the folder `e2e/tests/`
 
 You can write your own tests, just create a new file inside the `e2e/tests/` folder.
 All e2e are written using `jest` and `puppeteer`.
-Note that e2e tests runs using only a local service setup, so you need to configure the `service` repo as well in your local environment.
+
+Note that by default all the e2e tests runs checking the development website on https://dev.clearlydefined.io
+If you want to run test on your local environment, you should run:
+
+- `npm run e2e:start` builds the application and starts a background browser session, using Chromium, on your localhost:3333
+- `NODE_ENV=debug npm run e2e:test` run all the test checking on http://localhost:3333
 
 # Contributing
 
