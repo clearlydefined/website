@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ModalEditor from './ModalEditor'
+import InlineEditor from './InlineEditor'
 import LicensePicker from './LicensePicker'
 
 /**
