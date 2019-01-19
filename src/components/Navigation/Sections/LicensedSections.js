@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import Contribution from '../../../utils/contribution'
 import TwoColumnsSection from '../Sections/TwoColumnsSection'
+import LicensePicker from '../../LicensePicker'
 
 class LicensedSection extends Component {
   static propTypes = {
@@ -42,7 +43,8 @@ class LicensedSection extends Component {
         field: 'licensed.declared',
         placeholder: 'SPDX license',
         type: 'license',
-        editable: true
+        editable: true,
+        editor: LicensePicker
       },
       {
         multiple: true,
