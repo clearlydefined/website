@@ -43,13 +43,6 @@ describe('EditableFieldRenderer', () => {
     wrapper.find(ModalEditor).prop('onChange')(parentFunction)
     expect(parentFunction).toHaveBeenCalled()
   })
-  it('check applyCurationSuggestion function', () => {
-    const wrapper = shallow(
-      <EditableFieldRenderer label={'test'} editable placeholder={'test'} applyCurationSuggestion={parentFunction} />
-    )
-    wrapper.find(InlineEditor).prop('onApplySuggestion')(parentFunction)
-    expect(parentFunction).toHaveBeenCalled()
-  })
   it('check handleRevert function', () => {
     const wrapper = shallow(
       <EditableFieldRenderer label={'test'} editable placeholder={'test'} handleRevert={parentFunction} />

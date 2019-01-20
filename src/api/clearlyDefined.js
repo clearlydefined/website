@@ -11,6 +11,7 @@ const apiHome = process.env.REACT_APP_SERVER
 export const CURATIONS = 'curations'
 export const HARVEST = 'harvest'
 export const DEFINITIONS = 'definitions'
+export const SUGGESTIONS = 'suggestions'
 export const BROWSE = 'browse'
 export const ORIGINS_GITHUB = 'origins/github'
 export const ORIGINS_NPM = 'origins/npm'
@@ -114,6 +115,10 @@ export function getDefinitions(token, list) {
 
 export function getDefinitionSuggestions(token, prefix, type) {
   return getList(url(DEFINITIONS, { pattern: prefix, type }), token)
+}
+
+export function getSuggestedData(token, entity) {
+  return get(url(`${SUGGESTIONS}/${entity.toPath()}`), token)
 }
 
 export function previewDefinition(token, entity, curation) {

@@ -6,8 +6,9 @@ import Tag from 'antd/lib/tag'
 import Input from 'antd/lib/input'
 import Tooltip from 'antd/lib/tooltip'
 import Icon from 'antd/lib/icon'
+import withSuggestions from '../utils/withSuggestions'
 
-export default class GlobsPicker extends Component {
+class GlobsPicker extends Component {
   static propTypes = {
     globs: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
     onChange: PropTypes.func,
@@ -47,6 +48,10 @@ export default class GlobsPicker extends Component {
       inputValue: ''
     })
     onChange(newGlobs)
+  }
+
+  onChange = suggestion => {
+    this.props.onChange(suggestion)
   }
 
   render() {
@@ -99,3 +104,5 @@ export default class GlobsPicker extends Component {
     )
   }
 }
+
+export default withSuggestions(GlobsPicker)
