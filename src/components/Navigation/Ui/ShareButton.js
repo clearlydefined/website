@@ -16,7 +16,10 @@ export default class ShareButton extends Component {
           URL
         </MenuItem>
         <MenuItem eventKey="2" onSelect={() => onSelect('file')}>
-          File
+          Coordinate list (JSON)
+        </MenuItem>
+        <MenuItem eventKey="2" onSelect={() => onSelect('notice')}>
+          Notice file
         </MenuItem>
         <MenuItem divider />
         <MenuItem disabled eventKey="3" onSelect={() => onSelect('gist')}>
