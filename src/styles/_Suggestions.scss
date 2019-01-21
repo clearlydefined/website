@@ -1,0 +1,32 @@
+.suggestionsWrapper {
+  margin-left: 3px;
+  color: lightblue;
+  cursor: pointer;
+}
+.suggestionsWrapper__listHeader {
+  color: black;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}
+.suggestionRenderer {
+  display: flex;
+  font-family: 'Montserrat', sans-serif;
+}
+.suggestionValue {
+  width: 300px;
+  p {
+    width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    padding: 0;
+  }
+}
+.suggestionData {
+  margin-left: 30px;
+  font-size: 10px;
+  color: grey;
+  p {
+    margin: 0px;
+  }
+}

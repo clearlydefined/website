@@ -240,7 +240,8 @@ export default class DefinitionEntry extends React.Component {
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
-                <ModalEditor
+                <InlineEditor
+                  field={'licensed.declared'}
                   extraClass={this.classIfDifferent('licensed.declared')}
                   readOnly={readOnly}
                   initialValue={this.getOriginalValue('licensed.declared')}

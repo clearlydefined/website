@@ -79,7 +79,6 @@ class EditableFieldRenderer extends Component {
       readOnly,
       onChange,
       handleRevert,
-      applyCurationSuggestion,
       type,
       value,
       editable,
@@ -106,6 +105,7 @@ class EditableFieldRenderer extends Component {
         />
       ) : (
         <InlineEditor
+          field={field}
           extraClass={Contribution.classIfDifferent(definition, previewDefinition, field)}
           readOnly={readOnly}
           type={type && type !== 'coordinates' ? type : 'text'}
@@ -116,7 +116,6 @@ class EditableFieldRenderer extends Component {
           validator
           placeholder={placeholder}
           suggested={suggested}
-          onApplySuggestion={() => applyCurationSuggestion(field)}
         />
       )
 

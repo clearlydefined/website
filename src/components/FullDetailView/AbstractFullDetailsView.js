@@ -26,11 +26,9 @@ export class AbstractFullDetailsView extends Component {
       previewDefinition,
       readOnly,
       session,
-      latestCuration,
       inspectedCuration
     } = this.props
-    const { changes, appliedSuggestions } = this.state
-    const curationSuggestions = {}
+    const { changes } = this.state
 
     return modalView ? (
       <Modal
@@ -56,7 +54,6 @@ export class AbstractFullDetailsView extends Component {
             handleRevert={this.handleRevert}
             previewDefinition={previewDefinition}
             changes={changes}
-            curationSuggestions={curationSuggestions}
             applyCurationSuggestion={this.applyCurationSuggestion}
             getCurationData={this.getCurationData}
             inspectedCuration={inspectedCuration}
@@ -76,7 +73,6 @@ export class AbstractFullDetailsView extends Component {
           changes={changes}
           previewDefinition={previewDefinition}
           handleRevert={this.handleRevert}
-          curationSuggestions={curationSuggestions}
           applyCurationSuggestion={this.applyCurationSuggestion}
           getCurationData={this.getCurationData}
           inspectedCuration={inspectedCuration}

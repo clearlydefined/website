@@ -12,10 +12,11 @@ import LicensePicker from './LicensePicker'
  */
 class LicensesRenderer extends Component {
   render() {
-    const { value, isDifferent, onSave, readOnly } = this.props
+    const { value, isDifferent, onSave, readOnly, field } = this.props
 
     return (
       <ModalEditor
+        field={field}
         extraClass={isDifferent ? 'license--isEdited' : ''}
         readOnly={readOnly}
         type={'license'}
@@ -38,7 +39,8 @@ LicensesRenderer.propTypes = {
   value: PropTypes.string.isRequired,
   isDifferent: PropTypes.bool,
   onSave: PropTypes.func,
-  readOnly: PropTypes.bool
+  readOnly: PropTypes.bool,
+  field: PropTypes.string
 }
 
 export default LicensesRenderer

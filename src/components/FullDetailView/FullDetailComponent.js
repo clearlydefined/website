@@ -33,7 +33,6 @@ class FullDetailComponent extends Component {
     readOnly: PropTypes.bool.isRequired,
     renderContributeButton: PropTypes.element,
     previewDefinition: PropTypes.object,
-    curationSuggestions: PropTypes.object,
     getCurationData: PropTypes.func
   }
 
@@ -47,7 +46,6 @@ class FullDetailComponent extends Component {
       readOnly,
       handleRevert,
       changes,
-      curationSuggestions,
       getCurationData,
       inspectedCuration
     } = this.props
@@ -78,7 +76,6 @@ class FullDetailComponent extends Component {
                       previewDefinition={previewDefinition}
                       readOnly={readOnly}
                       onRevert={handleRevert}
-                      curationSuggestions={curationSuggestions}
                     />
                   </Col>
                   <Col md={6}>
