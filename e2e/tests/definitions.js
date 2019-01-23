@@ -79,35 +79,31 @@ describe('Definitions page', () => {
   })
 
   test('should edit a license of a component in the list', async () => {
-    await page.screenshot({ path: 'e2e/screenshots/license-0.png' })
     await page.waitForSelector(`.licensed-declared > span > span`)
     await page.click(`.licensed-declared > span > span`)
     await page.waitForSelector(`.spdx-picker`)
-    await page.screenshot({ path: 'e2e/screenshots/license-1.png' })
-    await page.click('.spdx-picker-header-buttons.col-md-2 > button.btn.btn-success')
-    await page.screenshot({ path: 'e2e/screenshots/license-2.png' })
-    /*const inputValue = await page.$eval(
-      `${licenseField} > div > div > div.rbt-input.form-control > div > div > input`,
+    const inputValue = await page.$eval(
+      `.spdxInputPicker > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main`,
       el => el.value
+    )
+    await page.click(
+      `.spdxInputPicker > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main`,
+      'MIT'
     )
     for (let i = 0; i < inputValue.length; i++) {
       await page.keyboard.press('Backspace')
     }
-    await page.type(`${licenseField} > div > div > div.rbt-input.form-control > div > div > input`, 'MIT')
-    await page.screenshot({ path: 'e2e/screenshots/license-0.png' })
+    await page.type(`.spdxInputPicker > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main`, 'MIT')
     await page.click('#rbt-menu-item-1')
-
-    await page.waitForSelector(`${licenseField} > span.editable-field.bg-info`)
-    await page.waitForSelector(`${component} > div.list-row > img.list-image.list-highlight`)*/
+    await page.click('.spdx-picker-header-buttons.col-md-2 > button.btn.btn-success')
+    await page.waitForSelector(`.licensed-declared > span > span.editable-field.bg-info`)
   })
 
   test('should open a modal while attempt to change a source location of a component in the list', async () => {
     await page.waitForSelector(`.described-sourceLocation > span > span`)
     await page.click(`.described-sourceLocation > span > span`)
-    await page.screenshot({ path: 'e2e/screenshots/sourceLocation-0.png' })
     await page.waitForSelector(`.fade.in.modal > div.modal-dialog`)
     await page.click(`.fade.in.modal > div > div > div > div:nth-child(2) > button`)
-    await page.screenshot({ path: 'e2e/screenshots/sourceLocation-1.png' })
   })
 
   test('should show an input field while attempting to change the release date of a component in the list', async () => {
