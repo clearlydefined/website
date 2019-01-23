@@ -32,7 +32,7 @@ export default class ModalEditor extends React.Component {
   }
 
   renderValue() {
-    const { value, initialValue, placeholder, extraClass, field, readOnly, onClick, editor, onChange } = this.props
+    const { value, initialValue, placeholder, extraClass, readOnly, onClick, editor, onChange } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
 
@@ -40,7 +40,7 @@ export default class ModalEditor extends React.Component {
       <span>
         <span
           title={value}
-          className={`editable-field ${extraClass} ${field} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
+          className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
           onClick={() => (readOnly ? null : this.setState({ editing: true }, () => onClick && onClick()))}
         >
           {value || placeholder}
@@ -60,10 +60,10 @@ export default class ModalEditor extends React.Component {
   }
 
   render() {
-    const { onClick, onRevert, revertable, readOnly, initialValue, value } = this.props
+    const { onClick, onRevert, revertable, readOnly, initialValue, value, field } = this.props
     const changed = initialValue !== value
     return (
-      <span className="list-singleLine">
+      <span className={`list-singleLine ${field}`}>
         {!readOnly && (
           <i
             className="fas fa-pencil-alt editable-marker"
