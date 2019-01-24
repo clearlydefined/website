@@ -1,0 +1,24 @@
+.ScoreRenderer {
+  width: 100%;
+  padding: 10px;
+  h2 {
+    color: white;
+    font-size: 16px;
+  }
+  .ScoreRenderer__domain {
+    display: flex;
+    width: 300px;
+  }
+  .ScoreRenderer__domain__section {
+    padding: 20px;
+    width: 100%;
+    p {
+      font-size: 12px;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+.ant-tooltip-inner {
+  width: 300px !important;
+}
