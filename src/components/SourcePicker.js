@@ -38,7 +38,12 @@ class SourcePicker extends Component {
     const { activeProvider } = this.state
     return (
       <ButtonGroup>
-        <Button name="github" onClick={this.onClick} active={activeProvider === 'github'}>
+        <Button
+          name="github"
+          className="sourcePicker__button--github"
+          onClick={this.onClick}
+          active={activeProvider === 'github'}
+        >
           GitHub
         </Button>
       </ButtonGroup>
@@ -50,6 +55,7 @@ class SourcePicker extends Component {
       <Button
         className="pull-right"
         bsStyle="success"
+        className="sourcePicker__button--select"
         onClick={() => this.props.onChange(this.state.selectedComponent)}
       >
         Select
@@ -67,7 +73,7 @@ class SourcePicker extends Component {
     const { activeProvider, selectedComponent } = this.state
     const { value } = this.props
     return (
-      <Grid className="main-container">
+      <Grid className="sourcePicker main-container">
         <Row className="show-grid spacer">
           <Col md={2}>{this.renderProviderButtons()}</Col>
           <Col md={5}>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</Col>
