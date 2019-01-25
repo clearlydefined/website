@@ -16,7 +16,7 @@ describe('Definitions page', () => {
   })
 
   afterAll(() => {
-    //browser.close()
+    browser.close()
   })
 
   test('should display "Available definitions" text on page', async () => {
@@ -125,7 +125,7 @@ describe('Definitions page', () => {
     10000
   )
 
-  test(
+  /*test(
     'should open a modal while attempt to change a source location of a component in the list',
     async () => {
       await page.waitForSelector(`.described-sourceLocation > span`)
@@ -135,7 +135,7 @@ describe('Definitions page', () => {
       await page.click(`.sourcePicker__button--select`)
     },
     10000
-  )
+  )*/
 
   test(
     'should show an input field while attempting to change the release date of a component in the list',
@@ -169,8 +169,12 @@ describe('Definitions page', () => {
       await page.type(`.contributePrompt__modal input[name="summary"]`, 'AUTOMATION TEST')
       await page.type(`.contributePrompt__modal textarea[name="details"]`, 'AUTOMATION TEST')
       await page.type(`.contributePrompt__modal textarea[name="resolution"]`, 'AUTOMATION TEST')
-      await page.waitForSelector('.contributePrompt__modal .contributePrompt__modal--loginButton')
-      await page.click('.contributePrompt__modal .contributePrompt__modal--loginButton')
+      await page.waitForSelector('.contributePrompt__modal .contributePrompt__modal--contributeButton')
+      await page.click('.contributePrompt__modal .contributePrompt__modal--contributeButton')
+      await page.waitForSelector('.contribution__success')
+      const contributionNotice = await page.$(`.contribution__success`)
+      const contributionNoticeContent = await (await contributionNotice.getProperty('textContent')).jsonValue()
+      await expect(contributionNoticeContent).toMatch('Successfully contributed')
     },
     20000
   )
