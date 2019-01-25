@@ -61,13 +61,13 @@ export default class CopyUrlButton extends Component {
     const isDisabled = !Boolean(path)
 
     return (
-      <CopyToClipboard text={this.renderUrl()} onCopy={this.onCopy}>
-        <ButtonWithTooltip tip={this.renderTooltip()}>
+      <ButtonWithTooltip tip={this.renderTooltip()}>
+        <CopyToClipboard text={this.renderUrl()} onCopy={this.onCopy}>
           <Button bsStyle={bsStyle} className={className} disabled={isDisabled} onClick={this.onClick}>
             <i className="fas fa-copy" />
           </Button>
-        </ButtonWithTooltip>
-      </CopyToClipboard>
+        </CopyToClipboard>
+      </ButtonWithTooltip>
     )
   }
 }
