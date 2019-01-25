@@ -65,7 +65,7 @@ export default class ContributePrompt extends Component {
     const { session, onLogin } = this.props
 
     return (
-      <Modal show={show} onHide={this.close}>
+      <Modal show={show} onHide={this.close} className="contributePrompt__modal">
         <Form>
           <Modal.Header closeButton>
             <Modal.Title>Describe the changes in this curation</Modal.Title>
@@ -79,7 +79,7 @@ export default class ContributePrompt extends Component {
                     {session.isAnonymous ? 'anonymous' : `@${session.username}`}
                   </FormControl.Static>{' '}
                   {session.isAnonymous && (
-                    <Button bsStyle="success" onClick={onLogin}>
+                    <Button bsStyle="success" className="contributePrompt__modal--loginButton" onClick={onLogin}>
                       Login
                     </Button>
                   )}

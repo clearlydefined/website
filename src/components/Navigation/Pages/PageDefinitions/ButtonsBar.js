@@ -56,7 +56,7 @@ export default class ButtonsBar extends Component {
         &nbsp;
         <ShareButton components={components} onSelect={this.onSelect} />
         &nbsp;
-        <Button bsStyle="success" disabled={hasChanges} onClick={doPromptContribute}>
+        <Button bsStyle="success" className="contributeButton" disabled={hasChanges} onClick={doPromptContribute}>
           Contribute
         </Button>
       </div>

@@ -8,7 +8,7 @@ let browser
 describe('Definitions page', () => {
   beforeAll(async () => {
     if (process.env.NODE_ENV === 'debug') {
-      browser = await puppeteer.launch({ headless: false, slowMo: 80, args: [`--window-size=1920,1080`] })
+      browser = await puppeteer.launch({ headless: false, slowMo: 80 })
       page = await browser.newPage()
     }
     await page.setViewport({ width: 1920, height: 1080 })
@@ -16,7 +16,7 @@ describe('Definitions page', () => {
   })
 
   afterAll(() => {
-    browser.close()
+    //browser.close()
   })
 
   test('should display "Available definitions" text on page', async () => {
@@ -152,8 +152,26 @@ describe('Definitions page', () => {
     async () => {
       await page.waitForSelector('.inspectComponent')
       await page.click('.inspectComponent')
-      page.waitForSelector('.fullDetaiView__modal')
+      await page.waitForSelector('.fullDetaiView__modal')
+      await page.waitForSelector('.fullDetaiView__modal .saveButton')
+      await page.click('.fullDetaiView__modal .saveButton')
     },
     10000
+  )
+
+  test(
+    'should open the contribution modal',
+    async () => {
+      await page.waitForSelector('.contributeButton')
+      await page.click('.contributeButton')
+      await page.waitForSelector('.contributePrompt__modal')
+      await page.select('.contributePrompt__modal select[name="type"]', 'missing')
+      await page.type(`.contributePrompt__modal input[name="summary"]`, 'AUTOMATION TEST')
+      await page.type(`.contributePrompt__modal textarea[name="details"]`, 'AUTOMATION TEST')
+      await page.type(`.contributePrompt__modal textarea[name="resolution"]`, 'AUTOMATION TEST')
+      await page.waitForSelector('.contributePrompt__modal .contributePrompt__modal--loginButton')
+      await page.click('.contributePrompt__modal .contributePrompt__modal--loginButton')
+    },
+    20000
   )
 })
