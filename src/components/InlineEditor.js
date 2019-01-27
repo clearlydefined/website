@@ -4,7 +4,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
-import Tooltip from 'antd/lib/tooltip'
 import { SpdxPicker } from './'
 import withSuggestions from '../utils/withSuggestions'
 class InlineEditor extends React.Component {

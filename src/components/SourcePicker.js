@@ -90,7 +90,7 @@ class SourcePicker extends Component {
           </Col>
         </Row>
         <Row>
-          <a href={selectedComponent ? selectedComponent.url : value}>
+          <a href={selectedComponent ? selectedComponent.url : value} target="_blank" rel="noopener noreferrer">
             {selectedComponent ? selectedComponent.url : value}
           </a>
           {this.renderActionButton()}
