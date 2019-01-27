@@ -18,7 +18,7 @@ export default class ButtonsBar extends Component {
         </Button>
         &nbsp;
         <Button bsStyle="success" disabled={hasChanges} onClick={doSave}>
-          Save
+          Done
         </Button>
       </div>
     )
