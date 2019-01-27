@@ -92,7 +92,8 @@ export class PageDefinitions extends UserManagedList {
         onRemoveAll={this.onRemoveAll}
         doPromptContribute={this.doPromptContribute}
         shareUrl={this.doSaveAsUrl}
-        shareFile={() => this.setState({ showSavePopup: true })}
+        shareFile={() => this.setState({ showSavePopup: true, saveType: 'file' })}
+        shareNotice={() => this.setState({ showSavePopup: true, saveType: 'notice' })}
         shareGist={() => this.setState({ showSavePopup: true, saveType: 'gist' })}
       />
     )
@@ -195,8 +196,9 @@ export class PageDefinitions extends UserManagedList {
         )}
         <SavePopUp
           show={this.state.showSavePopup}
+          type={this.state.saveType}
           onHide={() => this.setState({ showSavePopup: false })}
-          onSave={fileName => this.setState({ fileName }, this.doSave)}
+          onOK={options => this.setState({ options }, this.doSave)}
         />
         {this.renderVersionSelectopPopup()}
       </Grid>

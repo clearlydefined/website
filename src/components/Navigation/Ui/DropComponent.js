@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
@@ -122,8 +125,8 @@ class DropComponent extends Component {
 
   handleDropRejectedFiles = files => {
     const { dispatch } = this.props
-    const fileNames = files.map(file => file.name).join(', ')
-    uiWarning(dispatch, `Could not load: ${fileNames}`)
+    const filenames = files.map(file => file.name).join(', ')
+    uiWarning(dispatch, `Could not load: ${filenames}`)
   }
 
   render() {
