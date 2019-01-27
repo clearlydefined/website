@@ -15,6 +15,7 @@ export default class ButtonsBar extends Component {
     doPromptContribute: PropTypes.func,
     shareUrl: PropTypes.func,
     shareFile: PropTypes.func,
+    shareNotice: PropTypes.func,
     shareGist: PropTypes.func
   }
 
@@ -24,6 +25,8 @@ export default class ButtonsBar extends Component {
         return this.props.shareUrl()
       case 'file':
         return this.props.shareFile()
+      case 'notice':
+        return this.props.shareNotice()
       case 'gist':
         return this.props.shareGist()
       default:
