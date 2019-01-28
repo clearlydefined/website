@@ -92,6 +92,7 @@ class EditableFieldRenderer extends Component {
     const renderEditor = () =>
       editor ? (
         <ModalEditor
+          field={field}
           extraClass={Contribution.classIfDifferent(definition, previewDefinition, field)}
           readOnly={readOnly}
           initialValue={initialValue}

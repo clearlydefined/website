@@ -147,7 +147,7 @@ export default class ComponentButtons extends Component {
             )}
         </ButtonGroup>
         {!readOnly && (
-          <Button bsStyle="link remove-component" onClick={this.removeComponent.bind(this, component)}>
+          <Button bsStyle="link" className="remove-component" onClick={this.removeComponent.bind(this, component)}>
             <i className="fas fa-times list-remove" />
           </Button>
         )}
