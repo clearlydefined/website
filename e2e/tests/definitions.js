@@ -125,17 +125,17 @@ describe('Definitions page', () => {
     10000
   )
 
-  /*test(
+  test(
     'should open a modal while attempt to change a source location of a component in the list',
     async () => {
-      await page.waitForSelector(`.described-sourceLocation > span`)
-      await page.click(`.described-sourceLocation > span`)
+      await page.waitForSelector(`.described-sourceLocation > .fas.fa-pencil-alt.editable-marker`)
+      await page.click(`.described-sourceLocation > .fas.fa-pencil-alt.editable-marker`)
       await page.waitForSelector(`.sourcePicker`)
       await page.waitForSelector(`.sourcePicker__button--select`)
       await page.click(`.sourcePicker__button--select`)
     },
     10000
-  )*/
+  )
 
   test(
     'should show an input field while attempting to change the release date of a component in the list',

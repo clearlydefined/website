@@ -39,7 +39,7 @@ export default class DefinitionEntry extends React.Component {
       const proposedValue = transform(value)
       const isChanged = !equality(proposedValue, this.getOriginalValue(field))
       const newChanges = { ...component.changes }
-      if (isChanged) newChanges[field] = proposedValue
+      if (isChanged && proposedValue !== null) newChanges[field] = proposedValue
       else delete newChanges[field]
       onChange && onChange(component, newChanges)
     }

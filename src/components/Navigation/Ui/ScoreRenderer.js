@@ -83,7 +83,6 @@ class ScoreRenderer extends Component {
   render() {
     const { domain, scores } = this.props
     if (!domain && !scores) return null
-    console.log(JSON.stringify(this.props.domain))
     return (
       <Tooltip title={this.renderTooltipContent} key={this.renderTooltipContent} overlayStyle={{ width: '800px' }}>
         <img
