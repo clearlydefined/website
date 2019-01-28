@@ -39,7 +39,7 @@ export default class SpdxPicker extends Component {
     return (
       <div className="editable-editor">
         <Typeahead
-          className="spdxInputPicker"
+          className="spdx-input-picker"
           selected={[value] || []}
           options={identifiers}
           onBlur={onBlur}

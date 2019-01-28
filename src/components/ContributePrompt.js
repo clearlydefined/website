@@ -146,12 +146,12 @@ export default class ContributePrompt extends Component {
                 Remove contributed definitions from the list
               </Checkbox>
               <FormGroup className="pull-right">
-                <Button className="contributePrompt__modal--cancelButton" onClick={this.close}>
+                <Button className="contributePrompt__modal--cancel-button" onClick={this.close}>
                   Cancel
                 </Button>
                 <Button
                   bsStyle="success"
-                  className="contributePrompt__modal--contributeButton"
+                  className="contributePrompt__modal--contribute-button"
                   disabled={!this.canSubmit()}
                   type="button"
                   onClick={this.okHandler}

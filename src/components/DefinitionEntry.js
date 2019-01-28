@@ -71,7 +71,7 @@ export default class DefinitionEntry extends React.Component {
     const namespaceText = namespace ? namespace + '/' : ''
     const componentTag = componentUrl ? (
       <span>
-        <a href={componentUrl} target="_blank" rel="noopener noreferrer" className="componentName">
+        <a href={componentUrl} target="_blank" rel="noopener noreferrer" className="component-name">
           {namespaceText}
           {name}
         </a>
@@ -241,7 +241,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <ModalEditor
-                  field={'licensed-declared'}
+                  field={'licensed.declared'}
                   extraClass={this.classIfDifferent('licensed.declared')}
                   readOnly={readOnly}
                   initialValue={this.getOriginalValue('licensed.declared')}
@@ -261,7 +261,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <ModalEditor
-                  field={'described-sourceLocation'}
+                  field={'described.sourceLocation'}
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}
                   initialValue={Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
@@ -283,7 +283,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
                 <InlineEditor
-                  field={'described-releaseDate'}
+                  field={'described.releaseDate'}
                   extraClass={this.classIfDifferent('described.releaseDate')}
                   readOnly={readOnly}
                   type="date"
