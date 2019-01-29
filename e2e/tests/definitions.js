@@ -26,44 +26,26 @@ describe('Definitions page', () => {
   test(
     'user can type a definition text and should display a component in the list',
     async () => {
-      await page.waitForSelector('.rbt-input-main')
-      await page.click('.rbt-input-main')
+      await expect(page).toMatchElement('.rbt-input-main')
+      await expect(page).toClick('.rbt-input-main')
       await page.type('.rbt-input-main', 'async')
       await page.waitFor(2000)
-      await page.waitForSelector('.rbt-menu>li')
+      await expect(page).toMatchElement('.rbt-menu>li')
       let element = await page.$('.rbt-menu li:nth-child(1) a')
       element.click()
-      await page.waitForSelector('.components-list')
-      await page.waitForSelector('.components-list div:nth-child(0n+1) .component-row')
+      await expect(page).toMatchElement('.components-list')
+      await expect(page).toMatchElement('.components-list div:nth-child(0n+1) .component-row')
       const componentTitle = await page.$('.component-name')
       const text = await (await componentTitle.getProperty('textContent')).jsonValue()
       await expect(text).toMatch('async')
-      await page.waitForSelector(`.list-image`)
-      await page.waitForSelector(`.list-activity-area`)
-
-      const codeButtonElement = await page.$(`.add-source-component > i`)
-      const codeButtonContent = await (await codeButtonElement.getProperty('className')).jsonValue()
-      await expect(codeButtonContent).toMatch('fas fa-code')
-
-      const inspectButtonElement = await page.$(`.inspect-component > i`)
-      const inspectButtonContent = await (await inspectButtonElement.getProperty('className')).jsonValue()
-      await expect(inspectButtonContent).toMatch('fas fa-search')
-
-      const copyButtonElement = await page.$(`.copy-url-button > i`)
-      const copyButtonContent = await (await copyButtonElement.getProperty('className')).jsonValue()
-      await expect(copyButtonContent).toMatch('fas fa-copy')
-
-      const switchButtonElement = await page.$(`.switch-or-add-component > i`)
-      const switchButtonContent = await (await switchButtonElement.getProperty('className')).jsonValue()
-      await expect(switchButtonContent).toMatch('fas fa-exchange-alt')
-
-      const undoButtonElement = await page.$(`.revert-componentChanges > i`)
-      const undoButtonContent = await (await undoButtonElement.getProperty('className')).jsonValue()
-      await expect(undoButtonContent).toMatch('fas fa-undo')
-
-      const removeButtonElement = await page.$(`.remove-component > i`)
-      const removeButtonContent = await (await removeButtonElement.getProperty('className')).jsonValue()
-      await expect(removeButtonContent).toMatch('fas fa-times list-remove')
+      await expect(page).toMatchElement(`.list-image`)
+      await expect(page).toMatchElement(`.list-activity-area`)
+      await expect(page).toMatchElement(`.list-fa-button > i.fa-code`)
+      await expect(page).toMatchElement(`.list-fa-button > i.fa-search`)
+      await expect(page).toMatchElement(`.list-fa-button > i.fa-copy`)
+      await expect(page).toMatchElement(`.list-fa-button > i.fa-exchange-alt`)
+      await expect(page).toMatchElement(`.list-fa-button > i.fa-undo`)
+      await expect(page).toMatchElement(`.btn-link > i.list-remove`)
     },
     10000
   )
@@ -72,8 +54,8 @@ describe('Definitions page', () => {
     'should display the detail after clicking on a component in the list',
     async () => {
       const firstElement = '.components-list > .ReactVirtualized__Grid__innerScrollContainer > div:nth-child(1)'
-      await page.click(firstElement)
-      await page.waitForSelector(`${firstElement} > div.two-line-entry > div.list-panel`)
+      await expect(page).toClick(firstElement)
+      await expect(page).toMatchElement(`${firstElement} > div.two-line-entry > div.list-panel`)
       const component = `${firstElement} > div.two-line-entry > div.list-panel > div`
       const declaredElement = await page.$(`${component} > div.col-md-5 > div:nth-child(1) > div.col-md-2 > b`)
       const declaredContent = await (await declaredElement.getProperty('textContent')).jsonValue()
@@ -100,15 +82,15 @@ describe('Definitions page', () => {
   test(
     'should edit a license of a component in the list',
     async () => {
-      await page.waitForSelector(`[name="licensed.declared"] > span > span`)
-      await page.click(`[name="licensed.declared"] > span > span`)
-      await page.waitForSelector(`.spdx-picker`)
+      await expect(page).toMatchElement(`[name="licensed.declared"] > span > span`)
+      await expect(page).toClick(`[name="licensed.declared"] > span > span`)
+      await expect(page).toMatchElement(`.spdx-picker`)
 
       const inputValue = await page.$eval(
         `.spdx-input-picker > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main`,
         el => el.value
       )
-      await page.click(
+      await expect(page).toClick(
         `.spdx-input-picker > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main`,
         'MIT'
       )
@@ -119,9 +101,9 @@ describe('Definitions page', () => {
         `.spdx-input-picker > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main`,
         'MIT'
       )
-      await page.click('#rbt-menu-item-1')
-      await page.click('.spdx-picker-header-buttons.col-md-2 > button.btn.btn-success')
-      await page.waitForSelector(`[name="licensed.declared"] > span > span.editable-field.bg-info`)
+      await expect(page).toClick('#rbt-menu-item-1')
+      await expect(page).toClick('.spdx-picker-header-buttons.col-md-2 > button.btn.btn-success')
+      await expect(page).toMatchElement(`[name="licensed.declared"] > span > span.bg-info`)
     },
     10000
   )
@@ -129,11 +111,16 @@ describe('Definitions page', () => {
   test(
     'should open a modal while attempt to change a source location of a component in the list',
     async () => {
-      await page.waitForSelector(`[name="described.sourceLocation"] > .fas.fa-pencil-alt.editable-marker`)
-      await page.click(`[name="described.sourceLocation"] > .fas.fa-pencil-alt.editable-marker`)
-      await page.waitForSelector(`.sourcePicker`)
-      await page.waitForSelector(`.sourcePicker__button--select`)
-      await page.click(`.sourcePicker__button--select`)
+      await expect(page).toMatchElement(`[name="described.sourceLocation"] > .fas.fa-pencil-alt.editable-marker`)
+      await expect(page).toClick(`[name="described.sourceLocation"] > .fas.fa-pencil-alt.editable-marker`)
+      await expect(page).toMatchElement(`#source-picker`)
+      const sourcePickerModal = await page.$(`#source-picker`)
+      await expect(sourcePickerModal).not.toBeNull()
+      await expect(page).toMatchElement(`#source-picker .btn-success`)
+      await expect(page).toClick(`#source-picker .btn-success`)
+      await expect(page).toMatchElement(`#source-picker`, { hidden: true })
+      const hiddenSourcePickerModal = await page.$(`#source-picker`)
+      await expect(hiddenSourcePickerModal).toBeNull()
     },
     10000
   )
@@ -141,9 +128,9 @@ describe('Definitions page', () => {
   test(
     'should show an input field while attempting to change the release date of a component in the list',
     async () => {
-      await page.waitForSelector(`[name="described.releaseDate"] > .fas.fa-pencil-alt.editable-marker`)
-      await page.click(`[name="described.releaseDate"] > .fas.fa-pencil-alt.editable-marker`)
-      await page.waitForSelector(`[name="described.releaseDate"] > input`)
+      await expect(page).toMatchElement(`[name="described.releaseDate"] > .fas.fa-pencil-alt.editable-marker`)
+      await expect(page).toClick(`[name="described.releaseDate"] > .fas.fa-pencil-alt.editable-marker`)
+      await expect(page).toMatchElement(`[name="described.releaseDate"] > input`)
     },
     10000
   )
@@ -151,31 +138,28 @@ describe('Definitions page', () => {
   test(
     'should display a modal after clicking on the inspect button of a definition the list',
     async () => {
-      await page.waitForSelector('.inspect-component')
-      await page.click('.inspect-component')
-      await page.waitForSelector('.fullDetaiView__modal')
-      await page.waitForSelector('.fullDetaiView__modal .save-button')
-      await page.click('.fullDetaiView__modal .save-button')
+      await expect(page).toMatchElement(`.list-fa-button > i.fa-search`)
+      await expect(page).toClick(`.list-fa-button > i.fa-search`)
+      await expect(page).toMatchElement('.fullDetaiView__modal')
+      await expect(page).toMatchElement('.fullDetaiView__modal .save-button.btn.btn-primary', { timeout: 5000 })
+      await expect(page).toClick('.fullDetaiView__modal .save-button.btn.btn-primary')
     },
-    10000
+    20000
   )
-
   test(
     'should open the contribution modal',
     async () => {
-      await page.waitForSelector('.contribute-button')
-      await page.click('.contribute-button')
-      await page.waitForSelector('.contributePrompt__modal')
-      await page.select('.contributePrompt__modal select[name="type"]', 'missing')
-      await page.type(`.contributePrompt__modal input[name="summary"]`, 'AUTOMATION TEST')
-      await page.type(`.contributePrompt__modal textarea[name="details"]`, 'AUTOMATION TEST')
-      await page.type(`.contributePrompt__modal textarea[name="resolution"]`, 'AUTOMATION TEST')
-      await page.waitForSelector('.contributePrompt__modal .contributePrompt__modal--contribute-button')
-      await page.click('.contributePrompt__modal .contributePrompt__modal--contribute-button')
-      await page.waitForSelector('.contribution__success')
-      const contributionNotice = await page.$(`.contribution__success`)
-      const contributionNoticeContent = await (await contributionNotice.getProperty('textContent')).jsonValue()
-      await expect(contributionNoticeContent).toMatch('Successfully contributed')
+      await expect(page).toMatchElement('.contribute-button')
+      await expect(page).toClick('.contribute-button')
+      await page.waitForSelector('#contribute-modal')
+      await expect(page).toFill('#contribute-modal input[name="summary"]', 'AUTOMATION TEST')
+      await expect(page).toFill('#contribute-modal textarea[name="details"]', 'AUTOMATION TEST')
+      await expect(page).toFill('#contribute-modal textarea[name="resolution"]', 'AUTOMATION TEST')
+      await page.waitForSelector('#contribute-modal select[name="type"]')
+      await page.select('select[name="type"]', 'missing')
+      await expect(page).toMatchElement('#contribute-modal .contribute-button')
+      await expect(page).toClick('#contribute-modal .contribute-button')
+      await expect(page).toMatchElement('.contribution-success', { timeout: 10000 })
     },
     20000
   )

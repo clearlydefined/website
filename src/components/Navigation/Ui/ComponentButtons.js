@@ -80,10 +80,7 @@ export default class ComponentButtons extends Component {
                 name="addSourceComponent"
                 tip={'Add the definition for source that matches this package'}
               >
-                <Button
-                  className="list-fa-button add-source-component"
-                  onClick={this.addSourceForComponent.bind(this, component)}
-                >
+                <Button className="list-fa-button" onClick={this.addSourceForComponent.bind(this, component)}>
                   <i className="fas fa-code" />
                 </Button>
               </ButtonWithTooltip>
@@ -91,7 +88,7 @@ export default class ComponentButtons extends Component {
           {!isDefinitionEmpty && (
             <ButtonWithTooltip tip={'Dig into this definition'}>
               <Button
-                className="list-fa-button inspect-component"
+                className="list-fa-button"
                 onClick={this.inspectComponent.bind(this, currentComponent, definition)}
               >
                 <i className="fas fa-search" />
@@ -102,7 +99,7 @@ export default class ComponentButtons extends Component {
             route={ROUTE_DEFINITIONS}
             path={component.toPath()}
             bsStyle="default"
-            className="list-fa-button copy-url-button"
+            className="list-fa-button"
           />
           {!hideVersionSelector && (
             <ButtonWithTooltip tip={'Switch or add other versions of this definition'}>
@@ -126,7 +123,7 @@ export default class ComponentButtons extends Component {
                     </Menu>
                   }
                 >
-                  <Button className="list-fa-button switch-or-add-component" onClick={event => event.stopPropagation()}>
+                  <Button className="list-fa-button" onClick={event => event.stopPropagation()}>
                     <i className="fas fa-exchange-alt" /> <Icon type="down" />
                   </Button>
                 </Dropdown>
@@ -137,7 +134,7 @@ export default class ComponentButtons extends Component {
             !isDefinitionEmpty && (
               <ButtonWithTooltip tip={'Revert Changes of this Definition'}>
                 <Button
-                  className="list-fa-button revert-componentChanges"
+                  className="list-fa-button"
                   onClick={() => this.revertComponent(component)}
                   disabled={!hasChange(component)}
                 >
@@ -147,7 +144,7 @@ export default class ComponentButtons extends Component {
             )}
         </ButtonGroup>
         {!readOnly && (
-          <Button bsStyle="link" className="remove-component" onClick={this.removeComponent.bind(this, component)}>
+          <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
             <i className="fas fa-times list-remove" />
           </Button>
         )}
