@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { ControlLabel, Modal, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
 import DropFileOrText from './DropFileOrText'
-import pick from 'lodash/pick'
 
 const titles = {
   file: 'Share coordinates as a file',
@@ -31,7 +30,13 @@ export default class SavePopUp extends Component {
   constructor(props) {
     super(props)
     this.templateInputRef = React.createRef()
-    this.state = { renderer: 'text' }
+    this.state = { renderer: 'text', template: defaultNoticeTemplate }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.type === nextProps.type) return
+    const filename = nextProps.type === 'notice' ? 'NOTICE' : ''
+    this.setState({ ...this.state, filename })
   }
 
   doOK = () => {
@@ -137,3 +142,6 @@ export default class SavePopUp extends Component {
     )
   }
 }
+
+const defaultNoticeTemplate =
+  'SOFTWARE NOTICES AND INFORMATION\n\nDo Not Translate or Localize\n\nThis software incorporates material from third parties.\nNotwithstanding any other terms, you may reverse engineer this software to the extent\nrequired to debug changes to any libraries licensed under the GNU Lesser General Public License.\n\n{{#buckets}}\n{{#packages}}\n\n-------------------------------------------------------------------\n\n{{{name}}} {{{version}}} - {{{../name}}}\n{{#if website}}\n{{{website}}}\n{{/if}}\n{{#if copyrights}}\n{{#copyrights}}\n{{{this}}}\n{{/copyrights}}\n{{/if}}\n\n{{{../text}}}\n\n-------------------------------------------------------------------\n{{/packages}}\n{{/buckets}}\n'
