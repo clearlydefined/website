@@ -1,4 +1,4 @@
 var config = require('./jest.config')
-config.testRegex = 'ispec\\.js$' //Overriding testRegex option
+config.testRegex = 'test.unit\\.js$' //Overriding testRegex option
 console.log('RUNNING UNIT TESTS')
 module.exports = config
