@@ -7,9 +7,9 @@ import { Menu, Dropdown, Icon } from 'antd'
 import { CopyUrlButton } from '../../'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
-import { getBadgeUrl } from '../../../api/clearlyDefined'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import ButtonWithTooltip from './ButtonWithTooltip'
+import ScoreRenderer from './ScoreRenderer'
 
 export default class ComponentButtons extends Component {
   static propTypes = {
@@ -69,7 +69,7 @@ export default class ComponentButtons extends Component {
     const hasPendingCurations = Definition.hasPendingCurations(definition)
     return (
       <div className="list-activity-area">
-        {scores && <img className="list-buttons" src={getBadgeUrl(scores.tool, scores.effective)} alt="score" />}
+        {scores && <ScoreRenderer scores={scores} definition={definition} />}
         {isCurated && <Tag color="green">Curated</Tag>}
         {hasPendingCurations && <Tag color="gold">Pending Curations</Tag>}
         <ButtonGroup>
