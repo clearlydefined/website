@@ -141,8 +141,8 @@ describe('Definitions page', () => {
       await expect(page).toMatchElement(`.list-fa-button > i.fa-search`)
       await expect(page).toClick(`.list-fa-button > i.fa-search`)
       await expect(page).toMatchElement('.fullDetaiView__modal')
-      await expect(page).toMatchElement('.fullDetaiView__modal .save-button.btn.btn-primary', { timeout: 5000 })
-      await expect(page).toClick('.fullDetaiView__modal .save-button.btn.btn-primary')
+      await expect(page).toMatchElement('.fullDetaiView__modal .ok-button.btn.btn-primary', { timeout: 5000 })
+      await expect(page).toClick('.fullDetaiView__modal .ok-button.btn.btn-primary')
     },
     20000
   )

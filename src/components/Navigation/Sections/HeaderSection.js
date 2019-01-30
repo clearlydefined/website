@@ -57,7 +57,7 @@ export default class HeaderSection extends Component {
             </ButtonWithTooltip>
           )}{' '}
           {modalView && (
-            <Button bsStyle="primary" className="save-button" disabled={isEmpty(changes)} onClick={handleSave}>
+            <Button bsStyle="primary" className="ok-button" disabled={isEmpty(changes)} onClick={handleSave}>
               OK
             </Button>
           )}{' '}

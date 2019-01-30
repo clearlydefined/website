@@ -109,13 +109,13 @@ export default class ComponentButtons extends Component {
                   overlay={
                     <Menu>
                       <Menu.Item
-                        className="switchComponentVersion"
+                        className="switch-component-version"
                         onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}
                       >
                         Switch version
                       </Menu.Item>
                       <Menu.Item
-                        className="addComponentVersion"
+                        className="add-component-version"
                         onClick={this.showVersionSelectorPopup.bind(this, currentComponent, true)}
                       >
                         Add more versions
