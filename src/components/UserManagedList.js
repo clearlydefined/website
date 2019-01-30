@@ -196,11 +196,11 @@ export default class UserManagedList extends SystemManagedList {
 
   async saveNotices(coordinates, options) {
     const { token, dispatch } = this.props
-    uiInfo(dispatch, `Creating notice file for ${coordinates.length} coordinates...`)
+    uiInfo(dispatch, `Creating Notice file for ${coordinates.length} coordinates...`)
     const list = coordinates.map(entry => entry.toString())
     const notices = await getNotices(token, list, options.renderer, options.options)
     const { summary, content } = notices
-    const message = `Created Notices file with ${summary.total} entries`
+    const message = `Created Notice file with ${summary.total} entries`
     if (summary.warnings.noLicense.length) uiWarning(dispatch, this._renderNoticeProblem(message, summary))
     else uiInfo(dispatch, message)
     return saveAs(new File([content], `${options.filename}`))

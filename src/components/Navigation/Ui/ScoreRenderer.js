@@ -17,19 +17,18 @@ class ScoreRenderer extends Component {
 
   renderScore = score => (
     <Fragment>
-      <p>Total: {score.total}</p>
       {Object.keys(score).includes('date') && <p>Date: {score.date}</p>}
       {Object.keys(score).includes('source') && <p>Source: {score.source}</p>}
       {Object.keys(score).includes('consistency') && <p>Consistency: {score.consistency}</p>}
       {Object.keys(score).includes('declared') && <p>Declared: {score.declared}</p>}
       {Object.keys(score).includes('discovered') && <p>Discovered: {score.discovered}</p>}
-      {Object.keys(score).includes('spdx') && <p>Spdx: {score.spdx}</p>}
-      {Object.keys(score).includes('texts') && <p>Texts: {score.texts}</p>}
+      {Object.keys(score).includes('spdx') && <p>SPDX: {score.spdx}</p>}
+      {Object.keys(score).includes('texts') && <p>License Texts: {score.texts}</p>}
     </Fragment>
   )
 
   renderTooltipContent = () => {
-    const { domain, definition } = this.props
+    const { domain, definition, scores } = this.props
     if (!domain) {
       const describedScore = get(definition, 'described.score')
       const describedToolScore = get(definition, 'described.toolScore')
@@ -37,47 +36,34 @@ class ScoreRenderer extends Component {
       const licensedToolScore = get(definition, 'licensed.toolScore')
       return (
         <div className="ScoreRenderer">
+          <h2>Overall</h2>
+          {this.renderScores(scores.effective, scores.tool)}
+
           <h2>Described</h2>
-          <div className="ScoreRenderer__domain">
-            <div className="ScoreRenderer__domain__section">
-              <h2>Score</h2>
-              {this.renderScore(describedScore)}
-            </div>
-            <div className="ScoreRenderer__domain__section">
-              <h2>Toolscore:</h2>
-              {this.renderScore(describedToolScore)}
-            </div>
-          </div>
+          {this.renderScores(describedScore, describedToolScore)}
 
           <h2>Licensed</h2>
-          <div className="ScoreRenderer__domain">
-            <div className="ScoreRenderer__domain__section">
-              <h2>Score</h2>
-              {this.renderScore(licensedScore)}
-            </div>
-            <div className="ScoreRenderer__domain__section">
-              <h2>Toolscore</h2>
-              {this.renderScore(licensedToolScore)}
-            </div>
-          </div>
+          {this.renderScores(licensedScore, licensedToolScore)}
         </div>
       )
     } else {
-      return (
-        <div className="ScoreRenderer">
-          <div className="ScoreRenderer__domain">
-            <div className="ScoreRenderer__domain__section">
-              <h2>Score</h2>
-              {this.renderScore(get(domain, 'score'))}
-            </div>
-            <div className="ScoreRenderer__domain__section">
-              <h2>Toolscore:</h2>
-              {this.renderScore(get(domain, 'toolScore'))}
-            </div>
-          </div>
-        </div>
-      )
+      return <div className="ScoreRenderer">{this.renderScores(get(domain, 'score'), get(domain, 'toolScore'))}</div>
     }
+  }
+
+  renderScores(effective, tools) {
+    return (
+      <div className="ScoreRenderer__domain">
+        <div className="ScoreRenderer__domain__section">
+          <h2>{`Effective: ${effective.total || effective}`}</h2>
+          {this.renderScore(effective)}
+        </div>
+        <div className="ScoreRenderer__domain__section">
+          <h2>{`Tools: ${tools.total || tools}`}</h2>
+          {this.renderScore(tools)}
+        </div>
+      </div>
+    )
   }
 
   render() {
@@ -90,8 +76,8 @@ class ScoreRenderer extends Component {
           className="list-buttons"
           src={
             domain
-              ? getBadgeUrl(get(domain, 'toolScore.total'), get(domain, 'score.total'))
-              : getBadgeUrl(scores.tool, scores.effective)
+              ? getBadgeUrl(get(domain, 'score.total'), get(domain, 'toolScore.total'))
+              : getBadgeUrl(scores.effective, scores.tool)
           }
           alt="score"
         />
