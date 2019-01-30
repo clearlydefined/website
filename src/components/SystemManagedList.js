@@ -207,11 +207,15 @@ export default class SystemManagedList extends Component {
     })
   }
 
-  onFilter(value) {
-    const activeFilters = Object.assign({}, this.state.activeFilters)
-    const filterValue = get(activeFilters, value.type)
-    if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
-    else activeFilters[value.type] = value.value
+  // note that in some scenarios `onFilter` is called with a random second arg
+  // and sometimes with an explicit overwrite intent (e.g., true)
+  onFilter(value, overwrite = false) {
+    const activeFilters = overwrite === true ? value : Object.assign({}, this.state.activeFilters)
+    if (overwrite !== true) {
+      const filterValue = get(activeFilters, value.type)
+      if (filterValue && activeFilters[value.type] === value.value) delete activeFilters[value.type]
+      else activeFilters[value.type] = value.value
+    }
     this.setState({ ...this.state, activeFilters })
     this.updateList({ transform: this.createTransform(this.state.activeSort, activeFilters) })
   }
