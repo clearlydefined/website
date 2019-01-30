@@ -9,6 +9,7 @@ import pako from 'pako'
 import { ROUTE_SHARE } from '../utils/routingConstants'
 import { getNotices } from '../api/clearlyDefined'
 import { saveGist } from '../api/github'
+import { Button } from 'react-bootstrap'
 import { uiBrowseUpdateList, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
@@ -174,8 +175,8 @@ export default class UserManagedList extends SystemManagedList {
   async doSave() {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
-    await this.saveSpec(spec)
     this.setState({ showSavePopup: false })
+    await this.saveSpec(spec)
   }
 
   async saveSpec(spec) {
@@ -199,14 +200,25 @@ export default class UserManagedList extends SystemManagedList {
     const list = coordinates.map(entry => entry.toString())
     const notices = await getNotices(token, list, options.renderer, options.options)
     const { summary, content } = notices
-    const message = `Created Notices file with ${summary.total} entries, ${summary.missing} missing entries, and ${
-      summary.warnings.noLicense.length
-    } missing licenses`
-    if (summary.missing || summary.warnings.noLicense.length) uiWarning(dispatch, message)
+    const message = `Created Notices file with ${summary.total} entries`
+    if (summary.warnings.noLicense.length) uiWarning(dispatch, this._renderNoticeProblem(message, summary))
     else uiInfo(dispatch, message)
     return saveAs(new File([content], `${options.filename}`))
   }
 
+  _renderNoticeProblem(baseMessage, summary) {
+    return (
+      <div>
+        {`${baseMessage}, and ${summary.warnings.noLicense.length} missing licenses`}
+        <div>
+          <Button bsStyle="warning" onClick={() => this.onFilter({ 'licensed.declared': 'absence' }, true)}>
+            Filter
+          </Button>
+          <span>&nbsp;to show just the problem definitions</span>
+        </div>
+      </div>
+    )
+  }
   async saveGist(name, content) {
     const { token, dispatch } = this.props
     const url = await saveGist(token, `${name}.json`, JSON.stringify(content))
