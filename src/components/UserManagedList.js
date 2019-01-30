@@ -176,7 +176,7 @@ export default class UserManagedList extends SystemManagedList {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
     this.setState({ showSavePopup: false })
-    this.saveSpec(spec)
+    await this.saveSpec(spec)
   }
 
   async saveSpec(spec) {
