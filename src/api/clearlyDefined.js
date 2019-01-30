@@ -136,8 +136,8 @@ export function getBadgeUrl(score1, score2) {
   const topScore = 100
   const colors = ['red', 'yellow', 'brightgreen']
   const percentScore = (score1 + score2) / (2 * topScore)
-  const bucketSize = 1 / (colors.length - 1)
-  const color = colors[Math.ceil(percentScore / bucketSize)]
+  const bucketSize = 1 / colors.length
+  const color = colors[Math.floor(percentScore / bucketSize)]
   return `https://img.shields.io/badge/ClearlyDefined-${score1}%20%7C%20${score2}-${color}.svg`
 }
 
