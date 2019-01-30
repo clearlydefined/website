@@ -8,7 +8,6 @@ import Modal from 'antd/lib/modal'
 import 'antd/dist/antd.css'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
-import Curation from '../../utils/curation'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
