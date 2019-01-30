@@ -43,11 +43,11 @@ class DropFileOrText extends Component {
   async handleDropFiles(event) {
     const files = Object.values(event.dataTransfer.files)
     if (!files || !files.length) return false
+    const { dispatch, onLoad } = this.props
     if (files.length > 1) {
       uiWarning(dispatch, 'Only drop one file')
       return false
     }
-    const { dispatch, onLoad } = this.props
     const file = files[0]
     const reader = new FileReader()
     reader.onload = () => onLoad(reader.result, file.name)
