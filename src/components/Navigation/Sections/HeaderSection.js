@@ -5,9 +5,9 @@ import PropTypes from 'prop-types'
 import { Row, Button, Col } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
 import { Tag } from 'antd'
-import { getBadgeUrl } from '../../../api/clearlyDefined'
 import Definition from '../../../utils/definition'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
+import ScoreRenderer from '../Ui/ScoreRenderer'
 
 export default class HeaderSection extends Component {
   static propTypes = {
@@ -37,7 +37,7 @@ export default class HeaderSection extends Component {
               <div className="header-data">
                 {scores && (
                   <span className="score-header">
-                    <img className="list-buttons" src={getBadgeUrl(scores.tool, scores.effective)} alt="score" />
+                    <ScoreRenderer scores={scores} definition={item} />
                   </span>
                 )}
                 {isCurated && <Tag color="green">Curated</Tag>}

@@ -137,7 +137,6 @@
 }
 
 .editable-editor {
-  width: 90%;
   display: inline-block;
 }
 
@@ -203,9 +202,17 @@
   border-radius: 4px;
 }
 
+.copyrightContainer {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .modal-content {
   height: auto;
 }
+
 .tooltipWrapper {
   display: inline-block;
 }

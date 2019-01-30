@@ -7,12 +7,31 @@ import isNumber from 'lodash/isNumber'
 import { OverlayTrigger } from 'react-bootstrap'
 
 import PopoverRenderer from './PopoverRenderer'
+import withSuggestions from '../utils/withSuggestions'
 
 /**
  * Specific renderer for Copyrights data
  * It show the first Copyright, and if clicked opens a Popover containing a list of details
  *
  */
+class CopyrightsContent extends Component {
+  onChange = suggestion => {
+    this.props.onChange(suggestion)
+  }
+
+  render() {
+    const { classIfDifferent, values, readOnly, onClick } = this.props
+    return (
+      <div className="copyrightContainer" onClick={onClick}>
+        {!readOnly && <i className="fas fa-pencil-alt editable-marker" />}
+        <span className={classIfDifferent}>{values && values[0] ? values[0].value : null}</span>
+      </div>
+    )
+  }
+}
+
+const EnhancedCopyrights = withSuggestions(CopyrightsContent)
+
 class CopyrightsRenderer extends Component {
   static defaultProps = {
     readOnly: false,
@@ -48,19 +67,20 @@ class CopyrightsRenderer extends Component {
     this.setState({ values: this.state.values.filter((_, itemIndex) => index !== itemIndex), hasChanges: true })
   }
 
-  addItem = (value, updatedText) => {
+  addItem = (value, updatedText, forceSave = false) => {
     const { values, currentItem } = this.state
     const updatedObject = { value: updatedText || value, isDifferent: true }
     isNumber(currentItem) ? (values[currentItem] = updatedObject) : values.push(updatedObject)
-    this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true })
+    this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true }, () => forceSave && this.onSave())
   }
 
   onSave = () => this.props.onSave(this.state.values.map(item => item.value))
 
-  render() {
-    const { readOnly, container, placement, classIfDifferent } = this.props
-    const { hasChanges, values, showAddRow } = this.state
+  onChange = suggestion => this.addItem(suggestion, null, true)
 
+  render() {
+    const { readOnly, container, placement, classIfDifferent, field } = this.props
+    const { hasChanges, values, showAddRow } = this.state
     if (!values.length && readOnly) return null
 
     return (
@@ -88,10 +108,13 @@ class CopyrightsRenderer extends Component {
           />
         }
       >
-        <div className="copyrightContainer">
-          {!readOnly && <i className="fas fa-pencil-alt editable-marker" />}
-          <span className={classIfDifferent}>{values && values[0] ? values[0].value : null}</span>
-        </div>
+        <EnhancedCopyrights
+          field={field}
+          readOnly={readOnly}
+          classIfDifferent={classIfDifferent}
+          values={values}
+          onChange={this.onChange}
+        />
       </OverlayTrigger>
     )
   }

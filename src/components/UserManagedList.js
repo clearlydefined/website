@@ -7,8 +7,10 @@ import { saveAs } from 'file-saver'
 import base64js from 'base64-js'
 import pako from 'pako'
 import { ROUTE_SHARE } from '../utils/routingConstants'
+import { getNotices } from '../api/clearlyDefined'
 import { saveGist } from '../api/github'
-import { uiBrowseUpdateList, uiRevertDefinition, uiInfo, uiWarning } from '../actions/ui'
+import { Button } from 'react-bootstrap'
+import { uiBrowseUpdateList, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction } from '../actions/definitionActions'
@@ -38,7 +40,7 @@ export default class UserManagedList extends SystemManagedList {
     this.applySelectedVersions = this.applySelectedVersions.bind(this)
     this.doSave = this.doSave.bind(this)
     this.doSaveAsUrl = this.doSaveAsUrl.bind(this)
-    this.createGist = this.createGist.bind(this)
+    this.createGist = this.saveGist.bind(this)
     this.saveSpec = this.saveSpec.bind(this)
   }
 
@@ -167,28 +169,24 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   buildSaveSpec(list) {
-    return list.reduce((result, component) => {
-      result.push(EntitySpec.fromCoordinates(component))
-      return result
-    }, [])
+    return list.map(component => EntitySpec.fromCoordinates(component))
   }
 
-  doSave() {
+  async doSave() {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
-    this.saveSpec(spec)
-    this.setState({ showSavePopup: false, fileName: null })
+    this.setState({ showSavePopup: false })
+    await this.saveSpec(spec)
   }
 
   async saveSpec(spec) {
     const { dispatch } = this.props
+    const { options } = this.state
     try {
+      if (this.state.saveType === 'notice') return this.saveNotices(spec, options)
       const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-      if (this.state.saveType === 'gist') await this.createGist(this.state.fileName, fileObject)
-      else {
-        const file = new File([JSON.stringify(fileObject, null, 2)], `${this.state.fileName}.json`)
-        saveAs(file)
-      }
+      if (this.state.saveType === 'gist') await this.saveGist(options.filename, fileObject)
+      else saveAs(new File([JSON.stringify(fileObject, null, 2)], `${options.filename}.json`))
     } catch (error) {
       if (error.status === 404)
         return uiWarning(dispatch, "Could not create Gist. Likely you've not given us permission")
@@ -196,7 +194,32 @@ export default class UserManagedList extends SystemManagedList {
     }
   }
 
-  async createGist(name, content) {
+  async saveNotices(coordinates, options) {
+    const { token, dispatch } = this.props
+    uiInfo(dispatch, `Creating notice file for ${coordinates.length} coordinates...`)
+    const list = coordinates.map(entry => entry.toString())
+    const notices = await getNotices(token, list, options.renderer, options.options)
+    const { summary, content } = notices
+    const message = `Created Notices file with ${summary.total} entries`
+    if (summary.warnings.noLicense.length) uiWarning(dispatch, this._renderNoticeProblem(message, summary))
+    else uiInfo(dispatch, message)
+    return saveAs(new File([content], `${options.filename}`))
+  }
+
+  _renderNoticeProblem(baseMessage, summary) {
+    return (
+      <div>
+        {`${baseMessage}, and ${summary.warnings.noLicense.length} missing licenses`}
+        <div>
+          <Button bsStyle="warning" onClick={() => this.onFilter({ 'licensed.declared': 'absence' }, true)}>
+            Filter
+          </Button>
+          <span>&nbsp;to show just the problem definitions</span>
+        </div>
+      </div>
+    )
+  }
+  async saveGist(name, content) {
     const { token, dispatch } = this.props
     const url = await saveGist(token, `${name}.json`, JSON.stringify(content))
     const message = (

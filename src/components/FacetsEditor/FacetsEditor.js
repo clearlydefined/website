@@ -34,6 +34,7 @@ class FacetsEditor extends Component {
             </Col>
             <Col md={9}>
               <GlobsPicker
+                field={`described.facets.${item}`}
                 readOnly={readOnly}
                 className={Contribution.classIfDifferent(
                   component,

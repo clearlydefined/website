@@ -14,6 +14,7 @@ import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
+import LicensePicker from './LicensePicker'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -240,12 +241,13 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <InlineEditor
+                  field={'licensed.declared'}
                   extraClass={this.classIfDifferent('licensed.declared')}
                   readOnly={readOnly}
-                  type="license"
                   initialValue={this.getOriginalValue('licensed.declared')}
                   value={this.getValue('licensed.declared')}
                   onChange={this.fieldChange('licensed.declared')}
+                  editor={LicensePicker}
                   validator={value => true}
                   placeholder={'SPDX license'}
                   onRevert={() => onRevert('licensed.declared')}
