@@ -55,11 +55,11 @@ class ScoreRenderer extends Component {
     return (
       <div className="ScoreRenderer__domain">
         <div className="ScoreRenderer__domain__section">
-          <h2>{`Effective: ${effective.total || effective}`}</h2>
+          <h2>{`Effective: ${isNaN(effective) ? effective.total : effective}`}</h2>
           {this.renderScore(effective)}
         </div>
         <div className="ScoreRenderer__domain__section">
-          <h2>{`Tools: ${tools.total || tools}`}</h2>
+          <h2>{`Tools: ${isNaN(tools) ? tools.total : tools}`}</h2>
           {this.renderScore(tools)}
         </div>
       </div>
