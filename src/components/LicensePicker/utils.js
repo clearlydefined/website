@@ -10,7 +10,7 @@ const NOASSERTION = 'NOASSERTION'
 // Shared methods appliable to License Picker
 export default class LicensePickerUtils {
   static parseLicense(license) {
-    return license ? parse(license) : {}
+    return license && !['NONE', 'NOASSERTION'].includes(license) ? parse(license) : { license }
   }
 
   // Returns a license string based on the rules in input, following the specification of https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
@@ -86,16 +86,16 @@ export default class LicensePickerUtils {
           ? this.createRuleObject(conjunction, expression.left.left, expression.left.right)
           : expression.left
         : expression.right && expression.right.conjunction
-          ? expression.left
-          : expression.conjunction !== conjunction
-            ? expression
-            : expression.left
+        ? expression.left
+        : expression.conjunction !== conjunction
+        ? expression
+        : expression.left
     const right =
       path[0] === 'left'
         ? expression.right
         : get(expression, 'right.conjunction')
-          ? this.createRuleObject(conjunction, expression.right.left, expression.right.right)
-          : expression.conjunction === conjunction && this.createRuleObject(conjunction, expression.right)
+        ? this.createRuleObject(conjunction, expression.right.left, expression.right.right)
+        : expression.conjunction === conjunction && this.createRuleObject(conjunction, expression.right)
 
     return this.createRuleObject(ruleConjunction, left, right)
   }

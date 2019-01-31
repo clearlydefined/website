@@ -11,4 +11,8 @@ describe('LicensePickerUtils', () => {
     const licenseString = LicensePickerUtils.parseLicense('Apache-2.0 OR MIT')
     expect(licenseString).toEqual(testRules)
   })
+  it('parse a definition with no license', () => {
+    const licenseString = LicensePickerUtils.parseLicense('NOASSERTION')
+    expect(licenseString).toEqual({ license: 'NOASSERTION' })
+  })
 })
