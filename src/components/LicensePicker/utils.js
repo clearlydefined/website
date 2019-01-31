@@ -86,16 +86,16 @@ export default class LicensePickerUtils {
           ? this.createRuleObject(conjunction, expression.left.left, expression.left.right)
           : expression.left
         : expression.right && expression.right.conjunction
-          ? expression.left
-          : expression.conjunction !== conjunction
-            ? expression
-            : expression.left
+        ? expression.left
+        : expression.conjunction !== conjunction
+        ? expression
+        : expression.left
     const right =
       path[0] === 'left'
         ? expression.right
         : get(expression, 'right.conjunction')
-          ? this.createRuleObject(conjunction, expression.right.left, expression.right.right)
-          : expression.conjunction === conjunction && this.createRuleObject(conjunction, expression.right)
+        ? this.createRuleObject(conjunction, expression.right.left, expression.right.right)
+        : expression.conjunction === conjunction && this.createRuleObject(conjunction, expression.right)
 
     return this.createRuleObject(ruleConjunction, left, right)
   }
