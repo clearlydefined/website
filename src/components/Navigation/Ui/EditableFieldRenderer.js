@@ -100,6 +100,8 @@ class EditableFieldRenderer extends Component {
             onChange(field, value, null, type === 'coordinates' ? Contribution.toSourceLocation : a => a)
           }
           validator
+          revertable
+          onRevert={() => handleRevert(field)}
           editor={editor}
           placeholder={placeholder}
         />
