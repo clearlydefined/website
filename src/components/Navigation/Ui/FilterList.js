@@ -25,10 +25,9 @@ class FilterList extends Component {
               eventKey={{ type: id, value: filterType.value }}
             >
               <span>{filterType.label}</span>
-              {value &&
-                find(value, (filter, filterId) => filterId === id && filter === filterType.value) && (
-                  <i className="fas fa-check" />
-                )}
+              {value && find(value, (filter, filterId) => filterId === id && filter === filterType.value) && (
+                <i className="fas fa-check" />
+              )}
             </MenuItem>
           )
         })}

@@ -84,9 +84,8 @@ export default class FileList extends Component {
           <div style={{ paddingLeft: `${10 * (row.level - 1)}px` }}>{this.getNameCellEntry(component.item, row)}</div>
         ),
         filterMethod: (filter, rows) =>
-          rows.filter(
-            item =>
-              item._original ? item._original.path.toLowerCase().includes(filter.value.filterValue.toLowerCase()) : true
+          rows.filter(item =>
+            item._original ? item._original.path.toLowerCase().includes(filter.value.filterValue.toLowerCase()) : true
           ),
         filterAll: true
       },
