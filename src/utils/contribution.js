@@ -228,7 +228,7 @@ export default class Contribution {
     let discoveredUnknown = 0
     let parties = []
     let expressions = []
-    let declared = null
+    let declared = get(definition, `licensed.declared`)
 
     facets.forEach(name => {
       const facet = get(definition, `licensed.facets.${name}`)
