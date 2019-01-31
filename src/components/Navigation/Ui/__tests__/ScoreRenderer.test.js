@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import get from 'lodash/get'
+import isNumber from 'lodash/isNumber'
 import ScoreRenderer from '../ScoreRenderer'
 
 const definition = {
