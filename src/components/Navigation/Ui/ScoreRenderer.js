@@ -5,10 +5,19 @@ import isNumber from 'lodash/isNumber'
 import Tooltip from 'antd/lib/tooltip'
 import { getBadgeUrl } from '../../../api/clearlyDefined'
 
+const maxScores = {
+  date: 30,
+  source: 70,
+  consistency: 15,
+  declared: 30,
+  discovered: 25,
+  spdx: 15,
+  texts: 15
+}
+
 /**
  * Renders a badge image, with a tooltip containing all the details about the score
  */
-
 class ScoreRenderer extends Component {
   static propTypes = {
     score: PropTypes.object,
@@ -18,15 +27,28 @@ class ScoreRenderer extends Component {
 
   renderScore = score => (
     <Fragment>
-      {Object.keys(score).includes('date') && <p>Date: {score.date}</p>}
-      {Object.keys(score).includes('source') && <p>Source: {score.source}</p>}
-      {Object.keys(score).includes('consistency') && <p>Consistency: {score.consistency}</p>}
-      {Object.keys(score).includes('declared') && <p>Declared: {score.declared}</p>}
-      {Object.keys(score).includes('discovered') && <p>Discovered: {score.discovered}</p>}
-      {Object.keys(score).includes('spdx') && <p>SPDX: {score.spdx}</p>}
-      {Object.keys(score).includes('texts') && <p>License Texts: {score.texts}</p>}
+      {this.renderScoreEntry(score, 'date', 'Date')}
+      {this.renderScoreEntry(score, 'source', 'Source')}
+      {this.renderScoreEntry(score, 'consistency', 'Consistency')}
+      {this.renderScoreEntry(score, 'declared', 'Declared')}
+      {this.renderScoreEntry(score, 'discovered', 'Discovered')}
+      {this.renderScoreEntry(score, 'spdx', 'SPDX')}
+      {this.renderScoreEntry(score, 'textes', 'License texts')}
     </Fragment>
   )
+
+  renderScoreEntry(score, name, label) {
+    if (!Object.keys(score).includes(name)) return
+    const value = score[name] / maxScores[name]
+    const colors = ['red', 'yellow', 'inherit']
+    const bucket = Math.floor(value * colors.length)
+    const color = colors[Math.min(colors.length - 1, bucket)]
+    return (
+      <p style={{ color, fontWeight: color === 'inherit' ? 'inherit' : 800 }}>
+        {label}: {score[name]}
+      </p>
+    )
+  }
 
   renderTooltipContent = () => {
     const { domain, definition, scores } = this.props
