@@ -10,7 +10,7 @@ const NOASSERTION = 'NOASSERTION'
 // Shared methods appliable to License Picker
 export default class LicensePickerUtils {
   static parseLicense(license) {
-    return license ? parse(license) : {}
+    return license && !['NONE', 'NOASSERTION'].includes(license) ? parse(license) : { license }
   }
 
   // Returns a license string based on the rules in input, following the specification of https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60

@@ -109,6 +109,7 @@ export default class Contribution {
    * @param  {String} field field to check
    */
   static getValue(component, preview, field) {
+    console.log(component, this.getOriginalValue(component, field))
     return preview && this.getUpdatedValue(preview, field)
       ? this.getUpdatedValue(preview, field)
       : this.getOriginalValue(component, field) || ''
@@ -228,7 +229,7 @@ export default class Contribution {
     let discoveredUnknown = 0
     let parties = []
     let expressions = []
-    let declared = null
+    let declared = get(definition, `licensed.declared`)
 
     facets.forEach(name => {
       const facet = get(definition, `licensed.facets.${name}`)
