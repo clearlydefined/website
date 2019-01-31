@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
+import isNumber from 'lodash/isNumber'
 import Tooltip from 'antd/lib/tooltip'
 import { getBadgeUrl } from '../../../api/clearlyDefined'
 
@@ -55,11 +56,11 @@ class ScoreRenderer extends Component {
     return (
       <div className="ScoreRenderer__domain">
         <div className="ScoreRenderer__domain__section">
-          <h2>{`Effective: ${effective.total || effective}`}</h2>
+          <h2>{`Effective: ${effective.total && isNumber(effective.total) ? effective.total : effective}`}</h2>
           {this.renderScore(effective)}
         </div>
         <div className="ScoreRenderer__domain__section">
-          <h2>{`Tools: ${tools.total || tools}`}</h2>
+          <h2>{`Tools: ${tools.total && isNumber(tools.total) ? tools.total : tools}`}</h2>
           {this.renderScore(tools)}
         </div>
       </div>
