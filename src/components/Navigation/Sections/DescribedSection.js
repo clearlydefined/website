@@ -31,8 +31,8 @@ class DescribedSection extends Component {
       applyCurationSuggestion
     } = this.props
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
-    const toolList = get(definition.described, 'tools', []).map(
-      tool => (tool.startsWith('curation') ? tool.slice(0, 16) : tool)
+    const toolList = get(definition.described, 'tools', []).map(tool =>
+      tool.startsWith('curation') ? tool.slice(0, 16) : tool
     )
 
     const elements = [

@@ -250,6 +250,7 @@ export default class DefinitionEntry extends React.Component {
                   editor={LicensePicker}
                   validator={value => true}
                   placeholder={'SPDX license'}
+                  revertable
                   onRevert={() => onRevert('licensed.declared')}
                 />
               )}
@@ -270,6 +271,7 @@ export default class DefinitionEntry extends React.Component {
                   editor={SourcePicker}
                   validator={value => true}
                   placeholder={'Source location'}
+                  revertable
                   onRevert={() => onRevert('described.sourceLocation')}
                 />,
                 'right',
@@ -292,6 +294,7 @@ export default class DefinitionEntry extends React.Component {
                   onChange={this.fieldChange('described.releaseDate')}
                   validator={value => true}
                   placeholder={'YYYY-MM-DD'}
+                  revertable
                   onRevert={() => onRevert('described.releaseDate')}
                 />
               )}

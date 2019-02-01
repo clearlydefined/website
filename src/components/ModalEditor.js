@@ -70,13 +70,12 @@ export default class ModalEditor extends React.Component {
             onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
           />
         )}
-        {!readOnly &&
-          revertable && (
-            <i
-              className={`fas fa-undo editable-marker ${!changed && 'fa-disabled'}`}
-              onClick={() => onRevert && changed && onRevert()}
-            />
-          )}
+        {!readOnly && revertable && (
+          <i
+            className={`fas fa-undo editable-marker ${!changed && 'fa-disabled'}`}
+            onClick={() => onRevert && changed && onRevert()}
+          />
+        )}
         {this.renderValue()}
       </span>
     )

@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import { ControlLabel, Modal, FormGroup, InputGroup, FormControl, Button } from 'react-bootstrap'
+import { ControlLabel, Modal, FormGroup, FormControl, Button } from 'react-bootstrap'
 import DropFileOrText from './DropFileOrText'
 
 const titles = {
@@ -49,6 +49,7 @@ export default class SavePopUp extends Component {
       case 'notice':
         filename = this.ensureExtension(filename, extensions[renderer])
         break
+      default:
     }
     this.props.onOK({ filename, renderer, options: { template: this.state.template } })
   }

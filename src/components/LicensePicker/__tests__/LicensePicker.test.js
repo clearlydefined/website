@@ -8,6 +8,11 @@ describe('LicensePicker', () => {
   it('renders without crashing', () => {
     shallow(<LicensePicker />)
   })
+  it('given a definition with no license, shows the license picker', () => {
+    const nolicense = 'NOASSERTION'
+    const wrapper = shallow(<LicensePicker value={nolicense} />)
+    expect(wrapper.state('rules')).toEqual({ license: nolicense })
+  })
   it('given an existing License, change the rule conjunction OR to left path', () => {
     const wrapper = shallow(<LicensePicker value={license} />)
     const instance = wrapper.instance()

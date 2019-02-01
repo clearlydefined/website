@@ -1,13 +1,23 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
+import isNumber from 'lodash/isNumber'
 import Tooltip from 'antd/lib/tooltip'
 import { getBadgeUrl } from '../../../api/clearlyDefined'
+
+const maxScores = {
+  date: 30,
+  source: 70,
+  consistency: 15,
+  declared: 30,
+  discovered: 25,
+  spdx: 15,
+  texts: 15
+}
 
 /**
  * Renders a badge image, with a tooltip containing all the details about the score
  */
-
 class ScoreRenderer extends Component {
   static propTypes = {
     score: PropTypes.object,
@@ -17,19 +27,31 @@ class ScoreRenderer extends Component {
 
   renderScore = score => (
     <Fragment>
-      <p>Total: {score.total}</p>
-      {Object.keys(score).includes('date') && <p>Date: {score.date}</p>}
-      {Object.keys(score).includes('source') && <p>Source: {score.source}</p>}
-      {Object.keys(score).includes('consistency') && <p>Consistency: {score.consistency}</p>}
-      {Object.keys(score).includes('declared') && <p>Declared: {score.declared}</p>}
-      {Object.keys(score).includes('discovered') && <p>Discovered: {score.discovered}</p>}
-      {Object.keys(score).includes('spdx') && <p>Spdx: {score.spdx}</p>}
-      {Object.keys(score).includes('texts') && <p>Texts: {score.texts}</p>}
+      {this.renderScoreEntry(score, 'date', 'Date')}
+      {this.renderScoreEntry(score, 'source', 'Source')}
+      {this.renderScoreEntry(score, 'consistency', 'Consistency')}
+      {this.renderScoreEntry(score, 'declared', 'Declared')}
+      {this.renderScoreEntry(score, 'discovered', 'Discovered')}
+      {this.renderScoreEntry(score, 'spdx', 'SPDX')}
+      {this.renderScoreEntry(score, 'textes', 'License texts')}
     </Fragment>
   )
 
+  renderScoreEntry(score, name, label) {
+    if (!Object.keys(score).includes(name)) return
+    const value = score[name] / maxScores[name]
+    const colors = ['red', 'yellow', 'inherit']
+    const bucket = Math.floor(value * colors.length)
+    const color = colors[Math.min(colors.length - 1, bucket)]
+    return (
+      <p style={{ color, fontWeight: color === 'inherit' ? 'inherit' : 800 }}>
+        {label}: {score[name]}
+      </p>
+    )
+  }
+
   renderTooltipContent = () => {
-    const { domain, definition } = this.props
+    const { domain, definition, scores } = this.props
     if (!domain) {
       const describedScore = get(definition, 'described.score')
       const describedToolScore = get(definition, 'described.toolScore')
@@ -37,47 +59,34 @@ class ScoreRenderer extends Component {
       const licensedToolScore = get(definition, 'licensed.toolScore')
       return (
         <div className="ScoreRenderer">
+          <h2>Overall</h2>
+          {this.renderScores(scores.effective, scores.tool)}
+
           <h2>Described</h2>
-          <div className="ScoreRenderer__domain">
-            <div className="ScoreRenderer__domain__section">
-              <h2>Score</h2>
-              {this.renderScore(describedScore)}
-            </div>
-            <div className="ScoreRenderer__domain__section">
-              <h2>Toolscore:</h2>
-              {this.renderScore(describedToolScore)}
-            </div>
-          </div>
+          {this.renderScores(describedScore, describedToolScore)}
 
           <h2>Licensed</h2>
-          <div className="ScoreRenderer__domain">
-            <div className="ScoreRenderer__domain__section">
-              <h2>Score</h2>
-              {this.renderScore(licensedScore)}
-            </div>
-            <div className="ScoreRenderer__domain__section">
-              <h2>Toolscore</h2>
-              {this.renderScore(licensedToolScore)}
-            </div>
-          </div>
+          {this.renderScores(licensedScore, licensedToolScore)}
         </div>
       )
     } else {
-      return (
-        <div className="ScoreRenderer">
-          <div className="ScoreRenderer__domain">
-            <div className="ScoreRenderer__domain__section">
-              <h2>Score</h2>
-              {this.renderScore(get(domain, 'score'))}
-            </div>
-            <div className="ScoreRenderer__domain__section">
-              <h2>Toolscore:</h2>
-              {this.renderScore(get(domain, 'toolScore'))}
-            </div>
-          </div>
-        </div>
-      )
+      return <div className="ScoreRenderer">{this.renderScores(get(domain, 'score'), get(domain, 'toolScore'))}</div>
     }
+  }
+
+  renderScores(effective, tools) {
+    return (
+      <div className="ScoreRenderer__domain">
+        <div className="ScoreRenderer__domain__section">
+          <h2>{`Effective: ${isNumber(effective.total) ? effective.total : effective}`}</h2>
+          {this.renderScore(effective)}
+        </div>
+        <div className="ScoreRenderer__domain__section">
+          <h2>{`Tools: ${isNumber(tools.total) ? tools.total : tools}`}</h2>
+          {this.renderScore(tools)}
+        </div>
+      </div>
+    )
   }
 
   render() {
@@ -89,8 +98,8 @@ class ScoreRenderer extends Component {
           className="list-buttons"
           src={
             domain
-              ? getBadgeUrl(get(domain, 'toolScore.total'), get(domain, 'score.total'))
-              : getBadgeUrl(scores.tool, scores.effective)
+              ? getBadgeUrl(get(domain, 'score.total'), get(domain, 'toolScore.total'))
+              : getBadgeUrl(scores.effective, scores.tool)
           }
           alt="score"
         />
