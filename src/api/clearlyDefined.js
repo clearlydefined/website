@@ -126,8 +126,11 @@ export function previewDefinition(token, entity, curation) {
   return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true }), token, curation)
 }
 
-export function getNotices(token, coordinates, renderer, options) {
-  return post(url(`${NOTICES}`), token, { coordinates, renderer, options })
+export async function getNotices(token, coordinates, renderer, options) {
+  const result = await post(url(`${NOTICES}`), token, { coordinates, renderer, options })
+  if (typeof result.content === 'string') return result
+  result.content = JSON.stringify(result.content)
+  return result
 }
 
 export function getBadgeUrl(score1, score2) {
