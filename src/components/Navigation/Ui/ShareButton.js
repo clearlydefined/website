@@ -4,7 +4,8 @@ import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 export default class ShareButton extends Component {
   static propTypes = {
-    components: PropTypes.object
+    components: PropTypes.object,
+    onSelect: PropTypes.func
   }
 
   render() {
