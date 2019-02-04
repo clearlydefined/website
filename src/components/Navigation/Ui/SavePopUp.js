@@ -40,7 +40,8 @@ export default class SavePopUp extends Component {
   }
 
   doOK = () => {
-    let { filename, renderer } = this.state
+    let { filename, renderer, template } = this.state
+    let options = {}
     switch (this.props.type) {
       case 'file':
       case 'gist':
@@ -48,10 +49,11 @@ export default class SavePopUp extends Component {
         break
       case 'notice':
         filename = this.ensureExtension(filename, extensions[renderer])
+        if (renderer === 'template') options.template = template
         break
       default:
     }
-    this.props.onOK({ filename, renderer, options: { template: this.state.template } })
+    this.props.onOK({ filename, renderer, options })
   }
 
   ensureExtension(name, extension) {
