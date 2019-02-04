@@ -151,7 +151,7 @@ export default class ContributePrompt extends Component {
                 </Button>
                 <Button
                   bsStyle="success"
-                  className="contribute-button"
+                  data-test-id="contribute-button"
                   disabled={!this.canSubmit()}
                   type="button"
                   onClick={this.okHandler}

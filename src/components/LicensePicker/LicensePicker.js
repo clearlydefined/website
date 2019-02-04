@@ -98,10 +98,15 @@ export default class LicensePicker extends Component {
             </span>
           </Col>
           <Col md={2} className="spdx-picker-header-buttons">
-            <Button bsStyle="success" disabled={false} onClick={() => onChange(licenseExpression)}>
+            <Button
+              bsStyle="success"
+              data-test-id="license-picker-ok-button"
+              disabled={false}
+              onClick={() => onChange(licenseExpression)}
+            >
               OK
             </Button>
-            <Button bsStyle="danger" disabled={false} onClick={onClose}>
+            <Button bsStyle="danger" data-test-id="license-picker-cancel-button" disabled={false} onClick={onClose}>
               Cancel
             </Button>
           </Col>

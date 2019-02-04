@@ -114,6 +114,7 @@ describe('Definitions page', () => {
     await expect(page).toMatchElement(definitionsMap.fullDetailView.buttonSuccess, { timeout: 5000 })
     await expect(page).toClick(definitionsMap.fullDetailView.buttonSuccess)
   }, 20000)
+
   test('should open the contribution modal', async () => {
     await expect(page).toMatchElement(definitionsMap.contributeButton)
     await expect(page).toClick(definitionsMap.contributeButton)

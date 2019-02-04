@@ -59,7 +59,7 @@ export const definitionsMap = {
     identifier: '.spdx-picker',
     inputField: '.spdx-input-picker > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
     listSelection: '#rbt-menu-item-1',
-    buttonSuccess: '.spdx-picker-header-buttons.col-md-2 > button.btn.btn-success'
+    buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },
   sourcePicker: {
     identifier: '#source-picker',
@@ -70,7 +70,7 @@ export const definitionsMap = {
   fullDetailView: {
     identifier: '.fullDetaiView__modal',
     get buttonSuccess() {
-      return `${this.identifier} .ok-button.btn.btn-primary`
+      return `${this.identifier} [data-test-id="header-section-ok-button"]`
     }
   },
   contributeModal: {
@@ -88,7 +88,7 @@ export const definitionsMap = {
       return `${this.identifier} select[name="type"]`
     },
     get contributeButton() {
-      return `${this.identifier} .contribute-button`
+      return `${this.identifier} [data-test-id="contribute-button"]`
     }
   }
 }
