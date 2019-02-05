@@ -53,7 +53,7 @@ export default class ButtonsBar extends Component {
           Collapse All
         </Button>
         &nbsp;
-        <Button bsStyle="danger" disabled={hasChanges} onClick={onRemoveAll}>
+        <Button bsStyle="danger" disabled={!components || components.list.length === 0} onClick={onRemoveAll}>
           Clear All
         </Button>
         &nbsp;

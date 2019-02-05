@@ -27,7 +27,7 @@ function asObject(item) {
   }
 }
 
-const customLicenseIds = ['NONE', 'NOASSERTION']
+const customLicenseIds = ['NONE']
 
 const sorts = [
   { value: 'license', label: 'License' },
