@@ -71,7 +71,7 @@ class PageBrowse extends SystemManagedList {
     const target = event.target
     const activeProvider = target.name
     this.setState({ ...this.state, activeProvider })
-    this.props.dispatch(uiBrowseGet(this.props.token, activeProvider))
+    this.props.dispatch(uiBrowseGet(this.props.token, { type: activeProvider }))
   }
 
   render() {
