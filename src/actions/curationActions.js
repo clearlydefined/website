@@ -58,7 +58,7 @@ export function curateAction(token, spec) {
       result => {
         const prMessage = (
           <div>
-            <span className="contribution-success">Successfully contributed</span>{' '}
+            <span data-test-id="contribution-success">Successfully contributed</span>{' '}
             <a href={result.url} target="_blank" rel="noopener noreferrer">
               PR#
               {result.prNumber}

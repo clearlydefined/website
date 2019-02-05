@@ -79,7 +79,7 @@ export default class ContributePrompt extends Component {
                     {session.isAnonymous ? 'anonymous' : `@${session.username}`}
                   </FormControl.Static>{' '}
                   {session.isAnonymous && (
-                    <Button bsStyle="success" className="login-button" onClick={onLogin}>
+                    <Button bsStyle="success" data-test-id="login-button" onClick={onLogin}>
                       Login
                     </Button>
                   )}
@@ -146,7 +146,7 @@ export default class ContributePrompt extends Component {
                 Remove contributed definitions from the list
               </Checkbox>
               <FormGroup className="pull-right">
-                <Button className="cancel-button" onClick={this.close}>
+                <Button data-test-id="cancel-button" onClick={this.close}>
                   Cancel
                 </Button>
                 <Button

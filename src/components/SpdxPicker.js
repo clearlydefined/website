@@ -38,9 +38,8 @@ export default class SpdxPicker extends Component {
     const { value, onBlur, onChange } = this.props
     console.log(value)
     return (
-      <div className="editable-editor">
+      <div className="editable-editor" data-test-id="spdx-input-picker">
         <Typeahead
-          className="spdx-input-picker"
           selected={[value] || []}
           options={identifiers}
           onBlur={onBlur}

@@ -126,6 +126,6 @@ describe('Definitions page', () => {
     await page.select(definitionsMap.contributeModal.typeField, 'missing')
     await expect(page).toMatchElement(definitionsMap.contributeModal.contributeButton)
     await expect(page).toClick(definitionsMap.contributeModal.contributeButton)
-    await expect(page).toMatchElement(definitionsMap.contributeSuccess, { timeout: 10000 })
-  }, 20000)
+    await expect(page).toMatchElement(definitionsMap.contributeSuccess, { timeout: 30000 })
+  }, 30000)
 })

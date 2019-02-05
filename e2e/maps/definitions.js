@@ -8,10 +8,10 @@ export const definitionsMap = {
     list: '.components-list',
     firstElement: 'div:nth-child(0n+1) .component-row'
   },
-  contributeButton: '.contribute-button',
-  contributeSuccess: '.contribution-success',
+  contributeButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="contribute-button"]',
+  contributeSuccess: '[data-test-id="contribution-success"]',
   component: {
-    name: '.component-name',
+    name: '[data-test-id="component-name"]',
     image: '.list-image',
     buttons: '.list-activity-area',
     sourceButton: '.list-fa-button > i.fa-code',
@@ -57,7 +57,8 @@ export const definitionsMap = {
   },
   licensePicker: {
     identifier: '.spdx-picker',
-    inputField: '.spdx-input-picker > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
+    inputField:
+      '[data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
     listSelection: '#rbt-menu-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },

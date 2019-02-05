@@ -71,7 +71,7 @@ export default class DefinitionEntry extends React.Component {
     const namespaceText = namespace ? namespace + '/' : ''
     const componentTag = componentUrl ? (
       <span>
-        <a href={componentUrl} target="_blank" rel="noopener noreferrer" className="component-name">
+        <a href={componentUrl} target="_blank" rel="noopener noreferrer" data-test-id="component-name">
           {namespaceText}
           {name}
         </a>
