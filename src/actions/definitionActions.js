@@ -96,14 +96,15 @@ export function getDefinitionSuggestedDataAction(token, prefix, name) {
   }
 }
 
-export function browseDefinitionsAction(token, entity, name) {
+export function browseDefinitionsAction(token, query, name) {
   return async dispatch => {
     const actions = asyncActions(name)
     dispatch(actions.start())
     try {
-      const result = await browseDefinitions(token, entity)
-      dispatch(actions.success({ add: result }))
-      const toAdd = map(result, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
+      const result = await browseDefinitions(token, query)
+      const definitions = result.data
+      dispatch(actions.success({ add: definitions }))
+      const toAdd = map(definitions, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
       dispatch(uiBrowseUpdateList({ updateAll: toAdd }))
       const chunks = chunk(map(toAdd, component => EntitySpec.fromCoordinates(component).toPath(), 100))
       try {

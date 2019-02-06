@@ -146,8 +146,8 @@ export function uiRevertDefinition(definition, values) {
   return revertDefinitionAction(definition, values, UI_DEFINITION_REVERT)
 }
 
-export function uiBrowseGet(token, entity) {
-  return browseDefinitionsAction(token, entity, UI_BROWSE_GET)
+export function uiBrowseGet(token, query) {
+  return browseDefinitionsAction(token, query, UI_BROWSE_GET)
 }
 
 export function uiBrowseUpdateFilter(value) {
