@@ -29,7 +29,6 @@ class TwoColumnsSection extends Component {
 
   render() {
     const { definition, elements } = this.props
-
     return (
       <Row>
         {elements.map((element, index) => (

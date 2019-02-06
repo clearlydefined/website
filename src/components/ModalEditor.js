@@ -5,8 +5,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
-
-export default class ModalEditor extends React.Component {
+import withSuggestions from '../utils/withSuggestions'
+class ModalEditor extends React.Component {
   static propTypes = {
     readOnly: PropTypes.bool,
     initialValue: PropTypes.string,
@@ -30,14 +30,14 @@ export default class ModalEditor extends React.Component {
     const changed = initialValue !== value
 
     return (
-      <span>
-        <span
+      <span className="list-singleLine">
+        <div
           title={value}
           className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
           onClick={() => (readOnly ? null : this.setState({ editing: true }, () => onClick && onClick()))}
         >
           {value || placeholder}
-        </span>
+        </div>
         <Modal show={editing} onHide={() => this.setState({ editing: false })}>
           {React.createElement(editor, {
             onChange: spec => {
@@ -74,3 +74,5 @@ export default class ModalEditor extends React.Component {
     )
   }
 }
+
+export default withSuggestions(ModalEditor)

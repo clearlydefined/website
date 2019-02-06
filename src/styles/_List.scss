@@ -103,7 +103,9 @@
 }
 
 .list-singleLine {
-  display: inline-block;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   margin-bottom: 0;
   max-width: 100%;
   overflow: hidden;
