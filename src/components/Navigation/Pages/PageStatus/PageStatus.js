@@ -39,6 +39,7 @@ export default class PageStatus extends Component {
     const requestsPerDay = Object.keys(requestsPerDayData).map(date => {
       return { date: new Date(date).toLocaleDateString(), count: requestsPerDayData[date] }
     })
+
     const definitionAvailabilityData = await getStatus('definitionavailability')
     const definitionAvailability = Object.keys(definitionAvailabilityData).map(name => {
       return { name, value: definitionAvailabilityData[name] }
