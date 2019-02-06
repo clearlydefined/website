@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, Row, Col } from 'react-bootstrap'
+import { Grid, Row, Col, Table } from 'react-bootstrap'
 import {
   Bar,
   BarChart,
@@ -21,13 +21,6 @@ import {
 import { primaryColor, secondaryColor, describedColor, secureColor } from '../../../Clearly'
 
 const colors = [primaryColor.color, secondaryColor.color, describedColor.color, secureColor.color]
-
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 }
-]
 
 export default class PageStatus extends Component {
   constructor(props) {
@@ -655,6 +648,208 @@ export default class PageStatus extends Component {
         date: '2019-02-06T00:00:00Z'
       }
     ]
+    const rC = [
+      {
+        coordinates: 'npm/npmjs/-/jest-junit/6.2.1',
+        timestamp: '2019-02-06T01:40:00.564Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@types/puppeteer/1.12.1',
+        timestamp: '2019-02-06T01:39:55.888Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/jest-circus/24.1.0',
+        timestamp: '2019-02-06T01:39:30.121Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/msteams-ui-components-react/0.8.1',
+        timestamp: '2019-02-06T01:33:15.751Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/msteams-ui-icons-core/0.4.1',
+        timestamp: '2019-02-06T01:33:14.556Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/msteams-ui-icons-react/0.4.1',
+        timestamp: '2019-02-06T01:33:09.148Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/msteams-ui-styles-core/0.8.1',
+        timestamp: '2019-02-06T01:33:01.735Z'
+      },
+      {
+        coordinates: 'pypi/pypi/-/typed-ast/1.3.1',
+        timestamp: '2019-02-06T01:20:06.027Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/net.hockeyapp.android/HockeySDK/5.1.1',
+        timestamp: '2019-02-06T01:16:10.809Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/io.reactivex.rxjava2/rxjava/2.2.6',
+        timestamp: '2019-02-06T01:09:38.115Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.jakewharton/butterknife-compiler/10.0.0',
+        timestamp: '2019-02-06T01:06:14.693Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.jakewharton/butterknife/10.0.0',
+        timestamp: '2019-02-06T01:05:39.763Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.jakewharton.picasso/picasso2-okhttp3-downloader/1.1.0',
+        timestamp: '2019-02-06T01:04:47.573Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.google.dagger/dagger-compiler/2.21',
+        timestamp: '2019-02-06T01:04:33.284Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.google.dagger/dagger/2.21',
+        timestamp: '2019-02-06T01:03:23.21Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/org.mockito/mockito-core/2.24.0',
+        timestamp: '2019-02-06T00:46:31.055Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@ts-common/property-set/0.0.10',
+        timestamp: '2019-02-06T00:44:08.058Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@ts-common/string-map/0.2.4',
+        timestamp: '2019-02-06T00:44:04.601Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@ts-common/source-map/0.4.1',
+        timestamp: '2019-02-06T00:44:03.427Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.squareup.retrofit2/converter-simplexml/2.5.0',
+        timestamp: '2019-02-06T00:43:01.965Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.squareup.retrofit2/converter-scalars/2.5.0',
+        timestamp: '2019-02-06T00:42:39.184Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.squareup.retrofit2/converter-gson/2.5.0',
+        timestamp: '2019-02-06T00:41:59.243Z'
+      },
+      {
+        coordinates: 'maven/mavencentral/com.squareup.retrofit2/adapter-rxjava2/2.5.0',
+        timestamp: '2019-02-06T00:31:46.698Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/microsoft.applicationinsights.web/2.9.0',
+        timestamp: '2019-02-05T23:47:03.798Z'
+      },
+      {
+        coordinates: 'pypi/pypi/-/boto3/1.9.88',
+        timestamp: '2019-02-05T23:39:34.688Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/vscode-azureappservice/0.29.2',
+        timestamp: '2019-02-05T23:21:56.347Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/yasway/1.5.14',
+        timestamp: '2019-02-05T23:13:38.357Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/office-ui-fabric-react/6.134.0',
+        timestamp: '2019-02-05T23:04:43.305Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/shelving-mock-indexeddb/1.0.5',
+        timestamp: '2019-02-05T22:52:03.646Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/shelving-mock-event/1.0.12',
+        timestamp: '2019-02-05T22:52:01.617Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/service-worker-mock/2.0.0',
+        timestamp: '2019-02-05T22:51:54.324Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/npm-packlist/1.3.0',
+        timestamp: '2019-02-05T22:49:10.285Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/cpprestsdk.v.141/2.10.7',
+        timestamp: '2019-02-05T22:47:23.173Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/tsconfig-paths/3.8.0',
+        timestamp: '2019-02-05T22:34:24.746Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@types/mime/2.0.1',
+        timestamp: '2019-02-05T22:26:01.858Z'
+      },
+      {
+        coordinates: 'npm/npmjs/-/azure-pipelines-language-service/0.5.4',
+        timestamp: '2019-02-05T21:59:37.802Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@emotion/unitless/0.7.3',
+        timestamp: '2019-02-05T21:45:57.161Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@emotion/memoize/0.7.1',
+        timestamp: '2019-02-05T21:45:46.254Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@emotion/is-prop-valid/0.7.3',
+        timestamp: '2019-02-05T21:45:43.105Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@fortawesome/fontawesome-free/5.7.1',
+        timestamp: '2019-02-05T21:41:57.712Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/microsoft.dotnet.web.projecttemplates.2.2/2.2.1',
+        timestamp: '2019-02-05T21:38:15.523Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/microsoft.dotnet.web.spa.projecttemplates/2.2.1',
+        timestamp: '2019-02-05T21:38:08.37Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/nunit3.dotnetnew.template/1.6.0',
+        timestamp: '2019-02-05T21:37:51.105Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/microsoft.dotnet.web.itemtemplates/2.2.1',
+        timestamp: '2019-02-05T21:37:38.246Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/dotnet-watch/2.2.0',
+        timestamp: '2019-02-05T21:37:30.323Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/dotnet-sql-cache/2.2.0',
+        timestamp: '2019-02-05T21:37:28.102Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/dotnet-user-secrets/2.2.0',
+        timestamp: '2019-02-05T21:37:27.606Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/dotnet-ef/2.2.1',
+        timestamp: '2019-02-05T21:37:26.175Z'
+      },
+      {
+        coordinates: 'nuget/nuget/-/dotnet-dev-certs/2.2.0',
+        timestamp: '2019-02-05T21:37:21.159Z'
+      },
+      {
+        coordinates: 'npm/npmjs/@octokit/rest/15.18.1',
+        timestamp: '2019-02-05T21:33:33.36Z'
+      }
+    ]
     this.state = {
       requestsPerDay: Object.keys(temp).map(date => {
         return { date: new Date(date).toLocaleDateString(), count: temp[date] }
@@ -665,6 +860,10 @@ export default class PageStatus extends Component {
       crawledPerDay: cD.map(entry => {
         entry.date = new Date(entry.date).toLocaleDateString()
         return entry
+      }),
+      recentlyCrawled: rC.map(entry => {
+        entry.timestamp = new Date(entry.timestamp).toLocaleString()
+        return entry
       })
     }
   }
@@ -674,91 +873,139 @@ export default class PageStatus extends Component {
       <Grid className="main-container">
         <Row>
           <h2>Requests / day</h2>
-          <ResponsiveContainer height={500}>
-            <LineChart data={this.state.requestsPerDay}>
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="count" stroke={colors[0]} />
-            </LineChart>
-          </ResponsiveContainer>
+          {this.renderRequestsPerDay()}
         </Row>
         <hr />
         <Row>
           <Col md={6}>
             <h2>Definition availability</h2>
-            <table>
-              <tbody>
-                {this.state.definitionAvailability.map((entry, index) => {
-                  return (
-                    <tr>
-                      <td>
-                        <span
-                          style={{
-                            backgroundColor: colors[index % colors.length],
-                            height: '20px',
-                            width: '20px',
-                            marginRight: '10px',
-                            display: 'inline-block'
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <h3>{entry.name}</h3>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+            {this.renderDefinitionAvailabilityTable()}
           </Col>
-          <Col md={6}>
-            <ResponsiveContainer height={500}>
-              <PieChart>
-                <Pie
-                  nameKey="name"
-                  dataKey="value"
-                  data={this.state.definitionAvailability}
-                  labelLine={false}
-                  label
-                  label={this.renderPieLabel}
-                  outerRadius={200}
-                  fill="#8884d8"
-                >
-                  {this.state.definitionAvailability.map((entry, index) => (
-                    <Cell fill={colors[index % colors.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </Col>
+          <Col md={6}>{this.renderDefinitionAvailabilityChart()}</Col>
         </Row>
         <hr />
         <Row>
           <h2>Components processed / day</h2>
-          <ResponsiveContainer height={500}>
-            <BarChart data={this.state.crawledPerDay}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              {Object.keys(
-                this.state.crawledPerDay.reduce((result, entry) => {
-                  Object.keys(entry).forEach(x => {
-                    result[x] = 1
-                  })
-                  return result
-                }, {})
-              )
-                .filter(x => x !== 'date')
-                .map((host, index) => {
-                  return <Bar dataKey={host} fill={colors[index % colors.length]} stackId="a" />
-                })}
-            </BarChart>
-          </ResponsiveContainer>
+          {this.renderComponentsProcessed()}
+        </Row>
+        <hr />
+        <Row>
+          <h2>Recently crawled components</h2>
+          {this.renderRecentlyCrawled()}
         </Row>
       </Grid>
+    )
+  }
+
+  renderRequestsPerDay() {
+    return (
+      <ResponsiveContainer height={500}>
+        <LineChart data={this.state.requestsPerDay}>
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Line type="monotone" dataKey="count" stroke={colors[0]} />
+        </LineChart>
+      </ResponsiveContainer>
+    )
+  }
+
+  renderDefinitionAvailabilityTable() {
+    return (
+      <table>
+        <tbody>
+          {this.state.definitionAvailability.map((entry, index) => {
+            return (
+              <tr>
+                <td>
+                  <span
+                    style={{
+                      backgroundColor: colors[index % colors.length],
+                      height: '20px',
+                      width: '20px',
+                      marginRight: '10px',
+                      display: 'inline-block'
+                    }}
+                  />
+                </td>
+                <td>
+                  <h3>{entry.name}</h3>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    )
+  }
+
+  renderDefinitionAvailabilityChart() {
+    return (
+      <ResponsiveContainer height={500}>
+        <PieChart>
+          <Pie
+            nameKey="name"
+            dataKey="value"
+            data={this.state.definitionAvailability}
+            labelLine={false}
+            label
+            label={this.renderPieLabel}
+            outerRadius={200}
+            fill="#8884d8"
+          >
+            {this.state.definitionAvailability.map((entry, index) => (
+              <Cell fill={colors[index % colors.length]} />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    )
+  }
+
+  renderComponentsProcessed() {
+    return (
+      <ResponsiveContainer height={500}>
+        <BarChart data={this.state.crawledPerDay}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          {Object.keys(
+            this.state.crawledPerDay.reduce((result, entry) => {
+              Object.keys(entry).forEach(x => {
+                result[x] = 1
+              })
+              return result
+            }, {})
+          )
+            .filter(x => x !== 'date')
+            .map((host, index) => {
+              return <Bar dataKey={host} fill={colors[index % colors.length]} stackId="a" />
+            })}
+        </BarChart>
+      </ResponsiveContainer>
+    )
+  }
+
+  renderRecentlyCrawled() {
+    return (
+      <div>
+        <Table>
+          <tbody>
+            {this.state.recentlyCrawled.map(entry => {
+              return (
+                <tr>
+                  <td>{entry.timestamp}</td>
+                  <td>
+                    <a href={`/definitions/${entry.coordinates}`}>{entry.coordinates}</a>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </Table>
+      </div>
     )
   }
 
