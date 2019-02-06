@@ -18,8 +18,9 @@ import {
   XAxis,
   YAxis
 } from 'recharts'
+import { primaryColor, secondaryColor, describedColor, secureColor } from '../../../Clearly'
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
+const colors = [primaryColor.color, secondaryColor.color, describedColor.color, secureColor.color]
 
 const data = [
   { name: 'Group A', value: 400 },
@@ -678,7 +679,7 @@ export default class PageStatus extends Component {
               <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
-              <Line type="monotone" dataKey="count" stroke="#8884d8" />
+              <Line type="monotone" dataKey="count" stroke={colors[0]} />
             </LineChart>
           </ResponsiveContainer>
         </Row>
@@ -694,7 +695,7 @@ export default class PageStatus extends Component {
                       <td>
                         <span
                           style={{
-                            backgroundColor: COLORS[index % COLORS.length],
+                            backgroundColor: colors[index % colors.length],
                             height: '20px',
                             width: '20px',
                             marginRight: '10px',
@@ -725,7 +726,7 @@ export default class PageStatus extends Component {
                   fill="#8884d8"
                 >
                   {this.state.definitionAvailability.map((entry, index) => (
-                    <Cell fill={COLORS[index % COLORS.length]} />
+                    <Cell fill={colors[index % colors.length]} />
                   ))}
                 </Pie>
               </PieChart>
@@ -752,7 +753,7 @@ export default class PageStatus extends Component {
               )
                 .filter(x => x !== 'date')
                 .map((host, index) => {
-                  return <Bar dataKey={host} fill={COLORS[index % COLORS.length]} stackId="a" />
+                  return <Bar dataKey={host} fill={colors[index % colors.length]} stackId="a" />
                 })}
             </BarChart>
           </ResponsiveContainer>
