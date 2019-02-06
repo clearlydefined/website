@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid } from 'react-bootstrap'
-import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts'
+import { Grid, Row, Col } from 'react-bootstrap'
+import { LineChart, Line, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts'
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 
@@ -111,9 +111,17 @@ export default class PageStatus extends Component {
       '2019-02-05T00:00:00Z': 865,
       '2019-02-06T00:00:00Z': 4
     }
+    const dA = {
+      'recomputed definition available': 1806,
+      'computed definition available': 11568,
+      'definition not available': 794
+    }
     this.state = {
       requestsPerDay: Object.keys(temp).map(date => {
         return { date: new Date(date).toLocaleDateString(), count: temp[date] }
+      }),
+      definitionAvailability: Object.keys(dA).map(name => {
+        return { name, value: dA[name] }
       })
     }
   }
@@ -121,14 +129,77 @@ export default class PageStatus extends Component {
   render() {
     return (
       <Grid className="main-container">
-        <h2>Requests / day</h2>
-        <LineChart width={1200} height={400} data={this.state.requestsPerDay}>
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Line type="monotone" dataKey="count" stroke="#8884d8" />
-        </LineChart>
+        <Row>
+          <h2>Requests / day</h2>
+          <LineChart width={1200} height={400} data={this.state.requestsPerDay}>
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="count" stroke="#8884d8" />
+          </LineChart>
+        </Row>
+        <hr />
+        <Row>
+          <Col md={6}>
+            <h2>Definition availability</h2>
+            <table>
+              <tbody>
+                {this.state.definitionAvailability.map((entry, index) => {
+                  return (
+                    <tr>
+                      <td>
+                        <span
+                          style={{
+                            backgroundColor: COLORS[index % COLORS.length],
+                            height: '20px',
+                            width: '20px',
+                            display: 'inline-block'
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <h3>{entry.name}</h3>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </Col>
+          <Col md={6}>
+            <ResponsiveContainer height={500}>
+              <PieChart>
+                <Pie
+                  nameKey="name"
+                  dataKey="value"
+                  data={this.state.definitionAvailability}
+                  labelLine={false}
+                  label
+                  label={this.renderPieLabel}
+                  outerRadius={200}
+                  fill="#8884d8"
+                >
+                  {this.state.definitionAvailability.map((entry, index) => (
+                    <Cell fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </Col>
+        </Row>
       </Grid>
+    )
+  }
+
+  renderPieLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent }) {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5
+    const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180))
+    const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180))
+
+    return (
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
     )
   }
 }
