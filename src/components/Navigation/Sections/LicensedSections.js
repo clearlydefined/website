@@ -30,9 +30,7 @@ class LicensedSection extends Component {
       handleRevert,
       applyCurationSuggestion
     } = this.props
-    console.log(JSON.stringify(rawDefinition))
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
-    console.log(JSON.stringify(definition))
     const { licensed } = definition
     const totalFiles = get(licensed, 'files')
     const unlicensed = get(licensed, 'discovered.unknown')

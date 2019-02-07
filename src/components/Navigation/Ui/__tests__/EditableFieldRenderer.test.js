@@ -79,16 +79,16 @@ describe('EditableFieldRenderer', () => {
   it('check computedValuesfor field of type license', () => {
     const customProps = { ...props, type: 'license' }
     const wrapper = shallow(<EditableFieldRenderer {...customProps} />)
-    expect(wrapper.state()).toEqual({ computedValue: '', initialValue: '', suggested: '' })
+    expect(wrapper.state()).toEqual({ computedValue: '', initialValue: '' })
   })
   it('check computedValues for field of type date', () => {
     const customProps = { ...props, type: 'date' }
     const wrapper = shallow(<EditableFieldRenderer {...customProps} />)
-    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null, suggested: null })
+    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null})
   })
   it('check computedValues for field of type coordinates', () => {
     const customProps = { ...props, type: 'coordinates' }
     const wrapper = shallow(<EditableFieldRenderer {...customProps} />)
-    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null, suggested: null })
+    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null })
   })
 })

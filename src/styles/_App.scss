@@ -127,7 +127,10 @@
 }
 
 .editable-field {
-  text-decoration-style: dashed;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
 }
 
 .editable-marker {
