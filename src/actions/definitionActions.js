@@ -105,7 +105,8 @@ export function browseDefinitionsAction(token, query, name) {
       const definitions = result.data
       dispatch(actions.success({ add: definitions }))
       const toAdd = map(definitions, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
-      dispatch(uiBrowseUpdateList({ updateAll: toAdd }))
+      if (query.continuationToken) dispatch(uiBrowseUpdateList({ addAll: toAdd, data: result.continuationToken }))
+      else dispatch(uiBrowseUpdateList({ updateAll: toAdd, data: result.continuationToken }))
       const chunks = chunk(map(toAdd, component => EntitySpec.fromCoordinates(component).toPath(), 100))
       try {
         await Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))

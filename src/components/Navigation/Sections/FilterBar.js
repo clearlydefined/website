@@ -10,45 +10,83 @@ export default class FilterBar extends Component {
     activeFilters: PropTypes.object,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,
-    hasComponents: PropTypes.bool
+    hasComponents: PropTypes.bool,
+    showSortFilter: PropTypes.bool,
+    showLicenseFilter: PropTypes.bool,
+    showSourceFilter: PropTypes.bool,
+    showReleaseDateFilter: PropTypes.bool,
+    customLicenses: PropTypes.object,
+    customSorts: PropTypes.object,
+    customSources: PropTypes.object,
+    customReleaseDates: PropTypes.object
+  }
+
+  static defaultProps = {
+    showSortFilter: true,
+    showLicenseFilter: true,
+    showSourceFilter: true,
+    showReleaseDateFilter: true
   }
 
   render() {
-    const { activeSort, activeFilters, onFilter, onSort, hasComponents } = this.props
+    const {
+      activeSort,
+      activeFilters,
+      onFilter,
+      onSort,
+      hasComponents,
+      showSortFilter,
+      showLicenseFilter,
+      showReleaseDateFilter,
+      showSourceFilter,
+      customLicenses,
+      customSorts,
+      customSources,
+      customReleaseDates
+    } = this.props
+
     return (
       <div className="list-filter" align="right">
-        <SortList
-          list={sorts}
-          title={'Sort By'}
-          id={'sort'}
-          disabled={hasComponents}
-          value={activeSort}
-          onSort={onSort}
-        />
-        <FilterList
-          list={licenses}
-          title={'License'}
-          id={'licensed.declared'}
-          disabled={hasComponents}
-          value={activeFilters}
-          onFilter={onFilter}
-        />
-        <FilterList
-          list={sources}
-          title={'Source'}
-          id={'described.sourceLocation'}
-          disabled={hasComponents}
-          value={activeFilters}
-          onFilter={onFilter}
-        />
-        <FilterList
-          list={releaseDates}
-          title={'Release Date'}
-          id={'described.releaseDate'}
-          disabled={hasComponents}
-          value={activeFilters}
-          onFilter={onFilter}
-        />
+        {showSortFilter && (
+          <SortList
+            list={customSorts || sorts}
+            title={'Sort By'}
+            id={'sort'}
+            disabled={hasComponents}
+            value={activeSort}
+            onSort={onSort}
+          />
+        )}
+        {showLicenseFilter && (
+          <FilterList
+            list={customLicenses || licenses}
+            title={'License'}
+            id={'licensed.declared'}
+            disabled={hasComponents}
+            value={activeFilters}
+            onFilter={onFilter}
+          />
+        )}
+        {showSourceFilter && (
+          <FilterList
+            list={customSources || sources}
+            title={'Source'}
+            id={'described.sourceLocation'}
+            disabled={hasComponents}
+            value={activeFilters}
+            onFilter={onFilter}
+          />
+        )}
+        {showReleaseDateFilter && (
+          <FilterList
+            list={customReleaseDates || releaseDates}
+            title={'Release Date'}
+            id={'described.releaseDate'}
+            disabled={hasComponents}
+            value={activeFilters}
+            onFilter={onFilter}
+          />
+        )}
       </div>
     )
   }

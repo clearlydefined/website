@@ -64,6 +64,6 @@ export default class RowEntityList extends React.Component {
 
   length() {
     const { list } = this.props
-    return list ? list.length : 0
+    return list ? (list.length > 20 ? list.length - 5 : list.length) : 0
   }
 }

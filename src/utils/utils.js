@@ -40,14 +40,14 @@ const sorts = [
 ]
 
 const licenses = [
-  { value: 'apache-2.0', label: 'Apache-2.0' },
-  { value: 'bsd-2-clause', label: 'BSD-2-Clause' },
-  { value: 'cddl-1.0', label: 'CDDL-1.0' },
-  { value: 'epl-1.0', label: 'EPL-1.0' },
-  { value: 'gpl', label: 'GPL' },
-  { value: 'lgpl', label: 'LGPL' },
-  { value: 'mit', label: 'MIT' },
-  { value: 'mpl-2.0', label: 'MPL-2.0' },
+  { value: 'Apache-2.0', label: 'Apache-2.0' },
+  { value: 'BSD-2-Clause', label: 'BSD-2-Clause' },
+  { value: 'CDDL-1.0', label: 'CDDL-1.0' },
+  { value: 'EPL-1.0', label: 'EPL-1.0' },
+  { value: 'GPL', label: 'GPL' },
+  { value: 'LGPL', label: 'LGPL' },
+  { value: 'MIT', label: 'MIT' },
+  { value: 'MPL-2.0', label: 'MPL-2.0' },
   { value: 'presence', label: 'Presence Of' },
   { value: 'absence', label: 'Absence Of' }
 ]

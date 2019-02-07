@@ -106,7 +106,8 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: newList,
-        transformedList: transformer ? transformer(newList) : newList
+        transformedList: transformer ? transformer(newList) : newList,
+        data: result.data
       }
     }
 
@@ -144,7 +145,8 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: result.updateAll,
-        transformedList: transformer ? transformer(result.updateAll) : result.updateAll
+        transformedList: transformer ? transformer(result.updateAll) : result.updateAll,
+        data: result.data
       }
     }
 
