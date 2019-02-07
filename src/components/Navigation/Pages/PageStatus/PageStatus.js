@@ -27,6 +27,7 @@ export default class PageStatus extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      loaded: false,
       requestsPerDay: [],
       definitionAvailability: [],
       crawledPerDay: [],
@@ -42,6 +43,7 @@ export default class PageStatus extends Component {
       this.fetchRecentlyCrawled()
     ])
     this.setState({
+      loaded: true,
       requestsPerDay: data[0],
       definitionAvailability: data[1],
       crawledPerDay: data[2],
@@ -82,28 +84,37 @@ export default class PageStatus extends Component {
   render() {
     return (
       <Grid className="main-container">
-        <Row>
-          <h2>Requests / day</h2>
-          {this.renderRequestsPerDay()}
-        </Row>
-        <hr />
-        <Row>
-          <Col md={6}>
-            <h2>Definition availability</h2>
-            {this.renderDefinitionAvailabilityTable()}
-          </Col>
-          <Col md={6}>{this.renderDefinitionAvailabilityChart()}</Col>
-        </Row>
-        <hr />
-        <Row>
-          <h2>Components processed / day</h2>
-          {this.renderComponentsProcessed()}
-        </Row>
-        <hr />
-        <Row>
-          <h2>Recently crawled components</h2>
-          {this.renderRecentlyCrawled()}
-        </Row>
+        {!this.state.loaded && (
+          <h2>
+            <i className="fas fa-spinner fa-spin" />
+          </h2>
+        )}
+        {this.state.loaded && (
+          <div>
+            <Row>
+              <h2>Requests / day</h2>
+              {this.renderRequestsPerDay()}
+            </Row>
+            <hr />
+            <Row>
+              <Col md={6}>
+                <h2>Definition availability</h2>
+                {this.renderDefinitionAvailabilityTable()}
+              </Col>
+              <Col md={6}>{this.renderDefinitionAvailabilityChart()}</Col>
+            </Row>
+            <hr />
+            <Row>
+              <h2>Components processed / day</h2>
+              {this.renderComponentsProcessed()}
+            </Row>
+            <hr />
+            <Row>
+              <h2>Recently crawled components</h2>
+              {this.renderRecentlyCrawled()}
+            </Row>
+          </div>
+        )}
       </Grid>
     )
   }
@@ -123,7 +134,7 @@ export default class PageStatus extends Component {
 
   renderDefinitionAvailabilityTable() {
     return (
-      <table>
+      <table style={{ margin: '60px' }}>
         <tbody>
           {this.state.definitionAvailability.map((entry, index) => {
             return (
