@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { Row, Col } from 'react-bootstrap'
 import LabelRenderer from './LabelRenderer'
 import { InlineEditor, ModalEditor } from '../..'
-import Curation from '../../../utils/curation'
 import Contribution from '../../../utils/contribution'
 import ListDataRenderer from '../Ui/ListDataRenderer'
 
@@ -19,7 +18,6 @@ class EditableFieldRenderer extends Component {
     readOnly: PropTypes.bool,
     onChange: PropTypes.func,
     handleRevert: PropTypes.func,
-    curationSuggestions: PropTypes.object,
     applyCurationSuggestion: PropTypes.func,
     type: PropTypes.string,
     value: PropTypes.any,
@@ -36,37 +34,34 @@ class EditableFieldRenderer extends Component {
   }
 
   componentDidMount() {
-    const { definition, previewDefinition, curationSuggestions, field, type } = this.props
-    this.setComputedValue(definition, previewDefinition, curationSuggestions, field, type)
+    const { definition, previewDefinition, field, type } = this.props
+    this.setComputedValue(definition, previewDefinition, field, type)
   }
 
   componentWillReceiveProps(nextProps) {
-    const { definition, previewDefinition, curationSuggestions, field, type } = nextProps
-    this.setComputedValue(definition, previewDefinition, curationSuggestions, field, type)
+    const { definition, previewDefinition, field, type } = nextProps
+    this.setComputedValue(definition, previewDefinition, field, type)
   }
 
-  setComputedValue(definition, previewDefinition, curationSuggestions, field, type) {
-    let computedValue, initialValue, suggested
+  setComputedValue(definition, previewDefinition, field, type) {
+    let computedValue, initialValue
     switch (type) {
       case 'coordinates':
         computedValue = Contribution.printCoordinates(Contribution.getValue(definition, previewDefinition, field))
         initialValue = Contribution.printCoordinates(Contribution.getOriginalValue(definition, field))
-        suggested = Contribution.printCoordinates(Curation.getValue(curationSuggestions, field))
         break
       case 'date':
         computedValue = Contribution.printDate(Contribution.getValue(definition, previewDefinition, field))
         initialValue = Contribution.printDate(Contribution.getOriginalValue(definition, field))
-        suggested = Contribution.printDate(Curation.getValue(curationSuggestions, field))
         break
       case 'license':
         computedValue = Contribution.getValue(definition, previewDefinition, field)
         initialValue = Contribution.getOriginalValue(definition, field)
-        suggested = Curation.getValue(curationSuggestions, field)
         break
       default:
         break
     }
-    this.setState({ computedValue, initialValue, suggested })
+    this.setState({ computedValue, initialValue })
   }
 
   render() {
@@ -86,12 +81,13 @@ class EditableFieldRenderer extends Component {
       multiple,
       component
     } = this.props
-    const { computedValue, initialValue, suggested } = this.state
+    const { computedValue, initialValue } = this.state
     const { licensed } = definition || {}
 
     const renderEditor = () =>
       editor ? (
         <ModalEditor
+          field={field}
           extraClass={Contribution.classIfDifferent(definition, previewDefinition, field)}
           readOnly={readOnly}
           initialValue={initialValue}
@@ -117,7 +113,6 @@ class EditableFieldRenderer extends Component {
           onRevert={() => handleRevert(field)}
           validator
           placeholder={placeholder}
-          suggested={suggested}
         />
       )
 
