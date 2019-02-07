@@ -35,29 +35,48 @@ export default class PageStatus extends Component {
   }
 
   async componentDidMount() {
-    const requestsPerDayData = await getStatus('requestcount')
-    const requestsPerDay = Object.keys(requestsPerDayData).map(date => {
-      return { date: new Date(date).toLocaleDateString(), count: requestsPerDayData[date] }
+    const data = await Promise.all([
+      this.fetchRequestsPerDay(),
+      this.fetchDefinitionAvailability(),
+      this.fetchCrawledPerDay(),
+      this.fetchRecentlyCrawled()
+    ])
+    this.setState({
+      requestsPerDay: data[0],
+      definitionAvailability: data[1],
+      crawledPerDay: data[2],
+      recentlyCrawled: data[3]
     })
+  }
 
-    const definitionAvailabilityData = await getStatus('definitionavailability')
-    const definitionAvailability = Object.keys(definitionAvailabilityData).map(name => {
-      return { name, value: definitionAvailabilityData[name] }
+  async fetchRequestsPerDay() {
+    const data = await getStatus('requestcount')
+    return Object.keys(data).map(date => {
+      return { date: new Date(date).toLocaleDateString(), count: data[date] }
     })
+  }
 
-    const crawledPerDayData = await getStatus('processedperday')
-    const crawledPerDay = crawledPerDayData.map(entry => {
+  async fetchDefinitionAvailability() {
+    const data = await getStatus('definitionavailability')
+    return Object.keys(data).map(name => {
+      return { name, value: data[name] }
+    })
+  }
+
+  async fetchCrawledPerDay() {
+    const data = await getStatus('processedperday')
+    return data.map(entry => {
       entry.date = new Date(entry.date).toLocaleDateString()
       return entry
     })
+  }
 
-    const recentlyCrawledData = await getStatus('recentlycrawled')
-    const recentlyCrawled = recentlyCrawledData.map(entry => {
+  async fetchRecentlyCrawled() {
+    const data = await getStatus('recentlycrawled')
+    return data.map(entry => {
       entry.timestamp = new Date(entry.timestamp).toLocaleString()
       return entry
     })
-
-    this.setState({ requestsPerDay, definitionAvailability, crawledPerDay, recentlyCrawled })
   }
 
   render() {
