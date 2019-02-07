@@ -13,7 +13,7 @@ import {
   ROUTE_DISCORD,
   ROUTE_SHARE,
   ROUTE_BROWSE,
-  ROUTE_STATS
+  ROUTE_STATS,
   ROUTE_STATUS
 } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
