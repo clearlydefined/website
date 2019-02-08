@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import map from 'lodash/map'
+import classNames from 'classnames'
 import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
 import { uiNavigation, uiBrowseGet } from '../../../../actions/ui'
 import SystemManagedList from '../../../SystemManagedList'
@@ -24,7 +25,7 @@ import { licenses } from '../../../../utils/utils'
 class PageBrowse extends SystemManagedList {
   constructor(props) {
     super(props)
-    this.state = { activeProvider: null }
+    this.state = { activeProvider: 'npmjs' }
     this.onProviderSelection = this.onProviderSelection.bind(this)
     this.onFilter = this.onFilter.bind(this)
     this.onSort = this.onSort.bind(this)
@@ -35,12 +36,11 @@ class PageBrowse extends SystemManagedList {
 
   componentDidMount() {
     this.props.dispatch(uiNavigation({ to: ROUTE_BROWSE }))
+    this.updateData()
   }
 
-  noRowsRenderer() {
-    return (
-      <div className="list-noRows">Select a Provider to retrieve a list of definitions that need to be curated</div>
-    )
+  noRowsRenderer(loading) {
+    return loading ? <div /> : <div className="list-noRows">Broaden your filters to find more results</div>
   }
 
   tableTitle() {
@@ -79,13 +79,22 @@ class PageBrowse extends SystemManagedList {
   }
 
   renderFilterBar() {
+    const sorts = [
+      { value: 'license', label: 'License' },
+      { value: 'name', label: 'Name' },
+      { value: 'namespace', label: 'Namespace' },
+      { value: 'releaseDate', label: 'Release Date' },
+      { value: 'licensedScore', label: 'Licensed score' },
+      { value: 'describedScore', label: 'Described score' }
+    ]
     return (
       <FilterBar
         activeSort={this.state.activeSort}
+        customSorts={sorts}
         activeFilters={this.state.activeFilters}
         onFilter={this.onFilter}
         onSort={this.onSort}
-        hasComponents={!this.hasComponents()}
+        hasComponents={false} // always false to keep filters activated
         showSourceFilter={false}
         showReleaseDateFilter={false}
         showCurateFilter={true}
@@ -97,13 +106,12 @@ class PageBrowse extends SystemManagedList {
   onProviderSelection(event) {
     const target = event.target
     const activeProvider = target.name
-    this.setState({ ...this.state, activeProvider, activeFilters: null, activeSort: null })
-    this.props.dispatch(uiBrowseGet(this.props.token, { type: activeProvider }))
+    this.setState({ ...this.state, activeProvider, activeFilters: null, activeSort: null }, () => this.updateData())
   }
 
   async updateData(continuationToken) {
     const { activeFilters, activeSort, activeProvider } = this.state
-    const query = { type: activeProvider }
+    const query = { provider: activeProvider }
     if (continuationToken) query.continuationToken = continuationToken
     if (activeSort) query.sort = activeSort
     map(activeFilters, (item, key) => {
@@ -119,7 +127,10 @@ class PageBrowse extends SystemManagedList {
           break
       }
     })
-    return await this.props.dispatch(uiBrowseGet(this.props.token, query))
+    this.setState({ ...this.state, loading: true })
+    const result = await this.props.dispatch(uiBrowseGet(this.props.token, query))
+    this.setState({ ...this.state, loading: false })
+    return result
   }
 
   loadMoreRows = async () => {
@@ -129,7 +140,7 @@ class PageBrowse extends SystemManagedList {
 
   render() {
     const { components, definitions, session } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition, activeProvider } = this.state
+    const { sequence, showFullDetail, path, currentComponent, currentDefinition, activeProvider, loading } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt
@@ -141,7 +152,8 @@ class PageBrowse extends SystemManagedList {
         <ProviderButtons onClick={this.onProviderSelection} activeProvider={activeProvider} />
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <div className="section-body">
+            <div className={classNames('section-body', { loading })}>
+              <i className="fas fa-spinner fa-spin" />
               <ComponentList
                 readOnly={this.readOnly}
                 list={components.transformedList}
@@ -155,7 +167,7 @@ class PageBrowse extends SystemManagedList {
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
-                noRowsRenderer={this.noRowsRenderer}
+                noRowsRenderer={() => this.noRowsRenderer(loading)}
                 sequence={sequence}
                 hasChange={this.hasChange}
                 hideVersionSelector
