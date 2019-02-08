@@ -10,7 +10,7 @@ import { ROUTE_SHARE } from '../utils/routingConstants'
 import { getNotices } from '../api/clearlyDefined'
 import { saveGist } from '../api/github'
 import { Button } from 'react-bootstrap'
-import { uiBrowseUpdateList, uiInfo, uiWarning } from '../actions/ui'
+import { uiDefinitionsUpdateList, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction } from '../actions/definitionActions'
@@ -104,7 +104,7 @@ export default class UserManagedList extends SystemManagedList {
     !definitions.entries[path] &&
       dispatch(getDefinitionsAction(token, [path])) &&
       dispatch(getCurationAction(token, component))
-    dispatch(uiBrowseUpdateList({ add: component }))
+    dispatch(uiDefinitionsUpdateList({ add: component }))
   }
 
   loadComponentList(content, name) {
@@ -154,11 +154,11 @@ export default class UserManagedList extends SystemManagedList {
     if (list.sortBy || list.filter) this.setState({ sequence: this.state.sequence + 1 })
 
     const toAdd = list.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
-    dispatch(uiBrowseUpdateList({ addAll: toAdd }))
+    dispatch(uiDefinitionsUpdateList({ addAll: toAdd }))
     const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
     this.getDefinitionsAndNotify(missingDefinitions, 'All components have been loaded')
     dispatch(
-      uiBrowseUpdateList({
+      uiDefinitionsUpdateList({
         transform: this.createTransform.call(
           this,
           list.sortBy || this.state.activeSort,

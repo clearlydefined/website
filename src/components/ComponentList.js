@@ -24,10 +24,6 @@ export default class ComponentList extends React.Component {
     sequence: PropTypes.number
   }
 
-  static defaultProps = {
-    loadMoreRows: () => {}
-  }
-
   constructor(props) {
     super(props)
     this.state = { contentSeq: 0, sortOrder: null, changes: {} }
@@ -65,6 +61,7 @@ export default class ComponentList extends React.Component {
 
   rowHeight({ index }) {
     const component = this.props.list[index]
+    if (!component) return 50
     return component.expanded ? 150 : 50
   }
 
@@ -87,6 +84,7 @@ export default class ComponentList extends React.Component {
       hideVersionSelector
     } = this.props
     const component = list[index]
+    if (!component) return
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
     return (
