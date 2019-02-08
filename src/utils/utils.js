@@ -56,4 +56,6 @@ const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence'
 
 const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
 
-export { setIfValue, difference, customLicenseIds, asObject, sorts, licenses, sources, releaseDates }
+const curateFilters = [{ value: 'license', label: 'License' }, { value: 'described', label: 'Described' }]
+
+export { setIfValue, difference, customLicenseIds, asObject, sorts, licenses, sources, releaseDates, curateFilters }

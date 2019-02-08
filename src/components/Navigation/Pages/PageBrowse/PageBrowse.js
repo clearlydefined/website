@@ -16,7 +16,7 @@ import FilterBar from '../../Sections/FilterBar'
 import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import ProviderButtons from '../../Ui/ProviderButtons'
 import ContributePrompt from '../../../ContributePrompt'
-import { licenses, releaseDates } from '../../../../utils/utils'
+import { licenses } from '../../../../utils/utils'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -87,6 +87,8 @@ class PageBrowse extends SystemManagedList {
         onSort={this.onSort}
         hasComponents={!this.hasComponents()}
         showSourceFilter={false}
+        showReleaseDateFilter={false}
+        showCurateFilter={true}
         customLicenses={licenses.filter(license => license.value !== 'absence' && license.value !== 'presence')}
       />
     )
@@ -96,27 +98,23 @@ class PageBrowse extends SystemManagedList {
     const target = event.target
     const activeProvider = target.name
     this.setState({ ...this.state, activeProvider, activeFilters: null, activeSort: null })
-    this.props.dispatch(
-      uiBrowseGet(this.props.token, { type: activeProvider, maxLicensedScore: 70, maxDescribedScore: 70 })
-    )
+    this.props.dispatch(uiBrowseGet(this.props.token, { type: activeProvider }))
   }
 
   async updateData(continuationToken) {
     const { activeFilters, activeSort, activeProvider } = this.state
-    const query = { type: activeProvider, maxLicensedScore: 70, maxDescribedScore: 70 }
+    const query = { type: activeProvider }
     if (continuationToken) query.continuationToken = continuationToken
     if (activeSort) query.sort = activeSort
     map(activeFilters, (item, key) => {
       switch (key) {
+        case 'curate':
+          if (item === 'licensed') query.maxLicensedScore = 70
+          if (item === 'described') query.maxDescribedScore = 70
+          break
         case 'licensed.declared':
           query.license = item
           break
-        /*case 'described.sourceLocation':
-          query.sourceLocation = item
-          break
-        case 'described.releaseDate':
-          query.sourceLocation = item
-          break */
         default:
           break
       }

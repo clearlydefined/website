@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
-import { sorts, licenses, sources, releaseDates } from '../../../utils/utils'
+import { sorts, licenses, sources, releaseDates, curateFilters } from '../../../utils/utils'
 
 export default class FilterBar extends Component {
   static propTypes = {
@@ -15,17 +15,19 @@ export default class FilterBar extends Component {
     showLicenseFilter: PropTypes.bool,
     showSourceFilter: PropTypes.bool,
     showReleaseDateFilter: PropTypes.bool,
-    customLicenses: PropTypes.object,
-    customSorts: PropTypes.object,
-    customSources: PropTypes.object,
-    customReleaseDates: PropTypes.object
+    showCurateFilter: PropTypes.bool,
+    customLicenses: PropTypes.array,
+    customSorts: PropTypes.array,
+    customSources: PropTypes.array,
+    customReleaseDates: PropTypes.array
   }
 
   static defaultProps = {
     showSortFilter: true,
     showLicenseFilter: true,
     showSourceFilter: true,
-    showReleaseDateFilter: true
+    showReleaseDateFilter: true,
+    showCurateFilter: false
   }
 
   render() {
@@ -39,10 +41,12 @@ export default class FilterBar extends Component {
       showLicenseFilter,
       showReleaseDateFilter,
       showSourceFilter,
+      showCurateFilter,
       customLicenses,
       customSorts,
       customSources,
-      customReleaseDates
+      customReleaseDates,
+      customCurateFilters
     } = this.props
 
     return (
@@ -82,6 +86,16 @@ export default class FilterBar extends Component {
             list={customReleaseDates || releaseDates}
             title={'Release Date'}
             id={'described.releaseDate'}
+            disabled={hasComponents}
+            value={activeFilters}
+            onFilter={onFilter}
+          />
+        )}
+        {showCurateFilter && (
+          <FilterList
+            list={customCurateFilters || curateFilters}
+            title={'Curate'}
+            id={'curate'}
             disabled={hasComponents}
             value={activeFilters}
             onFilter={onFilter}

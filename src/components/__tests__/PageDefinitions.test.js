@@ -10,7 +10,7 @@ describe('PageDefinitions', () => {
     const store = mockStore({
       session: { token: '' },
       ui: {
-        browse: {
+        definitions: {
           filter: {},
           filterList: {},
           componentList: {}

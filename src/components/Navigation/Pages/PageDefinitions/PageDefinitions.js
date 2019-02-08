@@ -209,10 +209,10 @@ export class PageDefinitions extends UserManagedList {
 function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
-    filterValue: state.ui.browse.filter,
+    filterValue: state.ui.definitions.filter,
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
-    filterOptions: state.ui.browse.filterList,
-    components: state.ui.browse.componentList,
+    filterOptions: state.ui.definitions.filterList,
+    components: state.ui.definitions.componentList,
     definitions: state.definition.bodies,
     session: state.session
   }
