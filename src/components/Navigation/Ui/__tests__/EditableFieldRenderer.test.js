@@ -54,7 +54,6 @@ describe('EditableFieldRenderer', () => {
     const props = {
       definition: {},
       previewDefinition: {},
-      curationSuggestions: {},
       field: 'licensed.declared',
       type: 'license',
       label: 'test',
@@ -62,13 +61,12 @@ describe('EditableFieldRenderer', () => {
       placeholder: 'test'
     }
     const wrapper = shallow(<EditableFieldRenderer {...props} />)
-    expect(wrapper.state()).toEqual({ computedValue: '', initialValue: '', suggested: '' })
+    expect(wrapper.state()).toEqual({ computedValue: '', initialValue: '' })
   })
   it('check computedValues for field of type date', () => {
     const props = {
       definition: {},
       previewDefinition: {},
-      curationSuggestions: {},
       field: 'licensed.declared',
       type: 'date',
       label: 'test',
@@ -76,13 +74,12 @@ describe('EditableFieldRenderer', () => {
       placeholder: 'test'
     }
     const wrapper = shallow(<EditableFieldRenderer {...props} />)
-    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null, suggested: null })
+    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null })
   })
   it('check computedValues for field of type coordinates', () => {
     const props = {
       definition: {},
       previewDefinition: {},
-      curationSuggestions: {},
       field: 'licensed.declared',
       type: 'coordinates',
       label: 'test',
@@ -90,6 +87,6 @@ describe('EditableFieldRenderer', () => {
       placeholder: 'test'
     }
     const wrapper = shallow(<EditableFieldRenderer {...props} />)
-    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null, suggested: null })
+    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null })
   })
 })

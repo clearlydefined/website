@@ -205,6 +205,14 @@ export function getRevisions(token, path, type, provider) {
   return get(url(`${origin}/${path}/revisions`), token)
 }
 
+export function getStats(key) {
+  return get(url(`stats/${key}`))
+}
+
+export function getStatus(key) {
+  return get(url(`status/${key}`))
+}
+
 // ========================== utilities ====================
 
 export function url(path, query) {

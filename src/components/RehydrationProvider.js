@@ -12,7 +12,9 @@ import {
   ROUTE_ABOUT,
   ROUTE_DISCORD,
   ROUTE_SHARE,
-  ROUTE_BROWSE
+  ROUTE_BROWSE,
+  ROUTE_STATS,
+  ROUTE_STATUS
 } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
@@ -25,6 +27,8 @@ import withTracker from '../utils/withTracker'
 import FullDetailPage from './FullDetailView/FullDetailPage'
 import PageDefinitions from './Navigation/Pages/PageDefinitions'
 import PageBrowse from './Navigation/Pages/PageBrowse'
+import PageStats from './Navigation/Pages/PageStats'
+import PageStatus from './Navigation/Pages/PageStatus'
 
 const store = configureStore()
 
@@ -61,6 +65,8 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
               <Route path={ROUTE_BROWSE} component={withTracker(PageBrowse)} />
+              <Route path={ROUTE_STATS} component={withTracker(PageStats)} />
+              <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
               <Route path={ROUTE_ROOT} component={withTracker(PageLanding)} />
             </Switch>
