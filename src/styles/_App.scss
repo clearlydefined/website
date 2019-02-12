@@ -128,7 +128,7 @@
     .fa-spinner {
       display: block;
       position: absolute;
-      font-size: 7rem;
+      font-size: 6rem;
       left: 0;
       right: 0;
       text-align: center;
@@ -194,6 +194,10 @@
   display: flex;
   & > span:first-child {
     flex-grow: 1;
+  }
+
+  & > .fas {
+    margin: 3px 0 0 10px;
   }
 }
 

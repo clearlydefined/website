@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
-import { sorts, licenses, sources, releaseDates, curateFilters } from '../../../utils/utils'
+import { sorts, licenses, sources, releaseDates } from '../../../utils/utils'
 
 export default class FilterBar extends Component {
   static propTypes = {
@@ -15,7 +15,6 @@ export default class FilterBar extends Component {
     showLicenseFilter: PropTypes.bool,
     showSourceFilter: PropTypes.bool,
     showReleaseDateFilter: PropTypes.bool,
-    showCurateFilter: PropTypes.bool,
     customLicenses: PropTypes.array,
     customSorts: PropTypes.array,
     customSources: PropTypes.array,
@@ -26,8 +25,7 @@ export default class FilterBar extends Component {
     showSortFilter: true,
     showLicenseFilter: true,
     showSourceFilter: true,
-    showReleaseDateFilter: true,
-    showCurateFilter: false
+    showReleaseDateFilter: true
   }
 
   render() {
@@ -41,12 +39,10 @@ export default class FilterBar extends Component {
       showLicenseFilter,
       showReleaseDateFilter,
       showSourceFilter,
-      showCurateFilter,
       customLicenses,
       customSorts,
       customSources,
-      customReleaseDates,
-      customCurateFilters
+      customReleaseDates
     } = this.props
 
     return (
@@ -86,16 +82,6 @@ export default class FilterBar extends Component {
             list={customReleaseDates || releaseDates}
             title={'Release Date'}
             id={'described.releaseDate'}
-            disabled={hasComponents}
-            value={activeFilters}
-            onFilter={onFilter}
-          />
-        )}
-        {showCurateFilter && (
-          <FilterList
-            list={customCurateFilters || curateFilters}
-            title={'Curate'}
-            id={'curate'}
             disabled={hasComponents}
             value={activeFilters}
             onFilter={onFilter}

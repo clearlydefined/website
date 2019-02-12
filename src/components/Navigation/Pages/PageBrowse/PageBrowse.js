@@ -3,9 +3,9 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid } from 'react-bootstrap'
+import { Grid, FormControl } from 'react-bootstrap'
 import get from 'lodash/get'
-import map from 'lodash/map'
+import debounce from 'lodash/debounce'
 import classNames from 'classnames'
 import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
 import { uiNavigation, uiBrowseGet } from '../../../../actions/ui'
@@ -13,11 +13,11 @@ import SystemManagedList from '../../../SystemManagedList'
 import Section from '../../../Section'
 import ComponentList from '../../../ComponentList'
 import ButtonsBar from './ButtonsBar'
-import FilterBar from '../../Sections/FilterBar'
 import FullDetailPage from '../../../FullDetailView/FullDetailPage'
-import ProviderButtons from '../../Ui/ProviderButtons'
+import FilterList from '../../Ui/FilterList'
+import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { licenses } from '../../../../utils/utils'
+import { licenses, curateFilters } from '../../../../utils/utils'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -25,13 +25,13 @@ import { licenses } from '../../../../utils/utils'
 class PageBrowse extends SystemManagedList {
   constructor(props) {
     super(props)
-    this.state = { activeProvider: 'npmjs' }
-    this.onProviderSelection = this.onProviderSelection.bind(this)
+    this.state = {}
     this.onFilter = this.onFilter.bind(this)
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
     this.storeList = 'browse'
+    this.nameFilter = null
   }
 
   componentDidMount() {
@@ -44,7 +44,17 @@ class PageBrowse extends SystemManagedList {
   }
 
   tableTitle() {
-    return <span>Browse Definitions</span>
+    return (
+      <div>
+        <span>Browse Definitions</span>
+        <FormControl
+          placeholder="Name"
+          aria-label="Name"
+          inputRef={input => (this.nameFilter = input)}
+          onChange={debounce(() => this.updateData(), 500)}
+        />
+      </div>
+    )
   }
 
   renderButtons() {
@@ -80,53 +90,83 @@ class PageBrowse extends SystemManagedList {
 
   renderFilterBar() {
     const sorts = [
-      { value: 'license', label: 'License' },
-      { value: 'name', label: 'Name' },
-      { value: 'namespace', label: 'Namespace' },
-      { value: 'releaseDate', label: 'Release Date' },
-      { value: 'licensedScore', label: 'Licensed score' },
-      { value: 'describedScore', label: 'Described score' }
+      { value: 'releaseDate-desc', label: 'Newer' },
+      { value: 'releaseDate', label: 'Older' },
+      { value: 'licensedScore-desc', label: 'Higher Licensed score' },
+      { value: 'licensedScore', label: 'Lower Licensed score' },
+      { value: 'describedScore-desc', label: 'Higher Described score' },
+      { value: 'describedScore', label: 'Lower Described score' }
     ]
+
+    const providers = [
+      { value: 'npmjs', label: 'NpmJS' },
+      { value: 'github', label: 'GitHub' },
+      { value: 'mavencentral', label: 'MavenCentral' },
+      { value: 'cratesio', label: 'Crates.io' },
+      { value: 'pypi', label: 'PyPi' },
+      { value: 'rubygems', label: 'RubyGems' },
+      { value: 'nuget', label: 'NuGet' }
+    ]
+
     return (
-      <FilterBar
-        activeSort={this.state.activeSort}
-        customSorts={sorts}
-        activeFilters={this.state.activeFilters}
-        onFilter={this.onFilter}
-        onSort={this.onSort}
-        hasComponents={false} // always false to keep filters activated
-        showSourceFilter={false}
-        showReleaseDateFilter={false}
-        showCurateFilter={true}
-        customLicenses={licenses.filter(license => license.value !== 'absence' && license.value !== 'presence')}
-      />
+      <div className="filter-list" align="right">
+        <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
+        <FilterList
+          list={providers}
+          title={'Provider'}
+          id={'provider'}
+          value={this.state.activeFilters}
+          onFilter={this.onFilter}
+        />
+        <FilterList
+          list={licenses.filter(license => license.value !== 'absence' && license.value !== 'presence')}
+          title={'License'}
+          id={'license'}
+          value={this.state.activeFilters}
+          onFilter={this.onFilter}
+        />
+        <FilterList
+          list={curateFilters}
+          title={'Curate'}
+          id={'curate'}
+          value={this.state.activeFilters}
+          onFilter={this.onFilter}
+        />
+      </div>
     )
   }
 
-  onProviderSelection(event) {
-    const target = event.target
-    const activeProvider = target.name
-    this.setState({ ...this.state, activeProvider, activeFilters: null, activeSort: null }, () => this.updateData())
-  }
-
   async updateData(continuationToken) {
-    const { activeFilters, activeSort, activeProvider } = this.state
-    const query = { provider: activeProvider }
+    const { activeFilters, activeSort } = this.state
+    const activeName = get(this.nameFilter, 'value')
+    const query = Object.assign({}, activeFilters)
     if (continuationToken) query.continuationToken = continuationToken
     if (activeSort) query.sort = activeSort
-    map(activeFilters, (item, key) => {
-      switch (key) {
-        case 'curate':
-          if (item === 'licensed') query.maxLicensedScore = 70
-          if (item === 'described') query.maxDescribedScore = 70
-          break
-        case 'licensed.declared':
-          query.license = item
-          break
-        default:
-          break
-      }
-    })
+    switch (activeSort) {
+      case 'releaseDate-desc':
+        query.sort = 'releaseDate'
+        query.sortDesc = true
+        break
+      case 'licensedScore-desc':
+        query.sort = 'licensedScore'
+        query.sortDesc = true
+        break
+      case 'describedScore-desc':
+        query.sort = 'describedScore'
+        query.sortDesc = true
+        break
+      default:
+        break
+    }
+    if (query.curate === 'licensed') query.maxLicensedScore = 70
+    if (query.curate === 'described') query.maxDescribedScore = 70
+    if (query.curate) delete query.curate
+    if (activeName) {
+      if (activeName.indexOf('/') > 0) {
+        query.namespace = activeName.split('/')[0]
+        query.name = activeName.split('/')[1]
+      } else query.name = activeName
+    }
     this.setState({ ...this.state, loading: true })
     const result = await this.props.dispatch(uiBrowseGet(this.props.token, query))
     this.setState({ ...this.state, loading: false })
@@ -140,7 +180,7 @@ class PageBrowse extends SystemManagedList {
 
   render() {
     const { components, definitions, session } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition, activeProvider, loading } = this.state
+    const { sequence, showFullDetail, path, currentComponent, currentDefinition, loading } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt
@@ -149,7 +189,6 @@ class PageBrowse extends SystemManagedList {
           onLogin={this.handleLogin}
           actionHandler={this.doContribute}
         />
-        <ProviderButtons onClick={this.onProviderSelection} activeProvider={activeProvider} />
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
             <div className={classNames('section-body', { loading })}>

@@ -3,8 +3,6 @@
 
 import { asyncActions } from './'
 import map from 'lodash/map'
-import chunk from 'lodash/chunk'
-import throat from 'throat'
 import {
   getDefinitions,
   getDefinition,
@@ -14,7 +12,7 @@ import {
   browseDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiBrowseUpdateList, uiDanger } from './ui'
+import { uiBrowseUpdateList } from './ui'
 import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
