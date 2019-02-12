@@ -41,13 +41,21 @@ const sorts = [
 
 const licenses = [
   { value: 'Apache-2.0', label: 'Apache-2.0' },
+  { value: 'Artistic-2.0', label: 'Artistic-2.0' },
   { value: 'BSD-2-Clause', label: 'BSD-2-Clause' },
-  { value: 'CDDL-1.0', label: 'CDDL-1.0' },
+  { value: 'BSD-3-Clause', label: 'BSD-3-Clause' },
+  { value: 'CC-BY-4.0', label: 'CC-BY-4.0' },
+  { value: 'CC0-1.0', label: 'CC0-1.0' },
   { value: 'EPL-1.0', label: 'EPL-1.0' },
-  { value: 'GPL', label: 'GPL' },
-  { value: 'LGPL', label: 'LGPL' },
+  { value: 'GPL-2.0', label: 'GPL-2.0' },
+  { value: 'GPL-3.0', label: 'GPL-3.0' },
+  { value: 'ISC', label: 'ISC' },
+  { value: 'LGPL-2.1', label: 'LGPL-2.1' },
+  { value: 'LGPL-3.0', label: 'LGPL-3.0' },
   { value: 'MIT', label: 'MIT' },
   { value: 'MPL-2.0', label: 'MPL-2.0' },
+  { value: 'MS-PL', label: 'MS-PL' },
+  { value: 'Zlib', label: 'Zlib' },
   { value: 'presence', label: 'Presence Of' },
   { value: 'absence', label: 'Absence Of' }
 ]
