@@ -40,14 +40,22 @@ const sorts = [
 ]
 
 const licenses = [
-  { value: 'apache-2.0', label: 'Apache-2.0' },
-  { value: 'bsd-2-clause', label: 'BSD-2-Clause' },
-  { value: 'cddl-1.0', label: 'CDDL-1.0' },
-  { value: 'epl-1.0', label: 'EPL-1.0' },
-  { value: 'gpl', label: 'GPL' },
-  { value: 'lgpl', label: 'LGPL' },
-  { value: 'mit', label: 'MIT' },
-  { value: 'mpl-2.0', label: 'MPL-2.0' },
+  { value: 'Apache-2.0', label: 'Apache-2.0' },
+  { value: 'Artistic-2.0', label: 'Artistic-2.0' },
+  { value: 'BSD-2-Clause', label: 'BSD-2-Clause' },
+  { value: 'BSD-3-Clause', label: 'BSD-3-Clause' },
+  { value: 'CC-BY-4.0', label: 'CC-BY-4.0' },
+  { value: 'CC0-1.0', label: 'CC0-1.0' },
+  { value: 'EPL-1.0', label: 'EPL-1.0' },
+  { value: 'GPL-2.0', label: 'GPL-2.0' },
+  { value: 'GPL-3.0', label: 'GPL-3.0' },
+  { value: 'ISC', label: 'ISC' },
+  { value: 'LGPL-2.1', label: 'LGPL-2.1' },
+  { value: 'LGPL-3.0', label: 'LGPL-3.0' },
+  { value: 'MIT', label: 'MIT' },
+  { value: 'MPL-2.0', label: 'MPL-2.0' },
+  { value: 'MS-PL', label: 'MS-PL' },
+  { value: 'Zlib', label: 'Zlib' },
   { value: 'presence', label: 'Presence Of' },
   { value: 'absence', label: 'Absence Of' }
 ]
@@ -56,4 +64,6 @@ const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence'
 
 const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
 
-export { setIfValue, difference, customLicenseIds, asObject, sorts, licenses, sources, releaseDates }
+const curateFilters = [{ value: 'licensed', label: 'Licensed' }, { value: 'described', label: 'Described' }]
+
+export { setIfValue, difference, customLicenseIds, asObject, sorts, licenses, sources, releaseDates, curateFilters }

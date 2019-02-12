@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, Row, Col, Jumbotron } from 'react-bootstrap'
+import { Grid, Row, Jumbotron } from 'react-bootstrap'
 import TypeCard from './TypeCard'
 import CountUp from 'react-countup'
 import { getStats } from '../../../../api/clearlyDefined'

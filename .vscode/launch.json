@@ -11,6 +11,16 @@
       "program": "${workspaceFolder}/start-js"
     },
     {
+      "name": "Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
+    },
+    {
       "name": "Debug CRA Tests",
       "type": "node",
       "request": "launch",

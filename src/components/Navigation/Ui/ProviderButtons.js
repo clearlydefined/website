@@ -12,19 +12,19 @@ export default class ProviderButtons extends Component {
     const { onClick, activeProvider } = this.props
     return (
       <ButtonGroup>
+        <Button name="npmjs" onClick={onClick} active={activeProvider === 'npmjs'}>
+          NPM
+        </Button>
         <Button name="github" onClick={onClick} active={activeProvider === 'github'}>
           GitHub
         </Button>
-        <Button name="maven" onClick={onClick} active={activeProvider === 'maven'}>
+        <Button name="mavencentral" onClick={onClick} active={activeProvider === 'mavencentral'}>
           Maven
-        </Button>
-        <Button name="npm" onClick={onClick} active={activeProvider === 'npm'}>
-          NPM
         </Button>
         <Button name="nuget" onClick={onClick} active={activeProvider === 'nuget'}>
           NuGet
         </Button>
-        <Button name="crate" onClick={onClick} active={activeProvider === 'crate'}>
+        <Button name="cratesio" onClick={onClick} active={activeProvider === 'cratesio'}>
           Crate
         </Button>
         <Button name="pypi" onClick={onClick} active={activeProvider === 'pypi'}>

@@ -112,6 +112,29 @@
   border-color: lightgray;
   min-height: 200px;
   box-shadow: 5px 5px 20px -10px lightgrey;
+
+  .fa-spinner {
+    display: none;
+  }
+
+  &.loading {
+    position: relative;
+
+    & > div {
+      transition: opacity 0.2s;
+      opacity: 0.7;
+    }
+
+    .fa-spinner {
+      display: block;
+      position: absolute;
+      font-size: 6rem;
+      left: 0;
+      right: 0;
+      text-align: center;
+      top: 70px;
+    }
+  }
 }
 
 .section-header {
@@ -171,6 +194,10 @@
   display: flex;
   & > span:first-child {
     flex-grow: 1;
+  }
+
+  & > .fas {
+    margin: 3px 0 0 10px;
   }
 }
 

@@ -24,7 +24,7 @@ import ProviderButtons from './Navigation/Ui/ProviderButtons'
 class PageHarvest extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeProvider: 'github' }
+    this.state = { activeProvider: 'npmjs' }
     this.harvestHandler = this.harvestHandler.bind(this)
     this.onAddRequest = this.onAddRequest.bind(this)
     this.onRemoveRequest = this.onRemoveRequest.bind(this)
@@ -94,10 +94,10 @@ class PageHarvest extends Component {
           <Col md={6}>{this.renderProviderButtons()}</Col>
           <Col md={6}>
             {activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'maven' && <MavenSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'npm' && <NpmSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'mavencentral' && <MavenSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'npmjs' && <NpmSelector onChange={this.onAddRequest} />}
             {activeProvider === 'nuget' && <NuGetSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'crate' && <CrateSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'cratesio' && <CrateSelector onChange={this.onAddRequest} />}
             {activeProvider === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
             {activeProvider === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
           </Col>
