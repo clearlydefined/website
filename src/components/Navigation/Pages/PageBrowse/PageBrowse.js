@@ -194,7 +194,7 @@ class PageBrowse extends SystemManagedList {
             <div className={classNames('section-body', { loading })}>
               <i className="fas fa-spinner fa-spin" />
               <ComponentList
-                readOnly={this.readOnly}
+                readOnly={false}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 listHeight={1000}

@@ -31,7 +31,7 @@ export class PageDefinitions extends UserManagedList {
     this.revertDefinition = this.revertDefinition.bind(this)
     this.renderVersionSelectopPopup = this.renderVersionSelectopPopup.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
-    this.storeList = 'browse'
+    this.storeList = 'definitions'
   }
 
   componentDidMount() {
