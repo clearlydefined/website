@@ -70,7 +70,6 @@ export default class InfiniteList extends React.Component {
                 noRowsRenderer={noRowsRenderer}
                 rowCount={currentRows()}
                 rowHeight={rowHeight}
-                threshold={1}
                 rowRenderer={rowRenderer}
                 width={width}
                 sortOrder={sortOrder}

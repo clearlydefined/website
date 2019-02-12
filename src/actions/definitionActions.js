@@ -9,7 +9,7 @@ import {
   previewDefinition,
   getDefinitionSuggestions,
   getSuggestedData,
-  browseDefinitions
+  searchDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
 import { uiBrowseUpdateList } from './ui'
@@ -99,7 +99,8 @@ export function browseDefinitionsAction(token, query, name) {
     const actions = asyncActions(name)
     dispatch(actions.start())
     try {
-      const result = await browseDefinitions(token, query)
+      if (!query.continuationToken) dispatch(uiBrowseUpdateList({ startQuery: true }))
+      const result = await searchDefinitions(token, query)
       const definitions = result.data
       dispatch(actions.success({ add: definitions }))
       const toAdd = map(definitions, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)

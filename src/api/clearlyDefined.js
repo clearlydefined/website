@@ -106,7 +106,7 @@ export function getContributionData(token, entity) {
   return get(url(`${CURATIONS}/pr/${entity}`), token)
 }
 
-export function browseDefinitions(token, query) {
+export function searchDefinitions(token, query) {
   return get(url(DEFINITIONS, query), token)
 }
 
