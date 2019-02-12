@@ -110,29 +110,19 @@ class PageBrowse extends SystemManagedList {
     return (
       <div className="filter-list" align="right">
         <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-        <FilterList
-          list={providers}
-          title={'Provider'}
-          id={'provider'}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
-        <FilterList
-          list={licenses.filter(license => license.value !== 'absence' && license.value !== 'presence')}
-          title={'License'}
-          id={'license'}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
-        <FilterList
-          list={curateFilters}
-          title={'Curate'}
-          id={'curate'}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
+        {this.renderFilter(providers, 'Provider', 'provider')}
+        {this.renderFilter(
+          licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
+          'License',
+          'license'
+        )}
+        {this.renderFilter(curateFilters, 'Curate', 'curate')}
       </div>
     )
+  }
+
+  renderFilter(list, title, id) {
+    return <FilterList list={list} title={title} id={id} value={this.state.activeFilters} onFilter={this.onFilter} />
   }
 
   async updateData(continuationToken) {
@@ -198,7 +188,7 @@ class PageBrowse extends SystemManagedList {
                 readOnly={false}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                listHeight={400}
+                listHeight={600}
                 loadMoreRows={this.loadMoreRows}
                 onRemove={this.onRemoveComponent}
                 onRevert={this.revertDefinition}
