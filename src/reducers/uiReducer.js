@@ -17,6 +17,9 @@ import {
   UI_CONTRIBUTION_GET_URL,
   UI_CONTRIBUTION_UPDATE_LIST,
   UI_CONTRIBUTION_DEFINITIONS,
+  UI_DEFINITIONS_UPDATE_FILTER,
+  UI_DEFINITIONS_UPDATE_FILTER_LIST,
+  UI_DEFINITIONS_UPDATE_LIST,
   UI_BROWSE_UPDATE_FILTER,
   UI_BROWSE_UPDATE_FILTER_LIST,
   UI_BROWSE_UPDATE_LIST,
@@ -110,6 +113,12 @@ const inspect = combineReducers({
   inspectedCuration: itemReducer(UI_GET_CURATION_DATA, item => yaml.safeDump(item, { sortKeys: true }))
 })
 
+const definitions = combineReducers({
+  filter: valueReducer(UI_DEFINITIONS_UPDATE_FILTER),
+  filterList: listReducer(UI_DEFINITIONS_UPDATE_FILTER_LIST),
+  componentList: listReducer(UI_DEFINITIONS_UPDATE_LIST, null, EntitySpec.isEquivalent)
+})
+
 const browse = combineReducers({
   filter: valueReducer(UI_BROWSE_UPDATE_FILTER),
   filterList: listReducer(UI_BROWSE_UPDATE_FILTER_LIST),
@@ -135,6 +144,7 @@ const notifications = (state = [], action) => {
 
 export default combineReducers({
   navigation,
+  definitions,
   browse,
   inspect,
   curate,

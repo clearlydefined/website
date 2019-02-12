@@ -17,8 +17,9 @@ import { login } from '../actions/sessionActions'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import {
   uiBrowseUpdateFilterList,
-  uiBrowseUpdateList,
+  uiDefinitionsUpdateList,
   uiRevertDefinition,
+  uiBrowseUpdateList,
   uiInfo,
   uiDanger,
   uiContributionUpdateList
@@ -276,6 +277,8 @@ export default class SystemManagedList extends Component {
         return this.props.dispatch(uiBrowseUpdateList(o))
       case 'contributions':
         return this.props.dispatch(uiContributionUpdateList(o))
+      case 'definitions':
+        return this.props.dispatch(uiDefinitionsUpdateList(o))
       default:
         return null
     }
@@ -333,11 +336,14 @@ export default class SystemManagedList extends Component {
       ? components.list.filter(item => isEmpty(item.changes))
       : components.list.map(({ changes, ...keepAttrs }) => keepAttrs)
     if (this.hasChanges()) {
-      dispatch(
-        uiBrowseUpdateList({
-          updateAll: refreshedData
-        })
-      )
+      switch (this.storeList) {
+        case 'browse':
+          dispatch(uiBrowseUpdateList({ updateAll: refreshedData }))
+        case 'definitions':
+          dispatch(uiDefinitionsUpdateList({ updateAll: refreshedData }))
+        default:
+          return null
+      }
     }
 
     const definitions = this.buildSaveSpec(components.list)
