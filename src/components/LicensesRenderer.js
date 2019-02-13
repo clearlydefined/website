@@ -2,8 +2,7 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ModalEditor from './ModalEditor'
-import LicensePicker from './LicensePicker'
+import InlineEditor from './InlineEditor'
 
 /**
  * Specific renderer for Licenses data
@@ -15,7 +14,7 @@ class LicensesRenderer extends Component {
     const { value, isDifferent, onSave, readOnly, field } = this.props
 
     return (
-      <ModalEditor
+      <InlineEditor
         field={field}
         extraClass={isDifferent ? 'license--isEdited' : ''}
         readOnly={readOnly}
@@ -26,7 +25,6 @@ class LicensesRenderer extends Component {
         validator
         placeholder={readOnly ? '' : 'SPDX License'}
         revertable={false}
-        editor={LicensePicker}
       />
     )
   }
