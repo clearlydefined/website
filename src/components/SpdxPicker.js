@@ -37,7 +37,7 @@ export default class SpdxPicker extends Component {
   }
 
   render() {
-    const { value, onBlur, onChange } = this.props
+    const { value, onBlur, onChange, autoFocus } = this.props
     return (
       <div className="editable-editor">
         <Typeahead
@@ -49,7 +49,7 @@ export default class SpdxPicker extends Component {
           ref={ref => (this._typeahead = ref)}
           bodyContainer
           highlightOnlyResult
-          autoFocus
+          autoFocus={autoFocus}
           selectHintOnEnter
           clearButton
         />

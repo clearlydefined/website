@@ -15,6 +15,7 @@ import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import EntitySpec from '../utils/entitySpec'
+import LicensesRenderer from './LicensesRenderer'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -187,6 +188,7 @@ export default class DefinitionEntry extends React.Component {
     const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
     const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     const { readOnly, onRevert } = this.props
+
     return (
       <Row>
         <Col md={5}>
@@ -195,16 +197,12 @@ export default class DefinitionEntry extends React.Component {
             <Col md={10} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
-                <InlineEditor
+                <LicensesRenderer
                   field={'licensed.declared'}
-                  extraClass={this.classIfDifferent('licensed.declared')}
                   readOnly={readOnly}
                   initialValue={this.getOriginalValue('licensed.declared')}
                   value={this.getValue('licensed.declared')}
                   onChange={this.fieldChange('licensed.declared')}
-                  type="license"
-                  validator={value => true}
-                  placeholder={'SPDX license'}
                   revertable
                   onRevert={() => onRevert('licensed.declared')}
                 />
