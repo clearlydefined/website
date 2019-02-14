@@ -5,7 +5,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid } from 'react-bootstrap'
 import get from 'lodash/get'
-import { uiContributionGetData } from '../../../../actions/ui'
+import { uiContributionUpdateList, uiContributionGetData } from '../../../../actions/ui'
 import { ROUTE_CURATIONS } from '../../../../utils/routingConstants'
 import { uiNavigation } from '../../../../actions/ui'
 import Section from '../../../Section'
@@ -19,7 +19,6 @@ class PageContribution extends SystemManagedList {
   constructor(props) {
     super(props)
     this.renderFilterBar = this.renderFilterBar.bind(this)
-    this.storeList = 'contributions'
   }
   componentDidMount() {
     const { dispatch, prNumber, token } = this.props
@@ -51,6 +50,10 @@ class PageContribution extends SystemManagedList {
         hasComponents={!this.hasComponents()}
       />
     )
+  }
+
+  updateList(value) {
+    return this.props.dispatch(uiContributionUpdateList(value))
   }
 
   render() {

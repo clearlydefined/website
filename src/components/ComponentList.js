@@ -61,8 +61,7 @@ export default class ComponentList extends React.Component {
 
   rowHeight({ index }) {
     const component = this.props.list[index]
-    if (!component) return 50
-    return component.expanded ? 150 : 50
+    return component && component.expanded ? 150 : 50
   }
 
   toggleExpanded(component) {
