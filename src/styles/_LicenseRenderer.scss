@@ -3,3 +3,14 @@
   color: white;
   padding: 10px;
 }
+
+.license-renderer {
+  & > div {
+    float: left;
+  }
+  .license-advanced {
+    font-size: 1.2rem;
+    margin-left: 7px;
+    cursor: pointer;
+  }
+}

@@ -104,7 +104,7 @@ class InlineEditor extends React.Component {
   editors = {
     text: value => <input size="45" type="text" defaultValue={value} />,
     date: value => <input size="45" type="date" defaultValue={value} />,
-    license: value => <SpdxPicker value={value} />
+    license: value => <SpdxPicker value={value} autoFocus={true} />
   }
 
   editorDefaults = {

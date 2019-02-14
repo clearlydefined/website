@@ -8,7 +8,7 @@ import get from 'lodash/get'
 import debounce from 'lodash/debounce'
 import classNames from 'classnames'
 import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
-import { uiNavigation, uiBrowseGet } from '../../../../actions/ui'
+import { uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
 import SystemManagedList from '../../../SystemManagedList'
 import Section from '../../../Section'
 import ComponentList from '../../../ComponentList'
@@ -30,7 +30,6 @@ class PageBrowse extends SystemManagedList {
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
-    this.storeList = 'browse'
     this.nameFilter = null
   }
 
@@ -39,8 +38,8 @@ class PageBrowse extends SystemManagedList {
     this.updateData()
   }
 
-  noRowsRenderer(loading) {
-    return loading ? <div /> : <div className="list-noRows">Broaden your filters to find more results</div>
+  noRowsRenderer(isFetching) {
+    return isFetching ? <div /> : <div className="list-noRows">Broaden your filters to find more results</div>
   }
 
   tableTitle() {
@@ -111,29 +110,19 @@ class PageBrowse extends SystemManagedList {
     return (
       <div className="filter-list" align="right">
         <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-        <FilterList
-          list={providers}
-          title={'Provider'}
-          id={'provider'}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
-        <FilterList
-          list={licenses.filter(license => license.value !== 'absence' && license.value !== 'presence')}
-          title={'License'}
-          id={'license'}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
-        <FilterList
-          list={curateFilters}
-          title={'Curate'}
-          id={'curate'}
-          value={this.state.activeFilters}
-          onFilter={this.onFilter}
-        />
+        {this.renderFilter(providers, 'Provider', 'provider')}
+        {this.renderFilter(
+          licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
+          'License',
+          'license'
+        )}
+        {this.renderFilter(curateFilters, 'Curate', 'curate')}
       </div>
     )
+  }
+
+  renderFilter(list, title, id) {
+    return <FilterList list={list} title={title} id={id} value={this.state.activeFilters} onFilter={this.onFilter} />
   }
 
   async updateData(continuationToken) {
@@ -167,9 +156,7 @@ class PageBrowse extends SystemManagedList {
         query.name = activeName.split('/')[1]
       } else query.name = activeName
     }
-    this.setState({ ...this.state, loading: true })
     const result = await this.props.dispatch(uiBrowseGet(this.props.token, query))
-    this.setState({ ...this.state, loading: false })
     return result
   }
 
@@ -178,9 +165,13 @@ class PageBrowse extends SystemManagedList {
     if (components.data) return await this.updateData(components.data)
   }
 
+  updateList(value) {
+    return this.props.dispatch(uiBrowseUpdateList(value))
+  }
+
   render() {
     const { components, definitions, session } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition, loading } = this.state
+    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt
@@ -191,13 +182,13 @@ class PageBrowse extends SystemManagedList {
         />
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <div className={classNames('section-body', { loading })}>
+            <div className={classNames('section-body', { loading: components.isFetching })}>
               <i className="fas fa-spinner fa-spin" />
               <ComponentList
                 readOnly={false}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                listHeight={1000}
+                listHeight={600}
                 loadMoreRows={this.loadMoreRows}
                 onRemove={this.onRemoveComponent}
                 onRevert={this.revertDefinition}
@@ -206,7 +197,7 @@ class PageBrowse extends SystemManagedList {
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
-                noRowsRenderer={() => this.noRowsRenderer(loading)}
+                noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
                 sequence={sequence}
                 hasChange={this.hasChange}
                 hideVersionSelector

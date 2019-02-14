@@ -15,15 +15,7 @@ import notification from 'antd/lib/notification'
 import { curateAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import {
-  uiBrowseUpdateFilterList,
-  uiDefinitionsUpdateList,
-  uiRevertDefinition,
-  uiBrowseUpdateList,
-  uiInfo,
-  uiDanger,
-  uiContributionUpdateList
-} from '../actions/ui'
+import { uiBrowseUpdateFilterList, uiRevertDefinition, uiInfo, uiDanger } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
@@ -271,19 +263,6 @@ export default class SystemManagedList extends Component {
     })
   }
 
-  updateList(o) {
-    switch (this.storeList) {
-      case 'browse':
-        return this.props.dispatch(uiBrowseUpdateList(o))
-      case 'contributions':
-        return this.props.dispatch(uiContributionUpdateList(o))
-      case 'definitions':
-        return this.props.dispatch(uiDefinitionsUpdateList(o))
-      default:
-        return null
-    }
-  }
-
   revertAll() {
     this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?')
   }
@@ -331,23 +310,15 @@ export default class SystemManagedList extends Component {
   }
 
   refresh = removeDefinitions => {
-    const { components, dispatch } = this.props
+    const { components } = this.props
     const refreshedData = removeDefinitions
       ? components.list.filter(item => isEmpty(item.changes))
       : components.list.map(({ changes, ...keepAttrs }) => keepAttrs)
-    if (this.hasChanges()) {
-      switch (this.storeList) {
-        case 'browse':
-          dispatch(uiBrowseUpdateList({ updateAll: refreshedData }))
-        case 'definitions':
-          dispatch(uiDefinitionsUpdateList({ updateAll: refreshedData }))
-        default:
-          return null
-      }
-    }
-
+    if (this.hasChanges()) this.updateList({ updateAll: refreshedData })
     const definitions = this.buildSaveSpec(components.list)
     const definitionsToGet = definitions.map(definition => definition.toPath())
     this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
   }
+
+  updateList() {}
 }
