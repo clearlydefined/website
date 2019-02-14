@@ -7,7 +7,9 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import spdxLicenseIds from 'spdx-license-ids'
 import deprecatedSpdxLicenseIds from 'spdx-license-ids/deprecated'
 import { customLicenseIds } from '../utils/utils'
+
 const identifiers = [...customLicenseIds, ...spdxLicenseIds.sort(), ...deprecatedSpdxLicenseIds.sort()]
+
 export default class SpdxPicker extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
@@ -35,12 +37,11 @@ export default class SpdxPicker extends Component {
   }
 
   render() {
-    const { value, onBlur, onChange } = this.props
-    console.log(value)
+    const { value, onBlur, onChange, autoFocus } = this.props
     return (
       <div className="editable-editor">
         <Typeahead
-          selected={[value] || []}
+          defaultInputValue={value}
           options={identifiers}
           onBlur={onBlur}
           onKeyDown={e => this.onKeyPress(e, onChange)}
@@ -48,6 +49,7 @@ export default class SpdxPicker extends Component {
           ref={ref => (this._typeahead = ref)}
           bodyContainer
           highlightOnlyResult
+          autoFocus={autoFocus}
           selectHintOnEnter
           clearButton
         />

@@ -115,15 +115,9 @@ export default class FileList extends Component {
             <LicensesRenderer
               field={`files[${row.original.id}].license`}
               readOnly={readOnly}
-              isDifferent={Contribution.ifDifferent(
-                component,
-                previewDefinition,
-                `files[${row.original.id}].license`,
-                true,
-                false
-              )}
+              initialValue={get(component.item, `files[${row.original.id}].license`)}
               value={Contribution.getValue(component.item, previewDefinition, `files[${row.original.id}].license`)}
-              onSave={license => {
+              onChange={license => {
                 this.props.onChange(`files[${row.original.id}]`, license, null, license => {
                   const attributions = Contribution.getValue(
                     component.item,
