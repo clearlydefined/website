@@ -99,7 +99,7 @@ export function browseDefinitionsAction(token, query, name) {
     const actions = asyncActions(name)
     dispatch(actions.start())
     try {
-      if (!query.continuationToken) dispatch(uiBrowseUpdateList({ startQuery: true }))
+      dispatch(uiBrowseUpdateList({ startQuery: true }))
       const result = await searchDefinitions(token, query)
       const definitions = result.data
       dispatch(actions.success({ add: definitions }))
