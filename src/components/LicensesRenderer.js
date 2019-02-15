@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { InlineEditor } from './'
 import { Modal } from 'react-bootstrap'
@@ -38,7 +38,7 @@ class LicensesRenderer extends Component {
     const { advancedView } = this.state
 
     return (
-      <div class="license-renderer">
+      <div className="license-renderer">
         <InlineEditor
           field={field}
           extraClass={extraClass}

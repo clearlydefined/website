@@ -40,7 +40,7 @@ export default class DefinitionEntry extends React.Component {
       const proposedValue = transform(value)
       const isChanged = !equality(proposedValue, this.getOriginalValue(field))
       const newChanges = { ...component.changes }
-      if (isChanged) newChanges[field] = proposedValue
+      if (isChanged && proposedValue !== null) newChanges[field] = proposedValue
       else delete newChanges[field]
       onChange && onChange(component, newChanges)
     }
@@ -72,7 +72,7 @@ export default class DefinitionEntry extends React.Component {
     const namespaceText = namespace ? namespace + '/' : ''
     const componentTag = componentUrl ? (
       <span>
-        <a href={componentUrl} target="_blank" rel="noopener noreferrer">
+        <a href={componentUrl} target="_blank" rel="noopener noreferrer" data-test-id="component-name">
           {namespaceText}
           {name}
         </a>
@@ -215,6 +215,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <ModalEditor
+                  field={'described.sourceLocation'}
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}
                   initialValue={Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
@@ -237,6 +238,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
                 <InlineEditor
+                  field={'described.releaseDate'}
                   extraClass={this.classIfDifferent('described.releaseDate')}
                   readOnly={readOnly}
                   type="date"

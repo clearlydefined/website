@@ -12,7 +12,7 @@ import {
   searchDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiBrowseUpdateList } from './ui'
+import { uiBrowseUpdateList, uiDefinitionsUpdateList } from './ui'
 import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
@@ -76,8 +76,8 @@ export function revertDefinitionAction(definition, values, name) {
     const state = getState()
     const actions = asyncActions(name)
     dispatch(actions.start({ definition, values }))
-    const componentsWithoutChanges = Definition.revert(state.ui.browse.componentList.list, definition, values)
-    dispatch(uiBrowseUpdateList({ updateAll: componentsWithoutChanges }))
+    const componentsWithoutChanges = Definition.revert(state.ui.definitions.componentList.list, definition, values)
+    dispatch(uiDefinitionsUpdateList({ updateAll: componentsWithoutChanges }))
     return dispatch(actions.success({ componentsWithoutChanges }))
   }
 }
@@ -107,7 +107,7 @@ export function browseDefinitionsAction(token, query, name) {
       if (query.continuationToken) dispatch(uiBrowseUpdateList({ addAll: toAdd, data: result.continuationToken }))
       else dispatch(uiBrowseUpdateList({ updateAll: toAdd, data: result.continuationToken }))
       const definitionActions = asyncActions(DEFINITION_BODIES)
-      definitions.map(component => {
+      definitions.forEach(component => {
         dispatch(
           definitionActions.success({
             add: { [EntitySpec.fromCoordinates(component.coordinates).toPath()]: component }
