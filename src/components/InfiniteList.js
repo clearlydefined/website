@@ -44,7 +44,7 @@ export default class InfiniteList extends React.Component {
     }
   }
 
-  render() 
+  render() {
     const { isRowLoaded, loadMoreRows, listHeight, sortOrder, contentSeq, customClassName, threshold } = this.props
     const { totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer } = this.props
     let height = Math.min(currentRows() * 150, listHeight || 300)
