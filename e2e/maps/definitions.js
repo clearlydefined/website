@@ -46,7 +46,8 @@ export const definitionsMap = {
       get files() {
         return `${definitionsMap.component.detailsElement} > div.col-md-7 > div:nth-child(3) > div.col-md-2 > b`
       },
-      licenseField: '[name="licensed.declared"] > span > span',
+      licenseField: '[name="licensed.declared"] > span',
+      licensePickerButton: '.license-renderer > .license-advanced',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`
       },

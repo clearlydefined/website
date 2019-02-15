@@ -73,8 +73,8 @@ describe('Definitions page', () => {
   }, 10000)
 
   test('should edit a license of a component in the list', async () => {
-    await expect(page).toMatchElement(definitionsMap.component.details.licenseField)
-    await expect(page).toClick(definitionsMap.component.details.licenseField)
+    await expect(page).toMatchElement(definitionsMap.component.details.licensePickerButton)
+    await expect(page).toClick(definitionsMap.component.details.licensePickerButton)
     await expect(page).toMatchElement(definitionsMap.licensePicker.identifier)
 
     const inputValue = await page.$eval(definitionsMap.licensePicker.inputField, el => el.value)
