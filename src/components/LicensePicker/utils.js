@@ -13,14 +13,6 @@ export default class LicensePickerUtils {
     return license && !['NONE', 'NOASSERTION'].includes(license) ? parse(license) : { license }
   }
 
-  static isValidExpression(expression) {
-    try {
-      return !!this.parseLicense(expression)
-    } catch (e) {
-      return false
-    }
-  }
-
   // Returns a license string based on the rules in input, following the specification of https://spdx.org/spdx-specification-21-web-version#h.jxpfx0ykyb60
   static toString(expression) {
     if (!expression) return null
