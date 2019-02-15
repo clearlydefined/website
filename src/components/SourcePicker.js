@@ -67,7 +67,7 @@ class SourcePicker extends Component {
     const { activeProvider, selectedComponent } = this.state
     const { value } = this.props
     return (
-      <Grid className="main-container">
+      <Grid className="main-container" id="source-picker">
         <Row className="show-grid spacer">
           <Col md={2}>{this.renderProviderButtons()}</Col>
           <Col md={5}>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</Col>

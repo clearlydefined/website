@@ -39,7 +39,7 @@ export default class SpdxPicker extends Component {
   render() {
     const { value, onBlur, onChange, autoFocus } = this.props
     return (
-      <div className="editable-editor">
+      <div className="editable-editor" data-test-id="spdx-input-picker">
         <Typeahead
           defaultInputValue={value}
           options={identifiers}

@@ -8,12 +8,19 @@ import 'react-bootstrap-typeahead/css/Typeahead.css'
 import withSuggestions from '../utils/withSuggestions'
 class ModalEditor extends React.Component {
   static propTypes = {
+    field: PropTypes.string.isRequired,
     readOnly: PropTypes.bool,
     initialValue: PropTypes.string,
     extraClass: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string.isRequired
+    placeholder: PropTypes.string.isRequired,
+    onRevert: PropTypes.func,
+    revertable: PropTypes.bool
+  }
+
+  static defaultProps = {
+    revertable: true
   }
 
   state = { editing: false }
@@ -53,10 +60,10 @@ class ModalEditor extends React.Component {
   }
 
   render() {
-    const { onClick, readOnly, initialValue, value, onRevert, revertable } = this.props
+    const { onClick, onRevert, revertable, readOnly, initialValue, value, field } = this.props
     const changed = initialValue !== value
     return (
-      <span className="list-singleLine">
+      <span className="list-singleLine" name={field}>
         {!readOnly && (
           <i
             className="fas fa-pencil-alt editable-marker"

@@ -40,7 +40,8 @@ export default class RowEntityList extends React.Component {
       noRowsRenderer,
       rowHeight,
       contentSeq,
-      sortOrder
+      sortOrder,
+      customClassName
     } = this.props
     return (
       <InfiniteList
@@ -54,6 +55,7 @@ export default class RowEntityList extends React.Component {
         rowHeight={rowHeight}
         sortOrder={sortOrder}
         contentSeq={contentSeq}
+        customClassName={customClassName}
       />
     )
   }

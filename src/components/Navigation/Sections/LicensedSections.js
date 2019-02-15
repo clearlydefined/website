@@ -58,6 +58,7 @@ class LicensedSection extends Component {
       },
       {
         editable: true,
+        field: 'files',
         label: 'Files',
         component: (
           <p className="list-singleLine">
