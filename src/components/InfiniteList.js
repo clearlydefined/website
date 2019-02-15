@@ -44,8 +44,8 @@ export default class InfiniteList extends React.Component {
     }
   }
 
-  render() {
-    const { isRowLoaded, loadMoreRows, listHeight, sortOrder, contentSeq, customClassName } = this.props
+  render() 
+    const { isRowLoaded, loadMoreRows, listHeight, sortOrder, contentSeq, customClassName, threshold } = this.props
     const { totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer } = this.props
     let height = Math.min(currentRows() * 150, listHeight || 300)
     if (noRowsRenderer)
@@ -53,7 +53,12 @@ export default class InfiniteList extends React.Component {
       height = Math.max(height, 200)
 
     return (
-      <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={totalRows()}>
+      <InfiniteLoader
+        isRowLoaded={isRowLoaded}
+        loadMoreRows={loadMoreRows}
+        rowCount={totalRows()}
+        threshold={threshold}
+      >
         {({ onRowsRendered, registerChild }) => (
           <AutoSizer disableHeight>
             {({ width }) => (

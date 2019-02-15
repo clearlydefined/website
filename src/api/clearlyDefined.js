@@ -106,16 +106,16 @@ export function getContributionData(token, entity) {
   return get(url(`${CURATIONS}/pr/${entity}`), token)
 }
 
-export function browseDefinitions(token, entity) {
-  return getList(url(BROWSE, { pattern: entity }), token)
+export function searchDefinitions(token, query) {
+  return get(url(DEFINITIONS, query), token)
 }
 
 export function getDefinitions(token, list) {
   return post(url(`${DEFINITIONS}`), token, list)
 }
 
-export function getDefinitionSuggestions(token, prefix, type) {
-  return getList(url(DEFINITIONS, { pattern: prefix, type }), token)
+export function getDefinitionSuggestions(token, prefix) {
+  return getList(url(DEFINITIONS, { pattern: prefix }), token)
 }
 
 export function getSuggestedData(token, entity) {

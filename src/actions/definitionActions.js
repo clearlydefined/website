@@ -3,18 +3,16 @@
 
 import { asyncActions } from './'
 import map from 'lodash/map'
-import chunk from 'lodash/chunk'
-import throat from 'throat'
 import {
   getDefinitions,
   getDefinition,
   previewDefinition,
   getDefinitionSuggestions,
   getSuggestedData,
-  browseDefinitions
+  searchDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiBrowseUpdateList, uiDanger } from './ui'
+import { uiBrowseUpdateList } from './ui'
 import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
@@ -96,21 +94,26 @@ export function getDefinitionSuggestedDataAction(token, prefix, name) {
   }
 }
 
-export function browseDefinitionsAction(token, entity, name) {
+export function browseDefinitionsAction(token, query, name) {
   return async dispatch => {
     const actions = asyncActions(name)
     dispatch(actions.start())
     try {
-      const result = await browseDefinitions(token, entity)
-      dispatch(actions.success({ add: result }))
-      const toAdd = map(result, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
-      dispatch(uiBrowseUpdateList({ updateAll: toAdd }))
-      const chunks = chunk(map(toAdd, component => EntitySpec.fromCoordinates(component).toPath(), 100))
-      try {
-        await Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
-      } catch (error) {
-        uiDanger(dispatch, 'There was an issue retrieving components')
-      }
+      dispatch(uiBrowseUpdateList({ startQuery: true }))
+      const result = await searchDefinitions(token, query)
+      const definitions = result.data
+      dispatch(actions.success({ add: definitions }))
+      const toAdd = map(definitions, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
+      if (query.continuationToken) dispatch(uiBrowseUpdateList({ addAll: toAdd, data: result.continuationToken }))
+      else dispatch(uiBrowseUpdateList({ updateAll: toAdd, data: result.continuationToken }))
+      const definitionActions = asyncActions(DEFINITION_BODIES)
+      definitions.map(component => {
+        dispatch(
+          definitionActions.success({
+            add: { [EntitySpec.fromCoordinates(component.coordinates).toPath()]: component }
+          })
+        )
+      })
     } catch (error) {
       dispatch(actions.error(error))
     }

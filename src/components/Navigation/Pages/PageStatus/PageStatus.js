@@ -170,7 +170,6 @@ export default class PageStatus extends Component {
             dataKey="value"
             data={this.state.definitionAvailability}
             labelLine={false}
-            label
             label={this.renderPieLabel}
             outerRadius={200}
             fill="#8884d8"

@@ -8,7 +8,7 @@ import { Grid, Tooltip } from 'react-bootstrap'
 import base64js from 'base64-js'
 import notification from 'antd/lib/notification'
 import get from 'lodash/get'
-import { uiNavigation, uiWarning } from '../../../../actions/ui'
+import { uiDefinitionsUpdateList, uiNavigation, uiWarning } from '../../../../actions/ui'
 import { ROUTE_DEFINITIONS } from '../../../../utils/routingConstants'
 import NotificationButtons from '../../Ui/NotificationButtons'
 import SearchBar from '../../Ui/SearchBar'
@@ -31,7 +31,6 @@ export class PageDefinitions extends UserManagedList {
     this.revertDefinition = this.revertDefinition.bind(this)
     this.renderVersionSelectopPopup = this.renderVersionSelectopPopup.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
-    this.storeList = 'browse'
   }
 
   componentDidMount() {
@@ -145,6 +144,10 @@ export class PageDefinitions extends UserManagedList {
     ) : null
   }
 
+  updateList(value) {
+    return this.props.dispatch(uiDefinitionsUpdateList(value))
+  }
+
   render() {
     const { components, definitions, session, filterOptions } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
@@ -209,10 +212,10 @@ export class PageDefinitions extends UserManagedList {
 function mapStateToProps(state, ownProps) {
   return {
     token: state.session.token,
-    filterValue: state.ui.browse.filter,
+    filterValue: state.ui.definitions.filter,
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
-    filterOptions: state.ui.browse.filterList,
-    components: state.ui.browse.componentList,
+    filterOptions: state.ui.definitions.filterList,
+    components: state.ui.definitions.componentList,
     definitions: state.definition.bodies,
     session: state.session
   }

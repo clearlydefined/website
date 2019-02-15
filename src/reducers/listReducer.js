@@ -90,6 +90,13 @@ export default (name = '', transformer = null, comparator = null) => {
       }
     }
 
+    if (result.startQuery) {
+      return {
+        ...state,
+        isFetching: true
+      }
+    }
+
     if (result.add) {
       const newList = add(state.list, result.add, comparator)
       return {
@@ -106,7 +113,9 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: newList,
-        transformedList: transformer ? transformer(newList) : newList
+        transformedList: transformer ? transformer(newList) : newList,
+        data: result.data,
+        isFetching: false
       }
     }
 
@@ -144,7 +153,9 @@ export default (name = '', transformer = null, comparator = null) => {
         ...state,
         sequence: ++state.sequence,
         list: result.updateAll,
-        transformedList: transformer ? transformer(result.updateAll) : result.updateAll
+        transformedList: transformer ? transformer(result.updateAll) : result.updateAll,
+        data: result.data,
+        isFetching: false
       }
     }
 
