@@ -8,7 +8,7 @@ let page
 
 describe('Definitions page', () => {
   beforeAll(async () => {
-    browser = await puppeteer.launch({ headless: process.env.NODE_ENV === 'debug' ? false : true, slowMo: 80 })
+    browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
     page = await browser.newPage()
     await page.setViewport({ width: 1920, height: 1080 })
     await page.goto(`${__HOST__}/definitions`, { timeout: 40000, waitUntil: 'domcontentloaded' })
