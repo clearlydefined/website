@@ -8,9 +8,12 @@ let page
 
 describe('Definitions page', () => {
   beforeAll(async () => {
-    if (process.env.JEST_TIMEOUT) jest.setTimeout(process.env.JEST_TIMEOUT)
     browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
     page = await browser.newPage()
+    if (process.env.JEST_TIMEOUT) {
+      jest.setTimeout(process.env.JEST_TIMEOUT)
+      page.setDefaultTimeout(process.env.JEST_TIMEOUT)
+    }
     await page.setViewport({ width: 1920, height: 1080 })
     await page.goto(`${__HOST__}/definitions`, { waitUntil: 'domcontentloaded' })
   })
