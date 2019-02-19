@@ -20,10 +20,12 @@ describe('Definitions page', () => {
   })
 
   it('should display "Available definitions" text on page', async () => {
+    await page.waitForSelector('.section-title')
     await expect(page).toMatch('Available definitions')
   })
 
   test('user can type a definition text and should display a component in the list', async () => {
+    await page.waitForSelector(definitionsMap.componentSearch.input)
     await expect(page).toMatchElement(definitionsMap.componentSearch.input)
     await expect(page).toClick(definitionsMap.componentSearch.input)
     await page.type(definitionsMap.componentSearch.input, 'async')
@@ -38,6 +40,7 @@ describe('Definitions page', () => {
     const componentTitle = await page.$(definitionsMap.component.name)
     const text = await (await componentTitle.getProperty('textContent')).jsonValue()
     await expect(text).toMatch('async')
+    await page.waitForSelector(definitionsMap.component.image)
     await expect(page).toMatchElement(definitionsMap.component.image)
     await expect(page).toMatchElement(definitionsMap.component.buttons)
     await expect(page).toMatchElement(definitionsMap.component.sourceButton)
@@ -49,6 +52,7 @@ describe('Definitions page', () => {
   }, 10000)
 
   test('should display the detail after clicking on a component in the list', async () => {
+    await page.waitForSelector(definitionsMap.component.firstElement)
     await expect(page).toClick(definitionsMap.component.firstElement)
     await expect(page).toMatchElement(definitionsMap.component.panel)
     const declaredElement = await page.$(definitionsMap.component.details.declared)
@@ -72,6 +76,7 @@ describe('Definitions page', () => {
   }, 10000)
 
   test('should edit a license of a component in the list', async () => {
+    await page.waitForSelector(definitionsMap.component.details.licensePickerButton)
     await expect(page).toMatchElement(definitionsMap.component.details.licensePickerButton)
     await expect(page).toClick(definitionsMap.component.details.licensePickerButton)
     await expect(page).toMatchElement(definitionsMap.licensePicker.identifier)
@@ -88,6 +93,7 @@ describe('Definitions page', () => {
   }, 10000)
 
   test('should open a modal while attempt to change a source location of a component in the list', async () => {
+    await page.waitForSelector(definitionsMap.component.details.sourceField)
     await expect(page).toMatchElement(definitionsMap.component.details.sourceField)
     await expect(page).toClick(definitionsMap.component.details.sourceField)
     await expect(page).toMatchElement(definitionsMap.sourcePicker.identifier)
@@ -101,12 +107,14 @@ describe('Definitions page', () => {
   }, 10000)
 
   test('should show an input field while attempting to change the release date of a component in the list', async () => {
+    await page.waitForSelector(definitionsMap.component.details.releaseDateField)
     await expect(page).toMatchElement(definitionsMap.component.details.releaseDateField)
     await expect(page).toClick(definitionsMap.component.details.releaseDateField)
     await expect(page).toMatchElement(definitionsMap.component.details.releaseDateInput)
   }, 10000)
 
   test('should display a modal after clicking on the inspect button of a definition the list', async () => {
+    await page.waitForSelector(definitionsMap.component.inspectButton)
     await expect(page).toMatchElement(definitionsMap.component.inspectButton)
     await expect(page).toClick(definitionsMap.component.inspectButton)
     await expect(page).toMatchElement(definitionsMap.fullDetailView.identifier)
@@ -115,6 +123,7 @@ describe('Definitions page', () => {
   }, 20000)
 
   test('should open the contribution modal', async () => {
+    await page.waitForSelector(definitionsMap.contributeButton)
     await expect(page).toMatchElement(definitionsMap.contributeButton)
     await expect(page).toClick(definitionsMap.contributeButton)
     await page.waitForSelector(definitionsMap.contributeModal.identifier)
