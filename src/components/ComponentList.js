@@ -87,7 +87,7 @@ export default class ComponentList extends React.Component {
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
     return (
-      <div key={key} style={style}>
+      <div key={key} style={style} className="component-row">
         <DefinitionEntry
           draggable
           readOnly={readOnly}
@@ -134,6 +134,7 @@ export default class ComponentList extends React.Component {
           noRowsRenderer={noRowsRenderer}
           sortOrder={sortOrder}
           contentSeq={contentSeq}
+          customClassName={'components-list'}
         />
       </div>
     )

@@ -1,139 +1,150 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+import { definitionsMap } from '../maps/definitions'
+import { setDefaultOptions } from 'expect-puppeteer'
 
-describe('Definitions page', () => {
-  beforeAll(async () => {
-    await page.setViewport({ width: 1920, height: 1080 })
-    await page.goto(`${__HOST__}/definitions`, { timeout: 40000, waitUntil: 'domcontentloaded' })
-  })
+const puppeteer = require('puppeteer')
+const defaultTimeout = process.env.JEST_TIMEOUT ? process.env.JEST_TIMEOUT : 30000
 
-  it('should display "Available definitions" text on page', async () => {
-    await expect(page).toMatch('Available definitions')
-  })
+setDefaultOptions({ timeout: defaultTimeout })
+let browser
+let page
 
-  test('user can type a definition text and should display a component in the list', async () => {
-    await page.waitForSelector('.rbt-input-main')
-    await page.click('.rbt-input-main')
-    await page.type('.rbt-input-main', 'async')
-    await page.waitFor(2000)
-    await page.waitForSelector('.rbt-menu>li')
-    let element = await page.$('.rbt-menu li:nth-child(1) a')
-    element.click()
-    await page.waitForSelector('.ReactVirtualized__Grid__innerScrollContainer')
-    await page.waitFor(2000)
-    await page.waitForSelector('.ReactVirtualized__Grid__innerScrollContainer div:nth-child(0n+1) .two-line-entry')
-    const componentTitle = await page.$(
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-body > div.list-headline > span > span:nth-child(1) > a'
-    )
-    const text = await (await componentTitle.getProperty('textContent')).jsonValue()
-    await expect(text).toMatch('async')
-    const activityArea =
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area'
-    await page.waitForSelector(`${activityArea} > img`)
-    await page.waitForSelector(`${activityArea} > .btn-group`)
+describe(
+  'Definitions page',
+  () => {
+    beforeAll(async () => {
+      jest.setTimeout(defaultTimeout)
+      browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
+      page = await browser.newPage()
+      await page.setViewport({ width: 1920, height: 1080 })
+      await page.goto(`${__HOST__}/definitions`, { waitUntil: 'domcontentloaded' })
+    })
 
-    const codeButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(1) > button > i`)
-    const codeButtonContent = await (await codeButtonElement.getProperty('className')).jsonValue()
-    await expect(codeButtonContent).toMatch('fas fa-code')
+    afterAll(() => {
+      browser.close()
+    })
 
-    const inspectButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(2) > button > i`)
-    const inspectButtonContent = await (await inspectButtonElement.getProperty('className')).jsonValue()
-    await expect(inspectButtonContent).toMatch('fas fa-search')
+    it('should display "Available definitions" text on page', async () => {
+      await page.waitForSelector('.section-title')
+      await expect(page).toMatch('Available definitions')
+    })
 
-    const copyButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(3) > button > i`)
-    const copyButtonContent = await (await copyButtonElement.getProperty('className')).jsonValue()
-    await expect(copyButtonContent).toMatch('fas fa-copy')
+    test('user can type a definition text and should display a component in the list', async () => {
+      await page.waitForSelector(definitionsMap.componentSearch.input)
+      await expect(page).toMatchElement(definitionsMap.componentSearch.input)
+      await expect(page).toClick(definitionsMap.componentSearch.input)
+      await page.type(definitionsMap.componentSearch.input, 'async')
+      await page.waitFor(2000)
+      await expect(page).toMatchElement(definitionsMap.componentSearch.list)
+      let element = await page.$(definitionsMap.componentSearch.listElement)
+      element.click()
+      await expect(page).toMatchElement(definitionsMap.componentList.list)
+      await expect(page).toMatchElement(
+        `${definitionsMap.componentList.list} ${definitionsMap.componentList.firstElement}`
+      )
+      const componentTitle = await page.$(definitionsMap.component.name)
+      const text = await (await componentTitle.getProperty('textContent')).jsonValue()
+      await expect(text).toMatch('async')
+      await page.waitForSelector(definitionsMap.component.image)
+      await expect(page).toMatchElement(definitionsMap.component.image)
+      await expect(page).toMatchElement(definitionsMap.component.buttons)
+      await expect(page).toMatchElement(definitionsMap.component.sourceButton)
+      await expect(page).toMatchElement(definitionsMap.component.inspectButton)
+      await expect(page).toMatchElement(definitionsMap.component.copyButton)
+      await expect(page).toMatchElement(definitionsMap.component.switchButton)
+      await expect(page).toMatchElement(definitionsMap.component.revertButton)
+      await expect(page).toMatchElement(definitionsMap.component.removeButton)
+    })
 
-    const switchButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(4) > div > button > i`)
-    const switchButtonContent = await (await switchButtonElement.getProperty('className')).jsonValue()
-    await expect(switchButtonContent).toMatch('fas fa-exchange-alt')
+    test('should display the detail after clicking on a component in the list', async () => {
+      await page.waitForSelector(definitionsMap.component.firstElement)
+      await expect(page).toClick(definitionsMap.component.firstElement)
+      await expect(page).toMatchElement(definitionsMap.component.panel)
+      const declaredElement = await page.$(definitionsMap.component.details.declared)
+      const declaredContent = await (await declaredElement.getProperty('textContent')).jsonValue()
+      await expect(declaredContent).toMatch('Declared')
+      const sourceElement = await page.$(definitionsMap.component.details.source)
+      const sourceContent = await (await sourceElement.getProperty('textContent')).jsonValue()
+      await expect(sourceContent).toMatch('Source')
+      const releaseElement = await page.$(definitionsMap.component.details.releaseDate)
+      const releaseContent = await (await releaseElement.getProperty('textContent')).jsonValue()
+      await expect(releaseContent).toMatch('Release')
+      const discoveredElement = await page.$(definitionsMap.component.details.discovered)
+      const discoveredContent = await (await discoveredElement.getProperty('textContent')).jsonValue()
+      await expect(discoveredContent).toMatch('Discovered')
+      const attributionElement = await page.$(definitionsMap.component.details.attribution)
+      const attributionContent = await (await attributionElement.getProperty('textContent')).jsonValue()
+      await expect(attributionContent).toMatch('Attribution')
+      const filesElement = await page.$(definitionsMap.component.details.files)
+      const filesContent = await (await filesElement.getProperty('textContent')).jsonValue()
+      await expect(filesContent).toMatch('Files')
+    })
 
-    const undoButtonElement = await page.$(`${activityArea} > .btn-group > div:nth-child(5) > button > i`)
-    const undoButtonContent = await (await undoButtonElement.getProperty('className')).jsonValue()
-    await expect(undoButtonContent).toMatch('fas fa-undo')
+    test('should edit a license of a component in the list', async () => {
+      await page.waitForSelector(definitionsMap.component.details.licensePickerButton)
+      await expect(page).toMatchElement(definitionsMap.component.details.licensePickerButton)
+      await expect(page).toClick(definitionsMap.component.details.licensePickerButton)
+      await expect(page).toMatchElement(definitionsMap.licensePicker.identifier)
 
-    const removeButtonElement = await page.$(`${activityArea} > button > i`)
-    const removeButtonContent = await (await removeButtonElement.getProperty('className')).jsonValue()
-    await expect(removeButtonContent).toMatch('fas fa-times list-remove')
-  })
+      const inputValue = await page.$eval(definitionsMap.licensePicker.inputField, el => el.value)
+      await expect(page).toClick(definitionsMap.licensePicker.inputField, 'MIT')
+      for (let i = 0; i < inputValue.length; i++) {
+        await page.keyboard.press('Backspace')
+      }
+      await page.type(definitionsMap.licensePicker.inputField, 'MIT')
+      await expect(page).toClick(definitionsMap.licensePicker.listSelection)
+      await expect(page).toClick(definitionsMap.licensePicker.buttonSuccess)
+      await expect(page).toMatchElement(definitionsMap.component.details.licenseFieldUpdated)
+    })
 
-  test('should display the detail after clicking on a component in the list', async () => {
-    const firstElement =
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1)'
-    await page.click(firstElement)
-    await page.waitForSelector(`${firstElement} > div > div.list-panel`)
-    const component =
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div.list-panel > div'
-    const declaredElement = await page.$(`${component} > div.col-md-5 > div:nth-child(1) > div.col-md-2 > b`)
-    const declaredContent = await (await declaredElement.getProperty('textContent')).jsonValue()
-    await expect(declaredContent).toMatch('Declared')
-    const sourceElement = await page.$(`${component} > div.col-md-5 > div:nth-child(2) > div.col-md-2 > b`)
-    const sourceContent = await (await sourceElement.getProperty('textContent')).jsonValue()
-    await expect(sourceContent).toMatch('Source')
-    const releaseElement = await page.$(`${component} > div.col-md-5 > div:nth-child(3) > div.col-md-2 > b`)
-    const releaseContent = await (await releaseElement.getProperty('textContent')).jsonValue()
-    await expect(releaseContent).toMatch('Release')
-    const discoveredElement = await page.$(`${component} > div.col-md-7 > div:nth-child(1) > div.col-md-2 > b`)
-    const discoveredContent = await (await discoveredElement.getProperty('textContent')).jsonValue()
-    await expect(discoveredContent).toMatch('Discovered')
-    const attributionElement = await page.$(`${component} > div.col-md-7 > div:nth-child(2) > div.col-md-2 > b`)
-    const attributionContent = await (await attributionElement.getProperty('textContent')).jsonValue()
-    await expect(attributionContent).toMatch('Attribution')
-    const filesElement = await page.$(`${component} > div.col-md-7 > div:nth-child(3) > div.col-md-2 > b`)
-    const filesContent = await (await filesElement.getProperty('textContent')).jsonValue()
-    await expect(filesContent).toMatch('Files')
-  })
+    test('should open a modal while attempt to change a source location of a component in the list', async () => {
+      await page.waitForSelector(definitionsMap.component.details.sourceField)
+      await expect(page).toMatchElement(definitionsMap.component.details.sourceField)
+      await expect(page).toClick(definitionsMap.component.details.sourceField)
+      await expect(page).toMatchElement(definitionsMap.sourcePicker.identifier)
+      const sourcePickerModal = await page.$(definitionsMap.sourcePicker.identifier)
+      await expect(sourcePickerModal).not.toBeNull()
+      await expect(page).toMatchElement(definitionsMap.sourcePicker.buttonSuccess)
+      await expect(page).toClick(definitionsMap.sourcePicker.buttonSuccess)
+      await expect(page).toMatchElement(definitionsMap.sourcePicker.identifier, { hidden: true })
+      const hiddenSourcePickerModal = await page.$(definitionsMap.sourcePicker.identifier)
+      await expect(hiddenSourcePickerModal).toBeNull()
+    })
 
-  test('should edit a license of a component in the list', async () => {
-    const component =
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div'
-    const licenseField = `${component} > div.list-panel > div > div.col-md-5 > div:nth-child(1) > div.definition__line.col-md-10 > span.list-singleLine`
+    test('should show an input field while attempting to change the release date of a component in the list', async () => {
+      await page.waitForSelector(definitionsMap.component.details.releaseDateField)
+      await expect(page).toMatchElement(definitionsMap.component.details.releaseDateField)
+      await expect(page).toClick(definitionsMap.component.details.releaseDateField)
+      await expect(page).toMatchElement(definitionsMap.component.details.releaseDateInput)
+    })
 
-    await page.waitForSelector(`${licenseField} > span.editable-field`)
-    await page.click(`${licenseField} > span.editable-field`)
-    await page.waitForSelector(`${licenseField} > div.editable-editor`)
-    const inputValue = await page.$eval(
-      `${licenseField} > div > div > div.rbt-input.form-control > div > div > input`,
-      el => el.value
-    )
-    for (let i = 0; i < inputValue.length; i++) {
-      await page.keyboard.press('Backspace')
-    }
-    await page.type(`${licenseField} > div > div > div.rbt-input.form-control > div > div > input`, 'MIT')
-    await page.click('#rbt-menu-item-1')
+    test('should display a modal after clicking on the inspect button of a definition the list', async () => {
+      await page.waitForSelector(definitionsMap.component.inspectButton)
+      await expect(page).toMatchElement(definitionsMap.component.inspectButton)
+      await expect(page).toClick(definitionsMap.component.inspectButton)
+      await page.waitForSelector(definitionsMap.fullDetailView.identifier)
+      await expect(page).toMatchElement(definitionsMap.fullDetailView.identifier)
+      await expect(page).toMatchElement(definitionsMap.fullDetailView.buttonSuccess)
+      await expect(page).toClick(definitionsMap.fullDetailView.buttonSuccess)
+    })
 
-    await page.waitForSelector(`${licenseField} > span.editable-field.bg-info`)
-    await page.waitForSelector(`${component} > div.list-row > img.list-image.list-highlight`)
-  })
-
-  test('should open a modal while attempt to change a source location of a component in the list', async () => {
-    const component =
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div'
-    const sourceField = `${component} > div.list-panel > div > div.col-md-5 > div:nth-child(2) > div.definition__line.col-md-10 > span.list-singleLine > span`
-
-    await page.waitForSelector(`${sourceField} > span.editable-field`)
-    await page.click(`${sourceField} > span.editable-field`)
-    await page.waitForSelector(`body > div:nth-child(8) > div.fade.in.modal > div.modal-dialog`)
-    await page.click(`body > div:nth-child(8) > div.fade.in.modal > div > div > div > div:nth-child(2) > button`)
-  })
-
-  test('should show an input field while attempting to change the release date of a component in the list', async () => {
-    const component =
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div'
-
-    const dateField = `${component} > div.list-panel > div > div.col-md-5 > div:nth-child(3) > div.definition__line.col-md-10 > span.list-singleLine`
-
-    await page.waitForSelector(`${dateField} > span`)
-    await page.click(`${dateField} > span`)
-    await page.waitForSelector(`${dateField} > input`)
-  })
-
-  test('should display a modal after clicking on the inspect button of a definition the list', async () => {
-    const inspectButton =
-      '#root > div > main > div > div:nth-child(2) > div:nth-child(2) > div > div > div:nth-child(2) > div > div > div > div > div > div.list-activity-area > div > div:nth-child(2) > button'
-    await page.waitForSelector(inspectButton)
-    await page.click(inspectButton)
-    await page.waitFor(4000)
-    page.waitForSelector('body > div:nth-child(8) > div > div.ant-modal-wrap.ant-modal-centered > div')
-  })
-})
+    test('should open the contribution modal', async () => {
+      await page.waitForSelector(definitionsMap.contributeButton)
+      await expect(page).toMatchElement(definitionsMap.contributeButton)
+      await expect(page).toClick(definitionsMap.contributeButton)
+      await page.waitForSelector(definitionsMap.contributeModal.identifier)
+      await expect(page).toFill(definitionsMap.contributeModal.summaryField, 'AUTOMATION TEST')
+      await expect(page).toFill(definitionsMap.contributeModal.detailsField, 'AUTOMATION TEST')
+      await expect(page).toFill(definitionsMap.contributeModal.resolutionField, 'AUTOMATION TEST')
+      await page.waitForSelector(definitionsMap.contributeModal.typeField)
+      await page.select(definitionsMap.contributeModal.typeField, 'missing')
+      await page.waitForSelector(definitionsMap.contributeButton)
+      await expect(page).toMatchElement(definitionsMap.contributeModal.contributeButton)
+      await expect(page).toClick(definitionsMap.contributeModal.contributeButton)
+      await page.waitForSelector(definitionsMap.contributeSuccess)
+      await expect(page).toMatchElement(definitionsMap.contributeSuccess, { timeout: 30000 })
+    })
+  },
+  defaultTimeout
+)

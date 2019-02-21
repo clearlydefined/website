@@ -65,7 +65,7 @@ export default class ContributePrompt extends Component {
     const { session, onLogin } = this.props
 
     return (
-      <Modal show={show} onHide={this.close}>
+      <Modal show={show} onHide={this.close} id="contribute-modal">
         <Form>
           <Modal.Header closeButton>
             <Modal.Title>Describe the changes in this curation</Modal.Title>
@@ -79,7 +79,7 @@ export default class ContributePrompt extends Component {
                     {session.isAnonymous ? 'anonymous' : `@${session.username}`}
                   </FormControl.Static>{' '}
                   {session.isAnonymous && (
-                    <Button bsStyle="success" onClick={onLogin}>
+                    <Button bsStyle="success" data-test-id="login-button" onClick={onLogin}>
                       Login
                     </Button>
                   )}
@@ -146,8 +146,16 @@ export default class ContributePrompt extends Component {
                 Remove contributed definitions from the list
               </Checkbox>
               <FormGroup className="pull-right">
-                <Button onClick={this.close}>Cancel</Button>
-                <Button bsStyle="success" disabled={!this.canSubmit()} type="button" onClick={this.okHandler}>
+                <Button data-test-id="cancel-button" onClick={this.close}>
+                  Cancel
+                </Button>
+                <Button
+                  bsStyle="success"
+                  data-test-id="contribute-button"
+                  disabled={!this.canSubmit()}
+                  type="button"
+                  onClick={this.okHandler}
+                >
                   OK
                 </Button>
               </FormGroup>

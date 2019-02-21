@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import valid from 'spdx-expression-validate'
 import set from 'lodash/set'
 import toPath from 'lodash/toPath'
 import { Button, Row, Col } from 'react-bootstrap'
@@ -33,7 +32,7 @@ export default class LicensePicker extends Component {
     this.setState({
       licenseExpression: this.props.value || '',
       rules: this.props.value ? LicensePickerUtils.parseLicense(this.props.value) : { license: '' },
-      isValid: this.props.value ? valid(this.props.value) : false
+      isValid: this.props.value ? LicensePickerUtils.isValidExpression(this.props.value) : false
     })
   }
 
@@ -41,7 +40,11 @@ export default class LicensePicker extends Component {
     const { rules, sequence } = this.state
     if (sequence !== prevState.sequence) {
       const licenseExpression = LicensePickerUtils.toString(rules)
-      this.setState({ ...this.state, licenseExpression, isValid: valid(licenseExpression) })
+      this.setState({
+        ...this.state,
+        licenseExpression,
+        isValid: LicensePickerUtils.isValidExpression(licenseExpression)
+      })
     }
   }
 
@@ -98,10 +101,15 @@ export default class LicensePicker extends Component {
             </span>
           </Col>
           <Col md={2} className="spdx-picker-header-buttons">
-            <Button bsStyle="success" disabled={false} onClick={() => onChange(licenseExpression)}>
+            <Button
+              bsStyle="success"
+              data-test-id="license-picker-ok-button"
+              disabled={false}
+              onClick={() => onChange(licenseExpression)}
+            >
               OK
             </Button>
-            <Button bsStyle="danger" disabled={false} onClick={onClose}>
+            <Button bsStyle="danger" data-test-id="license-picker-cancel-button" disabled={false} onClick={onClose}>
               Cancel
             </Button>
           </Col>

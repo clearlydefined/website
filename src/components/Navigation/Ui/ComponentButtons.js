@@ -106,10 +106,16 @@ export default class ComponentButtons extends Component {
                   trigger={['click']}
                   overlay={
                     <Menu>
-                      <Menu.Item onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}>
+                      <Menu.Item
+                        data-test-id="switch-component-version"
+                        onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}
+                      >
                         Switch version
                       </Menu.Item>
-                      <Menu.Item onClick={this.showVersionSelectorPopup.bind(this, currentComponent, true)}>
+                      <Menu.Item
+                        data-test-id="add-component-version"
+                        onClick={this.showVersionSelectorPopup.bind(this, currentComponent, true)}
+                      >
                         Add more versions
                       </Menu.Item>
                     </Menu>
