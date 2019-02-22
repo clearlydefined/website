@@ -27,6 +27,10 @@
     font-size: $size-text-message;
     color: $color-text-main;
     text-align: center;
+
+    @media screen and (max-width: 992px) {
+      font-size: $size-text-message / 1.5;
+    }
   }
 
   h3 {
@@ -72,6 +76,10 @@
 
   .about-text {
     font-size: 1.25em;
+
+    ul {
+      padding-left: 30px;
+    }
   }
 
   .landing-large-logo {

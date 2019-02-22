@@ -118,69 +118,69 @@ class PageAbout extends Component {
           </Col>
         </Row>
 
-        <Row className="show-grid">
-          <Col md={3} mdOffset={2}>
+        <Row className="text-center">
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={aws} width="120" className="about-image" alt="aws" />
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={eclipse} width="200" className="about-image" alt="eclipse" />
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={nexb} width="140" className="about-image" alt="nexb" />
             </div>
           </Col>
         </Row>
-        <Row>
-          <Col md={3} mdOffset={2}>
+        <Row className="text-center">
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={here} width="130" className="about-image" alt="here" />
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={microsoft} width="220" className="about-image" alt="microsoft" />
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={osi} width="120" className="about-image" alt="osi" />
             </div>
           </Col>
         </Row>
-        <Row>
-          <Col md={3} mdOffset={2}>
+        <Row className="text-center">
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={qualcomm} width="190" className="about-image" alt="qualcomm" />
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={swh} width="240" className="about-image" alt="swh" />
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={sap} width="160" className="about-image" alt="sap" />
             </div>
           </Col>
         </Row>
-        <Row>
-          <Col md={3} mdOffset={2}>
+        <Row className="text-center">
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={webyourmind} width="190" className="about-image" alt="webyourmind" />
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={google} width="220" className="about-image" alt="google" />
             </div>
           </Col>
-          <Col md={3}>
+          <Col md={3} className="center-block">
             <div className="about-cell">
               <img src={codescoop} width="220" className="about-image" alt="codescoop" />
             </div>
