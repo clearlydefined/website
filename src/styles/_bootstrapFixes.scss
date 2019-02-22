@@ -11,3 +11,18 @@
   background-color: #dddddd;
   font-weight: 400;
 }
+
+.navbar-inverse .navbar-collapse,
+.navbar-inverse .navbar-form {
+  background-color: #222;
+}
+
+.navbar-toggle {
+  margin-top: 23px;
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    margin: 15.5px -15px;
+  }
+}

@@ -37,7 +37,7 @@ class Header extends Component {
 
   renderDocs() {
     return (
-      <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>
+      <Nav activeKey="0" pullRight={true}>
         <NavItem eventKey={1} onClick={this.gotoDocs}>
           Docs
         </NavItem>
@@ -47,19 +47,20 @@ class Header extends Component {
 
   renderLogin() {
     const { session } = this.props
+    let navItem = (
+      <NavItem eventKey={1} onClick={this.doLogout}>
+        Logout
+      </NavItem>
+    )
     if (session.isAnonymous && !session.isFetching)
-      return (
-        <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>
-          <NavItem eventKey={1} onClick={this.handleLogin}>
-            Login
-          </NavItem>
-        </Nav>
+      navItem = (
+        <NavItem eventKey={1} onClick={this.handleLogin}>
+          Login
+        </NavItem>
       )
     return (
-      <Nav id="nav_profile" bsStyle="pills" activeKey="0" pullRight={true}>
-        <NavItem eventKey={1} onClick={this.doLogout}>
-          Logout
-        </NavItem>
+      <Nav activeKey="0" pullRight={true}>
+        {navItem}
       </Nav>
     )
   }
@@ -69,7 +70,7 @@ class Header extends Component {
       ? o => o.protected !== 1
       : o => o.protected !== -1 && this.hasPermissions(o.permissions)
     return (
-      <Nav bsStyle="pills">
+      <Nav>
         {filter(navigation, filterExpr).map((navItem, i) => {
           return (
             <IndexLinkContainer active={navItem.isSelected} activeClassName="active" to={navItem.to} key={i}>
@@ -91,13 +92,14 @@ class Header extends Component {
   render() {
     const { session, navigation } = this.props
     return (
-      <Navbar inverse={true} id="nav_header">
+      <Navbar inverse={true}>
         <Navbar.Header>
           <Navbar.Brand>
             <LinkContainer to={ROUTE_ROOT}>
               <img src={logo} className="App-logo" alt="logo" />
             </LinkContainer>
           </Navbar.Brand>
+          <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
           {this.renderNavigation(navigation, session.isAnonymous)}
