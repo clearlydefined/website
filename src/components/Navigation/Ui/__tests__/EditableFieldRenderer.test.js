@@ -84,7 +84,7 @@ describe('EditableFieldRenderer', () => {
   it('check computedValues for field of type date', () => {
     const customProps = { ...props, type: 'date' }
     const wrapper = shallow(<EditableFieldRenderer {...customProps} />)
-    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null})
+    expect(wrapper.state()).toEqual({ computedValue: null, initialValue: null })
   })
   it('check computedValues for field of type coordinates', () => {
     const customProps = { ...props, type: 'coordinates' }

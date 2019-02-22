@@ -29,22 +29,22 @@ export const definitionsMap = {
     },
     details: {
       get declared() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-5 > div:nth-child(1) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > b`
       },
       get source() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-5 > div:nth-child(2) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > b`
       },
       get releaseDate() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-5 > div:nth-child(3) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > b`
       },
       get discovered() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-7 > div:nth-child(1) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > b`
       },
       get attribution() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-7 > div:nth-child(2) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > b`
       },
       get files() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-7 > div:nth-child(3) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > b`
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',

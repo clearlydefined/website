@@ -101,6 +101,14 @@
   margin: 30px;
 }
 
+.spacer-search {
+  margin: 3rem;
+
+  @media screen and (max-width: 992px) {
+    margin: 4rem 1rem 1rem;
+  }
+}
+
 .top-space {
   padding-top: 30px;
   padding-bottom: 7px;
@@ -143,17 +151,74 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media screen and (max-width: 992px) {
+    padding-top: 20px;
+  }
 }
 
 .section-title {
   font-size: 2em;
+
+  @media screen and (max-width: 1199px) {
+    font-size: 1.5em;
+  }
+}
+
+.section-button,
+.list-activity-area,
+.filter-bar {
+  // same as .btn-sm
+  @media screen and (max-width: 992px) {
+    .btn {
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+    }
+  }
+
+  // same as .btn-xs
+  @media screen and (max-width: 767px) {
+    .btn {
+      padding: 1px 5px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+    }
+  }
+}
+
+#buttonbar-collapse,
+.dropdown-menu-right {
+  padding: 0;
+  margin: -1px 0 0;
+  border: 1px;
+}
+
+.section-body {
+  // same as .btn-sm
+  @media screen and (max-width: 992px) {
+    .btn {
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+    }
+  }
+}
+
+.buttons-bar {
+  .btn-group,
+  .btn {
+    margin-left: 3px;
+  }
 }
 
 .editable-field {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 300px;
 }
 
 .editable-marker {
@@ -253,4 +318,12 @@
 
 hr {
   margin: 75px 0;
+}
+
+.rbt-input.form-control {
+  padding: 5px 17px;
+}
+
+.ReactVirtualized__Grid__innerScrollContainer {
+  overflow: visible !important;
 }

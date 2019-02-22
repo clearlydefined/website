@@ -66,4 +66,20 @@ const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'abs
 
 const curateFilters = [{ value: 'licensed', label: 'Licensed' }, { value: 'described', label: 'Described' }]
 
-export { setIfValue, difference, customLicenseIds, asObject, sorts, licenses, sources, releaseDates, curateFilters }
+const isMobile = window.innerWidth < 991
+// isMobile ? 1 : 1.4
+const isMobileMultiplier = isMobile ? 1 : 1.4
+
+export {
+  setIfValue,
+  difference,
+  customLicenseIds,
+  asObject,
+  sorts,
+  licenses,
+  sources,
+  releaseDates,
+  curateFilters,
+  isMobile,
+  isMobileMultiplier
+}

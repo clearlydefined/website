@@ -24,10 +24,10 @@ function withSuggestions(WrappedComponent) {
     render() {
       const { suggestedData, field } = this.props
       return (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <>
           <WrappedComponent {...this.props} ref={this.cmp} />
           {suggestedData && <SuggestionsList field={field} items={suggestedData} onSelect={this.applySuggestion} />}
-        </div>
+        </>
       )
     }
   }

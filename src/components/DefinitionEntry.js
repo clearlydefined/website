@@ -191,10 +191,10 @@ export default class DefinitionEntry extends React.Component {
 
     return (
       <Row>
-        <Col md={5}>
+        <Col sm={5}>
           <Row>
-            <Col md={2}>{this.renderLabel('Declared', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Declared')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <LicensesRenderer
@@ -210,8 +210,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Source', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Source')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <ModalEditor
@@ -233,8 +233,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Release', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Release')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
                 <InlineEditor
@@ -254,22 +254,22 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
         </Col>
-        <Col md={7}>
+        <Col sm={7}>
           <Row>
-            <Col md={2}>{this.renderLabel('Discovered')}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Discovered')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Attribution')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Files')}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Files')}</Col>
+            <Col xs={9} className="definition__line">
               <p className="list-singleLine">
                 Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
                 <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}

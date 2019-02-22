@@ -11,8 +11,27 @@ describe('LicensePickerUtils', () => {
     const licenseString = LicensePickerUtils.parseLicense('Apache-2.0 OR MIT')
     expect(licenseString).toEqual(testRules)
   })
+
   it('parse a definition with no license', () => {
     const licenseString = LicensePickerUtils.parseLicense('NOASSERTION')
     expect(licenseString).toEqual({ license: 'NOASSERTION' })
+  })
+
+  it('determines if spdx expression is valid', () => {
+    const data = {
+      MIT: true,
+      'MIT-0': true,
+      'MIT AND Apache-2.0': true,
+      'MIT OR Apache-2.0': true,
+      junk: false,
+      'MIT AND ADSL AND (AFL-3.0 OR AGPL-1.0-only)': true,
+      null: false,
+      NONE: true,
+      NOASSERTION: true
+    }
+
+    for (let input of Object.keys(data)) {
+      expect(LicensePickerUtils.isValidExpression(input)).toEqual(data[input])
+    }
   })
 })
