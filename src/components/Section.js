@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col } from 'react-bootstrap'
-
 import { isMobile } from '../utils/utils'
 
 export default class Section extends Component {

@@ -8,6 +8,7 @@ import Modal from 'antd/lib/modal'
 import 'antd/dist/antd.css'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
+import { isMobile } from '../../utils/utils'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
@@ -33,7 +34,8 @@ export class AbstractFullDetailsView extends Component {
       <Modal
         closable={false}
         footer={null}
-        centered
+        // if it's mobile do not center the Modal
+        centered={!isMobile}
         destroyOnClose={true}
         visible={visible}
         width={'85%'}

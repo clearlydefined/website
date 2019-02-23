@@ -66,8 +66,33 @@ const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'abs
 
 const curateFilters = [{ value: 'licensed', label: 'Licensed' }, { value: 'described', label: 'Described' }]
 
-const isMobile = window.innerWidth < 991
-// isMobile ? 1 : 1.4
+;(function() {
+  var throttle = function(type, name, obj) {
+    obj = obj || window
+    var running = false
+    var func = function() {
+      if (running) return
+      running = true
+      requestAnimationFrame(function() {
+        obj.dispatchEvent(new CustomEvent(name))
+        running = false
+      })
+    }
+    obj.addEventListener(type, func)
+  }
+
+  /* init - you can init any event */
+  throttle('resize', 'optimizedResize')
+})()
+
+let isMobile
+
+// handle resize event
+window.addEventListener('optimizedResize', function() {
+  isMobile = window.innerWidth < 768
+})
+
+// if it's mobile size use 1.4x multipler for the component list height
 const isMobileMultiplier = isMobile ? 1 : 1.4
 
 export {
