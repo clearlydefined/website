@@ -59,6 +59,22 @@ export default class ComponentButtons extends Component {
     this.props.showVersionSelectorPopup(component, multiple)
   }
 
+  renderMobileButtonGroup() {
+    return (
+      <ButtonToolbar>
+        <BSDropdown id="split-button-pull-right" onClick={event => event.stopPropagation()}>
+          <BSDropdown.Toggle>
+            <span className="sr-only">Toggle navigation</span>
+            <span className="icon-bar" />
+            <span className="icon-bar" />
+            <span className="icon-bar" />
+          </BSDropdown.Toggle>
+          <BSDropdown.Menu className="dropdown-menu-right">{this.renderButtonGroup()}</BSDropdown.Menu>
+        </BSDropdown>
+      </ButtonToolbar>
+    )
+  }
+
   renderButtonGroup() {
     const { definition, currentComponent, readOnly, hasChange, hideVersionSelector } = this.props
     const component = EntitySpec.fromCoordinates(currentComponent)
@@ -142,21 +158,7 @@ export default class ComponentButtons extends Component {
         {scores && <ScoreRenderer scores={scores} definition={definition} />}
         {isCurated && <Tag color="green">Curated</Tag>}
         {hasPendingCurations && <Tag color="gold">Pending Curations</Tag>}
-        {isMobile ? (
-          <ButtonToolbar>
-            <BSDropdown id="split-button-pull-right" onClick={event => event.stopPropagation()}>
-              <BSDropdown.Toggle>
-                <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar" />
-                <span className="icon-bar" />
-                <span className="icon-bar" />
-              </BSDropdown.Toggle>
-              <BSDropdown.Menu className="dropdown-menu-right">{this.renderButtonGroup()}</BSDropdown.Menu>
-            </BSDropdown>
-          </ButtonToolbar>
-        ) : (
-          this.renderButtonGroup()
-        )}
+        {isMobile ? this.renderMobileButtonGroup() : this.renderButtonGroup()}
 
         {!readOnly && (
           <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
