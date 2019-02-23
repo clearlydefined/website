@@ -17,12 +17,17 @@
   background-color: #222;
 }
 
-.navbar-toggle {
-  margin-top: 23px;
+@media screen and (max-width: 768px) {
+  .navbar-collapse {
+    padding-top: 15.5px;
+    padding-bottom: 15.5px;
+  }
+
+  .navbar-nav {
+    margin: 0 -15px;
+  }
 }
 
-@media (max-width: 768px) {
-  .navbar-nav {
-    margin: 15.5px -15px;
-  }
+.navbar-toggle {
+  margin-top: 23px;
 }

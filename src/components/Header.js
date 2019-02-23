@@ -37,31 +37,24 @@ class Header extends Component {
 
   renderDocs() {
     return (
-      <Nav activeKey="0" pullRight={true}>
-        <NavItem eventKey={1} onClick={this.gotoDocs}>
-          Docs
-        </NavItem>
-      </Nav>
+      <NavItem eventKey={1} onClick={this.gotoDocs}>
+        Docs
+      </NavItem>
     )
   }
 
   renderLogin() {
     const { session } = this.props
-    let navItem = (
-      <NavItem eventKey={1} onClick={this.doLogout}>
-        Logout
-      </NavItem>
-    )
     if (session.isAnonymous && !session.isFetching)
-      navItem = (
+      return (
         <NavItem eventKey={1} onClick={this.handleLogin}>
           Login
         </NavItem>
       )
     return (
-      <Nav activeKey="0" pullRight={true}>
-        {navItem}
-      </Nav>
+      <NavItem eventKey={1} onClick={this.doLogout}>
+        Logout
+      </NavItem>
     )
   }
 
@@ -103,8 +96,10 @@ class Header extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           {this.renderNavigation(navigation, session.isAnonymous)}
-          {this.renderLogin()}
-          {this.renderDocs()}
+          <Nav activeKey="0" pullRight={true}>
+            {this.renderLogin()}
+            {this.renderDocs()}
+          </Nav>
         </Navbar.Collapse>
       </Navbar>
     )
