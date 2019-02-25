@@ -3,16 +3,19 @@
 
 import React, { Component } from 'react'
 import { Header, Footer, NotificationList } from './'
+import { WindowProvider } from '../utils/WindowProvider'
 
 export default class App extends Component {
   render() {
     const { children } = this.props
     return (
       <div className="App">
-        <Header />
-        <main className="App-content">{children}</main>
-        <Footer />
-        <NotificationList />
+        <WindowProvider>
+          <Header />
+          <main className="App-content">{children}</main>
+          <Footer />
+          <NotificationList />
+        </WindowProvider>
       </div>
     )
   }

@@ -6,10 +6,10 @@ import PropTypes from 'prop-types'
 import isEqual from 'lodash/isEqual'
 import { RowEntityList, DefinitionEntry } from './'
 import EntitySpec from '../utils/entitySpec'
-import { isMobileMultiplier } from '../utils/utils'
 import ComponentButtons from './Navigation/Ui/ComponentButtons'
+import { withResize } from '../utils/WindowProvider'
 
-export default class ComponentList extends React.Component {
+class ComponentList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     listLength: PropTypes.number,
@@ -62,7 +62,7 @@ export default class ComponentList extends React.Component {
 
   rowHeight({ index }) {
     const component = this.props.list[index]
-    return component && component.expanded ? 150 * isMobileMultiplier : 50
+    return component && component.expanded ? 150 * this.props.isMobileMultiplier : 50
   }
 
   toggleExpanded(component) {
@@ -120,7 +120,15 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, listLength, renderFilterBar } = this.props
+    const {
+      loadMoreRows,
+      listHeight,
+      noRowsRenderer,
+      list,
+      listLength,
+      renderFilterBar,
+      isMobileMultiplier
+    } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
       <div>
@@ -141,3 +149,5 @@ export default class ComponentList extends React.Component {
     )
   }
 }
+
+export default withResize(ComponentList)

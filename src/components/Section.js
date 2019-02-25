@@ -4,9 +4,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col } from 'react-bootstrap'
-import { isMobile } from '../utils/utils'
+import { withResize } from '../utils/WindowProvider'
 
-export default class Section extends Component {
+class Section extends Component {
   static propTypes = {
     actionButton: PropTypes.element,
     children: PropTypes.element,
@@ -14,7 +14,7 @@ export default class Section extends Component {
   }
 
   render() {
-    const { name, actionButton, children } = this.props
+    const { name, actionButton, children, isMobile } = this.props
     return (
       <>
         {isMobile ? (
@@ -45,3 +45,5 @@ export default class Section extends Component {
     )
   }
 }
+
+export default withResize(Section)

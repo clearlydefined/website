@@ -7,12 +7,12 @@ import { Menu, Dropdown, Icon } from 'antd'
 import { CopyUrlButton } from '../../'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
-import { isMobile } from '../../../utils/utils'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import ButtonWithTooltip from './ButtonWithTooltip'
 import ScoreRenderer from './ScoreRenderer'
+import { withResize } from '../../../utils/WindowProvider'
 
-export default class ComponentButtons extends Component {
+class ComponentButtons extends Component {
   static propTypes = {
     definitions: PropTypes.object,
     currentComponent: PropTypes.object,
@@ -148,7 +148,7 @@ export default class ComponentButtons extends Component {
   }
 
   render() {
-    const { definition, currentComponent, readOnly } = this.props
+    const { definition, currentComponent, readOnly, isMobile } = this.props
     const component = EntitySpec.fromCoordinates(currentComponent)
     const scores = Definition.computeScores(definition)
     const isCurated = Definition.isCurated(definition)
@@ -169,3 +169,5 @@ export default class ComponentButtons extends Component {
     )
   }
 }
+
+export default withResize(ComponentButtons)
