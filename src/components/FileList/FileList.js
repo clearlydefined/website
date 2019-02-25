@@ -13,6 +13,22 @@ export default class FileList extends Component {
     expandedRows: []
   }
 
+  filterValues = (record, dataIndex, value) => {
+    if (Object.keys(record).includes('children')) {
+      const result = record.children.reduce((previousValue, item) => {
+        previousValue = this.filterValues(item, dataIndex, value)
+        return previousValue
+      }, false)
+      return result
+    }
+    return record[dataIndex]
+      ? record[dataIndex]
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase())
+      : false
+  }
+
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
@@ -42,14 +58,7 @@ export default class FileList extends Component {
     ),
     sorter: false,
     filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
-    onFilter: (value, record) => {
-      return record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : false
-    },
+    onFilter: (value, record) => this.filterValues(record, dataIndex, value),
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
         setTimeout(() => this.searchInput.select())
