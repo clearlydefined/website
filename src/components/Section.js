@@ -32,10 +32,10 @@ class Section extends Component {
           </>
         ) : (
           <Row className="section-header">
-            <Col sm={3} md={4}>
+            <Col md={3} lg={4}>
               <div className="section-title">{name}</div>
             </Col>
-            <Col sm={9} md={8}>
+            <Col md={9} lg={8}>
               <div className="section-button">{actionButton}</div>
             </Col>
           </Row>

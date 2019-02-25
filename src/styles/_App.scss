@@ -104,7 +104,7 @@
 .spacer-search {
   margin: 3rem;
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: 768px) {
     margin: 4rem 1rem 1rem;
   }
 }
@@ -152,7 +152,7 @@
   align-items: center;
   justify-content: center;
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: 768px) {
     padding-top: 20px;
   }
 }
@@ -160,7 +160,7 @@
 .section-title {
   font-size: 2em;
 
-  @media screen and (max-width: 1199px) {
+  @media screen and (max-width: 1200px) {
     font-size: 1.5em;
   }
 }
@@ -179,7 +179,7 @@
   }
 
   // same as .btn-xs
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 768px) {
     .btn {
       padding: 1px 5px;
       font-size: 12px;
