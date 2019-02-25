@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Table, Input, Button, Icon } from 'antd'
 import get from 'lodash/get'
+import isArray from 'lodash/isArray'
 import CopyrightsRenderer from '../../components/CopyrightsRenderer'
 import LicensesRenderer from '../../components/LicensesRenderer'
 import FacetsRenderer from '../../components/FacetsRenderer'
@@ -21,12 +22,16 @@ export default class FileList extends Component {
       }, false)
       return result
     }
+
+    if (!record[dataIndex]) return false
+    if (isArray(record[dataIndex]))
+      return record[dataIndex].find(item => (Object.keys(item).length > 0 ? item.value === value : item === value))
+        ? true
+        : false
     return record[dataIndex]
-      ? record[dataIndex]
-          .toString()
-          .toLowerCase()
-          .includes(value.toLowerCase())
-      : false
+      .toString()
+      .toLowerCase()
+      .includes(value.toLowerCase())
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -174,6 +179,7 @@ export default class FileList extends Component {
         width: '25%'
       }
     ]
+
     return (
       <Table
         className="file-list"
