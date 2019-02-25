@@ -25,6 +25,7 @@ export default class DefinitionEntry extends React.Component {
     activeFacets: PropTypes.array,
     definition: PropTypes.object.isRequired,
     component: PropTypes.object.isRequired,
+    multiSelectEnabled: PropTypes.bool,
     renderButtons: PropTypes.func
   }
 
@@ -324,21 +325,42 @@ export default class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const { definition, onClick, renderButtons, component, draggable } = this.props
+    const {
+      definition,
+      onClick,
+      renderButtons,
+      component,
+      draggable,
+      multiSelectEnabled,
+      selected,
+      toggleCheckbox
+    } = this.props
+
     return (
-      <TwoLineEntry
-        draggable={draggable}
-        item={component}
-        highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
-        image={this.getImage(definition)}
-        letter={definition.coordinates.type.slice(0, 1).toUpperCase()}
-        headline={this.renderHeadline(definition)}
-        message={this.renderMessage(definition)}
-        buttons={renderButtons && renderButtons(definition)}
-        onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
-        isEmpty={Definition.isDefinitionEmpty(definition)}
-        panel={component.expanded ? this.renderPanel(definition) : null}
-      />
+      <>
+        {multiSelectEnabled && (
+          <input
+            className="pull-left"
+            type="checkbox"
+            onChange={toggleCheckbox}
+            name="component-list"
+            checked={selected}
+          />
+        )}
+        <TwoLineEntry
+          draggable={draggable}
+          item={component}
+          highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
+          image={this.getImage(definition)}
+          letter={definition.coordinates.type.slice(0, 1).toUpperCase()}
+          headline={this.renderHeadline(definition)}
+          message={this.renderMessage(definition)}
+          buttons={renderButtons && renderButtons(definition)}
+          onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
+          isEmpty={Definition.isDefinitionEmpty(definition)}
+          panel={component.expanded ? this.renderPanel(definition) : null}
+        />
+      </>
     )
   }
 }

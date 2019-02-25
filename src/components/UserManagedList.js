@@ -27,6 +27,7 @@ export default class UserManagedList extends SystemManagedList {
     this.state = {
       activeFilters: {},
       activeSort: null,
+      selected: {},
       sequence: 0,
       showFullDetail: false,
       path: null
