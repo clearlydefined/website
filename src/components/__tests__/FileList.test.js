@@ -93,6 +93,6 @@ const definition = {
 
 describe('FileList', () => {
   it('renders without crashing', () => {
-    shallow(<FileList />)
+    shallow(<FileList component={definition} files={files} />)
   })
 })
