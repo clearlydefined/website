@@ -111,7 +111,7 @@ export default class ContributePrompt extends Component {
               label="Summary"
               value={summary || ''}
               onChange={this.handleChange}
-              placeholder="Short summary of changes. Like a commit message. Maximum 100 characters"
+              placeholder="Short summary of changes. Like a commit message. Maximum 100 characters. This text will be used to generate the title of the PR."
               maxLength={100}
               required
             />
