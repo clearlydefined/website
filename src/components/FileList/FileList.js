@@ -98,7 +98,8 @@ export default class FileList extends Component {
         key: 'name',
         ...this.getColumnSearchProps('name'),
         render: text => <span>{text}</span>,
-        width: '30%'
+        width: '30%',
+        className: 'column-name'
       },
       {
         title: 'Facets',
@@ -106,12 +107,14 @@ export default class FileList extends Component {
         key: 'facets',
         ...this.getColumnSearchProps('facets'),
         render: (value, record) => !record.children && <FacetsRenderer key={record.id} values={value || []} />,
-        width: '20%'
+        width: '20%',
+        className: 'column-facets'
       },
       {
         title: 'Licenses',
         dataIndex: 'license',
         key: 'license',
+        className: 'column-license',
         ...this.getColumnSearchProps('license'),
         render: (value, record) =>
           !record.children && (
@@ -143,6 +146,7 @@ export default class FileList extends Component {
         title: 'Copyrights',
         dataIndex: 'attributions',
         key: 'attributions',
+        className: 'column-copyrights',
         ...this.getColumnSearchProps('attributions'),
         render: (value, record) => {
           return (
@@ -172,6 +176,7 @@ export default class FileList extends Component {
     ]
     return (
       <Table
+        className="file-list"
         columns={columns}
         dataSource={FileListSpec.pathToTreeFolders(files, component.item, previewDefinition)}
         onChange={this.handleChange}
