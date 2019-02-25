@@ -95,14 +95,4 @@ describe('FileList', () => {
   it('renders without crashing', () => {
     shallow(<FileList />)
   })
-  it('renders a list of files', () => {
-    const wrapper = shallow(<FileList files={files} component={definition} />)
-    expect(wrapper.state().files).toEqual(files)
-  })
-  it('renders a list of files for the first definition, and an empty list for the second', () => {
-    const wrapper = shallow(<FileList files={files} component={definition} />)
-    expect(wrapper.state().files).toEqual(files)
-    wrapper.setProps({ files: null })
-    expect(wrapper.state().files).toEqual([])
-  })
 })
