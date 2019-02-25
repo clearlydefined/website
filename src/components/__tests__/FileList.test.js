@@ -10,15 +10,94 @@ describe('FileList', () => {
   it('filters files for name', () => {
     const wrapper = shallow(<FileList component={definition} files={files} />)
     const instance = wrapper.instance()
-    const resultNuget = nugetTreeFolders.map(record => instance.filterValues(record, 'name', 'install'))
-    expect(resultNuget).toEqual([false, true, false, false, false])
+    const resultNuget = instance.filterFiles(nugetTreeFolders, 'name', 'install')
+    expect(resultNuget).toEqual([
+      {
+        children: [
+          {
+            facets: [{ isDifferent: false, value: 'core' }],
+            folders: ['install.ps1'],
+            id: 18,
+            key: 27,
+            license: '',
+            name: 'install.ps1',
+            path: 'tools/install.ps1'
+          }
+        ],
+        folders: ['install.ps1'],
+        id: 18,
+        key: 26,
+        name: 'tools',
+        path: 'tools/install.ps1'
+      }
+    ])
+    const resultAxios = instance.filterFiles(axiosTreeFolders, 'name', 'package')
+    expect(resultAxios).toEqual([
+      {
+        attributions: ['(c) 2018 by Matt Zabriskie'],
+        children: [
+          {
+            facets: [{ isDifferent: false, value: 'core' }],
+            folders: ['package.json'],
+            hashes: { sha1: 'e2180deb3f1ee8d2c5fe6689bdeffc2e64a64d91' },
+            id: 1,
+            key: 9,
+            license: 'MIT',
+            name: 'package.json',
+            path: 'package/package.json'
+          }
+        ],
+        folders: ['axios.js'],
+        hashes: { sha1: '94ece417aa560aa8de906e8f54c0985da90364cc' },
+        id: 3,
+        key: 1,
+        name: 'package',
+        path: 'package/dist/axios.js'
+      }
+    ])
   })
 
   it('filters files for facets', () => {
     const wrapper = shallow(<FileList component={definition} files={files} />)
     const instance = wrapper.instance()
-    const result = nugetTreeFolders.map(record => instance.filterValues(record, 'facets', 'core'))
-    expect(result).toEqual([true, true, true, true, true])
+    const resultNuget = nugetTreeFolders.map(record => instance.filterValues(record, 'facets', 'core'))
+    expect(resultNuget).toEqual(nugetTreeFolders)
+    const resultAxios = axiosTreeFolders.map(record => instance.filterValues(record, 'facets', 'data'))
+    expect(resultAxios).toEqual([
+      {
+        attributions: ['(c) 2018 by Matt Zabriskie'],
+        children: [
+          {
+            attributions: ['(c) 2018 by Matt Zabriskie'],
+            children: [
+              {
+                attributions: [{ isDifferent: false, value: '(c) 2018 by Matt Zabriskie' }],
+                facets: [{ isDifferent: false, value: 'data' }],
+                folders: ['axios.min.js'],
+                hashes: { sha1: '2cdd24012271ad08af4dc5a85d4059143c324391' },
+                id: 5,
+                key: 5,
+                license: '',
+                name: 'axios.min.js',
+                path: 'package/dist/axios.min.js'
+              }
+            ],
+            folders: ['axios.js'],
+            hashes: { sha1: '94ece417aa560aa8de906e8f54c0985da90364cc' },
+            id: 3,
+            key: 2,
+            name: 'dist',
+            path: 'package/dist/axios.js'
+          }
+        ],
+        folders: ['axios.js'],
+        hashes: { sha1: '94ece417aa560aa8de906e8f54c0985da90364cc' },
+        id: 3,
+        key: 1,
+        name: 'package',
+        path: 'package/dist/axios.js'
+      }
+    ])
   })
 })
 
@@ -386,7 +465,7 @@ const nugetTreeFolders = [
   }
 ]
 
-const axios = [
+const axiosTreeFolders = [
   {
     path: 'package/dist/axios.js',
     attributions: ['(c) 2018 by Matt Zabriskie'],
@@ -435,7 +514,7 @@ const axios = [
             key: 5,
             name: 'axios.min.js',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: [{ value: 'data', isDifferent: false }]
           },
           {
             path: 'package/dist/axios.min.map',

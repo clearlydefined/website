@@ -9,29 +9,45 @@ import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
 export default class FileList extends Component {
   state = {
+    files: [],
+    filteredFiles: [],
     filteredInfo: {},
     sortedInfo: {},
-    expandedRows: []
+    expandedRows: [],
+    searchText: null
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      files: FileListSpec.pathToTreeFolders(nextProps.files, nextProps.component.item, nextProps.previewDefinition)
+    })
+  }
+
+  filterFiles = (files, dataIndex, value) => {
+    return files.map(record => this.filterValues(record, dataIndex, value)).filter(x => x)
   }
 
   filterValues = (record, dataIndex, value) => {
     if (Object.keys(record).includes('children')) {
-      const result = record.children.reduce((previousValue, item) => {
-        previousValue = this.filterValues(item, dataIndex, value)
+      const children = record.children.reduce((previousValue, item) => {
+        const filteredValue = this.filterValues(item, dataIndex, value)
+        if (filteredValue) previousValue.push(filteredValue)
         return previousValue
-      }, false)
-      return result
+      }, [])
+      if (children.length > 0) return { ...record, children }
     }
 
     if (!record[dataIndex]) return false
     if (isArray(record[dataIndex]))
       return record[dataIndex].find(item => (Object.keys(item).length > 0 ? item.value === value : item === value))
-        ? true
+        ? record
         : false
     return record[dataIndex]
       .toString()
       .toLowerCase()
       .includes(value.toLowerCase())
+      ? record
+      : false
   }
 
   getColumnSearchProps = dataIndex => ({
@@ -49,7 +65,7 @@ export default class FileList extends Component {
         />
         <Button
           type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm)}
+          onClick={() => this.handleSearch(dataIndex, selectedKeys, confirm)}
           icon="search"
           size="small"
           style={{ width: 90, marginRight: 8 }}
@@ -63,7 +79,6 @@ export default class FileList extends Component {
     ),
     sorter: false,
     filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
-    onFilter: (value, record) => this.filterValues(record, dataIndex, value),
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
         setTimeout(() => this.searchInput.select())
@@ -71,9 +86,10 @@ export default class FileList extends Component {
     }
   })
 
-  handleSearch = (selectedKeys, confirm) => {
+  handleSearch = (dataIndex, selectedKeys, confirm) => {
     confirm()
-    this.setState({ searchText: selectedKeys[0] })
+    const filteredFiles = this.filterFiles(this.state.files, dataIndex, selectedKeys[0])
+    this.setState({ searchText: selectedKeys[0], filteredFiles })
   }
 
   handleReset = clearFilters => {
@@ -93,8 +109,8 @@ export default class FileList extends Component {
   }
 
   render() {
-    const { readOnly, component, previewDefinition, files } = this.props
-    let { expandedRows } = this.state
+    const { readOnly, component, previewDefinition } = this.props
+    let { expandedRows, searchText, filteredFiles, files } = this.state
 
     const columns = [
       {
@@ -184,7 +200,7 @@ export default class FileList extends Component {
       <Table
         className="file-list"
         columns={columns}
-        dataSource={FileListSpec.pathToTreeFolders(files, component.item, previewDefinition)}
+        dataSource={searchText ? filteredFiles : files}
         onChange={this.handleChange}
         expandedRowKeys={expandedRows}
         onExpandedRowsChange={expandedRows => this.setState({ expandedRows })}
