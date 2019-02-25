@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
-import { OverlayTrigger } from 'react-bootstrap'
 import { Popover } from 'antd'
 
 import PopoverRenderer from './PopoverRenderer'
