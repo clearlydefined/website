@@ -98,31 +98,21 @@ export class PageDefinitions extends UserManagedList {
     )
   }
 
-  toggleCheckbox = (key, { target }) => {
-    this.setState(prevState => ({
-      selected: {
-        ...prevState.selected,
-        [key]: target.checked
-      }
-    }))
-  }
+  toggleCheckbox = selected => this.setState({ selected })
 
   onSelectAll = ({ target }) => {
     if (!target.checked) {
-      return this.setState({ selected: {} })
+      return this.setState({ selected: '' })
     }
     // for the length of components set all in the array
-    const selected = {}
-    this.props.components.transformedList.map((val, index) => {
-      selected[index] = true
-    })
-    this.setState({ selected })
+    this.setState({ selected: this.props.components.transformedList.map((_, i) => i) })
   }
 
   renderFilterBar() {
     return (
       <FilterBar
         onSelectAll={this.onSelectAll}
+        selected={this.state.selected}
         activeSort={this.state.activeSort}
         activeFilters={this.state.activeFilters}
         onFilter={this.onFilter}
@@ -196,7 +186,6 @@ export class PageDefinitions extends UserManagedList {
                   onChange={this.onChangeComponent}
                   onAddComponent={this.onAddComponent}
                   selected={this.state.selected}
-                  onSelectAll={this.onSelectAll}
                   toggleCheckbox={this.toggleCheckbox}
                   onInspect={this.onInspect}
                   renderFilterBar={this.renderFilterBar}

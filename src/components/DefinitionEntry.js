@@ -16,6 +16,7 @@ import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import EntitySpec from '../utils/entitySpec'
 import LicensesRenderer from './LicensesRenderer'
+import Checkbox from 'antd/lib/checkbox'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -325,28 +326,11 @@ export default class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const {
-      definition,
-      onClick,
-      renderButtons,
-      component,
-      draggable,
-      multiSelectEnabled,
-      selected,
-      toggleCheckbox
-    } = this.props
+    const { definition, onClick, renderButtons, component, draggable, multiSelectEnabled, index } = this.props
 
     return (
       <>
-        {multiSelectEnabled && (
-          <input
-            className="pull-left"
-            type="checkbox"
-            onChange={toggleCheckbox}
-            name="component-list"
-            checked={selected}
-          />
-        )}
+        {multiSelectEnabled && <Checkbox className="pull-left" value={index} />}
         <TwoLineEntry
           draggable={draggable}
           item={component}
