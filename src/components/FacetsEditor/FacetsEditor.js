@@ -29,10 +29,10 @@ class FacetsEditor extends Component {
       <div>
         {facets.map(item => (
           <Row key={item}>
-            <Col md={3}>
+            <Col xs={3}>
               <span>{item}</span>
             </Col>
-            <Col md={9}>
+            <Col xs={9}>
               <GlobsPicker
                 field={`described.facets.${item}`}
                 readOnly={readOnly}

@@ -6,10 +6,11 @@ import { Row, Button, Col } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
 import { Tag } from 'antd'
 import Definition from '../../../utils/definition'
+import { withResize } from '../../../utils/WindowProvider'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import ScoreRenderer from '../Ui/ScoreRenderer'
 
-export default class HeaderSection extends Component {
+class HeaderSection extends Component {
   static propTypes = {
     definition: PropTypes.object,
     // If modalView = true, show Save Button, otherwise show a Contribute Button
@@ -22,7 +23,16 @@ export default class HeaderSection extends Component {
   }
 
   render() {
-    const { definition, modalView, changes, renderContributeButton, handleClose, handleSave, handleRevert } = this.props
+    const {
+      definition,
+      modalView,
+      changes,
+      renderContributeButton,
+      handleClose,
+      handleSave,
+      handleRevert,
+      isMobile
+    } = this.props
     const { item } = definition
     const scores = Definition.computeScores(item)
     const isCurated = Definition.isCurated(item)
@@ -66,7 +76,7 @@ export default class HeaderSection extends Component {
               OK
             </Button>
           )}{' '}
-          {!modalView && renderContributeButton}{' '}
+          {!modalView && !isMobile && renderContributeButton}{' '}
           {modalView && (
             <Button data-test-id="header-section-cancel-button" onClick={handleClose}>
               Cancel
@@ -77,3 +87,5 @@ export default class HeaderSection extends Component {
     )
   }
 }
+
+export default withResize(HeaderSection)
