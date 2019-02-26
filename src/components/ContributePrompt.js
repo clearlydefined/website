@@ -108,10 +108,10 @@ export default class ContributePrompt extends Component {
             <FieldGroup
               name="summary"
               type="text"
-              label="Summary"
+              label="Title"
               value={summary || ''}
               onChange={this.handleChange}
-              placeholder="Short summary of changes. Like a commit message. Maximum 100 characters. This text will be used to generate the title of the PR."
+              placeholder="Short (100 char) description"
               maxLength={100}
               required
             />
