@@ -99,6 +99,69 @@ describe('FileList', () => {
       }
     ])
   })
+
+  it('filters files for copyrights', () => {
+    const wrapper = shallow(<FileList component={definition} files={files} />)
+    const instance = wrapper.instance()
+    const resultAxios = axiosTreeFolders.map(record => instance.filterValues(record, 'attributions', 'Matt'))
+    expect(resultAxios).toEqual([
+      {
+        attributions: ['(c) 2018 by Matt Zabriskie'],
+        children: [
+          {
+            attributions: ['(c) 2018 by Matt Zabriskie'],
+            children: [
+              {
+                attributions: [{ isDifferent: false, value: '(c) 2018 by Matt Zabriskie' }],
+                facets: [{ isDifferent: false, value: 'core' }],
+                folders: ['axios.js'],
+                hashes: { sha1: '94ece417aa560aa8de906e8f54c0985da90364cc' },
+                id: 3,
+                key: 3,
+                license: '',
+                name: 'axios.js',
+                path: 'package/dist/axios.js'
+              },
+              {
+                attributions: [{ isDifferent: false, value: '(c) 2018 by Matt Zabriskie' }],
+                facets: [{ isDifferent: false, value: 'data' }],
+                folders: ['axios.min.js'],
+                hashes: { sha1: '2cdd24012271ad08af4dc5a85d4059143c324391' },
+                id: 5,
+                key: 5,
+                license: '',
+                name: 'axios.min.js',
+                path: 'package/dist/axios.min.js'
+              }
+            ],
+            folders: ['axios.js'],
+            hashes: { sha1: '94ece417aa560aa8de906e8f54c0985da90364cc' },
+            id: 3,
+            key: 2,
+            name: 'dist',
+            path: 'package/dist/axios.js'
+          },
+          {
+            attributions: [{ isDifferent: false, value: 'Copyright (c) 2014-present Matt Zabriskie' }],
+            facets: [{ isDifferent: false, value: 'core' }],
+            folders: ['LICENSE'],
+            hashes: { sha1: '0d6395f8c93ddfd98efcac7f511d42a286b22168' },
+            id: 0,
+            key: 7,
+            license: 'MIT',
+            name: 'LICENSE',
+            path: 'package/LICENSE'
+          }
+        ],
+        folders: ['axios.js'],
+        hashes: { sha1: '94ece417aa560aa8de906e8f54c0985da90364cc' },
+        id: 3,
+        key: 1,
+        name: 'package',
+        path: 'package/dist/axios.js'
+      }
+    ])
+  })
 })
 
 const files = [

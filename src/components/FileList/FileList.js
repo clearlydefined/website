@@ -39,7 +39,11 @@ export default class FileList extends Component {
 
     if (!record[dataIndex]) return false
     if (isArray(record[dataIndex]))
-      return record[dataIndex].find(item => (Object.keys(item).length > 0 ? item.value === value : item === value))
+      return record[dataIndex].find(item =>
+        Object.keys(item).length > 0
+          ? item.value.toLowerCase().includes(value.toLowerCase())
+          : item.toLowerCase().includes(value.toLowerCase())
+      )
         ? record
         : false
     return record[dataIndex]

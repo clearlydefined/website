@@ -50,7 +50,13 @@ class CopyrightsRenderer extends Component {
   }
 
   componentDidMount() {
-    this.props.item && this.setState({ values: this.props.item, originalValues: this.props.item })
+    this.props.item &&
+      this.setState({
+        values: this.props.item.map(item => {
+          return { value: item, isDifferent: false }
+        }),
+        originalValues: this.props.item
+      })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -104,7 +110,6 @@ class CopyrightsRenderer extends Component {
   render() {
     const { readOnly, classIfDifferent, field } = this.props
     const { hasChanges, values, showAddRow, visible } = this.state
-
     if (!values.length && readOnly) return null
 
     return (
