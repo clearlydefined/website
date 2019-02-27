@@ -270,16 +270,6 @@
   opacity: 0.5;
 }
 
-.modal {
-  &-dialog {
-    width: 1220px;
-    height: 480px;
-  }
-  &-content {
-    height: 100%;
-  }
-}
-
 .dropdown-menu {
   z-index: 9001;
 }
@@ -302,10 +292,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.modal-content {
-  height: auto;
 }
 
 .tooltipWrapper {
