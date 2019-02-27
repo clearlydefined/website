@@ -26,4 +26,24 @@ export default class Curation {
   static getValue(component, field) {
     return get(component, field) || ''
   }
+
+  static isCurated(curations) {
+    const contributions = get(curations, 'item.contributions')
+    if (!contributions) return false
+    return !!contributions.filter(Curation.isMerged).length
+  }
+
+  static hasPendingCurations(curations) {
+    const contributions = get(curations, 'item.contributions')
+    if (!contributions) return false
+    return !!contributions.filter(Curation.isOpen).length
+  }
+
+  static isMerged(contribution) {
+    return get(contribution, 'pr.state') === 'closed' && get(contribution, 'pr.merged_at')
+  }
+
+  static isOpen(contribution) {
+    return get(contribution, 'pr.state') === 'open'
+  }
 }

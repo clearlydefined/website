@@ -75,33 +75,6 @@ export default class Definition {
     return { ...component, changes: updatedChanges }
   }
 
-  static isCurated(definition) {
-    return !isEmpty(get(definition, '_meta.merged'))
-  }
-
-  static hasPendingCurations(definition) {
-    return !isEmpty(get(definition, '_meta.pending'))
-  }
-
-  /**
-   * Return a list of PRs sorted by PR number
-   * @param {*} definition
-   */
-  static getPrs(definition) {
-    if (!get(definition, '_meta')) return
-    const { pending, merged } = get(definition, '_meta')
-    return union(
-      pending &&
-        pending.map(item => {
-          return { ...item, status: 'pending' }
-        }),
-      merged &&
-        merged.map(item => {
-          return { ...item, status: 'merged' }
-        })
-    )
-  }
-
   static getRevisionToKey(revision, definition) {
     return definition.provider === 'github' ? revision.sha : revision
   }

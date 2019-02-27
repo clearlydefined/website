@@ -6,14 +6,14 @@ import flatten from 'lodash/flatten'
 
 import { asyncActions } from './'
 import { curate, getCuration, getCurationList, getCurationData } from '../api/clearlyDefined'
-import { uiNotificationNew, uiGetCurationData } from '../actions/ui'
+import { uiNotificationNew, uiGetCurationData, UI_INSPECT_GET_CURATIONS } from '../actions/ui'
 
 export const CURATION_POST = 'CURATION_POST'
 export const CURATION_BODIES = 'CURATION_BODIES'
 
 export function getCurationAction(token, entity) {
   return dispatch => {
-    const actions = asyncActions(CURATION_BODIES)
+    const actions = asyncActions(UI_INSPECT_GET_CURATIONS)
     dispatch(actions.start())
     return getCuration(token, entity, { expand: ['prs'] }).then(
       result => dispatch(actions.success(result)),

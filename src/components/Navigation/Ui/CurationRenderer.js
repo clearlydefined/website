@@ -4,28 +4,37 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import TwoLineEntry from '../../TwoLineEntry'
 import Tag from 'antd/lib/tag'
+import Curation from '../../../utils/curation'
 
 export default class CurationRenderer extends Component {
   static propTypes = {
-    curation: PropTypes.object,
+    contribution: PropTypes.object,
     onClick: PropTypes.func
   }
 
   render() {
-    const { curation, onClick } = this.props
+    const { contribution, onClick } = this.props
     return (
       <TwoLineEntry
-        onClick={() => onClick && onClick(curation.number)}
+        onClick={() => onClick && onClick(contribution.pr.number)}
         headline={
           <span>
-            #{curation.number} {curation.title}{' '}
-            <Tag color={curation.status === 'merged' ? 'green' : 'gold'}>
-              {curation.status === 'merged' ? 'Curated' : 'Pending'}
-            </Tag>
+            #{contribution.pr.number} {contribution.pr.title}{' '}
+            <Tag color={this._tagColor(contribution)}>{this._tagText(contribution)}</Tag>
           </span>
         }
-        message={<span>@{curation.contributor}</span>}
+        message={<span>@{contribution.pr.user.login}</span>}
       />
     )
+  }
+
+  _tagColor(contribution) {
+    if (Curation.isOpen(contribution)) return 'gold'
+    return Curation.isMerged(contribution) ? 'green' : 'red'
+  }
+
+  _tagText(contribution) {
+    if (Curation.isOpen(contribution)) return 'Pending'
+    return Curation.isMerged(contribution) ? 'Curated' : 'Closed'
   }
 }
