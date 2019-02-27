@@ -60,8 +60,32 @@ export default class ContributePrompt extends Component {
     return type !== 'select' && summary.length > 0 && details.length > 0 && resolution.length > 0
   }
 
+  renderTypeField() {
+    return (
+      <FieldGroup
+        className="inlineBlock pull-right"
+        name="type"
+        label="Type"
+        value={this.state.type || 'select'}
+        onChange={this.handleChange}
+        placeholder="select"
+        componentClass="select"
+        required
+      >
+        <option value="select" disabled>
+          select
+        </option>
+        <option value="missing">Missing</option>
+        <option value="incorrect">Incorrect</option>
+        <option value="incomplete">Incomplete</option>
+        <option value="ambiguous">Ambiguous</option>
+        <option value="other">Other</option>
+      </FieldGroup>
+    )
+  }
+
   render() {
-    const { details, summary, show, type, resolution } = this.state
+    const { details, summary, show, resolution } = this.state
     const { session, onLogin } = this.props
 
     return (
@@ -85,33 +109,15 @@ export default class ContributePrompt extends Component {
                   )}
                 </div>
               </FormGroup>
-              <FieldGroup
-                className="inlineBlock pull-right"
-                name="type"
-                label="Type"
-                value={type || 'select'}
-                onChange={this.handleChange}
-                placeholder="select"
-                componentClass="select"
-                required
-              >
-                <option value="select" disabled>
-                  select
-                </option>
-                <option value="missing">Missing</option>
-                <option value="incorrect">Incorrect</option>
-                <option value="incomplete">Incomplete</option>
-                <option value="ambiguous">Ambiguous</option>
-                <option value="other">Other</option>
-              </FieldGroup>
+              {this.renderTypeField()}
             </div>
             <FieldGroup
               name="summary"
               type="text"
-              label="Summary"
+              label="Title"
               value={summary || ''}
               onChange={this.handleChange}
-              placeholder="Short summary of changes. Like a commit message. Maximum 100 characters"
+              placeholder="Short (100 char) description"
               maxLength={100}
               required
             />
