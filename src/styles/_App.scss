@@ -240,3 +240,18 @@
 hr {
   margin: 75px 0;
 }
+
+.section-header div:nth-child(2) {
+  align-self: flex-end;
+}
+
+@media (min-width: 768px) {
+  .section-button .text-right * {
+    margin-left: 3px;
+  }
+}
+@media (max-width: 767px) {
+  .section-button .text-right * {
+    margin-top: 3px;
+  }
+}
