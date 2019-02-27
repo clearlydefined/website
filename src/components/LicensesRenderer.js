@@ -54,7 +54,7 @@ class LicensesRenderer extends Component {
           type="license"
         />
         <i className="fas fa-eye license-advanced" onClick={this.toggleAdvancedView} />
-        <Modal show={advancedView} onHide={this.toggleAdvancedView}>
+        <Modal bsSize="large" show={advancedView} onHide={this.toggleAdvancedView}>
           <LicensePicker
             onChange={spec => this.advancedPickerChange(spec, onChange)}
             onClose={this.toggleAdvancedView}
