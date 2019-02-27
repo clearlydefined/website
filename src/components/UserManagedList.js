@@ -14,7 +14,6 @@ import { uiDefinitionsUpdateList, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { getCurationAction } from '../actions/curationActions'
 import SystemManagedList from './SystemManagedList'
 
 /**
@@ -101,9 +100,7 @@ export default class UserManagedList extends SystemManagedList {
     const path = component.toPath()
     if (!component.revision) return uiWarning(dispatch, `${path} needs version information`)
 
-    !definitions.entries[path] &&
-      dispatch(getDefinitionsAction(token, [path])) &&
-      dispatch(getCurationAction(token, component))
+    !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
     dispatch(uiDefinitionsUpdateList({ add: component }))
   }
 
