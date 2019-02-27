@@ -66,13 +66,17 @@ export default class DefinitionEntry extends React.Component {
   }
 
   renderHeadline(definition) {
+    if (!definition.described) return
     const { namespace, name, revision } = definition.coordinates
-    const componentUrl = EntitySpec.getComponentUrl(definition.coordinates)
-    const revisionUrl = EntitySpec.getRevisionUrl(definition.coordinates)
     const namespaceText = namespace ? namespace + '/' : ''
-    const componentTag = componentUrl ? (
+    const componentTag = definition.described.urls.registry ? (
       <span>
-        <a href={componentUrl} target="_blank" rel="noopener noreferrer" data-test-id="component-name">
+        <a
+          href={definition.described.urls.registry}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-test-id="component-name"
+        >
           {namespaceText}
           {name}
         </a>
@@ -83,10 +87,10 @@ export default class DefinitionEntry extends React.Component {
         {name}
       </span>
     )
-    const revisionTag = revisionUrl ? (
+    const revisionTag = definition.described.urls.version ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={revisionUrl} target="_blank" rel="noopener noreferrer">
+        <a href={definition.described.urls.version} target="_blank" rel="noopener noreferrer">
           {revision}
         </a>
       </span>
@@ -96,6 +100,7 @@ export default class DefinitionEntry extends React.Component {
         {revision}
       </span>
     )
+
     return (
       <span>
         {componentTag}
@@ -325,6 +330,7 @@ export default class DefinitionEntry extends React.Component {
 
   render() {
     const { definition, onClick, renderButtons, component, draggable } = this.props
+    console.log(definition, component)
     return (
       <TwoLineEntry
         draggable={draggable}

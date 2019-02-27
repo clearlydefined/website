@@ -6,6 +6,7 @@ import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import cloneDeep from 'lodash/cloneDeep'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { Section } from '../'
 import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
@@ -86,6 +87,13 @@ class FullDetailComponent extends Component {
             </Section>
             <Section name={<TitleWithScore title={'Licensed'} domain={item.licensed} />}>
               <LicensedSection rawDefinition={item} {...this.props} />
+            </Section>
+            <Section>
+              {get(item, 'described.urls.download') && (
+                <Button bsStyle="danger" href={get(item, 'described.urls.download')}>
+                  Download
+                </Button>
+              )}
             </Section>
             <Section
               name={

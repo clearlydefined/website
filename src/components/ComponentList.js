@@ -84,8 +84,8 @@ export default class ComponentList extends React.Component {
     } = this.props
     const component = list[index]
     if (!component) return
-    let definition = this.getDefinition(component)
-    definition = definition || { coordinates: component }
+    const definition = this.getDefinition(component) || { coordinates: component }
+    console.log(definition)
     return (
       <div key={key} style={style} className="component-row">
         <DefinitionEntry
