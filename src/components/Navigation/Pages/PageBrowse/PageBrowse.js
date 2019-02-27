@@ -98,13 +98,13 @@ class PageBrowse extends SystemManagedList {
     ]
 
     const providers = [
-      { value: 'npmjs', label: 'NpmJS' },
+      { value: 'cratesio', label: 'Crates.io' },
       { value: 'github', label: 'GitHub' },
       { value: 'mavencentral', label: 'MavenCentral' },
-      { value: 'cratesio', label: 'Crates.io' },
+      { value: 'npmjs', label: 'NpmJS' },
+      { value: 'nuget', label: 'NuGet' },
       { value: 'pypi', label: 'PyPi' },
-      { value: 'rubygems', label: 'RubyGems' },
-      { value: 'nuget', label: 'NuGet' }
+      { value: 'rubygems', label: 'RubyGems' }
     ]
 
     return (
