@@ -88,13 +88,6 @@ class FullDetailComponent extends Component {
             <Section name={<TitleWithScore title={'Licensed'} domain={item.licensed} />}>
               <LicensedSection rawDefinition={item} {...this.props} />
             </Section>
-            <Section>
-              {get(item, 'described.urls.download') && (
-                <Button bsStyle="danger" href={get(item, 'described.urls.download')}>
-                  Download
-                </Button>
-              )}
-            </Section>
             <Section
               name={
                 <section>
@@ -110,9 +103,17 @@ class FullDetailComponent extends Component {
                   )}
                 </section>
               }
+              actionButton={
+                get(item, 'described.urls.download') && (
+                  <Button bsStyle="primary" href={get(item, 'described.urls.download')}>
+                    <i className="fas fa-download" />
+                    <span>&nbsp;Download component</span>
+                  </Button>
+                )
+              }
             >
               <Row>
-                <Col md={11}>
+                <Col md={12}>
                   <FileList
                     files={cloneDeep(item.files)}
                     onChange={onChange}
