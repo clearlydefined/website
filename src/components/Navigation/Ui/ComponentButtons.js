@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Tag } from 'antd'
 import { get } from 'lodash'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { Menu, Dropdown, Icon } from 'antd'
@@ -64,9 +65,11 @@ export default class ComponentButtons extends Component {
     const scores = Definition.computeScores(definition)
     const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
     const isSourceEmpty = Definition.isSourceEmpty(definition)
+    const isCurated = Definition.isCurated(definition)
 
     return (
       <div className="list-activity-area">
+        {isCurated && <Tag color="green">Curated</Tag>}
         {scores && <ScoreRenderer scores={scores} definition={definition} />}
         <ButtonGroup>
           {!isSourceComponent && !readOnly && !isSourceEmpty && (

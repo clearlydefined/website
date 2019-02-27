@@ -51,6 +51,12 @@ export default class Definition {
     return !get(definition, 'described.sourceLocation')
   }
 
+  static isCurated(definition) {
+    const tools = get(definition, 'described.tools')
+    if (!tools) return false
+    return !!tools.find(tool => tool.startsWith('curation/'))
+  }
+
   /**
    * Revert a list of definitions or a specific one, removing all the changes or only specific values
    * @param  {[]} components list of definitions
