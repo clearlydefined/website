@@ -45,7 +45,7 @@ class ModalEditor extends React.Component {
         >
           {value || placeholder}
         </div>
-        <Modal show={editing} onHide={() => this.setState({ editing: false })}>
+        <Modal className="modal-xl" show={editing} onHide={() => this.setState({ editing: false })}>
           {React.createElement(editor, {
             onChange: spec => {
               onChange(spec)
