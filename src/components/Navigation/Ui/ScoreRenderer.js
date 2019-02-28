@@ -33,7 +33,7 @@ class ScoreRenderer extends Component {
       {this.renderScoreEntry(score, 'declared', 'Declared')}
       {this.renderScoreEntry(score, 'discovered', 'Discovered')}
       {this.renderScoreEntry(score, 'spdx', 'SPDX')}
-      {this.renderScoreEntry(score, 'textes', 'License texts')}
+      {this.renderScoreEntry(score, 'texts', 'License texts')}
     </Fragment>
   )
 

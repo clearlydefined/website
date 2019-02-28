@@ -8,6 +8,7 @@ import get from 'lodash/get'
 import debounce from 'lodash/debounce'
 import classNames from 'classnames'
 import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
+import { getCurationsAction } from '../../../../actions/curationActions'
 import { uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
 import SystemManagedList from '../../../SystemManagedList'
 import Section from '../../../Section'
@@ -18,6 +19,7 @@ import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
 import { licenses, curateFilters } from '../../../../utils/utils'
+import { stat } from 'fs'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -98,13 +100,13 @@ class PageBrowse extends SystemManagedList {
     ]
 
     const providers = [
-      { value: 'npmjs', label: 'NpmJS' },
+      { value: 'cratesio', label: 'Crates.io' },
       { value: 'github', label: 'GitHub' },
       { value: 'mavencentral', label: 'MavenCentral' },
-      { value: 'cratesio', label: 'Crates.io' },
+      { value: 'npmjs', label: 'NpmJS' },
+      { value: 'nuget', label: 'NuGet' },
       { value: 'pypi', label: 'PyPi' },
-      { value: 'rubygems', label: 'RubyGems' },
-      { value: 'nuget', label: 'NuGet' }
+      { value: 'rubygems', label: 'RubyGems' }
     ]
 
     return (
@@ -156,8 +158,9 @@ class PageBrowse extends SystemManagedList {
         query.name = activeName.split('/')[1]
       } else query.name = activeName
     }
-    const result = await this.props.dispatch(uiBrowseGet(this.props.token, query))
-    return result
+    await this.props.dispatch(uiBrowseGet(this.props.token, query))
+    if (this.props.definitions.entries)
+      this.props.dispatch(getCurationsAction(this.props.token, Object.keys(this.props.definitions.entries)))
   }
 
   loadMoreRows = async () => {
@@ -170,7 +173,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   render() {
-    const { components, definitions, session } = this.props
+    const { components, curations, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">
@@ -196,6 +199,7 @@ class PageBrowse extends SystemManagedList {
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
+                curations={curations}
                 definitions={definitions}
                 noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
                 sequence={sequence}
@@ -226,6 +230,7 @@ function mapStateToProps(state) {
   return {
     token: state.session.token,
     session: state.session,
+    curations: state.ui.curate.bodies,
     definitions: state.definition.bodies,
     components: state.ui.browse.componentList
   }

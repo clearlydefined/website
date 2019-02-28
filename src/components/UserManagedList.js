@@ -14,7 +14,7 @@ import { uiDefinitionsUpdateList, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { getCurationAction } from '../actions/curationActions'
+import { getCurationsAction } from '../actions/curationActions'
 import SystemManagedList from './SystemManagedList'
 
 /**
@@ -96,14 +96,13 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   onAddComponent(value) {
-    const { dispatch, token, definitions } = this.props
+    const { dispatch, token, definitions, curations } = this.props
     const component = typeof value === 'string' ? EntitySpec.fromPath(value) : value
     const path = component.toPath()
     if (!component.revision) return uiWarning(dispatch, `${path} needs version information`)
 
-    !definitions.entries[path] &&
-      dispatch(getDefinitionsAction(token, [path])) &&
-      dispatch(getCurationAction(token, component))
+    !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
+    !curations.entries[path] && dispatch(getCurationsAction(token, [path]))
     dispatch(uiDefinitionsUpdateList({ add: component }))
   }
 
@@ -148,7 +147,7 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   loadFromListSpec(list) {
-    const { dispatch, definitions } = this.props
+    const { dispatch, curations, definitions } = this.props
     if (list.filter) this.setState({ activeFilters: list.filter })
     if (list.sortBy) this.setState({ activeSort: list.sortBy })
     if (list.sortBy || list.filter) this.setState({ sequence: this.state.sequence + 1 })
@@ -156,7 +155,9 @@ export default class UserManagedList extends SystemManagedList {
     const toAdd = list.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
     dispatch(uiDefinitionsUpdateList({ addAll: toAdd }))
     const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
+    const missingCurations = toAdd.map(spec => spec.toPath()).filter(path => !curations.entries[path])
     this.getDefinitionsAndNotify(missingDefinitions, 'All components have been loaded')
+    this.getCurations(missingCurations)
     dispatch(
       uiDefinitionsUpdateList({
         transform: this.createTransform.call(
