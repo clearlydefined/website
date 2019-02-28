@@ -12,7 +12,6 @@ import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
-import Definition from '../../utils/definition'
 import DescribedSection from '../Navigation/Sections/DescribedSection'
 import RawDataSection from '../Navigation/Sections/RawDataSection'
 import HeaderSection from '../Navigation/Sections/HeaderSection'
@@ -27,7 +26,7 @@ class FullDetailComponent extends Component {
     handleClose: PropTypes.func,
     handleSave: PropTypes.func,
     handleRevert: PropTypes.func,
-    curation: PropTypes.object.isRequired,
+    curations: PropTypes.object.isRequired,
     definition: PropTypes.object.isRequired,
     harvest: PropTypes.object.isRequired,
     modalView: PropTypes.bool.isRequired,
@@ -39,7 +38,6 @@ class FullDetailComponent extends Component {
 
   render() {
     const {
-      curation,
       definition,
       harvest,
       onChange,
@@ -48,10 +46,11 @@ class FullDetailComponent extends Component {
       handleRevert,
       changes,
       getCurationData,
+      curations,
       inspectedCuration
     } = this.props
     const entry = find(changes, (_, key) => key && key.startsWith('files'))
-    if (!definition || !definition.item || !curation || !harvest) return null
+    if (!definition || !definition.item || !curations || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
     return (
@@ -80,7 +79,7 @@ class FullDetailComponent extends Component {
                     />
                   </Col>
                   <Col md={6}>
-                    <CurationsSection curations={Definition.getPrs(item)} />
+                    <CurationsSection curations={curations} />
                   </Col>
                 </Row>
               </Fragment>
@@ -128,6 +127,7 @@ class FullDetailComponent extends Component {
               <Row>
                 <Col md={11} offset-md={1}>
                   <RawDataSection
+                    curations={curations}
                     definition={definition}
                     item={item}
                     getCurationData={getCurationData}

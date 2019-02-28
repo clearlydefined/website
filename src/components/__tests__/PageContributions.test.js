@@ -15,6 +15,9 @@ describe('PageContribution', () => {
           filterList: {},
           componentList: {}
         },
+        curate: {
+          bodies: {}
+        },
         contribution: {
           url: {}
         }

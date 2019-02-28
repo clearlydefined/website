@@ -17,11 +17,11 @@ export default class RawDataRenderer extends Component {
   render() {
     const { value, name, type } = this.props
     if (value.isFetching) return <PlaceholderRenderer message={`Loading the ${name}`} />
-    if (value.error && value.error.state !== 404)
+    if (value.error && value.error.status !== 404)
       return <PlaceholderRenderer message={`There was a problem loading the ${name}`} />
     if (!value.isFetched)
       return <PlaceholderRenderer message={'Search for some part of a component name to see details'} />
-    if (!value.item) return <PlaceholderRenderer message={`There are no ${name}`} />
+    if (!value.item) return <PlaceholderRenderer message={`No ${name} found`} />
     const options = {
       selectOnLineNumbers: true
     }

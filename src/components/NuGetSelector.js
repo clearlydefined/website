@@ -39,6 +39,7 @@ export default class NuGetSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        useCache={false}
         options={options}
         placeholder={'Pick a Nuget to harvest'}
         onChange={this.onChange}
