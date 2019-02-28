@@ -14,6 +14,9 @@ describe('PageDefinitions', () => {
           filter: {},
           filterList: {},
           componentList: {}
+        },
+        curate: {
+          bodies: {}
         }
       },
       definition: {

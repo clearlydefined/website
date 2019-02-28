@@ -57,7 +57,7 @@ class PageContribution extends SystemManagedList {
   }
 
   render() {
-    const { components, definitions } = this.props
+    const { components, curations, definitions } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">
@@ -75,6 +75,7 @@ class PageContribution extends SystemManagedList {
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
+                curations={curations}
                 definitions={definitions}
                 noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
@@ -107,6 +108,7 @@ function mapStateToProps(state, ownProps) {
     session: state.session,
     prNumber: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     url: state.ui.contribution.url,
+    curations: state.ui.curate.bodies,
     definitions: state.ui.contribution.definitions,
     components: state.ui.contribution.componentList,
     filterValue: state.ui.browse.filter,
