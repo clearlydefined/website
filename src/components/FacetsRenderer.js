@@ -11,20 +11,22 @@ import Tag from 'antd/lib/tag'
  */
 class FacetsRenderer extends Component {
   static propTypes = {
-    item: PropTypes.shape({
-      value: PropTypes.array
-    }).isRequired
+    values: PropTypes.array.isRequired
   }
 
   render() {
-    const { item } = this.props
+    const { values } = this.props
     return (
       <div>
-        {item.value.map((val, i) => (
-          <Tag key={i} className={val.isDifferent ? 'facets--isEdited' : ''}>
-            {val.value || 'core'}
-          </Tag>
-        ))}
+        {values.length > 0 ? (
+          values.map((val, i) => (
+            <Tag key={i} className={val.isDifferent ? 'facets--isEdited' : ''}>
+              {val.value}
+            </Tag>
+          ))
+        ) : (
+          <Tag>core</Tag>
+        )}
       </div>
     )
   }
