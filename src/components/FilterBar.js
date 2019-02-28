@@ -40,6 +40,7 @@ export default class FilterBar extends Component {
     return (
       <AsyncTypeahead
         ref={this.typeahead}
+        useCache={false}
         placeholder="Component search..."
         onChange={this.onChange}
         options={options.list}
