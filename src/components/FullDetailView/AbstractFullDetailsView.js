@@ -8,7 +8,6 @@ import Modal from 'antd/lib/modal'
 import 'antd/dist/antd.css'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
-import { withResize } from '../../utils/WindowProvider'
 
 /**
  * Component that renders the Full Detail View as a Page or as a Modal
@@ -95,4 +94,4 @@ export class AbstractFullDetailsView extends Component {
   }
 }
 
-export default withResize(AbstractFullDetailsView)
+export default AbstractFullDetailsView

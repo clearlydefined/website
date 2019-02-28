@@ -50,9 +50,7 @@ export class WindowProvider extends PureComponent {
     return { isMobile, isMobileMultiplier }
   }
 
-  updateDimensions = () => {
-    this.setState(this.getDimensions())
-  }
+  updateDimensions = () => this.setState(this.getDimensions())
 
   render() {
     return <Provider value={this.state}>{this.props.children}</Provider>
@@ -62,9 +60,5 @@ export class WindowProvider extends PureComponent {
 export const WindowConsumer = Consumer
 
 export const withResize = Component => props => (
-  <Consumer>
-    {({ isMobile, isMobileMultiplier }) => (
-      <Component {...props} isMobile={isMobile} isMobileMultiplier={isMobileMultiplier} />
-    )}
-  </Consumer>
+  <Consumer>{windowProps => <Component {...props} {...windowProps} />}</Consumer>
 )
