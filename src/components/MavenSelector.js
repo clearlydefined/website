@@ -47,6 +47,7 @@ export default class MavenSelector extends Component {
     return (
       <AsyncTypeahead
         ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
+        useCache={false}
         options={options}
         placeholder={'Pick a groupId:artifactId to harvest'}
         onChange={this.onChange}
