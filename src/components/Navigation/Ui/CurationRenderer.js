@@ -29,12 +29,12 @@ export default class CurationRenderer extends Component {
   }
 
   _tagColor(contribution) {
-    if (Curation.isOpen(contribution)) return 'gold'
-    return Curation.isMerged(contribution) ? 'green' : 'red'
+    if (Curation.isOpen(contribution)) return 'green'
+    return Curation.isMerged(contribution) ? 'purple' : 'red'
   }
 
   _tagText(contribution) {
-    if (Curation.isOpen(contribution)) return 'Pending'
-    return Curation.isMerged(contribution) ? 'Curated' : 'Closed'
+    if (Curation.isOpen(contribution)) return 'Open'
+    return Curation.isMerged(contribution) ? 'Merged' : 'Closed'
   }
 }

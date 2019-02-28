@@ -50,8 +50,8 @@ export default class HeaderSection extends Component {
                     <ScoreRenderer scores={scores} definition={item} />
                   </span>
                 )}
-                {isCurated && <Tag color="green">Curated</Tag>}
-                {hasPendingCurations && <Tag color="gold">Pending Curations</Tag>}
+                {isCurated && <Tag color="purple">Curated</Tag>}
+                {hasPendingCurations && <Tag color="green">Pending curations</Tag>}
               </div>
             </div>
             <p>{item.coordinates.revision}</p>

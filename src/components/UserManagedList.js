@@ -147,7 +147,7 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   loadFromListSpec(list) {
-    const { dispatch, definitions } = this.props
+    const { dispatch, curations, definitions } = this.props
     if (list.filter) this.setState({ activeFilters: list.filter })
     if (list.sortBy) this.setState({ activeSort: list.sortBy })
     if (list.sortBy || list.filter) this.setState({ sequence: this.state.sequence + 1 })
@@ -155,7 +155,9 @@ export default class UserManagedList extends SystemManagedList {
     const toAdd = list.coordinates.map(component => EntitySpec.validateAndCreate(component)).filter(e => e)
     dispatch(uiDefinitionsUpdateList({ addAll: toAdd }))
     const missingDefinitions = toAdd.map(spec => spec.toPath()).filter(path => !definitions.entries[path])
+    const missingCurations = toAdd.map(spec => spec.toPath()).filter(path => !curations.entries[path])
     this.getDefinitionsAndNotify(missingDefinitions, 'All components have been loaded')
+    this.getCurations(missingCurations)
     dispatch(
       uiDefinitionsUpdateList({
         transform: this.createTransform.call(

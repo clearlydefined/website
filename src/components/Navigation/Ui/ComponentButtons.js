@@ -70,7 +70,11 @@ export default class ComponentButtons extends Component {
 
     return (
       <div className="list-activity-area">
-        {isCurationPending && <Tag color="green">Pending curations</Tag>}
+        {isCurationPending && (
+          <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank">
+            <Tag color="green">Pending curations</Tag>
+          </a>
+        )}
         {scores && <ScoreRenderer scores={scores} definition={definition} />}
         <ButtonGroup>
           {!isSourceComponent && !readOnly && !isSourceEmpty && (
