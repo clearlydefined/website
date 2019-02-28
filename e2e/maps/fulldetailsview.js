@@ -18,6 +18,6 @@ export const fulldetailsMap = {
     folderIcon: '.ant-table-row-expand-icon',
     rowIdentifier: '.ant-table-row',
     firstRow: '[data-row-key="1"]',
-    lastRow: '[data-row-key="30"]'
+    lastRow: '[data-row-key="44"]'
   }
 }
