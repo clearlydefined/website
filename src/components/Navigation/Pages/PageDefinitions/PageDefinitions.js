@@ -149,7 +149,7 @@ export class PageDefinitions extends UserManagedList {
   }
 
   render() {
-    const { components, definitions, session, filterOptions } = this.props
+    const { components, curations, definitions, session, filterOptions } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">
@@ -175,6 +175,7 @@ export class PageDefinitions extends UserManagedList {
                   onAddComponent={this.onAddComponent}
                   onInspect={this.onInspect}
                   renderFilterBar={this.renderFilterBar}
+                  curations={curations}
                   definitions={definitions}
                   noRowsRenderer={this.noRowsRenderer}
                   sequence={sequence}
@@ -216,6 +217,7 @@ function mapStateToProps(state, ownProps) {
     path: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     filterOptions: state.ui.definitions.filterList,
     components: state.ui.definitions.componentList,
+    curations: state.ui.curate.bodies,
     definitions: state.definition.bodies,
     session: state.session
   }
