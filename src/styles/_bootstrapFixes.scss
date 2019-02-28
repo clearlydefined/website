@@ -43,3 +43,9 @@
   background: $color_red !important;
   border-color: $color_red !important;
 }
+
+@media (min-width: 992px) {
+  .modal-xl .modal-dialog {
+    width: 1220px;
+  }
+}

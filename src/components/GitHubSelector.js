@@ -45,6 +45,7 @@ export default class GitHubSelector extends Component {
     return (
       <AsyncTypeahead
         ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
+        useCache={false}
         options={options}
         placeholder={'Pick a login/repo'}
         onChange={this.onChange}
