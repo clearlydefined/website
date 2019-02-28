@@ -123,7 +123,7 @@ export default class FileList extends Component {
         key: 'name',
         ...this.getColumnSearchProps('name'),
         render: text => <span>{text}</span>,
-        width: '30%',
+        width: '40%',
         className: 'column-name'
       },
       {
@@ -165,7 +165,7 @@ export default class FileList extends Component {
               }}
             />
           ),
-        width: '25%'
+        width: '20%'
       },
       {
         title: 'Copyrights',
@@ -196,7 +196,7 @@ export default class FileList extends Component {
             )
           )
         },
-        width: '25%'
+        width: '20%'
       }
     ]
 
@@ -209,6 +209,8 @@ export default class FileList extends Component {
         expandedRowKeys={expandedRows}
         onExpandedRowsChange={expandedRows => this.setState({ expandedRows })}
         pagination={false}
+        bordered={false}
+        indentSize={30}
       />
     )
   }
