@@ -46,7 +46,6 @@ export function harvest(token, spec) {
  * @param {*} entity
  * @param {object} params additional params added to the query string
  * @param {array} params.expand contains informations about the detail to be returned (e.g. ['prs','foo','bars']);
- * @param {string} params.state if === 'pending' return also curations not already merged
  */
 export function getCuration(token, entity, params = {}) {
   const { expand, state } = params
@@ -57,6 +56,15 @@ export function getCuration(token, entity, params = {}) {
     }),
     token
   )
+}
+
+/**
+ * Get curation details about a set of definitions
+ * @param {*} token
+ * @param {*} list
+ */
+export function getCurations(token, list) {
+  return post(url(CURATIONS), token, list)
 }
 
 /**

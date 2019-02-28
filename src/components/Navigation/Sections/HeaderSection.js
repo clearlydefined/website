@@ -35,8 +35,8 @@ export default class HeaderSection extends Component {
     } = this.props
     const { item } = definition
     const scores = Definition.computeScores(item)
-    const isCurated = Curation.isCurated(curations)
-    const hasPendingCurations = Curation.hasPendingCurations(curations)
+    const isCurated = Curation.isCurated(curations.item)
+    const hasPendingCurations = Curation.isPending(curations.item)
     return (
       <Row className="row-detail-header">
         <Col md={8}>

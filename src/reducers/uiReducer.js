@@ -40,6 +40,7 @@ import valueReducer from './valueReducer'
 import itemReducer from './itemReducer'
 import yaml from 'js-yaml'
 import EntitySpec from '../utils/entitySpec'
+import { CURATION_BODIES } from '../actions/curationActions'
 
 /**
  * protected:
@@ -90,6 +91,7 @@ const navigation = (state = initialStateNavigation, action) => {
 const curate = combineReducers({
   filter: valueReducer(UI_CURATE_UPDATE_FILTER),
   filterList: listReducer(UI_CURATE_UPDATE_FILTER_LIST),
+  bodies: tableReducer(CURATION_BODIES),
   currentCuration: itemReducer(UI_CURATE_GET),
   proposedCuration: itemReducer(UI_CURATE_GET_PROPOSED),
   currentDefinition: itemReducer(UI_CURATE_GET_DEFINITION),
