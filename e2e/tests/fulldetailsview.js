@@ -69,7 +69,7 @@ describe(
         `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
       )
       const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
-      await expect(nameContent).toMatch('lib')
+      await expect(nameContent).toMatch('package')
     })
 
     test('last row of FileList should be a file', async () => {
@@ -100,7 +100,7 @@ describe(
         `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
       )
       const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
-      await expect(nameContent).toMatch('Newtonsoft.Json.nuspec')
+      await expect(nameContent).toMatch('[Content_Types].xml')
     })
   },
   defaultTimeout

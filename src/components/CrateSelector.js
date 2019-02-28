@@ -39,6 +39,7 @@ export default class CrateSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        useCache={false}
         options={options}
         placeholder={'Pick a Crate to harvest'}
         onChange={this.onChange}

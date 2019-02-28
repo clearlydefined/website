@@ -6,6 +6,7 @@ import { Row, Button, Col } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
 import { Tag } from 'antd'
 import Definition from '../../../utils/definition'
+import Curation from '../../../utils/curation'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import ScoreRenderer from '../Ui/ScoreRenderer'
 
@@ -22,11 +23,20 @@ export default class HeaderSection extends Component {
   }
 
   render() {
-    const { definition, modalView, changes, renderContributeButton, handleClose, handleSave, handleRevert } = this.props
+    const {
+      definition,
+      curations,
+      modalView,
+      changes,
+      renderContributeButton,
+      handleClose,
+      handleSave,
+      handleRevert
+    } = this.props
     const { item } = definition
     const scores = Definition.computeScores(item)
-    const isCurated = Definition.isCurated(item)
-    const hasPendingCurations = Definition.hasPendingCurations(item)
+    const isCurated = Curation.isCurated(curations.item)
+    const hasPendingCurations = Curation.isPending(curations.item)
     return (
       <Row className="row-detail-header">
         <Col md={8}>
@@ -40,8 +50,8 @@ export default class HeaderSection extends Component {
                     <ScoreRenderer scores={scores} definition={item} />
                   </span>
                 )}
-                {isCurated && <Tag color="green">Curated</Tag>}
-                {hasPendingCurations && <Tag color="gold">Pending Curations</Tag>}
+                {isCurated && <Tag color="purple">Curated</Tag>}
+                {hasPendingCurations && <Tag color="green">Pending curations</Tag>}
               </div>
             </div>
             <p>{item.coordinates.revision}</p>

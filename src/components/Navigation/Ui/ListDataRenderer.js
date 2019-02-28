@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 export default class ListDataRenderer extends Component {
   static propTypes = {
     licensed: PropTypes.object,
-    item: PropTypes.object,
+    item: PropTypes.string,
     title: PropTypes.string
   }
 
