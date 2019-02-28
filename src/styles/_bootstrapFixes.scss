@@ -16,6 +16,26 @@
   min-width: 67px;
 }
 
+.navbar-inverse .navbar-collapse,
+.navbar-inverse .navbar-form {
+  background-color: #222;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-collapse {
+    padding-top: 15.5px;
+    padding-bottom: 15.5px;
+  }
+
+  .navbar-nav {
+    margin: 0 -15px;
+  }
+}
+
+.navbar-toggle {
+  margin-top: 23px;
+}
+
 .inlineBlock {
   display: inline-block;
 }
