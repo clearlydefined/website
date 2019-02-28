@@ -69,10 +69,10 @@ export default class DefinitionEntry extends React.Component {
     if (!definition.described) return
     const { namespace, name, revision } = definition.coordinates
     const namespaceText = namespace ? namespace + '/' : ''
-    const componentTag = definition.described.urls.registry ? (
+    const componentTag = get(definition, 'described.urls.registry') ? (
       <span>
         <a
-          href={definition.described.urls.registry}
+          href={get(definition, 'described.urls.registry')}
           target="_blank"
           rel="noopener noreferrer"
           data-test-id="component-name"
@@ -87,10 +87,10 @@ export default class DefinitionEntry extends React.Component {
         {name}
       </span>
     )
-    const revisionTag = definition.described.urls.version ? (
+    const revisionTag = get(definition, 'described.urls.version') ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={definition.described.urls.version} target="_blank" rel="noopener noreferrer">
+        <a href={get(definition, 'described.urls.registry')} target="_blank" rel="noopener noreferrer">
           {revision}
         </a>
       </span>
