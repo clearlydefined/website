@@ -12,7 +12,7 @@ import sortBy from 'lodash/sortBy'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
 import notification from 'antd/lib/notification'
-import { curateAction } from '../actions/curationActions'
+import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import { getDefinitionsAction } from '../actions/definitionActions'
 import { uiBrowseUpdateFilterList, uiRevertDefinition, uiInfo, uiDanger } from '../actions/ui'
@@ -56,6 +56,7 @@ export default class SystemManagedList extends Component {
     this.collapseAll = this.collapseAll.bind(this)
     this.incrementSequence = this.incrementSequence.bind(this)
     this.getDefinitionsAndNotify = this.getDefinitionsAndNotify.bind(this)
+    this.getCurations = this.getCurations.bind(this)
     this.refresh = this.refresh.bind(this)
     this.revertAll = this.revertAll.bind(this)
     this.revert = this.revert.bind(this)
@@ -309,6 +310,12 @@ export default class SystemManagedList extends Component {
       .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
   }
 
+  getCurations(curations) {
+    const { dispatch, token } = this.props
+    const chunks = chunk(curations, 100)
+    Promise.all(chunks.map(throat(10, chunk => dispatch(getCurationsAction(token, chunk)))))
+  }
+
   refresh = removeDefinitions => {
     const { components } = this.props
     const refreshedData = removeDefinitions
@@ -317,7 +324,9 @@ export default class SystemManagedList extends Component {
     if (this.hasChanges()) this.updateList({ updateAll: refreshedData })
     const definitions = this.buildSaveSpec(components.list)
     const definitionsToGet = definitions.map(definition => definition.toPath())
+    const curationsToGet = definitions.map(definition => definition.toPath())
     this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
+    this.getCurations(curationsToGet)
   }
 
   updateList() {}

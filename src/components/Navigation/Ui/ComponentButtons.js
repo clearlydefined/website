@@ -7,6 +7,7 @@ import { Menu, Dropdown, Icon } from 'antd'
 import { CopyUrlButton } from '../../'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
+import Curation from '../../../utils/curation'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import ButtonWithTooltip from './ButtonWithTooltip'
 import ScoreRenderer from './ScoreRenderer'
@@ -59,19 +60,22 @@ export default class ComponentButtons extends Component {
   }
 
   render() {
-    const { definition, currentComponent, readOnly, hasChange, hideVersionSelector } = this.props
+    const { definition, curation, currentComponent, readOnly, hasChange, hideVersionSelector } = this.props
     const component = EntitySpec.fromCoordinates(currentComponent)
     const isSourceComponent = this.isSourceComponent(component)
     const scores = Definition.computeScores(definition)
     const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
     const isSourceEmpty = Definition.isSourceEmpty(definition)
-    const isCurated = Definition.isCurated(definition)
-    const hasPendingCurations = Definition.hasPendingCurations(definition)
+    const isCurationPending = Curation.isPending(curation)
+
     return (
       <div className="list-activity-area">
+        {isCurationPending && (
+          <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank">
+            <Tag color="green">Pending curations</Tag>
+          </a>
+        )}
         {scores && <ScoreRenderer scores={scores} definition={definition} />}
-        {isCurated && <Tag color="green">Curated</Tag>}
-        {hasPendingCurations && <Tag color="gold">Pending Curations</Tag>}
         <ButtonGroup>
           {!isSourceComponent && !readOnly && !isSourceEmpty && (
             <ButtonWithTooltip
