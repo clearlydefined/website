@@ -15,3 +15,9 @@
 .inlineBlock {
   display: inline-block;
 }
+
+@media (min-width: 992px) {
+  .modal-xl .modal-dialog {
+    width: 1220px;
+  }
+}
