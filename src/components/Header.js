@@ -85,7 +85,7 @@ class Header extends Component {
   render() {
     const { session, navigation } = this.props
     return (
-      <Navbar inverse={true}>
+      <Navbar inverse={true} collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
             <LinkContainer to={ROUTE_ROOT}>
