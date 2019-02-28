@@ -39,21 +39,21 @@ describe('CurationRenderer', () => {
     wrapper.find(TwoLineEntry).simulate('click')
     expect(parentClick).toHaveBeenCalled()
   })
-  it('renders a green color for a merged curation', () => {
+  it('renders a purple color for a merged curation', () => {
     const wrapper = shallow(<CurationRenderer contribution={testCuration} />)
     const twoline = wrapper.find(TwoLineEntry)
     expect(twoline.props().headline).toEqual(
       <span>
-        #{testCuration.pr.number} {testCuration.pr.title} <Tag color={'green'}>{'Curated'}</Tag>
+        #{testCuration.pr.number} {testCuration.pr.title} <Tag color={'purple'}>{'Merged'}</Tag>
       </span>
     )
   })
-  it('renders a gold color for a pending curation', () => {
+  it('renders a green color for a pending curation', () => {
     const wrapper = shallow(<CurationRenderer contribution={testPendingCuration} />)
     const twoline = wrapper.find(TwoLineEntry)
     expect(twoline.props().headline).toEqual(
       <span>
-        #{testPendingCuration.pr.number} {testPendingCuration.pr.title} <Tag color={'gold'}>{'Pending'}</Tag>
+        #{testPendingCuration.pr.number} {testPendingCuration.pr.title} <Tag color={'green'}>{'Open'}</Tag>
       </span>
     )
   })
