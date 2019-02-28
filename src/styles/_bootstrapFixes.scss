@@ -19,3 +19,37 @@
 .inlineBlock {
   display: inline-block;
 }
+
+.btn-success {
+  background-color: $color_highlight !important;
+  border-color: $color_highlight !important;
+}
+
+.btn-danger {
+  background-color: $color_red !important;
+  border-color: $color_red !important;
+}
+
+.ant-tag-purple {
+  color: white !important;
+  background: #6f42c1 !important;
+  border-color: #6f42c1 !important;
+}
+
+.ant-tag-green {
+  color: white !important;
+  background: $color_highlight !important;
+  border-color: $color_highlight !important;
+}
+
+.ant-tag-red {
+  color: white !important;
+  background: $color_red !important;
+  border-color: $color_red !important;
+}
+
+@media (min-width: 992px) {
+  .modal-xl .modal-dialog {
+    width: 1220px;
+  }
+}

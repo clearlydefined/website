@@ -12,7 +12,7 @@ import notification from 'antd/lib/notification'
 import 'antd/dist/antd.css'
 import {
   uiInspectGetDefinition,
-  uiInspectGetCuration,
+  uiInspectGetCurations,
   uiInspectGetHarvested,
   uiNavigation,
   uiCurateGetDefinitionPreview,
@@ -88,13 +88,13 @@ export class FullDetailPage extends AbstractFullDetailsView {
     const {
       token,
       uiInspectGetDefinition,
-      uiInspectGetCuration,
+      uiInspectGetCurations,
       uiInspectGetHarvested,
       uiInspectGetSuggestions
     } = this.props
     if (!component) return
     uiInspectGetDefinition(token, component)
-    uiInspectGetCuration(token, component)
+    uiInspectGetCurations(token, component)
     uiInspectGetHarvested(token, component)
     uiInspectGetSuggestions(token, component)
     //uiGetCurationsList(token, component)
@@ -256,7 +256,7 @@ function mapStateToProps(state, props) {
   const { currentDefinition } = props
   const path = Definition.getPathFromUrl(props)
   const component = props.component || Definition.getDefinitionEntity(path)
-  const curation = state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation)
+  const curations = state.ui.inspect.curations && cloneDeep(state.ui.inspect.curations)
   let previewDefinition, definition
   if (currentDefinition && currentDefinition.otherDefinition) {
     previewDefinition = Contribution.getChangesFromPreview(currentDefinition.otherDefinition, currentDefinition)
@@ -273,7 +273,7 @@ function mapStateToProps(state, props) {
     token: state.session.token,
     session: state.session,
     definition,
-    curation,
+    curations,
     harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
     previewDefinition,
     inspectedCuration: state.ui.inspect.inspectedCuration && cloneDeep(state.ui.inspect.inspectedCuration)
@@ -285,7 +285,7 @@ function mapDispatchToProps(dispatch) {
     {
       login,
       uiInspectGetDefinition,
-      uiInspectGetCuration,
+      uiInspectGetCurations,
       uiInspectGetHarvested,
       uiGetCurationsList,
       uiNavigation,

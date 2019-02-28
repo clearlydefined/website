@@ -22,6 +22,7 @@ class ComponentList extends React.Component {
     noRowsRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
+    curations: PropTypes.object,
     sequence: PropTypes.number
   }
 
@@ -36,12 +37,17 @@ class ComponentList extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
+    if (newProps.curations.sequence !== this.props.curations.sequence) this.incrementSequence()
     if (newProps.sequence !== this.props.sequence) this.incrementSequence()
     if (!isEqual(newProps.list, this.props.list.sequence)) this.incrementSequence()
   }
 
   getDefinition(component) {
     return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+  }
+
+  getCuration(component) {
+    return this.props.curations.entries[EntitySpec.fromCoordinates(component).toPath()]
   }
 
   revertComponent(component, param) {
@@ -87,6 +93,8 @@ class ComponentList extends React.Component {
     if (!component) return
     let definition = this.getDefinition(component)
     definition = definition || { coordinates: component }
+    let curation = this.getCuration(component)
+    curation = curation || { contributions: [], curations: {} }
     return (
       <div key={key} style={style} className="component-row">
         <DefinitionEntry
@@ -100,6 +108,7 @@ class ComponentList extends React.Component {
           classOnDifference="bg-info"
           renderButtons={() => (
             <ComponentButtons
+              curation={curation}
               definition={definition}
               currentComponent={component}
               hasChange={hasChange}

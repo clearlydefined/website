@@ -46,7 +46,6 @@ export function harvest(token, spec) {
  * @param {*} entity
  * @param {object} params additional params added to the query string
  * @param {array} params.expand contains informations about the detail to be returned (e.g. ['prs','foo','bars']);
- * @param {string} params.state if === 'pending' return also curations not already merged
  */
 export function getCuration(token, entity, params = {}) {
   const { expand, state } = params
@@ -57,6 +56,15 @@ export function getCuration(token, entity, params = {}) {
     }),
     token
   )
+}
+
+/**
+ * Get curation details about a set of definitions
+ * @param {*} token
+ * @param {*} list
+ */
+export function getCurations(token, list) {
+  return post(url(CURATIONS), token, list)
 }
 
 /**
@@ -137,10 +145,10 @@ export function getBadgeUrl(score1, score2) {
   score1 = score1 || 0
   score2 = score2 || 0
   const topScore = 100
-  const colors = ['red', 'yellow', 'brightgreen']
+  const colors = ['cb2431', 'yellow', '2cbe4e']
   const percentScore = (score1 + score2) / (2 * topScore)
   const bucketSize = 1 / colors.length
-  const color = colors[Math.floor(percentScore / bucketSize)]
+  const color = colors[Math.floor(percentScore / bucketSize)] || '2cbe4e'
   return `https://img.shields.io/badge/ClearlyDefined-${score1}%20%7C%20${score2}-${color}.svg`
 }
 

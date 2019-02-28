@@ -14,6 +14,9 @@ describe('PageBrowse', () => {
           filter: {},
           filterList: {},
           componentList: {}
+        },
+        curate: {
+          bodies: {}
         }
       },
       definition: {

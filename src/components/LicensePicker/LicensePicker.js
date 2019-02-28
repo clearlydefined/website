@@ -104,12 +104,11 @@ export default class LicensePicker extends Component {
             <Button
               bsStyle="success"
               data-test-id="license-picker-ok-button"
-              disabled={false}
               onClick={() => onChange(licenseExpression)}
             >
               OK
             </Button>
-            <Button bsStyle="danger" data-test-id="license-picker-cancel-button" disabled={false} onClick={onClose}>
+            <Button bsStyle="danger" data-test-id="license-picker-cancel-button" onClick={onClose}>
               Cancel
             </Button>
           </Col>
