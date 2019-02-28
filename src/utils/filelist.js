@@ -7,6 +7,7 @@ import Contribution from './contribution'
 let key = 0
 export default class FileListSpec {
   static pathToTreeFolders(files, component, preview) {
+    if (!files) return []
     const newFiles = files.map((file, index) => {
       return { ...file, id: index, folders: file.path.split('/') }
     })
