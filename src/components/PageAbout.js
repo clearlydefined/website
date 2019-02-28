@@ -30,7 +30,7 @@ class PageAbout extends Component {
 
   render() {
     return (
-      <Grid className="main-container">
+      <Grid className="main-container about-container">
         <Row className="show-grid neighborhood-row about-text">
           <Col md={10} mdOffset={1}>
             <h2>About {clearlyDefined}</h2>

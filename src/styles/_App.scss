@@ -65,6 +65,10 @@
   .about-cell {
     display: flex;
     min-height: 170px;
+
+    @media (max-width: 768px) {
+      min-height: 150px;
+    }
   }
 
   .about-image {
@@ -87,6 +91,16 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+  }
+}
+
+.about-container {
+  @media (max-width: 768px) {
+    margin-top: -80px;
+  }
+
+  .center-block {
+    vertical-align: top;
   }
 }
 
