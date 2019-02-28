@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import isNumber from 'lodash/isNumber'
-import { OverlayTrigger } from 'react-bootstrap'
+import { Popover } from 'antd'
 
 import PopoverRenderer from './PopoverRenderer'
 import withSuggestions from '../utils/withSuggestions'
@@ -44,11 +44,27 @@ class CopyrightsRenderer extends Component {
     currentItem: null,
     hasChanges: false,
     showAddRow: false,
+    visible: false,
+    originalValues: [],
     values: []
   }
 
   componentDidMount() {
-    this.props.item && this.setState({ values: this.props.item })
+    this.props.item &&
+      this.setState({
+        values: this.props.item.map(item => {
+          return { value: item, isDifferent: false }
+        }),
+        originalValues: this.props.item
+      })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      values: nextProps.item.map(item => {
+        return { value: item, isDifferent: !this.state.originalValues.find(originalItem => originalItem === item) }
+      })
+    })
   }
 
   onShowAddRow = () => {
@@ -74,22 +90,36 @@ class CopyrightsRenderer extends Component {
     this.setState({ values, showAddRow: false, currentItem: null, hasChanges: true }, () => forceSave && this.onSave())
   }
 
-  onSave = () => this.props.onSave(this.state.values.map(item => item.value))
+  onSave = () => {
+    this.props.onSave(this.state.values.map(item => item.value))
+    this.setState({ visible: false })
+  }
+
+  hide = () => {
+    this.setState({
+      visible: false
+    })
+  }
+
+  handleVisibleChange = visible => {
+    this.setState({ visible })
+  }
 
   onChange = suggestion => this.addItem(suggestion, null, true)
 
   render() {
-    const { readOnly, container, placement, classIfDifferent, field } = this.props
-    const { hasChanges, values, showAddRow } = this.state
+    const { readOnly, classIfDifferent, field } = this.props
+    const { hasChanges, values, showAddRow, visible } = this.state
     if (!values.length && readOnly) return null
 
     return (
-      <OverlayTrigger
+      <Popover
+        overlayClassName="copyrights-renderer"
         trigger="click"
-        rootClose={readOnly || !hasChanges} // hide overlay when the user clicks outside the overlay
-        container={container}
-        placement={placement}
-        overlay={
+        visible={visible}
+        onVisibleChange={this.handleVisibleChange}
+        placement="left"
+        content={
           <PopoverRenderer
             addItem={this.addItem}
             canAddItems={!readOnly}
@@ -105,6 +135,7 @@ class CopyrightsRenderer extends Component {
             title={'Copyrights'}
             undoEdit={this.undoEdit}
             values={values}
+            placement="left"
           />
         }
       >
@@ -115,7 +146,7 @@ class CopyrightsRenderer extends Component {
           values={values}
           onChange={this.onChange}
         />
-      </OverlayTrigger>
+      </Popover>
     )
   }
 }
