@@ -74,15 +74,15 @@ class SourcePicker extends Component {
           <Col md={5}>
             {selectedComponent && activeProvider === 'github' && (
               <GitHubCommitPicker
+                allowNew
                 request={selectedComponent}
-                allowNew={true}
                 getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
                 onChange={this.commitChanged.bind(this, selectedComponent)}
               />
             )}
           </Col>
         </Row>
-        <Row>
+        <Row className="spacer">
           <a href={selectedComponent ? selectedComponent.url : value} target="_blank" rel="noopener noreferrer">
             {selectedComponent ? selectedComponent.url : value}
           </a>
