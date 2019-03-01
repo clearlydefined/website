@@ -63,8 +63,8 @@ export default class FilterBar extends Component {
             title={'License'}
             id={'licensed.declared'}
             disabled={hasComponents}
-            value={activeFilters}
             onFilter={onFilter}
+            width={150}
           />
         )}
         {showSourceFilter && (
