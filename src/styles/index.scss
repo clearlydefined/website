@@ -1,8 +1,12 @@
 /* Copyright (c) Microsoft Corporation and others. Licensed under the MIT license. */
 /* SPDX-License-Identifier: MIT */
 
+@import '~antd/dist/antd.css';
+@import './antdOverwrites.scss';
+
 @import './variables';
 @import './bootstrapFixes';
+
 body {
   padding: 0;
   min-height: 100vh;

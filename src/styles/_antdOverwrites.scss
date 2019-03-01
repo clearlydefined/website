@@ -1,0 +1,25 @@
+.ant-select-selection {
+  border: 0;
+}
+
+.ant-select-disabled .ant-select-selection {
+  background: transparent;
+}
+
+.ant-select-selection__placeholder,
+.ant-select-search__field__placeholder {
+  color: lighten($color-text-main, 5);
+}
+
+.ant-select-disabled .ant-select-selection__placeholder,
+.ant-select-arrow {
+  color: $color-text-light;
+}
+
+.ant-select-enabled {
+  color: $color-text-main;
+}
+
+.ant-select-enabled .ant-select-arrow {
+  color: lighten($color-text-main, 5);
+}
