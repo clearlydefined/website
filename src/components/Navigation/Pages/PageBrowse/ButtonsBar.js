@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from 'react-bootstrap'
+import Button from 'antd/lib/button'
 import ButtonWithTooltip from '../../Ui/ButtonWithTooltip'
 
 export default class ButtonsBar extends Component {
@@ -31,17 +31,16 @@ export default class ButtonsBar extends Component {
     return (
       <div className="pull-right">
         <ButtonWithTooltip tip="Revert all changes of all the definitions">
-          <Button bsStyle="danger" disabled={hasChanges} onClick={revertAll}>
-            <i className="fas fa-undo" />
-            <span>&nbsp;Revert Changes</span>
+          <Button type="danger" disabled={hasChanges} onClick={revertAll} icon="undo">
+            Revert Changes
           </Button>
         </ButtonWithTooltip>
         &nbsp;
-        <Button bsStyle="default" disabled={hasChanges} onClick={collapseAll}>
+        <Button type="default" disabled={hasChanges} onClick={collapseAll}>
           Collapse All
         </Button>
         &nbsp;
-        <Button bsStyle="success" disabled={hasChanges} onClick={doPromptContribute}>
+        <Button type="primary" disabled={hasChanges} onClick={doPromptContribute}>
           Contribute
         </Button>
       </div>
