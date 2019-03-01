@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Select } from 'antd'
+import Select from 'antd/lib/select'
 
 class FilterList extends Component {
   static defaultProps = {
@@ -27,13 +27,11 @@ class FilterList extends Component {
         placeholder={title}
         style={{ width }}
       >
-        {list.map(filterType => {
-          return (
-            <Select.Option className="page-definitions__menu-item" title={filterType.label} value={filterType.value}>
-              <span>{filterType.label}</span>
-            </Select.Option>
-          )
-        })}
+        {list.map(filterType => (
+          <Select.Option className="page-definitions__menu-item" title={filterType.label} value={filterType.value}>
+            <span>{filterType.label}</span>
+          </Select.Option>
+        ))}
       </Select>
     )
   }

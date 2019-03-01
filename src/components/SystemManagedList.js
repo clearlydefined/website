@@ -168,10 +168,9 @@ export default class SystemManagedList extends Component {
     return sorts[eventKey]
   }
 
-  onSort(eventKey) {
-    let activeSort = eventKey.value
+  onSort(activeSort) {
     if (this.state.activeSort === activeSort) activeSort = null
-    this.setState({ ...this.state, activeSort, sequence: this.state.sequence + 1 })
+    this.setState({ activeSort, sequence: this.state.sequence + 1 })
     this.updateList({ transform: this.createTransform(activeSort, this.state.activeFilters) })
   }
 
