@@ -28,7 +28,7 @@ class FilterList extends Component {
         style={{ width }}
       >
         {list.map(filterType => (
-          <Select.Option className="page-definitions__menu-item" title={filterType.label} value={filterType.value}>
+          <Select.Option className="page-definitions__menu-item" title={filterType.label} key={filterType.value}>
             <span>{filterType.label}</span>
           </Select.Option>
         ))}

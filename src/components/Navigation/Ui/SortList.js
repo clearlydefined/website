@@ -30,7 +30,7 @@ class SortList extends Component {
         style={{ width }}
       >
         {list.map(sortType => (
-          <Select.Option className="page-definitions__menu-item" title={sortType.label} value={sortType.value}>
+          <Select.Option className="page-definitions__menu-item" title={sortType.label} key={sortType.value}>
             <span>{sortType.label}</span>
           </Select.Option>
         ))}

@@ -61,30 +61,27 @@ class PageBrowse extends SystemManagedList {
       <ButtonsBar
         hasChanges={!this.hasChanges()}
         revertAll={this.revertAll}
-        doRefreshAll={this.doRefreshAll}
         collapseAll={this.collapseAll}
-        onRemoveAll={this.onRemoveAll}
         doPromptContribute={this.doPromptContribute}
       />
     )
   }
 
   // Overrides the default onFilter method
-  onFilter(filter, overwrite = false) {
+  onFilter(filter, type, overwrite = false) {
     const activeFilters = overwrite === true ? filter : Object.assign({}, this.state.activeFilters)
     if (overwrite !== true) {
-      const filterValue = get(activeFilters, filter.type)
-      if (filterValue && activeFilters[filter.type] === filter.value) delete activeFilters[filter.type]
-      else activeFilters[filter.type] = filter.value
+      const filterValue = get(activeFilters, type)
+      if (filterValue && activeFilters[type] === filter) delete activeFilters[type]
+      else activeFilters[type] = filter
     }
-    this.setState({ ...this.state, activeFilters }, () => this.updateData())
+    this.setState({ activeFilters }, () => this.updateData())
   }
 
   // Overrides the default onSort method
-  onSort(eventKey) {
-    let activeSort = eventKey.value
+  onSort(activeSort) {
     if (this.state.activeSort === activeSort) activeSort = null
-    this.setState({ ...this.state, activeSort, sequence: this.state.sequence + 1 }, () => this.updateData())
+    this.setState({ activeSort, sequence: this.state.sequence + 1 }, () => this.updateData())
   }
 
   renderFilterBar() {
@@ -109,20 +106,28 @@ class PageBrowse extends SystemManagedList {
 
     return (
       <div className="filter-list" align="right">
-        <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-        {this.renderFilter(providers, 'Provider', 'provider')}
-        {this.renderFilter(
-          licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
-          'License',
-          'license'
-        )}
-        {this.renderFilter(curateFilters, 'Curate', 'curate')}
+        <SortList
+          width={190}
+          list={sorts}
+          title={'Sort By'}
+          id={'sort'}
+          value={this.state.activeSort}
+          onSort={this.onSort}
+        />
+        {this.renderFilter({ list: providers, title: 'Provider', id: 'provider', width: 130 })}
+        {this.renderFilter({
+          list: licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
+          title: 'License',
+          id: 'license',
+          width: 140
+        })}
+        {this.renderFilter({ list: curateFilters, title: 'Curate', id: 'curate', width: 110 })}
       </div>
     )
   }
 
-  renderFilter(list, title, id) {
-    return <FilterList list={list} title={title} id={id} value={this.state.activeFilters} onFilter={this.onFilter} />
+  renderFilter(props) {
+    return <FilterList {...props} value={this.state.activeFilters} onFilter={this.onFilter} />
   }
 
   async updateData(continuationToken) {
@@ -190,10 +195,8 @@ class PageBrowse extends SystemManagedList {
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 listHeight={600}
                 loadMoreRows={this.loadMoreRows}
-                onRemove={this.onRemoveComponent}
                 onRevert={this.revertDefinition}
                 onChange={this.onChangeComponent}
-                onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 definitions={definitions}
