@@ -99,15 +99,7 @@ export class PageDefinitions extends UserManagedList {
   }
 
   renderFilterBar() {
-    return (
-      <FilterBar
-        activeSort={this.state.activeSort}
-        activeFilters={this.state.activeFilters}
-        onFilter={this.onFilter}
-        onSort={this.onSort}
-        hasComponents={!this.hasComponents()}
-      />
-    )
+    return <FilterBar onFilter={this.onFilter} onSort={this.onSort} hasComponents={!this.hasComponents()} />
   }
 
   noRowsRenderer() {

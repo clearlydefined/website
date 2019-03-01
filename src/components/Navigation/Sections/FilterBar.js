@@ -6,8 +6,6 @@ import { sorts, licenses, sources, releaseDates } from '../../../utils/utils'
 
 export default class FilterBar extends Component {
   static propTypes = {
-    activeSort: PropTypes.string,
-    activeFilters: PropTypes.object,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,
     hasComponents: PropTypes.bool,
@@ -30,8 +28,6 @@ export default class FilterBar extends Component {
 
   render() {
     const {
-      activeSort,
-      activeFilters,
       onFilter,
       onSort,
       hasComponents,
@@ -53,8 +49,8 @@ export default class FilterBar extends Component {
             title={'Sort By'}
             id={'sort'}
             disabled={hasComponents}
-            value={activeSort}
             onSort={onSort}
+            width={130}
           />
         )}
         {showLicenseFilter && (
@@ -64,7 +60,7 @@ export default class FilterBar extends Component {
             id={'licensed.declared'}
             disabled={hasComponents}
             onFilter={onFilter}
-            width={150}
+            width={140}
           />
         )}
         {showSourceFilter && (
@@ -73,7 +69,6 @@ export default class FilterBar extends Component {
             title={'Source'}
             id={'described.sourceLocation'}
             disabled={hasComponents}
-            value={activeFilters}
             onFilter={onFilter}
           />
         )}
@@ -83,8 +78,8 @@ export default class FilterBar extends Component {
             title={'Release Date'}
             id={'described.releaseDate'}
             disabled={hasComponents}
-            value={activeFilters}
             onFilter={onFilter}
+            width={125}
           />
         )}
       </div>
