@@ -64,7 +64,7 @@
   border-color: $color_red !important;
 }
 
-@media (min-width: 992px) {
+@media (min-width: $screen-md) {
   .modal-xl .modal-dialog {
     width: 1220px;
   }

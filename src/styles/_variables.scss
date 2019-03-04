@@ -26,3 +26,14 @@ $color_black_10: rgba(0, 0, 0, 0.1);
 $size-text-banner: 10rem;
 $size-text-message: 5rem;
 $size-text-message-small: $size-text-message / 1.5 / 1.5;
+
+//== Media queries breakpoints
+
+$screen-sm: 768px;
+$screen-md: 992px;
+$screen-lg: 1200px;
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max: ($screen-sm - 1);
+$screen-sm-max: ($screen-md - 1);
+$screen-md-max: ($screen-lg - 1);

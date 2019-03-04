@@ -266,6 +266,19 @@ hr {
   margin: 75px 0;
 }
 
+.section-header div:nth-child(2) {
+  align-self: flex-end;
+}
+
+.section-button .text-right > .btn,
+.section-button .text-right > .dropdown {
+  margin: 0 0 0 3px;
+
+  @media (max-width: $screen-sm-max) {
+    margin: 3px 0 0 0;
+  }
+}
+
 .browse-page {
   // negative margin to reduce the .navbar min-height
   margin-top: -40px;
