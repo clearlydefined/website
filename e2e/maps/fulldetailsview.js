@@ -18,6 +18,9 @@ export const fulldetailsMap = {
     folderIcon: '.ant-table-row-expand-icon',
     rowIdentifier: '.ant-table-row',
     firstRow: '[data-row-key="1"]',
-    lastRow: '[data-row-key="44"]'
+    firstRowContent: 'docs',
+    lastRow: '[data-row-key="128"]',
+    lastRowContent: 'package.json',
+    pathUrl: 'https://github.com/automattic/mongoose/blob/1ead0e616ab028a994ab47a23643749659243e07/package.json'
   }
 }
