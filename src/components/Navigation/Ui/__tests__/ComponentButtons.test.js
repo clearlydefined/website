@@ -67,6 +67,7 @@ describe('ComponentButtons', () => {
     expect(wrapper.find(Button).length).toBe(6)
   })
   it('check functionality of each button', async () => {
+    const showVersionSelectorPopup = jest.fn()
     const wrapper = mount(
       <ComponentButtons
         definition={mockedDefinition}
@@ -74,13 +75,15 @@ describe('ComponentButtons', () => {
         readOnly={false}
         hasChange={() => null}
         getDefinition={() => mockedDefinition}
+        showVersionSelectorPopup={showVersionSelectorPopup}
       />
     )
     const buttons = wrapper.find(Button)
     await buttons.forEach(button => button.simulate('click'))
     const dropdown = wrapper.find(Dropdown)
     await dropdown.simulate('click')
-    const menuItems = wrapper.find(Menu)
-    await menuItems.forEach(menuItem => menuItem.simulate('select'))
+    const menuItems = wrapper.find(Menu.Item)
+    await menuItems.forEach(menuItem => menuItem.simulate('click'))
+    expect(showVersionSelectorPopup).toHaveBeenCalledTimes(2)
   })
 })

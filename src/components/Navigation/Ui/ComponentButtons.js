@@ -20,7 +20,8 @@ export default class ComponentButtons extends Component {
     onAddComponent: PropTypes.func,
     onInspect: PropTypes.func,
     onRemove: PropTypes.func,
-    onRevert: PropTypes.func
+    onRevert: PropTypes.func,
+    showVersionSelectorPopup: PropTypes.func
   }
 
   isSourceComponent(component) {
