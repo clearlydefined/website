@@ -249,8 +249,8 @@ hr {
   align-self: flex-end;
 }
 
-.section-button .text-right .btn,
-.section-button .text-right .dropdown {
+.section-button .text-right > .btn,
+.section-button .text-right > .dropdown {
   margin: 0 0 0 3px;
 
   @media (max-width: $screen-sm-max) {
