@@ -249,13 +249,11 @@ hr {
   align-self: flex-end;
 }
 
-@media (min-width: 768px) {
-  .section-button .text-right * {
-    margin-left: 3px;
-  }
-}
-@media (max-width: 767px) {
-  .section-button .text-right * {
-    margin-top: 3px;
+.section-button .text-right .btn,
+.section-button .text-right .dropdown {
+  margin: 0 0 0 3px;
+
+  @media (max-width: $screen-sm-max) {
+    margin: 3px 0 0 0;
   }
 }
