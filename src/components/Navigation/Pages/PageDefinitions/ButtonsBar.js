@@ -21,8 +21,8 @@ export default class ButtonsBar extends Component {
     shareUrl: PropTypes.func
   }
 
-  onSelect = type => {
-    switch (type) {
+  onSelect = ({ key }) => {
+    switch (key) {
       case 'url':
         return this.props.shareUrl()
       case 'file':

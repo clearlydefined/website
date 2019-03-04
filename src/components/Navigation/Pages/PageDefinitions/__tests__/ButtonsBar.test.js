@@ -1,8 +1,9 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
+import Dropdown from 'antd/lib/dropdown'
+import Menu from 'antd/lib/menu'
 import ButtonsBar from '../ButtonsBar'
 import ShareButton from '../../../Ui/ShareButton'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 const components = {
   list: [{ type: 'npm', provider: 'npmjs', name: 'async', revision: '2.6.1' }]
@@ -33,31 +34,28 @@ describe('ButtonsBar', () => {
   it('checks if share functions are called', async () => {
     const shareUrl = jest.fn()
     const shareFile = jest.fn()
-    const shareGist = jest.fn()
     const shareNotice = jest.fn()
     const wrapper = mount(
       <ButtonsBar
         shareUrl={shareUrl}
         shareFile={shareFile}
-        shareGist={shareGist}
+        shareGist={null}
         shareNotice={shareNotice}
         components={components}
       />
     )
     const wrapperShareButton = wrapper.find(ShareButton)
     wrapperShareButton.simulate('click')
-    const dropdown = wrapperShareButton.find(DropdownButton)
+    const dropdown = wrapperShareButton.find(Dropdown)
     expect(dropdown.prop('disabled')).toBe(false)
 
     await dropdown.simulate('click')
 
-    const menuItems = wrapper.find(MenuItem)
-    await menuItems.forEach(menuItem => {
-      menuItem.props().onSelect()
-    })
+    const menuItems = wrapper.find(Menu.Item)
+    await menuItems.forEach(menuItem => menuItem.simulate('click'))
     expect(shareUrl).toHaveBeenCalled()
     expect(shareFile).toHaveBeenCalled()
-    expect(shareGist).toHaveBeenCalled()
+    expect(shareNotice).toHaveBeenCalled()
   })
 
   it("checks if buttons are enabled when there aren't changes", async () => {
