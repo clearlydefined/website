@@ -18,7 +18,10 @@ describe(
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}/definitions/nuget/nuget/-/Newtonsoft.Json/10.0.2`, { waitUntil: 'domcontentloaded' })
+      await page.goto(
+        `${__HOST__}/definitions/git/github/automattic/mongoose/1ead0e616ab028a994ab47a23643749659243e07`,
+        { waitUntil: 'domcontentloaded' }
+      )
     })
 
     afterAll(() => {
@@ -69,7 +72,7 @@ describe(
         `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
       )
       const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
-      await expect(nameContent).toMatch('package')
+      await expect(nameContent).toMatch(fulldetailsMap.fileList.firstRowContent)
     })
 
     test('last row of FileList should be a file', async () => {
@@ -100,7 +103,7 @@ describe(
         `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
       )
       const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
-      await expect(nameContent).toMatch('[Content_Types].xml')
+      await expect(nameContent).toMatch(fulldetailsMap.fileList.lastRowContent)
     })
   },
   defaultTimeout
