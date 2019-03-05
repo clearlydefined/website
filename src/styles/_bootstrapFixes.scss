@@ -12,6 +12,11 @@
   font-weight: 400;
 }
 
+.center-block {
+  display: inline-block;
+  float: none;
+}
+
 .navbar-inverse .navbar-collapse,
 .navbar-inverse .navbar-form {
   background-color: #222;
@@ -64,7 +69,7 @@
   border-color: $color_red !important;
 }
 
-@media (min-width: 992px) {
+@media (min-width: $screen-md) {
   .modal-xl .modal-dialog {
     width: 1220px;
   }

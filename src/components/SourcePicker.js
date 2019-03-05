@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, ButtonGroup } from 'react-bootstrap'
+import { Grid, Row, Col, Button, ButtonGroup, FormGroup } from 'react-bootstrap'
 import { GitHubSelector, GitHubCommitPicker } from './'
 import { getGitHubRevisions } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'
@@ -46,14 +46,14 @@ class SourcePicker extends Component {
   }
 
   renderActionButton() {
+    const { onChange, onClose } = this.props
     return (
-      <Button
-        className="pull-right"
-        bsStyle="success"
-        onClick={() => this.props.onChange(this.state.selectedComponent)}
-      >
-        Select
-      </Button>
+      <FormGroup className="pull-right">
+        <Button bsStyle="success" onClick={() => onChange(this.state.selectedComponent)}>
+          OK
+        </Button>
+        <Button onClick={() => onClose()}>Cancel</Button>
+      </FormGroup>
     )
   }
 
@@ -72,14 +72,15 @@ class SourcePicker extends Component {
           <Col md={2}>{this.renderProviderButtons()}</Col>
           <Col md={5}>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</Col>
           <Col md={5}>
-            {selectedComponent && activeProvider === 'github' && (
-              <GitHubCommitPicker
-                allowNew
-                request={selectedComponent}
-                getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
-                onChange={this.commitChanged.bind(this, selectedComponent)}
-              />
-            )}
+            {selectedComponent &&
+              activeProvider === 'github' && (
+                <GitHubCommitPicker
+                  allowNew
+                  request={selectedComponent}
+                  getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
+                  onChange={this.commitChanged.bind(this, selectedComponent)}
+                />
+              )}
           </Col>
         </Row>
         <Row className="spacer">

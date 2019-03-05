@@ -150,7 +150,7 @@ export class PageDefinitions extends UserManagedList {
 
   render() {
     const { components, curations, definitions, session, filterOptions } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
+    const { sequence, showFullDetail, path, currentComponent, currentDefinition, showSavePopup, saveType } = this.state
     return (
       <Grid className="main-container">
         <ContributePrompt
@@ -198,12 +198,14 @@ export class PageDefinitions extends UserManagedList {
             readOnly={this.readOnly}
           />
         )}
-        <SavePopUp
-          show={this.state.showSavePopup}
-          type={this.state.saveType}
-          onHide={() => this.setState({ showSavePopup: false })}
-          onOK={options => this.setState({ options }, this.doSave)}
-        />
+        {showSavePopup && (
+          <SavePopUp
+            show={showSavePopup}
+            type={saveType}
+            onHide={() => this.setState({ showSavePopup: false })}
+            onOK={options => this.setState({ options }, this.doSave)}
+          />
+        )}
         {this.renderVersionSelectopPopup()}
       </Grid>
     )
