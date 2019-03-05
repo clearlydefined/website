@@ -15,7 +15,7 @@ import notification from 'antd/lib/notification'
 import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { uiBrowseUpdateFilterList, uiRevertDefinition, uiInfo, uiDanger } from '../actions/ui'
+import { uiBrowseUpdateFilterList, uiRevert, uiInfo, uiDanger } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
@@ -268,14 +268,19 @@ export default class SystemManagedList extends Component {
     this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?')
   }
 
-  revertDefinition(definition, value) {
-    this.revert(definition, 'Are you sure to revert all the unsaved changes from the selected definition?', value)
+  revertDefinition(definition, value, store) {
+    this.revert(
+      definition,
+      'Are you sure to revert all the unsaved changes from the selected definition?',
+      value,
+      store
+    )
   }
 
-  revert(definition, description, value) {
+  revert(definition, description, value, store) {
     const { dispatch } = this.props
     if (value) {
-      dispatch(uiRevertDefinition(definition, value))
+      dispatch(uiRevert(definition, value, store))
       this.incrementSequence()
       return
     }
@@ -286,7 +291,7 @@ export default class SystemManagedList extends Component {
       btn: (
         <NotificationButtons
           onClick={() => {
-            dispatch(uiRevertDefinition(definition))
+            dispatch(uiRevert(definition, null, store))
             this.incrementSequence()
             notification.close(key)
           }}

@@ -192,7 +192,7 @@ class PageBrowse extends SystemManagedList {
                 listHeight={600}
                 loadMoreRows={this.loadMoreRows}
                 onRemove={this.onRemoveComponent}
-                onRevert={this.revertDefinition}
+                onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
                 onChange={this.onChangeComponent}
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}

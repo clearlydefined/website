@@ -18,7 +18,7 @@ import {
   uiCurateGetDefinitionPreview,
   uiCurateResetDefinitionPreview,
   uiGetCurationsList,
-  uiRevertDefinition,
+  uiRevert,
   uiApplyCurationSuggestion,
   uiGetCurationData,
   uiInspectGetSuggestions
@@ -291,7 +291,7 @@ function mapDispatchToProps(dispatch) {
       curateAction,
       uiCurateGetDefinitionPreview,
       uiCurateResetDefinitionPreview,
-      uiRevertDefinition,
+      uiRevert,
       uiApplyCurationSuggestion,
       uiGetCurationData,
       uiInspectGetSuggestions
