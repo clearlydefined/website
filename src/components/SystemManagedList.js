@@ -264,8 +264,8 @@ export default class SystemManagedList extends Component {
     })
   }
 
-  revertAll() {
-    this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?')
+  revertAll(store) {
+    this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?', null, store)
   }
 
   revertDefinition(definition, value, store) {
