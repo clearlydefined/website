@@ -71,22 +71,24 @@ export default class ComponentButtons extends Component {
     return (
       <div className="list-activity-area">
         {isCurationPending && (
-          <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank">
+          <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
             <Tag color="green">Pending curations</Tag>
           </a>
         )}
         {scores && <ScoreRenderer scores={scores} definition={definition} />}
         <ButtonGroup>
-          {!isSourceComponent && !readOnly && !isSourceEmpty && (
-            <ButtonWithTooltip
-              name="addSourceComponent"
-              tip={'Add the definition for source that matches this package'}
-            >
-              <Button className="list-fa-button" onClick={this.addSourceForComponent.bind(this, component)}>
-                <i className="fas fa-code" />
-              </Button>
-            </ButtonWithTooltip>
-          )}
+          {!isSourceComponent &&
+            !readOnly &&
+            !isSourceEmpty && (
+              <ButtonWithTooltip
+                name="addSourceComponent"
+                tip={'Add the definition for source that matches this package'}
+              >
+                <Button className="list-fa-button" onClick={this.addSourceForComponent.bind(this, component)}>
+                  <i className="fas fa-code" />
+                </Button>
+              </ButtonWithTooltip>
+            )}
           {!isDefinitionEmpty && (
             <ButtonWithTooltip tip={'Dig into this definition'}>
               <Button
@@ -132,17 +134,18 @@ export default class ComponentButtons extends Component {
               </div>
             </ButtonWithTooltip>
           )}
-          {!readOnly && !isDefinitionEmpty && (
-            <ButtonWithTooltip tip={'Revert Changes of this Definition'}>
-              <Button
-                className="list-fa-button"
-                onClick={() => this.revertComponent(component)}
-                disabled={!hasChange(component)}
-              >
-                <i className="fas fa-undo" />
-              </Button>
-            </ButtonWithTooltip>
-          )}
+          {!readOnly &&
+            !isDefinitionEmpty && (
+              <ButtonWithTooltip tip={'Revert Changes of this Definition'}>
+                <Button
+                  className="list-fa-button"
+                  onClick={() => this.revertComponent(component)}
+                  disabled={!hasChange(component)}
+                >
+                  <i className="fas fa-undo" />
+                </Button>
+              </ButtonWithTooltip>
+            )}
         </ButtonGroup>
         {!readOnly && (
           <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>

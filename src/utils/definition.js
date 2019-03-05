@@ -5,7 +5,6 @@ import EntitySpec from './entitySpec'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
-import union from 'lodash/union'
 
 // Abstract methods for Definition
 export default class Definition {
