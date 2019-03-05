@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
 import React, { Component, Fragment } from 'react'
 import AntdButton from 'antd/lib/button'
 import PropTypes from 'prop-types'

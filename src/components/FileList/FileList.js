@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import { Table, Input, Button, Icon } from 'antd'
 import get from 'lodash/get'
