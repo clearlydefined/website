@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component, Fragment } from 'react'
-import { Row, Button, Col } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
+import Button from 'antd/lib/button'
 import PropTypes from 'prop-types'
 import cloneDeep from 'lodash/cloneDeep'
 import find from 'lodash/find'
@@ -93,9 +94,13 @@ class FullDetailComponent extends Component {
                   &nbsp;
                   {!readOnly && (
                     <ButtonWithTooltip tip="Revert all changes of all the definitions">
-                      <Button bsStyle="danger" onClick={() => handleRevert('files')} disabled={entry === undefined}>
-                        <i className="fas fa-undo" />
-                        <span>&nbsp;Revert Changes</span>
+                      <Button
+                        type="danger"
+                        onClick={() => handleRevert('files')}
+                        disabled={entry === undefined}
+                        icon="undo"
+                      >
+                        Revert Changes
                       </Button>
                     </ButtonWithTooltip>
                   )}

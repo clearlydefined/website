@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, Button } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
+import Button from 'antd/lib/button'
 import isEmpty from 'lodash/isEmpty'
 import Modal from 'antd/lib/modal'
 import ContributePrompt from '../ContributePrompt'
@@ -75,7 +76,7 @@ export class AbstractFullDetailsView extends Component {
           getCurationData={this.getCurationData}
           inspectedCuration={inspectedCuration}
           renderContributeButton={
-            <Button bsStyle="success" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
+            <Button type="primary" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
               Contribute
             </Button>
           }

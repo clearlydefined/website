@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Row, Button, Col } from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
+import Button from 'antd/lib/button'
 import isEmpty from 'lodash/isEmpty'
 import { Tag } from 'antd'
 import Definition from '../../../utils/definition'
@@ -50,15 +51,14 @@ export default class HeaderSection extends Component {
         <Col md={4} className="text-right">
           {!isEmpty(changes) && (
             <ButtonWithTooltip tip="Revert all changes of the current definition">
-              <Button bsStyle="danger" data-test-id="header-section-revert-button" onClick={() => handleRevert()}>
-                <i className="fas fa-undo" />
-                <span>&nbsp;Revert Changes</span>
+              <Button type="danger" data-test-id="header-section-revert-button" onClick={handleRevert} icon="undo">
+                Revert Changes
               </Button>
             </ButtonWithTooltip>
           )}{' '}
           {modalView && (
             <Button
-              bsStyle="primary"
+              type="primary"
               data-test-id="header-section-ok-button"
               disabled={isEmpty(changes)}
               onClick={handleSave}
