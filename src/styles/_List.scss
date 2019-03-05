@@ -133,6 +133,12 @@
   }
 }
 
+.component-buttons {
+  .btn-remove:not(:hover) {
+    border-color: transparent;
+  }
+}
+
 .list-remove {
   font-size: 2rem;
   color: red;
@@ -145,17 +151,18 @@
   padding-right: 10px;
 }
 
-.list-hybrid-button {
-  .fa {
-    font-size: 1.5rem;
-    color: #38a038;
-  }
-  align-self: center;
-  padding-left: 10px;
+.list-fa-button {
+  color: $color_secondary !important;
 }
 
-.list-fa-button {
-  color: #38a038;
+.list-fa-button:hover,
+.list-fa-button:focus {
+  border-color: $color_secondary;
+}
+
+.list-fa-button:active {
+  color: darken($color_secondary, 10) !important;
+  border-color: darken($color_secondary, 10);
 }
 
 .list-message {

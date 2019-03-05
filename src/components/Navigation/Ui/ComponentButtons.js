@@ -1,9 +1,10 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Tag } from 'antd'
 import { get } from 'lodash'
-import { Button, ButtonGroup } from 'react-bootstrap'
-import { Menu, Dropdown, Icon } from 'antd'
+import { Button, Menu, Dropdown, Icon } from 'antd'
 import { CopyUrlButton } from '../../'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
@@ -69,11 +70,11 @@ export default class ComponentButtons extends Component {
     const isCurated = Definition.isCurated(definition)
     const hasPendingCurations = Definition.hasPendingCurations(definition)
     return (
-      <div className="list-activity-area">
+      <div className="list-activity-area component-buttons">
         {scores && <ScoreRenderer scores={scores} definition={definition} />}
         {isCurated && <Tag color="green">Curated</Tag>}
         {hasPendingCurations && <Tag color="gold">Pending Curations</Tag>}
-        <ButtonGroup>
+        <Button.Group>
           {!isSourceComponent && !readOnly && !isSourceEmpty && (
             <ButtonWithTooltip
               name="addSourceComponent"
@@ -94,39 +95,32 @@ export default class ComponentButtons extends Component {
               </Button>
             </ButtonWithTooltip>
           )}
-          <CopyUrlButton
-            route={ROUTE_DEFINITIONS}
-            path={component.toPath()}
-            bsStyle="default"
-            className="list-fa-button"
-          />
+          <CopyUrlButton route={ROUTE_DEFINITIONS} path={component.toPath()} className="list-fa-button" />
           {!hideVersionSelector && (
             <ButtonWithTooltip tip={'Switch or add other versions of this definition'}>
-              <div>
-                <Dropdown
-                  trigger={['click']}
-                  overlay={
-                    <Menu>
-                      <Menu.Item
-                        data-test-id="switch-component-version"
-                        onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}
-                      >
-                        Switch version
-                      </Menu.Item>
-                      <Menu.Item
-                        data-test-id="add-component-version"
-                        onClick={this.showVersionSelectorPopup.bind(this, currentComponent, true)}
-                      >
-                        Add more versions
-                      </Menu.Item>
-                    </Menu>
-                  }
-                >
-                  <Button className="list-fa-button" onClick={event => event.stopPropagation()}>
-                    <i className="fas fa-exchange-alt" /> <Icon type="down" />
-                  </Button>
-                </Dropdown>
-              </div>
+              <Dropdown
+                trigger={['click']}
+                overlay={
+                  <Menu>
+                    <Menu.Item
+                      data-test-id="switch-component-version"
+                      onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}
+                    >
+                      Switch version
+                    </Menu.Item>
+                    <Menu.Item
+                      data-test-id="add-component-version"
+                      onClick={this.showVersionSelectorPopup.bind(this, currentComponent, true)}
+                    >
+                      Add more versions
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <Button className="list-fa-button" onClick={event => event.stopPropagation()}>
+                  <i className="fas fa-exchange-alt" /> <Icon type="down" />
+                </Button>
+              </Dropdown>
             </ButtonWithTooltip>
           )}
           {!readOnly && !isDefinitionEmpty && (
@@ -140,11 +134,15 @@ export default class ComponentButtons extends Component {
               </Button>
             </ButtonWithTooltip>
           )}
-        </ButtonGroup>
+        </Button.Group>
         {!readOnly && (
-          <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
-            <i className="fas fa-times list-remove" />
-          </Button>
+          <Button
+            ghost
+            className="btn-remove"
+            type="danger"
+            onClick={this.removeComponent.bind(this, component)}
+            icon="close"
+          />
         )}
       </div>
     )

@@ -170,7 +170,7 @@ class PageCurate extends Component {
             />
           </Col>
           <Col md={1}>
-            <CopyUrlButton route={ROUTE_CURATE} path={filterValue} bsStyle="default" />
+            <CopyUrlButton route={ROUTE_CURATE} path={filterValue} />
           </Col>
           {isCurator && <Col md={4}>{this.renderButtons()}</Col>}
         </Row>

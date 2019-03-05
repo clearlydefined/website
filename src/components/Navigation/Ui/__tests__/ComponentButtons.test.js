@@ -1,8 +1,7 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import ComponentButtons from '../ComponentButtons'
-import { Button, ButtonGroup } from 'react-bootstrap'
-import { Menu, Dropdown } from 'antd'
+import { Button, Menu, Dropdown } from 'antd'
 
 const mockedDefinition = {
   described: {
@@ -63,7 +62,7 @@ describe('ComponentButtons', () => {
         hasChange={() => null}
       />
     )
-    expect(wrapper.find(ButtonGroup))
+    expect(wrapper.find(Button.Group))
     expect(wrapper.find(Button).length).toBe(6)
   })
   it('check functionality of each button', async () => {

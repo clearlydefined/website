@@ -26,3 +26,40 @@
 .ant-select-enabled .ant-select-arrow {
   color: lighten($color-text-main, 5);
 }
+
+// for button groups sorrunded by a .tooltipWrapper div
+
+.ant-btn-group > .tooltipWrapper:first-child:not(:last-child) > .ant-btn,
+.ant-btn-group > .tooltipWrapper:first-child:not(:last-child) > span > .ant-btn {
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.ant-btn-group > .tooltipWrapper:last-child:not(:first-child) > .ant-btn,
+.ant-btn-group > .tooltipWrapper:last-child:not(:first-child) > span > .ant-btn {
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.ant-btn-group > .tooltipWrapper {
+  .ant-btn + .ant-btn,
+  span + .ant-btn,
+  .ant-btn + span,
+  > span + span,
+  + .ant-btn,
+  > .ant-btn,
+  + .ant-btn-group {
+    margin-left: -1px;
+  }
+
+  > .ant-btn:hover,
+  > span > .ant-btn:hover,
+  > .ant-btn:focus,
+  > span > .ant-btn:focus,
+  > .ant-btn:active,
+  > span > .ant-btn:active,
+  > .ant-btn.active,
+  > span > .ant-btn.active {
+    z-index: 2;
+  }
+}
