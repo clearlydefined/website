@@ -3,9 +3,14 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Button } from 'react-bootstrap'
-import { FormGroup, ControlLabel, FormControl, Checkbox } from 'react-bootstrap'
+import Button from 'antd/lib/button'
+import Checkbox from 'antd/lib/checkbox'
+import Select from 'antd/lib/select'
+import Form from 'antd/lib/form'
+import { Modal, FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
 import { FieldGroup } from './'
+
+const Option = Select.Option
 
 export default class ContributePrompt extends Component {
   constructor(props) {
@@ -48,10 +53,17 @@ export default class ContributePrompt extends Component {
   }
 
   handleChange(event) {
-    const target = event.target
-    const value = target.type === 'checkbox' ? target.checked : target.value
-    const name = target.name
-    this.setState({ ...this.state, [name]: value })
+    let target, value, name
+    // for the Select of type
+    if (!event.target) {
+      value = event
+      name = 'type'
+    } else {
+      target = event.target
+      value = target.type === 'checkbox' ? target.checked : target.value
+      name = target.name
+    }
+    this.setState({ [name]: value })
   }
 
   canSubmit() {
@@ -62,25 +74,18 @@ export default class ContributePrompt extends Component {
 
   renderTypeField() {
     return (
-      <FieldGroup
-        className="inlineBlock pull-right"
-        name="type"
-        label="Type"
-        value={this.state.type || 'select'}
-        onChange={this.handleChange}
-        placeholder="select"
-        componentClass="select"
-        required
-      >
-        <option value="select" disabled>
-          select
-        </option>
-        <option value="missing">Missing</option>
-        <option value="incorrect">Incorrect</option>
-        <option value="incomplete">Incomplete</option>
-        <option value="ambiguous">Ambiguous</option>
-        <option value="other">Other</option>
-      </FieldGroup>
+      <Form.Item className="pull-right" label="Type">
+        <Select placeholder="Select" style={{ width: 120 }} onChange={this.handleChange}>
+          <Option value="select" disabled>
+            select
+          </Option>
+          <Option value="missing">Missing</Option>
+          <Option value="incorrect">Incorrect</Option>
+          <Option value="incomplete">Incomplete</Option>
+          <Option value="ambiguous">Ambiguous</Option>
+          <Option value="other">Other</Option>
+        </Select>
+      </Form.Item>
     )
   }
 
@@ -90,7 +95,7 @@ export default class ContributePrompt extends Component {
 
     return (
       <Modal show={show} onHide={this.close} id="contribute-modal">
-        <Form>
+        <Form layout="vertical">
           <Modal.Header closeButton>
             <Modal.Title>Describe the changes in this curation</Modal.Title>
           </Modal.Header>
@@ -103,7 +108,7 @@ export default class ContributePrompt extends Component {
                     {session.isAnonymous ? 'anonymous' : `@${session.username}`}
                   </FormControl.Static>{' '}
                   {session.isAnonymous && (
-                    <Button bsStyle="success" data-test-id="login-button" onClick={onLogin}>
+                    <Button type="primary" data-test-id="login-button" onClick={onLogin}>
                       Login
                     </Button>
                   )}
@@ -147,25 +152,23 @@ export default class ContributePrompt extends Component {
             />
           </Modal.Body>
           <Modal.Footer>
-            <div>
-              <Checkbox className="inlineBlock pull-left" name="removeDefinitions" onChange={this.handleChange}>
-                Remove contributed definitions from the list
-              </Checkbox>
-              <FormGroup className="pull-right">
-                <Button data-test-id="cancel-button" onClick={this.close}>
-                  Cancel
-                </Button>
-                <Button
-                  bsStyle="success"
-                  data-test-id="contribute-button"
-                  disabled={!this.canSubmit()}
-                  type="button"
-                  onClick={this.okHandler}
-                >
-                  OK
-                </Button>
-              </FormGroup>
-            </div>
+            <Checkbox className="inlineBlock pull-left" name="removeDefinitions" onChange={this.handleChange}>
+              Remove contributed definitions from the list
+            </Checkbox>
+            <FormGroup className="pull-right">
+              <Button data-test-id="cancel-button" onClick={this.close}>
+                Cancel
+              </Button>
+              &nbsp;
+              <Button
+                type="primary"
+                data-test-id="contribute-button"
+                disabled={!this.canSubmit()}
+                onClick={this.okHandler}
+              >
+                OK
+              </Button>
+            </FormGroup>
           </Modal.Footer>
         </Form>
       </Modal>

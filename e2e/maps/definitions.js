@@ -16,10 +16,10 @@ export const definitionsMap = {
     buttons: '.list-activity-area',
     sourceButton: '.list-fa-button > i.fa-code',
     inspectButton: '.list-fa-button > i.fa-search',
-    copyButton: '.list-fa-button > i.fa-copy',
+    copyButton: '.list-fa-button > i.anticon-copy',
     switchButton: '.list-fa-button > i.fa-exchange-alt',
     revertButton: '.list-fa-button > i.fa-undo',
-    removeButton: '.btn-link > i.list-remove',
+    removeButton: '.ant-btn-icon-only > i.anticon-close',
     firstElement: '.components-list > .ReactVirtualized__Grid__innerScrollContainer > div:nth-child(1)',
     get panel() {
       return `${this.firstElement} > div.two-line-entry > div.list-panel`
@@ -87,8 +87,10 @@ export const definitionsMap = {
       return `${this.identifier} textarea[name="resolution"]`
     },
     get typeField() {
-      return `${this.identifier} select[name="type"]`
+      return `${this.identifier} .ant-select`
     },
+    typeMissingOption:
+      '.ant-select-dropdown:not(.ant-select-dropdown-hidden) .ant-select-dropdown-menu li:nth-child(2)',
     get contributeButton() {
       return `${this.identifier} [data-test-id="contribute-button"]`
     }
