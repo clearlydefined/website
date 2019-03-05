@@ -63,9 +63,7 @@ class PageBrowse extends SystemManagedList {
       <ButtonsBar
         hasChanges={!this.hasChanges()}
         revertAll={this.revertAll}
-        doRefreshAll={this.doRefreshAll}
         collapseAll={this.collapseAll}
-        onRemoveAll={this.onRemoveAll}
         doPromptContribute={this.doPromptContribute}
       />
     )

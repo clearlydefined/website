@@ -3,35 +3,62 @@
 
 .Footer {
   width: 100%;
-  min-height: 50px;
+  flex: none;
   display: flex;
   font-size: 1.1em;
-}
 
-.Footer-element {
-  align-self: center;
-}
-
-.Footer-center {
-  text-align: center;
-}
-
-.Footer-right {
-  margin-right: 2rem;
-}
-
-.Footer-socials {
-  margin-right: 2rem;
-  margin-left: 1rem;
-  a {
-    margin: 0.3rem;
-    margin-right: 0.5rem;
-    display: inline-block;
-    font-size: 2.5rem;
-    color: $color_primary;
+  .container {
+    padding: 0;
   }
-  a:hover,
-  a:focus {
-    color: $color_secondary;
+
+  [class*='col-'] {
+    align-self: center;
+  }
+
+  .right {
+    margin-right: 2rem;
+  }
+
+  @media (max-width: 767px) {
+    div:nth-child(3) {
+      padding: 0;
+    }
+
+    .right {
+      margin-right: 0;
+    }
+
+    span:not(.socials) {
+      display: none;
+    }
+
+    a {
+      flex-wrap: nowrap;
+    }
+  }
+
+  .socials {
+    margin-right: 2rem;
+    margin-left: 1rem;
+    a {
+      margin: 0.3rem;
+      margin-right: 0.5rem;
+      display: inline-block;
+      font-size: 2.4rem;
+      color: $color_primary;
+    }
+    a:hover,
+    a:focus {
+      color: $color_secondary;
+    }
+
+    @media screen and (max-width: 992px) {
+      margin: 0;
+
+      a:nth-child(3) {
+        display: block;
+        float: left;
+      }
+    }
   }
 }
