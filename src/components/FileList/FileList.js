@@ -112,6 +112,22 @@ export default class FileList extends Component {
     this.setState({ filteredInfo: null })
   }
 
+  getNameCellEntry = (definition, row) => {
+    if (!row || !definition) return null
+    const { provider, namespace, name, revision } = definition.coordinates
+    const path = get(row, 'path')
+    if (provider !== 'github' || !path || row.children) return <span>{row.name}</span>
+    return (
+      <a
+        href={`https://github.com/${namespace}/${name}/blob/${revision}/${path}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {row.name}
+      </a>
+    )
+  }
+
   render() {
     const { readOnly, component, previewDefinition } = this.props
     let { expandedRows, searchText, filteredFiles, files } = this.state
@@ -122,8 +138,8 @@ export default class FileList extends Component {
         dataIndex: 'name',
         key: 'name',
         ...this.getColumnSearchProps('name'),
-        render: text => <span>{text}</span>,
-        width: '30%',
+        render: (text, record) => this.getNameCellEntry(component.item, record),
+        width: '40%',
         className: 'column-name'
       },
       {
@@ -165,7 +181,7 @@ export default class FileList extends Component {
               }}
             />
           ),
-        width: '25%'
+        width: '20%'
       },
       {
         title: 'Copyrights',
@@ -196,7 +212,7 @@ export default class FileList extends Component {
             )
           )
         },
-        width: '25%'
+        width: '20%'
       }
     ]
 
@@ -209,6 +225,8 @@ export default class FileList extends Component {
         expandedRowKeys={expandedRows}
         onExpandedRowsChange={expandedRows => this.setState({ expandedRows })}
         pagination={false}
+        bordered={false}
+        indentSize={30}
       />
     )
   }

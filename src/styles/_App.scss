@@ -31,11 +31,19 @@
     font-size: $size-text-message;
     color: $color-text-main;
     text-align: center;
+
+    @media (max-width: 768px) {
+      font-size: $size-text-message-small;
+    }
   }
 
   h3 {
     font-size: 1.6em;
     line-height: 1.3;
+
+    @media (max-width: 768px) {
+      font-size: calc(1.6em / 1.5);
+    }
   }
 
   .valign-child {
@@ -52,19 +60,27 @@
     font-size: 10rem;
     color: $color_primary;
     text-align: center;
-  }
 
-  .neighborhood-logo-container {
-    text-align: center;
+    @media (max-width: 768px) {
+      font-size: 4.3rem;
+    }
   }
 
   .neighborhood-logo {
     width: 100px;
+
+    @media (max-width: 767px) {
+      width: 100%;
+    }
   }
 
   .about-cell {
     display: flex;
     min-height: 170px;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 
   .about-image {
@@ -83,12 +99,17 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 }
 
 .labelled-button {
   display: inline-block;
   width: 100%;
+
   .btn {
     margin-left: 10px;
   }
@@ -316,4 +337,22 @@ hr {
 
 .ReactVirtualized__Grid__innerScrollContainer {
   overflow: visible !important;
+}
+
+.section-header div:nth-child(2) {
+  align-self: flex-end;
+}
+
+.section-button .text-right > .btn,
+.section-button .text-right > .dropdown {
+  margin: 0 0 0 3px;
+
+  @media (max-width: $screen-sm-max) {
+    margin: 3px 0 0 0;
+  }
+}
+
+.browse-page {
+  // negative margin to reduce the .navbar min-height
+  margin-top: -40px;
 }

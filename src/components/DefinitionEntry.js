@@ -3,7 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker } from './'
+import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRenderer } from './'
 import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
@@ -182,13 +182,7 @@ export default class DefinitionEntry extends React.Component {
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed } = definition
-    const totalFiles = get(licensed, 'files')
-    const unlicensed = get(licensed, 'discovered.unknown')
-    const unattributed = get(licensed, 'attribution.unknown')
-    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
-    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     const { readOnly, onRevert } = this.props
-
     return (
       <Row>
         <Col sm={5}>
@@ -268,13 +262,9 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col xs={3}>{this.renderLabel('Files')}</Col>
-            <Col xs={9} className="definition__line">
-              <p className="list-singleLine">
-                Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
-                <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
-                <b>{isNaN(unattributed) ? '-' : `${unattributed} (${unattributedPercent}%)`}</b>
-              </p>
+            <Col md={2}>{this.renderLabel('Files')}</Col>
+            <Col md={10} className="definition__line">
+              <FileCountRenderer definition={definition} />
             </Col>
           </Row>
         </Col>
