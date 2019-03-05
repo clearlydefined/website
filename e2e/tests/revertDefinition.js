@@ -84,8 +84,6 @@ describe(
       const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
       await expect(licenseFieldValue).toEqual('MIT')
     })
-
-    // WRITE SAME TESTS FOR BROWSE PAGE
   },
   defaultTimeout
 )
