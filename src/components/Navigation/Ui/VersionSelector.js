@@ -81,10 +81,10 @@ class VersionSelector extends Component {
         </Modal.Body>
         <Modal.Footer>
           <FormGroup className="pull-right">
-            <Button onClick={this.onClose}>Cancel</Button>
             <Button bsStyle="success" type="button" disabled={selected.length === 0} onClick={() => this.doSave()}>
               OK
             </Button>
+            <Button onClick={this.onClose}>Cancel</Button>
           </FormGroup>
         </Modal.Footer>
       </Modal>

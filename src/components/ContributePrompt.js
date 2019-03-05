@@ -152,9 +152,6 @@ export default class ContributePrompt extends Component {
                 Remove contributed definitions from the list
               </Checkbox>
               <FormGroup className="pull-right">
-                <Button data-test-id="cancel-button" onClick={this.close}>
-                  Cancel
-                </Button>
                 <Button
                   bsStyle="success"
                   data-test-id="contribute-button"
@@ -163,6 +160,9 @@ export default class ContributePrompt extends Component {
                   onClick={this.okHandler}
                 >
                   OK
+                </Button>
+                <Button data-test-id="cancel-button" onClick={this.close}>
+                  Cancel
                 </Button>
               </FormGroup>
             </div>
