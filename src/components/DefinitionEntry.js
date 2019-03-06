@@ -90,7 +90,7 @@ export default class DefinitionEntry extends React.Component {
     const revisionTag = get(definition, 'described.urls.version') ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={get(definition, 'described.urls.registry')} target="_blank" rel="noopener noreferrer">
+        <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
           {revision}
         </a>
       </span>
@@ -330,7 +330,6 @@ export default class DefinitionEntry extends React.Component {
 
   render() {
     const { definition, onClick, renderButtons, component, draggable } = this.props
-    console.log(definition, component)
     return (
       <TwoLineEntry
         draggable={draggable}
