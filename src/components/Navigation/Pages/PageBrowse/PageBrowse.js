@@ -19,7 +19,6 @@ import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
 import { licenses, curateFilters } from '../../../../utils/utils'
-import { stat } from 'fs'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
