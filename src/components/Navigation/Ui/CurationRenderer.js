@@ -20,7 +20,9 @@ export default class CurationRenderer extends Component {
         headline={
           <span>
             #{contribution.pr.number} {contribution.pr.title}{' '}
-            <Tag color={this._tagColor(contribution)}>{this._tagText(contribution)}</Tag>
+            <Tag className="cd-badge" color={this._tagColor(contribution)}>
+              {this._tagText(contribution)}
+            </Tag>
           </span>
         }
         message={<span>@{contribution.pr.user.login}</span>}
