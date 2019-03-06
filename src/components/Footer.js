@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { SocialIcons } from './'
-import { Col } from 'react-bootstrap'
+import { Col, Grid } from 'react-bootstrap'
 
 // import { API_DEVELOP, API_PROD, API_LOCAL } from '../api/clearlyDefined';
 // function colorize(content) {
@@ -29,24 +29,27 @@ export default class Footer extends Component {
     const { socials } = this.props
     return (
       <footer className="Footer">
-        <Col sm={4} className="Footer-element">
-          <SocialIcons className="Footer-socials" entity={socials} />
-        </Col>
-        <Col sm={4} className="Footer-element Footer-center">
-          Are you ClearlyDefined?
-        </Col>
-        <Col sm={4} className="Footer-element">
-          <div className="pull-right Footer-right">
-            <a href="https://docs.clearlydefined.io/legal/terms" target="_blank" rel="noopener noreferrer">
-              Terms of use
-            </a>{' '}
-            |{' '}
-            <a href="https://docs.clearlydefined.io/legal/privacy" target="_blank" rel="noopener noreferrer">
-              Privacy policy
-            </a>{' '}
-            | <a href="https://docs.clearlydefined.io/legal/NOTICES">Notices</a>
-          </div>
-        </Col>
+        <Grid>
+          <Col sm={4} xs={3}>
+            <SocialIcons className="socials" entity={socials} />
+          </Col>
+          <Col sm={4} xs={5} className="text-center">
+            Are you ClearlyDefined?
+          </Col>
+          <Col sm={4} xs={4}>
+            <div className="pull-right right">
+              <a href="https://docs.clearlydefined.io/legal/terms" target="_blank" rel="noopener noreferrer">
+                Terms of use
+              </a>{' '}
+              <span>| </span>
+              <a href="https://docs.clearlydefined.io/legal/privacy" target="_blank" rel="noopener noreferrer">
+                Privacy policy
+              </a>{' '}
+              <span>| </span>
+              <a href="https://docs.clearlydefined.io/legal/NOTICES">Notices</a>
+            </div>
+          </Col>
+        </Grid>
       </footer>
     )
   }

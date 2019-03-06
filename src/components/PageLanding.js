@@ -37,7 +37,7 @@ class PageLanding extends Component {
 
   renderLogo(logo) {
     return (
-      <div className="neighborhood-logo-container">
+      <div className="text-center">
         <img className="neighborhood-logo" src={logo} alt="logo" />
       </div>
     )
@@ -48,10 +48,10 @@ class PageLanding extends Component {
       <Grid className="main-container">
         <img src={logo} alt="logo" className="landing-large-logo" />
         <Row className="show-grid neighborhood-row">
-          <Col md={logoColWidth} className="valign-child">
+          <Col xs={logoColWidth} xsPush={textColWidth} smPush={0} className="valign-child">
             {this.renderLogo(described)}
           </Col>
-          <Col md={textColWidth}>
+          <Col xs={textColWidth} xsPull={logoColWidth} smPull={0}>
             <h2>
               <Clearly style={describedColor}>Described</Clearly>
             </h2>
@@ -67,10 +67,10 @@ class PageLanding extends Component {
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={logoColWidth} className="valign-child">
+          <Col xs={logoColWidth} xsPush={textColWidth} smPush={0} className="valign-child">
             {this.renderLogo(licensed)}
           </Col>
-          <Col md={textColWidth}>
+          <Col xs={textColWidth} xsPull={logoColWidth} smPull={0}>
             <h2>
               <Clearly style={licensedColor}>Licensed</Clearly>
             </h2>
@@ -86,10 +86,10 @@ class PageLanding extends Component {
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={logoColWidth} className="valign-child">
+          <Col xs={logoColWidth} xsPush={textColWidth} smPush={0} className="valign-child">
             {this.renderLogo(secure)}
           </Col>
-          <Col md={textColWidth}>
+          <Col xs={textColWidth} xsPull={logoColWidth} smPull={0}>
             <h2>
               <Clearly style={secureColor}>Secure</Clearly>
             </h2>
@@ -106,7 +106,7 @@ class PageLanding extends Component {
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={textColWidth}>
+          <Col xs={textColWidth}>
             <h2 style={primaryColor}>Get {clearlyDefined}</h2>
             <h3>
               Becoming {clearlyDefined} means identifying the information others need, but in your terms. The{' '}
@@ -118,12 +118,12 @@ class PageLanding extends Component {
               </a>
             </h3>
           </Col>
-          <Col md={logoColWidth} className="valign-child">
+          <Col xs={logoColWidth} className="valign-child">
             {this.renderNeighborhood(adopt)}
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={textColWidth}>
+          <Col xs={textColWidth}>
             <h2 style={primaryColor}>Use definitions</h2>
             <h3>
               {clearlyDefined} harvests and curates key data about projects from around the world and makes it available
@@ -134,12 +134,12 @@ class PageLanding extends Component {
               </a>
             </h3>
           </Col>
-          <Col md={logoColWidth} className="valign-child">
+          <Col xs={logoColWidth} className="valign-child">
             {this.renderNeighborhood(use)}
           </Col>
         </Row>
         <Row className="show-grid neighborhood-row">
-          <Col md={textColWidth}>
+          <Col xs={textColWidth}>
             <h2 style={primaryColor}>Contribute or curate data</h2>
             <h3>
               {clearlyDefined} is a community approach to a community challenge. If you've ever had to figure out where
@@ -150,7 +150,7 @@ class PageLanding extends Component {
               </a>
             </h3>
           </Col>
-          <Col md={logoColWidth} className="valign-child">
+          <Col xs={logoColWidth} className="valign-child">
             {this.renderNeighborhood(contribute)}
           </Col>
         </Row>
