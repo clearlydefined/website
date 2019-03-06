@@ -1,5 +1,5 @@
-/* Copyright (c) Microsoft Corporation and others. */
-/* SPDX-License-Identifier: MIT */
+// Copyright (c) Microsoft Corporation and others.
+// SPDX-License-Identifier: MIT
 
 import React, { PureComponent, createContext } from 'react'
 
@@ -11,10 +11,10 @@ export class WindowProvider extends PureComponent {
   constructor(props) {
     super(props)
     ;(function() {
-      var throttle = function(type, name, obj) {
+      const throttle = (type, name, obj) => {
         obj = obj || window
-        var running = false
-        var func = function() {
+        let running = false
+        function func() {
           if (running) return
           running = true
           requestAnimationFrame(function() {
