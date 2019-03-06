@@ -32,8 +32,8 @@
     color: $color-text-main;
     text-align: center;
 
-    @media (max-width: 768px) {
-      font-size: $size-text-message-small;
+    @media screen and (max-width: 992px) {
+      font-size: $size-text-message / 1.5;
     }
   }
 
@@ -79,7 +79,7 @@
     min-height: 170px;
 
     @media (max-width: 768px) {
-      width: 100%;
+      min-height: 150px;
     }
   }
 
@@ -92,6 +92,10 @@
 
   .about-text {
     font-size: 1.25em;
+
+    ul {
+      padding-left: 30px;
+    }
   }
 
   .landing-large-logo {
@@ -103,6 +107,16 @@
     @media (max-width: 768px) {
       width: 100%;
     }
+  }
+}
+
+.about-container {
+  @media (max-width: 768px) {
+    margin-top: -80px;
+  }
+
+  .center-block {
+    vertical-align: top;
   }
 }
 

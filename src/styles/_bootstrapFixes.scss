@@ -16,6 +16,11 @@
   min-width: 67px;
 }
 
+.center-block {
+  display: inline-block;
+  float: none;
+}
+
 .navbar-inverse .navbar-collapse,
 .navbar-inverse .navbar-form {
   background-color: #222;

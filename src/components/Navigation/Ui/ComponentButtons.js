@@ -156,7 +156,7 @@ class ComponentButtons extends Component {
     return (
       <div className="list-activity-area">
         {isCurationPending && (
-          <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank">
+          <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
             <Tag color="green">Pending curations</Tag>
           </a>
         )}

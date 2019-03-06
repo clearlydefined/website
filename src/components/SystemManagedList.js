@@ -291,8 +291,8 @@ export default class SystemManagedList extends Component {
             notification.close(key)
           }}
           onClose={() => notification.close(key)}
-          confirmText="Revert"
-          dismissText="Dismiss"
+          confirmText="OK"
+          dismissText="Cancel"
         />
       ),
       key,

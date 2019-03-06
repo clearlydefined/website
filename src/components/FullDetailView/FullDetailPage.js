@@ -163,8 +163,8 @@ export class FullDetailPage extends AbstractFullDetailsView {
             notification.close(key)
           }}
           onClose={() => notification.close(key)}
-          confirmText="Confirm"
-          dismissText="Dismiss Notification"
+          confirmText="OK"
+          dismissText="Cancel"
         />
       ),
       key,
@@ -195,8 +195,8 @@ export class FullDetailPage extends AbstractFullDetailsView {
             })
           }
           onClose={() => notification.close(key)}
-          confirmText="Confirm"
-          dismissText="Dismiss Notification"
+          confirmText="OK"
+          dismissText="Cancel"
         />
       ),
       key,
