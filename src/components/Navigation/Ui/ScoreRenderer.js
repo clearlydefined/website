@@ -99,9 +99,13 @@ class ScoreRenderer extends Component {
     return (
       <Tooltip title={this.renderTooltipContent} key={this.renderTooltipContent} overlayStyle={{ width: '800px' }}>
         {domain ? (
-          <Tag color={this.getColor(get(domain, 'score.total'))}>{get(domain, 'toolScore.total')}</Tag>
+          <Tag className="cd-badge" color={this.getColor(get(domain, 'score.total'))}>
+            {get(domain, 'toolScore.total')}
+          </Tag>
         ) : (
-          <Tag color={this.getColor(scores.effective)}>{scores.effective}</Tag>
+          <Tag className="cd-badge" color={this.getColor(scores.effective)}>
+            {scores.effective}
+          </Tag>
         )}
       </Tooltip>
     )

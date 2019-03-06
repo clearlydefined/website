@@ -112,7 +112,9 @@ export default class DefinitionEntry extends React.Component {
       <span>
         &nbsp;&nbsp;
         <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
-          <Tag color="green">Pending curations</Tag>
+          <Tag className="cd-badge" color="green">
+            Pending curations
+          </Tag>
         </a>
       </span>
     ) : null
