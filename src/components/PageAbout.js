@@ -180,7 +180,7 @@ class PageAbout extends Component {
 
         <Row className="show-grid neighborhood-row">
           <Col md={12}>
-            <h2>Community challenge == community solution</h2>
+            <h2>Community challenge = community solution</h2>
 
             <p>The goals of {clearlyDefined} are to:</p>
             <ul className="list-style-type:square">
