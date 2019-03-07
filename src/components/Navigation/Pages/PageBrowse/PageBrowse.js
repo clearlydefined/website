@@ -3,9 +3,8 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, FormControl } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 import get from 'lodash/get'
-import debounce from 'lodash/debounce'
 import classNames from 'classnames'
 import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
@@ -19,6 +18,8 @@ import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
 import { licenses, curateFilters } from '../../../../utils/utils'
+import SearchBar from '../../Ui/SearchBar'
+import EntitySpec from '../../../../utils/entitySpec'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -43,16 +44,18 @@ class PageBrowse extends SystemManagedList {
     return isFetching ? <div /> : <div className="list-noRows">Broaden your filters to find more results</div>
   }
 
+  onBrowse = value => {
+    const coordinates = EntitySpec.fromPath(value)
+    this.nameFilter = coordinates.name
+    this.updateData()
+  }
+
   tableTitle() {
+    const { filterOptions } = this.props
     return (
       <div>
         <span>Browse Definitions</span>
-        <FormControl
-          placeholder="Name"
-          aria-label="Name"
-          inputRef={input => (this.nameFilter = input)}
-          onChange={debounce(() => this.updateData(), 500)}
-        />
+        <SearchBar filterOptions={filterOptions} onChange={this.onBrowse} onSearch={this.onSearch} />
       </div>
     )
   }
@@ -229,7 +232,8 @@ function mapStateToProps(state) {
     session: state.session,
     curations: state.ui.curate.bodies,
     definitions: state.definition.bodies,
-    components: state.ui.browse.componentList
+    components: state.ui.browse.componentList,
+    filterOptions: state.ui.definitions.filterList
   }
 }
 
