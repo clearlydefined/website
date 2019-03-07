@@ -90,10 +90,10 @@ class PageBrowse extends SystemManagedList {
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
-      { value: 'licensedScore-desc', label: 'Higher Licensed score' },
-      { value: 'licensedScore', label: 'Lower Licensed score' },
-      { value: 'describedScore-desc', label: 'Higher Described score' },
-      { value: 'describedScore', label: 'Lower Described score' }
+      { value: 'licensedScore-desc', label: 'Higher Effective score' },
+      { value: 'licensedScore', label: 'Lower Effective score' },
+      { value: 'describedScore-desc', label: 'Higher Tools score' },
+      { value: 'describedScore', label: 'Lower Tools score' }
     ]
 
     const providers = [
