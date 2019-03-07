@@ -19,6 +19,7 @@ import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
 import { licenses, curateFilters } from '../../../../utils/utils'
+import SpdxPicker from '../../../SpdxPicker'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -70,6 +71,7 @@ class PageBrowse extends SystemManagedList {
 
   // Overrides the default onFilter method
   onFilter(filter, overwrite = false) {
+    console.log(filter)
     const activeFilters = overwrite === true ? filter : Object.assign({}, this.state.activeFilters)
     if (overwrite !== true) {
       const filterValue = get(activeFilters, filter.type)
@@ -110,11 +112,7 @@ class PageBrowse extends SystemManagedList {
       <div className="filter-list" align="right">
         <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
         {this.renderFilter(providers, 'Provider', 'provider')}
-        {this.renderFilter(
-          licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
-          'License',
-          'license'
-        )}
+        <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
         {this.renderFilter(curateFilters, 'Curate', 'curate')}
       </div>
     )
