@@ -90,10 +90,8 @@ class PageBrowse extends SystemManagedList {
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
-      { value: 'licensedScore-desc', label: 'Higher Effective score' },
-      { value: 'licensedScore', label: 'Lower Effective score' },
-      { value: 'describedScore-desc', label: 'Higher Tools score' },
-      { value: 'describedScore', label: 'Lower Tools score' }
+      { value: 'score-desc', label: 'Higher Score' },
+      { value: 'score', label: 'Lower Score' }
     ]
 
     const providers = [
@@ -135,12 +133,8 @@ class PageBrowse extends SystemManagedList {
         query.sort = 'releaseDate'
         query.sortDesc = true
         break
-      case 'licensedScore-desc':
-        query.sort = 'licensedScore'
-        query.sortDesc = true
-        break
-      case 'describedScore-desc':
-        query.sort = 'describedScore'
+      case 'score-desc':
+        query.sort = 'score'
         query.sortDesc = true
         break
       default:
