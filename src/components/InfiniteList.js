@@ -5,6 +5,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { AutoSizer, List, InfiniteLoader } from 'react-virtualized'
 
+const noRowsHeight = 200
+
 export default class InfiniteList extends React.Component {
   static propTypes = {
     rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
@@ -54,12 +56,12 @@ export default class InfiniteList extends React.Component {
         threshold={threshold}
       >
         {({ onRowsRendered, registerChild }) => (
-          <AutoSizer disableHeight>
-            {({ width }) => (
+          <AutoSizer>
+            {({ width, height }) => (
               <List
                 ref={this.hookRef(registerChild)}
                 className={`${customClassName}`}
-                height={height}
+                height={totalRows() === 0 ? noRowsHeight : height}
                 onRowsRendered={onRowsRendered}
                 noRowsRenderer={noRowsRenderer}
                 rowCount={currentRows()}
