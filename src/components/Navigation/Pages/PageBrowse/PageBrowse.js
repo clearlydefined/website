@@ -19,7 +19,7 @@ import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
 import { licenses, curateFilters } from '../../../../utils/utils'
-import SearchBar from '../../Ui/SearchBar'
+import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
 
 /**
@@ -60,11 +60,12 @@ class PageBrowse extends SystemManagedList {
     return (
       <div>
         <span>Browse Definitions</span>
-        <SearchBar
-          filterOptions={filterOptions}
+        <FilterBar
+          options={filterOptions}
           onChange={this.onBrowse}
           onSearch={this.onSearch}
           onClear={this.onBrowse}
+          clearOnChange
         />
       </div>
     )
