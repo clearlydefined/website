@@ -5,6 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRenderer } from './'
 import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
+import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -14,8 +15,10 @@ import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
+import Curation from '../utils/curation'
 import EntitySpec from '../utils/entitySpec'
 import LicensesRenderer from './LicensesRenderer'
+import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -24,6 +27,7 @@ export default class DefinitionEntry extends React.Component {
     onInspect: PropTypes.func,
     activeFacets: PropTypes.array,
     definition: PropTypes.object.isRequired,
+    curation: PropTypes.object.isRequired,
     component: PropTypes.object.isRequired,
     renderButtons: PropTypes.func
   }
@@ -65,10 +69,11 @@ export default class DefinitionEntry extends React.Component {
     return (component.changes && component.changes[field]) || this.getOriginalValue(field)
   }
 
-  renderHeadline(definition) {
-    if (!definition.described) return
+  renderHeadline(definition, curation) {
     const { namespace, name, revision } = definition.coordinates
     const namespaceText = namespace ? namespace + '/' : ''
+    const scores = Definition.computeScores(definition)
+    const isCurationPending = Curation.isPending(curation)
     const componentTag = get(definition, 'described.urls.registry') ? (
       <span>
         <a
@@ -91,7 +96,7 @@ export default class DefinitionEntry extends React.Component {
       <span>
         &nbsp;&nbsp;&nbsp;
         <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
-          {revision}
+          {revision.slice(0, 7)}
         </a>
       </span>
     ) : (
@@ -100,11 +105,28 @@ export default class DefinitionEntry extends React.Component {
         {revision}
       </span>
     )
-
+    const scoreTag = scores ? (
+      <span>
+        &nbsp;&nbsp;&nbsp;
+        <ScoreRenderer scores={scores} definition={definition} />
+      </span>
+    ) : null
+    const curationTag = isCurationPending ? (
+      <span>
+        &nbsp;&nbsp;
+        <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
+          <Tag className="cd-badge" color="green">
+            Pending curations
+          </Tag>
+        </a>
+      </span>
+    ) : null
     return (
       <span>
         {componentTag}
         {revisionTag}
+        {scoreTag}
+        {curationTag}
       </span>
     )
   }
@@ -319,7 +341,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const { definition, onClick, renderButtons, component, draggable } = this.props
+    const { curation, definition, onClick, renderButtons, component, draggable } = this.props
     return (
       <TwoLineEntry
         draggable={draggable}
@@ -327,7 +349,7 @@ export default class DefinitionEntry extends React.Component {
         highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
         image={this.getImage(definition)}
         letter={definition.coordinates.type.slice(0, 1).toUpperCase()}
-        headline={this.renderHeadline(definition)}
+        headline={this.renderHeadline(definition, curation)}
         message={this.renderMessage(definition)}
         buttons={renderButtons && renderButtons(definition)}
         onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}

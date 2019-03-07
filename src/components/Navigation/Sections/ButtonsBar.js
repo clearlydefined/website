@@ -14,8 +14,7 @@ export default class ButtonsBar extends Component {
     onRemoveAll: PropTypes.func,
     doPromptContribute: PropTypes.func,
     shareUrl: PropTypes.func,
-    shareFile: PropTypes.func,
-    shareGist: PropTypes.func
+    shareFile: PropTypes.func
   }
 
   onSelect = type => {
@@ -24,8 +23,6 @@ export default class ButtonsBar extends Component {
         return this.props.shareUrl()
       case 'file':
         return this.props.shareFile()
-      case 'gist':
-        return this.props.shareGist()
       default:
         break
     }

@@ -97,8 +97,8 @@ class Header extends Component {
         <Navbar.Collapse>
           {this.renderNavigation(navigation, session.isAnonymous)}
           <Nav activeKey="0" pullRight={true}>
-            {this.renderLogin()}
             {this.renderDocs()}
+            {this.renderLogin()}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
