@@ -11,6 +11,14 @@
 
 .App-content {
   flex: 1;
+
+  .cd-badge {
+    font-size: 12px;
+    font-weight: normal;
+    height: 20px;
+    line-height: 0.1;
+    padding: 8px 4px 1px 4px;
+  }
 }
 
 .App-logo {
@@ -201,6 +209,11 @@
 
   @media screen and (max-width: 1200px) {
     font-size: 1.5em;
+  }
+
+  .cd-badge {
+    margin-bottom: 3px;
+    vertical-align: middle;
   }
 }
 

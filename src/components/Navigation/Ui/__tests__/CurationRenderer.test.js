@@ -44,7 +44,10 @@ describe('CurationRenderer', () => {
     const twoline = wrapper.find(TwoLineEntry)
     expect(twoline.props().headline).toEqual(
       <span>
-        #{testCuration.pr.number} {testCuration.pr.title} <Tag color={'purple'}>{'Merged'}</Tag>
+        #{testCuration.pr.number} {testCuration.pr.title}{' '}
+        <Tag className="cd-badge" color={'purple'}>
+          {'Merged'}
+        </Tag>
       </span>
     )
   })
@@ -53,7 +56,10 @@ describe('CurationRenderer', () => {
     const twoline = wrapper.find(TwoLineEntry)
     expect(twoline.props().headline).toEqual(
       <span>
-        #{testPendingCuration.pr.number} {testPendingCuration.pr.title} <Tag color={'green'}>{'Open'}</Tag>
+        #{testPendingCuration.pr.number} {testPendingCuration.pr.title}{' '}
+        <Tag className="cd-badge" color={'green'}>
+          {'Open'}
+        </Tag>
       </span>
     )
   })

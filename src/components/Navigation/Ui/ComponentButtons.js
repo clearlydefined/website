@@ -9,9 +9,9 @@ import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
 import Curation from '../../../utils/curation'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
+import { withResize } from '../../../utils/WindowProvider'
 import ButtonWithTooltip from './ButtonWithTooltip'
 import ScoreRenderer from './ScoreRenderer'
-import { withResize } from '../../../utils/WindowProvider'
 
 class ComponentButtons extends Component {
   static propTypes = {

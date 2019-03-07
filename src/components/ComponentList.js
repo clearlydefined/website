@@ -101,6 +101,7 @@ class ComponentList extends React.Component {
           draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
+          curation={curation}
           definition={definition}
           component={component}
           onChange={this.onEntryChange}
@@ -108,7 +109,6 @@ class ComponentList extends React.Component {
           classOnDifference="bg-info"
           renderButtons={() => (
             <ComponentButtons
-              curation={curation}
               definition={definition}
               currentComponent={component}
               hasChange={hasChange}
