@@ -9,7 +9,6 @@ import DropFileOrText from './DropFileOrText'
 
 const titles = {
   file: 'Share coordinates as a file',
-  gist: 'Share coordinates as a gist',
   notice: 'Share definitions as a Notice file'
 }
 
@@ -44,9 +43,6 @@ export default class SavePopUp extends Component {
     let options = {}
     switch (this.props.type) {
       case 'file':
-      case 'gist':
-        filename = this.ensureExtension(filename, '.json')
-        break
       case 'notice':
         filename = this.ensureExtension(filename, extensions[renderer])
         if (renderer === 'template') options.template = template
