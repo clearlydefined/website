@@ -1,17 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Tag } from 'antd'
 import { get } from 'lodash'
 import { Button, ButtonGroup, ButtonToolbar, Dropdown as BSDropdown } from 'react-bootstrap'
 import { Menu, Dropdown, Icon } from 'antd'
 import { CopyUrlButton } from '../../'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
-import Curation from '../../../utils/curation'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import { withResize } from '../../../utils/WindowProvider'
 import ButtonWithTooltip from './ButtonWithTooltip'
-import ScoreRenderer from './ScoreRenderer'
 
 class ComponentButtons extends Component {
   static propTypes = {
@@ -149,18 +146,10 @@ class ComponentButtons extends Component {
   }
 
   render() {
-    const { definition, curation, currentComponent, readOnly, isMobile } = this.props
+    const { currentComponent, readOnly, isMobile } = this.props
     const component = EntitySpec.fromCoordinates(currentComponent)
-    const scores = Definition.computeScores(definition)
-    const isCurationPending = Curation.isPending(curation)
     return (
       <div className="list-activity-area">
-        {isCurationPending && (
-          <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
-            <Tag color="green">Pending curations</Tag>
-          </a>
-        )}
-        {scores && <ScoreRenderer scores={scores} definition={definition} />}
         {isMobile ? this.renderMobileButtonGroup() : this.renderButtonGroup()}
 
         {!readOnly && (
