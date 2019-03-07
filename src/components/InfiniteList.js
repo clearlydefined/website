@@ -4,7 +4,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { AutoSizer, List, InfiniteLoader } from 'react-virtualized'
-import styles from 'react-virtualized/styles.css'
 
 export default class InfiniteList extends React.Component {
   static propTypes = {
@@ -59,7 +58,7 @@ export default class InfiniteList extends React.Component {
             {({ width }) => (
               <List
                 ref={this.hookRef(registerChild)}
-                className={`${styles.List && styles.List} ${customClassName}`}
+                className={`${customClassName}`}
                 height={height}
                 onRowsRendered={onRowsRendered}
                 noRowsRenderer={noRowsRenderer}
