@@ -71,7 +71,6 @@ class PageBrowse extends SystemManagedList {
 
   // Overrides the default onFilter method
   onFilter(filter, overwrite = false) {
-    console.log(filter)
     const activeFilters = overwrite === true ? filter : Object.assign({}, this.state.activeFilters)
     if (overwrite !== true) {
       const filterValue = get(activeFilters, filter.type)
