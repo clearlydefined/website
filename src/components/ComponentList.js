@@ -130,7 +130,7 @@ export default class ComponentList extends React.Component {
     const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div>
+      <div style={{ flex: '1' }}>
         {renderFilterBar()}
         <RowEntityList
           list={list}

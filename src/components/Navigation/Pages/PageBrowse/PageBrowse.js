@@ -173,14 +173,14 @@ class PageBrowse extends SystemManagedList {
     const { components, curations, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
-      <Grid className="main-container">
+      <Grid className="main-container flex">
         <ContributePrompt
           ref={this.contributeModal}
           session={session}
           onLogin={this.handleLogin}
           actionHandler={this.doContribute}
         />
-        <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
+        <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
             <div className={classNames('section-body', { loading: components.isFetching })}>
               <i className="fas fa-spinner fa-spin" />

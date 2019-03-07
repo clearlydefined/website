@@ -30,6 +30,8 @@
 }
 
 .main-container {
+  height: 100%;
+
   h1 {
     font-size: $size-text-banner;
     text-align: center;
@@ -154,11 +156,12 @@
 }
 
 .section-body {
-  border: 1px;
-  border-style: solid;
-  border-color: lightgray;
-  min-height: 200px;
+  border: 1px solid lightgray;
   box-shadow: 5px 5px 20px -10px lightgrey;
+  display: flex;
+  flex: 1;
+  min-height: 200px;
+  padding-bottom: $height-filters-list;
 
   .fa-spinner {
     display: none;
@@ -182,6 +185,12 @@
       top: 70px;
     }
   }
+}
+
+.flex-grow-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 
 .section-header {
