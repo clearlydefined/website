@@ -93,7 +93,6 @@ export class PageDefinitions extends UserManagedList {
         shareUrl={this.doSaveAsUrl}
         shareFile={() => this.setState({ showSavePopup: true, saveType: 'file' })}
         shareNotice={() => this.setState({ showSavePopup: true, saveType: 'notice' })}
-        shareGist={() => this.setState({ showSavePopup: true, saveType: 'gist' })}
       />
     )
   }
