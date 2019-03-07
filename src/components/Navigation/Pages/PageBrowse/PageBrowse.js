@@ -5,6 +5,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid } from 'react-bootstrap'
 import get from 'lodash/get'
+import uniq from 'lodash/uniq'
 import classNames from 'classnames'
 import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
@@ -45,13 +46,17 @@ class PageBrowse extends SystemManagedList {
   }
 
   onBrowse = value => {
-    const coordinates = EntitySpec.fromPath(value)
-    this.nameFilter = coordinates.name
+    this.nameFilter = { value }
     this.updateData()
   }
 
   tableTitle() {
     const { filterOptions } = this.props
+    const coordinates = filterOptions.list
+      .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
+      .filter(x => x)
+    const names = uniq(coordinates.map(coordinate => coordinate.name))
+    filterOptions.list = names
     return (
       <div>
         <span>Browse Definitions</span>
