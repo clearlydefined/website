@@ -167,7 +167,6 @@ export class PageDefinitions extends UserManagedList {
                   readOnly={this.readOnly}
                   list={components.transformedList}
                   listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                  listHeight={1000}
                   onRemove={this.onRemoveComponent}
                   onRevert={this.revertDefinition}
                   onChange={this.onChangeComponent}

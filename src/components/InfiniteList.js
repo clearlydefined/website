@@ -8,7 +8,6 @@ import styles from 'react-virtualized/styles.css'
 
 export default class InfiniteList extends React.Component {
   static propTypes = {
-    listHeight: PropTypes.number,
     rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
     totalRows: PropTypes.func,
     currentRows: PropTypes.func,
@@ -45,12 +44,8 @@ export default class InfiniteList extends React.Component {
   }
 
   render() {
-    const { isRowLoaded, loadMoreRows, listHeight, sortOrder, contentSeq, customClassName, threshold } = this.props
+    const { isRowLoaded, loadMoreRows, sortOrder, contentSeq, customClassName, threshold } = this.props
     const { totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer } = this.props
-    let height = Math.min(currentRows() * 150, listHeight || 300)
-    if (noRowsRenderer)
-      // show noRowsRenderer won't be called with zero height
-      height = Math.max(height, 200)
 
     return (
       <InfiniteLoader

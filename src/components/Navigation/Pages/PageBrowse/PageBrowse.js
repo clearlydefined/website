@@ -188,7 +188,6 @@ class PageBrowse extends SystemManagedList {
                 readOnly={false}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                listHeight={600}
                 loadMoreRows={this.loadMoreRows}
                 onRemove={this.onRemoveComponent}
                 onRevert={this.revertDefinition}

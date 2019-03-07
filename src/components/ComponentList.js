@@ -12,7 +12,6 @@ export default class ComponentList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     listLength: PropTypes.number,
-    listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
@@ -128,7 +127,7 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, listLength, renderFilterBar } = this.props
+    const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
       <div>
@@ -137,7 +136,6 @@ export default class ComponentList extends React.Component {
           list={list}
           listLength={listLength}
           loadMoreRows={loadMoreRows}
-          listHeight={listHeight}
           rowRenderer={this.renderRow}
           rowHeight={this.rowHeight}
           noRowsRenderer={noRowsRenderer}

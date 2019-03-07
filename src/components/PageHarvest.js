@@ -106,7 +106,6 @@ class PageHarvest extends Component {
           <div className="section-body">
             <HarvestQueueList
               list={queue.list}
-              listHeight={1000}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}
               noRowsRenderer={this.noRowsRenderer}
