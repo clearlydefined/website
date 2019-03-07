@@ -60,7 +60,12 @@ class PageBrowse extends SystemManagedList {
     return (
       <div>
         <span>Browse Definitions</span>
-        <SearchBar filterOptions={filterOptions} onChange={this.onBrowse} onSearch={this.onSearch} />
+        <SearchBar
+          filterOptions={filterOptions}
+          onChange={this.onBrowse}
+          onSearch={this.onSearch}
+          onClear={this.onBrowse}
+        />
       </div>
     )
   }
