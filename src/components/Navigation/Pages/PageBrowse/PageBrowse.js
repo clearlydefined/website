@@ -51,6 +51,16 @@ class PageBrowse extends SystemManagedList {
   }
 
   tableTitle() {
+    const providers = [
+      { value: 'cratesio', label: 'Crates.io' },
+      { value: 'github', label: 'GitHub' },
+      { value: 'mavencentral', label: 'MavenCentral' },
+      { value: 'npmjs', label: 'NpmJS' },
+      { value: 'nuget', label: 'NuGet' },
+      { value: 'pypi', label: 'PyPi' },
+      { value: 'rubygems', label: 'RubyGems' },
+      { value: 'cocoapods', label: 'CocoaPods' }
+    ]
     const { filterOptions } = this.props
     const coordinates = filterOptions.list
       .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
@@ -60,13 +70,17 @@ class PageBrowse extends SystemManagedList {
     return (
       <div>
         <span>Browse Definitions</span>
-        <FilterBar
-          options={filterOptions}
-          onChange={this.onBrowse}
-          onSearch={this.onSearch}
-          onClear={this.onBrowse}
-          clearOnChange
-        />
+        <div className={'horizontalBlock'}>
+          {this.renderFilter(providers, 'Provider', 'provider')}
+          {this.renderFilter(curateFilters, 'Curate', 'curate')}
+          <FilterBar
+            options={filterOptions}
+            onChange={this.onBrowse}
+            onSearch={this.onSearch}
+            onClear={this.onBrowse}
+            clearOnChange
+          />
+        </div>
       </div>
     )
   }
@@ -110,26 +124,15 @@ class PageBrowse extends SystemManagedList {
       { value: 'describedScore', label: 'Lower Described score' }
     ]
 
-    const providers = [
-      { value: 'cratesio', label: 'Crates.io' },
-      { value: 'github', label: 'GitHub' },
-      { value: 'mavencentral', label: 'MavenCentral' },
-      { value: 'npmjs', label: 'NpmJS' },
-      { value: 'nuget', label: 'NuGet' },
-      { value: 'pypi', label: 'PyPi' },
-      { value: 'rubygems', label: 'RubyGems' }
-    ]
-
     return (
       <div className="filter-list" align="right">
         <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-        {this.renderFilter(providers, 'Provider', 'provider')}
+
         {this.renderFilter(
           licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
           'License',
           'license'
         )}
-        {this.renderFilter(curateFilters, 'Curate', 'curate')}
       </div>
     )
   }
