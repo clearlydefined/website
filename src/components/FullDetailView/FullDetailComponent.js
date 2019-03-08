@@ -6,6 +6,7 @@ import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import cloneDeep from 'lodash/cloneDeep'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { Section } from '../'
 import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
@@ -106,9 +107,17 @@ class FullDetailComponent extends Component {
                   )}
                 </section>
               }
+              actionButton={
+                get(item, 'described.urls.download') && (
+                  <Button bsStyle="primary" href={get(item, 'described.urls.download')}>
+                    <i className="fas fa-download" />
+                    <span>&nbsp;Download component</span>
+                  </Button>
+                )
+              }
             >
               <Row>
-                <Col md={11}>
+                <Col md={12}>
                   <FileList
                     files={cloneDeep(item.files)}
                     onChange={onChange}

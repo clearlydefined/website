@@ -71,14 +71,17 @@ export default class DefinitionEntry extends React.Component {
 
   renderHeadline(definition, curation) {
     const { namespace, name, revision } = definition.coordinates
-    const componentUrl = EntitySpec.getComponentUrl(definition.coordinates)
-    const revisionUrl = EntitySpec.getRevisionUrl(definition.coordinates)
     const namespaceText = namespace ? namespace + '/' : ''
     const scores = Definition.computeScores(definition)
     const isCurationPending = Curation.isPending(curation)
-    const componentTag = componentUrl ? (
+    const componentTag = get(definition, 'described.urls.registry') ? (
       <span>
-        <a href={componentUrl} target="_blank" rel="noopener noreferrer" data-test-id="component-name">
+        <a
+          href={get(definition, 'described.urls.registry')}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-test-id="component-name"
+        >
           {namespaceText}
           {name}
         </a>
@@ -89,10 +92,10 @@ export default class DefinitionEntry extends React.Component {
         {name}
       </span>
     )
-    const revisionTag = revisionUrl ? (
+    const revisionTag = get(definition, 'described.urls.version') ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={revisionUrl} target="_blank" rel="noopener noreferrer">
+        <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
           {revision.slice(0, 7)}
         </a>
       </span>
