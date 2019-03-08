@@ -63,12 +63,11 @@ class PageContribution extends SystemManagedList {
       <Grid className="main-container">
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <div className="section-body">
+            <div className="section-body flex-grow">
               <ComponentList
                 readOnly={this.readOnly}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                listHeight={1000}
                 onRemove={this.onRemoveComponent}
                 onRevert={this.revertDefinition}
                 onChange={this.onChangeComponent}

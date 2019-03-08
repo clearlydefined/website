@@ -201,6 +201,10 @@
   }
 }
 
+.filter-list {
+  height: $height-filters-list;
+}
+
 .filter-list,
 .list-filter {
   .btn-group-default .btn {
