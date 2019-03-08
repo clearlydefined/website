@@ -50,19 +50,9 @@
   }
   .ant-table-row-collapsed::after,
   .ant-table-row-expanded::after {
-    content: '' !important;
-    font-family: 'anticon' !important;
-    font-style: normal;
-    vertical-align: baseline;
-    text-align: center;
-    text-transform: none;
-    text-rendering: auto;
-
-    right: 16px;
-    top: 0;
+    content: '';
     display: inline-block;
     transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    zoom: 1;
 
     border-top: 8px solid black;
     border-left: 8px solid transparent;
