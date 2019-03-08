@@ -27,7 +27,6 @@ import nuget from '../images/nuget.svg'
 class HarvestQueueList extends React.Component {
   static propTypes = {
     list: PropTypes.array.isRequired,
-    listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onChange: PropTypes.func,
@@ -164,13 +163,12 @@ class HarvestQueueList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list } = this.props
+    const { loadMoreRows, noRowsRenderer, list } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
       <RowEntityList
         list={list}
         loadMoreRows={loadMoreRows}
-        listHeight={listHeight}
         rowRenderer={this.renderRow}
         rowHeight={50}
         noRowsRenderer={noRowsRenderer}

@@ -12,7 +12,7 @@ export default class App extends Component {
       <div className="App">
         <WindowProvider>
           <Header />
-          <main className="App-content">{children}</main>
+          <main className="App-content flex-grow">{children}</main>
           <Footer />
           <NotificationList />
         </WindowProvider>

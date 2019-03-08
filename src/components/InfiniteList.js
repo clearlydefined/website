@@ -4,11 +4,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { AutoSizer, List, InfiniteLoader } from 'react-virtualized'
-import styles from 'react-virtualized/styles.css'
+import { noRowsHeight } from '../utils/utils'
 
 export default class InfiniteList extends React.Component {
   static propTypes = {
-    listHeight: PropTypes.number,
     rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
     totalRows: PropTypes.func,
     currentRows: PropTypes.func,
@@ -45,12 +44,8 @@ export default class InfiniteList extends React.Component {
   }
 
   render() {
-    const { isRowLoaded, loadMoreRows, listHeight, sortOrder, contentSeq, customClassName, threshold } = this.props
+    const { isRowLoaded, loadMoreRows, sortOrder, contentSeq, customClassName, threshold } = this.props
     const { totalRows, currentRows, rowHeight, rowRenderer, noRowsRenderer } = this.props
-    let height = Math.min(currentRows() * 150, listHeight || 230)
-    if (noRowsRenderer)
-      // show noRowsRenderer won't be called with zero height
-      height = Math.max(height, 230)
 
     return (
       <InfiniteLoader
@@ -60,12 +55,12 @@ export default class InfiniteList extends React.Component {
         threshold={threshold}
       >
         {({ onRowsRendered, registerChild }) => (
-          <AutoSizer disableHeight>
-            {({ width }) => (
+          <AutoSizer>
+            {({ width, height }) => (
               <List
                 ref={this.hookRef(registerChild)}
-                className={`${styles.List && styles.List} ${customClassName}`}
-                height={height}
+                className={`${customClassName}`}
+                height={totalRows() === 0 ? noRowsHeight : height}
                 onRowsRendered={onRowsRendered}
                 noRowsRenderer={noRowsRenderer}
                 rowCount={currentRows()}

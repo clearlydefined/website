@@ -13,7 +13,6 @@ class ComponentList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     listLength: PropTypes.number,
-    listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
@@ -129,24 +128,15 @@ class ComponentList extends React.Component {
   }
 
   render() {
-    const {
-      loadMoreRows,
-      listHeight,
-      noRowsRenderer,
-      list,
-      listLength,
-      renderFilterBar,
-      isMobileMultiplier
-    } = this.props
+    const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div>
+      <div className="flex-grow">
         {renderFilterBar()}
         <RowEntityList
           list={list}
           listLength={listLength}
           loadMoreRows={loadMoreRows}
-          listHeight={listHeight * isMobileMultiplier}
           rowRenderer={this.renderRow}
           rowHeight={this.rowHeight}
           noRowsRenderer={noRowsRenderer}

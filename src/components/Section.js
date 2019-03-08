@@ -16,7 +16,7 @@ class Section extends Component {
   render() {
     const { name, actionButton, children, isMobile } = this.props
     return (
-      <>
+      <div className={className}>
         {isMobile ? (
           <>
             <Row className="section-header">
@@ -41,7 +41,7 @@ class Section extends Component {
           </Row>
         )}
         {children}
-      </>
+      </div>
     )
   }
 }
