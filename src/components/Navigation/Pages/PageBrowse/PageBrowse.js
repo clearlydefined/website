@@ -77,7 +77,7 @@ class PageBrowse extends SystemManagedList {
         <Col md={2} mdOffset={1}>
           {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
         </Col>
-        <Col md={10}>
+        <Col md={8}>
           <div className={'horizontalBlock'}>
             {this.renderFilter(providers, 'Provider', 'provider')}
             <span>&nbsp;</span>
