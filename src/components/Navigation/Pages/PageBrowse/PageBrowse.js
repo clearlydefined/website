@@ -20,6 +20,7 @@ import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
 import { licenses, curateFilters } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
+import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
 
 /**
