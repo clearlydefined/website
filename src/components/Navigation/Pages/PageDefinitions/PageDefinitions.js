@@ -151,7 +151,7 @@ export class PageDefinitions extends UserManagedList {
     const { components, curations, definitions, session, filterOptions } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition, showSavePopup, saveType } = this.state
     return (
-      <Grid className="main-container">
+      <Grid className="main-container flex-column">
         <ContributePrompt
           ref={this.contributeModal}
           session={session}
@@ -159,28 +159,30 @@ export class PageDefinitions extends UserManagedList {
           actionHandler={this.doContribute}
         />
         <SearchBar filterOptions={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} />
-        <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
+        <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <DropComponent onLoad={this.loadComponentList} onAddComponent={this.onAddComponent}>
-              <div className="section-body flex-grow">
-                <ComponentList
-                  readOnly={this.readOnly}
-                  list={components.transformedList}
-                  listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                  onRemove={this.onRemoveComponent}
-                  onRevert={this.revertDefinition}
-                  onChange={this.onChangeComponent}
-                  onAddComponent={this.onAddComponent}
-                  onInspect={this.onInspect}
-                  renderFilterBar={this.renderFilterBar}
-                  curations={curations}
-                  definitions={definitions}
-                  noRowsRenderer={this.noRowsRenderer}
-                  sequence={sequence}
-                  hasChange={this.hasChange}
-                  showVersionSelectorPopup={this.showVersionSelectorPopup}
-                />
-              </div>
+            <DropComponent
+              className="section-body flex-grow"
+              onLoad={this.loadComponentList}
+              onAddComponent={this.onAddComponent}
+            >
+              <ComponentList
+                readOnly={this.readOnly}
+                list={components.transformedList}
+                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+                onRemove={this.onRemoveComponent}
+                onRevert={this.revertDefinition}
+                onChange={this.onChangeComponent}
+                onAddComponent={this.onAddComponent}
+                onInspect={this.onInspect}
+                renderFilterBar={this.renderFilterBar}
+                curations={curations}
+                definitions={definitions}
+                noRowsRenderer={this.noRowsRenderer}
+                sequence={sequence}
+                hasChange={this.hasChange}
+                showVersionSelectorPopup={this.showVersionSelectorPopup}
+              />
             </DropComponent>
           }
         </Section>
