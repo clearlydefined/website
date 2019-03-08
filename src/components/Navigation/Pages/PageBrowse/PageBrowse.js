@@ -18,7 +18,7 @@ import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { licenses, curateFilters } from '../../../../utils/utils'
+import { curateFilters } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
@@ -74,8 +74,8 @@ class PageBrowse extends SystemManagedList {
     filterOptions.list = names
     return (
       <Row className="show-grid spacer">
-        <Col md={1} mdOffset={1}>
-          {this.renderFilter(curateFilters, 'Curate', 'curate')}
+        <Col md={2} mdOffset={1}>
+          {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
         </Col>
         <Col md={10}>
           <div className={'horizontalBlock'}>
@@ -139,8 +139,17 @@ class PageBrowse extends SystemManagedList {
     )
   }
 
-  renderFilter(list, title, id) {
-    return <FilterList list={list} title={title} id={id} value={this.state.activeFilters} onFilter={this.onFilter} />
+  renderFilter(list, title, id, variant) {
+    return (
+      <FilterList
+        list={list}
+        title={title}
+        id={id}
+        value={this.state.activeFilters}
+        onFilter={this.onFilter}
+        variant={variant}
+      />
+    )
   }
 
   async updateData(continuationToken) {
