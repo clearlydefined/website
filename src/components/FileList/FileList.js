@@ -226,7 +226,7 @@ export default class FileList extends Component {
         onExpandedRowsChange={expandedRows => this.setState({ expandedRows })}
         pagination={false}
         bordered={false}
-        indentSize={30}
+        indentSize={8}
       />
     )
   }
