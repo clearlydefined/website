@@ -74,6 +74,10 @@ function normalize(value, provider, property) {
 }
 
 export default class EntitySpec {
+  static isPath(path) {
+    return path.match(/\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/)
+  }
+
   static fromPath(path) {
     const [, type, provider, namespace, name, revision, prSpec] = path.match(
       /\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/
