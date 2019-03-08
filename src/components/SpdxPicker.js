@@ -14,7 +14,8 @@ export default class SpdxPicker extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
     onBlur: PropTypes.func,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    promptText: PropTypes.string
   }
 
   constructor(props) {
@@ -37,7 +38,7 @@ export default class SpdxPicker extends Component {
   }
 
   render() {
-    const { value, onBlur, onChange, autoFocus } = this.props
+    const { value, onBlur, onChange, autoFocus, promptText } = this.props
     return (
       <div className="editable-editor" data-test-id="spdx-input-picker">
         <Typeahead
@@ -52,6 +53,7 @@ export default class SpdxPicker extends Component {
           autoFocus={autoFocus}
           selectHintOnEnter
           clearButton
+          placeholder={promptText}
         />
       </div>
     )

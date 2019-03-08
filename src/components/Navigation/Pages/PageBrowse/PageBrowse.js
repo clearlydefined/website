@@ -19,6 +19,7 @@ import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
 import { licenses, curateFilters } from '../../../../utils/utils'
+import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
 
@@ -76,7 +77,7 @@ class PageBrowse extends SystemManagedList {
         <Col md={1} mdOffset={1}>
           {this.renderFilter(curateFilters, 'Curate', 'curate')}
         </Col>
-        <Col md={8}>
+        <Col md={10}>
           <div className={'horizontalBlock'}>
             {this.renderFilter(providers, 'Provider', 'provider')}
             <span>&nbsp;</span>
@@ -133,12 +134,7 @@ class PageBrowse extends SystemManagedList {
     return (
       <div className="filter-list" align="right">
         <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-
-        {this.renderFilter(
-          licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
-          'License',
-          'license'
-        )}
+        <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
       </div>
     )
   }
