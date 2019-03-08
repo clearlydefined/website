@@ -33,16 +33,9 @@ describe('ButtonsBar', () => {
   it('checks if share functions are called', async () => {
     const shareUrl = jest.fn()
     const shareFile = jest.fn()
-    const shareGist = jest.fn()
     const shareNotice = jest.fn()
     const wrapper = mount(
-      <ButtonsBar
-        shareUrl={shareUrl}
-        shareFile={shareFile}
-        shareGist={shareGist}
-        shareNotice={shareNotice}
-        components={components}
-      />
+      <ButtonsBar shareUrl={shareUrl} shareFile={shareFile} shareNotice={shareNotice} components={components} />
     )
     const wrapperShareButton = wrapper.find(ShareButton)
     wrapperShareButton.simulate('click')
@@ -57,7 +50,6 @@ describe('ButtonsBar', () => {
     })
     expect(shareUrl).toHaveBeenCalled()
     expect(shareFile).toHaveBeenCalled()
-    expect(shareGist).toHaveBeenCalled()
   })
 
   it("checks if buttons are enabled when there aren't changes", async () => {

@@ -10,19 +10,6 @@ export default class ButtonsBar extends Component {
     doSave: PropTypes.func
   }
 
-  onSelect = type => {
-    switch (type) {
-      case 'url':
-        return this.props.shareUrl()
-      case 'file':
-        return this.props.shareFile()
-      case 'gist':
-        return this.props.shareGist()
-      default:
-        break
-    }
-  }
-
   render() {
     const { hasChanges, revertAll, collapseAll, doPromptContribute } = this.props
     return (

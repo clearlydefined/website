@@ -141,17 +141,6 @@ export async function getNotices(token, coordinates, renderer, options) {
   return result
 }
 
-export function getBadgeUrl(score1, score2) {
-  score1 = score1 || 0
-  score2 = score2 || 0
-  const topScore = 100
-  const colors = ['cb2431', 'yellow', '2cbe4e']
-  const percentScore = (score1 + score2) / (2 * topScore)
-  const bucketSize = 1 / colors.length
-  const color = colors[Math.floor(percentScore / bucketSize)] || '2cbe4e'
-  return `https://img.shields.io/badge/ClearlyDefined-${score1}%20%7C%20${score2}-${color}.svg`
-}
-
 export function getGitHubSearch(token, path) {
   return get(url(`${ORIGINS_GITHUB}/${path}`), token)
 }
