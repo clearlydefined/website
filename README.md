@@ -33,8 +33,8 @@ All e2e are written using `jest` and `puppeteer`.
 Note that by default all the e2e tests runs checking the development website on https://dev.clearlydefined.io
 If you want to run test on your local environment, you should run:
 
-- `npm run e2e:start` builds the application and starts a background browser session, using Chromium, on your localhost:3333
-- `NODE_ENV=debug npm run e2e:test` run all the test checking on http://localhost:3333
+- `npm start` this is the normal start that you have likely already done. Builds the application and gets it running on port 3000
+- `npm run e2e:test` run all the test using the local content on http://localhost:3000
 
 # Contributing
 
