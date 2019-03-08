@@ -11,7 +11,7 @@ import {
   searchDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiDefinitionsUpdateList } from './ui'
+import { uiDefinitionsUpdateList, UI_BROWSE_REVERT, uiBrowseUpdateList } from './ui'
 import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
@@ -70,13 +70,21 @@ export function resetPreviewDefinitionAction(token, entity, name) {
   }
 }
 
-export function revertDefinitionAction(definition, values, name) {
+export function revertAction(definition, values, name) {
   return (dispatch, getState) => {
     const state = getState()
     const actions = asyncActions(name)
     dispatch(actions.start({ definition, values }))
-    const componentsWithoutChanges = Definition.revert(state.ui.definitions.componentList.list, definition, values)
-    dispatch(uiDefinitionsUpdateList({ updateAll: componentsWithoutChanges }))
+    const componentsWithoutChanges = Definition.revert(
+      name === UI_BROWSE_REVERT ? state.ui.browse.componentList.list : state.ui.definitions.componentList.list,
+      definition,
+      values
+    )
+    dispatch(
+      name === UI_BROWSE_REVERT
+        ? uiBrowseUpdateList({ updateAll: componentsWithoutChanges })
+        : uiDefinitionsUpdateList({ updateAll: componentsWithoutChanges })
+    )
     return dispatch(actions.success({ componentsWithoutChanges }))
   }
 }
