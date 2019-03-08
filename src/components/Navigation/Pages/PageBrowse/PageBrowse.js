@@ -163,8 +163,8 @@ class PageBrowse extends SystemManagedList {
       default:
         break
     }
-    if (query.curate === 'licensed') query.maxLicensedScore = 70
-    if (query.curate === 'described') query.maxDescribedScore = 70
+    if (query.curate === 'effective') query.maxEffectiveScore = 70
+    if (query.curate === 'tool') query.maxToolScore = 70
     if (query.curate) delete query.curate
     if (activeName) {
       if (activeName.indexOf('/') > 0) {
