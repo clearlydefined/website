@@ -64,9 +64,9 @@
     transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     zoom: 1;
 
-    border-top: 10px solid black;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
+    border-top: 8px solid black;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
   }
 
   .ant-table-row-collapsed::after {
