@@ -132,9 +132,12 @@ class PageBrowse extends SystemManagedList {
     ]
 
     return (
+      // OMG, structural whitespace?!
       <div className="filter-list" align="right">
-        <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
         <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
+        &nbsp;
+        <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
+        &nbsp; &nbsp; &nbsp; &nbsp;
       </div>
     )
   }
