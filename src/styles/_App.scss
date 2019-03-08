@@ -59,7 +59,7 @@
   }
 
   .neighborhood-row {
-    padding-top: 80px;
+    padding-top: 60px;
     display: flex;
     min-height: 150px;
   }
@@ -99,7 +99,7 @@
   }
 
   .about-text {
-    font-size: 1.25em;
+    font-size: 1.75em;
 
     ul {
       padding-left: 30px;
@@ -119,6 +119,7 @@
 }
 
 .about-container {
+  font-size: 1.5em;
   @media (max-width: 768px) {
     margin-top: -80px;
   }
