@@ -3,9 +3,9 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, FormControl } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 import get from 'lodash/get'
-import debounce from 'lodash/debounce'
+import uniq from 'lodash/uniq'
 import classNames from 'classnames'
 import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
@@ -19,6 +19,8 @@ import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
 import { licenses, curateFilters } from '../../../../utils/utils'
+import FilterBar from '../../../FilterBar'
+import EntitySpec from '../../../../utils/entitySpec'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -43,16 +45,42 @@ class PageBrowse extends SystemManagedList {
     return isFetching ? <div /> : <div className="list-noRows">Broaden your filters to find more results</div>
   }
 
+  onBrowse = value => {
+    this.nameFilter = { value }
+    this.updateData()
+  }
+
   tableTitle() {
+    const providers = [
+      { value: 'cratesio', label: 'Crates.io' },
+      { value: 'github', label: 'GitHub' },
+      { value: 'mavencentral', label: 'MavenCentral' },
+      { value: 'npmjs', label: 'NpmJS' },
+      { value: 'nuget', label: 'NuGet' },
+      { value: 'pypi', label: 'PyPi' },
+      { value: 'rubygems', label: 'RubyGems' },
+      { value: 'cocoapods', label: 'CocoaPods' }
+    ]
+    const { filterOptions } = this.props
+    const coordinates = filterOptions.list
+      .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
+      .filter(x => x)
+    const names = uniq(coordinates.map(coordinate => coordinate.name))
+    filterOptions.list = names
     return (
       <div>
         <span>Browse Definitions</span>
-        <FormControl
-          placeholder="Name"
-          aria-label="Name"
-          inputRef={input => (this.nameFilter = input)}
-          onChange={debounce(() => this.updateData(), 500)}
-        />
+        <div className={'horizontalBlock'}>
+          {this.renderFilter(providers, 'Provider', 'provider')}
+          {this.renderFilter(curateFilters, 'Curate', 'curate')}
+          <FilterBar
+            options={filterOptions}
+            onChange={this.onBrowse}
+            onSearch={this.onSearch}
+            onClear={this.onBrowse}
+            clearOnChange
+          />
+        </div>
       </div>
     )
   }
@@ -61,7 +89,7 @@ class PageBrowse extends SystemManagedList {
     return (
       <ButtonsBar
         hasChanges={!this.hasChanges()}
-        revertAll={this.revertAll}
+        revertAll={() => this.revertAll('browse')}
         collapseAll={this.collapseAll}
         doPromptContribute={this.doPromptContribute}
       />
@@ -96,26 +124,15 @@ class PageBrowse extends SystemManagedList {
       { value: 'describedScore', label: 'Lower Described score' }
     ]
 
-    const providers = [
-      { value: 'cratesio', label: 'Crates.io' },
-      { value: 'github', label: 'GitHub' },
-      { value: 'mavencentral', label: 'MavenCentral' },
-      { value: 'npmjs', label: 'NpmJS' },
-      { value: 'nuget', label: 'NuGet' },
-      { value: 'pypi', label: 'PyPi' },
-      { value: 'rubygems', label: 'RubyGems' }
-    ]
-
     return (
       <div className="filter-list" align="right">
         <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-        {this.renderFilter(providers, 'Provider', 'provider')}
+
         {this.renderFilter(
           licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
           'License',
           'license'
         )}
-        {this.renderFilter(curateFilters, 'Curate', 'curate')}
       </div>
     )
   }
@@ -191,7 +208,7 @@ class PageBrowse extends SystemManagedList {
                 listHeight={600}
                 loadMoreRows={this.loadMoreRows}
                 onRemove={this.onRemoveComponent}
-                onRevert={this.revertDefinition}
+                onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
                 onChange={this.onChangeComponent}
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
@@ -229,7 +246,8 @@ function mapStateToProps(state) {
     session: state.session,
     curations: state.ui.curate.bodies,
     definitions: state.definition.bodies,
-    components: state.ui.browse.componentList
+    components: state.ui.browse.componentList,
+    filterOptions: state.ui.definitions.filterList
   }
 }
 

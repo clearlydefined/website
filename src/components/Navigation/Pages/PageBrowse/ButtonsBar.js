@@ -13,9 +13,9 @@ export default class ButtonsBar extends Component {
   render() {
     const { hasChanges, revertAll, collapseAll, doPromptContribute } = this.props
     return (
-      <div className="text-right">
+      <div className="text-right" data-test-id="page-browse-buttons-bar">
         <ButtonWithTooltip tip="Revert all changes of all the definitions">
-          <Button bsStyle="danger" disabled={hasChanges} onClick={revertAll}>
+          <Button bsStyle="danger" disabled={hasChanges} onClick={revertAll} data-test-id="revert-button">
             <i className="fas fa-undo" />
             <span>&nbsp;Revert Changes</span>
           </Button>
@@ -23,7 +23,7 @@ export default class ButtonsBar extends Component {
         <Button bsStyle="default" disabled={hasChanges} onClick={collapseAll}>
           Collapse All
         </Button>
-        <Button bsStyle="success" disabled={hasChanges} onClick={doPromptContribute}>
+        <Button bsStyle="success" disabled={hasChanges} onClick={doPromptContribute} data-test-id="contribute-button">
           Contribute
         </Button>
       </div>
