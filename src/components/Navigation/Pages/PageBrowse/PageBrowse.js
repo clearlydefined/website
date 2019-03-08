@@ -126,10 +126,8 @@ class PageBrowse extends SystemManagedList {
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
-      { value: 'licensedScore-desc', label: 'Higher Licensed score' },
-      { value: 'licensedScore', label: 'Lower Licensed score' },
-      { value: 'describedScore-desc', label: 'Higher Described score' },
-      { value: 'describedScore', label: 'Lower Described score' }
+      { value: 'score-desc', label: 'Higher Score' },
+      { value: 'score', label: 'Lower Score' }
     ]
 
     return (
@@ -160,12 +158,11 @@ class PageBrowse extends SystemManagedList {
         query.sort = 'releaseDate'
         query.sortDesc = true
         break
-      case 'licensedScore-desc':
-        query.sort = 'licensedScore'
-        query.sortDesc = true
-        break
-      case 'describedScore-desc':
-        query.sort = 'describedScore'
+      case 'score':
+        query.sort = 'effectiveScore'
+        query.sortDesc = false
+      case 'score-desc':
+        query.sort = 'effectiveScore'
         query.sortDesc = true
         break
       default:
