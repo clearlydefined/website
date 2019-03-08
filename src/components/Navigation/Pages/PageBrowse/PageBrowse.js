@@ -166,6 +166,7 @@ class PageBrowse extends SystemManagedList {
       case 'score':
         query.sort = 'effectiveScore'
         query.sortDesc = false
+        break
       case 'score-desc':
         query.sort = 'effectiveScore'
         query.sortDesc = true
