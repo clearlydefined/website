@@ -103,7 +103,7 @@ class PageHarvest extends Component {
           </Col>
         </Row>
         <Section name={'Components to harvest'} actionButton={this.renderActionButton()}>
-          <div className="section-body">
+          <div className="section-body flex-grow">
             <HarvestQueueList
               list={queue.list}
               onRemove={this.onRemoveRequest}

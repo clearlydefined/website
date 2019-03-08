@@ -162,7 +162,7 @@ export class PageDefinitions extends UserManagedList {
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
             <DropComponent onLoad={this.loadComponentList} onAddComponent={this.onAddComponent}>
-              <div className="section-body">
+              <div className="section-body flex-grow">
                 <ComponentList
                   readOnly={this.readOnly}
                   list={components.transformedList}

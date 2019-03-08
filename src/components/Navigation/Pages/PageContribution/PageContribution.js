@@ -63,7 +63,7 @@ class PageContribution extends SystemManagedList {
       <Grid className="main-container">
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <div className="section-body">
+            <div className="section-body flex-grow">
               <ComponentList
                 readOnly={this.readOnly}
                 list={components.transformedList}

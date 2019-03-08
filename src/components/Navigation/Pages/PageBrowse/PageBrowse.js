@@ -199,7 +199,7 @@ class PageBrowse extends SystemManagedList {
         />
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <div className={classNames('section-body', { loading: components.isFetching })}>
+            <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
               <i className="fas fa-spinner fa-spin" />
               <ComponentList
                 readOnly={false}
