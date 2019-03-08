@@ -57,7 +57,15 @@ export default class ComponentButtons extends Component {
   }
 
   render() {
-    const { definition, currentComponent, readOnly, hasChange, hideVersionSelector } = this.props
+    const {
+      definition,
+      currentComponent,
+      readOnly,
+      hasChange,
+      hideVersionSelector,
+      onRemove,
+      onAddComponent
+    } = this.props
     const component = EntitySpec.fromCoordinates(currentComponent)
     const isSourceComponent = this.isSourceComponent(component)
     const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
@@ -66,7 +74,7 @@ export default class ComponentButtons extends Component {
     return (
       <div className="list-activity-area">
         <ButtonGroup>
-          {!isSourceComponent && !readOnly && !isSourceEmpty && (
+          {onAddComponent && !isSourceComponent && !readOnly && !isSourceEmpty && (
             <ButtonWithTooltip
               name="addSourceComponent"
               tip={'Add the definition for source that matches this package'}
@@ -133,7 +141,7 @@ export default class ComponentButtons extends Component {
             </ButtonWithTooltip>
           )}
         </ButtonGroup>
-        {!readOnly && (
+        {onRemove && !readOnly && (
           <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
             <i className="fas fa-times list-remove" />
           </Button>
