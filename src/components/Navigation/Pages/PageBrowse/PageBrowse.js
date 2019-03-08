@@ -3,7 +3,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid } from 'react-bootstrap'
+import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import classNames from 'classnames'
@@ -52,15 +52,19 @@ class PageBrowse extends SystemManagedList {
   }
 
   tableTitle() {
+    return 'Browse Definitions'
+  }
+
+  renderTopFilters() {
     const providers = [
+      { value: 'cocoapods', label: 'CocoaPods' },
       { value: 'cratesio', label: 'Crates.io' },
       { value: 'github', label: 'GitHub' },
       { value: 'mavencentral', label: 'MavenCentral' },
       { value: 'npmjs', label: 'NpmJS' },
       { value: 'nuget', label: 'NuGet' },
       { value: 'pypi', label: 'PyPi' },
-      { value: 'rubygems', label: 'RubyGems' },
-      { value: 'cocoapods', label: 'CocoaPods' }
+      { value: 'rubygems', label: 'RubyGems' }
     ]
     const { filterOptions } = this.props
     const coordinates = filterOptions.list
@@ -69,20 +73,24 @@ class PageBrowse extends SystemManagedList {
     const names = uniq(coordinates.map(coordinate => coordinate.name))
     filterOptions.list = names
     return (
-      <div>
-        <span>Browse Definitions</span>
-        <div className={'horizontalBlock'}>
-          {this.renderFilter(providers, 'Provider', 'provider')}
+      <Row className="show-grid spacer">
+        <Col md={2} mdOffset={1}>
           {this.renderFilter(curateFilters, 'Curate', 'curate')}
-          <FilterBar
-            options={filterOptions}
-            onChange={this.onBrowse}
-            onSearch={this.onSearch}
-            onClear={this.onBrowse}
-            clearOnChange
-          />
-        </div>
-      </div>
+        </Col>
+        <Col md={8}>
+          <div className={'horizontalBlock'}>
+            {this.renderFilter(providers, 'Provider', 'provider')}
+            <span>&nbsp;</span>
+            <FilterBar
+              options={filterOptions}
+              onChange={this.onBrowse}
+              onSearch={this.onSearch}
+              onClear={this.onBrowse}
+              clearOnChange
+            />
+          </div>
+        </Col>
+      </Row>
     )
   }
 
@@ -119,10 +127,8 @@ class PageBrowse extends SystemManagedList {
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
-      { value: 'licensedScore-desc', label: 'Higher Licensed score' },
-      { value: 'licensedScore', label: 'Lower Licensed score' },
-      { value: 'describedScore-desc', label: 'Higher Described score' },
-      { value: 'describedScore', label: 'Lower Described score' }
+      { value: 'score-desc', label: 'Higher Score' },
+      { value: 'score', label: 'Lower Score' }
     ]
 
     return (
@@ -148,12 +154,11 @@ class PageBrowse extends SystemManagedList {
         query.sort = 'releaseDate'
         query.sortDesc = true
         break
-      case 'licensedScore-desc':
-        query.sort = 'licensedScore'
-        query.sortDesc = true
-        break
-      case 'describedScore-desc':
-        query.sort = 'describedScore'
+      case 'score':
+        query.sort = 'effectiveScore'
+        query.sortDesc = false
+      case 'score-desc':
+        query.sort = 'effectiveScore'
         query.sortDesc = true
         break
       default:
@@ -186,27 +191,25 @@ class PageBrowse extends SystemManagedList {
     const { components, curations, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
-      <Grid className="main-container">
+      <Grid className="main-container flex">
         <ContributePrompt
           ref={this.contributeModal}
           session={session}
           onLogin={this.handleLogin}
           actionHandler={this.doContribute}
         />
-        <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
+        {this.renderTopFilters()}
+        <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <div className={classNames('section-body', { loading: components.isFetching })}>
+            <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
               <i className="fas fa-spinner fa-spin" />
               <ComponentList
                 readOnly={false}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                listHeight={600}
                 loadMoreRows={this.loadMoreRows}
-                onRemove={this.onRemoveComponent}
                 onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
                 onChange={this.onChangeComponent}
-                onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 curations={curations}

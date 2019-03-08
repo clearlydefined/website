@@ -93,7 +93,12 @@ class FullDetailComponent extends Component {
                   &nbsp;
                   {!readOnly && (
                     <ButtonWithTooltip tip="Revert all changes of all the definitions">
-                      <Button bsStyle="danger" onClick={() => handleRevert('files')} disabled={entry === undefined}>
+                      <Button
+                        bsSize="small"
+                        bsStyle="danger"
+                        onClick={() => handleRevert('files')}
+                        disabled={entry === undefined}
+                      >
                         <i className="fas fa-undo" />
                         <span>&nbsp;Revert Changes</span>
                       </Button>

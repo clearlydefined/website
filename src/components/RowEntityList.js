@@ -9,7 +9,6 @@ export default class RowEntityList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     listLength: PropTypes.number,
-    listHeight: PropTypes.number,
     rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.func]),
     rowRenderer: PropTypes.func.isRequired,
     loadMoreRows: PropTypes.func,
@@ -19,7 +18,6 @@ export default class RowEntityList extends React.Component {
   }
 
   static defaultProps = {
-    listHeight: 600,
     rowHeight: 50,
     noRowsRenderer: () => <div>Nothing found</div>
   }
@@ -34,7 +32,6 @@ export default class RowEntityList extends React.Component {
   render() {
     const {
       loadMoreRows,
-      listHeight,
       listLength,
       rowRenderer,
       noRowsRenderer,
@@ -47,7 +44,6 @@ export default class RowEntityList extends React.Component {
       <InfiniteList
         isRowLoaded={this.isRowLoaded}
         loadMoreRows={loadMoreRows}
-        listHeight={listHeight}
         totalRows={() => listLength}
         currentRows={this.length}
         rowRenderer={rowRenderer}
