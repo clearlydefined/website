@@ -74,10 +74,10 @@ class PageBrowse extends SystemManagedList {
     filterOptions.list = names
     return (
       <Row className="show-grid spacer">
-        <Col md={2} mdOffset={1}>
+        <Col md={1} mdOffset={1}>
           {this.renderFilter(curateFilters, 'Curate', 'curate')}
         </Col>
-        <Col md={8}>
+        <Col md={10}>
           <div className={'horizontalBlock'}>
             {this.renderFilter(providers, 'Provider', 'provider')}
             <span>&nbsp;</span>
@@ -191,7 +191,7 @@ class PageBrowse extends SystemManagedList {
     const { components, curations, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
-      <Grid className="main-container flex">
+      <Grid className="main-container flex-column">
         <ContributePrompt
           ref={this.contributeModal}
           session={session}
