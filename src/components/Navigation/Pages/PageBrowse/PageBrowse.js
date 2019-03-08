@@ -133,8 +133,11 @@ class PageBrowse extends SystemManagedList {
         query.sort = 'releaseDate'
         query.sortDesc = true
         break
+      case 'score':
+        query.sort = 'effectiveScore'
+        query.sortDesc = false
       case 'score-desc':
-        query.sort = 'score'
+        query.sort = 'effectiveScore'
         query.sortDesc = true
         break
       default:
