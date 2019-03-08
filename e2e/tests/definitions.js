@@ -18,16 +18,16 @@ describe(
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}/definitions`, { waitUntil: 'domcontentloaded' })
+      await page.goto(`${__HOST__}/workspace`, { waitUntil: 'domcontentloaded' })
     })
 
     afterAll(() => {
       browser.close()
     })
 
-    it('should display "Available definitions" text on page', async () => {
+    it('should display "Workspace" text on page', async () => {
       await page.waitForSelector('.section-title')
-      await expect(page).toMatch('Available definitions')
+      await expect(page).toMatch('Workspace')
     })
 
     test('user can type a definition text and should display a component in the list', async () => {

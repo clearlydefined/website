@@ -50,17 +50,11 @@ import { CURATION_BODIES } from '../actions/curationActions'
  */
 const initialStateNavigation = [
   {
-    title: 'Definitions',
+    title: 'Workspace',
     to: ROUTE_DEFINITIONS,
     protected: 0,
     isSelected: false
   },
-  /*{
-    title: 'Browse',
-    to: ROUTE_BROWSE,
-    protected: 0,
-    isSelected: false
-  },*/
   {
     title: 'Harvest',
     to: ROUTE_HARVEST,
