@@ -64,7 +64,11 @@ const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence'
 
 const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
 
-const curateFilters = [{ value: 'licensed', label: 'Licensed' }, { value: 'described', label: 'Described' }]
+const curateFilters = [
+  { value: 'effective', label: 'Focus on overall issues' },
+  { value: 'licensed', label: 'Focus on license issues' },
+  { value: 'described', label: 'Focus on description issues' }
+]
 
 const noRowsHeight = 200
 
