@@ -4,8 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { AutoSizer, List, InfiniteLoader } from 'react-virtualized'
-
-const noRowsHeight = 200
+import { noRowsHeight } from '../utils/utils'
 
 export default class InfiniteList extends React.Component {
   static propTypes = {

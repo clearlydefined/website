@@ -66,4 +66,17 @@ const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'abs
 
 const curateFilters = [{ value: 'licensed', label: 'Licensed' }, { value: 'described', label: 'Described' }]
 
-export { setIfValue, difference, customLicenseIds, asObject, sorts, licenses, sources, releaseDates, curateFilters }
+const noRowsHeight = 200
+
+export {
+  asObject,
+  curateFilters,
+  customLicenseIds,
+  difference,
+  licenses,
+  noRowsHeight,
+  releaseDates,
+  setIfValue,
+  sorts,
+  sources
+}
