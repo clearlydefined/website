@@ -44,12 +44,9 @@
 }
 
 .file-list {
-  .ant-table-tbody > tr > td {
-    border-bottom: 0px !important;
-  }
   .ant-table-row-collapsed,
   .ant-table-row-expanded {
-    border: 0px !important;
+    border: 0;
   }
   .ant-table-row-collapsed::after,
   .ant-table-row-expanded::after {
@@ -80,5 +77,13 @@
     transform: scale(0.66666667) rotate(0deg);
   }
 
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    border-bottom: 0;
+    padding: 5px 0;
+  }
+
+  .ant-table-row-expand-icon {
+    background: transparent;
   }
 }
