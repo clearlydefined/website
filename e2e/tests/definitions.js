@@ -34,7 +34,7 @@ describe(
       await page.waitForSelector(definitionsMap.componentSearch.input)
       await expect(page).toMatchElement(definitionsMap.componentSearch.input)
       await expect(page).toClick(definitionsMap.componentSearch.input)
-      await page.type(definitionsMap.componentSearch.input, 'async')
+      await page.type(definitionsMap.componentSearch.input, 'async/2')
       await page.waitFor(2000)
       await expect(page).toMatchElement(definitionsMap.componentSearch.list)
       let element = await page.$(definitionsMap.componentSearch.listElement)
