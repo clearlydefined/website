@@ -210,5 +210,14 @@
   .btn-group-default .btn {
     border: none;
     padding: 6px;
+
+    &:focus,
+    &:hover {
+      background: transparent;
+    }
+  }
+
+  .open > .dropdown-toggle.btn-default {
+    background: transparent;
   }
 }
