@@ -18,7 +18,7 @@ import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { licenses, curateFilters } from '../../../../utils/utils'
+import { curateFilters } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
@@ -74,10 +74,10 @@ class PageBrowse extends SystemManagedList {
     filterOptions.list = names
     return (
       <Row className="show-grid spacer">
-        <Col md={1} mdOffset={1}>
-          {this.renderFilter(curateFilters, 'Curate', 'curate')}
+        <Col md={2} mdOffset={1}>
+          {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
         </Col>
-        <Col md={10}>
+        <Col md={8}>
           <div className={'horizontalBlock'}>
             {this.renderFilter(providers, 'Provider', 'provider')}
             <span>&nbsp;</span>
@@ -132,15 +132,27 @@ class PageBrowse extends SystemManagedList {
     ]
 
     return (
+      // OMG, structural whitespace?!
       <div className="filter-list" align="right">
-        <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
         <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
+        &nbsp;
+        <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
+        &nbsp; &nbsp; &nbsp; &nbsp;
       </div>
     )
   }
 
-  renderFilter(list, title, id) {
-    return <FilterList list={list} title={title} id={id} value={this.state.activeFilters} onFilter={this.onFilter} />
+  renderFilter(list, title, id, variant) {
+    return (
+      <FilterList
+        list={list}
+        title={title}
+        id={id}
+        value={this.state.activeFilters}
+        onFilter={this.onFilter}
+        variant={variant}
+      />
+    )
   }
 
   async updateData(continuationToken) {
@@ -157,6 +169,7 @@ class PageBrowse extends SystemManagedList {
       case 'score':
         query.sort = 'effectiveScore'
         query.sortDesc = false
+        break
       case 'score-desc':
         query.sort = 'effectiveScore'
         query.sortDesc = true

@@ -16,7 +16,6 @@ import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import Curation from '../utils/curation'
-import EntitySpec from '../utils/entitySpec'
 import LicensesRenderer from './LicensesRenderer'
 import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
 
