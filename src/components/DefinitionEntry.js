@@ -17,10 +17,10 @@ import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import Curation from '../utils/curation'
 import EntitySpec from '../utils/entitySpec'
+import { withResize } from '../utils/WindowProvider'
 import LicensesRenderer from './LicensesRenderer'
 import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
-
-export default class DefinitionEntry extends React.Component {
+class DefinitionEntry extends React.Component {
   static propTypes = {
     onChange: PropTypes.func,
     onCurate: PropTypes.func,
@@ -113,7 +113,7 @@ export default class DefinitionEntry extends React.Component {
         &nbsp;&nbsp;
         <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
           <Tag className="cd-badge" color="green">
-            Pending
+            {this.props.isMobile ? 'Pending' : 'Pending curations'}
           </Tag>
         </a>
       </span>
@@ -356,3 +356,5 @@ export default class DefinitionEntry extends React.Component {
     )
   }
 }
+
+export default withResize(DefinitionEntry)
