@@ -101,7 +101,7 @@ export default class DefinitionEntry extends React.Component {
     ) : (
       <span>
         &nbsp;&nbsp;&nbsp;
-        {revision}
+        {revision.slice(0, 7)}
       </span>
     )
     const scoreTag = scores ? (
