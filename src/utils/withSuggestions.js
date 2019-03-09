@@ -39,7 +39,7 @@ function withSuggestions(WrappedComponent) {
 function mapStateToProps(state, props) {
   if (!props.definition) return {}
   const coordinates = EntitySpec.fromCoordinates(props.definition.coordinates).toPath()
-  const suggestion = get(state.suggestion.suggestions.entries, coordinates)
+  const suggestion = get(state.suggestion.bodies.entries, coordinates)
   return {
     suggestedData: suggestion && get(suggestion, props.field)
   }

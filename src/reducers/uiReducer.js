@@ -30,8 +30,7 @@ import {
   UI_INSPECT_GET_DEFINITION,
   UI_INSPECT_GET_HARVESTED,
   UI_GET_CURATIONS_LIST,
-  UI_GET_CURATION_DATA,
-  UI_INSPECT_GET_SUGGESTIONS
+  UI_GET_CURATION_DATA
 } from '../actions/ui'
 import listReducer from './listReducer'
 import tableReducer from './tableReducer'

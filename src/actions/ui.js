@@ -8,7 +8,6 @@ import {
   getDefinitionSuggestionsAction,
   resetPreviewDefinitionAction,
   revertAction,
-  getDefinitionSuggestedDataAction,
   browseDefinitionsAction
 } from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
@@ -24,7 +23,6 @@ export const UI_INSPECT_UPDATE_FILTER = 'UI_INSPECT_UPDATE_FILTER'
 export const UI_INSPECT_GET_CURATIONS = 'UI_INSPECT_GET_CURATIONS'
 export const UI_INSPECT_GET_DEFINITION = 'UI_INSPECT_GET_DEFINITION'
 export const UI_INSPECT_GET_HARVESTED = 'UI_INSPECT_GET_HARVESTED'
-export const UI_INSPECT_GET_SUGGESTIONS = 'UI_INSPECT_GET_SUGGESTIONS'
 
 export const UI_GET_CURATION_DATA = 'UI_GET_CURATION_DATA'
 export const UI_GET_CURATIONS_LIST = 'UI_GET_CURATIONS_LIST'
@@ -176,8 +174,4 @@ export function uiHarvestUpdateFilter(value) {
 
 export function uiHarvestUpdateQueue(value) {
   return { type: UI_HARVEST_UPDATE_QUEUE, result: value }
-}
-
-export function uiInspectGetSuggestions(token, entity) {
-  return getDefinitionSuggestedDataAction(token, entity, UI_INSPECT_GET_SUGGESTIONS)
 }

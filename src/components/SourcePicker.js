@@ -72,15 +72,14 @@ class SourcePicker extends Component {
           <Col md={2}>{this.renderProviderButtons()}</Col>
           <Col md={5}>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</Col>
           <Col md={5}>
-            {selectedComponent &&
-              activeProvider === 'github' && (
-                <GitHubCommitPicker
-                  allowNew
-                  request={selectedComponent}
-                  getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
-                  onChange={this.commitChanged.bind(this, selectedComponent)}
-                />
-              )}
+            {selectedComponent && activeProvider === 'github' && (
+              <GitHubCommitPicker
+                allowNew
+                request={selectedComponent}
+                getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
+                onChange={this.commitChanged.bind(this, selectedComponent)}
+              />
+            )}
           </Col>
         </Row>
         <Row className="spacer">

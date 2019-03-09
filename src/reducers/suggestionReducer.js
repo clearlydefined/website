@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { UI_INSPECT_GET_SUGGESTIONS } from '../actions/ui'
+import { DEFINITION_SUGGESTIONS } from '../actions/definitionActions'
 import tableReducer from './tableReducer'
 
 export default combineReducers({
-  suggestions: tableReducer(UI_INSPECT_GET_SUGGESTIONS)
+  bodies: tableReducer(DEFINITION_SUGGESTIONS)
 })
