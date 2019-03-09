@@ -218,6 +218,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <LicensesRenderer
+                  definition={definition}
                   field={'licensed.declared'}
                   readOnly={readOnly}
                   initialValue={this.getOriginalValue('licensed.declared')}
@@ -235,6 +236,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <ModalEditor
+                  definition={definition}
                   field={'described.sourceLocation'}
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}
