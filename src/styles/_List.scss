@@ -134,7 +134,7 @@
 }
 
 .list-remove {
-  font-size: 2rem;
+  font-size: 1.6rem;
   color: $color_red;
   align-self: center;
   padding-left: 10px;
@@ -156,6 +156,9 @@
 
 .list-fa-button {
   color: #38a038;
+  background: transparent;
+  border: none;
+  padding: 5px 7px;
 }
 
 .list-message {
@@ -195,5 +198,26 @@
   [class*='col-'] {
     padding-right: 0;
     padding-left: 0;
+  }
+}
+
+.filter-list {
+  height: $height-filters-list;
+}
+
+.filter-list,
+.list-filter {
+  .btn-group-default .btn {
+    border: none;
+    padding: 6px;
+
+    &:focus,
+    &:hover {
+      background: transparent;
+    }
+  }
+
+  .open > .dropdown-toggle.btn-default {
+    background: transparent;
   }
 }

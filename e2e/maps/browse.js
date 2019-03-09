@@ -1,15 +1,10 @@
-export const definitionsMap = {
-  componentSearch: {
-    input: '.rbt-input-main',
-    list: '.rbt-menu>li',
-    listElement: '.rbt-menu li:nth-child(1) a'
-  },
+export const browseMap = {
   componentList: {
     list: '.components-list',
     firstElement: 'div:nth-child(0n+1) .component-row'
   },
-  revertButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="revert-button"]',
-  contributeButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="contribute-button"]',
+  revertButton: '[data-test-id="page-browse-buttons-bar"] [data-test-id="revert-button"]',
+  contributeButton: '[data-test-id="page-browse-buttons-bar"] [data-test-id="contribute-button"]',
   contributeSuccess: '[data-test-id="contribution-success"]',
   notification: {
     revertButton: '[data-test-id="notification-revert-confirm"]'
@@ -64,7 +59,7 @@ export const definitionsMap = {
   licensePicker: {
     identifier: '.spdx-picker',
     inputField:
-      '[data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
+      '.spdx-picker [data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
     listSelection: '#rbt-menu-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },

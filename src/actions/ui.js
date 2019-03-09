@@ -7,8 +7,7 @@ import {
   previewDefinitionAction,
   getDefinitionSuggestionsAction,
   resetPreviewDefinitionAction,
-  revertDefinitionAction,
-  getDefinitionSuggestedDataAction,
+  revertAction,
   browseDefinitionsAction
 } from './definitionActions'
 import { getHarvestOutputAction } from './harvestActions'
@@ -24,7 +23,6 @@ export const UI_INSPECT_UPDATE_FILTER = 'UI_INSPECT_UPDATE_FILTER'
 export const UI_INSPECT_GET_CURATIONS = 'UI_INSPECT_GET_CURATIONS'
 export const UI_INSPECT_GET_DEFINITION = 'UI_INSPECT_GET_DEFINITION'
 export const UI_INSPECT_GET_HARVESTED = 'UI_INSPECT_GET_HARVESTED'
-export const UI_INSPECT_GET_SUGGESTIONS = 'UI_INSPECT_GET_SUGGESTIONS'
 
 export const UI_GET_CURATION_DATA = 'UI_GET_CURATION_DATA'
 export const UI_GET_CURATIONS_LIST = 'UI_GET_CURATIONS_LIST'
@@ -50,6 +48,7 @@ export const UI_DEFINITIONS_UPDATE_LIST = 'UI_DEFINITIONS_UPDATE_LIST'
 export const UI_BROWSE_UPDATE_FILTER = 'UI_BROWSE_UPDATE_FILTER'
 export const UI_BROWSE_UPDATE_FILTER_LIST = 'UI_BROWSE_UPDATE_FILTER_LIST'
 export const UI_BROWSE_UPDATE_LIST = 'UI_BROWSE_UPDATE_LIST'
+export const UI_BROWSE_REVERT = 'UI_BROWSE_REVERT'
 
 export const UI_HARVEST_UPDATE_FILTER = 'UI_HARVEST_UPDATE_FILTER'
 export const UI_HARVEST_UPDATE_QUEUE = 'UI_HARVEST_UPDATE_QUEUE'
@@ -145,8 +144,8 @@ export function uiCurateResetDefinitionPreview(token, entity) {
   return resetPreviewDefinitionAction(token, entity, UI_CURATE_DEFINITION_PREVIEW)
 }
 
-export function uiRevertDefinition(definition, values) {
-  return revertDefinitionAction(definition, values, UI_DEFINITION_REVERT)
+export function uiRevert(definition, values, store) {
+  return revertAction(definition, values, store === 'browse' ? UI_BROWSE_REVERT : UI_DEFINITION_REVERT)
 }
 
 export function uiBrowseGet(token, query) {
@@ -175,8 +174,4 @@ export function uiHarvestUpdateFilter(value) {
 
 export function uiHarvestUpdateQueue(value) {
   return { type: UI_HARVEST_UPDATE_QUEUE, result: value }
-}
-
-export function uiInspectGetSuggestions(token, entity) {
-  return getDefinitionSuggestedDataAction(token, entity, UI_INSPECT_GET_SUGGESTIONS)
 }

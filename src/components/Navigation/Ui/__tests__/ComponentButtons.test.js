@@ -54,7 +54,23 @@ describe('ComponentButtons', () => {
       />
     )
   })
+
   it('renders all the buttons', async () => {
+    const wrapper = mount(
+      <ComponentButtons
+        definition={mockedDefinition}
+        currentComponent={mockedComponent}
+        readOnly={false}
+        hasChange={() => null}
+        onAddComponent={() => null}
+        onRemove={() => null}
+      />
+    )
+    expect(wrapper.find(ButtonGroup))
+    expect(wrapper.find(Button).length).toBe(6)
+  })
+
+  it('renders some of the buttons', async () => {
     const wrapper = mount(
       <ComponentButtons
         definition={mockedDefinition}
@@ -64,8 +80,9 @@ describe('ComponentButtons', () => {
       />
     )
     expect(wrapper.find(ButtonGroup))
-    expect(wrapper.find(Button).length).toBe(6)
+    expect(wrapper.find(Button).length).toBe(4)
   })
+
   it('check functionality of each button', async () => {
     const wrapper = mount(
       <ComponentButtons

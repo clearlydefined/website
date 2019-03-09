@@ -12,7 +12,6 @@ export default class ComponentList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     listLength: PropTypes.number,
-    listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
@@ -90,8 +89,7 @@ export default class ComponentList extends React.Component {
     } = this.props
     const component = list[index]
     if (!component) return
-    let definition = this.getDefinition(component)
-    definition = definition || { coordinates: component }
+    const definition = this.getDefinition(component) || { coordinates: component }
     let curation = this.getCuration(component)
     curation = curation || { contributions: [], curations: {} }
     return (
@@ -100,6 +98,7 @@ export default class ComponentList extends React.Component {
           draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
+          curation={curation}
           definition={definition}
           component={component}
           onChange={this.onEntryChange}
@@ -107,7 +106,6 @@ export default class ComponentList extends React.Component {
           classOnDifference="bg-info"
           renderButtons={() => (
             <ComponentButtons
-              curation={curation}
               definition={definition}
               currentComponent={component}
               hasChange={hasChange}
@@ -128,16 +126,15 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, listLength, renderFilterBar } = this.props
+    const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div>
+      <div className="flex-grow">
         {renderFilterBar()}
         <RowEntityList
           list={list}
           listLength={listLength}
           loadMoreRows={loadMoreRows}
-          listHeight={listHeight}
           rowRenderer={this.renderRow}
           rowHeight={this.rowHeight}
           noRowsRenderer={noRowsRenderer}

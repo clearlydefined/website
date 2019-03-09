@@ -44,51 +44,36 @@
 }
 
 .file-list {
-  .ant-table-tbody > tr > td {
-    border-bottom: 0px !important;
-  }
   .ant-table-row-collapsed,
   .ant-table-row-expanded {
-    border: 0px !important;
+    border: 0;
   }
-  .ant-table-row-collapsed::after {
-    content: '' !important;
-    font-family: 'anticon' !important;
-    font-style: normal;
-    vertical-align: baseline;
-    text-align: center;
-    text-transform: none;
-    text-rendering: auto;
-
-    right: 16px;
-    top: 0;
-    display: inline-block;
-    transform: scale(0.66666667) rotate(-90deg);
-    transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    zoom: 1;
-
-    border-top: 10px solid black;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-  }
+  .ant-table-row-collapsed::after,
   .ant-table-row-expanded::after {
-    content: '' !important;
-    font-family: 'anticon' !important;
-    font-style: normal;
-    vertical-align: baseline;
-    text-align: center;
-    text-transform: none;
-    text-rendering: auto;
-
-    right: 16px;
-    top: 0;
+    content: '';
     display: inline-block;
-    transform: scale(0.66666667) rotate(0deg);
     transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    zoom: 1;
 
-    border-top: 10px solid black;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
+    border-top: 8px solid black;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+  }
+
+  .ant-table-row-collapsed::after {
+    transform: scale(0.66666667) rotate(-90deg);
+  }
+
+  .ant-table-row-expanded::after {
+    transform: scale(0.66666667) rotate(0deg);
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    border-bottom: 0;
+    padding: 5px 0;
+  }
+
+  .ant-table-row-expand-icon {
+    background: transparent;
   }
 }

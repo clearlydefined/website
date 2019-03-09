@@ -74,6 +74,10 @@ function normalize(value, provider, property) {
 }
 
 export default class EntitySpec {
+  static isPath(path) {
+    return path.match(/\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/)
+  }
+
   static fromPath(path) {
     const [, type, provider, namespace, name, revision, prSpec] = path.match(
       /\/*([^/]+)\/([^/]+)\/([^/]+)\/([^/]+)\/?([^/]+)?(\/pr\/.+)?/
@@ -138,50 +142,5 @@ export default class EntitySpec {
 
   toString() {
     return this.toPath()
-  }
-
-  static getComponentUrl(coordinates) {
-    switch (coordinates.provider) {
-      case 'github':
-        return `https://github.com/${coordinates.namespace}/${coordinates.name}`
-      case 'npmjs':
-        return `https://npmjs.com/package/${
-          coordinates.namespace ? coordinates.namespace + '/' + coordinates.name : coordinates.name
-        }`
-      case 'nuget':
-        return `https://nuget.org/packages/${coordinates.name}`
-      case 'cratesio':
-        return `https://crates.io/crates/${coordinates.name}`
-      case 'mavencentral':
-        return `https://mvnrepository.com/artifact/${coordinates.namespace}/${coordinates.name}`
-      case 'pypi':
-        return `https://pypi.org/project/${coordinates.name}`
-      case 'rubygems':
-        return `https://rubygems.org/gems/${coordinates.name}`
-      default:
-        return
-    }
-  }
-
-  static getRevisionUrl(coordinates) {
-    if (!coordinates.revision) return
-    switch (coordinates.provider) {
-      case 'github':
-        return `${this.getComponentUrl(coordinates)}/tree/${coordinates.revision}`
-      case 'npmjs':
-        return `${this.getComponentUrl(coordinates)}/v/${coordinates.revision}`
-      case 'nuget':
-        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
-      case 'cratesio':
-        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
-      case 'mavencentral':
-        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
-      case 'pypi':
-        return `${this.getComponentUrl(coordinates)}/${coordinates.revision}`
-      case 'rubygems':
-        return `${this.getComponentUrl(coordinates)}/versions/${coordinates.revision}`
-      default:
-        return
-    }
   }
 }

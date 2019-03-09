@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Tag } from 'antd'
 import { get } from 'lodash'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import { Menu, Dropdown, Icon } from 'antd'
 import { CopyUrlButton } from '../../'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
-import Curation from '../../../utils/curation'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import ButtonWithTooltip from './ButtonWithTooltip'
-import ScoreRenderer from './ScoreRenderer'
 
 export default class ComponentButtons extends Component {
   static propTypes = {
@@ -60,35 +57,33 @@ export default class ComponentButtons extends Component {
   }
 
   render() {
-    const { definition, curation, currentComponent, readOnly, hasChange, hideVersionSelector } = this.props
+    const {
+      definition,
+      currentComponent,
+      readOnly,
+      hasChange,
+      hideVersionSelector,
+      onRemove,
+      onAddComponent
+    } = this.props
     const component = EntitySpec.fromCoordinates(currentComponent)
     const isSourceComponent = this.isSourceComponent(component)
-    const scores = Definition.computeScores(definition)
     const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
     const isSourceEmpty = Definition.isSourceEmpty(definition)
-    const isCurationPending = Curation.isPending(curation)
 
     return (
       <div className="list-activity-area">
-        {isCurationPending && (
-          <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
-            <Tag color="green">Pending curations</Tag>
-          </a>
-        )}
-        {scores && <ScoreRenderer scores={scores} definition={definition} />}
         <ButtonGroup>
-          {!isSourceComponent &&
-            !readOnly &&
-            !isSourceEmpty && (
-              <ButtonWithTooltip
-                name="addSourceComponent"
-                tip={'Add the definition for source that matches this package'}
-              >
-                <Button className="list-fa-button" onClick={this.addSourceForComponent.bind(this, component)}>
-                  <i className="fas fa-code" />
-                </Button>
-              </ButtonWithTooltip>
-            )}
+          {onAddComponent && !isSourceComponent && !readOnly && !isSourceEmpty && (
+            <ButtonWithTooltip
+              name="addSourceComponent"
+              tip={'Add the definition for source that matches this package'}
+            >
+              <Button className="list-fa-button" onClick={this.addSourceForComponent.bind(this, component)}>
+                <i className="fas fa-code" />
+              </Button>
+            </ButtonWithTooltip>
+          )}
           {!isDefinitionEmpty && (
             <ButtonWithTooltip tip={'Dig into this definition'}>
               <Button
@@ -134,20 +129,19 @@ export default class ComponentButtons extends Component {
               </div>
             </ButtonWithTooltip>
           )}
-          {!readOnly &&
-            !isDefinitionEmpty && (
-              <ButtonWithTooltip tip={'Revert Changes of this Definition'}>
-                <Button
-                  className="list-fa-button"
-                  onClick={() => this.revertComponent(component)}
-                  disabled={!hasChange(component)}
-                >
-                  <i className="fas fa-undo" />
-                </Button>
-              </ButtonWithTooltip>
-            )}
+          {!readOnly && !isDefinitionEmpty && (
+            <ButtonWithTooltip tip={'Revert Changes of this Definition'}>
+              <Button
+                className="list-fa-button"
+                onClick={() => this.revertComponent(component)}
+                disabled={!hasChange(component)}
+              >
+                <i className="fas fa-undo" />
+              </Button>
+            </ButtonWithTooltip>
+          )}
         </ButtonGroup>
-        {!readOnly && (
+        {onRemove && !readOnly && (
           <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
             <i className="fas fa-times list-remove" />
           </Button>

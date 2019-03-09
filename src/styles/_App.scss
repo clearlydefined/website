@@ -10,7 +10,13 @@
 }
 
 .App-content {
-  flex: 1;
+  .cd-badge {
+    font-size: 12px;
+    font-weight: normal;
+    height: 20px;
+    line-height: 0.1;
+    padding: 8px 4px 1px 4px;
+  }
 }
 
 .App-logo {
@@ -22,6 +28,8 @@
 }
 
 .main-container {
+  height: 100%;
+
   h1 {
     font-size: $size-text-banner;
     text-align: center;
@@ -51,7 +59,7 @@
   }
 
   .neighborhood-row {
-    padding-top: 80px;
+    padding-top: 60px;
     display: flex;
     min-height: 150px;
   }
@@ -89,28 +97,10 @@
     margin-right: auto;
     margin-left: auto;
   }
-
-  .about-text {
-    font-size: 1.25em;
-
-    ul {
-      padding-left: 30px;
-    }
-  }
-
-  .landing-large-logo {
-    width: 500px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-
-    @media (max-width: 768px) {
-      width: 100%;
-    }
-  }
 }
 
 .about-container {
+  font-size: 1.25em;
   @media (max-width: 768px) {
     margin-top: -80px;
   }
@@ -146,11 +136,11 @@
 }
 
 .section-body {
-  border: 1px;
-  border-style: solid;
-  border-color: lightgray;
-  min-height: 200px;
+  border: 1px solid lightgray;
   box-shadow: 5px 5px 20px -10px lightgrey;
+  display: flex;
+  min-height: 200px;
+  padding-bottom: $height-filters-list;
 
   .fa-spinner {
     display: none;
@@ -176,6 +166,16 @@
   }
 }
 
+.flex-grow {
+  flex: 1;
+}
+
+.flex-grow-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
 .section-header {
   padding-top: 30px;
   padding-bottom: 7px;
@@ -186,6 +186,11 @@
 
 .section-title {
   font-size: 2em;
+
+  .cd-badge {
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
 }
 
 .editable-field {
@@ -274,6 +279,10 @@
 
 .tooltipWrapper [disabled] {
   pointer-events: none;
+}
+
+.section-button {
+  text-align: right;
 }
 
 hr {

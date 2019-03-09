@@ -15,8 +15,7 @@ export default class ButtonsBar extends Component {
     doPromptContribute: PropTypes.func,
     shareUrl: PropTypes.func,
     shareFile: PropTypes.func,
-    shareNotice: PropTypes.func,
-    shareGist: PropTypes.func
+    shareNotice: PropTypes.func
   }
 
   onSelect = type => {
@@ -27,8 +26,6 @@ export default class ButtonsBar extends Component {
         return this.props.shareFile()
       case 'notice':
         return this.props.shareNotice()
-      case 'gist':
-        return this.props.shareGist()
       default:
         break
     }
@@ -39,7 +36,7 @@ export default class ButtonsBar extends Component {
     return (
       <div className="text-right" data-test-id="page-definition-buttons-bar">
         <ButtonWithTooltip tip="Revert all changes of all the definitions">
-          <Button bsStyle="danger" disabled={hasChanges} onClick={revertAll}>
+          <Button bsStyle="danger" disabled={hasChanges} onClick={revertAll} data-test-id="revert-button">
             <i className="fas fa-undo" />
             <span>&nbsp;Revert Changes</span>
           </Button>
