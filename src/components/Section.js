@@ -10,7 +10,7 @@ export default class Section extends Component {
     actionButton: PropTypes.element,
     children: PropTypes.element,
     className: PropTypes.string,
-    name: PropTypes.oneOf([PropTypes.element, PropTypes.string])
+    name: PropTypes.oneOfType([PropTypes.element, PropTypes.string])
   }
 
   render() {

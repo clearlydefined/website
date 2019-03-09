@@ -7,7 +7,7 @@ import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import classNames from 'classnames'
-import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
+import { ROUTE_ROOT } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
 import { uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
 import SystemManagedList from '../../../SystemManagedList'
@@ -38,7 +38,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   componentDidMount() {
-    this.props.dispatch(uiNavigation({ to: ROUTE_BROWSE }))
+    this.props.dispatch(uiNavigation({ to: ROUTE_ROOT }))
     this.updateData()
   }
 
@@ -52,7 +52,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   tableTitle() {
-    return 'Browse Definitions'
+    return 'Browse'
   }
 
   renderTopFilters() {
@@ -214,39 +214,37 @@ class PageBrowse extends SystemManagedList {
         />
         {this.renderTopFilters()}
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
-          {
-            <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
-              <i className="fas fa-spinner fa-spin" />
-              <ComponentList
-                readOnly={false}
-                list={components.transformedList}
-                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                loadMoreRows={this.loadMoreRows}
-                onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
-                onChange={this.onChangeComponent}
-                onInspect={this.onInspect}
-                renderFilterBar={this.renderFilterBar}
-                curations={curations}
-                definitions={definitions}
-                noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
-                sequence={sequence}
-                hasChange={this.hasChange}
-                hideVersionSelector
-              />
-            </div>
-          }
-          {currentDefinition && (
-            <FullDetailPage
-              modalView
-              visible={showFullDetail}
-              onClose={this.onInspectClose}
-              onSave={this.onChangeComponent}
-              path={path}
-              currentDefinition={currentDefinition}
-              component={currentComponent}
+          <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
+            <i className="fas fa-spinner fa-spin" />
+            <ComponentList
               readOnly={false}
+              list={components.transformedList}
+              listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+              loadMoreRows={this.loadMoreRows}
+              onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
+              onChange={this.onChangeComponent}
+              onInspect={this.onInspect}
+              renderFilterBar={this.renderFilterBar}
+              curations={curations}
+              definitions={definitions}
+              noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
+              sequence={sequence}
+              hasChange={this.hasChange}
+              hideVersionSelector
             />
-          )}
+            {currentDefinition && (
+              <FullDetailPage
+                modalView
+                visible={showFullDetail}
+                onClose={this.onInspectClose}
+                onSave={this.onChangeComponent}
+                path={path}
+                currentDefinition={currentDefinition}
+                component={currentComponent}
+                readOnly={false}
+              />
+            )}
+          </div>
         </Section>
       </Grid>
     )

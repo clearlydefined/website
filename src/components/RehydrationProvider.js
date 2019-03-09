@@ -7,19 +7,19 @@ import { persistStore, createTransform } from 'redux-persist'
 import {
   ROUTE_ROOT,
   ROUTE_DEFINITIONS,
+  ROUTE_WORKSPACE,
   ROUTE_HARVEST,
   ROUTE_CURATIONS,
   ROUTE_ABOUT,
   ROUTE_DISCORD,
   ROUTE_SHARE,
-  ROUTE_BROWSE,
   ROUTE_STATS,
   ROUTE_STATUS
 } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { App, PageLanding, PageHarvest } from './'
+import { App, PageHarvest } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import PageContribution from './Navigation/Pages/PageContribution'
@@ -58,17 +58,16 @@ export default class RehydrationDelayedProvider extends Component {
         <Router>
           <App className="App">
             <Switch>
-              <Route path={ROUTE_DEFINITIONS} exact={true} component={withTracker(PageDefinitions)} />
+              <Route path={ROUTE_WORKSPACE} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
               <Route path={ROUTE_SHARE} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_CURATIONS} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
-              <Route path={ROUTE_BROWSE} component={withTracker(PageBrowse)} />
               <Route path={ROUTE_STATS} component={withTracker(PageStats)} />
               <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
-              <Route path={ROUTE_ROOT} component={withTracker(PageLanding)} />
+              <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
             </Switch>
           </App>
         </Router>
