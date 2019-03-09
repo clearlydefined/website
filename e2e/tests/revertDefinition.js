@@ -18,7 +18,7 @@ describe(
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}/definitions`, { waitUntil: 'domcontentloaded' })
+      await page.goto(`${__HOST__}/workspace`, { waitUntil: 'domcontentloaded' })
     })
 
     afterAll(() => {
@@ -29,7 +29,7 @@ describe(
       await page.waitForSelector(definitionsMap.componentSearch.input)
       await expect(page).toMatchElement(definitionsMap.componentSearch.input)
       await expect(page).toClick(definitionsMap.componentSearch.input)
-      await page.type(definitionsMap.componentSearch.input, 'async')
+      await page.type(definitionsMap.componentSearch.input, 'async/2.6.1')
       await page.waitFor(4000)
       await expect(page).toMatchElement(definitionsMap.componentSearch.list, { timeout: 30000 })
       let element = await page.$(definitionsMap.componentSearch.listElement)

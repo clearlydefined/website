@@ -9,7 +9,7 @@ import base64js from 'base64-js'
 import notification from 'antd/lib/notification'
 import get from 'lodash/get'
 import { uiDefinitionsUpdateList, uiNavigation, uiWarning } from '../../../../actions/ui'
-import { ROUTE_DEFINITIONS } from '../../../../utils/routingConstants'
+import { ROUTE_WORKSPACE } from '../../../../utils/routingConstants'
 import NotificationButtons from '../../Ui/NotificationButtons'
 import SearchBar from '../../Ui/SearchBar'
 import { ComponentList, Section, ContributePrompt } from '../../../'
@@ -43,7 +43,7 @@ export class PageDefinitions extends UserManagedList {
         uiWarning(dispatch, 'Loading components from URL failed')
       }
     }
-    dispatch(uiNavigation({ to: ROUTE_DEFINITIONS }))
+    dispatch(uiNavigation({ to: ROUTE_WORKSPACE }))
   }
 
   tableTitle() {

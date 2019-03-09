@@ -7,6 +7,7 @@ import { persistStore, createTransform } from 'redux-persist'
 import {
   ROUTE_ROOT,
   ROUTE_DEFINITIONS,
+  ROUTE_WORKSPACE,
   ROUTE_HARVEST,
   ROUTE_CURATIONS,
   ROUTE_ABOUT,
@@ -57,7 +58,7 @@ export default class RehydrationDelayedProvider extends Component {
         <Router>
           <App className="App">
             <Switch>
-              <Route path={ROUTE_DEFINITIONS} exact={true} component={withTracker(PageDefinitions)} />
+              <Route path={ROUTE_WORKSPACE} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
               <Route path={ROUTE_SHARE} component={withTracker(PageDefinitions)} />
               <Route path={ROUTE_CURATIONS} component={withTracker(PageContribution)} />

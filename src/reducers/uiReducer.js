@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { ROUTE_DEFINITIONS, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
+import { ROUTE_WORKSPACE, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
 import {
   UI_NAVIGATION,
   UI_NOTIFICATION_NEW,
@@ -51,7 +51,7 @@ import { CURATION_BODIES } from '../actions/curationActions'
 const initialStateNavigation = [
   {
     title: 'Workspace',
-    to: ROUTE_DEFINITIONS,
+    to: ROUTE_WORKSPACE,
     protected: 0,
     isSelected: false
   },
