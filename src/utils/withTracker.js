@@ -7,11 +7,13 @@ import ReactGA from 'react-ga'
 
 export default function withTracker(WrappedComponent, options = {}) {
   const trackPage = page => {
-    ReactGA.set({
-      page,
-      ...options
-    })
-    ReactGA.pageview(page)
+    if (process.env['REACT_APP_GA_TRACKINGID']) {
+      ReactGA.set({
+        page,
+        ...options
+      })
+      ReactGA.pageview(page)
+    }
   }
 
   const HOC = class extends Component {
