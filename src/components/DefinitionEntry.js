@@ -18,6 +18,8 @@ import Definition from '../utils/definition'
 import Curation from '../utils/curation'
 import LicensesRenderer from './LicensesRenderer'
 import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
+import DefinitionTitle from './Navigation/Ui/DefinitionTitle'
+import DefinitionRevision from './Navigation/Ui/DefinitionRevision'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -69,41 +71,8 @@ export default class DefinitionEntry extends React.Component {
   }
 
   renderHeadline(definition, curation) {
-    const { namespace, name, revision } = definition.coordinates
-    const namespaceText = namespace ? namespace + '/' : ''
     const scores = Definition.computeScores(definition)
     const isCurationPending = Curation.isPending(curation)
-    const componentTag = get(definition, 'described.urls.registry') ? (
-      <span>
-        <a
-          href={get(definition, 'described.urls.registry')}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-test-id="component-name"
-        >
-          {namespaceText}
-          {name}
-        </a>
-      </span>
-    ) : (
-      <span>
-        {namespaceText}
-        {name}
-      </span>
-    )
-    const revisionTag = get(definition, 'described.urls.version') ? (
-      <span>
-        &nbsp;&nbsp;&nbsp;
-        <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
-          {revision.slice(0, 7)}
-        </a>
-      </span>
-    ) : (
-      <span>
-        &nbsp;&nbsp;&nbsp;
-        {revision.slice(0, 7)}
-      </span>
-    )
     const scoreTag = scores ? (
       <span>
         &nbsp;&nbsp;&nbsp;
@@ -122,8 +91,8 @@ export default class DefinitionEntry extends React.Component {
     ) : null
     return (
       <span>
-        {componentTag}
-        {revisionTag}
+        <DefinitionTitle definition={definition} />
+        <DefinitionRevision definition={definition} />
         {scoreTag}
         {curationTag}
       </span>
