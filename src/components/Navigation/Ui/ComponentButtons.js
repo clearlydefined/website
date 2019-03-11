@@ -12,7 +12,7 @@ import ButtonWithTooltip from './ButtonWithTooltip'
 
 class ComponentButtons extends Component {
   static propTypes = {
-    definitions: PropTypes.object,
+    definition: PropTypes.object,
     currentComponent: PropTypes.object,
     readOnly: PropTypes.bool,
     hasChange: PropTypes.func,
