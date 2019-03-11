@@ -10,11 +10,12 @@ class Section extends Component {
   static propTypes = {
     actionButton: PropTypes.element,
     children: PropTypes.element,
-    name: PropTypes.string
+    className: PropTypes.string,
+    name: PropTypes.oneOfType([PropTypes.element, PropTypes.string])
   }
 
   render() {
-    const { name, actionButton, children, isMobile } = this.props
+    const { name, className, actionButton, children, isMobile } = this.props
     return (
       <div className={className}>
         {isMobile ? (

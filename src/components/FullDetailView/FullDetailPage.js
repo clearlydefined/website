@@ -14,18 +14,16 @@ import {
   uiInspectGetDefinition,
   uiInspectGetCurations,
   uiInspectGetHarvested,
-  uiNavigation,
   uiCurateGetDefinitionPreview,
   uiCurateResetDefinitionPreview,
   uiGetCurationsList,
   uiRevert,
   uiApplyCurationSuggestion,
-  uiGetCurationData,
-  uiInspectGetSuggestions
+  uiGetCurationData
 } from '../../actions/ui'
+import { getDefinitionSuggestedDataAction } from '../../actions/definitionActions'
 import { curateAction } from '../../actions/curationActions'
 import { login } from '../../actions/sessionActions'
-import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
@@ -74,13 +72,12 @@ export class FullDetailPage extends AbstractFullDetailsView {
   }
 
   componentDidMount() {
-    const { uiNavigation, component } = this.props
+    const { component } = this.props
     if (component.changes) {
       this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
     } else {
       this.handleNewSpec(component)
     }
-    uiNavigation({ to: ROUTE_DEFINITIONS })
   }
 
   // Get the data for the current definition
@@ -90,13 +87,13 @@ export class FullDetailPage extends AbstractFullDetailsView {
       uiInspectGetDefinition,
       uiInspectGetCurations,
       uiInspectGetHarvested,
-      uiInspectGetSuggestions
+      getDefinitionSuggestedDataAction
     } = this.props
     if (!component) return
     uiInspectGetDefinition(token, component)
     uiInspectGetCurations(token, component)
     uiInspectGetHarvested(token, component)
-    uiInspectGetSuggestions(token, component)
+    getDefinitionSuggestedDataAction(token, component)
     //uiGetCurationsList(token, component)
     this.previewDefinition(component)
   }
@@ -288,14 +285,13 @@ function mapDispatchToProps(dispatch) {
       uiInspectGetCurations,
       uiInspectGetHarvested,
       uiGetCurationsList,
-      uiNavigation,
       curateAction,
       uiCurateGetDefinitionPreview,
       uiCurateResetDefinitionPreview,
       uiRevert,
       uiApplyCurationSuggestion,
       uiGetCurationData,
-      uiInspectGetSuggestions
+      getDefinitionSuggestedDataAction
     },
     dispatch
   )

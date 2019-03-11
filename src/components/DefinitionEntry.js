@@ -16,10 +16,10 @@ import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import Curation from '../utils/curation'
-import EntitySpec from '../utils/entitySpec'
 import { withResize } from '../utils/WindowProvider'
 import LicensesRenderer from './LicensesRenderer'
 import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
+
 class DefinitionEntry extends React.Component {
   static propTypes = {
     onChange: PropTypes.func,
@@ -71,14 +71,17 @@ class DefinitionEntry extends React.Component {
 
   renderHeadline(definition, curation) {
     const { namespace, name, revision } = definition.coordinates
-    const componentUrl = EntitySpec.getComponentUrl(definition.coordinates)
-    const revisionUrl = EntitySpec.getRevisionUrl(definition.coordinates)
     const namespaceText = namespace ? namespace + '/' : ''
     const scores = Definition.computeScores(definition)
     const isCurationPending = Curation.isPending(curation)
-    const componentTag = componentUrl ? (
+    const componentTag = get(definition, 'described.urls.registry') ? (
       <span>
-        <a href={componentUrl} target="_blank" rel="noopener noreferrer" data-test-id="component-name">
+        <a
+          href={get(definition, 'described.urls.registry')}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-test-id="component-name"
+        >
           {namespaceText}
           {name}
         </a>
@@ -89,17 +92,17 @@ class DefinitionEntry extends React.Component {
         {name}
       </span>
     )
-    const revisionTag = revisionUrl ? (
+    const revisionTag = get(definition, 'described.urls.version') ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={revisionUrl} target="_blank" rel="noopener noreferrer">
+        <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
           {revision.slice(0, 7)}
         </a>
       </span>
     ) : (
       <span>
         &nbsp;&nbsp;&nbsp;
-        {revision}
+        {revision.slice(0, 7)}
       </span>
     )
     const scoreTag = scores ? (
@@ -216,6 +219,7 @@ class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <LicensesRenderer
+                  definition={definition}
                   field={'licensed.declared'}
                   readOnly={readOnly}
                   initialValue={this.getOriginalValue('licensed.declared')}
@@ -233,6 +237,7 @@ class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <ModalEditor
+                  definition={definition}
                   field={'described.sourceLocation'}
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}

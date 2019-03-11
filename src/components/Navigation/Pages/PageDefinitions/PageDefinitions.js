@@ -9,7 +9,7 @@ import base64js from 'base64-js'
 import notification from 'antd/lib/notification'
 import get from 'lodash/get'
 import { uiDefinitionsUpdateList, uiNavigation, uiWarning } from '../../../../actions/ui'
-import { ROUTE_DEFINITIONS } from '../../../../utils/routingConstants'
+import { ROUTE_WORKSPACE } from '../../../../utils/routingConstants'
 import NotificationButtons from '../../Ui/NotificationButtons'
 import SearchBar from '../../Ui/SearchBar'
 import { ComponentList, Section, ContributePrompt } from '../../../'
@@ -43,11 +43,11 @@ export class PageDefinitions extends UserManagedList {
         uiWarning(dispatch, 'Loading components from URL failed')
       }
     }
-    dispatch(uiNavigation({ to: ROUTE_DEFINITIONS }))
+    dispatch(uiNavigation({ to: ROUTE_WORKSPACE }))
   }
 
   tableTitle() {
-    return 'Available definitions'
+    return 'Workspace'
   }
 
   doRefreshAll = () => {
@@ -113,17 +113,18 @@ export class PageDefinitions extends UserManagedList {
     return (
       <div className="list-noRows">
         <div>
-          <p>Search for components in the above search bar or drag and drop...</p>
+          <p>Build your own workspace of components by searching for them in above or drag and drop a...</p>
           <ul>
-            <li>the URL for a component version/commit from nuget.org, github.com, npmjs.com, ... </li>
+            <li>URL for a component version/commit from nuget.org, github.com, npmjs.com, ... </li>
             <li>
-              the URL for curation PR from{' '}
+              URL for curation PR from{' '}
               <a href="https://github.com/clearlydefined/curated-data">
                 https://github.com/clearlydefined/curated-data
               </a>
               , ...{' '}
             </li>
-            <li>a saved ClearlyDefined component list, package-lock.json, project-log.json, ... </li>
+            <li>package manager list like package-lock.json, project-log.json, ... </li>
+            <li>workspace shared using the "Share" feature in ClearlyDefined </li>
           </ul>
         </div>
       </div>
@@ -151,7 +152,7 @@ export class PageDefinitions extends UserManagedList {
     const { components, curations, definitions, session, filterOptions } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition, showSavePopup, saveType } = this.state
     return (
-      <Grid className="main-container">
+      <Grid className="main-container flex-column">
         <ContributePrompt
           ref={this.contributeModal}
           session={session}
@@ -159,28 +160,30 @@ export class PageDefinitions extends UserManagedList {
           actionHandler={this.doContribute}
         />
         <SearchBar filterOptions={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} />
-        <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
+        <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <DropComponent onLoad={this.loadComponentList} onAddComponent={this.onAddComponent}>
-              <div className="section-body flex-grow">
-                <ComponentList
-                  readOnly={this.readOnly}
-                  list={components.transformedList}
-                  listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                  onRemove={this.onRemoveComponent}
-                  onRevert={this.revertDefinition}
-                  onChange={this.onChangeComponent}
-                  onAddComponent={this.onAddComponent}
-                  onInspect={this.onInspect}
-                  renderFilterBar={this.renderFilterBar}
-                  curations={curations}
-                  definitions={definitions}
-                  noRowsRenderer={this.noRowsRenderer}
-                  sequence={sequence}
-                  hasChange={this.hasChange}
-                  showVersionSelectorPopup={this.showVersionSelectorPopup}
-                />
-              </div>
+            <DropComponent
+              className="section-body flex-grow"
+              onLoad={this.loadComponentList}
+              onAddComponent={this.onAddComponent}
+            >
+              <ComponentList
+                readOnly={this.readOnly}
+                list={components.transformedList}
+                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+                onRemove={this.onRemoveComponent}
+                onRevert={this.revertDefinition}
+                onChange={this.onChangeComponent}
+                onAddComponent={this.onAddComponent}
+                onInspect={this.onInspect}
+                renderFilterBar={this.renderFilterBar}
+                curations={curations}
+                definitions={definitions}
+                noRowsRenderer={this.noRowsRenderer}
+                sequence={sequence}
+                hasChange={this.hasChange}
+                showVersionSelectorPopup={this.showVersionSelectorPopup}
+              />
             </DropComponent>
           }
         </Section>

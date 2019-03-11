@@ -97,29 +97,10 @@
     margin-right: auto;
     margin-left: auto;
   }
-
-  .about-text {
-    font-size: 1.75em;
-
-    ul {
-      padding-left: 30px;
-    }
-  }
-
-  .landing-large-logo {
-    width: 500px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-
-    @media (max-width: 768px) {
-      width: 100%;
-    }
-  }
 }
 
 .about-container {
-  font-size: 1.5em;
+  font-size: 1.25em;
   @media (max-width: 768px) {
     margin-top: -80px;
   }
@@ -363,6 +344,10 @@
 
 .tooltipWrapper [disabled] {
   pointer-events: none;
+}
+
+.section-button {
+  text-align: right;
 }
 
 hr {

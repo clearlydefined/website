@@ -14,13 +14,13 @@ describe('InlineEditor', () => {
           filter: {},
           filterList: {},
           componentList: {}
-        },
-        inspect: {
-          suggestedData: {}
         }
       },
       definition: {
         bodies: {}
+      },
+      suggestion: {
+        suggestions: {}
       }
     })
 

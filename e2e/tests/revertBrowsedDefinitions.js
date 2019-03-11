@@ -11,14 +11,14 @@ let browser
 let page
 
 describe(
-  'Revert changes on Definitions page',
+  'Revert changes on Browse page',
   () => {
     beforeAll(async () => {
       jest.setTimeout(defaultTimeout)
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}/browse`, { waitUntil: 'domcontentloaded' })
+      await page.goto(`${__HOST__}`, { waitUntil: 'domcontentloaded' })
     })
 
     afterAll(() => {

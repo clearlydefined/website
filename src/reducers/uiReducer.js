@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { ROUTE_DEFINITIONS, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
+import { ROUTE_WORKSPACE, ROUTE_HARVEST, ROUTE_ABOUT } from '../utils/routingConstants'
 import {
   UI_NAVIGATION,
   UI_NOTIFICATION_NEW,
@@ -30,8 +30,7 @@ import {
   UI_INSPECT_GET_DEFINITION,
   UI_INSPECT_GET_HARVESTED,
   UI_GET_CURATIONS_LIST,
-  UI_GET_CURATION_DATA,
-  UI_INSPECT_GET_SUGGESTIONS
+  UI_GET_CURATION_DATA
 } from '../actions/ui'
 import listReducer from './listReducer'
 import tableReducer from './tableReducer'
@@ -50,17 +49,11 @@ import { CURATION_BODIES } from '../actions/curationActions'
  */
 const initialStateNavigation = [
   {
-    title: 'Definitions',
-    to: ROUTE_DEFINITIONS,
+    title: 'Workspace',
+    to: ROUTE_WORKSPACE,
     protected: 0,
     isSelected: false
   },
-  /*{
-    title: 'Browse',
-    to: ROUTE_BROWSE,
-    protected: 0,
-    isSelected: false
-  },*/
   {
     title: 'Harvest',
     to: ROUTE_HARVEST,
@@ -110,7 +103,6 @@ const inspect = combineReducers({
   definition: itemReducer(UI_INSPECT_GET_DEFINITION, item => yaml.safeDump(item, { sortKeys: true })),
   curations: itemReducer(UI_INSPECT_GET_CURATIONS, item => yaml.safeDump(item, { sortKeys: true })),
   harvested: itemReducer(UI_INSPECT_GET_HARVESTED, item => JSON.stringify(item, null, 2)),
-  suggestedData: itemReducer(UI_INSPECT_GET_SUGGESTIONS, item => yaml.safeDump(item, { sortKeys: true })),
   curationList: itemReducer(UI_GET_CURATIONS_LIST, item => yaml.safeDump(item, { sortKeys: true })),
   inspectedCuration: itemReducer(UI_GET_CURATION_DATA, item => yaml.safeDump(item, { sortKeys: true }))
 })

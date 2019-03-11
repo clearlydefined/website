@@ -3,7 +3,7 @@
 
 describe('Home page', () => {
   beforeAll(async () => {
-    await page.goto(__HOST__)
+    await page.goto(`${__HOST__}/about`)
   })
 
   it('should display "ClearlyDefined" text on page', async () => {

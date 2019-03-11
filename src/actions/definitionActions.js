@@ -16,6 +16,7 @@ import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
+export const DEFINITION_SUGGESTIONS = 'DEFINITION_SUGGESTIONS'
 
 export function getDefinitionAction(token, entity, name) {
   return dispatch => {
@@ -89,13 +90,14 @@ export function revertAction(definition, values, name) {
   }
 }
 
-export function getDefinitionSuggestedDataAction(token, prefix, name) {
+export function getDefinitionSuggestedDataAction(token, prefix) {
   return dispatch => {
     if (!prefix) return null
-    const actions = asyncActions(name)
+    const actions = asyncActions(DEFINITION_SUGGESTIONS)
     dispatch(actions.start())
     return getSuggestedData(token, prefix).then(
-      result => dispatch(actions.success(result)),
+      result =>
+        dispatch(actions.success({ add: { [EntitySpec.fromCoordinates(result.coordinates).toPath()]: result } })),
       error => dispatch(actions.error(error))
     )
   }

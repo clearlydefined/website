@@ -7,7 +7,7 @@ import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import classNames from 'classnames'
-import { ROUTE_BROWSE } from '../../../../utils/routingConstants'
+import { ROUTE_ROOT } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
 import { uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
 import SystemManagedList from '../../../SystemManagedList'
@@ -18,7 +18,8 @@ import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { licenses, curateFilters } from '../../../../utils/utils'
+import { curateFilters } from '../../../../utils/utils'
+import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
 
@@ -37,7 +38,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   componentDidMount() {
-    this.props.dispatch(uiNavigation({ to: ROUTE_BROWSE }))
+    this.props.dispatch(uiNavigation({ to: ROUTE_ROOT }))
     this.updateData()
   }
 
@@ -51,7 +52,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   tableTitle() {
-    return 'Browse Definitions'
+    return 'Browse'
   }
 
   renderTopFilters() {
@@ -74,7 +75,7 @@ class PageBrowse extends SystemManagedList {
     return (
       <Row className="show-grid spacer">
         <Col md={2} mdOffset={1}>
-          {this.renderFilter(curateFilters, 'Curate', 'curate')}
+          {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
         </Col>
         <Col md={8}>
           <div className={'horizontalBlock'}>
@@ -126,27 +127,32 @@ class PageBrowse extends SystemManagedList {
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
-      { value: 'licensedScore-desc', label: 'Higher Licensed score' },
-      { value: 'licensedScore', label: 'Lower Licensed score' },
-      { value: 'describedScore-desc', label: 'Higher Described score' },
-      { value: 'describedScore', label: 'Lower Described score' }
+      { value: 'score-desc', label: 'Higher Score' },
+      { value: 'score', label: 'Lower Score' }
     ]
 
     return (
+      // OMG, structural whitespace?!
       <div className="filter-list" align="right">
+        <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
+        &nbsp;
         <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-
-        {this.renderFilter(
-          licenses.filter(license => license.value !== 'absence' && license.value !== 'presence'),
-          'License',
-          'license'
-        )}
+        &nbsp; &nbsp; &nbsp; &nbsp;
       </div>
     )
   }
 
-  renderFilter(list, title, id) {
-    return <FilterList list={list} title={title} id={id} value={this.state.activeFilters} onFilter={this.onFilter} />
+  renderFilter(list, title, id, variant) {
+    return (
+      <FilterList
+        list={list}
+        title={title}
+        id={id}
+        value={this.state.activeFilters}
+        onFilter={this.onFilter}
+        variant={variant}
+      />
+    )
   }
 
   async updateData(continuationToken) {
@@ -160,12 +166,12 @@ class PageBrowse extends SystemManagedList {
         query.sort = 'releaseDate'
         query.sortDesc = true
         break
-      case 'licensedScore-desc':
-        query.sort = 'licensedScore'
-        query.sortDesc = true
+      case 'score':
+        query.sort = 'effectiveScore'
+        query.sortDesc = false
         break
-      case 'describedScore-desc':
-        query.sort = 'describedScore'
+      case 'score-desc':
+        query.sort = 'effectiveScore'
         query.sortDesc = true
         break
       default:
@@ -173,6 +179,7 @@ class PageBrowse extends SystemManagedList {
     }
     if (query.curate === 'licensed') query.maxLicensedScore = 70
     if (query.curate === 'described') query.maxDescribedScore = 70
+    if (query.curate === 'effective') query.maxEffectiveScore = 70
     if (query.curate) delete query.curate
     if (activeName) {
       if (activeName.indexOf('/') > 0) {
@@ -198,7 +205,7 @@ class PageBrowse extends SystemManagedList {
     const { components, curations, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
-      <Grid className="main-container flex">
+      <Grid className="main-container flex-column">
         <ContributePrompt
           ref={this.contributeModal}
           session={session}
@@ -207,39 +214,37 @@ class PageBrowse extends SystemManagedList {
         />
         {this.renderTopFilters()}
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
-          {
-            <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
-              <i className="fas fa-spinner fa-spin" />
-              <ComponentList
-                readOnly={false}
-                list={components.transformedList}
-                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                loadMoreRows={this.loadMoreRows}
-                onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
-                onChange={this.onChangeComponent}
-                onInspect={this.onInspect}
-                renderFilterBar={this.renderFilterBar}
-                curations={curations}
-                definitions={definitions}
-                noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
-                sequence={sequence}
-                hasChange={this.hasChange}
-                hideVersionSelector
-              />
-            </div>
-          }
-          {currentDefinition && (
-            <FullDetailPage
-              modalView
-              visible={showFullDetail}
-              onClose={this.onInspectClose}
-              onSave={this.onChangeComponent}
-              path={path}
-              currentDefinition={currentDefinition}
-              component={currentComponent}
+          <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
+            <i className="fas fa-spinner fa-spin" />
+            <ComponentList
               readOnly={false}
+              list={components.transformedList}
+              listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+              loadMoreRows={this.loadMoreRows}
+              onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
+              onChange={this.onChangeComponent}
+              onInspect={this.onInspect}
+              renderFilterBar={this.renderFilterBar}
+              curations={curations}
+              definitions={definitions}
+              noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
+              sequence={sequence}
+              hasChange={this.hasChange}
+              hideVersionSelector
             />
-          )}
+            {currentDefinition && (
+              <FullDetailPage
+                modalView
+                visible={showFullDetail}
+                onClose={this.onInspectClose}
+                onSave={this.onChangeComponent}
+                path={path}
+                currentDefinition={currentDefinition}
+                component={currentComponent}
+                readOnly={false}
+              />
+            )}
+          </div>
         </Section>
       </Grid>
     )
