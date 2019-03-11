@@ -45,7 +45,7 @@ export class WindowProvider extends PureComponent {
     // const height = window.innerHeight || documentElement.clientHeight || body.clientHeight
     const isMobile = width < 768
     // if it's mobile size use 1.4x multipler for the component list height
-    const isMobileMultiplier = isMobile ? 1 : 1.4
+    const isMobileMultiplier = isMobile ? 1.4 : 1
 
     return { isMobile, isMobileMultiplier }
   }
