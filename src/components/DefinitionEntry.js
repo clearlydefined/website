@@ -291,8 +291,8 @@ class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Files')}</Col>
-            <Col md={10} className="definition__line">
+            <Col md={3}>{this.renderLabel('Files')}</Col>
+            <Col md={9} className="definition__line">
               <FileCountRenderer definition={definition} />
             </Col>
           </Row>
