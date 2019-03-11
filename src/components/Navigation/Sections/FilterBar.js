@@ -47,7 +47,7 @@ export default class FilterBar extends Component {
     } = this.props
 
     return (
-      <div align="right">
+      <div className="list-filter" align="right">
         <ButtonGroup>
           {showSortFilter && (
             <SortList

@@ -70,7 +70,7 @@ const curateFilters = [
   { value: 'described', label: 'Focus on description issues' }
 ]
 
-const noRowsHeight = 200
+const noRowsHeight = 260
 
 export {
   asObject,
