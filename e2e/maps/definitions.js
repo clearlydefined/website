@@ -6,7 +6,8 @@ export const definitionsMap = {
   },
   componentList: {
     list: '.components-list',
-    firstElement: 'div:nth-child(0n+1) .component-row'
+    firstElement: 'div:nth-child(0n+1) .component-row',
+    tag: '.list-headline .ant-tag'
   },
   revertButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="revert-button"]',
   contributeButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="contribute-button"]',
@@ -52,7 +53,7 @@ export const definitionsMap = {
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',
-      revertLicenseButton: '.license-renderer > div > span > .fa-undo',
+      revertLicenseButton: '.license-renderer .fa-undo',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`
       },
