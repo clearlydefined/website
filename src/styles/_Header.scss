@@ -8,7 +8,7 @@
   min-height: 80px;
   z-index: 1;
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: $screen-md) {
     margin-bottom: 0;
   }
 
@@ -21,7 +21,7 @@
       cursor: pointer;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: $screen-xs-max) {
       padding: 0;
     }
   }
@@ -39,7 +39,7 @@
           color: $color_highlight;
         }
 
-        @media screen and (max-width: 992px) {
+        @media screen and (max-width: $screen-md) {
           padding-top: 15px;
           padding-bottom: 5px;
         }
