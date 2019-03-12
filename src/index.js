@@ -7,7 +7,7 @@ import './styles/index.css'
 import { unregister } from './registerServiceWorker'
 import { RehydrationProvider } from './components'
 import ReactGA from 'react-ga'
-if (process.env['REACT_APP_GA_TRACKINGID']) {
+if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize(process.env['REACT_APP_GA_TRACKINGID'])
   ReactGA.pageview(window.location.pathname + window.location.search)
 }
