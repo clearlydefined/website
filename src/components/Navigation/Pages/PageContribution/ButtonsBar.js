@@ -4,17 +4,17 @@ import { Button } from 'react-bootstrap'
 
 export default class ButtonsBar extends Component {
   static propTypes = {
-    revertAll: PropTypes.func,
-    collapseAll: PropTypes.func,
-    doSave: PropTypes.func
+    doSave: PropTypes.func,
+    hasChanges: PropTypes.bool,
+    toggleCollapseExpandAll: PropTypes.func
   }
 
   render() {
-    const { hasChanges, collapseAll, doSave } = this.props
+    const { hasChanges, toggleCollapseExpandAll, doSave } = this.props
     return (
       <div className="pull-right">
-        <Button bsStyle="default" disabled={hasChanges} onClick={collapseAll}>
-          Collapse All
+        <Button bsStyle="default" onClick={toggleCollapseExpandAll}>
+          Toggle Collapse
         </Button>
         &nbsp;
         <Button bsStyle="success" disabled={hasChanges} onClick={doSave}>

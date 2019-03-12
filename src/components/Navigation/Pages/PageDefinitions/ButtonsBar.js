@@ -10,12 +10,12 @@ export default class ButtonsBar extends Component {
     hasChanges: PropTypes.bool,
     revertAll: PropTypes.func,
     doRefreshAll: PropTypes.func,
-    collapseAll: PropTypes.func,
     onRemoveAll: PropTypes.func,
     doPromptContribute: PropTypes.func,
     shareUrl: PropTypes.func,
     shareFile: PropTypes.func,
-    shareNotice: PropTypes.func
+    shareNotice: PropTypes.func,
+    toggleCollapseExpandAll: PropTypes.func
   }
 
   onSelect = type => {
@@ -32,7 +32,15 @@ export default class ButtonsBar extends Component {
   }
 
   render() {
-    const { components, hasChanges, revertAll, doRefreshAll, collapseAll, onRemoveAll, doPromptContribute } = this.props
+    const {
+      components,
+      doPromptContribute,
+      doRefreshAll,
+      hasChanges,
+      onRemoveAll,
+      revertAll,
+      toggleCollapseExpandAll
+    } = this.props
     return (
       <div className="text-right" data-test-id="page-definition-buttons-bar">
         <ButtonWithTooltip tip="Revert all changes of all the definitions">
@@ -44,8 +52,8 @@ export default class ButtonsBar extends Component {
         <Button bsStyle="default" disabled={hasChanges} onClick={doRefreshAll}>
           Refresh
         </Button>
-        <Button bsStyle="default" disabled={hasChanges} onClick={collapseAll}>
-          Collapse All
+        <Button bsStyle="default" onClick={toggleCollapseExpandAll}>
+          Toggle Collapse
         </Button>
         <Button bsStyle="danger" disabled={!components || components.list.length === 0} onClick={onRemoveAll}>
           Clear All
