@@ -71,7 +71,6 @@ export default class DefinitionEntry extends React.Component {
   renderHeadline(definition, curation) {
     const { namespace, name, revision } = definition.coordinates
     const namespaceText = namespace ? namespace + '/' : ''
-    const scores = Definition.computeScores(definition)
     const isCurationPending = Curation.isPending(curation)
     const componentTag = get(definition, 'described.urls.registry') ? (
       <span>
@@ -104,10 +103,10 @@ export default class DefinitionEntry extends React.Component {
         {revision.slice(0, 7)}
       </span>
     )
-    const scoreTag = scores ? (
+    const scoreTag = get(definition, 'scores') ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <ScoreRenderer scores={scores} definition={definition} />
+        <ScoreRenderer scores={get(definition, 'scores')} definition={definition} />
       </span>
     ) : null
     const curationTag = isCurationPending ? (
