@@ -132,6 +132,7 @@ class DropComponent extends Component {
   render() {
     return (
       <div
+        className={this.props.className}
         onDragOver={this.onDragOver}
         onDragEnter={this.onDragEnter}
         onDrop={this.onDrop}

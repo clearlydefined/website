@@ -40,6 +40,7 @@ export default class RubyGemsSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        useCache={false}
         options={options}
         placeholder={'Pick a RubyGem to harvest'}
         onChange={this.onChange}

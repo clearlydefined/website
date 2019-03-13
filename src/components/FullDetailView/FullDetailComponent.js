@@ -6,12 +6,12 @@ import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import cloneDeep from 'lodash/cloneDeep'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { Section } from '../'
 import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
-import Definition from '../../utils/definition'
 import DescribedSection from '../Navigation/Sections/DescribedSection'
 import RawDataSection from '../Navigation/Sections/RawDataSection'
 import HeaderSection from '../Navigation/Sections/HeaderSection'
@@ -26,7 +26,7 @@ class FullDetailComponent extends Component {
     handleClose: PropTypes.func,
     handleSave: PropTypes.func,
     handleRevert: PropTypes.func,
-    curation: PropTypes.object.isRequired,
+    curations: PropTypes.object.isRequired,
     definition: PropTypes.object.isRequired,
     harvest: PropTypes.object.isRequired,
     modalView: PropTypes.bool.isRequired,
@@ -38,7 +38,6 @@ class FullDetailComponent extends Component {
 
   render() {
     const {
-      curation,
       definition,
       harvest,
       onChange,
@@ -47,10 +46,11 @@ class FullDetailComponent extends Component {
       handleRevert,
       changes,
       getCurationData,
+      curations,
       inspectedCuration
     } = this.props
     const entry = find(changes, (_, key) => key && key.startsWith('files'))
-    if (!definition || !definition.item || !curation || !harvest) return null
+    if (!definition || !definition.item || !curations || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
     return (
@@ -79,7 +79,7 @@ class FullDetailComponent extends Component {
                     />
                   </Col>
                   <Col md={6}>
-                    <CurationsSection curations={Definition.getPrs(item)} />
+                    <CurationsSection curations={curations} />
                   </Col>
                 </Row>
               </Fragment>
@@ -94,7 +94,12 @@ class FullDetailComponent extends Component {
                   &nbsp;
                   {!readOnly && (
                     <ButtonWithTooltip tip="Revert all changes of all the definitions">
-                      <Button bsStyle="danger" onClick={() => handleRevert('files')} disabled={entry === undefined}>
+                      <Button
+                        bsSize="small"
+                        bsStyle="danger"
+                        onClick={() => handleRevert('files')}
+                        disabled={entry === undefined}
+                      >
                         <i className="fas fa-undo" />
                         <span>&nbsp;Revert Changes</span>
                       </Button>
@@ -102,9 +107,17 @@ class FullDetailComponent extends Component {
                   )}
                 </section>
               }
+              actionButton={
+                get(item, 'described.urls.download') && (
+                  <Button bsStyle="primary" href={get(item, 'described.urls.download')}>
+                    <i className="fas fa-download" />
+                    <span>&nbsp;Download component</span>
+                  </Button>
+                )
+              }
             >
               <Row>
-                <Col md={11}>
+                <Col md={12}>
                   <FileList
                     files={cloneDeep(item.files)}
                     onChange={onChange}
@@ -119,6 +132,7 @@ class FullDetailComponent extends Component {
               <Row>
                 <Col md={11} offset-md={1}>
                   <RawDataSection
+                    curations={curations}
                     definition={definition}
                     item={item}
                     getCurationData={getCurationData}

@@ -8,19 +8,23 @@ class NotificationButtons extends Component {
     confirmText: PropTypes.string,
     // Text to display for the Dismiss Button
     dismissText: PropTypes.string,
+    // Test id for the Confirm Button
+    confirmButtonTestId: PropTypes.string,
+    // Test id display for the Dismiss Button
+    dismissButtonTestId: PropTypes.string,
     // Callback function callable when data needs to be saved
     onClick: PropTypes.func,
     // Callback function callable when the notifications needs to be closed
     onClose: PropTypes.func
   }
   render() {
-    const { onClick, onClose, confirmText, dismissText } = this.props
+    const { onClick, onClose, confirmText, dismissText, confirmButtonTestId, dismissButtonTestId } = this.props
     return (
       <Fragment>
-        <AntdButton type="primary" size="small" onClick={onClick}>
+        <AntdButton type="primary" size="small" onClick={onClick} data-test-id={confirmButtonTestId}>
           {confirmText}
         </AntdButton>
-        <AntdButton type="secondary" size="small" onClick={onClose}>
+        <AntdButton type="secondary" size="small" onClick={onClose} data-test-id={dismissButtonTestId}>
           {dismissText}
         </AntdButton>
       </Fragment>

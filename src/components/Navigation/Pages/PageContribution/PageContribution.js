@@ -57,24 +57,24 @@ class PageContribution extends SystemManagedList {
   }
 
   render() {
-    const { components, definitions } = this.props
+    const { components, curations, definitions } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container">
         <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
-            <div className="section-body">
+            <div className="section-body flex-grow">
               <ComponentList
                 readOnly={this.readOnly}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                listHeight={1000}
                 onRemove={this.onRemoveComponent}
                 onRevert={this.revertDefinition}
                 onChange={this.onChangeComponent}
                 onAddComponent={this.onAddComponent}
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
+                curations={curations}
                 definitions={definitions}
                 noRowsRenderer={this.noRowsRenderer}
                 sequence={sequence}
@@ -107,6 +107,7 @@ function mapStateToProps(state, ownProps) {
     session: state.session,
     prNumber: ownProps.location.pathname.slice(ownProps.match.url.length + 1),
     url: state.ui.contribution.url,
+    curations: state.ui.curate.bodies,
     definitions: state.ui.contribution.definitions,
     components: state.ui.contribution.componentList,
     filterValue: state.ui.browse.filter,

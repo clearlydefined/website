@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import isNumber from 'lodash/isNumber'
 import Tooltip from 'antd/lib/tooltip'
-import { getBadgeUrl } from '../../../api/clearlyDefined'
+import { Tag } from 'antd'
 
 const maxScores = {
   date: 30,
@@ -33,18 +33,22 @@ class ScoreRenderer extends Component {
       {this.renderScoreEntry(score, 'declared', 'Declared')}
       {this.renderScoreEntry(score, 'discovered', 'Discovered')}
       {this.renderScoreEntry(score, 'spdx', 'SPDX')}
-      {this.renderScoreEntry(score, 'textes', 'License texts')}
+      {this.renderScoreEntry(score, 'texts', 'License texts')}
     </Fragment>
   )
 
+  getColor(score, topScore = 100) {
+    const colors = ['#cb2431', '#d6af22', '#2cbe4e']
+    const percentScore = score / topScore
+    const bucket = Math.floor(percentScore * colors.length)
+    return colors[Math.min(colors.length - 1, bucket)]
+  }
+
   renderScoreEntry(score, name, label) {
     if (!Object.keys(score).includes(name)) return
-    const value = score[name] / maxScores[name]
-    const colors = ['red', 'yellow', 'inherit']
-    const bucket = Math.floor(value * colors.length)
-    const color = colors[Math.min(colors.length - 1, bucket)]
+    const color = this.getColor(score[name], maxScores[name] || 100)
     return (
-      <p style={{ color, fontWeight: color === 'inherit' ? 'inherit' : 800 }}>
+      <p style={{ color }}>
         {label}: {score[name]}
       </p>
     )
@@ -94,15 +98,15 @@ class ScoreRenderer extends Component {
     if (!domain && !scores) return null
     return (
       <Tooltip title={this.renderTooltipContent} key={this.renderTooltipContent} overlayStyle={{ width: '800px' }}>
-        <img
-          className="list-buttons"
-          src={
-            domain
-              ? getBadgeUrl(get(domain, 'score.total'), get(domain, 'toolScore.total'))
-              : getBadgeUrl(scores.effective, scores.tool)
-          }
-          alt="score"
-        />
+        {domain ? (
+          <Tag className="cd-badge" color={this.getColor(get(domain, 'score.total'))}>
+            {get(domain, 'toolScore.total')}
+          </Tag>
+        ) : (
+          <Tag className="cd-badge" color={this.getColor(scores.effective)}>
+            {scores.effective}
+          </Tag>
+        )}
       </Tooltip>
     )
   }

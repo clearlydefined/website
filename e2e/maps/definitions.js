@@ -8,8 +8,12 @@ export const definitionsMap = {
     list: '.components-list',
     firstElement: 'div:nth-child(0n+1) .component-row'
   },
+  revertButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="revert-button"]',
   contributeButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="contribute-button"]',
   contributeSuccess: '[data-test-id="contribution-success"]',
+  notification: {
+    revertButton: '[data-test-id="notification-revert-confirm"]'
+  },
   component: {
     name: '[data-test-id="component-name"]',
     image: '.list-image',
@@ -48,6 +52,7 @@ export const definitionsMap = {
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',
+      revertLicenseButton: '.license-renderer > div > span > .fa-undo',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`
       },

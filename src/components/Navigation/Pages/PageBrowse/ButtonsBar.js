@@ -10,35 +10,20 @@ export default class ButtonsBar extends Component {
     doSave: PropTypes.func
   }
 
-  onSelect = type => {
-    switch (type) {
-      case 'url':
-        return this.props.shareUrl()
-      case 'file':
-        return this.props.shareFile()
-      case 'gist':
-        return this.props.shareGist()
-      default:
-        break
-    }
-  }
-
   render() {
     const { hasChanges, revertAll, collapseAll, doPromptContribute } = this.props
     return (
-      <div className="pull-right">
+      <div className="text-right" data-test-id="page-browse-buttons-bar">
         <ButtonWithTooltip tip="Revert all changes of all the definitions">
-          <Button bsStyle="danger" disabled={hasChanges} onClick={revertAll}>
+          <Button bsStyle="danger" disabled={hasChanges} onClick={revertAll} data-test-id="revert-button">
             <i className="fas fa-undo" />
             <span>&nbsp;Revert Changes</span>
           </Button>
         </ButtonWithTooltip>
-        &nbsp;
         <Button bsStyle="default" disabled={hasChanges} onClick={collapseAll}>
           Collapse All
         </Button>
-        &nbsp;
-        <Button bsStyle="success" disabled={hasChanges} onClick={doPromptContribute}>
+        <Button bsStyle="success" disabled={hasChanges} onClick={doPromptContribute} data-test-id="contribute-button">
           Contribute
         </Button>
       </div>

@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 import { asyncActions } from './'
-import map from 'lodash/map'
 import {
   getDefinitions,
   getDefinition,
@@ -12,11 +11,12 @@ import {
   searchDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiBrowseUpdateList, uiDefinitionsUpdateList } from './ui'
+import { uiDefinitionsUpdateList, UI_BROWSE_REVERT, uiBrowseUpdateList } from './ui'
 import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
+export const DEFINITION_SUGGESTIONS = 'DEFINITION_SUGGESTIONS'
 
 export function getDefinitionAction(token, entity, name) {
   return dispatch => {
@@ -71,24 +71,33 @@ export function resetPreviewDefinitionAction(token, entity, name) {
   }
 }
 
-export function revertDefinitionAction(definition, values, name) {
+export function revertAction(definition, values, name) {
   return (dispatch, getState) => {
     const state = getState()
     const actions = asyncActions(name)
     dispatch(actions.start({ definition, values }))
-    const componentsWithoutChanges = Definition.revert(state.ui.definitions.componentList.list, definition, values)
-    dispatch(uiDefinitionsUpdateList({ updateAll: componentsWithoutChanges }))
+    const componentsWithoutChanges = Definition.revert(
+      name === UI_BROWSE_REVERT ? state.ui.browse.componentList.list : state.ui.definitions.componentList.list,
+      definition,
+      values
+    )
+    dispatch(
+      name === UI_BROWSE_REVERT
+        ? uiBrowseUpdateList({ updateAll: componentsWithoutChanges })
+        : uiDefinitionsUpdateList({ updateAll: componentsWithoutChanges })
+    )
     return dispatch(actions.success({ componentsWithoutChanges }))
   }
 }
 
-export function getDefinitionSuggestedDataAction(token, prefix, name) {
+export function getDefinitionSuggestedDataAction(token, prefix) {
   return dispatch => {
     if (!prefix) return null
-    const actions = asyncActions(name)
+    const actions = asyncActions(DEFINITION_SUGGESTIONS)
     dispatch(actions.start())
     return getSuggestedData(token, prefix).then(
-      result => dispatch(actions.success(result)),
+      result =>
+        dispatch(actions.success({ add: { [EntitySpec.fromCoordinates(result.coordinates).toPath()]: result } })),
       error => dispatch(actions.error(error))
     )
   }
@@ -99,21 +108,18 @@ export function browseDefinitionsAction(token, query, name) {
     const actions = asyncActions(name)
     dispatch(actions.start())
     try {
-      dispatch(uiBrowseUpdateList({ startQuery: true }))
       const result = await searchDefinitions(token, query)
-      const definitions = result.data
-      dispatch(actions.success({ add: definitions }))
-      const toAdd = map(definitions, component => EntitySpec.validateAndCreate(component.coordinates)).filter(e => e)
-      if (query.continuationToken) dispatch(uiBrowseUpdateList({ addAll: toAdd, data: result.continuationToken }))
-      else dispatch(uiBrowseUpdateList({ updateAll: toAdd, data: result.continuationToken }))
+      const definitionBodies = result.data.reduce((result, definition) => {
+        const coordinates = EntitySpec.validateAndCreate(definition.coordinates)
+        if (coordinates) result[coordinates] = definition
+        return result
+      }, {})
+      const allCoordinates = Object.keys(definitionBodies).map(EntitySpec.fromPath)
+      if (query.continuationToken) dispatch(actions.success({ addAll: allCoordinates, data: result.continuationToken }))
+      else dispatch(actions.success({ updateAll: allCoordinates, data: result.continuationToken }))
+
       const definitionActions = asyncActions(DEFINITION_BODIES)
-      definitions.forEach(component => {
-        dispatch(
-          definitionActions.success({
-            add: { [EntitySpec.fromCoordinates(component.coordinates).toPath()]: component }
-          })
-        )
-      })
+      dispatch(definitionActions.success({ add: definitionBodies }))
     } catch (error) {
       dispatch(actions.error(error))
     }

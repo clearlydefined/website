@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { ToggleButtonGroup, ToggleButton, Button, Row, Col } from 'react-bootstrap'
 import SpdxPicker from '../SpdxPicker'
@@ -58,19 +58,17 @@ export default class RuleBuilder extends Component {
           {currentPath !== 'right' && (!parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right'))
             ? this.renderHeaderRow(rule, path, conjunction)
             : null}
-          <Col md={4} className="flex-center">
+          <Col md={6} className="flex-center">
             <SpdxPicker value={rule.license} onChange={value => updateLicense(value, path)} />
             {rule.license && (
-              <Fragment>
-                <div>
-                  <input
-                    type="checkbox"
-                    onChange={event => considerLaterVersions(event.target.checked, path)}
-                    value="+"
-                  />
-                  Any later version
-                </div>
-              </Fragment>
+              <div>
+                <input
+                  type="checkbox"
+                  onChange={event => considerLaterVersions(event.target.checked, path)}
+                  value="+"
+                />
+                Any later version
+              </div>
             )}
             {path.length > 0 && (
               <Button id="removeRule" onClick={() => removeRule(path)}>

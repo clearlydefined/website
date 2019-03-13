@@ -5,46 +5,61 @@ import { Tag } from 'antd'
 import TwoLineEntry from '../../../TwoLineEntry'
 
 const testCuration = {
-  number: 1,
-  title: 'test',
-  status: 'merged',
-  contributor: 'test'
+  pr: {
+    number: 1,
+    title: 'test',
+    state: 'closed',
+    merged_at: '2018-11-13T02:44:34Z',
+    user: {
+      login: 'test'
+    }
+  }
 }
 
 const testPendingCuration = {
-  number: 1,
-  title: 'test',
-  status: 'pending',
-  contributor: 'test'
+  pr: {
+    number: 1,
+    title: 'test',
+    state: 'open',
+    user: {
+      login: 'test'
+    }
+  }
 }
 
 describe('CurationRenderer', () => {
   it('renders without crashing', () => {
-    const wrapper = shallow(<CurationRenderer curation={testCuration} />)
+    const wrapper = shallow(<CurationRenderer contribution={testCuration} />)
     expect(wrapper.find(TwoLineEntry).exists()).toBeTruthy()
-    expect(wrapper.find(TwoLineEntry).props().message).toEqual(<span>@{testCuration.contributor}</span>)
+    expect(wrapper.find(TwoLineEntry).props().message).toEqual(<span>@{testCuration.pr.user.login}</span>)
   })
   it('check the onClick function', () => {
     const parentClick = jest.fn()
-    const wrapper = shallow(<CurationRenderer curation={testCuration} onClick={parentClick} />)
+    const wrapper = shallow(<CurationRenderer contribution={testCuration} onClick={parentClick} />)
     wrapper.find(TwoLineEntry).simulate('click')
     expect(parentClick).toHaveBeenCalled()
   })
-  it('renders a green color for a merged curation', () => {
-    const wrapper = shallow(<CurationRenderer curation={testCuration} />)
+  it('renders a purple color for a merged curation', () => {
+    const wrapper = shallow(<CurationRenderer contribution={testCuration} />)
     const twoline = wrapper.find(TwoLineEntry)
     expect(twoline.props().headline).toEqual(
       <span>
-        #{testCuration.number} {testCuration.title} <Tag color={'green'}>{'Curated'}</Tag>
+        #{testCuration.pr.number} {testCuration.pr.title}{' '}
+        <Tag className="cd-badge" color={'purple'}>
+          {'Merged'}
+        </Tag>
       </span>
     )
   })
-  it('renders a gold color for a pending curation', () => {
-    const wrapper = shallow(<CurationRenderer curation={testPendingCuration} />)
+  it('renders a green color for a pending curation', () => {
+    const wrapper = shallow(<CurationRenderer contribution={testPendingCuration} />)
     const twoline = wrapper.find(TwoLineEntry)
     expect(twoline.props().headline).toEqual(
       <span>
-        #{testPendingCuration.number} {testPendingCuration.title} <Tag color={'gold'}>{'Pending'}</Tag>
+        #{testPendingCuration.pr.number} {testPendingCuration.pr.title}{' '}
+        <Tag className="cd-badge" color={'green'}>
+          {'Open'}
+        </Tag>
       </span>
     )
   })

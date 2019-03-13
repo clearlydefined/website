@@ -5,7 +5,6 @@ import EntitySpec from './entitySpec'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import isEmpty from 'lodash/isEmpty'
-import union from 'lodash/union'
 
 // Abstract methods for Definition
 export default class Definition {
@@ -51,6 +50,12 @@ export default class Definition {
     return !get(definition, 'described.sourceLocation')
   }
 
+  static isCurated(definition) {
+    const tools = get(definition, 'described.tools')
+    if (!tools) return false
+    return !!tools.find(tool => tool.startsWith('curation/'))
+  }
+
   /**
    * Revert a list of definitions or a specific one, removing all the changes or only specific values
    * @param  {[]} components list of definitions
@@ -73,33 +78,6 @@ export default class Definition {
     }
     const { [key]: omit, ...updatedChanges } = component.changes
     return { ...component, changes: updatedChanges }
-  }
-
-  static isCurated(definition) {
-    return !isEmpty(get(definition, '_meta.merged'))
-  }
-
-  static hasPendingCurations(definition) {
-    return !isEmpty(get(definition, '_meta.pending'))
-  }
-
-  /**
-   * Return a list of PRs sorted by PR number
-   * @param {*} definition
-   */
-  static getPrs(definition) {
-    if (!get(definition, '_meta')) return
-    const { pending, merged } = get(definition, '_meta')
-    return union(
-      pending &&
-        pending.map(item => {
-          return { ...item, status: 'pending' }
-        }),
-      merged &&
-        merged.map(item => {
-          return { ...item, status: 'merged' }
-        })
-    )
   }
 
   static getRevisionToKey(revision, definition) {

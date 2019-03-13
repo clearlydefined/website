@@ -17,13 +17,13 @@ const facets = ['data', 'dev', 'docs', 'examples', 'tests']
  */
 class FacetsEditor extends Component {
   static propTypes = {
-    component: PropTypes.object,
+    definition: PropTypes.object,
     previewDefinition: PropTypes.object,
     onChange: PropTypes.func.isRequired
   }
 
   render() {
-    const { onChange, component, previewDefinition, readOnly, onRevert, curationSuggestions } = this.props
+    const { onChange, definition, previewDefinition, readOnly, onRevert, curationSuggestions } = this.props
 
     return (
       <div>
@@ -37,7 +37,7 @@ class FacetsEditor extends Component {
                 field={`described.facets.${item}`}
                 readOnly={readOnly}
                 className={Contribution.classIfDifferent(
-                  component,
+                  definition,
                   previewDefinition,
                   `described.facets.${item}`,
                   'facets--isEdited'
@@ -45,7 +45,7 @@ class FacetsEditor extends Component {
                 globs={
                   Curation.getValue(curationSuggestions, `described.facets.${item}`)
                     ? Curation.getValue(curationSuggestions, `described.facets.${item}`)
-                    : Contribution.getValue(component, previewDefinition, `described.facets.${item}`)
+                    : Contribution.getValue(definition, previewDefinition, `described.facets.${item}`)
                 }
                 suggested={Curation.getValue(curationSuggestions, `described.facets.${item}`)}
                 onChange={value => onChange(`described.facets.${item}`, value)}

@@ -40,6 +40,7 @@ export default class PyPiSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        useCache={false}
         options={options}
         placeholder={'Pick a PyPi to harvest'}
         onChange={this.onChange}

@@ -13,7 +13,8 @@ export default class FilterBar extends Component {
     onChange: PropTypes.func,
     clearOnChange: PropTypes.bool,
     defaultValue: PropTypes.string,
-    onSearch: PropTypes.func.isRequired
+    onSearch: PropTypes.func.isRequired,
+    onClear: PropTypes.func
   }
 
   constructor(props) {
@@ -23,11 +24,13 @@ export default class FilterBar extends Component {
   }
 
   onChange(values) {
-    const { onChange, clearOnChange } = this.props
+    const { onChange, clearOnChange, onClear } = this.props
     if (values.length) {
       onChange && onChange(values[0])
       // timing hack to work around https://github.com/ericgio/react-bootstrap-typeahead/issues/211
       clearOnChange && setTimeout(() => this.refs.typeahead && this.refs.typeahead.getInstance().clear(), 0)
+    } else {
+      onClear && onClear()
     }
   }
 
@@ -39,7 +42,9 @@ export default class FilterBar extends Component {
     const { options, defaultValue, value, onSearch } = this.props
     return (
       <AsyncTypeahead
+        className="filter-bar"
         ref={this.typeahead}
+        useCache={false}
         placeholder="Component search..."
         onChange={this.onChange}
         options={options.list}

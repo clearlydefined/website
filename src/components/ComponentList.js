@@ -13,7 +13,6 @@ export default class ComponentList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     listLength: PropTypes.number,
-    listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
@@ -24,7 +23,8 @@ export default class ComponentList extends React.Component {
     definitions: PropTypes.object,
     selected: PropTypes.array,
     sequence: PropTypes.number,
-    toggleCheckbox: PropTypes.func
+    toggleCheckbox: PropTypes.func,
+    curations: PropTypes.object
   }
 
   constructor(props) {
@@ -38,12 +38,17 @@ export default class ComponentList extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
+    if (newProps.curations.sequence !== this.props.curations.sequence) this.incrementSequence()
     if (newProps.sequence !== this.props.sequence) this.incrementSequence()
     if (!isEqual(newProps.list, this.props.list.sequence)) this.incrementSequence()
   }
 
   getDefinition(component) {
     return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+  }
+
+  getCuration(component) {
+    return this.props.curations.entries[EntitySpec.fromCoordinates(component).toPath()]
   }
 
   revertComponent(component, param) {
@@ -87,8 +92,9 @@ export default class ComponentList extends React.Component {
     } = this.props
     const component = list[index]
     if (!component) return
-    let definition = this.getDefinition(component)
-    definition = definition || { coordinates: component }
+    const definition = this.getDefinition(component) || { coordinates: component }
+    let curation = this.getCuration(component)
+    curation = curation || { contributions: [], curations: {} }
     return (
       <div key={key} style={style} className="component-row">
         <DefinitionEntry
@@ -97,6 +103,7 @@ export default class ComponentList extends React.Component {
           draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
+          curation={curation}
           definition={definition}
           component={component}
           onChange={this.onEntryChange}
@@ -124,26 +131,16 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const {
-      loadMoreRows,
-      listHeight,
-      noRowsRenderer,
-      list,
-      listLength,
-      selected,
-      renderFilterBar,
-      toggleCheckbox
-    } = this.props
+    const { loadMoreRows, noRowsRenderer, list, listLength, selected, renderFilterBar, toggleCheckbox } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div>
+      <div className="flex-grow">
         {renderFilterBar()}
         <CheckboxGroup onChange={toggleCheckbox} value={selected}>
           <RowEntityList
             list={list}
             listLength={listLength}
             loadMoreRows={loadMoreRows}
-            listHeight={listHeight}
             rowRenderer={this.renderRow}
             rowHeight={this.rowHeight}
             noRowsRenderer={noRowsRenderer}

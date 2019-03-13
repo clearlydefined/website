@@ -3,8 +3,9 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker } from './'
+import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRenderer } from './'
 import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
+import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -14,9 +15,10 @@ import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
-import EntitySpec from '../utils/entitySpec'
+import Curation from '../utils/curation'
 import LicensesRenderer from './LicensesRenderer'
 import Checkbox from 'antd/lib/checkbox'
+import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
 
 export default class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -25,6 +27,7 @@ export default class DefinitionEntry extends React.Component {
     onInspect: PropTypes.func,
     activeFacets: PropTypes.array,
     definition: PropTypes.object.isRequired,
+    curation: PropTypes.object.isRequired,
     component: PropTypes.object.isRequired,
     multiSelectEnabled: PropTypes.bool,
     renderButtons: PropTypes.func
@@ -67,14 +70,19 @@ export default class DefinitionEntry extends React.Component {
     return (component.changes && component.changes[field]) || this.getOriginalValue(field)
   }
 
-  renderHeadline(definition) {
+  renderHeadline(definition, curation) {
     const { namespace, name, revision } = definition.coordinates
-    const componentUrl = EntitySpec.getComponentUrl(definition.coordinates)
-    const revisionUrl = EntitySpec.getRevisionUrl(definition.coordinates)
     const namespaceText = namespace ? namespace + '/' : ''
-    const componentTag = componentUrl ? (
+    const scores = Definition.computeScores(definition)
+    const isCurationPending = Curation.isPending(curation)
+    const componentTag = get(definition, 'described.urls.registry') ? (
       <span>
-        <a href={componentUrl} target="_blank" rel="noopener noreferrer" data-test-id="component-name">
+        <a
+          href={get(definition, 'described.urls.registry')}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-test-id="component-name"
+        >
           {namespaceText}
           {name}
         </a>
@@ -85,23 +93,41 @@ export default class DefinitionEntry extends React.Component {
         {name}
       </span>
     )
-    const revisionTag = revisionUrl ? (
+    const revisionTag = get(definition, 'described.urls.version') ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={revisionUrl} target="_blank" rel="noopener noreferrer">
-          {revision}
+        <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
+          {revision.slice(0, 7)}
         </a>
       </span>
     ) : (
       <span>
         &nbsp;&nbsp;&nbsp;
-        {revision}
+        {revision.slice(0, 7)}
       </span>
     )
+    const scoreTag = scores ? (
+      <span>
+        &nbsp;&nbsp;&nbsp;
+        <ScoreRenderer scores={scores} definition={definition} />
+      </span>
+    ) : null
+    const curationTag = isCurationPending ? (
+      <span>
+        &nbsp;&nbsp;
+        <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
+          <Tag className="cd-badge" color="green">
+            Pending curations
+          </Tag>
+        </a>
+      </span>
+    ) : null
     return (
       <span>
         {componentTag}
         {revisionTag}
+        {scoreTag}
+        {curationTag}
       </span>
     )
   }
@@ -184,13 +210,7 @@ export default class DefinitionEntry extends React.Component {
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed } = definition
-    const totalFiles = get(licensed, 'files')
-    const unlicensed = get(licensed, 'discovered.unknown')
-    const unattributed = get(licensed, 'attribution.unknown')
-    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
-    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     const { readOnly, onRevert } = this.props
-
     return (
       <Row>
         <Col md={5}>
@@ -200,6 +220,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <LicensesRenderer
+                  definition={definition}
                   field={'licensed.declared'}
                   readOnly={readOnly}
                   initialValue={this.getOriginalValue('licensed.declared')}
@@ -217,6 +238,7 @@ export default class DefinitionEntry extends React.Component {
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <ModalEditor
+                  definition={definition}
                   field={'described.sourceLocation'}
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}
@@ -272,11 +294,7 @@ export default class DefinitionEntry extends React.Component {
           <Row>
             <Col md={2}>{this.renderLabel('Files')}</Col>
             <Col md={10} className="definition__line">
-              <p className="list-singleLine">
-                Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
-                <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
-                <b>{isNaN(unattributed) ? '-' : `${unattributed} (${unattributedPercent}%)`}</b>
-              </p>
+              <FileCountRenderer definition={definition} />
             </Col>
           </Row>
         </Col>
