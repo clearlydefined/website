@@ -187,6 +187,7 @@ export default class SystemManagedList extends Component {
       for (let filterType in activeFilters) {
         const value = activeFilters[filterType]
         const fieldValue = this.getValue(definition, filterType)
+        if (!value) return true
         if (value === 'presence') {
           if (!fieldValue) return false
         } else if (value === 'absence') {
@@ -204,6 +205,7 @@ export default class SystemManagedList extends Component {
   // note that in some scenarios `onFilter` is called with a random second arg
   // and sometimes with an explicit overwrite intent (e.g., true)
   onFilter(value, overwrite = false) {
+    console.log(value)
     const activeFilters = overwrite === true ? value : Object.assign({}, this.state.activeFilters)
     if (overwrite !== true) {
       const filterValue = get(activeFilters, value.type)

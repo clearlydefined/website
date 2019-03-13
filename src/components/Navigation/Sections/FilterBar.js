@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
-import { sorts, licenses, sources, releaseDates } from '../../../utils/utils'
+import { sorts, sources, releaseDates } from '../../../utils/utils'
+import SpdxPicker from '../../SpdxPicker'
 
 export default class FilterBar extends Component {
   static propTypes = {
@@ -39,7 +40,6 @@ export default class FilterBar extends Component {
       showLicenseFilter,
       showReleaseDateFilter,
       showSourceFilter,
-      customLicenses,
       customSorts,
       customSources,
       customReleaseDates
@@ -58,13 +58,11 @@ export default class FilterBar extends Component {
           />
         )}
         {showLicenseFilter && (
-          <FilterList
-            list={customLicenses || licenses}
-            title={'License'}
-            id={'licensed.declared'}
+          <SpdxPicker
+            value={''}
             disabled={hasComponents}
-            value={activeFilters}
-            onFilter={onFilter}
+            promptText={'License'}
+            onChange={value => onFilter({ type: 'licensed.declared', value })}
           />
         )}
         {showSourceFilter && (
