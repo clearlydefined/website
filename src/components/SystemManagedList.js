@@ -205,7 +205,6 @@ export default class SystemManagedList extends Component {
   // note that in some scenarios `onFilter` is called with a random second arg
   // and sometimes with an explicit overwrite intent (e.g., true)
   onFilter(value, overwrite = false) {
-    console.log(value)
     const activeFilters = overwrite === true ? value : Object.assign({}, this.state.activeFilters)
     if (overwrite !== true) {
       const filterValue = get(activeFilters, value.type)
