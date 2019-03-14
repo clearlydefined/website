@@ -3,8 +3,9 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Grid } from 'react-bootstrap'
+import { Row, Col, Grid, Button } from 'react-bootstrap'
 import get from 'lodash/get'
+import has from 'lodash/has'
 import uniq from 'lodash/uniq'
 import classNames from 'classnames'
 import { ROUTE_ROOT } from '../../../../utils/routingConstants'
@@ -29,8 +30,8 @@ import EntitySpec from '../../../../utils/entitySpec'
 class PageBrowse extends SystemManagedList {
   constructor(props) {
     super(props)
-    this.state = {}
     this.onFilter = this.onFilter.bind(this)
+    this.onClearSearch = this.onClearSearch.bind(this)
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
@@ -67,6 +68,7 @@ class PageBrowse extends SystemManagedList {
       { value: 'rubygems', label: 'RubyGems' }
     ]
     const { filterOptions } = this.props
+    const { activeFilters } = this.state
     const coordinates = filterOptions.list
       .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
       .filter(x => x)
@@ -74,12 +76,15 @@ class PageBrowse extends SystemManagedList {
     filterOptions.list = names
     return (
       <Row className="show-grid spacer">
-        <Col md={2} mdOffset={1}>
-          {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
-        </Col>
-        <Col md={8}>
+        <Col md={11} mdOffset={1}>
           <div className={'horizontalBlock'}>
-            {this.renderFilter(providers, 'Provider', 'provider')}
+            {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success', has(activeFilters, 'curate'), () =>
+              this.onFilter({ type: 'curate', value: null })
+            )}
+            <span>&nbsp;</span>
+            {this.renderFilter(providers, 'Provider', 'provider', null, has(activeFilters, 'provider'), () =>
+              this.onFilter({ type: 'provider', value: null })
+            )}
             <span>&nbsp;</span>
             <FilterBar
               options={filterOptions}
@@ -88,6 +93,14 @@ class PageBrowse extends SystemManagedList {
               onClear={this.onBrowse}
               clearOnChange
             />
+            {Object.keys(activeFilters).length > 0 ? (
+              <>
+                <span>&nbsp;</span>
+                <Button variant="primary" onClick={this.onClearSearch}>
+                  Clear Search
+                </Button>
+              </>
+            ) : null}
           </div>
         </Col>
       </Row>
@@ -116,6 +129,10 @@ class PageBrowse extends SystemManagedList {
     this.setState({ ...this.state, activeFilters }, () => this.updateData())
   }
 
+  onClearSearch() {
+    this.setState({ ...this.state, activeFilters: {} }, () => this.updateData())
+  }
+
   // Overrides the default onSort method
   onSort(eventKey) {
     let activeSort = eventKey.value
@@ -142,7 +159,7 @@ class PageBrowse extends SystemManagedList {
     )
   }
 
-  renderFilter(list, title, id, variant) {
+  renderFilter(list, title, id, variant, allowReset, onReset) {
     return (
       <FilterList
         list={list}
@@ -151,6 +168,8 @@ class PageBrowse extends SystemManagedList {
         value={this.state.activeFilters}
         onFilter={this.onFilter}
         variant={variant}
+        allowReset={allowReset}
+        onReset={onReset}
       />
     )
   }
