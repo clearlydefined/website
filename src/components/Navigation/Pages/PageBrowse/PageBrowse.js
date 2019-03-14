@@ -79,11 +79,11 @@ class PageBrowse extends SystemManagedList {
         <Col md={11} mdOffset={1}>
           <div className={'horizontalBlock'}>
             {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success', has(activeFilters, 'curate'), () =>
-              this.onFilter({ type: 'curate', value: null })
+              this.onFilter({ type: 'curate', value: get(activeFilters, 'curate') })
             )}
             <span>&nbsp;</span>
             {this.renderFilter(providers, 'Provider', 'provider', null, has(activeFilters, 'provider'), () =>
-              this.onFilter({ type: 'provider', value: null })
+              this.onFilter({ type: 'provider', value: get(activeFilters, 'provider') })
             )}
             <span>&nbsp;</span>
             <FilterBar
