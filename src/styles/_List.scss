@@ -181,6 +181,8 @@
 }
 
 .list-filter {
+  display: flex;
+  justify-content: flex-end;
   height: 50;
   align-self: center;
 }
