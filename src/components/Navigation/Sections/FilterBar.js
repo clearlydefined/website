@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Dropdown, Button, Icon, Menu } from 'antd'
+import Checkbox from 'react-bootstrap/lib/Checkbox'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, licenses, sources, releaseDates } from '../../../utils/utils'
-import { Checkbox, Dropdown, Button, Icon, Menu } from 'antd'
 
 export default class FilterBar extends Component {
   static propTypes = {
@@ -61,9 +62,9 @@ export default class FilterBar extends Component {
     } = this.props
 
     return (
-      <div>
+      <div className="section--filter-bar">
         <div className="pull-left">
-          <Checkbox style={{ marginTop: 6 }} disabled={hasComponents} onChange={onSelectAll}>
+          <Checkbox className="inlineBlock" disabled={hasComponents} onChange={onSelectAll} checked={anySelections}>
             Select All
           </Checkbox>
           {selected.length > 0 && (
@@ -79,7 +80,7 @@ export default class FilterBar extends Component {
             </Button.Group>
           )}
         </div>
-        <div className="list-filter" align="right">
+        <div className="list-filter pull-right">
           {showSortFilter && (
             <SortList
               list={customSorts || sorts}

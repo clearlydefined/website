@@ -1,10 +1,6 @@
 /* Copyright (c) Microsoft Corporation and others. */
 /* SPDX-License-Identifier: MIT */
 
-.List {
-  width: 100%;
-}
-
 .list-row {
   height: 100%;
   width: 100%;
@@ -13,6 +9,10 @@
   align-items: center;
   padding: 5px 15px 5px 10px;
   cursor: pointer;
+
+  &.no-padding-left {
+    padding-left: 0;
+  }
 
   &:hover {
     background: $color_black_10;

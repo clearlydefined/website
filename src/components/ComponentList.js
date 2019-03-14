@@ -4,10 +4,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import isEqual from 'lodash/isEqual'
+import FormGroup from 'react-bootstrap/lib/FormGroup'
 import { RowEntityList, DefinitionEntry } from './'
 import EntitySpec from '../utils/entitySpec'
 import ComponentButtons from './Navigation/Ui/ComponentButtons'
-import CheckboxGroup from 'antd/lib/checkbox/Group'
 
 export default class ComponentList extends React.Component {
   static propTypes = {
@@ -136,12 +136,12 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, noRowsRenderer, list, listLength, selected, renderFilterBar, toggleCheckbox } = this.props
+    const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div className="flex-grow">
+      <div className="component-list flex-grow">
         {renderFilterBar()}
-        <CheckboxGroup onChange={toggleCheckbox} value={selected}>
+        <FormGroup className="flex-grow-column">
           <RowEntityList
             list={list}
             listLength={listLength}
@@ -153,7 +153,7 @@ export default class ComponentList extends React.Component {
             contentSeq={contentSeq}
             customClassName={'components-list'}
           />
-        </CheckboxGroup>
+        </FormGroup>
       </div>
     )
   }

@@ -4,7 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRenderer } from './'
-import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
+import { Row, Checkbox, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
@@ -17,7 +17,6 @@ import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import Curation from '../utils/curation'
 import LicensesRenderer from './LicensesRenderer'
-import Checkbox from 'antd/lib/checkbox'
 import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
 
 export default class DefinitionEntry extends React.Component {

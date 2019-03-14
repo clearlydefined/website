@@ -289,8 +289,21 @@ hr {
   margin: 75px 0;
 }
 
-.ant-checkbox-group {
-  display: block !important;
+.section--filter-bar {
+  .checkbox {
+    margin-left: 6px;
+  }
+}
+
+.component-list {
+  .form-group.flex-grow-column {
+    height: 100%;
+    width: 100%;
+
+    .checkbox {
+      margin-left: 6px;
+    }
+  }
 }
 
 .ant-checkbox-wrapper {
