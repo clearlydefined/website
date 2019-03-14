@@ -119,7 +119,7 @@ export function searchDefinitions(token, query) {
 }
 
 export function getDefinitions(token, list) {
-  return post(url(`${DEFINITIONS}`), token, list)
+  return post(url(DEFINITIONS), token, list)
 }
 
 export function getDefinitionSuggestions(token, prefix) {
@@ -213,7 +213,7 @@ export function getStatus(key) {
 // ========================== utilities ====================
 
 export function url(path, query) {
-  path = apiHome + '/' + path
+  path = `${apiHome}/${path}`
   if (!query) return path
 
   const queryString = toPairs(query)
