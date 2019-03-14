@@ -21,7 +21,7 @@ export default class ComponentList extends React.Component {
     noRowsRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
-    selected: PropTypes.array,
+    selected: PropTypes.object,
     sequence: PropTypes.number,
     toggleCheckbox: PropTypes.func,
     curations: PropTypes.object
@@ -90,8 +90,10 @@ export default class ComponentList extends React.Component {
       showVersionSelectorPopup,
       hideVersionSelector,
       onSelectAll,
-      selected
+      selected,
+      toggleCheckbox
     } = this.props
+
     const component = list[index]
     if (!component) return
     const definition = this.getDefinition(component) || { coordinates: component }
@@ -102,9 +104,8 @@ export default class ComponentList extends React.Component {
         <DefinitionEntry
           multiSelectEnabled
           onSelectAll={onSelectAll}
-          selected={selected[index]}
-          toggleCheckbox={this.props.toggleCheckbox.bind(this, index)}
-          index={index}
+          isSelected={selected[index] || false}
+          toggleCheckbox={toggleCheckbox.bind(this, index)}
           draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}

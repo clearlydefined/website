@@ -29,7 +29,8 @@ export default class DefinitionEntry extends React.Component {
     curation: PropTypes.object.isRequired,
     component: PropTypes.object.isRequired,
     multiSelectEnabled: PropTypes.bool,
-    renderButtons: PropTypes.func
+    renderButtons: PropTypes.func,
+    isSelected: PropTypes.bool
   }
 
   static defaultProps = {}
@@ -343,11 +344,20 @@ export default class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const { definition, onClick, renderButtons, component, draggable, multiSelectEnabled, index } = this.props
+    const {
+      component,
+      definition,
+      draggable,
+      multiSelectEnabled,
+      onClick,
+      renderButtons,
+      isSelected,
+      toggleCheckbox
+    } = this.props
 
     return (
       <>
-        {multiSelectEnabled && <Checkbox className="pull-left" value={index} />}
+        {multiSelectEnabled && <Checkbox className="pull-left" onChange={toggleCheckbox} checked={isSelected} />}
         <TwoLineEntry
           draggable={draggable}
           item={component}

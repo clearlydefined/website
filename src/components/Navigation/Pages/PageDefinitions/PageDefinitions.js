@@ -97,14 +97,20 @@ export class PageDefinitions extends UserManagedList {
     )
   }
 
-  toggleCheckbox = selected => this.setState({ selected })
+  toggleCheckbox = index => {
+    if (this.state.selected[index]) {
+      this.setState(prevState => ({ selected: { ...prevState.selected, [index]: !prevState.selected } }))
+    } else {
+      this.setState(prevState => ({ selected: { ...prevState.selected, [index]: true } }))
+    }
+  }
 
   onSelectAll = ({ target }) => {
     if (!target.checked) {
-      return this.setState({ selected: '' })
+      return this.setState({ selected: {} })
     }
-    // for the length of components set all in the array
-    this.setState({ selected: this.props.components.transformedList.map((_, i) => i) })
+    // create object with keys by index with all true
+    this.setState({ selected: this.props.components.transformedList.reduce((o, _, i) => ({ ...o, [i]: true }), {}) })
   }
 
   onChangeAllLicenses = license => {
@@ -114,13 +120,14 @@ export class PageDefinitions extends UserManagedList {
   }
 
   renderFilterBar() {
+    const { activeFilters, activeSort, selected } = this.state
     return (
       <FilterBar
         onChangeAllLicenses={this.onChangeAllLicenses}
         onSelectAll={this.onSelectAll}
-        selected={this.state.selected}
-        activeSort={this.state.activeSort}
-        activeFilters={this.state.activeFilters}
+        selected={selected}
+        activeSort={activeSort}
+        activeFilters={activeFilters}
         onFilter={this.onFilter}
         onSort={this.onSort}
         hasComponents={!this.hasComponents()}
@@ -169,7 +176,16 @@ export class PageDefinitions extends UserManagedList {
 
   render() {
     const { components, curations, definitions, session, filterOptions } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition, showSavePopup, saveType } = this.state
+    const {
+      currentComponent,
+      currentDefinition,
+      path,
+      saveType,
+      selected,
+      sequence,
+      showFullDetail,
+      showSavePopup
+    } = this.state
     return (
       <Grid className="main-container flex-column">
         <ContributePrompt
@@ -194,7 +210,7 @@ export class PageDefinitions extends UserManagedList {
                 onRevert={this.revertDefinition}
                 onChange={this.onChangeComponent}
                 onAddComponent={this.onAddComponent}
-                selected={this.state.selected}
+                selected={selected}
                 onSelectAll={this.onSelectAll}
                 toggleCheckbox={this.toggleCheckbox}
                 onInspect={this.onInspect}

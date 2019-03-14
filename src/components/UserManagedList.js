@@ -50,6 +50,7 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   onRemoveAll() {
+    this.setState({ selected: [] })
     this.updateList({ removeAll: {} })
   }
 

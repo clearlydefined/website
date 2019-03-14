@@ -17,6 +17,7 @@ export default class FilterBar extends Component {
     showLicenseFilter: PropTypes.bool,
     showSourceFilter: PropTypes.bool,
     showReleaseDateFilter: PropTypes.bool,
+    selected: PropTypes.object,
     customLicenses: PropTypes.array,
     customSorts: PropTypes.array,
     customSources: PropTypes.array,
@@ -61,13 +62,15 @@ export default class FilterBar extends Component {
       onSelectAll
     } = this.props
 
+    const anySelections = Object.keys(selected).length > 0 && Object.values(selected).filter(s => s).length > 0
+
     return (
       <div className="section--filter-bar">
         <div className="pull-left">
           <Checkbox className="inlineBlock" disabled={hasComponents} onChange={onSelectAll} checked={anySelections}>
             Select All
           </Checkbox>
-          {selected.length > 0 && (
+          {anySelections && (
             // testId="multi-license-select"
             <Button.Group style={{ display: 'inline-block' }}>
               <Dropdown overlay={this.menu(customLicenses || licenses)} trigger={['click']}>
