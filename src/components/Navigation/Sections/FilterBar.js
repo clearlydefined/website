@@ -29,9 +29,7 @@ export default class FilterBar extends Component {
     showReleaseDateFilter: true
   }
 
-  onChangeAllLicenses = ({ item }) => {
-    console.log(item)
-  }
+  onChangeAllLicenses = ({ item }) => this.props.onChangeAllLicenses(item.props.children)
 
   menu(list) {
     return (
@@ -58,13 +56,14 @@ export default class FilterBar extends Component {
       customLicenses,
       customSorts,
       customSources,
-      customReleaseDates
+      customReleaseDates,
+      onSelectAll
     } = this.props
 
     return (
       <div>
         <div className="pull-left">
-          <Checkbox style={{ marginTop: 6 }} disabled={hasComponents} onChange={this.props.onSelectAll}>
+          <Checkbox style={{ marginTop: 6 }} disabled={hasComponents} onChange={onSelectAll}>
             Select All
           </Checkbox>
           {selected.length > 0 && (

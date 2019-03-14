@@ -88,7 +88,9 @@ export default class ComponentList extends React.Component {
       onRemove,
       onRevert,
       showVersionSelectorPopup,
-      hideVersionSelector
+      hideVersionSelector,
+      onSelectAll,
+      selected
     } = this.props
     const component = list[index]
     if (!component) return
@@ -99,6 +101,9 @@ export default class ComponentList extends React.Component {
       <div key={key} style={style} className="component-row">
         <DefinitionEntry
           multiSelectEnabled
+          onSelectAll={onSelectAll}
+          selected={selected[index]}
+          toggleCheckbox={this.props.toggleCheckbox.bind(this, index)}
           index={index}
           draggable
           readOnly={readOnly}

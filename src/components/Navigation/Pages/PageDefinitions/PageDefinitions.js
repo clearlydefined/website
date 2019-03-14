@@ -107,9 +107,16 @@ export class PageDefinitions extends UserManagedList {
     this.setState({ selected: this.props.components.transformedList.map((_, i) => i) })
   }
 
+  onChangeAllLicenses = license => {
+    this.props.components.transformedList.map(component =>
+      this.onChangeComponent(component, { ...component, changes: { ['licensed.declared']: license } })
+    )
+  }
+
   renderFilterBar() {
     return (
       <FilterBar
+        onChangeAllLicenses={this.onChangeAllLicenses}
         onSelectAll={this.onSelectAll}
         selected={this.state.selected}
         activeSort={this.state.activeSort}
@@ -187,6 +194,9 @@ export class PageDefinitions extends UserManagedList {
                 onRevert={this.revertDefinition}
                 onChange={this.onChangeComponent}
                 onAddComponent={this.onAddComponent}
+                selected={this.state.selected}
+                onSelectAll={this.onSelectAll}
+                toggleCheckbox={this.toggleCheckbox}
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 curations={curations}
