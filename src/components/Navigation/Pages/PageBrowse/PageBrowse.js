@@ -18,7 +18,7 @@ import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { curateFilters } from '../../../../utils/utils'
+import { curateFilters, providers } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
@@ -56,16 +56,6 @@ class PageBrowse extends SystemManagedList {
   }
 
   renderTopFilters() {
-    const providers = [
-      { value: 'cocoapods', label: 'CocoaPods' },
-      { value: 'cratesio', label: 'Crates.io' },
-      { value: 'github', label: 'GitHub' },
-      { value: 'mavencentral', label: 'MavenCentral' },
-      { value: 'npmjs', label: 'NpmJS' },
-      { value: 'nuget', label: 'NuGet' },
-      { value: 'pypi', label: 'PyPi' },
-      { value: 'rubygems', label: 'RubyGems' }
-    ]
     const { filterOptions } = this.props
     const coordinates = filterOptions.list
       .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
@@ -74,12 +64,24 @@ class PageBrowse extends SystemManagedList {
     filterOptions.list = names
     return (
       <Row className="show-grid spacer">
-        <Col md={2} mdOffset={1}>
-          {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
-        </Col>
-        <Col md={8}>
+        <Col md={11} mdOffset={1}>
           <div className={'horizontalBlock'}>
-            {this.renderFilter(providers, 'Provider', 'provider')}
+            {this.renderFilter(
+              curateFilters,
+              get(this.state, 'activeFilters.curate')
+                ? curateFilters.find(item => item.value === get(this.state, 'activeFilters.curate')).label
+                : 'Fix something',
+              'curate',
+              'success'
+            )}
+            <span>&nbsp;</span>
+            {this.renderFilter(
+              providers,
+              get(this.state, 'activeFilters.provider')
+                ? providers.find(item => item.value === get(this.state, 'activeFilters.provider')).label
+                : 'Provider',
+              'provider'
+            )}
             <span>&nbsp;</span>
             <FilterBar
               options={filterOptions}
