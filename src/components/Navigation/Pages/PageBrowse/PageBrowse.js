@@ -3,7 +3,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Grid, Button } from 'react-bootstrap'
+import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import has from 'lodash/has'
 import uniq from 'lodash/uniq'
@@ -31,7 +31,6 @@ class PageBrowse extends SystemManagedList {
   constructor(props) {
     super(props)
     this.onFilter = this.onFilter.bind(this)
-    this.onClearSearch = this.onClearSearch.bind(this)
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
@@ -92,15 +91,8 @@ class PageBrowse extends SystemManagedList {
               onSearch={this.onSearch}
               onClear={this.onBrowse}
               clearOnChange
+              value={get(this.nameFilter, 'value')}
             />
-            {Object.keys(activeFilters).length > 0 ? (
-              <>
-                <span>&nbsp;</span>
-                <Button variant="primary" onClick={this.onClearSearch}>
-                  Clear Search
-                </Button>
-              </>
-            ) : null}
           </div>
         </Col>
       </Row>
@@ -127,10 +119,6 @@ class PageBrowse extends SystemManagedList {
       else activeFilters[filter.type] = filter.value
     }
     this.setState({ ...this.state, activeFilters }, () => this.updateData())
-  }
-
-  onClearSearch() {
-    this.setState({ ...this.state, activeFilters: {} }, () => this.updateData())
   }
 
   // Overrides the default onSort method
