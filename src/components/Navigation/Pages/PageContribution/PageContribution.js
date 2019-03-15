@@ -60,8 +60,8 @@ class PageContribution extends SystemManagedList {
     const { components, curations, definitions } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
-      <Grid className="main-container">
-        <Section name={this.tableTitle()} actionButton={this.renderButtons()}>
+      <Grid className="main-container flex-column">
+        <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
           {
             <div className="section-body flex-grow">
               <ComponentList
