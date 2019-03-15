@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import Contribution from '../../../utils/contribution'
 import TwoColumnsSection from '../Sections/TwoColumnsSection'
 import { SourcePicker } from '../..'
+import ListDataRenderer from '../Ui/ListDataRenderer'
 
 class DescribedSection extends Component {
   static propTypes = {
@@ -31,7 +32,10 @@ class DescribedSection extends Component {
       applyCurationSuggestion
     } = this.props
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
-    const toolList = get(definition.described, 'tools', []).map(tool =>
+
+    // trim tool text if it starts with curation, as what follows is a long hash
+    // e.g. curation/1032ce558db47eee59b75d84132f5fbe6e19efbb
+    definition.described.tools = get(definition.described, 'tools', []).map(tool =>
       tool.startsWith('curation') ? tool.slice(0, 16) : tool
     )
 
@@ -46,9 +50,8 @@ class DescribedSection extends Component {
       },
       {
         label: 'Tools',
-        field: 'described.tools',
-        editable: false,
-        value: toolList.join(', ')
+        component: <ListDataRenderer licensed={definition} item="described.tools" title={'Tools'} />,
+        field: 'described.tools'
       },
       {
         label: 'Release',
