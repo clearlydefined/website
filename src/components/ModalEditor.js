@@ -44,7 +44,7 @@ class ModalEditor extends React.Component {
         <div
           title={value}
           className={`editable-field ${extraClass} ${value ? (changed ? 'bg-info' : '') : 'placeholder-text'}`}
-          onClick={() => (readOnly ? null : this.setState({ editing: true }, () => onClick && onClick()))}
+          onClick={() => !readOnly && this.setState({ editing: true }, () => onClick && onClick())}
         >
           {value || placeholder}
         </div>
