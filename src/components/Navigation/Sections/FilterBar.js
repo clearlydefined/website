@@ -7,6 +7,8 @@ import { Button, ButtonGroup, Checkbox, DropdownButton, MenuItem } from 'react-b
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
+import { ModalEditor, SourcePicker } from '../..'
+import Contribution from '../../../utils/contribution'
 
 export default class FilterBar extends Component {
   static propTypes = {
@@ -14,6 +16,8 @@ export default class FilterBar extends Component {
     activeFilters: PropTypes.object,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,
+    onChangeAllLicenses: PropTypes.func,
+    onChangeAllSources: PropTypes.func,
     hasComponents: PropTypes.bool,
     showSortFilter: PropTypes.bool,
     showLicenseFilter: PropTypes.bool,
@@ -34,19 +38,33 @@ export default class FilterBar extends Component {
   }
 
   state = {
-    licenseToUpdate: ''
+    licenseToUpdate: '',
+    sourceToUpdate: null
   }
 
   onChangeAllLicenses = ({ value }) => {
+    const { onChangeAllLicenses } = this.props
     this.setState(prevState => {
       // toggle
       if (prevState.licenseToUpdate == value) {
-        this.props.onChangeAllLicenses(null)
+        onChangeAllLicenses(null)
         return { licenseToUpdate: null }
       }
-      this.props.onChangeAllLicenses(value)
+      onChangeAllLicenses(value)
       return { licenseToUpdate: value }
     })
+  }
+
+  onChangeAllSources = value => {
+    const { onChangeAllSources } = this.props
+    // toggle
+    if (!value) {
+      onChangeAllSources(null)
+      this.setState({ sourceToUpdate: null })
+      return
+    }
+    onChangeAllSources(value)
+    this.setState({ sourceToUpdate: value })
   }
 
   renderLicensesDropdown() {
@@ -67,6 +85,36 @@ export default class FilterBar extends Component {
           </MenuItem>
         ))}
       </DropdownButton>
+    )
+  }
+
+  renderSourcesButton() {
+    const { sourceToUpdate } = this.state
+
+    // trim from the slash (/) after http://github.com
+    const source =
+      Contribution.printCoordinates(sourceToUpdate) && Contribution.printCoordinates(sourceToUpdate).slice(18)
+    return (
+      <ModalEditor
+        editor={SourcePicker}
+        field={'described.sourceLocation'}
+        onChange={this.onChangeAllSources}
+        revertable={false}
+        showEditIcon={false}
+      >
+        <Button>
+          <span>{source || 'Source'}</span>
+          {sourceToUpdate && (
+            <i
+              className="fas fa-undo"
+              onClick={e => {
+                e.stopPropagation()
+                this.onChangeAllSources()
+              }}
+            />
+          )}
+        </Button>
+      </ModalEditor>
     )
   }
 
@@ -100,7 +148,7 @@ export default class FilterBar extends Component {
           {anySelections && (
             <ButtonGroup className="inlineBlock">
               {this.renderLicensesDropdown()}
-              <Button>Source</Button>
+              {this.renderSourcesButton()}
               <Button>Release Date</Button>
             </ButtonGroup>
           )}

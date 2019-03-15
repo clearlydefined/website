@@ -114,23 +114,31 @@ export class PageDefinitions extends UserManagedList {
   }
 
   onChangeAllLicenses = license => {
-    // reset
-    if (!license) {
-      return this.props.components.transformedList.map(component => {
-        const { changes, ...rest } = component
-        this.onChangeComponent(component, rest)
-      })
-    }
+    if (!license) return this.resetComponents()
     this.props.components.transformedList.map(component =>
       this.onChangeComponent(component, { ...component, changes: { ['licensed.declared']: license } })
     )
   }
+
+  onChangeAllSources = source => {
+    if (!source) return this.resetComponents()
+    this.props.components.transformedList.map(component =>
+      this.onChangeComponent(component, { ...component, changes: { ['described.sourceLocation']: source } })
+    )
+  }
+
+  resetComponents = () =>
+    this.props.components.transformedList.map(component => {
+      const { changes, ...rest } = component
+      this.onChangeComponent(component, rest)
+    })
 
   renderFilterBar() {
     const { activeFilters, activeSort, selected } = this.state
     return (
       <FilterBar
         onChangeAllLicenses={this.onChangeAllLicenses}
+        onChangeAllSources={this.onChangeAllSources}
         onSelectAll={this.onSelectAll}
         selected={selected}
         activeSort={activeSort}
