@@ -6,16 +6,19 @@ import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import withSuggestions from '../utils/withSuggestions'
+
 class ModalEditor extends React.Component {
   static propTypes = {
+    editor: PropTypes.element.isRequired,
     field: PropTypes.string.isRequired,
     readOnly: PropTypes.bool,
     initialValue: PropTypes.string,
     extraClass: PropTypes.string,
     value: PropTypes.string,
+    onClick: PropTypes.func,
     onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string.isRequired,
     onRevert: PropTypes.func,
+    placeholder: PropTypes.string.isRequired,
     revertable: PropTypes.bool
   }
 
