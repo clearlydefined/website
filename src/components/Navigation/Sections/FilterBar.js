@@ -1,10 +1,12 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Dropdown, Button, Icon, Menu } from 'antd'
-import Checkbox from 'react-bootstrap/lib/Checkbox'
+import { Button, ButtonGroup, Checkbox, DropdownButton, MenuItem } from 'react-bootstrap'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
-import { sorts, licenses, sources, releaseDates } from '../../../utils/utils'
+import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
 
 export default class FilterBar extends Component {
   static propTypes = {
@@ -31,15 +33,40 @@ export default class FilterBar extends Component {
     showReleaseDateFilter: true
   }
 
-  onChangeAllLicenses = ({ item }) => this.props.onChangeAllLicenses(item.props.children)
+  state = {
+    licenseToUpdate: ''
+  }
 
-  menu(list) {
+  onChangeAllLicenses = ({ value }) => {
+    this.setState(prevState => {
+      // toggle
+      if (prevState.licenseToUpdate == value) {
+        this.props.onChangeAllLicenses(null)
+        return { licenseToUpdate: null }
+      }
+      this.props.onChangeAllLicenses(value)
+      return { licenseToUpdate: value }
+    })
+  }
+
+  renderLicensesDropdown() {
+    const { licenseToUpdate } = this.state
+    const { customLicenses } = this.props
+    const licenses = customLicenses || defaultLicenses
     return (
-      <Menu onClick={this.onChangeAllLicenses}>
-        {list.map((item, key) => (
-          <Menu.Item key={key}>{item.label}</Menu.Item>
+      <DropdownButton
+        className="list-button"
+        bsStyle="default"
+        title={licenseToUpdate || 'License'}
+        id="multi-license-select"
+      >
+        {licenses.map((license, index) => (
+          <MenuItem key={index} onSelect={this.onChangeAllLicenses} eventKey={{ value: license.value }}>
+            <span>{license.label}</span>
+            {licenseToUpdate === license.value && <i className="fas fa-check" />}
+          </MenuItem>
         ))}
-      </Menu>
+      </DropdownButton>
     )
   }
 
@@ -71,16 +98,11 @@ export default class FilterBar extends Component {
             Select All
           </Checkbox>
           {anySelections && (
-            // testId="multi-license-select"
-            <Button.Group style={{ display: 'inline-block' }}>
-              <Dropdown overlay={this.menu(customLicenses || licenses)} trigger={['click']}>
-                <Button style={{ marginLeft: 8 }}>
-                  License <Icon type="down" />
-                </Button>
-              </Dropdown>
+            <ButtonGroup className="inlineBlock">
+              {this.renderLicensesDropdown()}
               <Button>Source</Button>
               <Button>Release Date</Button>
-            </Button.Group>
+            </ButtonGroup>
           )}
         </div>
         <div className="list-filter pull-right">
@@ -96,7 +118,7 @@ export default class FilterBar extends Component {
           )}
           {showLicenseFilter && (
             <FilterList
-              list={customLicenses || licenses}
+              list={customLicenses || defaultLicenses}
               title={'License'}
               id={'licensed.declared'}
               disabled={hasComponents}

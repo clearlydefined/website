@@ -114,6 +114,13 @@ export class PageDefinitions extends UserManagedList {
   }
 
   onChangeAllLicenses = license => {
+    // reset
+    if (!license) {
+      return this.props.components.transformedList.map(component => {
+        const { changes, ...rest } = component
+        this.onChangeComponent(component, rest)
+      })
+    }
     this.props.components.transformedList.map(component =>
       this.onChangeComponent(component, { ...component, changes: { ['licensed.declared']: license } })
     )
