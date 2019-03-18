@@ -103,7 +103,7 @@ export default class EntitySpec {
     return new EntitySpec(o.type, o.provider, o.namespace, o.name)
   }
 
-  static asPrLess(o) {
+  static fromObject(o) {
     return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision)
   }
 
