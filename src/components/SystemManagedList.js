@@ -19,7 +19,6 @@ import { uiBrowseUpdateFilterList, uiRevert, uiInfo, uiDanger } from '../actions
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
-import Definition from '../utils/definition'
 
 /**
  * Abstracts methods for system-managed list
@@ -162,8 +161,8 @@ export default class SystemManagedList extends Component {
       },
       score: coordinates => {
         const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-        const scores = Definition.computeScores(definition)
-        return scores ? (scores.tool + scores.effective) / 2 : -1
+        const scores = get(definition, 'scores')
+        return scores ? (get(scores, 'tool') + get(scores, 'effective')) / 2 : -1
       }
     }
     return sorts[eventKey]
