@@ -217,6 +217,7 @@ class PageBrowse extends SystemManagedList {
           <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
             <i className="fas fa-spinner fa-spin" />
             <ComponentList
+              multiSelectEnabled={false}
               readOnly={false}
               list={components.transformedList}
               listLength={get(components, 'headers.pagination.totalCount') || components.list.length}

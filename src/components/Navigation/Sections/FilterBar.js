@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Button, ButtonGroup, Checkbox, DropdownButton, MenuItem } from 'react-bootstrap'
+import { Button, ButtonGroup, Checkbox } from 'react-bootstrap'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
@@ -15,6 +15,7 @@ export default class FilterBar extends Component {
   static propTypes = {
     activeSort: PropTypes.string,
     activeFilters: PropTypes.object,
+    multiSelectEnabled: PropTypes.bool,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,
     hasComponents: PropTypes.bool,
@@ -30,6 +31,7 @@ export default class FilterBar extends Component {
   }
 
   static defaultProps = {
+    multiSelectEnabled: false,
     showSortFilter: true,
     showLicenseFilter: true,
     showSourceFilter: true,
@@ -114,6 +116,33 @@ export default class FilterBar extends Component {
     )
   }
 
+  renderMultiSelect() {
+    const { hasComponents, onSelectAll, selected } = this.props
+
+    const numSelected = Object.values(selected).filter(s => s).length
+    const anySelections = Object.keys(selected).length > 0 && numSelected > 0
+    return (
+      <div className="pull-left">
+        <Checkbox
+          className="inlineBlock btn-group"
+          disabled={hasComponents}
+          onChange={onSelectAll}
+          checked={anySelections}
+        >
+          Select All
+        </Checkbox>
+        {anySelections && <span className="selected">{numSelected} selected</span>}
+        {anySelections && (
+          <ButtonGroup className="inlineBlock">
+            {this.renderSourcesButton()}
+            {this.renderReleaseDateEditor()}
+            {this.renderLicensesDropdown()}
+          </ButtonGroup>
+        )}
+      </div>
+    )
+  }
+
   render() {
     const {
       activeSort,
@@ -121,7 +150,6 @@ export default class FilterBar extends Component {
       onFilter,
       onSort,
       hasComponents,
-      selected,
       showSortFilter,
       showLicenseFilter,
       showReleaseDateFilter,
@@ -130,32 +158,12 @@ export default class FilterBar extends Component {
       customSorts,
       customSources,
       customReleaseDates,
-      onSelectAll
+      multiSelectEnabled,
     } = this.props
-
-    const numSelected = Object.values(selected).filter(s => s).length
-    const anySelections = Object.keys(selected).length > 0 && numSelected > 0
 
     return (
       <div className="section--filter-bar">
-        <div className="pull-left">
-          <Checkbox
-            className="inlineBlock btn-group"
-            disabled={hasComponents}
-            onChange={onSelectAll}
-            checked={anySelections}
-          >
-            Select All
-          </Checkbox>
-          {anySelections && <span className="selected">{numSelected} selected</span>}
-          {anySelections && (
-            <ButtonGroup className="inlineBlock">
-              {this.renderSourcesButton()}
-              {this.renderReleaseDateEditor()}
-              {this.renderLicensesDropdown()}
-            </ButtonGroup>
-          )}
-        </div>
+       {multiSelectEnabled && this.renderMultiSelect()}
         <div className="list-filter pull-right">
           {showSortFilter && (
             <SortList

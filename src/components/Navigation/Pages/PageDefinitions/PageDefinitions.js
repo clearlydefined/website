@@ -136,6 +136,7 @@ export class PageDefinitions extends UserManagedList {
     const { activeFilters, activeSort, selected } = this.state
     return (
       <FilterBar
+        multiSelectEnabled
         onFieldChange={this.onFieldChange}
         onSelectAll={this.onSelectAll}
         selected={selected}
@@ -216,6 +217,7 @@ export class PageDefinitions extends UserManagedList {
               onAddComponent={this.onAddComponent}
             >
               <ComponentList
+                multiSelectEnabled
                 readOnly={this.readOnly}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}

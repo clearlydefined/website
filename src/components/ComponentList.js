@@ -14,6 +14,7 @@ export default class ComponentList extends React.Component {
     list: PropTypes.array,
     listLength: PropTypes.number,
     loadMoreRows: PropTypes.func,
+    multiSelectEnabled: PropTypes.bool,
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
     onChange: PropTypes.func,
@@ -25,6 +26,10 @@ export default class ComponentList extends React.Component {
     sequence: PropTypes.number,
     toggleCheckbox: PropTypes.func,
     curations: PropTypes.object
+  }
+
+  static defaultProps = {
+    selected: {}
   }
 
   constructor(props) {
@@ -91,7 +96,8 @@ export default class ComponentList extends React.Component {
       hideVersionSelector,
       onSelectAll,
       selected,
-      toggleCheckbox
+      toggleCheckbox,
+      multiSelectEnabled
     } = this.props
 
     const component = list[index]
@@ -102,10 +108,10 @@ export default class ComponentList extends React.Component {
     return (
       <div key={key} style={style} className="component-row">
         <DefinitionEntry
-          multiSelectEnabled
+          multiSelectEnabled={multiSelectEnabled}
           onSelectAll={onSelectAll}
           isSelected={selected[index] || false}
-          toggleCheckbox={toggleCheckbox.bind(this, index)}
+          toggleCheckbox={multiSelectEnabled && toggleCheckbox.bind(this, index)}
           draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
