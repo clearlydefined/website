@@ -8,6 +8,7 @@ import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
 import { ModalEditor, SourcePicker } from '../..'
+import SpdxPicker from '../../SpdxPicker'
 import Contribution from '../../../utils/contribution'
 
 export default class FilterBar extends Component {
@@ -42,7 +43,7 @@ export default class FilterBar extends Component {
     sourceToUpdate: null
   }
 
-  onChangeAllLicenses = ({ value }) => {
+  onChangeAllLicenses = value => {
     const { onChangeAllLicenses } = this.props
     this.setState(prevState => {
       // toggle
@@ -69,23 +70,7 @@ export default class FilterBar extends Component {
 
   renderLicensesDropdown() {
     const { licenseToUpdate } = this.state
-    const { customLicenses } = this.props
-    const licenses = customLicenses || defaultLicenses
-    return (
-      <DropdownButton
-        className="list-button"
-        bsStyle="default"
-        title={licenseToUpdate || 'License'}
-        id="multi-license-select"
-      >
-        {licenses.map((license, index) => (
-          <MenuItem key={index} onSelect={this.onChangeAllLicenses} eventKey={{ value: license.value }}>
-            <span>{license.label}</span>
-            {licenseToUpdate === license.value && <i className="fas fa-check" />}
-          </MenuItem>
-        ))}
-      </DropdownButton>
-    )
+    return <SpdxPicker value={licenseToUpdate || ''} promptText={'License'} onChange={this.onChangeAllLicenses} />
   }
 
   renderSourcesButton() {
@@ -137,14 +122,21 @@ export default class FilterBar extends Component {
       onSelectAll
     } = this.props
 
-    const anySelections = Object.keys(selected).length > 0 && Object.values(selected).filter(s => s).length > 0
+    const numSelected = Object.values(selected).filter(s => s).length
+    const anySelections = Object.keys(selected).length > 0 && numSelected > 0
 
     return (
       <div className="section--filter-bar">
         <div className="pull-left">
-          <Checkbox className="inlineBlock" disabled={hasComponents} onChange={onSelectAll} checked={anySelections}>
+          <Checkbox
+            className="inlineBlock btn-group"
+            disabled={hasComponents}
+            onChange={onSelectAll}
+            checked={anySelections}
+          >
             Select All
           </Checkbox>
+          {anySelections && <span className="selected">{numSelected} selected</span>}
           {anySelections && (
             <ButtonGroup className="inlineBlock">
               {this.renderLicensesDropdown()}
