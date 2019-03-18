@@ -17,9 +17,17 @@ export default class FileList extends Component {
     searchText: null
   }
 
+  componentDidMount() {
+    this.updateFileList(this.props)
+  }
+
   componentWillReceiveProps(nextProps) {
+    this.updateFileList(nextProps)
+  }
+
+  updateFileList = props => {
     this.setState({
-      files: FileListSpec.pathToTreeFolders(nextProps.files, nextProps.component.item, nextProps.previewDefinition)
+      files: FileListSpec.pathToTreeFolders(props.files, props.component.item, props.previewDefinition)
     })
   }
 
@@ -131,7 +139,6 @@ export default class FileList extends Component {
   render() {
     const { readOnly, component, previewDefinition } = this.props
     let { expandedRows, searchText, filteredFiles, files } = this.state
-
     const columns = [
       {
         title: 'Name',
