@@ -37,29 +37,28 @@ export default class FilterBar extends Component {
   }
 
   state = {
-    licenseToUpdate: '',
-    releaseToUpdate: null,
-    sourceToUpdate: null
+    'licensed.declared': null,
+    release: null,
+    source: null
   }
 
   onFieldChange = (field, value) => {
     const { onFieldChange } = this.props
     this.setState(prevState => {
       // toggle
-      if (prevState.licenseToUpdate == value) {
+      if (prevState[field] == value) {
         onFieldChange(field, null)
-        return { licenseToUpdate: null }
+        return { [field]: null }
       }
       onFieldChange(field, value)
-      return { licenseToUpdate: value }
+      return { [field]: value }
     })
   }
 
   renderLicensesDropdown() {
-    const { licenseToUpdate } = this.state
     return (
       <SpdxPicker
-        value={licenseToUpdate || ''}
+        value={this.state['licensed.declared'] || ''}
         promptText={'License'}
         onChange={this.onFieldChange.bind(this, 'licensed.declared')}
       />
@@ -67,11 +66,16 @@ export default class FilterBar extends Component {
   }
 
   renderSourcesButton() {
-    const { sourceToUpdate } = this.state
+    const sourceToUpdate = this.state['described.sourceLocation']
 
+    const coordinates = Contribution.printCoordinates(sourceToUpdate)
     // trim starting from the slash (/) after "http://github.com"
-    const source =
-      Contribution.printCoordinates(sourceToUpdate) && Contribution.printCoordinates(sourceToUpdate).slice(18)
+    let source = coordinates && coordinates.slice(18)
+
+    if (source && source.indexOf('commit/') > -1) {
+      source = source.slice(0, source.indexOf('commit/') + 7 + 7) // 7 = length of "commit/" - 7 = length of the hash
+    }
+
     return (
       <ModalEditor
         editor={SourcePicker}
@@ -97,8 +101,6 @@ export default class FilterBar extends Component {
   }
 
   renderReleaseDateEditor() {
-    const { releaseToUpdate } = this.state
-
     return (
       <InlineEditor
         editIcon={false}
@@ -107,7 +109,7 @@ export default class FilterBar extends Component {
         placeholder="Release Date"
         revertable={false}
         type="date"
-        value={Contribution.printDate(releaseToUpdate)}
+        value={Contribution.printDate(this.state['described.releaseDate'])}
       />
     )
   }
@@ -148,9 +150,9 @@ export default class FilterBar extends Component {
           {anySelections && <span className="selected">{numSelected} selected</span>}
           {anySelections && (
             <ButtonGroup className="inlineBlock">
-              {this.renderLicensesDropdown()}
               {this.renderSourcesButton()}
               {this.renderReleaseDateEditor()}
+              {this.renderLicensesDropdown()}
             </ButtonGroup>
           )}
         </div>

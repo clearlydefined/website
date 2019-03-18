@@ -292,7 +292,7 @@ hr {
 
 .section--filter-bar {
   .checkbox {
-    margin-left: 6px;
+    margin: 6px;
   }
 
   .list-singleLine {
@@ -307,6 +307,11 @@ hr {
   .selected {
     padding: 0 10px;
     vertical-align: middle;
+  }
+
+  .placeholder-text,
+  .rbt-input-main::placeholder {
+    color: #333;
   }
 }
 

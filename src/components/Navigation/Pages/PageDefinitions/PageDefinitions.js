@@ -114,9 +114,15 @@ export class PageDefinitions extends UserManagedList {
   }
 
   onFieldChange = (field, value) => {
-    if (!value) return this.resetComponents()
+    if (!value) {
+      this.props.components.transformedList.map(component => {
+        delete component.changes[field]
+        this.onChangeComponent(component, { ...component, changes: component.changes })
+      })
+      return
+    }
     this.props.components.transformedList.map(component =>
-      this.onChangeComponent(component, { ...component, changes: { [field]: value } })
+      this.onChangeComponent(component, { ...component, changes: { ...component.changes, [field]: value } })
     )
   }
 
