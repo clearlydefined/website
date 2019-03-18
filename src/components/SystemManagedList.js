@@ -161,9 +161,8 @@ export default class SystemManagedList extends Component {
       },
       score: coordinates => {
         const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-        return get(definition, 'scores')
-          ? (get(definition, 'scores.tool') + get(definition, 'scores.effective')) / 2
-          : -1
+        const scores = get(definition, 'scores')
+        return scores ? (get(scores, 'tool') + get(scores, 'effective')) / 2 : -1
       }
     }
     return sorts[eventKey]

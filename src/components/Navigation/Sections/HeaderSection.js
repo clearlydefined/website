@@ -34,6 +34,7 @@ export default class HeaderSection extends Component {
       handleRevert
     } = this.props
     const { item } = definition
+    const scores = get(item, 'scores')
     const isCurated = Curation.isCurated(curations.item)
     const hasPendingCurations = Curation.isPending(curations.item)
     return (
@@ -44,9 +45,9 @@ export default class HeaderSection extends Component {
               <h2>{item && item.coordinates.name}</h2>
               &nbsp;&nbsp;
               <div className="header-data">
-                {get(item, 'scores') && (
+                {scores && (
                   <span className="score-header">
-                    <ScoreRenderer scores={get(item, 'scores')} definition={item} />
+                    <ScoreRenderer scores={scores} definition={item} />
                   </span>
                 )}
                 {isCurated && (
