@@ -53,11 +53,7 @@ export default class TwoLineEntry extends React.Component {
             />
           )}
           {letter && !image && (
-            <span
-              className={`list-letter${highlight ? ' list-highlight' : ''}`}
-              alt={item.provider}
-              title={item.provider}
-            >
+            <span className={`list-letter${highlight ? ' list-highlight' : ''}`} title={item.provider}>
               {letter.slice(0, 1)}
             </span>
           )}
