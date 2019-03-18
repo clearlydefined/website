@@ -7,7 +7,7 @@ import { Button, ButtonGroup, Checkbox, DropdownButton, MenuItem } from 'react-b
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
-import { ModalEditor, SourcePicker } from '../..'
+import { ModalEditor, SourcePicker, InlineEditor } from '../..'
 import SpdxPicker from '../../SpdxPicker'
 import Contribution from '../../../utils/contribution'
 
@@ -17,8 +17,6 @@ export default class FilterBar extends Component {
     activeFilters: PropTypes.object,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,
-    onChangeAllLicenses: PropTypes.func,
-    onChangeAllSources: PropTypes.func,
     hasComponents: PropTypes.bool,
     showSortFilter: PropTypes.bool,
     showLicenseFilter: PropTypes.bool,
@@ -40,50 +38,45 @@ export default class FilterBar extends Component {
 
   state = {
     licenseToUpdate: '',
+    releaseToUpdate: null,
     sourceToUpdate: null
   }
 
-  onChangeAllLicenses = value => {
-    const { onChangeAllLicenses } = this.props
+  onFieldChange = (field, value) => {
+    const { onFieldChange } = this.props
     this.setState(prevState => {
       // toggle
       if (prevState.licenseToUpdate == value) {
-        onChangeAllLicenses(null)
+        onFieldChange(field, null)
         return { licenseToUpdate: null }
       }
-      onChangeAllLicenses(value)
+      onFieldChange(field, value)
       return { licenseToUpdate: value }
     })
   }
 
-  onChangeAllSources = value => {
-    const { onChangeAllSources } = this.props
-    // toggle
-    if (!value) {
-      onChangeAllSources(null)
-      this.setState({ sourceToUpdate: null })
-      return
-    }
-    onChangeAllSources(value)
-    this.setState({ sourceToUpdate: value })
-  }
-
   renderLicensesDropdown() {
     const { licenseToUpdate } = this.state
-    return <SpdxPicker value={licenseToUpdate || ''} promptText={'License'} onChange={this.onChangeAllLicenses} />
+    return (
+      <SpdxPicker
+        value={licenseToUpdate || ''}
+        promptText={'License'}
+        onChange={this.onFieldChange.bind(this, 'licensed.declared')}
+      />
+    )
   }
 
   renderSourcesButton() {
     const { sourceToUpdate } = this.state
 
-    // trim from the slash (/) after http://github.com
+    // trim starting from the slash (/) after "http://github.com"
     const source =
       Contribution.printCoordinates(sourceToUpdate) && Contribution.printCoordinates(sourceToUpdate).slice(18)
     return (
       <ModalEditor
         editor={SourcePicker}
-        field={'described.sourceLocation'}
-        onChange={this.onChangeAllSources}
+        field="described.sourceLocation"
+        onChange={this.onFieldChange.bind(this, 'described.sourceLocation')}
         revertable={false}
         showEditIcon={false}
       >
@@ -94,12 +87,28 @@ export default class FilterBar extends Component {
               className="fas fa-undo"
               onClick={e => {
                 e.stopPropagation()
-                this.onChangeAllSources()
+                this.onFieldChange('described.sourceLocation')
               }}
             />
           )}
         </Button>
       </ModalEditor>
+    )
+  }
+
+  renderReleaseDateEditor() {
+    const { releaseToUpdate } = this.state
+
+    return (
+      <InlineEditor
+        editIcon={false}
+        field="described.releaseDate"
+        onChange={this.onFieldChange.bind(this, 'described.releaseDate')}
+        placeholder="Release Date"
+        revertable={false}
+        type="date"
+        value={Contribution.printDate(releaseToUpdate)}
+      />
     )
   }
 
@@ -141,7 +150,7 @@ export default class FilterBar extends Component {
             <ButtonGroup className="inlineBlock">
               {this.renderLicensesDropdown()}
               {this.renderSourcesButton()}
-              <Button>Release Date</Button>
+              {this.renderReleaseDateEditor()}
             </ButtonGroup>
           )}
         </div>

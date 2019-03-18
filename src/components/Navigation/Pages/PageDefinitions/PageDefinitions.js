@@ -113,17 +113,10 @@ export class PageDefinitions extends UserManagedList {
     this.setState({ selected: this.props.components.transformedList.reduce((o, _, i) => ({ ...o, [i]: true }), {}) })
   }
 
-  onChangeAllLicenses = license => {
-    if (!license) return this.resetComponents()
+  onFieldChange = (field, value) => {
+    if (!value) return this.resetComponents()
     this.props.components.transformedList.map(component =>
-      this.onChangeComponent(component, { ...component, changes: { ['licensed.declared']: license } })
-    )
-  }
-
-  onChangeAllSources = source => {
-    if (!source) return this.resetComponents()
-    this.props.components.transformedList.map(component =>
-      this.onChangeComponent(component, { ...component, changes: { ['described.sourceLocation']: source } })
+      this.onChangeComponent(component, { ...component, changes: { [field]: value } })
     )
   }
 
@@ -137,8 +130,7 @@ export class PageDefinitions extends UserManagedList {
     const { activeFilters, activeSort, selected } = this.state
     return (
       <FilterBar
-        onChangeAllLicenses={this.onChangeAllLicenses}
-        onChangeAllSources={this.onChangeAllSources}
+        onFieldChange={this.onFieldChange}
         onSelectAll={this.onSelectAll}
         selected={selected}
         activeSort={activeSort}

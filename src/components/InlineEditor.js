@@ -6,8 +6,10 @@ import PropTypes from 'prop-types'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import { SpdxPicker } from './'
 import withSuggestions from '../utils/withSuggestions'
+
 class InlineEditor extends React.Component {
   static propTypes = {
+    editIcon: PropTypes.bool,
     field: PropTypes.string.isRequired,
     readOnly: PropTypes.bool,
     initialValue: PropTypes.string,
@@ -21,8 +23,9 @@ class InlineEditor extends React.Component {
   }
 
   static defaultProps = {
-    type: 'text',
-    revertable: true
+    editIcon: true,
+    revertable: true,
+    type: 'text'
   }
 
   state = { editing: false }
@@ -55,9 +58,8 @@ class InlineEditor extends React.Component {
 
   renderValue() {
     const { value, type, initialValue, placeholder, extraClass, readOnly, onClick } = this.props
-    const { editing } = this.state
     const changed = initialValue !== value
-    if (!editing)
+    if (!this.state.editing)
       return (
         <span
           title={this.renderers[type](value)}
@@ -72,12 +74,12 @@ class InlineEditor extends React.Component {
   }
 
   render() {
-    const { onClick, readOnly, initialValue, value, onRevert, revertable, field } = this.props
+    const { editIcon, onClick, readOnly, initialValue, value, onRevert, revertable, field } = this.props
     const changed = initialValue !== value
     return (
       <span className="list-singleLine" name={field}>
         <Fragment>
-          {!readOnly && (
+          {!readOnly && editIcon && (
             <i
               className="fas fa-pencil-alt editable-marker"
               onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
@@ -102,8 +104,8 @@ class InlineEditor extends React.Component {
   }
 
   editors = {
-    text: value => <input size="45" type="text" defaultValue={value} />,
-    date: value => <input size="45" type="date" defaultValue={value} />,
+    text: value => <input size={45} type="text" defaultValue={value} />,
+    date: value => <input size={45} type="date" defaultValue={value} />,
     license: value => <SpdxPicker value={value} autoFocus={true} />
   }
 
