@@ -44,9 +44,22 @@ export default class TwoLineEntry extends React.Component {
         }}
       >
         <div className={`list-row${isEmpty ? ' isEmpty' : ''}`} onClick={onClick}>
-          {image && <img className={`list-image${highlight ? ' list-highlight' : ''}`} src={image} alt="" />}
+          {image && (
+            <img
+              className={`list-image${highlight ? ' list-highlight' : ''}`}
+              src={image}
+              alt={item.provider}
+              title={item.provider}
+            />
+          )}
           {letter && !image && (
-            <span className={`list-letter${highlight ? ' list-highlight' : ''}`}>{letter.slice(0, 1)}</span>
+            <span
+              className={`list-letter${highlight ? ' list-highlight' : ''}`}
+              alt={item.provider}
+              title={item.provider}
+            >
+              {letter.slice(0, 1)}
+            </span>
           )}
           <div className="list-body">
             <div className="list-headline">{headline}</div>
