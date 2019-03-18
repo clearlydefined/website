@@ -100,7 +100,7 @@ class ScoreRenderer extends Component {
       <Tooltip title={this.renderTooltipContent} key={this.renderTooltipContent} overlayStyle={{ width: '800px' }}>
         {domain ? (
           <Tag className="cd-badge" color={this.getColor(get(domain, 'score.total'))}>
-            {get(domain, 'toolScore.total')}
+            {get(domain, 'score.total')}
           </Tag>
         ) : (
           <Tag className="cd-badge" color={this.getColor(scores.effective)}>
