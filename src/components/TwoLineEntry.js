@@ -3,7 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import get from 'lodash/get'
 export default class TwoLineEntry extends React.Component {
   static propTypes = {
     buttons: PropTypes.element,
@@ -35,6 +35,8 @@ export default class TwoLineEntry extends React.Component {
       draggable,
       item
     } = this.props
+
+    console.log(item)
     return (
       <div
         className="two-line-entry"
@@ -48,12 +50,12 @@ export default class TwoLineEntry extends React.Component {
             <img
               className={`list-image${highlight ? ' list-highlight' : ''}`}
               src={image}
-              alt={item.provider}
-              title={item.provider}
+              alt={get(item, 'provider')}
+              title={get(item, 'provider')}
             />
           )}
           {letter && !image && (
-            <span className={`list-letter${highlight ? ' list-highlight' : ''}`} title={item.provider}>
+            <span className={`list-letter${highlight ? ' list-highlight' : ''}`} title={get(item, 'provider')}>
               {letter.slice(0, 1)}
             </span>
           )}
