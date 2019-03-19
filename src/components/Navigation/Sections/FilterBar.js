@@ -133,7 +133,7 @@ export default class FilterBar extends Component {
         </Checkbox>
         {anySelections && <span className="selected">{numSelected} selected</span>}
         {anySelections && (
-          <ButtonGroup className="inlineBlock">
+          <ButtonGroup className="list-singleLine inlineBlock">
             {this.renderSourcesButton()}
             {this.renderReleaseDateEditor()}
             {this.renderLicensesDropdown()}
