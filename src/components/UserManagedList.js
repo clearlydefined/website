@@ -80,7 +80,7 @@ export default class UserManagedList extends SystemManagedList {
   onFieldChange = (field, value) => {
     if (!value) {
       this.props.components.transformedList.map(component => {
-        delete component.changes[field]
+        if (component.changes) delete component.changes[field]
         this.onChangeComponent(component, { ...component, changes: component.changes })
       })
       return
