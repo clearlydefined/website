@@ -89,15 +89,6 @@ export default class FilterBar extends Component {
       >
         <Button>
           <span>{source || 'Source'}</span>
-          {sourceToUpdate && (
-            <i
-              className="fas fa-undo"
-              onClick={e => {
-                e.stopPropagation()
-                this.onFieldChange('described.sourceLocation')
-              }}
-            />
-          )}
         </Button>
       </ModalEditor>
     )
