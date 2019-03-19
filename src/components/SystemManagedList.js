@@ -109,11 +109,20 @@ export default class SystemManagedList extends Component {
 
   /**
    * Dispatch the action to save a contribution
-   * @param  {} contributionInfo object that describes the contribution
+   * @param  {*} contributionInfo object that describes the contribution
    */
   doContribute(contributionInfo) {
     const { dispatch, token, components } = this.props
-    const patches = this.buildContributeSpec(components.list)
+    const { selected } = this.state
+    let patches
+    const selectedEntries = selected ? Object.entries(selected) : []
+    // contribute all the components
+    if (selectedEntries.length === 0) {
+      patches = this.buildContributeSpec(components.list)
+    } else {
+      const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
+      patches = this.buildContributeSpec(selectedComponents)
+    }
     const spec = { contributionInfo, patches }
     dispatch(curateAction(token, spec))
     this.refresh(contributionInfo.removeDefinitions)
