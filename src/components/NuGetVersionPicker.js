@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getNugetRevisions } from '../api/clearlyDefined'
-import { Typeahead } from 'react-bootstrap-typeahead'
+import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class NuGetVersionPicker extends Component {
   static propTypes = {
@@ -62,7 +62,7 @@ export default class NuGetVersionPicker extends Component {
     const list = customValues.concat(options)
 
     return (
-      <Typeahead
+      <Autocomplete
         id="nuget-version-picker"
         selected={selected}
         options={list}

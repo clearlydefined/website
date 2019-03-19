@@ -3,7 +3,8 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
+import { Highlighter } from 'react-bootstrap-typeahead'
+import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class GitHubCommitPicker extends Component {
   static propTypes = {
@@ -86,7 +87,7 @@ export default class GitHubCommitPicker extends Component {
 
     return (
       <div onClick={e => e.stopPropagation()}>
-        <Typeahead
+        <Autocomplete
           id="github-commit-picker"
           selected={selected}
           options={list}

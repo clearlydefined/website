@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getRubyGemsRevisions } from '../api/clearlyDefined'
-import { Typeahead } from 'react-bootstrap-typeahead'
+import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class RubyGemsVersionPicker extends Component {
   static propTypes = {
@@ -61,7 +61,7 @@ export default class RubyGemsVersionPicker extends Component {
     const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
     return (
-      <Typeahead
+      <Autocomplete
         id="rubygems-version-picker"
         selected={selected}
         options={list}

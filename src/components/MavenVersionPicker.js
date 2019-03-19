@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getMavenRevisions } from '../api/clearlyDefined'
-import { Typeahead } from 'react-bootstrap-typeahead'
+import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class MavenVersionPicker extends Component {
   static propTypes = {
@@ -60,7 +60,7 @@ export default class MavenVersionPicker extends Component {
     const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
     return (
-      <Typeahead
+      <Autocomplete
         id="maven-version-picker"
         selected={selected}
         options={list}

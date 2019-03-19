@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getCrateRevisions } from '../api/clearlyDefined'
-import { Typeahead } from 'react-bootstrap-typeahead'
+import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class CrateVersionPicker extends Component {
   static propTypes = {
@@ -57,7 +57,7 @@ export default class CrateVersionPicker extends Component {
     const { customValues, options } = this.state
     const list = customValues.concat(options)
     return (
-      <Typeahead
+      <Autocomplete
         id="crate-version-picker"
         options={list}
         defaultInputValue={defaultInputValue}
