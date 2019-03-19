@@ -47,9 +47,9 @@ export default class CrateVersionPicker extends Component {
     onChange(value)
   }
 
-  filter(option, text) {
+  filter(option, props) {
     if (this.props.request.revision) return true
-    return option.toLowerCase().indexOf(text.toLowerCase()) !== -1
+    return option.toLowerCase().indexOf(props.text.toLowerCase()) !== -1
   }
 
   render() {
@@ -58,8 +58,8 @@ export default class CrateVersionPicker extends Component {
     const list = customValues.concat(options)
     return (
       <Typeahead
+        id="crate-version-picker"
         options={list}
-        // labelKey='id'
         defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type a Crate version' : 'Pick a Crate version'}
         onChange={this.onChange}

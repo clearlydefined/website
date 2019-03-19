@@ -40,6 +40,7 @@ export default class NpmSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        id="npm-selector"
         useCache={false}
         options={options}
         placeholder={'Pick an NPM to harvest'}

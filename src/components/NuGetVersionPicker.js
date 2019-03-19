@@ -51,9 +51,9 @@ export default class NuGetVersionPicker extends Component {
     onChange(value)
   }
 
-  filter(option, text) {
+  filter(option, props) {
     if (this.props.request.revision) return true
-    return option.toLowerCase().indexOf(text.toLowerCase()) !== -1
+    return option.toLowerCase().indexOf(props.text.toLowerCase()) !== -1
   }
 
   render() {
@@ -63,9 +63,9 @@ export default class NuGetVersionPicker extends Component {
 
     return (
       <Typeahead
+        id="nuget-version-picker"
         selected={selected}
         options={list}
-        // labelKey='id'
         defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type a Nuget version' : 'Pick an Nuget version'}
         onChange={this.onChange}

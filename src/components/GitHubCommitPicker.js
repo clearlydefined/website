@@ -71,11 +71,11 @@ export default class GitHubCommitPicker extends Component {
     return <Highlighter search={props.text}>{value}</Highlighter>
   }
 
-  filter(option, text) {
-    if (!text) return true
+  filter(option, props) {
+    if (!props.text) return true
     return (
-      option.tag.toLowerCase().indexOf(text.toLowerCase()) !== -1 ||
-      option.sha.toLowerCase().indexOf(text.toLowerCase()) !== -1
+      option.tag.toLowerCase().indexOf(props.text.toLowerCase()) !== -1 ||
+      option.sha.toLowerCase().indexOf(props.text.toLowerCase()) !== -1
     )
   }
 
@@ -87,6 +87,7 @@ export default class GitHubCommitPicker extends Component {
     return (
       <div onClick={e => e.stopPropagation()}>
         <Typeahead
+          id="github-commit-picker"
           selected={selected}
           options={list}
           labelKey="tag"

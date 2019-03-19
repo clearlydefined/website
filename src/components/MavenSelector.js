@@ -46,6 +46,7 @@ export default class MavenSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        id="maven-selector"
         ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
         useCache={false}
         options={options}
