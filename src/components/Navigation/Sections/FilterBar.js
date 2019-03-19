@@ -16,6 +16,7 @@ export default class FilterBar extends Component {
     activeSort: PropTypes.string,
     activeFilters: PropTypes.object,
     multiSelectEnabled: PropTypes.bool,
+    onFieldChange: PropTypes.func,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,
     hasComponents: PropTypes.bool,
@@ -49,10 +50,10 @@ export default class FilterBar extends Component {
     this.setState(prevState => {
       // toggle
       if (prevState[field] == value) {
-        onFieldChange(field, null)
+        onFieldChange && onFieldChange(field, null)
         return { [field]: null }
       }
-      onFieldChange(field, value)
+      onFieldChange && onFieldChange(field, value)
       return { [field]: value }
     })
   }
