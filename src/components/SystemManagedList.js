@@ -32,6 +32,7 @@ export default class SystemManagedList extends Component {
     this.state = {
       activeFilters: {},
       activeSort: null,
+      selected: {},
       sequence: 0,
       showFullDetail: false,
       path: null

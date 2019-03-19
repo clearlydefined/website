@@ -97,41 +97,6 @@ export class PageDefinitions extends UserManagedList {
     )
   }
 
-  toggleCheckbox = index => {
-    if (this.state.selected[index]) {
-      this.setState(prevState => ({ selected: { ...prevState.selected, [index]: !prevState.selected } }))
-    } else {
-      this.setState(prevState => ({ selected: { ...prevState.selected, [index]: true } }))
-    }
-  }
-
-  onSelectAll = ({ target }) => {
-    if (!target.checked) {
-      return this.setState({ selected: {} })
-    }
-    // create object with keys by index with all true
-    this.setState({ selected: this.props.components.transformedList.reduce((o, _, i) => ({ ...o, [i]: true }), {}) })
-  }
-
-  onFieldChange = (field, value) => {
-    if (!value) {
-      this.props.components.transformedList.map(component => {
-        delete component.changes[field]
-        this.onChangeComponent(component, { ...component, changes: component.changes })
-      })
-      return
-    }
-    this.props.components.transformedList.map(component =>
-      this.onChangeComponent(component, { ...component, changes: { ...component.changes, [field]: value } })
-    )
-  }
-
-  resetComponents = () =>
-    this.props.components.transformedList.map(component => {
-      const { changes, ...rest } = component
-      this.onChangeComponent(component, rest)
-    })
-
   renderFilterBar() {
     const { activeFilters, activeSort, selected } = this.state
     return (
@@ -227,7 +192,7 @@ export class PageDefinitions extends UserManagedList {
                 onAddComponent={this.onAddComponent}
                 selected={selected}
                 onSelectAll={this.onSelectAll}
-                toggleCheckbox={this.toggleCheckbox}
+                toggleCheckbox={this.toggleSelectAllCheckbox}
                 onInspect={this.onInspect}
                 renderFilterBar={this.renderFilterBar}
                 curations={curations}
