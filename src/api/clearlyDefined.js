@@ -33,7 +33,7 @@ export const ORIGINS = {
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
-  return get(url(`${HARVEST}/${entity.toPath()}`, { form: 'raw' }), token)
+  return get(url(`${HARVEST}/${EntitySpec.fromObject(entity).toPath()}`, { form: 'raw' }), token)
 }
 
 export function harvest(token, spec) {
@@ -127,7 +127,7 @@ export function getDefinitionSuggestions(token, prefix) {
 }
 
 export function getSuggestedData(token, entity) {
-  return get(url(`${SUGGESTIONS}/${entity.toPath()}`), token)
+  return get(url(`${SUGGESTIONS}/${EntitySpec.fromObject(entity).toPath()}`), token)
 }
 
 export function previewDefinition(token, entity, curation) {

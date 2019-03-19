@@ -130,7 +130,7 @@ class FullDetailComponent extends Component {
             </Section>
             <Section name="Raw data">
               <Row>
-                <Col md={11} offset-md={1}>
+                <Col md={12}>
                   <RawDataSection
                     curations={curations}
                     definition={definition}
