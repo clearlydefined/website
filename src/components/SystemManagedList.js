@@ -59,7 +59,6 @@ export default class SystemManagedList extends Component {
     this.incrementSequence = this.incrementSequence.bind(this)
     this.getDefinitionsAndNotify = this.getDefinitionsAndNotify.bind(this)
     this.getCurations = this.getCurations.bind(this)
-    this.refresh = this.refresh.bind(this)
     this.revertAll = this.revertAll.bind(this)
     this.revert = this.revert.bind(this)
     this.revertDefinition = this.revertDefinition.bind(this)
