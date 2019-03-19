@@ -129,9 +129,7 @@ export default class FilterBar extends Component {
           disabled={hasComponents}
           onChange={onSelectAll}
           checked={anySelections}
-        >
-          Select All
-        </Checkbox>
+        />
         {anySelections && <span className="selected">{numSelected} selected</span>}
         {anySelections && (
           <ButtonGroup className="list-singleLine inlineBlock">
