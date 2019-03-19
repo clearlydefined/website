@@ -33,6 +33,7 @@ export default class UserManagedList extends SystemManagedList {
       path: null
     }
     this.readOnly = false
+    this.multiSelectEnabled = true
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.loadComponentList = this.loadComponentList.bind(this)

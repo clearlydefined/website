@@ -66,6 +66,7 @@ class PageContribution extends SystemManagedList {
             <div className="section-body flex-grow">
               <ComponentList
                 readOnly={this.readOnly}
+                multiSelectEnabled={this.multiSelectEnabled}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 onRemove={this.onRemoveComponent}

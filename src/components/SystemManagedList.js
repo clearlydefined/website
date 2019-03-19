@@ -37,6 +37,7 @@ export default class SystemManagedList extends Component {
       path: null
     }
     this.readOnly = true
+    this.multiSelectEnabled = false
     this.getDefinition = this.getDefinition.bind(this)
     this.getValue = this.getValue.bind(this)
     this.hasChanges = this.hasChanges.bind(this)

@@ -158,12 +158,12 @@ export default class FilterBar extends Component {
       customSorts,
       customSources,
       customReleaseDates,
-      multiSelectEnabled,
+      multiSelectEnabled
     } = this.props
 
     return (
       <div className="section--filter-bar">
-       {multiSelectEnabled && this.renderMultiSelect()}
+        {multiSelectEnabled && this.renderMultiSelect()}
         <div className="list-filter pull-right">
           {showSortFilter && (
             <SortList
