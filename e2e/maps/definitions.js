@@ -16,7 +16,7 @@ export const definitionsMap = {
     revertButton: '[data-test-id="notification-revert-confirm"]'
   },
   component: {
-    name: '[data-test-id="component-name"]',
+    name: '.list-headline [data-test-id="component-name"]',
     image: '.list-image',
     buttons: '.list-activity-area',
     sourceButton: '.list-fa-button > i.fa-code',
@@ -65,7 +65,7 @@ export const definitionsMap = {
   licensePicker: {
     identifier: '.spdx-picker',
     inputField:
-      '[data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
+      '.spdx-picker [data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
     listSelection: '#rbt-menu-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },

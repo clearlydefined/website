@@ -25,17 +25,6 @@ export default class Definition {
     return path ? EntitySpec.fromPath(path) : null
   }
 
-  static computeScores(definition) {
-    if (!get(definition, 'described')) return null
-    const tool = Math.ceil(
-      (get(definition, 'described.toolScore.total', 0) + get(definition, 'licensed.toolScore.total', 0)) / 2
-    )
-    const effective = Math.ceil(
-      (get(definition, 'described.score.total', 0) + get(definition, 'licensed.score.total', 0)) / 2
-    )
-    return { tool, effective }
-  }
-
   /**
    * Determine if a component doesn't have any data. In order to show in the UI in the list of Components
    *

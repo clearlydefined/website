@@ -72,22 +72,17 @@ class DefinitionEntry extends React.Component {
   renderHeadline(definition, curation) {
     const { namespace, name, revision } = definition.coordinates
     const namespaceText = namespace ? namespace + '/' : ''
-    const scores = Definition.computeScores(definition)
+    const scores = get(definition, 'scores')
     const isCurationPending = Curation.isPending(curation)
     const componentTag = get(definition, 'described.urls.registry') ? (
-      <span>
-        <a
-          href={get(definition, 'described.urls.registry')}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-test-id="component-name"
-        >
+      <span data-test-id="component-name">
+        <a href={get(definition, 'described.urls.registry')} target="_blank" rel="noopener noreferrer">
           {namespaceText}
           {name}
         </a>
       </span>
     ) : (
-      <span>
+      <span data-test-id="component-name">
         {namespaceText}
         {name}
       </span>
