@@ -2,40 +2,25 @@
 // SPDX-License-Identifier: MIT
 
 import React, { PureComponent, createContext } from 'react'
+import debounce from 'lodash/debounce'
 
 const { Provider, Consumer } = createContext({ isMobile: undefined, isMobileMultiplier: 0 })
 
 export class WindowProvider extends PureComponent {
-  state = this.getDimensions()
-
   constructor(props) {
     super(props)
-    ;(function() {
-      const throttle = (type, name, obj) => {
-        obj = obj || window
-        let running = false
-        function func() {
-          if (running) return
-          running = true
-          requestAnimationFrame(function() {
-            obj.dispatchEvent(new CustomEvent(name))
-            running = false
-          })
-        }
-        obj.addEventListener(type, func)
-      }
 
-      /* init - you can init any event */
-      throttle('resize', 'optimizedResize')
-    })()
+    this.state = this.getDimensions()
+
+    this.trottledResize = debounce(this.updateDimensions, 100)
   }
 
   componentDidMount() {
-    window.addEventListener('optimizedResize', this.updateDimensions)
+    window.addEventListener('resize', debounce(this.updateDimensions))
   }
 
   componentWillUnmount() {
-    window.removeEventListener('optimizedResize', this.updateDimensions)
+    window.removeEventListener('resize', this.trottledResize)
   }
 
   getDimensions() {
