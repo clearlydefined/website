@@ -14,6 +14,13 @@ export const definitionsMap = {
   notification: {
     revertButton: '[data-test-id="notification-revert-confirm"]'
   },
+  filterBar: {
+    selectAllCheckbox: '[data-test-id="select-all-checkbox"]',
+    licenseDropdown: '.section--filter-bar .rbt-input'
+  },
+  get selectCheckbox() {
+    return `${this.componentList.firstElement} input[type="checkbox"]`
+  },
   component: {
     name: '[data-test-id="component-name"]',
     image: '.list-image',
@@ -65,6 +72,7 @@ export const definitionsMap = {
     identifier: '.spdx-picker',
     inputField:
       '[data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
+    listSelectionFirst: '#rbt-menu-item-0',
     listSelection: '#rbt-menu-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },

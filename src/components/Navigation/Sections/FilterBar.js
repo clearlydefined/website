@@ -116,6 +116,7 @@ export default class FilterBar extends Component {
     return (
       <div className="pull-left">
         <Checkbox
+          data-test-id="select-all-checkbox"
           className="inlineBlock btn-group"
           disabled={hasComponents}
           onChange={onSelectAll}
