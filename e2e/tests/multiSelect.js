@@ -61,8 +61,7 @@ const searchDefinition = async definition => {
   await expect(page).toMatchElement(definitionsMap.componentSearch.input)
   await expect(page).toClick(definitionsMap.componentSearch.input)
   await page.type(definitionsMap.componentSearch.input, definition)
-  await page.waitFor(2000)
-  await expect(page).toMatchElement(definitionsMap.componentSearch.list)
-  let element = await page.$(definitionsMap.componentSearch.listElement)
+  await expect(page).toMatchElement(definitionsMap.componentSearch.listElement)
+  const element = await page.$(definitionsMap.componentSearch.listElement)
   element.click()
 }
