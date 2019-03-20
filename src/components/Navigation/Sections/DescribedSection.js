@@ -35,7 +35,7 @@ class DescribedSection extends Component {
 
     // trim tool text if it starts with curation, as what follows is a long hash
     // e.g. curation/1032ce558db47eee59b75d84132f5fbe6e19efbb
-    definition.described.tools = get(definition.described, 'tools', []).map(tool =>
+    const toolList = get(definition.described, 'tools', []).map(tool =>
       tool.startsWith('curation') ? tool.slice(0, 16) : tool
     )
 
@@ -50,7 +50,7 @@ class DescribedSection extends Component {
       },
       {
         label: 'Tools',
-        component: <ListDataRenderer licensed={definition} item="described.tools" title={'Tools'} />,
+        component: <ListDataRenderer values={toolList} title={'Tools'} />,
         field: 'described.tools'
       },
       {
