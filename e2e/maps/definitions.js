@@ -15,7 +15,8 @@ export const definitionsMap = {
     revertButton: '[data-test-id="notification-revert-confirm"]'
   },
   filterBar: {
-    selectAllCheckbox: '[data-test-id="select-all-checkbox"]',
+    selectAllCheckbox: '[data-test-id="select-all-checkbox"]:not([disabled])',
+    sourceButton: '[name="described.sourceLocation"]',
     licenseDropdown: '.section--filter-bar .rbt-input'
   },
   get selectCheckbox() {
