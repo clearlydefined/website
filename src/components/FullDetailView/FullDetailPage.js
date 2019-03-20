@@ -256,7 +256,7 @@ function mapStateToProps(state, props) {
   let previewDefinition, definition
   if (currentDefinition && currentDefinition.otherDefinition) {
     previewDefinition = Contribution.getChangesFromPreview(currentDefinition.otherDefinition, currentDefinition)
-    definition = { item: currentDefinition.otherDefinition }
+    definition = { ...state.ui.inspect.definition, item: currentDefinition.otherDefinition }
   } else {
     previewDefinition = Definition.getDefinitionPreview(state)
     definition = state.ui.inspect.definition && cloneDeep(state.ui.inspect.definition)
