@@ -87,6 +87,7 @@ export function curateAction(token, spec) {
       },
       error => {
         dispatch(actions.error(error))
+        console.log(error)
         if (error.status === 400) {
           const errors = flatten(error.body.errors)
           errors.forEach(e => {
