@@ -64,7 +64,7 @@ export default class SystemManagedList extends Component {
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
   }
 
   getValue(component, field) {
@@ -80,8 +80,8 @@ export default class SystemManagedList extends Component {
   onInspect(component, definition) {
     this.setState({
       ...(definition ? { currentDefinition: definition } : {}),
-      path: EntitySpec.fromCoordinates(component).toPath(),
-      currentComponent: EntitySpec.fromCoordinates(component),
+      path: EntitySpec.fromObject(component).toPath(),
+      currentComponent: EntitySpec.fromObject(component),
       showFullDetail: true
     })
   }
@@ -120,7 +120,7 @@ export default class SystemManagedList extends Component {
   buildContributeSpec(list) {
     return list.reduce((result, component) => {
       if (!this.hasChange(component)) return result
-      const coord = EntitySpec.asRevisionless(component)
+      const coord = EntitySpec.withoutRevision(component)
       const patch = find(result, p => {
         return EntitySpec.isEquivalent(p.coordinates, coord)
       })
@@ -152,15 +152,15 @@ export default class SystemManagedList extends Component {
       provider: coordinates => (coordinates.provider ? coordinates.provider : null),
       type: coordinates => (coordinates.type ? coordinates.type : null),
       releaseDate: coordinates => {
-        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        const definition = this.props.definitions.entries[EntitySpec.fromObject(coordinates).toPath()]
         return get(definition, 'described.releaseDate', null)
       },
       license: coordinates => {
-        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        const definition = this.props.definitions.entries[EntitySpec.fromObject(coordinates).toPath()]
         return get(definition, 'licensed.declared', null)
       },
       score: coordinates => {
-        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        const definition = this.props.definitions.entries[EntitySpec.fromObject(coordinates).toPath()]
         const scores = get(definition, 'scores')
         return scores ? (get(scores, 'tool') + get(scores, 'effective')) / 2 : -1
       }

@@ -42,11 +42,11 @@ class ComponentList extends React.Component {
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
   }
 
   getCuration(component) {
-    return this.props.curations.entries[EntitySpec.fromCoordinates(component).toPath()]
+    return this.props.curations.entries[EntitySpec.fromObject(component).toPath()]
   }
 
   revertComponent(component, param) {

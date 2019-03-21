@@ -47,7 +47,7 @@ class ComponentButtons extends Component {
     event.stopPropagation()
     const definition = this.props.getDefinition(component)
     const sourceLocation = get(definition, 'described.sourceLocation')
-    const sourceEntity = sourceLocation && EntitySpec.fromCoordinates(sourceLocation)
+    const sourceEntity = sourceLocation && EntitySpec.fromObject(sourceLocation)
     const action = this.props.onAddComponent
     action && sourceEntity && action(sourceEntity, component)
   }
@@ -75,7 +75,7 @@ class ComponentButtons extends Component {
 
   renderButtonGroup() {
     const { definition, currentComponent, readOnly, hasChange, hideVersionSelector } = this.props
-    const component = EntitySpec.fromCoordinates(currentComponent)
+    const component = EntitySpec.fromObject(currentComponent)
     const isSourceComponent = this.isSourceComponent(component)
     const isSourceEmpty = Definition.isSourceEmpty(definition)
     const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
@@ -147,7 +147,7 @@ class ComponentButtons extends Component {
 
   render() {
     const { currentComponent, readOnly, isMobile } = this.props
-    const component = EntitySpec.fromCoordinates(currentComponent)
+    const component = EntitySpec.fromObject(currentComponent)
     return (
       <div className="list-activity-area">
         {isMobile ? this.renderMobileButtonGroup() : this.renderButtonGroup()}

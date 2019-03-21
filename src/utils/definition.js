@@ -54,8 +54,7 @@ export default class Definition {
   static revert(components, definition, key) {
     if (!components) return
     return components.map(component => {
-      if (definition && !isEqual(EntitySpec.fromCoordinates(definition), EntitySpec.fromCoordinates(component)))
-        return component
+      if (definition && !isEqual(EntitySpec.fromObject(definition), EntitySpec.fromObject(component))) return component
       return this.revertChanges(component, key)
     })
   }
