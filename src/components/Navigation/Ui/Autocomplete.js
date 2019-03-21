@@ -20,14 +20,24 @@ export default class Autocomplete extends Component {
             option={result}
             position={index}
           >
-            <Highlighter search={menuProps.text}>
-              {menuProps.labelKey && get(result, menuProps.labelKey) ? get(result, menuProps.labelKey) : result}
-            </Highlighter>
+            {this.renderItem(result, menuProps)}
           </TypeaheadMenuItem>
         ))}
       </Menu>,
       document.body
     )
+
+  renderItem = (result, menuProps) => {
+    const { renderMenuItemChildren } = this.props
+
+    return renderMenuItemChildren ? (
+      renderMenuItemChildren(result, menuProps)
+    ) : (
+      <Highlighter search={menuProps.text}>
+        {menuProps.labelKey && get(result, menuProps.labelKey) ? get(result, menuProps.labelKey) : result}
+      </Highlighter>
+    )
+  }
 
   render() {
     return <Typeahead {...this.props} renderMenu={this.renderMenu} />
