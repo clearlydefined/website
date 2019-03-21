@@ -21,10 +21,9 @@ describe(
       await page.goto(`${__HOST__}/workspace`, { waitUntil: 'domcontentloaded' })
       await page.setRequestInterception(true)
       page.on('request', interceptedRequest => {
-        if (interceptedRequest.url().includes('/curations') && interceptedRequest.method() === 'PATCH') {
-          console.log(interceptedRequest.url())
+        if (interceptedRequest.url().includes('/curations') && interceptedRequest.method() === 'PATCH')
           interceptedRequest.respond(responses.curations)
-        } else interceptedRequest.continue()
+        else interceptedRequest.continue()
       })
     })
 
