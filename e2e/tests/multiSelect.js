@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import { setDefaultOptions } from 'expect-puppeteer'
 import { definitionsMap } from '../maps/definitions'
 
-const { revertButton, notification, component, filterBar, sourcePicker } = definitionsMap
+const { componentSearch, revertButton, notification, component, filterBar, sourcePicker } = definitionsMap
 const { details, firstElement } = component
 
 const puppeteer = require('puppeteer')
@@ -41,6 +42,17 @@ describe('Multiselect changes on Definitions page', () => {
     await searchDefinition('async/2.6.1')
     await editAllSources()
   })
+
+  test('should show an input field while attempting to change the release date of all selected components', async () => {
+    const { releaseDateButton } = filterBar
+    await searchDefinition('async/2.6.1')
+    await selectTheAllCheckbox()
+    await page.waitForSelector(releaseDateButton)
+    await expect(page).toClick(releaseDateButton)
+
+    await page.waitForSelector(filterBar.releaseDateInput)
+    await expect(page).toMatchElement(filterBar.releaseDateInput)
+  })
 })
 
 const editAllSources = async () => {
@@ -65,7 +77,7 @@ const selectTheAllCheckbox = async () => {
 }
 
 const editAllLicenses = async () => {
-  const { selectAllCheckbox, licenseDropdown } = filterBar
+  const { licenseDropdown } = filterBar
   await selectTheAllCheckbox()
   await page.type(licenseDropdown, 'MIT-0')
   await expect(page).toClick(definitionsMap.licensePicker.listSelectionFirst)
@@ -76,12 +88,13 @@ const editAllLicenses = async () => {
 }
 
 const searchDefinition = async definition => {
-  await page.waitForSelector(definitionsMap.componentSearch.input)
-  await expect(page).toMatchElement(definitionsMap.componentSearch.input)
-  await expect(page).toClick(definitionsMap.componentSearch.input)
-  await page.type(definitionsMap.componentSearch.input, definition)
-  await expect(page).toMatchElement(definitionsMap.componentSearch.listElement)
-  const element = await page.$(definitionsMap.componentSearch.listElement)
+  const { input, listElement } = componentSearch
+  await page.waitForSelector(input)
+  await expect(page).toMatchElement(input)
+  await expect(page).toClick(input)
+  await page.type(input, definition)
+  await expect(page).toMatchElement(listElement)
+  const element = await page.$(listElement)
   element.click()
 }
 

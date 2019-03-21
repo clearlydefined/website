@@ -17,6 +17,8 @@ export const definitionsMap = {
   filterBar: {
     selectAllCheckbox: '[data-test-id="select-all-checkbox"]:not([disabled])',
     sourceButton: '[name="described.sourceLocation"]',
+    releaseDateButton: '[name="described.releaseDate"]',
+    releaseDateInput: '[name="described.releaseDate"] > input',
     licenseDropdown: '.section--filter-bar .rbt-input'
   },
   get selectCheckbox() {
