@@ -24,6 +24,7 @@ class InlineEditor extends React.Component {
 
   static defaultProps = {
     editIcon: true,
+    extraClass: '',
     revertable: true,
     type: 'text'
   }
