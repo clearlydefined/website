@@ -95,16 +95,20 @@ export default class EntitySpec {
     return entry.parser(path)
   }
 
-  static fromCoordinates(o) {
+  static fromObject(o) {
     return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision, o.pr, o.changes)
   }
 
-  static asRevisionless(o) {
+  static withoutRevision(o) {
     return new EntitySpec(o.type, o.provider, o.namespace, o.name)
   }
 
+  static withoutPR(o) {
+    return new EntitySpec(o.type, o.provider, o.namespace, o.name, o.revision)
+  }
+
   static validateAndCreate(o) {
-    if (o && typeof o === 'object' && o.name && o.provider && o.revision && o.type) return this.fromCoordinates(o)
+    if (o && typeof o === 'object' && o.name && o.provider && o.revision && o.type) return this.fromObject(o)
   }
 
   static isEquivalent(one, other) {
