@@ -33,7 +33,7 @@ export const ORIGINS = {
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
-  return get(url(`${HARVEST}/${entity.toPath()}`, { form: 'raw' }), token)
+  return get(url(`${HARVEST}/${EntitySpec.withoutPR(entity).toPath()}`, { form: 'raw' }), token)
 }
 
 export function harvest(token, spec) {
@@ -76,7 +76,7 @@ export function getCurations(token, list) {
  */
 export function getCurationList(token, entity, params = {}) {
   const { state } = params
-  const entityWithoutRevision = EntitySpec.asRevisionless(entity)
+  const entityWithoutRevision = EntitySpec.withoutRevision(entity)
   return get(
     url(`${CURATIONS}/${entityWithoutRevision.toPath()}`, {
       state
@@ -127,7 +127,7 @@ export function getDefinitionSuggestions(token, prefix) {
 }
 
 export function getSuggestedData(token, entity) {
-  return get(url(`${SUGGESTIONS}/${entity.toPath()}`), token)
+  return get(url(`${SUGGESTIONS}/${EntitySpec.withoutPR(entity).toPath()}`), token)
 }
 
 export function previewDefinition(token, entity, curation) {

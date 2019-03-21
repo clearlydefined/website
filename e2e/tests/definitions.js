@@ -44,6 +44,7 @@ describe(
         `${definitionsMap.componentList.list} ${definitionsMap.componentList.firstElement}`
       )
       const componentTitle = await page.$(definitionsMap.component.name)
+      await expect(componentTitle).not.toBeNull()
       const text = await (await componentTitle.getProperty('textContent')).jsonValue()
       await expect(text).toMatch('async')
       await page.waitForSelector(definitionsMap.component.image)
