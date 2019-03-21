@@ -46,7 +46,7 @@ export default class ComponentButtons extends Component {
     event.stopPropagation()
     const definition = this.props.getDefinition(component)
     const sourceLocation = get(definition, 'described.sourceLocation')
-    const sourceEntity = sourceLocation && EntitySpec.fromCoordinates(sourceLocation)
+    const sourceEntity = sourceLocation && EntitySpec.fromObject(sourceLocation)
     const action = this.props.onAddComponent
     action && sourceEntity && action(sourceEntity, component)
   }
@@ -66,7 +66,7 @@ export default class ComponentButtons extends Component {
       onRemove,
       onAddComponent
     } = this.props
-    const component = EntitySpec.fromCoordinates(currentComponent)
+    const component = EntitySpec.fromObject(currentComponent)
     const isSourceComponent = this.isSourceComponent(component)
     const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
     const isSourceEmpty = Definition.isSourceEmpty(definition)
