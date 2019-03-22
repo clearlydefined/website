@@ -64,6 +64,7 @@ export default class SpdxPicker extends Component {
           selectHintOnEnter
           clearButton
           placeholder={promptText}
+          allowNew
         />
       </div>
     )
