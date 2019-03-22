@@ -144,6 +144,10 @@
   padding-bottom: 7px;
 }
 
+.right-space {
+  margin-right: 10px;
+}
+
 .section-body {
   border: 1px solid lightgray;
   box-shadow: 5px 5px 20px -10px lightgrey;
@@ -380,4 +384,9 @@ hr {
 .browse-page {
   // negative margin to reduce the .navbar min-height
   margin-top: -40px;
+}
+
+.active-filters {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
