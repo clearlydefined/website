@@ -5,8 +5,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
+import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import classNames from 'classnames'
+import Tag from 'antd/lib/tag'
 import { ROUTE_ROOT } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
 import { uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
@@ -34,7 +36,6 @@ class PageBrowse extends SystemManagedList {
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
-    this.nameFilter = null
   }
 
   componentDidMount() {
@@ -47,8 +48,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   onBrowse = value => {
-    this.nameFilter = { value }
-    this.updateData()
+    this.setState({ activeName: value }, () => this.updateData())
   }
 
   tableTitle() {
@@ -57,42 +57,48 @@ class PageBrowse extends SystemManagedList {
 
   renderTopFilters() {
     const { filterOptions } = this.props
+    const { activeFilters, activeSort, activeName } = this.state
     const coordinates = filterOptions.list
       .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
       .filter(x => x)
     const names = uniq(coordinates.map(coordinate => coordinate.name))
     filterOptions.list = names
     return (
-      <Row className="show-grid spacer">
-        <Col md={11} mdOffset={1}>
-          <div className={'horizontalBlock'}>
-            {this.renderFilter(
-              curateFilters,
-              get(this.state, 'activeFilters.curate')
-                ? curateFilters.find(item => item.value === get(this.state, 'activeFilters.curate')).label
-                : 'Fix something',
-              'curate',
-              'success'
+      <>
+        <Row className="show-grid spacer">
+          <Col md={11} mdOffset={1}>
+            <div className={'horizontalBlock'}>
+              {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
+              <span>&nbsp;</span>
+              {this.renderFilter(providers, 'Provider', 'provider')}
+              <span>&nbsp;</span>
+              <FilterBar
+                options={filterOptions}
+                onChange={this.onBrowse}
+                onSearch={this.onSearch}
+                onClear={this.onBrowse}
+                clearOnChange
+              />
+            </div>
+          </Col>
+        </Row>
+        <Row className="show-grid spacer active-filters">
+          <Col md={11} mdOffset={1}>
+            {(activeFilters || activeSort || activeName) && (
+              <div className="horizontalBlock">
+                <p className="right-space">Active Filters:</p>
+                <>
+                  {map(activeFilters, (val, i) => (
+                    <Tag key={i}>{`${i}:${val}`}</Tag>
+                  ))}
+                  {activeSort && <Tag key={'sort'}>{`sort:${activeSort}`}</Tag>}
+                  {activeName && <Tag key={'name'}>{`name:${activeName}`}</Tag>}
+                </>
+              </div>
             )}
-            <span>&nbsp;</span>
-            {this.renderFilter(
-              providers,
-              get(this.state, 'activeFilters.provider')
-                ? providers.find(item => item.value === get(this.state, 'activeFilters.provider')).label
-                : 'Provider',
-              'provider'
-            )}
-            <span>&nbsp;</span>
-            <FilterBar
-              options={filterOptions}
-              onChange={this.onBrowse}
-              onSearch={this.onSearch}
-              onClear={this.onBrowse}
-              clearOnChange
-            />
-          </div>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </>
     )
   }
 
@@ -158,8 +164,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   async updateData(continuationToken) {
-    const { activeFilters, activeSort } = this.state
-    const activeName = get(this.nameFilter, 'value')
+    const { activeFilters, activeSort, activeName } = this.state
     const query = Object.assign({}, activeFilters)
     if (continuationToken) query.continuationToken = continuationToken
     if (activeSort) query.sort = activeSort
