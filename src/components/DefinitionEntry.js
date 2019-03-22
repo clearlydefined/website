@@ -19,6 +19,8 @@ import Curation from '../utils/curation'
 import { withResize } from '../utils/WindowProvider'
 import LicensesRenderer from './LicensesRenderer'
 import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
+import DefinitionTitle from './Navigation/Ui/DefinitionTitle'
+import DefinitionRevision from './Navigation/Ui/DefinitionRevision'
 
 class DefinitionEntry extends React.Component {
   static propTypes = {
@@ -70,36 +72,8 @@ class DefinitionEntry extends React.Component {
   }
 
   renderHeadline(definition, curation) {
-    const { namespace, name, revision } = definition.coordinates
-    const namespaceText = namespace ? namespace + '/' : ''
     const scores = get(definition, 'scores')
     const isCurationPending = Curation.isPending(curation)
-    const componentTag = get(definition, 'described.urls.registry') ? (
-      <span data-test-id="component-name">
-        <a href={get(definition, 'described.urls.registry')} target="_blank" rel="noopener noreferrer">
-          {namespaceText}
-          {name}
-        </a>
-      </span>
-    ) : (
-      <span data-test-id="component-name">
-        {namespaceText}
-        {name}
-      </span>
-    )
-    const revisionTag = get(definition, 'described.urls.version') ? (
-      <span>
-        &nbsp;&nbsp;&nbsp;
-        <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
-          {revision.slice(0, 7)}
-        </a>
-      </span>
-    ) : (
-      <span>
-        &nbsp;&nbsp;&nbsp;
-        {revision.slice(0, 7)}
-      </span>
-    )
     const scoreTag = scores ? (
       <span>
         &nbsp;&nbsp;&nbsp;
@@ -118,8 +92,8 @@ class DefinitionEntry extends React.Component {
     ) : null
     return (
       <span>
-        {componentTag}
-        {revisionTag}
+        <DefinitionTitle definition={definition} />
+        <DefinitionRevision definition={definition} />
         {scoreTag}
         {curationTag}
       </span>
