@@ -96,8 +96,7 @@ export function getDefinitionSuggestedDataAction(token, prefix) {
     const actions = asyncActions(DEFINITION_SUGGESTIONS)
     dispatch(actions.start())
     return getSuggestedData(token, prefix).then(
-      result =>
-        dispatch(actions.success({ add: { [EntitySpec.fromCoordinates(result.coordinates).toPath()]: result } })),
+      result => dispatch(actions.success({ add: { [EntitySpec.fromObject(result.coordinates).toPath()]: result } })),
       error => dispatch(actions.error(error))
     )
   }

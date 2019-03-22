@@ -4,8 +4,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Button, Col } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
+import get from 'lodash/get'
 import { Tag } from 'antd'
-import Definition from '../../../utils/definition'
 import Curation from '../../../utils/curation'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import ScoreRenderer from '../Ui/ScoreRenderer'
@@ -36,7 +36,7 @@ export default class HeaderSection extends Component {
       handleRevert
     } = this.props
     const { item } = definition
-    const scores = Definition.computeScores(item)
+    const scores = get(item, 'scores')
     const isCurated = Curation.isCurated(curations.item)
     const hasPendingCurations = Curation.isPending(curations.item)
     return (

@@ -71,7 +71,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   renderHeadline(definition, curation) {
-    const scores = Definition.computeScores(definition)
+    const scores = get(definition, 'scores')
     const isCurationPending = Curation.isPending(curation)
     const scoreTag = scores ? (
       <span>
