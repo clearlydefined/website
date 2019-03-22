@@ -88,6 +88,7 @@ class PageBrowse extends SystemManagedList {
               activeSort={activeSort}
               activeName={activeName}
               onClear={this.clearFilters}
+              onClearAll={this.clearAllFilters}
             />
           </Col>
         </Row>
@@ -108,6 +109,9 @@ class PageBrowse extends SystemManagedList {
     }
   }
 
+  clearAllFilters = () =>
+    this.setState({ activeFilters: null, activeSort: null, activeName: null }, () => this.updateData())
+
   renderButtons() {
     return (
       <ButtonsBar
@@ -127,7 +131,9 @@ class PageBrowse extends SystemManagedList {
       if (filterValue && activeFilters[filter.type] === filter.value) delete activeFilters[filter.type]
       else activeFilters[filter.type] = filter.value
     }
-    this.setState({ ...this.state, activeFilters }, () => this.updateData())
+    this.setState({ ...this.state, activeFilters: Object.keys(activeFilters).length > 0 ? activeFilters : null }, () =>
+      this.updateData()
+    )
   }
 
   // Overrides the default onSort method
