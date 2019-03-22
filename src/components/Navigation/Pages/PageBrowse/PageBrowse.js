@@ -5,10 +5,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
-import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import classNames from 'classnames'
-import Tag from 'antd/lib/tag'
 import { ROUTE_ROOT } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
 import { uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
@@ -24,6 +22,7 @@ import { curateFilters, providers } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
+import ActiveFilters from '../../Sections/ActiveFilters'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -84,18 +83,7 @@ class PageBrowse extends SystemManagedList {
         </Row>
         <Row className="show-grid spacer active-filters">
           <Col md={11} mdOffset={1}>
-            {(activeFilters || activeSort || activeName) && (
-              <div className="horizontalBlock">
-                <p className="right-space">Active Filters:</p>
-                <>
-                  {map(activeFilters, (val, i) => (
-                    <Tag key={i}>{`${i}:${val}`}</Tag>
-                  ))}
-                  {activeSort && <Tag key={'sort'}>{`sort:${activeSort}`}</Tag>}
-                  {activeName && <Tag key={'name'}>{`name:${activeName}`}</Tag>}
-                </>
-              </div>
-            )}
+            <ActiveFilters activeFilters={activeFilters} activeSort={activeSort} activeName={activeName} />
           </Col>
         </Row>
       </>
