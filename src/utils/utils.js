@@ -81,7 +81,7 @@ const providers = [
   { value: 'rubygems', label: 'RubyGems' }
 ]
 
-const noRowsHeight = 200
+const noRowsHeight = 260
 
 export {
   asObject,

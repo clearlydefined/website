@@ -16,10 +16,11 @@ import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import Curation from '../utils/curation'
+import { withResize } from '../utils/WindowProvider'
 import LicensesRenderer from './LicensesRenderer'
 import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
 
-export default class DefinitionEntry extends React.Component {
+class DefinitionEntry extends React.Component {
   static propTypes = {
     onChange: PropTypes.func,
     onCurate: PropTypes.func,
@@ -110,7 +111,7 @@ export default class DefinitionEntry extends React.Component {
         &nbsp;&nbsp;
         <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
           <Tag className="cd-badge" color="green">
-            Pending curations
+            {this.props.isMobile ? 'Pending' : 'Pending curations'}
           </Tag>
         </a>
       </span>
@@ -206,10 +207,10 @@ export default class DefinitionEntry extends React.Component {
     const { readOnly, onRevert } = this.props
     return (
       <Row>
-        <Col md={5}>
+        <Col sm={5}>
           <Row>
-            <Col md={2}>{this.renderLabel('Declared', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Declared')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <LicensesRenderer
@@ -226,8 +227,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Source', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Source')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <ModalEditor
@@ -250,8 +251,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Release', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Release')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
                 <InlineEditor
@@ -271,22 +272,22 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
         </Col>
-        <Col md={7}>
+        <Col sm={7}>
           <Row>
-            <Col md={2}>{this.renderLabel('Discovered')}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Discovered')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Attribution')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Files')}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Files')}</Col>
+            <Col xs={9} className="definition__line">
               <FileCountRenderer definition={definition} />
             </Col>
           </Row>
@@ -355,3 +356,5 @@ export default class DefinitionEntry extends React.Component {
     )
   }
 }
+
+export default withResize(DefinitionEntry)
