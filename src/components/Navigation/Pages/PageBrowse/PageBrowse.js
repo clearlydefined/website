@@ -83,11 +83,29 @@ class PageBrowse extends SystemManagedList {
         </Row>
         <Row className="show-grid spacer active-filters">
           <Col md={11} mdOffset={1}>
-            <ActiveFilters activeFilters={activeFilters} activeSort={activeSort} activeName={activeName} />
+            <ActiveFilters
+              activeFilters={activeFilters}
+              activeSort={activeSort}
+              activeName={activeName}
+              onClear={this.clearFilters}
+            />
           </Col>
         </Row>
       </>
     )
+  }
+
+  clearFilters = (filterName, id) => {
+    switch (filterName) {
+      case 'activeFilters':
+        return this.onFilter({ type: id, value: get(this.state, `${filterName}.${id}`) })
+      case 'activeSort':
+        return this.onSort({ value: id })
+      case 'activeName':
+        return this.setState({ activeName: null }, () => this.updateData())
+      default:
+        return
+    }
   }
 
   renderButtons() {
