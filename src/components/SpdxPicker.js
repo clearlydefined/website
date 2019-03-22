@@ -7,6 +7,7 @@ import { Typeahead } from 'react-bootstrap-typeahead'
 import spdxLicenseIds from 'spdx-license-ids'
 import deprecatedSpdxLicenseIds from 'spdx-license-ids/deprecated'
 import { customLicenseIds } from '../utils/utils'
+import LicensePickerUtils from '../components/LicensePicker/utils'
 
 const identifiers = [...customLicenseIds, ...spdxLicenseIds.sort(), ...deprecatedSpdxLicenseIds.sort()]
 
@@ -21,6 +22,7 @@ export default class SpdxPicker extends Component {
   constructor(props) {
     super(props)
     this.onKeyPress = this.onKeyPress.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   onKeyPress(event, onChange) {
@@ -33,8 +35,16 @@ export default class SpdxPicker extends Component {
     if (enterPressed && (!isMenuOpen || !resultsExist)) {
       const { target } = event
       const { value } = target
-      value && onChange(value)
+      value && this.onChange(value, onChange)
     }
+  }
+
+  onChange(value, onChange) {
+    return LicensePickerUtils.isValidExpression(value) ? onChange(value) : false
+  }
+
+  onBlur(event, onBlur) {
+    return LicensePickerUtils.isValidExpression(event.target.value) ? onBlur && onBlur(event) : false
   }
 
   render() {
@@ -44,9 +54,9 @@ export default class SpdxPicker extends Component {
         <Typeahead
           defaultInputValue={value}
           options={identifiers}
-          onBlur={onBlur}
+          onBlur={event => this.onBlur(event, onBlur)}
           onKeyDown={e => this.onKeyPress(e, onChange)}
-          onChange={([first]) => onChange(first)}
+          onChange={([first]) => this.onChange(first, onChange)}
           ref={ref => (this._typeahead = ref)}
           bodyContainer
           highlightOnlyResult
