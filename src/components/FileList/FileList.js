@@ -1,4 +1,8 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Table, Input, Button, Icon } from 'antd'
 import get from 'lodash/get'
 import isArray from 'lodash/isArray'
@@ -7,7 +11,16 @@ import LicensesRenderer from '../../components/LicensesRenderer'
 import FacetsRenderer from '../../components/FacetsRenderer'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
+
 export default class FileList extends Component {
+  static propTypes = {
+    onChange: PropTypes.func,
+    files: PropTypes.array,
+    component: PropTypes.object,
+    previewDefinition: PropTypes.object,
+    readOnly: PropTypes.bool
+  }
+
   state = {
     files: [],
     filteredFiles: [],
