@@ -220,9 +220,12 @@ export default class Contribution {
     }
   }
 
+
+  static defaultFacts = ['core', 'data', 'dev', 'docs', 'examples', 'tests']
+
   // Function that retrieve informations about facets from the definition
   static foldFacets(definition, facets = null) {
-    facets = facets || ['core', 'data', 'dev', 'docs', 'examples', 'tests']
+    facets = facets || this.defaultFacts
     let files = 0
     let attributionUnknown = 0
     let discoveredUnknown = 0
