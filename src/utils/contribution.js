@@ -9,6 +9,7 @@ import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import union from 'lodash/union'
 import compact from 'lodash/compact'
+import minimatch from 'minimatch'
 import EntitySpec from './entitySpec'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -220,6 +221,41 @@ export default class Contribution {
     }
   }
 
+  static generateBlob(record) {
+    const firstChildPath = record.children[0].path
+    // if root
+    if (firstChildPath.indexOf(`${record.name}/`) === 0) {
+      return `**/${record.name}/*`
+    }
+    return `**/${firstChildPath.split(`${record.name}/`)[0]}${record.name}/*`
+  }
+
+  static getFolder(record) {
+    const firstChildPath = record.children[0].path
+    // if root
+    if (firstChildPath.indexOf(`${record.name}/`) === 0) {
+      return `/${record.name}`
+    }
+    return `/${firstChildPath.split(`${record.name}/`)[0]}${record.name}`
+  }
+
+  static folderMatchesBlob(record, blob) {
+    const path = this.getFolder(record)
+    // remove "/*"
+    if (blob.endsWith('/*')) {
+      return minimatch(path, blob.slice(0, -2)) || minimatch(path, blob)
+    }
+    return minimatch(path, blob)
+  }
+
+  static folderMatchesBlobExactly(record, blob) {
+    const path = this.getFolder(record)
+    // remove "/*"
+    if (blob.endsWith('/*')) {
+      return minimatch(path, blob.slice(0, -2))
+    }
+    return minimatch(path, blob)
+  }
 
   static defaultFacts = ['core', 'data', 'dev', 'doc', 'examples', 'tests']
 

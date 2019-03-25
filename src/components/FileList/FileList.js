@@ -136,16 +136,29 @@ export default class FileList extends Component {
     )
   }
 
+  onFacetSelected = (facets, record) => {
+    const { definition, onChange, previewDefinition } = this.props
+    const blob = Contribution.generateBlob(record)
+    facets.forEach(facet => {
+      const globs = Contribution.getValue(definition, previewDefinition, `described.facets.${facet}`)
+      let newGlobs = [...globs]
+      if (globs.indexOf(blob) === -1) newGlobs = [...globs, blob]
+      onChange(`described.facets.${facet}`, newGlobs)
+    })
+  }
+
   render() {
-    const { readOnly, component, previewDefinition } = this.props
+    const { onChange, definition, readOnly, component, previewDefinition } = this.props
     let { expandedRows, searchText, filteredFiles, files } = this.state
+
+    const facets = Contribution.getValue(definition, previewDefinition, 'described.facets')
     const columns = [
       {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
         ...this.getColumnSearchProps('name'),
-        render: (text, record) => this.getNameCellEntry(component.item, record),
+        render: (_, record) => this.getNameCellEntry(component.item, record),
         width: '40%',
         className: 'column-name'
       },
@@ -154,7 +167,16 @@ export default class FileList extends Component {
         dataIndex: 'facets',
         key: 'facets',
         ...this.getColumnSearchProps('facets'),
-        render: (value, record) => !record.children && <FacetsRenderer key={record.id} values={value || []} />,
+        render: (value, record) => (
+          <FacetsRenderer
+            isFolder={(record.children && true) || false}
+            onFacetSelected={this.onFacetSelected}
+            facets={facets}
+            key={record.id}
+            record={record}
+            values={value || []}
+          />
+        ),
         width: '20%',
         className: 'column-facets'
       },
@@ -173,7 +195,7 @@ export default class FileList extends Component {
               initialValue={get(component.item, `files[${record.id}].license`)}
               value={Contribution.getValue(component.item, previewDefinition, `files[${record.id}].license`)}
               onChange={license => {
-                this.props.onChange(`files[${record.id}]`, license, null, license => {
+                onChange(`files[${record.id}]`, license, null, license => {
                   const attributions = Contribution.getValue(
                     component.item,
                     previewDefinition,
@@ -207,7 +229,7 @@ export default class FileList extends Component {
                 readOnly={readOnly}
                 selections={false}
                 onSave={value => {
-                  this.props.onChange(`files[${record.id}]`, value, null, value => {
+                  onChange(`files[${record.id}]`, value, null, value => {
                     return {
                       path: record.path,
                       license: Contribution.getValue(component.item, previewDefinition, `files[${record.id}].license`),
