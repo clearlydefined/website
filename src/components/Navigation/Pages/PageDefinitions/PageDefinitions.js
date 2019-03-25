@@ -175,35 +175,33 @@ export class PageDefinitions extends UserManagedList {
         />
         <SearchBar filterOptions={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} />
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
-          {
-            <DropComponent
-              className="section-body flex-grow"
-              onLoad={this.loadComponentList}
+          <DropComponent
+            className="section-body flex-grow"
+            onLoad={this.loadComponentList}
+            onAddComponent={this.onAddComponent}
+          >
+            <ComponentList
+              readOnly={this.readOnly}
               onAddComponent={this.onAddComponent}
-            >
-              <ComponentList
-                multiSelectEnabled={this.multiSelectEnabled}
-                readOnly={this.readOnly}
-                list={components.transformedList}
-                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                onRemove={this.onRemoveComponent}
-                onRevert={this.revertDefinition}
-                onChange={this.onChangeComponent}
-                onAddComponent={this.onAddComponent}
-                selected={selected}
-                onSelectAll={this.onSelectAll}
-                toggleCheckbox={this.toggleSelectAllCheckbox}
-                onInspect={this.onInspect}
-                renderFilterBar={this.renderFilterBar}
-                curations={curations}
-                definitions={definitions}
-                noRowsRenderer={this.noRowsRenderer}
-                sequence={sequence}
-                hasChange={this.hasChange}
-                showVersionSelectorPopup={this.showVersionSelectorPopup}
-              />
-            </DropComponent>
-          }
+              multiSelectEnabled={this.multiSelectEnabled}
+              list={components.transformedList}
+              listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+              onRemove={this.onRemoveComponent}
+              onRevert={this.revertDefinition}
+              onChange={this.onChangeComponent}
+              selected={selected}
+              onSelectAll={this.onSelectAll}
+              toggleCheckbox={this.toggleSelectAllCheckbox}
+              onInspect={this.onInspect}
+              renderFilterBar={this.renderFilterBar}
+              curations={curations}
+              definitions={definitions}
+              noRowsRenderer={this.noRowsRenderer}
+              sequence={sequence}
+              hasChange={this.hasChange}
+              showVersionSelectorPopup={this.showVersionSelectorPopup}
+            />
+          </DropComponent>
         </Section>
         {currentDefinition && (
           <FullDetailPage

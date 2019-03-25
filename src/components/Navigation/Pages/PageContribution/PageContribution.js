@@ -62,7 +62,7 @@ class PageContribution extends SystemManagedList {
     return (
       <Grid className="main-container flex-column">
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
-          {
+          <>
             <div className="section-body flex-grow">
               <ComponentList
                 readOnly={this.readOnly}
@@ -83,19 +83,19 @@ class PageContribution extends SystemManagedList {
                 hideVersionSelector
               />
             </div>
-          }
-          {currentDefinition && (
-            <FullDetailPage
-              modalView
-              visible={showFullDetail}
-              onClose={this.onInspectClose}
-              onSave={this.onChangeComponent}
-              path={path}
-              currentDefinition={currentDefinition}
-              component={currentComponent}
-              readOnly={this.readOnly}
-            />
-          )}
+            {currentDefinition && (
+              <FullDetailPage
+                modalView
+                visible={showFullDetail}
+                onClose={this.onInspectClose}
+                onSave={this.onChangeComponent}
+                path={path}
+                currentDefinition={currentDefinition}
+                component={currentComponent}
+                readOnly={this.readOnly}
+              />
+            )}
+          </>
         </Section>
       </Grid>
     )
