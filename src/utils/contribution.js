@@ -221,7 +221,7 @@ export default class Contribution {
   }
 
 
-  static defaultFacts = ['core', 'data', 'dev', 'docs', 'examples', 'tests']
+  static defaultFacts = ['core', 'data', 'dev', 'doc', 'examples', 'tests']
 
   // Function that retrieve informations about facets from the definition
   static foldFacets(definition, facets = null) {
