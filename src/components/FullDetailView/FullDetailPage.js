@@ -9,7 +9,6 @@ import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 import PropTypes from 'prop-types'
 import notification from 'antd/lib/notification'
-import 'antd/dist/antd.css'
 import {
   uiInspectGetDefinition,
   uiInspectGetCurations,

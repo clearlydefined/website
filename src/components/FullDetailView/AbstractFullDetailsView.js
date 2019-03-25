@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 import { Grid, Button } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
 import Modal from 'antd/lib/modal'
-import 'antd/dist/antd.css'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
 
