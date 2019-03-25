@@ -205,10 +205,6 @@ export default class UserManagedList extends SystemManagedList {
     )
   }
 
-  buildSaveSpec(list) {
-    return list.map(component => EntitySpec.fromObject(component))
-  }
-
   async doSave() {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)

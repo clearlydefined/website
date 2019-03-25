@@ -346,4 +346,8 @@ export default class SystemManagedList extends Component {
   }
 
   updateList() {}
+
+  buildSaveSpec(list) {
+    return list.map(component => EntitySpec.fromObject(component))
+  }
 }
