@@ -6,6 +6,7 @@ import Tag from 'antd/lib/tag'
 import Input from 'antd/lib/input'
 import Tooltip from 'antd/lib/tooltip'
 import Icon from 'antd/lib/icon'
+import isEqual from 'lodash/isEqual'
 import withSuggestions from '../utils/withSuggestions'
 
 class GlobsPicker extends Component {
@@ -42,7 +43,7 @@ class GlobsPicker extends Component {
       inputVisible: false,
       inputValue: ''
     })
-    onChange(newGlobs)
+    if (newGlobs.length > 0 && !isEqual(newGlobs, globs)) onChange(newGlobs)
   }
 
   onChange = suggestion => this.props.onChange(suggestion)
