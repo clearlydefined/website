@@ -21,7 +21,6 @@ class GlobsPicker extends Component {
       inputVisible: false,
       inputValue: ''
     }
-    this.saveInputRef = React.createRef()
   }
 
   handleClose = removedglob => {
@@ -30,13 +29,9 @@ class GlobsPicker extends Component {
     onChange(newGlobs)
   }
 
-  showInput = () => {
-    this.setState({ inputVisible: true }, () => this.saveInputRef.current.focus())
-  }
+  showInput = () => this.setState({ inputVisible: true })
 
-  handleInputChange = e => {
-    this.setState({ inputValue: e.target.value })
-  }
+  handleInputChange = e => this.setState({ inputValue: e.target.value })
 
   handleInputConfirm = () => {
     const { globs, onChange } = this.props
@@ -50,9 +45,7 @@ class GlobsPicker extends Component {
     onChange(newGlobs)
   }
 
-  onChange = suggestion => {
-    this.props.onChange(suggestion)
-  }
+  onChange = suggestion => this.props.onChange(suggestion)
 
   render() {
     const { globs, className, readOnly, onRevert } = this.props
@@ -84,7 +77,7 @@ class GlobsPicker extends Component {
           })}
         {inputVisible ? (
           <Input
-            ref={this.saveInputRef}
+            autoFocus
             type="text"
             size="small"
             style={{ width: 78 }}
