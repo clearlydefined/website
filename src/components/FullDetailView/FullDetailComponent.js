@@ -10,6 +10,7 @@ import get from 'lodash/get'
 import { Section } from '../'
 import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
+import Tooltip from 'antd/lib/tooltip'
 import Contribution from '../../utils/contribution'
 import DescribedSection from '../Navigation/Sections/DescribedSection'
 import RawDataSection from '../Navigation/Sections/RawDataSection'
@@ -33,6 +34,44 @@ class FullDetailComponent extends Component {
     renderContributeButton: PropTypes.element,
     previewDefinition: PropTypes.object,
     getCurationData: PropTypes.func
+  }
+
+  globTooptipText() {
+    return (
+      <div>
+        <p>
+          Globbing patterns use common wildcard patterns to provide a partial path that can match zero or hundreds of
+          files all at the same time.
+        </p>
+        <p>"?" matches a single character.</p>
+        <p>"*" matches any number of characters within name.</p>
+        For example:
+        <br />
+        // Match any file or folder starting with "foo"
+        <br />
+        <code>foo*</code>
+        <br />
+        // Match any file or folder starting with "foo" and ending with .txt
+        <br />
+        <code>foo*.txt</code>
+        <br />
+        // Match any file or folder ending with "foo"
+        <br />
+        <code>*foo</code>
+        <br />
+        // Match a/b/z but not a/b/c/z
+        <br />
+        <code>a/*/z</code>
+        <br />
+        // Match a/z and a/b/z and a/b/c/z
+        <br />
+        <code>a/**/z</code>
+        <br />
+        // Matches hat but not ham or h/t
+        <br />
+        <code>/h?t</code>
+      </div>
+    )
   }
 
   render() {
@@ -66,9 +105,19 @@ class FullDetailComponent extends Component {
             <Section name={<TitleWithScore title={'Described'} domain={item.described} />}>
               <Fragment>
                 <DescribedSection rawDefinition={item} {...this.props} />
-                <Row>
+                <Row className="mt-3">
                   <Col md={6}>
-                    <LabelRenderer text={'Facets'} />
+                    <Row>
+                      <Col md={3}>
+                        <LabelRenderer text="Facets" />
+                      </Col>
+                      <Col md={9}>
+                        {/* using minimatch package in service */}
+                        <Tooltip title={this.globTooptipText()} overlayStyle={{ width: '800px' }}>
+                          <i className="fas fa-info-circle" />
+                        </Tooltip>
+                      </Col>
+                    </Row>
                     <FacetsEditor
                       definition={item}
                       onChange={onChange}
