@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-import map from 'lodash/map'
-import get from 'lodash/get'
+
 import { asyncActions } from './'
 import {
   getDefinitions,
@@ -18,7 +17,6 @@ import EntitySpec from '../utils/entitySpec'
 export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
 export const DEFINITION_SUGGESTIONS = 'DEFINITION_SUGGESTIONS'
-export const DEFINITION_MISSING = 'DEFINITION_MISSING'
 
 export function getDefinitionAction(token, entity, name) {
   return dispatch => {
@@ -39,19 +37,6 @@ export function getDefinitionsAction(token, entities) {
       result => dispatch(actions.success({ add: result })),
       error => dispatch(actions.error(error))
     )
-  }
-}
-
-export function checkForMissingDefinition(token) {
-  return (dispatch, getState) => {
-    const missingDefinitions = map(
-      get(getState(), 'definition.bodies.entries'),
-      (item, key) => !get(item, 'described.tools') && key
-    ).filter(x => x)
-    if (missingDefinitions.length > 0) {
-      dispatch(getDefinitionsAction(token, missingDefinitions))
-      setTimeout(() => dispatch(checkForMissingDefinition(token)), 20000)
-    }
   }
 }
 
