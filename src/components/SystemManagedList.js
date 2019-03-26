@@ -14,7 +14,7 @@ import isEmpty from 'lodash/isEmpty'
 import notification from 'antd/lib/notification'
 import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
-import { getDefinitionsAction } from '../actions/definitionActions'
+import { getDefinitionsAction, checkForMissingDefinition } from '../actions/definitionActions'
 import { uiBrowseUpdateFilterList, uiRevert, uiInfo, uiDanger } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
@@ -312,7 +312,10 @@ export default class SystemManagedList extends Component {
     const { dispatch, token } = this.props
     const chunks = chunk(definitions, 100)
     Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
-      .then(() => uiInfo(dispatch, message))
+      .then(() => {
+        uiInfo(dispatch, message)
+        dispatch(checkForMissingDefinition(token))
+      })
       .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
   }
 
