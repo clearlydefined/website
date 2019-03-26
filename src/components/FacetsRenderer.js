@@ -64,7 +64,7 @@ class FacetsRenderer extends Component {
     const { isFolder, facets, record } = this.props
     if (!isFolder || !facets) return []
     const facetsFiltered = Object.values(facets).map(
-      blobs => blobs.filter(blob => Contribution.folderMatchesBlob(record, blob)).length > 0
+      globs => globs.filter(glob => Contribution.folderMatchesGlob(record, glob)).length > 0
     )
     return Object.keys(facets).filter((_, i) => facetsFiltered[i])
   }
@@ -73,8 +73,7 @@ class FacetsRenderer extends Component {
     const { facets, record } = this.props
     return currentFacets.map((tag, i) => {
       const isMatchingThisFolder =
-        facets && facets[tag].filter(blob => Contribution.folderMatchesBlobExactly(record, blob)).length > 0
-      console.log(isMatchingThisFolder, tag, facets[tag])
+        facets && facets[tag].filter(glob => Contribution.folderMatchesGlobExactly(record, glob)).length > 0
       return (
         <Tag key={i} closable={isMatchingThisFolder} afterClose={() => this.handleClose(tag)}>
           {tag}

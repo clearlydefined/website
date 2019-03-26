@@ -221,7 +221,7 @@ export default class Contribution {
     }
   }
 
-  static generateBlob(record) {
+  static generateGlob(record) {
     const firstChildPath = record.children[0].path
     // if root
     if (firstChildPath.indexOf(`${record.name}/`) === 0) {
@@ -239,22 +239,22 @@ export default class Contribution {
     return `/${firstChildPath.split(`${record.name}/`)[0]}${record.name}`
   }
 
-  static folderMatchesBlob(record, blob) {
+  static folderMatchesGlob(record, glob) {
     const path = this.getFolder(record)
     // remove "/*"
-    if (blob.endsWith('/*')) {
-      return minimatch(path, blob.slice(0, -2)) || minimatch(path, blob)
+    if (glob.endsWith('/*')) {
+      return minimatch(path, glob.slice(0, -2)) || minimatch(path, glob)
     }
-    return minimatch(path, blob)
+    return minimatch(path, glob)
   }
 
-  static folderMatchesBlobExactly(record, blob) {
+  static folderMatchesGlobExactly(record, glob) {
     const path = this.getFolder(record)
     // remove "/*"
-    if (blob.endsWith('/*')) {
-      return minimatch(path, blob.slice(0, -2))
+    if (glob.endsWith('/*')) {
+      return minimatch(path, glob.slice(0, -2))
     }
-    return minimatch(path, blob)
+    return minimatch(path, glob)
   }
 
   static defaultFacts = ['core', 'data', 'dev', 'doc', 'examples', 'tests']
