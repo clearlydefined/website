@@ -78,3 +78,18 @@
     background: transparent;
   }
 }
+
+.detail-header {
+  font-weight: bold;
+  margin-bottom: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  a {
+    color: inherit;
+  }
+  a:hover,
+  a:focus {
+    color: $color_highlight;
+  }
+}

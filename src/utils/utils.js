@@ -70,7 +70,18 @@ const curateFilters = [
   { value: 'described', label: 'Focus on description issues' }
 ]
 
-const noRowsHeight = 200
+const providers = [
+  { value: 'cocoapods', label: 'CocoaPods' },
+  { value: 'cratesio', label: 'Crates.io' },
+  { value: 'github', label: 'GitHub' },
+  { value: 'mavencentral', label: 'MavenCentral' },
+  { value: 'npmjs', label: 'NpmJS' },
+  { value: 'nuget', label: 'NuGet' },
+  { value: 'pypi', label: 'PyPi' },
+  { value: 'rubygems', label: 'RubyGems' }
+]
+
+const noRowsHeight = 260
 
 export {
   asObject,
@@ -79,6 +90,7 @@ export {
   difference,
   licenses,
   noRowsHeight,
+  providers,
   releaseDates,
   setIfValue,
   sorts,

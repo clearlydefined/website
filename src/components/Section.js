@@ -4,8 +4,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col } from 'react-bootstrap'
+import { withResize } from '../utils/WindowProvider'
 
-export default class Section extends Component {
+class Section extends Component {
   static propTypes = {
     actionButton: PropTypes.element,
     children: PropTypes.element,
@@ -14,19 +15,36 @@ export default class Section extends Component {
   }
 
   render() {
-    const { name, actionButton, className, children } = this.props
+    const { name, className, actionButton, children, isMobile } = this.props
     return (
       <div className={className}>
-        <Row className="section-header">
-          <Col sm={4}>
-            <div className="section-title">{name}</div>
-          </Col>
-          <Col sm={8}>
-            <div className="section-button">{actionButton}</div>
-          </Col>
-        </Row>
+        {isMobile ? (
+          <>
+            <Row className="section-header">
+              <Col xs={12}>
+                <div className="section-title">{name}</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <div className="section-button">{actionButton}</div>
+              </Col>
+            </Row>
+          </>
+        ) : (
+          <Row className="section-header">
+            <Col md={3} lg={4}>
+              <div className="section-title">{name}</div>
+            </Col>
+            <Col md={9} lg={8}>
+              <div className="section-button">{actionButton}</div>
+            </Col>
+          </Row>
+        )}
         {children}
       </div>
     )
   }
 }
+
+export default withResize(Section)
