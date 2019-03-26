@@ -99,7 +99,6 @@ describe(
         }`
       )
 
-      await expect(nameContent).toMatch(fulldetailsMap.fileList.lastRowContent)
       const nameContent = await page.$eval(
         `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier}`,
         el => el.textContent
