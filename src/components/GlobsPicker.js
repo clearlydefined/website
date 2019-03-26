@@ -7,6 +7,7 @@ import Input from 'antd/lib/input'
 import Tooltip from 'antd/lib/tooltip'
 import Icon from 'antd/lib/icon'
 import isEqual from 'lodash/isEqual'
+import isValidGlob from 'is-valid-glob'
 import withSuggestions from '../utils/withSuggestions'
 
 class GlobsPicker extends Component {
@@ -32,7 +33,7 @@ class GlobsPicker extends Component {
     const { value } = e.target
     const { globs, onChange } = this.props
     let newGlobs = [...globs]
-    if (value && globs.indexOf(value) === -1) newGlobs = [...globs, value]
+    if (isValidGlob(value) && globs.indexOf(value) === -1) newGlobs = [...globs, value]
     this.setState({ inputVisible: false })
     if (newGlobs.length > 0 && !isEqual(newGlobs, globs)) onChange(newGlobs)
   }
