@@ -9,6 +9,8 @@ import { Tag } from 'antd'
 import Curation from '../../../utils/curation'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import ScoreRenderer from '../Ui/ScoreRenderer'
+import DefinitionTitle from '../Ui/DefinitionTitle'
+import DefinitionRevision from '../Ui/DefinitionRevision'
 
 export default class HeaderSection extends Component {
   static propTypes = {
@@ -42,7 +44,9 @@ export default class HeaderSection extends Component {
         <Col md={8}>
           <div className="detail-header">
             <div className="header-title">
-              <h2>{item && item.coordinates.name}</h2>
+              <h2>
+                <DefinitionTitle definition={item} showNamespace={false} />
+              </h2>
               &nbsp;&nbsp;
               <div className="header-data">
                 {scores && (
@@ -62,7 +66,9 @@ export default class HeaderSection extends Component {
                 )}
               </div>
             </div>
-            <p>{item.coordinates.revision}</p>
+            <p>
+              <DefinitionRevision definition={item} showNamespace={false} />
+            </p>
           </div>
         </Col>
         <Col md={4} className="text-right">

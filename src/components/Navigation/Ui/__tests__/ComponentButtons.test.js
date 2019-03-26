@@ -80,7 +80,7 @@ describe('ComponentButtons', () => {
       />
     )
     expect(wrapper.find(ButtonGroup))
-    expect(wrapper.find(Button).length).toBe(4)
+    expect(wrapper.find(Button).length).toBe(6)
   })
 
   it('check functionality of each button', async () => {

@@ -6,7 +6,7 @@ export default class SearchBar extends Component {
   render() {
     const { filterOptions, onChange, onSearch, onClear } = this.props
     return (
-      <Row className="show-grid spacer">
+      <Row className="show-grid spacer-search">
         <Col md={10} mdOffset={1}>
           <FilterBar options={filterOptions} onChange={onChange} onSearch={onSearch} clearOnChange onClear={onClear} />
         </Col>

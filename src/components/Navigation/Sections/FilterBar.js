@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { ButtonGroup } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
@@ -47,44 +48,46 @@ export default class FilterBar extends Component {
 
     return (
       <div className="list-filter" align="right">
-        {showSortFilter && (
-          <SortList
-            list={customSorts || sorts}
-            title={'Sort By'}
-            id={'sort'}
-            disabled={hasComponents}
-            value={activeSort}
-            onSort={onSort}
-          />
-        )}
-        {showLicenseFilter && (
-          <SpdxPicker
-            value={''}
-            disabled={hasComponents}
-            promptText={'License'}
-            onChange={value => onFilter({ type: 'licensed.declared', value })}
-          />
-        )}
-        {showSourceFilter && (
-          <FilterList
-            list={customSources || sources}
-            title={'Source'}
-            id={'described.sourceLocation'}
-            disabled={hasComponents}
-            value={activeFilters}
-            onFilter={onFilter}
-          />
-        )}
-        {showReleaseDateFilter && (
-          <FilterList
-            list={customReleaseDates || releaseDates}
-            title={'Release Date'}
-            id={'described.releaseDate'}
-            disabled={hasComponents}
-            value={activeFilters}
-            onFilter={onFilter}
-          />
-        )}
+        <ButtonGroup>
+          {showSortFilter && (
+            <SortList
+              list={customSorts || sorts}
+              title={'Sort By'}
+              id={'sort'}
+              disabled={hasComponents}
+              value={activeSort}
+              onSort={onSort}
+            />
+          )}
+          {showLicenseFilter && (
+            <SpdxPicker
+              value={''}
+              disabled={hasComponents}
+              promptText={'License'}
+              onChange={value => onFilter({ type: 'licensed.declared', value })}
+            />
+          )}
+          {showSourceFilter && (
+            <FilterList
+              list={customSources || sources}
+              title={'Source'}
+              id={'described.sourceLocation'}
+              disabled={hasComponents}
+              value={activeFilters}
+              onFilter={onFilter}
+            />
+          )}
+          {showReleaseDateFilter && (
+            <FilterList
+              list={customReleaseDates || releaseDates}
+              title={'Release Date'}
+              id={'described.releaseDate'}
+              disabled={hasComponents}
+              value={activeFilters}
+              onFilter={onFilter}
+            />
+          )}
+        </ButtonGroup>
       </div>
     )
   }
