@@ -111,7 +111,8 @@ class FacetsRenderer extends Component {
           ) : (
             <Select
               autoFocus
-              mode="tags"
+              mode="multiple"
+              maxTagCount={1}
               style={{ width: '50%' }}
               onChange={this.handleInputConfirm}
               onBlur={this.handleInputConfirm}
