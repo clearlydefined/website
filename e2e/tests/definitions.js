@@ -35,14 +35,15 @@ describe(
       await expect(page).toMatchElement(definitionsMap.componentSearch.input)
       await expect(page).toClick(definitionsMap.componentSearch.input)
       await page.type(definitionsMap.componentSearch.input, 'async/2.6.1')
-      await page.waitFor(2000)
       await expect(page).toMatchElement(definitionsMap.componentSearch.list)
-      let element = await page.$(definitionsMap.componentSearch.listElement)
+      await expect(page).toMatchElement(definitionsMap.componentSearch.listElement, { text: 'npm/npmjs/-/async/2.6.1' })
+      const element = await page.$(definitionsMap.componentSearch.listElement)
       element.click()
       await expect(page).toMatchElement(definitionsMap.componentList.list)
       await expect(page).toMatchElement(
         `${definitionsMap.componentList.list} ${definitionsMap.componentList.firstElement}`
       )
+      await expect(page).toMatchElement(definitionsMap.component.name)
       const componentTitle = await page.$(definitionsMap.component.name)
       await expect(componentTitle).not.toBeNull()
       const text = await (await componentTitle.getProperty('textContent')).jsonValue()
