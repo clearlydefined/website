@@ -47,7 +47,7 @@ class GlobsPicker extends Component {
       <div className="editable-editor">
         {!readOnly && (
           <i
-            className={`fas fa-undo editable-marker ${!globs && 'fa-disabled'}`}
+            className={`fas fa-undo editable-marker ${globs.length > -1 ? '' : 'fa-disabled'}`}
             onClick={() => onRevert && globs && onRevert()}
           />
         )}
