@@ -16,12 +16,8 @@ class GlobsPicker extends Component {
     readOnly: PropTypes.bool
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      inputVisible: false,
-      inputValue: ''
-    }
+  state = {
+    inputVisible: false
   }
 
   handleClose = removedglob => {
@@ -32,17 +28,12 @@ class GlobsPicker extends Component {
 
   showInput = () => this.setState({ inputVisible: true })
 
-  handleInputChange = e => this.setState({ inputValue: e.target.value })
-
-  handleInputConfirm = () => {
+  handleInputConfirm = e => {
+    const { value } = e.target
     const { globs, onChange } = this.props
-    const { inputValue } = this.state
     let newGlobs = [...globs]
-    if (inputValue && globs.indexOf(inputValue) === -1) newGlobs = [...globs, inputValue]
-    this.setState({
-      inputVisible: false,
-      inputValue: ''
-    })
+    if (value && globs.indexOf(value) === -1) newGlobs = [...globs, value]
+    this.setState({ inputVisible: false })
     if (newGlobs.length > 0 && !isEqual(newGlobs, globs)) onChange(newGlobs)
   }
 
@@ -50,7 +41,7 @@ class GlobsPicker extends Component {
 
   render() {
     const { globs, className, readOnly, onRevert } = this.props
-    const { inputVisible, inputValue } = this.state
+    const { inputVisible } = this.state
 
     return (
       <div className="editable-editor">
@@ -82,8 +73,6 @@ class GlobsPicker extends Component {
             type="text"
             size="small"
             style={{ width: 78 }}
-            value={inputValue}
-            onChange={this.handleInputChange}
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}
           />
