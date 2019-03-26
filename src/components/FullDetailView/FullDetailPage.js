@@ -29,6 +29,7 @@ import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
 import NotificationButtons from '../Navigation/Ui/NotificationButtons'
 import { AbstractFullDetailsView } from './AbstractFullDetailsView'
+import { withResize } from '../../utils/WindowProvider'
 
 export class FullDetailPage extends AbstractFullDetailsView {
   static defaultProps = {
@@ -296,7 +297,9 @@ function mapDispatchToProps(dispatch) {
   )
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FullDetailPage)
+export default withResize(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(FullDetailPage)
+)

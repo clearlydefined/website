@@ -35,6 +35,7 @@ describe(
       let element = await page.$(definitionsMap.componentSearch.listElement)
       element.click()
       await expect(page).toMatchElement(definitionsMap.componentList.list)
+      await expect(page).toMatchElement(`${definitionsMap.componentList.list} ${definitionsMap.componentList.tag}`)
       await expect(page).toMatchElement(
         `${definitionsMap.componentList.list} ${definitionsMap.componentList.firstElement}`
       )

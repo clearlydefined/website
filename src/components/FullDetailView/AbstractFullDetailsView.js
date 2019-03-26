@@ -21,6 +21,7 @@ export class AbstractFullDetailsView extends Component {
       curations,
       harvest,
       modalView,
+      isMobile,
       visible,
       previewDefinition,
       readOnly,
@@ -33,7 +34,8 @@ export class AbstractFullDetailsView extends Component {
       <Modal
         closable={false}
         footer={null}
-        centered
+        // if it's mobile do not center the Modal
+        centered={!isMobile}
         destroyOnClose={true}
         visible={visible}
         width={'85%'}

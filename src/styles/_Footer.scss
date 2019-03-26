@@ -19,7 +19,7 @@
     margin-right: 2rem;
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: $screen-xs-max) {
     div:nth-child(3) {
       padding: 0;
     }
@@ -52,7 +52,7 @@
       color: $color_secondary;
     }
 
-    @media screen and (max-width: 992px) {
+    @media screen and (max-width: $screen-md) {
       margin: 0;
 
       a:nth-child(3) {
