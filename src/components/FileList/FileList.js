@@ -149,15 +149,23 @@ export default class FileList extends Component {
     )
   }
 
-  onFacetSelected = (facets, record) => {
+  onFacetSelected = (facets, record, facet) => {
     const { definition, onChange, previewDefinition } = this.props
-    const blob = Contribution.generateBlob(record)
-    facets.forEach(facet => {
-      const globs = Contribution.getValue(definition, previewDefinition, `described.facets.${facet}`)
-      let newGlobs = [...globs]
-      if (globs.indexOf(blob) === -1) newGlobs = [...globs, blob]
-      onChange(`described.facets.${facet}`, newGlobs)
-    })
+    const glob = Contribution.generateGlob(record)
+    if (facets && facets.length > 0) {
+      facets.forEach(facet => {
+        const globs = Contribution.getValue(definition, previewDefinition, `described.facets.${facet}`)
+        let newGlobs = [...globs]
+        if (globs.indexOf(glob) === -1) newGlobs = [...globs, glob]
+        onChange(`described.facets.${facet}`, newGlobs)
+      })
+      return
+    }
+    // remove glob from the list of globs for this facet
+    const globs = Contribution.getValue(definition, previewDefinition, `described.facets.${facet}`)
+    const matchingGlobs = globs.filter(glob => Contribution.folderMatchesGlob(record, glob))
+    const newGlobs = globs.filter(g => !matchingGlobs.includes(g))
+    onChange(`described.facets.${facet}`, newGlobs)
   }
 
   render() {

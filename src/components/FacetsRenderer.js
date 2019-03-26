@@ -29,33 +29,25 @@ class FacetsRenderer extends Component {
     inputVisible: false
   }
 
-  onFacetSelected = val => {
+  onFacetSelected = (val, facet) => {
     const { onFacetSelected, record } = this.props
-    onFacetSelected && onFacetSelected(val, record)
+    onFacetSelected && onFacetSelected(val, record, facet)
   }
 
   handleInputConfirm = inputValues => {
-    const { onFacetSelected, record } = this.props
-
     if (!inputValues[0]) return this.setState({ inputVisible: false })
 
     const currentFacets = this.getFacetsForCurrentFolder()
     let newFacets = currentFacets
     if (currentFacets.indexOf(inputValues[0]) === -1) newFacets = [...currentFacets, inputValues[0]]
     if (inputValues.length > 0 && !isEqual(newFacets, currentFacets)) {
-      onFacetSelected && onFacetSelected(newFacets, record)
+      this.onFacetSelected(newFacets)
     }
     this.setState({ inputVisible: false })
   }
 
   handleClose = removedFacet => {
-    const { facets, record } = this.props
-    const facetsFiltered = Object.values(facets).map(
-      blobs => blobs.filter(blob => Contribution.folderMatchesBlob(record, blob)).length > 0
-    )
-    const currentFacets = Object.keys(facets).filter((_, i) => facetsFiltered[i])
-    const newFacets = currentFacets.filter(glob => glob !== removedFacet)
-    this.onFacetSelected(newFacets)
+    this.onFacetSelected(null, removedFacet)
   }
 
   showInput = () => this.setState({ inputVisible: true })
