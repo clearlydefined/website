@@ -9,10 +9,6 @@ import Tag from 'antd/lib/tag'
 import isEqual from 'lodash/isEqual'
 import Contribution from '../utils/contribution'
 
-const { Option } = Select
-
-const nonCoreFacets = Contribution.defaultFacts.slice(1)
-
 /**
  * Specific renderer for Facets
  *
@@ -109,10 +105,10 @@ class FacetsRenderer extends Component {
               onChange={this.handleInputConfirm}
               onBlur={this.handleInputConfirm}
             >
-              {nonCoreFacets
+              {Contribution.nonCoreFacets
                 .filter(el => !currentFacets.includes(el))
                 .map(facet => (
-                  <Option key={facet}>{facet}</Option>
+                  <Select.Option key={facet}>{facet}</Select.Option>
                 ))}
             </Select>
           ))}

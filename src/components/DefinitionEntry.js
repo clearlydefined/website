@@ -157,7 +157,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   foldFacets(definition, facets = null) {
-    facets = facets || Contribution.defaultFacts
+    facets = facets || Contribution.defaultFacets
     let files = 0
     let attributionUnknown = 0
     let discoveredUnknown = 0

@@ -24,7 +24,7 @@ class FacetsEditor extends Component {
 
     return (
       <div>
-        {Contribution.defaultFacts.map(item => (
+        {Contribution.nonCoreFacets.map(item => (
           <Row key={item}>
             <Col md={3}>
               <span>{item}</span>

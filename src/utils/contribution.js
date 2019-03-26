@@ -257,11 +257,12 @@ export default class Contribution {
     return minimatch(path, glob)
   }
 
-  static defaultFacts = ['core', 'data', 'dev', 'doc', 'examples', 'tests']
+  static defaultFacets = ['core', 'data', 'dev', 'doc', 'examples', 'tests']
+  static nonCoreFacets = ['data', 'dev', 'doc', 'examples', 'tests']
 
   // Function that retrieve informations about facets from the definition
   static foldFacets(definition, facets = null) {
-    facets = facets || this.defaultFacts
+    facets = facets || this.defaultFacets
     let files = 0
     let attributionUnknown = 0
     let discoveredUnknown = 0
