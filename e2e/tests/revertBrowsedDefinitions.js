@@ -34,14 +34,12 @@ describe(
     test('user can revert license field value', async () => {
       await licenseEdit()
       await page.waitForSelector(browseMap.component.details.revertLicenseButton)
-      const revertLicenseButton = await page.$(browseMap.component.details.revertLicenseButton)
-      const revertClassName = await (await revertLicenseButton.getProperty('className')).jsonValue()
+      const revertClassName = await page.$eval(browseMap.component.details.revertLicenseButton, el => el.className)
       await expect(revertClassName.includes('fa-disabled')).toBe(false)
       await expect(page).toClick(browseMap.component.details.revertLicenseButton)
       await page.waitForSelector(browseMap.component.details.licenseField)
-      const licenseField = await page.$(browseMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      const licenseField = await page.$eval(browseMap.component.details.licenseField, el => el.textContent)
+      await expect(licenseField).toEqual('MIT')
     })
 
     test('user can revert entire definition changes', async () => {
@@ -52,9 +50,8 @@ describe(
       await expect(page).toClick(browseMap.notification.revertButton)
       await page.waitForSelector(browseMap.component.firstElement)
       await expect(page).toClick(browseMap.component.firstElement)
-      const licenseField = await page.$(browseMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      const licenseField = await page.$eval(browseMap.component.details.licenseField, el => el.textContent)
+      await expect(licenseField).toEqual('MIT')
     })
 
     test('user can revert all changes', async () => {
@@ -65,9 +62,8 @@ describe(
       await expect(page).toClick(browseMap.notification.revertButton)
       await page.waitForSelector(browseMap.component.firstElement)
       await expect(page).toClick(browseMap.component.firstElement)
-      const licenseField = await page.$(browseMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      const licenseField = await page.$eval(browseMap.component.details.licenseField, el => el.textContent)
+      await expect(licenseField).toEqual('MIT')
     })
   },
   defaultTimeout

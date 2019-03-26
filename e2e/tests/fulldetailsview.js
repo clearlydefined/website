@@ -68,10 +68,10 @@ describe(
         }`
       )
 
-      const nameElement = await page.$(
-        `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
+      const nameContent = await page.$eval(
+        `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier}`,
+        el => el.textContent
       )
-      const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
       await expect(nameContent).toMatch(fulldetailsMap.fileList.firstRowContent)
     })
 
@@ -99,10 +99,11 @@ describe(
         }`
       )
 
-      const nameElement = await page.$(
-        `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
+      await expect(nameContent).toMatch(fulldetailsMap.fileList.lastRowContent)
+      const nameContent = await page.$eval(
+        `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier}`,
+        el => el.textContent
       )
-      const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
       await expect(nameContent).toMatch(fulldetailsMap.fileList.lastRowContent)
     })
   },

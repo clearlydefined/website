@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 import { definitionsMap } from '../maps/definitions'
@@ -44,10 +45,8 @@ describe(
         `${definitionsMap.componentList.list} ${definitionsMap.componentList.firstElement}`
       )
       await expect(page).toMatchElement(definitionsMap.component.name)
-      const componentTitle = await page.$(definitionsMap.component.name)
-      await expect(componentTitle).not.toBeNull()
-      const text = await (await componentTitle.getProperty('textContent')).jsonValue()
-      await expect(text).toMatch('async')
+      const componentTitle = await page.$eval(definitionsMap.component.name, el => el.textContent)
+      await expect(componentTitle).toMatch('async')
       await page.waitForSelector(definitionsMap.component.image)
       await expect(page).toMatchElement(definitionsMap.component.image)
       await expect(page).toMatchElement(definitionsMap.component.buttons)
@@ -63,23 +62,17 @@ describe(
       await page.waitForSelector(definitionsMap.component.firstElement)
       await expect(page).toClick(definitionsMap.component.firstElement)
       await expect(page).toMatchElement(definitionsMap.component.panel)
-      const declaredElement = await page.$(definitionsMap.component.details.declared)
-      const declaredContent = await (await declaredElement.getProperty('textContent')).jsonValue()
+      const declaredContent = await page.$eval(definitionsMap.component.details.declared, el => el.textContent)
       await expect(declaredContent).toMatch('Declared')
-      const sourceElement = await page.$(definitionsMap.component.details.source)
-      const sourceContent = await (await sourceElement.getProperty('textContent')).jsonValue()
+      const sourceContent = await page.$eval(definitionsMap.component.details.source, el => el.textContent)
       await expect(sourceContent).toMatch('Source')
-      const releaseElement = await page.$(definitionsMap.component.details.releaseDate)
-      const releaseContent = await (await releaseElement.getProperty('textContent')).jsonValue()
+      const releaseContent = await page.$eval(definitionsMap.component.details.releaseDate, el => el.textContent)
       await expect(releaseContent).toMatch('Release')
-      const discoveredElement = await page.$(definitionsMap.component.details.discovered)
-      const discoveredContent = await (await discoveredElement.getProperty('textContent')).jsonValue()
+      const discoveredContent = await page.$eval(definitionsMap.component.details.discovered, el => el.textContent)
       await expect(discoveredContent).toMatch('Discovered')
-      const attributionElement = await page.$(definitionsMap.component.details.attribution)
-      const attributionContent = await (await attributionElement.getProperty('textContent')).jsonValue()
+      const attributionContent = await page.$eval(definitionsMap.component.details.attribution, el => el.textContent)
       await expect(attributionContent).toMatch('Attribution')
-      const filesElement = await page.$(definitionsMap.component.details.files)
-      const filesContent = await (await filesElement.getProperty('textContent')).jsonValue()
+      const filesContent = await page.$eval(definitionsMap.component.details.files, el => el.textContent)
       await expect(filesContent).toMatch('Files')
     })
 
