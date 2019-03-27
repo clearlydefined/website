@@ -23,7 +23,7 @@ class FacetsEditor extends Component {
     const { onChange, definition, previewDefinition, readOnly, onRevert, curationSuggestions } = this.props
 
     return (
-      <div>
+      <div data-test-id="facets-editor">
         {Contribution.nonCoreFacets.map(item => (
           <Row key={item}>
             <Col md={3}>

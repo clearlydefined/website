@@ -1,4 +1,15 @@
 export const fulldetailsMap = {
+  described: {
+    facets: {
+      editor: '[data-test-id="facets-editor"]',
+      get dataFacetTagForInput() {
+        return `${this.editor} .ant-tag`
+      },
+      get dataFacetInput() {
+        return `${this.editor} input`
+      }
+    }
+  },
   fileList: {
     identifier: '.file-list',
     columns: {
@@ -21,6 +32,14 @@ export const fulldetailsMap = {
     firstRowContent: 'docs',
     lastRow: '[data-row-key="128"]',
     lastRowContent: 'package.json',
-    pathUrl: 'https://github.com/automattic/mongoose/blob/1ead0e616ab028a994ab47a23643749659243e07/package.json'
+    pathUrl: 'https://github.com/automattic/mongoose/blob/1ead0e616ab028a994ab47a23643749659243e07/package.json',
+    files: {
+      'README.md': {
+        row: '.file-list tbody > tr:nth-child(5) > .column-facets > div',
+        get facets() {
+          return `${this.row} .ant-tag`
+        }
+      }
+    }
   }
 }

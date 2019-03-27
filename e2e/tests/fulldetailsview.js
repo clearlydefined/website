@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+
 import { fulldetailsMap } from '../maps/fulldetailsview'
 import { setDefaultOptions } from 'expect-puppeteer'
 
@@ -104,6 +105,22 @@ describe(
       )
       const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
       await expect(nameContent).toMatch(fulldetailsMap.fileList.lastRowContent)
+    })
+
+    test('adding and removing a glob to a facet from the FacetsEditor applies correctly', async () => {
+      const { described, fileList } = fulldetailsMap
+      const { files } = fileList
+      await page.waitForSelector(files['README.md'].row)
+      await expect(page).toMatchElement(files['README.md'].facets)
+      const facets = await page.$$eval(files['README.md'].facets, els => els.map(e => e.textContent))
+      expect(facets).toEqual(['core'])
+      await expect(page).toClick(described.facets.dataFacetTagForInput)
+      await expect(page).toFill(described.facets.dataFacetInput, '**/*.md')
+      await page.keyboard.press('Enter')
+      // wait for the facet to be updated (first element)
+      await expect(page).toMatchElement(files['README.md'].facets, { text: 'data' })
+      const updatedFacets = await page.$$eval(files['README.md'].facets, els => els.map(e => e.textContent))
+      expect(updatedFacets).toEqual(['data'])
     })
   },
   defaultTimeout
