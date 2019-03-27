@@ -126,13 +126,22 @@ class PageBrowse extends SystemManagedList {
   // Overrides the default onFilter method
   onFilter(filter, overwrite = false) {
     const activeFilters = overwrite === true ? filter : Object.assign({}, this.state.activeFilters)
+    let activeSort = null
     if (overwrite !== true) {
       const filterValue = get(activeFilters, filter.type)
       if (filterValue && activeFilters[filter.type] === filter.value) delete activeFilters[filter.type]
       else activeFilters[filter.type] = filter.value
     }
-    this.setState({ ...this.state, activeFilters: Object.keys(activeFilters).length > 0 ? activeFilters : null }, () =>
-      this.updateData()
+    if (filter.type === 'curate') {
+      activeSort = 'effectiveScore'
+    }
+    this.setState(
+      {
+        ...this.state,
+        activeFilters: Object.keys(activeFilters).length > 0 ? activeFilters : null,
+        activeSort: activeSort ? activeSort : this.state.activeSort
+      },
+      () => this.updateData()
     )
   }
 
