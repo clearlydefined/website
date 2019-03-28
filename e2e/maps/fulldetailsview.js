@@ -12,6 +12,7 @@ export const fulldetailsMap = {
   },
   fileList: {
     identifier: '.file-list',
+    revertBtn: '[data-test-id="revert-files-and-facets"]',
     columns: {
       name: {
         identifier: '.column-name'
@@ -38,6 +39,35 @@ export const fulldetailsMap = {
         row: '.file-list tbody > tr:nth-child(5) > .column-facets > div',
         get facets() {
           return `${this.row} .ant-tag`
+        }
+      },
+      docs: {
+        row: '.file-list tbody > tr:nth-child(1)',
+        get facetsColumn() {
+          return `${this.row} > .column-facets > div`
+        },
+        get expandIcon() {
+          return `${this.row} .ant-table-row-expand-icon`
+        },
+        get facets() {
+          return `${this.facetsColumn} .ant-tag`
+        },
+        get removeIcon() {
+          return `${this.facetsColumn} .ant-tag:first-child .anticon-close`
+        },
+        get plusIcon() {
+          return `${this.facetsColumn} i`
+        },
+        get input() {
+          return `${this.facetsColumn} .ant-select-search__field`
+        },
+        children: {
+          'populate.html': {
+            facetsColumn: '.file-list tbody > tr:nth-child(12) > .column-facets > div',
+            get facets() {
+              return `${this.facetsColumn} .ant-tag`
+            }
+          }
         }
       }
     }

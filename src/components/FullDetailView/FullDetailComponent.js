@@ -148,6 +148,7 @@ class FullDetailComponent extends Component {
                   {!readOnly && (
                     <ButtonWithTooltip tip="Revert all file and facet changes on this definitions">
                       <Button
+                        data-test-id="revert-files-and-facets"
                         bsSize="small"
                         bsStyle="danger"
                         onClick={() => {

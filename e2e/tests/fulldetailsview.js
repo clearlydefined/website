@@ -107,9 +107,13 @@ describe(
       await expect(nameContent).toMatch(fulldetailsMap.fileList.lastRowContent)
     })
 
-    test('adding and removing a glob to a facet from the FacetsEditor applies correctly', async () => {
+    test('adding and removing a glob to a facet applies correctly (from the FacetsEditor)', async () => {
       const { described, fileList } = fulldetailsMap
       const { files } = fileList
+
+      // revert all the facet and file changes
+      await expect(page).toMatchElement(fulldetailsMap.fileList.revertBtn)
+
       await page.waitForSelector(files['README.md'].row)
       await expect(page).toMatchElement(files['README.md'].facets)
       const facets = await page.$$eval(files['README.md'].facets, els => els.map(e => e.textContent))
@@ -121,6 +125,42 @@ describe(
       await expect(page).toMatchElement(files['README.md'].facets, { text: 'data' })
       const updatedFacets = await page.$$eval(files['README.md'].facets, els => els.map(e => e.textContent))
       expect(updatedFacets).toEqual(['data'])
+    })
+
+    test('adding and removing a glob to a facet applies correctly (from the Filelist)', async () => {
+      const { docs } = fulldetailsMap.fileList.files
+      const populateHTML = docs.children['populate.html']
+
+      // revert all the facet and file changes
+      await expect(page).toMatchElement(fulldetailsMap.fileList.revertBtn)
+
+      await page.waitForSelector(docs.row)
+      await expect(page).toMatchElement(docs.facets)
+      const facets = (await page.$$eval(docs.facets, els => els.map(e => e.textContent))).filter(e => e)
+      expect(facets).toEqual(['core'])
+      await expect(page).toMatchElement(docs.plusIcon)
+      await expect(page).toClick(docs.plusIcon)
+      await expect(page).toFill(docs.input, 'doc')
+      await page.keyboard.press('Enter')
+
+      // wait for the facet to be updated (first element)
+      await expect(page).toMatchElement(docs.facets, { text: 'doc' })
+      const updatedFacets = (await page.$$eval(docs.facets, els => els.map(e => e.textContent))).filter(e => e)
+      expect(updatedFacets).toEqual(['doc'])
+
+      // test the files inside the 'test' folder
+      await expect(page).toClick(docs.expandIcon)
+      const facetsForPopulateHTML = (await page.$$eval(populateHTML.facets, els => els.map(e => e.textContent))).filter(
+        e => e
+      )
+      expect(facetsForPopulateHTML).toEqual(['doc'])
+      // remove 'doc' facet
+      await expect(page).toClick(docs.removeIcon)
+      await expect(page).toMatchElement(populateHTML.facets, { text: 'core' })
+      const facetsForPopulateHTMLReverted = (await page.$$eval(populateHTML.facets, els =>
+        els.map(e => e.textContent)
+      )).filter(e => e)
+      expect(facetsForPopulateHTMLReverted).toEqual(['core'])
     })
   },
   defaultTimeout
