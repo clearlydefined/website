@@ -121,7 +121,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
       return uiCurateResetDefinitionPreview()
     const previewComponent = nextComponent ? nextComponent : component
     const patch = Contribution.buildPatch([], previewComponent, changes)
-    const cleanPatch = this.cleanPatch(patch)
+    const cleanPatch = this.cleanPatch(patch, 'facets')
     !isEmpty(cleanPatch)
       ? uiCurateGetDefinitionPreview(token, previewComponent, cleanPatch)
       : uiCurateResetDefinitionPreview()
@@ -129,15 +129,16 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
   // remove empty arrays from described.facets to workaround issue on Service API
   // https://github.com/clearlydefined/service/issues/456
-  cleanPatch(patch) {
+  cleanPatch(patch, key) {
     const { described } = patch
-    const cleanPatch = { ...patch, described: { ...described, facets: {} } }
-    for (const s in described.facets) {
-      const elem = described.facets[s]
-      if (elem.length) cleanPatch.described.facets[s] = elem
+    if (!described || !described[key]) return patch
+    const cleanPatch = { ...patch, described: { ...described, [key]: {} } }
+    for (const s in described[key]) {
+      const elem = described[key][s]
+      if (elem.length) cleanPatch.described[key][s] = elem
     }
-    if (Object.keys(cleanPatch.described.facets).length === 0) {
-      delete cleanPatch.described.facets
+    if (Object.keys(cleanPatch.described[key]).length === 0) {
+      delete cleanPatch.described[key]
     }
     return cleanPatch
   }
