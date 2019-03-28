@@ -212,7 +212,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
         />
       ),
       key,
-      onClose: notification.close(key),
+      onClose: () => notification.close(key),
       duration: 0
     })
   }

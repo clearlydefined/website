@@ -89,8 +89,11 @@ class FullDetailComponent extends Component {
       curations,
       inspectedCuration
     } = this.props
-    const entry = find(changes, (_, key) => key && key.startsWith('files'))
     if (!definition || !definition.item || !curations || !harvest) return null
+    const filesOrFacetsHaveBeenChanged = find(
+      changes,
+      (_, key) => (key && key.startsWith('files')) || key.startsWith('described.facets')
+    )
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
     return (
@@ -143,12 +146,15 @@ class FullDetailComponent extends Component {
                   <span>Files</span>
                   &nbsp;
                   {!readOnly && (
-                    <ButtonWithTooltip tip="Revert all changes of all the definitions">
+                    <ButtonWithTooltip tip="Revert all file and facet changes on this definitions">
                       <Button
                         bsSize="small"
                         bsStyle="danger"
-                        onClick={() => handleRevert('files')}
-                        disabled={entry === undefined}
+                        onClick={() => {
+                          handleRevert('files')
+                          handleRevert('described.facets')
+                        }}
+                        disabled={!filesOrFacetsHaveBeenChanged}
                       >
                         <i className="fas fa-undo" />
                         <span>&nbsp;Revert Changes</span>
