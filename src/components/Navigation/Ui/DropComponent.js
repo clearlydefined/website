@@ -64,7 +64,7 @@ class DropComponent extends Component {
   handleDropObject(content) {
     const contentObject = asObject(content)
     if (!contentObject) return false
-    this.props.onAddComponent(EntitySpec.fromCoordinates(contentObject))
+    this.props.onAddComponent(EntitySpec.fromObject(contentObject))
   }
 
   // handle dropping a url pointing to a curation PR
@@ -132,6 +132,7 @@ class DropComponent extends Component {
   render() {
     return (
       <div
+        className={this.props.className}
         onDragOver={this.onDragOver}
         onDragEnter={this.onDragEnter}
         onDrop={this.onDrop}

@@ -8,14 +8,15 @@ import PropTypes from 'prop-types'
 export default class ListDataRenderer extends Component {
   static propTypes = {
     licensed: PropTypes.object,
-    item: PropTypes.object,
-    title: PropTypes.string
+    item: PropTypes.string,
+    title: PropTypes.string,
+    values: PropTypes.array
   }
 
   render() {
-    const { licensed, item, title } = this.props
-    const values = get(licensed, item, [])
-    if (!values) return null
+    const { licensed, item, values, title } = this.props
+    const data = values || get(licensed, item, [])
+    if (!data) return null
     return (
       <OverlayTrigger
         trigger="click"
@@ -24,7 +25,7 @@ export default class ListDataRenderer extends Component {
         overlay={
           <Popover title={title} id={title}>
             <div className="popoverRenderer popoverRenderer_scrollY">
-              {values.map((a, index) => (
+              {data.map((a, index) => (
                 <div key={`${a}_${index}`} className="popoverRenderer__items">
                   <div className="popoverRenderer__items__value">
                     <span>{a}</span>
@@ -35,7 +36,7 @@ export default class ListDataRenderer extends Component {
           </Popover>
         }
       >
-        <span className="popoverSpan">{values.join(', ')}</span>
+        <span className="popoverSpan">{data.join(', ')}</span>
       </OverlayTrigger>
     )
   }

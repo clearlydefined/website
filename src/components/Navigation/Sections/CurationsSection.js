@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import LabelRenderer from '../Ui/LabelRenderer'
 import { ROUTE_CURATIONS } from '../../../utils/routingConstants'
 import CurationRenderer from '../Ui/CurationRenderer'
+import get from 'lodash/get'
 
 class CurationsSection extends Component {
   static propTypes = {
-    // Array containing the curations
-    curations: PropTypes.array,
+    curations: PropTypes.object,
+    contributions: PropTypes.array,
     // Callback function called when expanding a curation
     onClick: PropTypes.func
   }
@@ -19,18 +20,25 @@ class CurationsSection extends Component {
 
   render() {
     const { curations } = this.props
+    const contributions = get(curations, 'item.contributions')
     return (
       <div>
         <LabelRenderer text={'Curations'} />
-        <div className="curationSection">
-          {curations ? (
-            curations.map(curation => (
-              <CurationRenderer key={`curation-${curation.number}`} curation={curation} onClick={this.goToCuration} />
-            ))
-          ) : (
-            <p>No curations found for this component</p>
-          )}
-        </div>
+        {curations.isFetched && (
+          <div className="curationSection">
+            {contributions ? (
+              contributions.map(contribution => (
+                <CurationRenderer
+                  key={`curation-${contribution.pr.number}`}
+                  contribution={contribution}
+                  onClick={this.goToCuration}
+                />
+              ))
+            ) : (
+              <p>No curations found for this component</p>
+            )}
+          </div>
+        )}
       </div>
     )
   }

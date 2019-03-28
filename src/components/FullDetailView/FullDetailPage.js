@@ -12,25 +12,24 @@ import notification from 'antd/lib/notification'
 import 'antd/dist/antd.css'
 import {
   uiInspectGetDefinition,
-  uiInspectGetCuration,
+  uiInspectGetCurations,
   uiInspectGetHarvested,
-  uiNavigation,
   uiCurateGetDefinitionPreview,
   uiCurateResetDefinitionPreview,
   uiGetCurationsList,
-  uiRevertDefinition,
+  uiRevert,
   uiApplyCurationSuggestion,
-  uiGetCurationData,
-  uiInspectGetSuggestions
+  uiGetCurationData
 } from '../../actions/ui'
+import { getDefinitionSuggestedDataAction } from '../../actions/definitionActions'
 import { curateAction } from '../../actions/curationActions'
 import { login } from '../../actions/sessionActions'
-import { ROUTE_DEFINITIONS } from '../../utils/routingConstants'
 import Contribution from '../../utils/contribution'
 import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
 import NotificationButtons from '../Navigation/Ui/NotificationButtons'
 import { AbstractFullDetailsView } from './AbstractFullDetailsView'
+import { withResize } from '../../utils/WindowProvider'
 
 export class FullDetailPage extends AbstractFullDetailsView {
   static defaultProps = {
@@ -73,13 +72,12 @@ export class FullDetailPage extends AbstractFullDetailsView {
   }
 
   componentDidMount() {
-    const { uiNavigation, component } = this.props
+    const { component } = this.props
     if (component.changes) {
       this.setState({ changes: component.changes }, () => this.handleNewSpec(component))
     } else {
       this.handleNewSpec(component)
     }
-    uiNavigation({ to: ROUTE_DEFINITIONS })
   }
 
   // Get the data for the current definition
@@ -87,15 +85,15 @@ export class FullDetailPage extends AbstractFullDetailsView {
     const {
       token,
       uiInspectGetDefinition,
-      uiInspectGetCuration,
+      uiInspectGetCurations,
       uiInspectGetHarvested,
-      uiInspectGetSuggestions
+      getDefinitionSuggestedDataAction
     } = this.props
     if (!component) return
     uiInspectGetDefinition(token, component)
-    uiInspectGetCuration(token, component)
+    uiInspectGetCurations(token, component)
     uiInspectGetHarvested(token, component)
-    uiInspectGetSuggestions(token, component)
+    getDefinitionSuggestedDataAction(token, component)
     //uiGetCurationsList(token, component)
     this.previewDefinition(component)
   }
@@ -162,8 +160,8 @@ export class FullDetailPage extends AbstractFullDetailsView {
             notification.close(key)
           }}
           onClose={() => notification.close(key)}
-          confirmText="Confirm"
-          dismissText="Dismiss Notification"
+          confirmText="OK"
+          dismissText="Cancel"
         />
       ),
       key,
@@ -194,8 +192,8 @@ export class FullDetailPage extends AbstractFullDetailsView {
             })
           }
           onClose={() => notification.close(key)}
-          confirmText="Confirm"
-          dismissText="Dismiss Notification"
+          confirmText="OK"
+          dismissText="Cancel"
         />
       ),
       key,
@@ -255,11 +253,11 @@ function mapStateToProps(state, props) {
   const { currentDefinition } = props
   const path = Definition.getPathFromUrl(props)
   const component = props.component || Definition.getDefinitionEntity(path)
-  const curation = state.ui.inspect.curation && cloneDeep(state.ui.inspect.curation)
+  const curations = state.ui.inspect.curations && cloneDeep(state.ui.inspect.curations)
   let previewDefinition, definition
   if (currentDefinition && currentDefinition.otherDefinition) {
     previewDefinition = Contribution.getChangesFromPreview(currentDefinition.otherDefinition, currentDefinition)
-    definition = { item: currentDefinition.otherDefinition }
+    definition = { ...state.ui.inspect.definition, item: currentDefinition.otherDefinition }
   } else {
     previewDefinition = Definition.getDefinitionPreview(state)
     definition = state.ui.inspect.definition && cloneDeep(state.ui.inspect.definition)
@@ -272,7 +270,7 @@ function mapStateToProps(state, props) {
     token: state.session.token,
     session: state.session,
     definition,
-    curation,
+    curations,
     harvest: state.ui.inspect.harvested && cloneDeep(state.ui.inspect.harvested),
     previewDefinition,
     inspectedCuration: state.ui.inspect.inspectedCuration && cloneDeep(state.ui.inspect.inspectedCuration)
@@ -284,23 +282,24 @@ function mapDispatchToProps(dispatch) {
     {
       login,
       uiInspectGetDefinition,
-      uiInspectGetCuration,
+      uiInspectGetCurations,
       uiInspectGetHarvested,
       uiGetCurationsList,
-      uiNavigation,
       curateAction,
       uiCurateGetDefinitionPreview,
       uiCurateResetDefinitionPreview,
-      uiRevertDefinition,
+      uiRevert,
       uiApplyCurationSuggestion,
       uiGetCurationData,
-      uiInspectGetSuggestions
+      getDefinitionSuggestedDataAction
     },
     dispatch
   )
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FullDetailPage)
+export default withResize(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(FullDetailPage)
+)

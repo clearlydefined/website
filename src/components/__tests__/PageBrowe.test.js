@@ -14,6 +14,14 @@ describe('PageBrowse', () => {
           filter: {},
           filterList: {},
           componentList: {}
+        },
+        definitions: {
+          filter: {},
+          filterList: {},
+          componentList: {}
+        },
+        curate: {
+          bodies: {}
         }
       },
       definition: {
@@ -22,8 +30,8 @@ describe('PageBrowse', () => {
     })
 
     const props = {
-      match: { path: '/browse', url: '/browse', isExact: true, params: {} },
-      location: { pathname: '/browse', search: '', hash: '', key: 'ip23w9' }
+      match: { path: '/', url: '/', isExact: true, params: {} },
+      location: { pathname: '/', search: '', hash: '', key: 'ip23w9' }
     }
 
     shallow(<ConnectedPageBrowse store={store} {...props} />)

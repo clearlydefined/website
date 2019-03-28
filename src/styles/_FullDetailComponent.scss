@@ -42,3 +42,56 @@
 .ant-modal-body {
   padding: 10px;
 }
+.ReactVirtualized__List {
+  outline: none;
+}
+
+.file-list {
+  .ant-table-row-collapsed,
+  .ant-table-row-expanded {
+    border: 0;
+  }
+  .ant-table-row-collapsed::after,
+  .ant-table-row-expanded::after {
+    content: '';
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+    border-top: 8px solid black;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+  }
+
+  .ant-table-row-collapsed::after {
+    transform: scale(0.66666667) rotate(-90deg);
+  }
+
+  .ant-table-row-expanded::after {
+    transform: scale(0.66666667) rotate(0deg);
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    border-bottom: 0;
+    padding: 5px 0;
+  }
+
+  .ant-table-row-expand-icon {
+    background: transparent;
+  }
+}
+
+.detail-header {
+  font-weight: bold;
+  margin-bottom: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  a {
+    color: inherit;
+  }
+  a:hover,
+  a:focus {
+    color: $color_highlight;
+  }
+}

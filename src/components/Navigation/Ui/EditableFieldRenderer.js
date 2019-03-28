@@ -18,7 +18,6 @@ class EditableFieldRenderer extends Component {
     readOnly: PropTypes.bool,
     onChange: PropTypes.func,
     handleRevert: PropTypes.func,
-    applyCurationSuggestion: PropTypes.func,
     type: PropTypes.string,
     value: PropTypes.any,
     editable: PropTypes.bool,
@@ -87,6 +86,7 @@ class EditableFieldRenderer extends Component {
     const renderEditor = () =>
       editor ? (
         <ModalEditor
+          definition={definition}
           field={field}
           extraClass={Contribution.classIfDifferent(definition, previewDefinition, field)}
           readOnly={readOnly}
@@ -103,6 +103,7 @@ class EditableFieldRenderer extends Component {
         />
       ) : (
         <InlineEditor
+          definition={definition}
           field={field}
           extraClass={Contribution.classIfDifferent(definition, previewDefinition, field)}
           readOnly={readOnly}

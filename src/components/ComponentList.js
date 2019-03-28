@@ -7,12 +7,12 @@ import isEqual from 'lodash/isEqual'
 import { RowEntityList, DefinitionEntry } from './'
 import EntitySpec from '../utils/entitySpec'
 import ComponentButtons from './Navigation/Ui/ComponentButtons'
+import { withResize } from '../utils/WindowProvider'
 
-export default class ComponentList extends React.Component {
+class ComponentList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     listLength: PropTypes.number,
-    listHeight: PropTypes.number,
     loadMoreRows: PropTypes.func,
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
@@ -21,6 +21,7 @@ export default class ComponentList extends React.Component {
     noRowsRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
+    curations: PropTypes.object,
     sequence: PropTypes.number
   }
 
@@ -35,12 +36,17 @@ export default class ComponentList extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
+    if (newProps.curations.sequence !== this.props.curations.sequence) this.incrementSequence()
     if (newProps.sequence !== this.props.sequence) this.incrementSequence()
     if (!isEqual(newProps.list, this.props.list.sequence)) this.incrementSequence()
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+  }
+
+  getCuration(component) {
+    return this.props.curations.entries[EntitySpec.fromObject(component).toPath()]
   }
 
   revertComponent(component, param) {
@@ -61,7 +67,7 @@ export default class ComponentList extends React.Component {
 
   rowHeight({ index }) {
     const component = this.props.list[index]
-    return component && component.expanded ? 150 : 50
+    return component && component.expanded ? 150 * this.props.isMobileMultiplier : 50
   }
 
   toggleExpanded(component) {
@@ -84,14 +90,16 @@ export default class ComponentList extends React.Component {
     } = this.props
     const component = list[index]
     if (!component) return
-    let definition = this.getDefinition(component)
-    definition = definition || { coordinates: component }
+    const definition = this.getDefinition(component) || { coordinates: component }
+    let curation = this.getCuration(component)
+    curation = curation || { contributions: [], curations: {} }
     return (
       <div key={key} style={style} className="component-row">
         <DefinitionEntry
           draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
+          curation={curation}
           definition={definition}
           component={component}
           onChange={this.onEntryChange}
@@ -119,16 +127,15 @@ export default class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, listHeight, noRowsRenderer, list, listLength, renderFilterBar } = this.props
+    const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div>
+      <div className="flex-grow">
         {renderFilterBar()}
         <RowEntityList
           list={list}
           listLength={listLength}
           loadMoreRows={loadMoreRows}
-          listHeight={listHeight}
           rowRenderer={this.renderRow}
           rowHeight={this.rowHeight}
           noRowsRenderer={noRowsRenderer}
@@ -140,3 +147,5 @@ export default class ComponentList extends React.Component {
     )
   }
 }
+
+export default withResize(ComponentList)

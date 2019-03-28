@@ -89,7 +89,7 @@ class PageHarvest extends Component {
     const { activeProvider } = this.state
     const { queue } = this.props
     return (
-      <Grid className="main-container">
+      <Grid className="main-container flex-column">
         <Row className="show-grid spacer">
           <Col md={6}>{this.renderProviderButtons()}</Col>
           <Col md={6}>
@@ -102,11 +102,10 @@ class PageHarvest extends Component {
             {activeProvider === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
           </Col>
         </Row>
-        <Section name={'Components to harvest'} actionButton={this.renderActionButton()}>
-          <div className="section-body">
+        <Section className="flex-grow-column" name={'Components to harvest'} actionButton={this.renderActionButton()}>
+          <div className="section-body flex-grow">
             <HarvestQueueList
               list={queue.list}
-              listHeight={1000}
               onRemove={this.onRemoveRequest}
               onChange={this.onChangeRequest}
               noRowsRenderer={this.noRowsRenderer}

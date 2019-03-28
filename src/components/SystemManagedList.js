@@ -12,14 +12,13 @@ import sortBy from 'lodash/sortBy'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
 import notification from 'antd/lib/notification'
-import { curateAction } from '../actions/curationActions'
+import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
 import { getDefinitionsAction } from '../actions/definitionActions'
-import { uiBrowseUpdateFilterList, uiRevertDefinition, uiInfo, uiDanger } from '../actions/ui'
+import { uiBrowseUpdateFilterList, uiRevert, uiInfo, uiDanger } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
-import Definition from '../utils/definition'
 
 /**
  * Abstracts methods for system-managed list
@@ -56,6 +55,7 @@ export default class SystemManagedList extends Component {
     this.collapseAll = this.collapseAll.bind(this)
     this.incrementSequence = this.incrementSequence.bind(this)
     this.getDefinitionsAndNotify = this.getDefinitionsAndNotify.bind(this)
+    this.getCurations = this.getCurations.bind(this)
     this.refresh = this.refresh.bind(this)
     this.revertAll = this.revertAll.bind(this)
     this.revert = this.revert.bind(this)
@@ -64,7 +64,7 @@ export default class SystemManagedList extends Component {
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
   }
 
   getValue(component, field) {
@@ -80,8 +80,8 @@ export default class SystemManagedList extends Component {
   onInspect(component, definition) {
     this.setState({
       ...(definition ? { currentDefinition: definition } : {}),
-      path: EntitySpec.fromCoordinates(component).toPath(),
-      currentComponent: EntitySpec.fromCoordinates(component),
+      path: EntitySpec.fromObject(component).toPath(),
+      currentComponent: EntitySpec.fromObject(component),
       showFullDetail: true
     })
   }
@@ -120,7 +120,7 @@ export default class SystemManagedList extends Component {
   buildContributeSpec(list) {
     return list.reduce((result, component) => {
       if (!this.hasChange(component)) return result
-      const coord = EntitySpec.asRevisionless(component)
+      const coord = EntitySpec.withoutRevision(component)
       const patch = find(result, p => {
         return EntitySpec.isEquivalent(p.coordinates, coord)
       })
@@ -152,17 +152,17 @@ export default class SystemManagedList extends Component {
       provider: coordinates => (coordinates.provider ? coordinates.provider : null),
       type: coordinates => (coordinates.type ? coordinates.type : null),
       releaseDate: coordinates => {
-        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        const definition = this.props.definitions.entries[EntitySpec.fromObject(coordinates).toPath()]
         return get(definition, 'described.releaseDate', null)
       },
       license: coordinates => {
-        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
+        const definition = this.props.definitions.entries[EntitySpec.fromObject(coordinates).toPath()]
         return get(definition, 'licensed.declared', null)
       },
       score: coordinates => {
-        const definition = this.props.definitions.entries[EntitySpec.fromCoordinates(coordinates).toPath()]
-        const scores = Definition.computeScores(definition)
-        return scores ? (scores.tool + scores.effective) / 2 : -1
+        const definition = this.props.definitions.entries[EntitySpec.fromObject(coordinates).toPath()]
+        const scores = get(definition, 'scores')
+        return scores ? (get(scores, 'tool') + get(scores, 'effective')) / 2 : -1
       }
     }
     return sorts[eventKey]
@@ -263,18 +263,23 @@ export default class SystemManagedList extends Component {
     })
   }
 
-  revertAll() {
-    this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?')
+  revertAll(store) {
+    this.revert(null, 'Are you sure to revert all the unsaved changes from all the active definitions?', null, store)
   }
 
-  revertDefinition(definition, value) {
-    this.revert(definition, 'Are you sure to revert all the unsaved changes from the selected definition?', value)
+  revertDefinition(definition, value, store) {
+    this.revert(
+      definition,
+      'Are you sure to revert all the unsaved changes from the selected definition?',
+      value,
+      store
+    )
   }
 
-  revert(definition, description, value) {
+  revert(definition, description, value, store) {
     const { dispatch } = this.props
     if (value) {
-      dispatch(uiRevertDefinition(definition, value))
+      dispatch(uiRevert(definition, value, store))
       this.incrementSequence()
       return
     }
@@ -285,13 +290,15 @@ export default class SystemManagedList extends Component {
       btn: (
         <NotificationButtons
           onClick={() => {
-            dispatch(uiRevertDefinition(definition))
+            dispatch(uiRevert(definition, null, store))
             this.incrementSequence()
             notification.close(key)
           }}
           onClose={() => notification.close(key)}
-          confirmText="Revert"
-          dismissText="Dismiss"
+          confirmButtonTestId="notification-revert-confirm"
+          dismissButtonTestId="notification-revert-dismiss"
+          confirmText="OK"
+          dismissText="Cancel"
         />
       ),
       key,
@@ -309,6 +316,12 @@ export default class SystemManagedList extends Component {
       .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
   }
 
+  getCurations(curations) {
+    const { dispatch, token } = this.props
+    const chunks = chunk(curations, 100)
+    Promise.all(chunks.map(throat(10, chunk => dispatch(getCurationsAction(token, chunk)))))
+  }
+
   refresh = removeDefinitions => {
     const { components } = this.props
     const refreshedData = removeDefinitions
@@ -317,8 +330,14 @@ export default class SystemManagedList extends Component {
     if (this.hasChanges()) this.updateList({ updateAll: refreshedData })
     const definitions = this.buildSaveSpec(components.list)
     const definitionsToGet = definitions.map(definition => definition.toPath())
+    const curationsToGet = definitions.map(definition => definition.toPath())
     this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
+    this.getCurations(curationsToGet)
   }
 
   updateList() {}
+
+  buildSaveSpec(list) {
+    return list.map(component => EntitySpec.fromObject(component))
+  }
 }

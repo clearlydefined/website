@@ -6,11 +6,12 @@ $content-min-width-desktop: 72rem;
 $footer-min-height-desktop: 54px;
 $container-content-width: 1160px;
 // COLORS
-$color_highlight: green;
+$color_highlight: #2cbe4e;
 $color_primary: #0064b5;
 $color_secondary: #60b360;
 $color_darkgrey: #222429;
 $color_darkgrey_highlight: #444651;
+$color_red: #cb2431;
 // BG
 $color_background_main: #fff;
 $color_border_frame: #ededed;
@@ -24,3 +25,17 @@ $color_black_10: rgba(0, 0, 0, 0.1);
 
 $size-text-banner: 10rem;
 $size-text-message: 5rem;
+$size-text-message-small: $size-text-message / 1.5 / 1.5;
+
+//== Media queries breakpoints
+
+$screen-sm: 768px;
+$screen-md: 992px;
+$screen-lg: 1200px;
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max: ($screen-sm - 1);
+$screen-sm-max: ($screen-md - 1);
+$screen-md-max: ($screen-lg - 1);
+
+$height-filters-list: 32px;

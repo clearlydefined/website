@@ -23,9 +23,6 @@ export default class ShareButton extends Component {
           Notice file
         </MenuItem>
         <MenuItem divider />
-        <MenuItem disabled eventKey="3" onSelect={() => onSelect('gist')}>
-          Gist
-        </MenuItem>
         <MenuItem disabled>Definitions (Not implemented)</MenuItem>
         <MenuItem disabled>SPDX (Not implemented)</MenuItem>
       </DropdownButton>

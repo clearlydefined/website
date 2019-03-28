@@ -90,13 +90,6 @@ export default (name = '', transformer = null, comparator = null) => {
       }
     }
 
-    if (result.startQuery) {
-      return {
-        ...state,
-        isFetching: true
-      }
-    }
-
     if (result.add) {
       const newList = add(state.list, result.add, comparator)
       return {

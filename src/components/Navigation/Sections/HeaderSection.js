@@ -4,11 +4,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Button, Col } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
+import get from 'lodash/get'
 import { Tag } from 'antd'
-import Definition from '../../../utils/definition'
 import { withResize } from '../../../utils/WindowProvider'
+import Curation from '../../../utils/curation'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import ScoreRenderer from '../Ui/ScoreRenderer'
+import DefinitionTitle from '../Ui/DefinitionTitle'
+import DefinitionRevision from '../Ui/DefinitionRevision'
 
 class HeaderSection extends Component {
   static propTypes = {
@@ -24,25 +27,28 @@ class HeaderSection extends Component {
 
   render() {
     const {
-      definition,
-      modalView,
       changes,
-      renderContributeButton,
+      curations,
+      definition,
       handleClose,
-      handleSave,
       handleRevert,
-      isMobile
+      handleSave,
+      isMobile,
+      modalView,
+      renderContributeButton
     } = this.props
     const { item } = definition
-    const scores = Definition.computeScores(item)
-    const isCurated = Definition.isCurated(item)
-    const hasPendingCurations = Definition.hasPendingCurations(item)
+    const scores = get(item, 'scores')
+    const isCurated = Curation.isCurated(curations.item)
+    const hasPendingCurations = Curation.isPending(curations.item)
     return (
       <Row className="row-detail-header">
         <Col md={8}>
           <div className="detail-header">
             <div className="header-title">
-              <h2>{item && item.coordinates.name}</h2>
+              <h2>
+                <DefinitionTitle definition={item} showNamespace={false} />
+              </h2>
               &nbsp;&nbsp;
               <div className="header-data">
                 {scores && (
@@ -50,11 +56,21 @@ class HeaderSection extends Component {
                     <ScoreRenderer scores={scores} definition={item} />
                   </span>
                 )}
-                {isCurated && <Tag color="green">Curated</Tag>}
-                {hasPendingCurations && <Tag color="gold">Pending Curations</Tag>}
+                {isCurated && (
+                  <Tag className="cd-badge" color="purple">
+                    Curated
+                  </Tag>
+                )}
+                {hasPendingCurations && (
+                  <Tag className="cd-badge" color="green">
+                    Pending curations
+                  </Tag>
+                )}
               </div>
             </div>
-            <p>{item.coordinates.revision}</p>
+            <p>
+              <DefinitionRevision definition={item} showNamespace={false} />
+            </p>
           </div>
         </Col>
         <Col md={4} className="text-right">

@@ -32,7 +32,7 @@ export default class Contribution {
   static buildContributeSpec(result, component, changes) {
     if (!this.hasChange(changes)) return result
 
-    const coord = EntitySpec.fromCoordinates(component)
+    const coord = EntitySpec.fromObject(component)
     const patch = find(result, p => {
       return EntitySpec.isEquivalent(p.coordinates, coord)
     })

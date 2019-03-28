@@ -3,8 +3,9 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker } from './'
+import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRenderer } from './'
 import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
+import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -14,16 +15,21 @@ import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
-import EntitySpec from '../utils/entitySpec'
+import Curation from '../utils/curation'
+import { withResize } from '../utils/WindowProvider'
 import LicensesRenderer from './LicensesRenderer'
+import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
+import DefinitionTitle from './Navigation/Ui/DefinitionTitle'
+import DefinitionRevision from './Navigation/Ui/DefinitionRevision'
 
-export default class DefinitionEntry extends React.Component {
+class DefinitionEntry extends React.Component {
   static propTypes = {
     onChange: PropTypes.func,
     onCurate: PropTypes.func,
     onInspect: PropTypes.func,
     activeFacets: PropTypes.array,
     definition: PropTypes.object.isRequired,
+    curation: PropTypes.object.isRequired,
     component: PropTypes.object.isRequired,
     renderButtons: PropTypes.func
   }
@@ -65,41 +71,31 @@ export default class DefinitionEntry extends React.Component {
     return (component.changes && component.changes[field]) || this.getOriginalValue(field)
   }
 
-  renderHeadline(definition) {
-    const { namespace, name, revision } = definition.coordinates
-    const componentUrl = EntitySpec.getComponentUrl(definition.coordinates)
-    const revisionUrl = EntitySpec.getRevisionUrl(definition.coordinates)
-    const namespaceText = namespace ? namespace + '/' : ''
-    const componentTag = componentUrl ? (
-      <span>
-        <a href={componentUrl} target="_blank" rel="noopener noreferrer" data-test-id="component-name">
-          {namespaceText}
-          {name}
-        </a>
-      </span>
-    ) : (
-      <span>
-        {namespaceText}
-        {name}
-      </span>
-    )
-    const revisionTag = revisionUrl ? (
+  renderHeadline(definition, curation) {
+    const scores = get(definition, 'scores')
+    const isCurationPending = Curation.isPending(curation)
+    const scoreTag = scores ? (
       <span>
         &nbsp;&nbsp;&nbsp;
-        <a href={revisionUrl} target="_blank" rel="noopener noreferrer">
-          {revision}
+        <ScoreRenderer scores={scores} definition={definition} />
+      </span>
+    ) : null
+    const curationTag = isCurationPending ? (
+      <span>
+        &nbsp;&nbsp;
+        <a href="https://github.com/clearlydefined/curated-data/pulls" target="_blank" rel="noopener noreferrer">
+          <Tag className="cd-badge" color="green">
+            {this.props.isMobile ? 'Pending' : 'Pending curations'}
+          </Tag>
         </a>
       </span>
-    ) : (
-      <span>
-        &nbsp;&nbsp;&nbsp;
-        {revision}
-      </span>
-    )
+    ) : null
     return (
       <span>
-        {componentTag}
-        {revisionTag}
+        <DefinitionTitle definition={definition} />
+        <DefinitionRevision definition={definition} />
+        {scoreTag}
+        {curationTag}
       </span>
     )
   }
@@ -182,22 +178,17 @@ export default class DefinitionEntry extends React.Component {
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed } = definition
-    const totalFiles = get(licensed, 'files')
-    const unlicensed = get(licensed, 'discovered.unknown')
-    const unattributed = get(licensed, 'attribution.unknown')
-    const unlicensedPercent = totalFiles ? this.getPercentage(unlicensed, totalFiles) : '-'
-    const unattributedPercent = totalFiles ? this.getPercentage(unattributed, totalFiles) : '-'
     const { readOnly, onRevert } = this.props
-
     return (
       <Row>
-        <Col md={5}>
+        <Col sm={5}>
           <Row>
-            <Col md={2}>{this.renderLabel('Declared', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Declared')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'licensed.declared',
                 <LicensesRenderer
+                  definition={definition}
                   field={'licensed.declared'}
                   readOnly={readOnly}
                   initialValue={this.getOriginalValue('licensed.declared')}
@@ -210,11 +201,12 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Source', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Source')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.sourceLocation',
                 <ModalEditor
+                  definition={definition}
                   field={'described.sourceLocation'}
                   extraClass={this.classIfDifferent('described.sourceLocation')}
                   readOnly={readOnly}
@@ -233,8 +225,8 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Release', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Release')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderWithToolTipIfDifferent(
                 'described.releaseDate',
                 <InlineEditor
@@ -254,27 +246,23 @@ export default class DefinitionEntry extends React.Component {
             </Col>
           </Row>
         </Col>
-        <Col md={7}>
+        <Col sm={7}>
           <Row>
-            <Col md={2}>{this.renderLabel('Discovered')}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Discovered')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Attribution', true)}</Col>
-            <Col md={10} className="definition__line">
+            <Col xs={3}>{this.renderLabel('Attribution')}</Col>
+            <Col xs={9} className="definition__line">
               {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
             </Col>
           </Row>
           <Row>
-            <Col md={2}>{this.renderLabel('Files')}</Col>
-            <Col md={10} className="definition__line">
-              <p className="list-singleLine">
-                Total: <b>{totalFiles || '0'}</b>, Unlicensed:{' '}
-                <b>{isNaN(unlicensed) ? '-' : `${unlicensed} (${unlicensedPercent}%)`}</b>, Unattributed:{' '}
-                <b>{isNaN(unattributed) ? '-' : `${unattributed} (${unattributedPercent}%)`}</b>
-              </p>
+            <Col xs={3}>{this.renderLabel('Files')}</Col>
+            <Col xs={9} className="definition__line">
+              <FileCountRenderer definition={definition} />
             </Col>
           </Row>
         </Col>
@@ -324,7 +312,7 @@ export default class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const { definition, onClick, renderButtons, component, draggable } = this.props
+    const { curation, definition, onClick, renderButtons, component, draggable } = this.props
     return (
       <TwoLineEntry
         draggable={draggable}
@@ -332,7 +320,7 @@ export default class DefinitionEntry extends React.Component {
         highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
         image={this.getImage(definition)}
         letter={definition.coordinates.type.slice(0, 1).toUpperCase()}
-        headline={this.renderHeadline(definition)}
+        headline={this.renderHeadline(definition, curation)}
         message={this.renderMessage(definition)}
         buttons={renderButtons && renderButtons(definition)}
         onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
@@ -342,3 +330,5 @@ export default class DefinitionEntry extends React.Component {
     )
   }
 }
+
+export default withResize(DefinitionEntry)

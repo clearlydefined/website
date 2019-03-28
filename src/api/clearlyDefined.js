@@ -33,7 +33,7 @@ export const ORIGINS = {
 
 export function getHarvestResults(token, entity) {
   // TODO ensure that the entity has data all the way down to the revision (and no more)
-  return get(url(`${HARVEST}/${entity.toPath()}`, { form: 'raw' }), token)
+  return get(url(`${HARVEST}/${EntitySpec.withoutPR(entity).toPath()}`, { form: 'raw' }), token)
 }
 
 export function harvest(token, spec) {
@@ -46,7 +46,6 @@ export function harvest(token, spec) {
  * @param {*} entity
  * @param {object} params additional params added to the query string
  * @param {array} params.expand contains informations about the detail to be returned (e.g. ['prs','foo','bars']);
- * @param {string} params.state if === 'pending' return also curations not already merged
  */
 export function getCuration(token, entity, params = {}) {
   const { expand, state } = params
@@ -60,6 +59,15 @@ export function getCuration(token, entity, params = {}) {
 }
 
 /**
+ * Get curation details about a set of definitions
+ * @param {*} token
+ * @param {*} list
+ */
+export function getCurations(token, list) {
+  return post(url(CURATIONS), token, list)
+}
+
+/**
  * List all of the curations (if any) using the given coordinates as a pattern to match, despite the revision
  * @param  {} token
  * @param  {} entity
@@ -68,7 +76,7 @@ export function getCuration(token, entity, params = {}) {
  */
 export function getCurationList(token, entity, params = {}) {
   const { state } = params
-  const entityWithoutRevision = EntitySpec.asRevisionless(entity)
+  const entityWithoutRevision = EntitySpec.withoutRevision(entity)
   return get(
     url(`${CURATIONS}/${entityWithoutRevision.toPath()}`, {
       state
@@ -119,7 +127,7 @@ export function getDefinitionSuggestions(token, prefix) {
 }
 
 export function getSuggestedData(token, entity) {
-  return get(url(`${SUGGESTIONS}/${entity.toPath()}`), token)
+  return get(url(`${SUGGESTIONS}/${EntitySpec.withoutPR(entity).toPath()}`), token)
 }
 
 export function previewDefinition(token, entity, curation) {
@@ -131,17 +139,6 @@ export async function getNotices(token, coordinates, renderer, options) {
   if (typeof result.content === 'string') return result
   result.content = JSON.stringify(result.content)
   return result
-}
-
-export function getBadgeUrl(score1, score2) {
-  score1 = score1 || 0
-  score2 = score2 || 0
-  const topScore = 100
-  const colors = ['red', 'yellow', 'brightgreen']
-  const percentScore = (score1 + score2) / (2 * topScore)
-  const bucketSize = 1 / colors.length
-  const color = colors[Math.floor(percentScore / bucketSize)]
-  return `https://img.shields.io/badge/ClearlyDefined-${score1}%20%7C%20${score2}-${color}.svg`
 }
 
 export function getGitHubSearch(token, path) {

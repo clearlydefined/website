@@ -30,7 +30,7 @@
   text-overflow: ellipsis;
 }
 .popoverRenderer__items__value--isEdited {
-  color: red;
+  color: $color_red;
 }
 .popoverRenderer__items__formControl {
   width: 200px;
@@ -49,4 +49,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 100%;
+  display: block;
 }

@@ -6,12 +6,17 @@ export const definitionsMap = {
   },
   componentList: {
     list: '.components-list',
-    firstElement: 'div:nth-child(0n+1) .component-row'
+    firstElement: 'div:nth-child(0n+1) .component-row',
+    tag: '.list-headline .ant-tag'
   },
+  revertButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="revert-button"]',
   contributeButton: '[data-test-id="page-definition-buttons-bar"] [data-test-id="contribute-button"]',
   contributeSuccess: '[data-test-id="contribution-success"]',
+  notification: {
+    revertButton: '[data-test-id="notification-revert-confirm"]'
+  },
   component: {
-    name: '[data-test-id="component-name"]',
+    name: '.list-headline [data-test-id="component-name"]',
     image: '.list-image',
     buttons: '.list-activity-area',
     sourceButton: '.list-fa-button > i.fa-code',
@@ -29,25 +34,26 @@ export const definitionsMap = {
     },
     details: {
       get declared() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-5 > div:nth-child(1) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > b`
       },
       get source() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-5 > div:nth-child(2) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > b`
       },
       get releaseDate() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-5 > div:nth-child(3) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > b`
       },
       get discovered() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-7 > div:nth-child(1) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > b`
       },
       get attribution() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-7 > div:nth-child(2) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > b`
       },
       get files() {
-        return `${definitionsMap.component.detailsElement} > div.col-md-7 > div:nth-child(3) > div.col-md-2 > b`
+        return `${definitionsMap.component.detailsElement} > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > b`
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',
+      revertLicenseButton: '.license-renderer .fa-undo',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`
       },
@@ -59,7 +65,7 @@ export const definitionsMap = {
   licensePicker: {
     identifier: '.spdx-picker',
     inputField:
-      '[data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
+      '.spdx-picker [data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
     listSelection: '#rbt-menu-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },

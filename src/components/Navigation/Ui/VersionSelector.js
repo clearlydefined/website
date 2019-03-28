@@ -59,7 +59,7 @@ class VersionSelector extends Component {
     const { options, label, selected } = this.state
 
     return (
-      <Modal show={show} onHide={this.onClose}>
+      <Modal show={show} onHide={this.onClose} backdrop={selected.length > 0 ? 'static' : true}>
         <Modal.Header closeButton>
           <Modal.Title>{label}</Modal.Title>
         </Modal.Header>
@@ -81,10 +81,10 @@ class VersionSelector extends Component {
         </Modal.Body>
         <Modal.Footer>
           <FormGroup className="pull-right">
-            <Button onClick={this.onClose}>Cancel</Button>
             <Button bsStyle="success" type="button" disabled={selected.length === 0} onClick={() => this.doSave()}>
               OK
             </Button>
+            <Button onClick={this.onClose}>Cancel</Button>
           </FormGroup>
         </Modal.Footer>
       </Modal>

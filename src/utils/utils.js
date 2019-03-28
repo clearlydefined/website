@@ -27,7 +27,7 @@ function asObject(item) {
   }
 }
 
-const customLicenseIds = ['NONE']
+const customLicenseIds = ['NONE', 'NOASSERTION']
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -64,6 +64,35 @@ const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence'
 
 const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
 
-const curateFilters = [{ value: 'licensed', label: 'Licensed' }, { value: 'described', label: 'Described' }]
+const curateFilters = [
+  { value: 'effective', label: 'Focus on overall issues' },
+  { value: 'licensed', label: 'Focus on license issues' },
+  { value: 'described', label: 'Focus on description issues' }
+]
 
-export { setIfValue, difference, customLicenseIds, asObject, sorts, licenses, sources, releaseDates, curateFilters }
+const providers = [
+  { value: 'cocoapods', label: 'CocoaPods' },
+  { value: 'cratesio', label: 'Crates.io' },
+  { value: 'github', label: 'GitHub' },
+  { value: 'mavencentral', label: 'MavenCentral' },
+  { value: 'npmjs', label: 'NpmJS' },
+  { value: 'nuget', label: 'NuGet' },
+  { value: 'pypi', label: 'PyPi' },
+  { value: 'rubygems', label: 'RubyGems' }
+]
+
+const noRowsHeight = 260
+
+export {
+  asObject,
+  curateFilters,
+  customLicenseIds,
+  difference,
+  licenses,
+  noRowsHeight,
+  providers,
+  releaseDates,
+  setIfValue,
+  sorts,
+  sources
+}

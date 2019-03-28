@@ -18,9 +18,10 @@ export class AbstractFullDetailsView extends Component {
     const {
       path,
       definition,
-      curation,
+      curations,
       harvest,
       modalView,
+      isMobile,
       visible,
       previewDefinition,
       readOnly,
@@ -33,7 +34,8 @@ export class AbstractFullDetailsView extends Component {
       <Modal
         closable={false}
         footer={null}
-        centered
+        // if it's mobile do not center the Modal
+        centered={!isMobile}
         destroyOnClose={true}
         visible={visible}
         width={isMobile ? '95%' : '85%'}
@@ -41,7 +43,7 @@ export class AbstractFullDetailsView extends Component {
       >
         {visible && (
           <FullDetailComponent
-            curation={curation}
+            curations={curations}
             definition={definition}
             harvest={harvest}
             path={path}
@@ -62,7 +64,7 @@ export class AbstractFullDetailsView extends Component {
     ) : (
       <Grid>
         <FullDetailComponent
-          curation={curation}
+          curations={curations}
           definition={definition}
           harvest={harvest}
           path={path}

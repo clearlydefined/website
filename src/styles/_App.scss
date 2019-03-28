@@ -9,6 +9,16 @@
   font-weight: 400;
 }
 
+.App-content {
+  .cd-badge {
+    font-size: 12px;
+    font-weight: normal;
+    height: 20px;
+    line-height: 0.1;
+    padding: 8px 4px 1px 4px;
+  }
+}
+
 .App-logo {
   height: 150px;
 }
@@ -18,6 +28,8 @@
 }
 
 .main-container {
+  height: 100%;
+
   h1 {
     font-size: $size-text-banner;
     text-align: center;
@@ -27,11 +39,19 @@
     font-size: $size-text-message;
     color: $color-text-main;
     text-align: center;
+
+    @media screen and (max-width: $screen-md) {
+      font-size: $size-text-message / 1.5;
+    }
   }
 
   h3 {
     font-size: 1.6em;
     line-height: 1.3;
+
+    @media (max-width: $screen-sm) {
+      font-size: calc(1.6em / 1.5);
+    }
   }
 
   .valign-child {
@@ -39,7 +59,7 @@
   }
 
   .neighborhood-row {
-    padding-top: 80px;
+    padding-top: 60px;
     display: flex;
     min-height: 150px;
   }
@@ -48,19 +68,27 @@
     font-size: 10rem;
     color: $color_primary;
     text-align: center;
-  }
 
-  .neighborhood-logo-container {
-    text-align: center;
+    @media (max-width: $screen-sm) {
+      font-size: 4.3rem;
+    }
   }
 
   .neighborhood-logo {
     width: 100px;
+
+    @media (max-width: $screen-xs-max) {
+      width: 100%;
+    }
   }
 
   .about-cell {
     display: flex;
     min-height: 170px;
+
+    @media (max-width: $screen-sm) {
+      min-height: 150px;
+    }
   }
 
   .about-image {
@@ -69,22 +97,23 @@
     margin-right: auto;
     margin-left: auto;
   }
+}
 
-  .about-text {
-    font-size: 1.25em;
+.about-container {
+  font-size: 1.25em;
+  @media (max-width: $screen-sm) {
+    margin-top: -80px;
   }
 
-  .landing-large-logo {
-    width: 500px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  .center-block {
+    vertical-align: top;
   }
 }
 
 .labelled-button {
   display: inline-block;
   width: 100%;
+
   .btn {
     margin-left: 10px;
   }
@@ -95,10 +124,19 @@
   align-items: center;
   justify-content: center;
   color: #bdbdbd;
+  height: 100%;
 }
 
 .spacer {
   margin: 30px;
+}
+
+.spacer-search {
+  margin: 3rem;
+
+  @media screen and (max-width: $screen-sm) {
+    margin: 4rem 1rem 1rem;
+  }
 }
 
 .top-space {
@@ -106,12 +144,16 @@
   padding-bottom: 7px;
 }
 
+.right-space {
+  margin-right: 10px;
+}
+
 .section-body {
-  border: 1px;
-  border-style: solid;
-  border-color: lightgray;
-  min-height: 200px;
+  border: 1px solid lightgray;
   box-shadow: 5px 5px 20px -10px lightgrey;
+  display: flex;
+  min-height: 200px;
+  padding-bottom: $height-filters-list;
 
   .fa-spinner {
     display: none;
@@ -137,23 +179,95 @@
   }
 }
 
+.flex-grow {
+  flex: 1;
+}
+
+.flex-grow-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
 .section-header {
   padding-top: 30px;
   padding-bottom: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media screen and (max-width: $screen-sm) {
+    padding-top: 20px;
+  }
 }
 
 .section-title {
   font-size: 2em;
+
+  @media screen and (max-width: $screen-lg) {
+    font-size: 1.5em;
+  }
+
+  .cd-badge {
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+}
+
+.section-button,
+.list-activity-area,
+.filter-bar {
+  // same as .btn-sm
+  @media screen and (max-width: $screen-md) {
+    .btn {
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+    }
+  }
+
+  // same as .btn-xs
+  @media screen and (max-width: $screen-sm) {
+    .btn {
+      padding: 1px 5px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+    }
+  }
+}
+
+#buttonbar-collapse,
+.dropdown-menu-right {
+  padding: 0;
+  margin: -1px 0 0;
+  border: 1px;
+}
+
+.section-body {
+  // same as .btn-sm
+  @media screen and (max-width: $screen-md) {
+    .btn {
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
+    }
+  }
+}
+
+.buttons-bar {
+  .btn-group,
+  .btn {
+    margin-left: 3px;
+  }
 }
 
 .editable-field {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 300px;
 }
 
 .editable-marker {
@@ -205,16 +319,6 @@
   opacity: 0.5;
 }
 
-.modal {
-  &-dialog {
-    width: 1220px;
-    height: 480px;
-  }
-  &-content {
-    height: 100%;
-  }
-}
-
 .dropdown-menu {
   z-index: 9001;
 }
@@ -239,10 +343,6 @@
   text-overflow: ellipsis;
 }
 
-.modal-content {
-  height: auto;
-}
-
 .tooltipWrapper {
   display: inline-block;
 }
@@ -251,6 +351,42 @@
   pointer-events: none;
 }
 
+.section-button {
+  text-align: right;
+}
+
 hr {
   margin: 75px 0;
+}
+
+.rbt-input.form-control {
+  padding: 5px 17px;
+}
+
+.ReactVirtualized__Grid__innerScrollContainer {
+  overflow: visible !important;
+}
+
+.section-header div:nth-child(2) {
+  align-self: flex-end;
+}
+
+.section-button .text-right > .btn,
+.section-button .text-right > .dropdown {
+  margin-left: 3px;
+
+  @media (max-width: $screen-sm-max) {
+    margin-bottom: 1px;
+    margin-left: 2px;
+  }
+}
+
+.browse-page {
+  // negative margin to reduce the .navbar min-height
+  margin-top: -40px;
+}
+
+.active-filters {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }

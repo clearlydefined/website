@@ -34,12 +34,24 @@ class LicensesRenderer extends Component {
   }
 
   render() {
-    const { extraClass, field, initialValue, onChange, onRevert, onSave, readOnly, revertable, value } = this.props
+    const {
+      extraClass,
+      field,
+      initialValue,
+      onChange,
+      onRevert,
+      onSave,
+      readOnly,
+      revertable,
+      value,
+      definition
+    } = this.props
     const { advancedView } = this.state
 
     return (
       <div className="license-renderer">
         <InlineEditor
+          definition={definition}
           field={field}
           extraClass={extraClass}
           readOnly={readOnly}
@@ -53,8 +65,8 @@ class LicensesRenderer extends Component {
           onRevert={onRevert}
           type="license"
         />
-        <i className="fas fa-eye license-advanced" onClick={this.toggleAdvancedView} />
-        <Modal show={advancedView} onHide={this.toggleAdvancedView}>
+        {!readOnly && <i className="fas fa-eye license-advanced" onClick={this.toggleAdvancedView} />}
+        <Modal bsSize="large" show={advancedView} onHide={this.toggleAdvancedView}>
           <LicensePicker
             onChange={spec => this.advancedPickerChange(spec, onChange)}
             onClose={this.toggleAdvancedView}
@@ -67,10 +79,8 @@ class LicensesRenderer extends Component {
 }
 
 LicensesRenderer.propTypes = {
-  /**
-   * item to show
-   */
-  value: PropTypes.string.isRequired,
+  definition: PropTypes.object,
+  value: PropTypes.string,
   extraClass: PropTypes.string,
   onSave: PropTypes.func,
   readOnly: PropTypes.bool,

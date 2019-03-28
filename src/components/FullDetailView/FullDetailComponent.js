@@ -6,12 +6,12 @@ import { Row, Button, Col } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import cloneDeep from 'lodash/cloneDeep'
 import find from 'lodash/find'
+import get from 'lodash/get'
 import { Section } from '../'
 import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
 import 'antd/dist/antd.css'
 import Contribution from '../../utils/contribution'
-import Definition from '../../utils/definition'
 import DescribedSection from '../Navigation/Sections/DescribedSection'
 import RawDataSection from '../Navigation/Sections/RawDataSection'
 import HeaderSection from '../Navigation/Sections/HeaderSection'
@@ -27,7 +27,7 @@ class FullDetailComponent extends Component {
     handleClose: PropTypes.func,
     handleSave: PropTypes.func,
     handleRevert: PropTypes.func,
-    curation: PropTypes.object.isRequired,
+    curations: PropTypes.object.isRequired,
     definition: PropTypes.object.isRequired,
     harvest: PropTypes.object.isRequired,
     modalView: PropTypes.bool.isRequired,
@@ -49,13 +49,26 @@ class FullDetailComponent extends Component {
             &nbsp;
             {!readOnly && (
               <ButtonWithTooltip tip="Revert all changes of all the definitions">
-                <Button bsStyle="danger" onClick={() => handleRevert('files')} disabled={entry === undefined}>
+                <Button
+                  bsSize="small"
+                  bsStyle="danger"
+                  onClick={() => handleRevert('files')}
+                  disabled={entry === undefined}
+                >
                   <i className="fas fa-undo" />
                   <span>&nbsp;Revert Changes</span>
                 </Button>
               </ButtonWithTooltip>
             )}
           </section>
+        }
+        actionButton={
+          get(item, 'described.urls.download') && (
+            <Button bsStyle="primary" href={get(item, 'described.urls.download')}>
+              <i className="fas fa-download" />
+              <span>&nbsp;Download component</span>
+            </Button>
+          )
         }
       >
         <Row>
@@ -94,8 +107,8 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const { curation, definition, harvest, onChange, previewDefinition, readOnly, handleRevert, isMobile } = this.props
-    if (!definition || !definition.item || !curation || !harvest) return null
+    const { curations, definition, harvest, onChange, previewDefinition, readOnly, handleRevert, isMobile } = this.props
+    if (!definition || !definition.item || !curations || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
     return (
@@ -132,7 +145,7 @@ class FullDetailComponent extends Component {
                     />
                   </Col>
                   <Col md={6}>
-                    <CurationsSection curations={Definition.getPrs(item)} />
+                    <CurationsSection curations={curations} />
                   </Col>
                 </Row>
               </Fragment>
