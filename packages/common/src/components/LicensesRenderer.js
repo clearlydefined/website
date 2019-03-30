@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { InlineEditor } from './'
 import { Modal } from 'react-bootstrap'
-import LicensePicker from './LicensePicker'
+import {LicensePicker} from '@clearlydefined/ui-components'
 
 /**
  * Specific renderer for Licenses data

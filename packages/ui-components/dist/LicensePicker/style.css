@@ -1,0 +1,50 @@
+.flex {
+  display: flex; }
+
+.flex-column {
+  display: flex;
+  flex-direction: column; }
+
+.flex-center {
+  display: flex;
+  align-items: center; }
+
+.spdx-picker-expression {
+  padding: 5px; }
+
+.spdx-picker-expression.is-valid {
+  background: green; }
+
+.spdx-picker-expression.is-not-valid {
+  background: red; }
+
+.spdx-picker-header-title > h2 {
+  margin: 0;
+  padding: 10px;
+  font-size: 2.5em; }
+
+.spdx-picker-header-title > h2 > .header-data {
+  display: flex;
+  align-items: center; }
+
+.spdx-picker-header-buttons {
+  padding: 10px;
+  text-align: right;
+  padding-right: 20px; }
+
+.spdx-picker-header-buttons > button {
+  margin: 2px; }
+
+.spdx-picker-rule {
+  padding: 10px; }
+
+.header-row {
+  padding: 0px;
+  display: flex;
+  justify-content: space-between; }
+
+.spdx-picker-group {
+  padding: 10px;
+  padding-right: 0px;
+  background: lightgrey;
+  border: 1px solid black; }
