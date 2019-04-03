@@ -30,7 +30,9 @@ export default class GitHubCommitPicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, selected: nextProps.request.commit ? [nextProps.request.commit] : [] })
+    this.setState({ ...this.state, selected: nextProps.request.commit ? [nextProps.request.commit] : [] }, () =>
+      this.getOptions('')
+    )
   }
 
   componentDidUpdate() {
@@ -83,7 +85,6 @@ export default class GitHubCommitPicker extends Component {
     const { defaultInputValue, allowNew } = this.props
     const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
-
     return (
       <div onClick={e => e.stopPropagation()}>
         <Autocomplete
