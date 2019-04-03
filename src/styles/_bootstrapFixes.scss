@@ -45,9 +45,10 @@
   display: inline-block;
 }
 
-.btn-success {
-  background-color: $color_highlight;
-  border-color: $color_highlight;
+.btn-success,
+.ant-btn-primary {
+  background-color: $color_highlight !important;
+  border-color: $color_highlight !important;
 }
 
 .btn-danger {
