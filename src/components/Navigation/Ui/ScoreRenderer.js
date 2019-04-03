@@ -37,8 +37,8 @@ class ScoreRenderer extends Component {
     </Fragment>
   )
 
-  getColor(score, topScore = 100) {
-    const colors = ['#cb2431', '#d6af22', '#2cbe4e']
+  getColor(score, topScore = 100, customColors) {
+    const colors = customColors || ['#cb2431', '#d6af22', '#2cbe4e']
     const percentScore = score / topScore
     const bucket = Math.floor(percentScore * colors.length)
     return colors[Math.min(colors.length - 1, bucket)]
@@ -46,7 +46,7 @@ class ScoreRenderer extends Component {
 
   renderScoreEntry(score, name, label) {
     if (!Object.keys(score).includes(name)) return
-    const color = this.getColor(score[name], maxScores[name] || 100)
+    const color = this.getColor(score[name], maxScores[name] || 100, ['#d6af22', '#2cbe4e'])
     return (
       <p style={{ color }}>
         {label}: {score[name]}
