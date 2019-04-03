@@ -133,7 +133,7 @@ class PageBrowse extends SystemManagedList {
       else activeFilters[filter.type] = filter.value
     }
     if (filter.type === 'curate') {
-      activeSort = 'effectiveScore'
+      activeSort = 'score'
     }
     this.setState(
       {
@@ -153,6 +153,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   renderFilterBar() {
+    console.log(this.state)
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
