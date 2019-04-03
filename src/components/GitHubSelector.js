@@ -78,7 +78,7 @@ export default class GitHubSelector extends Component {
           ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
           useCache={false}
           options={namespace.options}
-          placeholder={'Pick a namespace'}
+          placeholder={'User / Organization'}
           onChange={this.onChange}
           labelKey="id"
           clearButton
@@ -95,7 +95,7 @@ export default class GitHubSelector extends Component {
           ref={typeahead => (this._componentselector = typeahead)}
           useCache={false}
           options={component.options}
-          placeholder={'Pick a component'}
+          placeholder={'Repo'}
           onChange={this.onComponentChange}
           labelKey={option => option.id.substring(option.id.indexOf('/') + 1)}
           clearButton
