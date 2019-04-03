@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
+import difference from 'lodash/difference'
 import classNames from 'classnames'
 import { ROUTE_ROOT } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
@@ -217,7 +218,12 @@ class PageBrowse extends SystemManagedList {
     }
     await this.props.dispatch(uiBrowseGet(this.props.token, query))
     if (this.props.definitions.entries)
-      this.props.dispatch(getCurationsAction(this.props.token, Object.keys(this.props.definitions.entries)))
+      this.props.dispatch(
+        getCurationsAction(
+          this.props.token,
+          difference(Object.keys(this.props.definitions.entries), Object.keys(this.props.curations.entries))
+        )
+      )
   }
 
   loadMoreRows = async () => {
