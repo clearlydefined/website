@@ -153,7 +153,6 @@ class PageBrowse extends SystemManagedList {
   }
 
   renderFilterBar() {
-    console.log(this.state)
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
