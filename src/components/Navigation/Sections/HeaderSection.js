@@ -82,7 +82,7 @@ export default class HeaderSection extends Component {
           )}{' '}
           {modalView && (
             <Button
-              bsStyle="primary"
+              bsStyle="success"
               data-test-id="header-section-ok-button"
               disabled={isEmpty(changes)}
               onClick={handleSave}
