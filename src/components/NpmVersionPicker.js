@@ -35,7 +35,6 @@ export default class NpmVersionPicker extends Component {
       const options = await getNpmRevisions(this.props.token, path)
       this.setState({ ...this.state, options })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [] })
     }
   }

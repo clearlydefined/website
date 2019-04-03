@@ -31,7 +31,6 @@ export default class PyPiSelector extends Component {
       const options = await getPyPiSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [], isLoading: false })
     }
   }

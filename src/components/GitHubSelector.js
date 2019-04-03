@@ -52,7 +52,6 @@ export default class GitHubSelector extends Component {
       const options = await getGitHubSearch(this.props.token, value)
       this.setState({ namespace: { options: options, isLoading: false } })
     } catch (error) {
-      console.log(error)
       this.setState({ namespace: { options: [], isLoading: false } })
     }
   }
@@ -65,7 +64,6 @@ export default class GitHubSelector extends Component {
       const options = await getGitHubSearch(this.props.token, `${this.state.selectedNamespace}/${value}`)
       this.setState({ component: { options: options, isLoading: false } })
     } catch (error) {
-      console.log(error)
       this.setState({ component: { options: [], isLoading: false } })
     }
   }

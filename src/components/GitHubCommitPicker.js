@@ -49,7 +49,6 @@ export default class GitHubCommitPicker extends Component {
       const options = await getGitHubRevisions(path)
       !this.isUnmounted && this.setState({ options, shouldUpdate: false })
     } catch (error) {
-      console.log(error)
       !this.isUnmounted && this.setState({ options: [], shouldUpdate: false })
     }
   }

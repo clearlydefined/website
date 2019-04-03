@@ -30,7 +30,6 @@ export default class CrateVersionPicker extends Component {
       const options = await getCrateRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [] })
     }
   }

@@ -30,7 +30,6 @@ export default class CrateSelector extends Component {
       const options = await getCrateSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [], isLoading: false })
     }
   }

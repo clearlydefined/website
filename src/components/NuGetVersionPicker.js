@@ -34,7 +34,6 @@ export default class NuGetVersionPicker extends Component {
       const options = await getNugetRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [] })
     }
   }

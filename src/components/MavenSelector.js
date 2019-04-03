@@ -37,7 +37,6 @@ export default class MavenSelector extends Component {
       const options = await getMavenSearch(this.props.token, value.replace(':', '/'))
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [], isLoading: false })
     }
   }

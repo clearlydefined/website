@@ -34,7 +34,6 @@ export default class MavenVersionPicker extends Component {
       const options = await getMavenRevisions(this.props.token, path.replace(':', '/'))
       this.setState({ ...this.state, options })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [] })
     }
   }

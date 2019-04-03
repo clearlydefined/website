@@ -34,7 +34,6 @@ export default class RubyGemsVersionPicker extends Component {
       const options = await getRubyGemsRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [] })
     }
   }
