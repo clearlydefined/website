@@ -45,7 +45,8 @@
   display: inline-block;
 }
 
-.btn-success {
+.btn-success,
+.ant-btn-primary {
   background-color: $color_highlight !important;
   border-color: $color_highlight !important;
 }
