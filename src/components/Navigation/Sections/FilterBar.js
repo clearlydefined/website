@@ -49,7 +49,7 @@ export default class FilterBar extends Component {
     const { onFieldChange } = this.props
     this.setState(prevState => {
       // toggle
-      if (prevState[field] == value) {
+      if (prevState[field] === value) {
         onFieldChange && onFieldChange(field, null)
         return { [field]: null }
       }
@@ -109,12 +109,12 @@ export default class FilterBar extends Component {
   }
 
   renderMultiSelect() {
-    const { hasComponents, onSelectAll, selected } = this.props
+    const { hasComponents, onSelectAll, selected, components } = this.props
 
     const numSelected = Object.values(selected).filter(s => s).length
     const anySelections = Object.keys(selected).length > 0 && numSelected > 0
     return (
-      <div className="pull-left">
+      <div className="pull-left selected-definitions">
         <Checkbox
           data-test-id="select-all-checkbox"
           className="inlineBlock btn-group"
@@ -122,7 +122,8 @@ export default class FilterBar extends Component {
           onChange={onSelectAll}
           checked={anySelections}
         />
-        {anySelections && <span className="selected">{numSelected} selected</span>}
+        {anySelections && <span>{numSelected} of</span>}
+        <span>{components.length} definitions</span>
         {anySelections && (
           <ButtonGroup className="list-singleLine inlineBlock">
             {this.renderSourcesButton()}
