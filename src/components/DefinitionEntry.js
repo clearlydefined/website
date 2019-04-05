@@ -327,7 +327,9 @@ class DefinitionEntry extends React.Component {
 
     return (
       <>
-        {multiSelectEnabled && <Checkbox className="pull-left" onChange={toggleCheckbox} checked={isSelected} />}
+        {multiSelectEnabled && (
+          <Checkbox className="pull-left component-checkbox" onChange={toggleCheckbox} checked={isSelected} />
+        )}
         <TwoLineEntry
           draggable={draggable}
           item={component}
