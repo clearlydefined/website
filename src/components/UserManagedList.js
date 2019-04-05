@@ -72,14 +72,14 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   resetComponents = () =>
-    this.props.components.transformedList.map(component => {
+    this.props.components.transformedList.forEach(component => {
       const { changes, ...rest } = component
       this.onChangeComponent(component, rest)
     })
 
   onFieldChange = (field, value) => {
     if (!value) {
-      this.props.components.transformedList.map(component => {
+      this.props.components.transformedList.forEach(component => {
         if (component.changes) delete component.changes[field]
         this.onChangeComponent(component, { ...component, changes: component.changes })
       })

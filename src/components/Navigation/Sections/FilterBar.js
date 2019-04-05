@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Button, ButtonGroup, Checkbox } from 'react-bootstrap'
+import { ButtonGroup, Checkbox } from 'react-bootstrap'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
@@ -80,30 +80,24 @@ export default class FilterBar extends Component {
         editor={SourcePicker}
         field="described.sourceLocation"
         onChange={this.onFieldChange.bind(this, 'described.sourceLocation')}
-        revertable={false}
-        showEditIcon={false}
-      >
-        <Button>
-          <span>{source || 'Source'}</span>
-          <i class="fas fa-ellipsis-v" />
-        </Button>
-      </ModalEditor>
+        onRevert={this.onFieldChange.bind(this, 'described.sourceLocation')}
+        revertable
+        showEditIcon
+        value={source}
+        placeholder="Source location"
+      />
     )
   }
 
   renderReleaseDateEditor() {
     return (
       <InlineEditor
-        editIcon={false}
         field="described.releaseDate"
         onChange={this.onFieldChange.bind(this, 'described.releaseDate')}
-        placeholder={
-          <>
-            <span>Release Date</span>
-            <i class="fas fa-ellipsis-v" />
-          </>
-        }
-        revertable={false}
+        onRevert={this.onFieldChange.bind(this, 'described.releaseDate')}
+        placeholder="Release Date"
+        revertable
+        editIcon
         type="date"
         value={Contribution.printDate(this.state['described.releaseDate'])}
       />
