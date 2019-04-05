@@ -60,11 +60,7 @@ export default class FilterBar extends Component {
 
   renderLicensesDropdown() {
     return (
-      <SpdxPicker
-        value={this.state['licensed.declared'] || ''}
-        promptText={'License'}
-        onChange={this.onFieldChange.bind(this, 'licensed.declared')}
-      />
+      <SpdxPicker value={''} promptText={'License'} onChange={this.onFieldChange.bind(this, 'licensed.declared')} />
     )
   }
 
@@ -89,6 +85,7 @@ export default class FilterBar extends Component {
       >
         <Button>
           <span>{source || 'Source'}</span>
+          <i class="fas fa-ellipsis-v" />
         </Button>
       </ModalEditor>
     )
@@ -100,7 +97,12 @@ export default class FilterBar extends Component {
         editIcon={false}
         field="described.releaseDate"
         onChange={this.onFieldChange.bind(this, 'described.releaseDate')}
-        placeholder="Release Date"
+        placeholder={
+          <>
+            <span>Release Date</span>
+            <i class="fas fa-ellipsis-v" />
+          </>
+        }
         revertable={false}
         type="date"
         value={Contribution.printDate(this.state['described.releaseDate'])}
