@@ -59,9 +59,7 @@ class DefinitionEntry extends React.Component {
   }
 
   ifDifferent(field, then_, else_) {
-    return this.props.otherDefinition && !isEqual(get(this.props.otherDefinition, field), this.getOriginalValue(field))
-      ? then_
-      : else_
+    return !isEqual(this.getValue(field), this.getOriginalValue(field)) ? then_ : else_
   }
 
   classIfDifferent(field) {
@@ -118,7 +116,7 @@ class DefinitionEntry extends React.Component {
   }
 
   renderMessage(definition) {
-    const licenseExpression = definition ? get(definition, 'licensed.declared') : null
+    const licenseExpression = definition ? this.getValue('licensed.declared') : null
     return licenseExpression ? (
       this.renderWithToolTipIfDifferent(
         'licensed.declared',
