@@ -84,6 +84,7 @@ export default class FilterBar extends Component {
         revertable
         showEditIcon
         value={source}
+        initialValue={null}
         placeholder="Source location"
       />
     )
@@ -100,6 +101,7 @@ export default class FilterBar extends Component {
         editIcon
         type="date"
         value={Contribution.printDate(this.state['described.releaseDate'])}
+        initialValue={null}
       />
     )
   }
