@@ -1,0 +1,85 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
+import React, { Component } from 'react'
+import { Row, Col } from 'react-bootstrap'
+import { getStats } from '../../../../api/clearlyDefined'
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { primaryColor, secondaryColor, describedColor, secureColor } from '../../../Clearly'
+const colors = [primaryColor.color, secondaryColor.color, describedColor.color, secureColor.color]
+
+export default class LicenseBreakdown extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      declaredLicenseBreakdown: []
+    }
+  }
+
+  async componentDidMount() {
+    const data = await getStats(this.props.type)
+    if (!data.value) return
+    this.setState({
+      totalCount: data.value.totalCount,
+      declaredLicenseBreakdown: data.value.declaredLicenseBreakdown
+    })
+  }
+
+  render() {
+    const { declaredLicenseBreakdown, totalCount } = this.state
+
+    return (
+      <Row>
+        <Col md={6}>
+          <table style={{ margin: '60px' }}>
+            <tbody>
+              {declaredLicenseBreakdown.map((entry, index) => {
+                return (
+                  <tr key={index}>
+                    <td>
+                      <span
+                        style={{
+                          backgroundColor: colors[index % colors.length],
+                          height: '20px',
+                          width: '20px',
+                          marginRight: '10px',
+                          display: 'inline-block'
+                        }}
+                      />
+                    </td>
+                    <td width="250">
+                      <h4>{entry.value}</h4>
+                    </td>
+                    <td>
+                      <h4>{((entry.count * 100) / totalCount).toFixed(2)}%</h4>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </Col>
+        <Col md={6}>
+          <ResponsiveContainer height={500}>
+            <BarChart
+              width={900}
+              height={260}
+              data={declaredLicenseBreakdown}
+              margin={{ top: 5, right: 0, left: 0, bottom: 25 }}
+            >
+              <XAxis dataKey="value" tickSize dy="25" />
+              <YAxis hide />
+              <Tooltip />
+              <CartesianGrid vertical={false} stroke="#ebf3f0" />
+              <Bar dataKey="count" barSize={170}>
+                {declaredLicenseBreakdown.map((entry, index) => (
+                  <Cell fill={colors[index % colors.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </Col>
+      </Row>
+    )
+  }
+}

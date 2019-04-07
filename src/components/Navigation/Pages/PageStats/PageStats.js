@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, Row, Jumbotron } from 'react-bootstrap'
+import { Grid, Row, Jumbotron, Tabs, Tab } from 'react-bootstrap'
 import TypeCard from './TypeCard'
+import LicenseBreakdown from './LicenseBreakdown'
 import CountUp from 'react-countup'
 import { getStats } from '../../../../api/clearlyDefined'
 import npm from '../../../../../src/images/n-large.png'
@@ -24,8 +25,12 @@ export default class PageStats extends Component {
   }
 
   async componentDidMount() {
-    const totalComponents = await getStats('totalcount')
-    this.setState({ totalComponents: totalComponents.value })
+    const stats = await getStats('total')
+    this.setState({
+      totalComponents: stats.value.totalCount,
+      describedScoreMedian: stats.value.describedScoreMedian,
+      licensedScoreMedian: stats.value.licensedScoreMedian
+    })
   }
 
   render() {
@@ -37,19 +42,52 @@ export default class PageStats extends Component {
               <CountUp end={this.state.totalComponents} separator="," />
             </h2>
             <p>Number of total definitions</p>
+            <small>median licensed score: {this.state.licensedScoreMedian}</small>
+            <small> | </small>
+            <small>median described score: {this.state.describedScoreMedian}</small>
           </Jumbotron>
         </Row>
         <Row>
           <div className="card-container">
             <TypeCard type="npm" image={npm} />
+            <TypeCard type="gem" image={gem} />
+            <TypeCard type="pypi" image={pypi} />
             <TypeCard type="maven" image={maven} />
             <TypeCard type="nuget" image={nuget} />
             <TypeCard type="git" image={git} />
             <TypeCard type="pod" image={pod} />
             <TypeCard type="crate" image={crate} />
-            <TypeCard type="gem" image={gem} />
-            <TypeCard type="pypi" image={pypi} />
           </div>
+        </Row>
+        <hr />
+        <Row>
+          <h2>Declared License Breakdown</h2>
+          <Tabs>
+            <Tab eventKey="overall" title="Overall">
+              <LicenseBreakdown type="total" />
+            </Tab>
+            <Tab eventKey="npm" title="NPM">
+              <LicenseBreakdown type="npm" />
+            </Tab>
+            <Tab eventKey="gem" title="Gem">
+              <LicenseBreakdown type="gem" />
+            </Tab>
+            <Tab eventKey="pypi" title="PyPi">
+              <LicenseBreakdown type="pypi" />
+            </Tab>
+            <Tab eventKey="maven" title="Maven">
+              <LicenseBreakdown type="maven" />
+            </Tab>
+            <Tab eventKey="nuget" title="NuGet">
+              <LicenseBreakdown type="nuget" />
+            </Tab>
+            <Tab eventKey="git" title="Git">
+              <LicenseBreakdown type="git" />
+            </Tab>
+            <Tab eventKey="pod" title="Pod">
+              <LicenseBreakdown type="pod" />
+            </Tab>
+          </Tabs>
         </Row>
       </Grid>
     )
