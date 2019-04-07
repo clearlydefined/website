@@ -7,8 +7,8 @@ export default class TypeCard extends Component {
     super(props)
     this.state = {
       totalCount: 0,
-      averageLicensed: 0,
-      averageDescribed: 0
+      describedScoreMedian: 0,
+      licensedScoreMedian: 0
     }
   }
 
@@ -16,9 +16,9 @@ export default class TypeCard extends Component {
     const data = await getStats(this.props.type)
     if (!data.value) return
     this.setState({
-      totalCount: data.value.totalcount,
-      averageLicensed: Math.round(data.value['avg_licensed.score.total'] * 100) / 100,
-      averageDescribed: Math.round(data.value['avg_described.score.total'] * 100) / 100
+      totalCount: data.value.totalCount,
+      describedScoreMedian: data.value.describedScoreMedian,
+      licensedScoreMedian: data.value.licensedScoreMedian
     })
   }
 
@@ -28,15 +28,15 @@ export default class TypeCard extends Component {
         cardClass="float"
         header={this.props.image}
         name={this.props.type}
-        positionName={`total count: ${this.state.totalCount}`}
+        positionName={`total count: ${this.state.totalCount.toLocaleString()}`}
         stats={[
           {
-            name: 'average licensed score',
-            value: this.state.averageLicensed
+            name: 'median licensed score',
+            value: this.state.licensedScoreMedian
           },
           {
-            name: 'average described score',
-            value: this.state.averageDescribed
+            name: 'median described score',
+            value: this.state.describedScoreMedian
           }
         ]}
       />
