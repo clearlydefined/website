@@ -15,32 +15,35 @@ export default class ActiveFilters extends Component {
 
   render() {
     const { activeFilters, activeSort, activeName, onClear, onClearAll } = this.props
-    return activeFilters || activeSort || activeName ? (
+    const hasFilters = activeFilters || activeSort || activeName ? true : false
+    return (
       <div className="activeFilters">
         <div className="horizontalBlock">
-          <Button bsStyle="link" onClick={onClearAll}>
-            <i className="fas fa-times list-remove right-space" />
+          <Button bsStyle="link" onClick={hasFilters && onClearAll}>
+            {hasFilters && <i className="fas fa-times list-remove right-space" />}
             Filter / Sort:
           </Button>
-          <>
-            {map(
-              activeFilters,
-              (val, i) =>
-                val && <Tag key={i} closable={true} onClose={() => onClear('activeFilters', i)}>{`${i}:${val}`}</Tag>
-            )}
-            {activeSort && (
-              <Tag
-                key={'sort'}
-                closable={true}
-                afterClose={() => onClear('activeSort', activeSort)}
-              >{`sort:${activeSort}`}</Tag>
-            )}
-            {activeName && (
-              <Tag key={'name'} closable={true} onClose={() => onClear('activeName')}>{`name:${activeName}`}</Tag>
-            )}
-          </>
+          {hasFilters ? (
+            <>
+              {map(
+                activeFilters,
+                (val, i) =>
+                  val && <Tag key={i} closable={true} onClose={() => onClear('activeFilters', i)}>{`${i}:${val}`}</Tag>
+              )}
+              {activeSort && (
+                <Tag
+                  key={'sort'}
+                  closable={true}
+                  afterClose={() => onClear('activeSort', activeSort)}
+                >{`sort:${activeSort}`}</Tag>
+              )}
+              {activeName && (
+                <Tag key={'name'} closable={true} onClose={() => onClear('activeName')}>{`name:${activeName}`}</Tag>
+              )}
+            </>
+          ) : null}
         </div>
       </div>
-    ) : null
+    )
   }
 }

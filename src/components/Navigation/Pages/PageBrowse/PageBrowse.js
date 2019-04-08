@@ -117,7 +117,8 @@ class PageBrowse extends SystemManagedList {
     const activeFilters = overwrite === true ? filter : Object.assign({}, this.state.activeFilters)
     if (overwrite !== true) {
       const filterValue = get(activeFilters, filter.type)
-      if (filterValue && activeFilters[filter.type] === filter.value) delete activeFilters[filter.type]
+      if ((filterValue && activeFilters[filter.type] === filter.value) || !filter.value)
+        delete activeFilters[filter.type]
       else activeFilters[filter.type] = filter.value
     }
     this.setState({ ...this.state, activeFilters: Object.keys(activeFilters).length > 0 ? activeFilters : null }, () =>
