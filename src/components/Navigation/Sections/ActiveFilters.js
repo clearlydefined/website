@@ -23,9 +23,11 @@ export default class ActiveFilters extends Component {
             Filter / Sort:
           </Button>
           <>
-            {map(activeFilters, (val, i) => (
-              <Tag key={i} closable={true} afterClose={() => onClear('activeFilters', i)}>{`${i}:${val}`}</Tag>
-            ))}
+            {map(
+              activeFilters,
+              (val, i) =>
+                val && <Tag key={i} closable={true} onClose={() => onClear('activeFilters', i)}>{`${i}:${val}`}</Tag>
+            )}
             {activeSort && (
               <Tag
                 key={'sort'}
@@ -34,7 +36,7 @@ export default class ActiveFilters extends Component {
               >{`sort:${activeSort}`}</Tag>
             )}
             {activeName && (
-              <Tag key={'name'} closable={true} afterClose={() => onClear('activeName')}>{`name:${activeName}`}</Tag>
+              <Tag key={'name'} closable={true} onClose={() => onClear('activeName')}>{`name:${activeName}`}</Tag>
             )}
           </>
         </div>
