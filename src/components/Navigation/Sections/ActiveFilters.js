@@ -16,9 +16,12 @@ export default class ActiveFilters extends Component {
   render() {
     const { activeFilters, activeSort, activeName, onClear, onClearAll } = this.props
     return activeFilters || activeSort || activeName ? (
-      <div>
+      <div className="activeFilters">
         <div className="horizontalBlock">
-          <p className="right-space">Active Filters:</p>
+          <Button bsStyle="link" onClick={onClearAll}>
+            <i className="fas fa-times list-remove right-space" />
+            Filter / Sort:
+          </Button>
           <>
             {map(activeFilters, (val, i) => (
               <Tag key={i} closable={true} afterClose={() => onClear('activeFilters', i)}>{`${i}:${val}`}</Tag>
@@ -35,10 +38,6 @@ export default class ActiveFilters extends Component {
             )}
           </>
         </div>
-        <Button bsStyle="link" onClick={onClearAll}>
-          <i className="fas fa-times list-remove right-space" />
-          Clear current search query, filters and sorts
-        </Button>
       </div>
     ) : null
   }
