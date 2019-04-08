@@ -37,35 +37,7 @@ describe('Multiselect changes on Definitions page', () => {
     const licenseField = await page.$eval(details.licenseField, el => el.innerText)
     await expect(licenseField).toBe('MIT')
   })
-
-  test('should open a modal while attempt to change a source location of all definitions', async () => {
-    await searchDefinition('async/2.6.1')
-    await editAllSources()
-  })
-
-  test('should show an input field while attempting to change the release date of all selected components', async () => {
-    const { releaseDateButton } = filterBar
-    await searchDefinition('async/2.6.1')
-    await selectTheAllCheckbox()
-    await page.waitForSelector(releaseDateButton)
-    await expect(page).toClick(releaseDateButton)
-
-    await page.waitForSelector(filterBar.releaseDateInput)
-    await expect(page).toMatchElement(filterBar.releaseDateInput)
-  })
 })
-
-const editAllSources = async () => {
-  const { sourceButton } = filterBar
-  await selectTheAllCheckbox()
-
-  await page.waitForSelector(sourceButton)
-  await expect(page).toClick(sourceButton)
-
-  await expect(page).toMatchElement(sourcePicker.identifier)
-  await expect(page).toClick(sourcePicker.buttonSuccess)
-  await expect(page).not.toMatchElement(sourcePicker.identifier)
-}
 
 const selectTheAllCheckbox = async () => {
   const { selectAllCheckbox } = filterBar
