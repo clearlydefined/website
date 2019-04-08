@@ -7,9 +7,7 @@ import { ButtonGroup, Checkbox } from 'react-bootstrap'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
-import { ModalEditor, SourcePicker, InlineEditor } from '../..'
 import SpdxPicker from '../../SpdxPicker'
-import Contribution from '../../../utils/contribution'
 
 export default class FilterBar extends Component {
   static propTypes = {
@@ -64,48 +62,6 @@ export default class FilterBar extends Component {
     )
   }
 
-  renderSourcesButton() {
-    const sourceToUpdate = this.state['described.sourceLocation']
-
-    const coordinates = Contribution.printCoordinates(sourceToUpdate)
-    // trim starting from the slash (/) after "http://github.com"
-    let source = coordinates && coordinates.slice(18)
-
-    if (source && source.indexOf('commit/') > -1) {
-      source = source.slice(0, source.indexOf('commit/') + 7 + 7) // 7 = length of "commit/" - 7 = length of the hash
-    }
-
-    return (
-      <ModalEditor
-        editor={SourcePicker}
-        field="described.sourceLocation"
-        onChange={this.onFieldChange.bind(this, 'described.sourceLocation')}
-        onRevert={this.onFieldChange.bind(this, 'described.sourceLocation')}
-        revertable
-        showEditIcon
-        value={source}
-        initialValue={null}
-        placeholder="Source location"
-      />
-    )
-  }
-
-  renderReleaseDateEditor() {
-    return (
-      <InlineEditor
-        field="described.releaseDate"
-        onChange={this.onFieldChange.bind(this, 'described.releaseDate')}
-        onRevert={this.onFieldChange.bind(this, 'described.releaseDate')}
-        placeholder="Release Date"
-        revertable
-        editIcon
-        type="date"
-        value={Contribution.printDate(this.state['described.releaseDate'])}
-        initialValue={null}
-      />
-    )
-  }
-
   renderMultiSelect() {
     const { hasComponents, onSelectAll, selected, components } = this.props
 
@@ -123,11 +79,7 @@ export default class FilterBar extends Component {
         {anySelections && <span>{numSelected} of</span>}
         <span>{components.length} definitions</span>
         {anySelections && (
-          <ButtonGroup className="list-singleLine inlineBlock">
-            {this.renderSourcesButton()}
-            {this.renderReleaseDateEditor()}
-            {this.renderLicensesDropdown()}
-          </ButtonGroup>
+          <ButtonGroup className="list-singleLine inlineBlock">{this.renderLicensesDropdown()}</ButtonGroup>
         )}
       </div>
     )
