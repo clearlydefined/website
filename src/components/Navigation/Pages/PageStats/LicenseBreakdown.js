@@ -3,37 +3,27 @@
 
 import React, { Component } from 'react'
 import { Row, Col } from 'react-bootstrap'
-import { getStats } from '../../../../api/clearlyDefined'
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { primaryColor, secondaryColor, describedColor, secureColor } from '../../../Clearly'
 const colors = [primaryColor.color, secondaryColor.color, describedColor.color, secureColor.color]
 
 export default class LicenseBreakdown extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
+  static defaultProps = {
+    stats: {
+      totalCount: 0,
       declaredLicenseBreakdown: []
     }
   }
 
-  async componentDidMount() {
-    const data = await getStats(this.props.type)
-    if (!data.value) return
-    this.setState({
-      totalCount: data.value.totalCount,
-      declaredLicenseBreakdown: data.value.declaredLicenseBreakdown
-    })
-  }
-
   render() {
-    const { declaredLicenseBreakdown, totalCount } = this.state
+    const { stats } = this.props
 
     return (
       <Row>
         <Col md={6}>
           <table style={{ margin: '60px' }}>
             <tbody>
-              {declaredLicenseBreakdown.map((entry, index) => {
+              {stats.declaredLicenseBreakdown.map((entry, index) => {
                 return (
                   <tr key={index}>
                     <td>
@@ -51,7 +41,7 @@ export default class LicenseBreakdown extends Component {
                       <h4>{entry.value}</h4>
                     </td>
                     <td>
-                      <h4>{((entry.count * 100) / totalCount).toFixed(2)}%</h4>
+                      <h4>{((entry.count * 100) / stats.totalCount).toFixed(2)}%</h4>
                     </td>
                   </tr>
                 )
@@ -64,7 +54,7 @@ export default class LicenseBreakdown extends Component {
             <BarChart
               width={900}
               height={260}
-              data={declaredLicenseBreakdown}
+              data={stats.declaredLicenseBreakdown}
               margin={{ top: 5, right: 0, left: 0, bottom: 25 }}
             >
               <XAxis dataKey="value" tickSize dy="25" />
@@ -72,7 +62,7 @@ export default class LicenseBreakdown extends Component {
               <Tooltip />
               <CartesianGrid vertical={false} stroke="#ebf3f0" />
               <Bar dataKey="count" barSize={170}>
-                {declaredLicenseBreakdown.map((entry, index) => (
+                {stats.declaredLicenseBreakdown.map((entry, index) => (
                   <Cell fill={colors[index % colors.length]} />
                 ))}
               </Bar>
