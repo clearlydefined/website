@@ -47,7 +47,7 @@ export const browseMap = {
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',
-      revertLicenseButton: '.license-renderer > div > span > .fa-undo',
+      revertLicenseButton: '.license-renderer .fa-undo',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`
       },

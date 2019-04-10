@@ -69,7 +69,7 @@ export default class UserManagedList extends SystemManagedList {
                 onClick={async () => {
                   await this.onRemoveComponent(selectedComponent)
                   await this.onAddComponent(
-                    EntitySpec.fromCoordinates({ ...selectedComponent, revision: versions, changes: {} })
+                    EntitySpec.fromObject({ ...selectedComponent, revision: versions, changes: {} })
                   )
                   notification.close(key)
                 }}
@@ -84,14 +84,12 @@ export default class UserManagedList extends SystemManagedList {
           })
         } else {
           await this.onRemoveComponent(selectedComponent)
-          await this.onAddComponent(EntitySpec.fromCoordinates({ ...selectedComponent, revision: versions }))
+          await this.onAddComponent(EntitySpec.fromObject({ ...selectedComponent, revision: versions }))
         }
       })
     }
     this.setState({ showVersionSelectorPopup: false }, () =>
-      versions.map(version =>
-        this.onAddComponent(EntitySpec.fromCoordinates({ ...selectedComponent, revision: version }))
-      )
+      versions.map(version => this.onAddComponent(EntitySpec.fromObject({ ...selectedComponent, revision: version })))
     )
   }
 
@@ -167,10 +165,6 @@ export default class UserManagedList extends SystemManagedList {
         )
       })
     )
-  }
-
-  buildSaveSpec(list) {
-    return list.map(component => EntitySpec.fromCoordinates(component))
   }
 
   async doSave() {

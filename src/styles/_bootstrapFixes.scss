@@ -6,6 +6,16 @@
   cursor: pointer;
 }
 
+.badge {
+  color: #4d2c2c;
+  background-color: #dddddd;
+  font-weight: 400;
+}
+
+.dropdown-menu {
+  min-width: 67px;
+}
+
 .center-block {
   display: inline-block;
   float: none;
@@ -16,7 +26,7 @@
   background-color: #222;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $screen-sm) {
   .navbar-collapse {
     padding-top: 15.5px;
     padding-bottom: 15.5px;
@@ -35,9 +45,22 @@
   display: inline-block;
 }
 
-.btn-success {
+.btn-success,
+.ant-btn-primary {
   background-color: $color_highlight !important;
   border-color: $color_highlight !important;
+}
+
+.ant-btn {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.ant-btn-secondary {
+  &:hover {
+    color: #d9d9d9 !important;
+    border-color: #d9d9d9 !important;
+  }
 }
 
 .btn-danger {

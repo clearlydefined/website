@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
+import difference from 'lodash/difference'
 import classNames from 'classnames'
 import { ROUTE_ROOT } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
@@ -18,10 +19,11 @@ import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { curateFilters } from '../../../../utils/utils'
+import { curateFilters, providers } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
+import ActiveFilters from '../../Sections/ActiveFilters'
 
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -34,7 +36,6 @@ class PageBrowse extends SystemManagedList {
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
-    this.nameFilter = null
   }
 
   componentDidMount() {
@@ -47,8 +48,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   onBrowse = value => {
-    this.nameFilter = { value }
-    this.updateData()
+    this.setState({ activeName: value }, () => this.updateData())
   }
 
   tableTitle() {
@@ -56,16 +56,6 @@ class PageBrowse extends SystemManagedList {
   }
 
   renderTopFilters() {
-    const providers = [
-      { value: 'cocoapods', label: 'CocoaPods' },
-      { value: 'cratesio', label: 'Crates.io' },
-      { value: 'github', label: 'GitHub' },
-      { value: 'mavencentral', label: 'MavenCentral' },
-      { value: 'npmjs', label: 'NpmJS' },
-      { value: 'nuget', label: 'NuGet' },
-      { value: 'pypi', label: 'PyPi' },
-      { value: 'rubygems', label: 'RubyGems' }
-    ]
     const { filterOptions } = this.props
     const coordinates = filterOptions.list
       .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
@@ -73,26 +63,44 @@ class PageBrowse extends SystemManagedList {
     const names = uniq(coordinates.map(coordinate => coordinate.name))
     filterOptions.list = names
     return (
-      <Row className="show-grid spacer">
-        <Col md={2} mdOffset={1}>
-          {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
-        </Col>
-        <Col md={8}>
-          <div className={'horizontalBlock'}>
-            {this.renderFilter(providers, 'Provider', 'provider')}
-            <span>&nbsp;</span>
-            <FilterBar
-              options={filterOptions}
-              onChange={this.onBrowse}
-              onSearch={this.onSearch}
-              onClear={this.onBrowse}
-              clearOnChange
-            />
-          </div>
-        </Col>
-      </Row>
+      <>
+        <Row className="show-grid spacer">
+          <Col md={2} mdOffset={1}>
+            {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
+          </Col>
+          <Col md={8}>
+            <div className={'horizontalBlock'}>
+              {this.renderFilter(providers, 'Provider', 'provider')}
+              <span>&nbsp;</span>
+              <FilterBar
+                options={filterOptions}
+                onChange={this.onBrowse}
+                onSearch={this.onSearch}
+                onClear={this.onBrowse}
+                clearOnChange
+              />
+            </div>
+          </Col>
+        </Row>
+      </>
     )
   }
+
+  clearFilters = (filterName, id) => {
+    switch (filterName) {
+      case 'activeFilters':
+        return this.onFilter({ type: id, value: get(this.state, `${filterName}.${id}`) })
+      case 'activeSort':
+        return this.onSort({ value: id })
+      case 'activeName':
+        return this.setState({ activeName: null }, () => this.updateData())
+      default:
+        return
+    }
+  }
+
+  clearAllFilters = () =>
+    this.setState({ activeFilters: null, activeSort: null, activeName: null }, () => this.updateData())
 
   renderButtons() {
     return (
@@ -108,12 +116,24 @@ class PageBrowse extends SystemManagedList {
   // Overrides the default onFilter method
   onFilter(filter, overwrite = false) {
     const activeFilters = overwrite === true ? filter : Object.assign({}, this.state.activeFilters)
+    let activeSort = null
     if (overwrite !== true) {
       const filterValue = get(activeFilters, filter.type)
-      if (filterValue && activeFilters[filter.type] === filter.value) delete activeFilters[filter.type]
+      if ((filterValue && activeFilters[filter.type] === filter.value) || !filter.value)
+        delete activeFilters[filter.type]
       else activeFilters[filter.type] = filter.value
     }
-    this.setState({ ...this.state, activeFilters }, () => this.updateData())
+    if (filter.type === 'curate') {
+      activeSort = 'score'
+    }
+    this.setState(
+      {
+        ...this.state,
+        activeFilters: Object.keys(activeFilters).length > 0 ? activeFilters : null,
+        activeSort: activeSort ? activeSort : this.state.activeSort
+      },
+      () => this.updateData()
+    )
   }
 
   // Overrides the default onSort method
@@ -124,6 +144,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   renderFilterBar() {
+    const { activeFilters, activeSort, activeName } = this.state
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
@@ -133,11 +154,22 @@ class PageBrowse extends SystemManagedList {
 
     return (
       // OMG, structural whitespace?!
-      <div className="filter-list" align="right">
-        <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
-        &nbsp;
-        <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-        &nbsp; &nbsp; &nbsp; &nbsp;
+      <div className="section--filter-bar">
+        <div className="active-filters">
+          <ActiveFilters
+            activeFilters={activeFilters}
+            activeSort={activeSort}
+            activeName={activeName}
+            onClear={this.clearFilters}
+            onClearAll={this.clearAllFilters}
+          />
+        </div>
+        <div className="filter-list">
+          <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
+          &nbsp;
+          <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
+          &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
       </div>
     )
   }
@@ -156,8 +188,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   async updateData(continuationToken) {
-    const { activeFilters, activeSort } = this.state
-    const activeName = get(this.nameFilter, 'value')
+    const { activeFilters, activeSort, activeName } = this.state
     const query = Object.assign({}, activeFilters)
     if (continuationToken) query.continuationToken = continuationToken
     if (activeSort) query.sort = activeSort
@@ -189,7 +220,12 @@ class PageBrowse extends SystemManagedList {
     }
     await this.props.dispatch(uiBrowseGet(this.props.token, query))
     if (this.props.definitions.entries)
-      this.props.dispatch(getCurationsAction(this.props.token, Object.keys(this.props.definitions.entries)))
+      this.props.dispatch(
+        getCurationsAction(
+          this.props.token,
+          difference(Object.keys(this.props.definitions.entries), Object.keys(this.props.curations.entries))
+        )
+      )
   }
 
   loadMoreRows = async () => {
@@ -231,6 +267,7 @@ class PageBrowse extends SystemManagedList {
               sequence={sequence}
               hasChange={this.hasChange}
               hideVersionSelector
+              hideRemoveButton
             />
             {currentDefinition && (
               <FullDetailPage

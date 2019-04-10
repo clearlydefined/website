@@ -25,10 +25,10 @@ function withSuggestions(WrappedComponent) {
     render() {
       const { suggestedData, field } = this.props
       return (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <>
           <WrappedComponent {...this.props} ref={this.cmp} />
           {suggestedData && <SuggestionsList field={field} items={suggestedData} onSelect={this.applySuggestion} />}
-        </div>
+        </>
       )
     }
   }
@@ -38,7 +38,7 @@ function withSuggestions(WrappedComponent) {
 
 function mapStateToProps(state, props) {
   if (!props.definition) return {}
-  const coordinates = EntitySpec.fromCoordinates(props.definition.coordinates).toPath()
+  const coordinates = EntitySpec.fromObject(props.definition.coordinates).toPath()
   const suggestion = get(state.suggestion.bodies.entries, coordinates)
   return {
     suggestedData: suggestion && get(suggestion, props.field)

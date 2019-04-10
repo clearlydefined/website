@@ -55,7 +55,7 @@ export class PageDefinitions extends UserManagedList {
       const key = `open${Date.now()}`
       notification.open({
         message: 'Unsaved Changes',
-        description: 'Some information has been changed and is currently unsaved. Are you sure to continue?',
+        description: 'Some information has been changed and is currently unsaved. Are you sure you want to continue?',
         btn: (
           <NotificationButtons
             onClick={() => {
@@ -161,31 +161,29 @@ export class PageDefinitions extends UserManagedList {
         />
         <SearchBar filterOptions={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} />
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
-          {
-            <DropComponent
-              className="section-body flex-grow"
-              onLoad={this.loadComponentList}
+          <DropComponent
+            className="section-body flex-grow"
+            onLoad={this.loadComponentList}
+            onAddComponent={this.onAddComponent}
+          >
+            <ComponentList
+              readOnly={this.readOnly}
+              list={components.transformedList}
+              listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+              onRemove={this.onRemoveComponent}
+              onRevert={this.revertDefinition}
+              onChange={this.onChangeComponent}
               onAddComponent={this.onAddComponent}
-            >
-              <ComponentList
-                readOnly={this.readOnly}
-                list={components.transformedList}
-                listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-                onRemove={this.onRemoveComponent}
-                onRevert={this.revertDefinition}
-                onChange={this.onChangeComponent}
-                onAddComponent={this.onAddComponent}
-                onInspect={this.onInspect}
-                renderFilterBar={this.renderFilterBar}
-                curations={curations}
-                definitions={definitions}
-                noRowsRenderer={this.noRowsRenderer}
-                sequence={sequence}
-                hasChange={this.hasChange}
-                showVersionSelectorPopup={this.showVersionSelectorPopup}
-              />
-            </DropComponent>
-          }
+              onInspect={this.onInspect}
+              renderFilterBar={this.renderFilterBar}
+              curations={curations}
+              definitions={definitions}
+              noRowsRenderer={this.noRowsRenderer}
+              sequence={sequence}
+              hasChange={this.hasChange}
+              showVersionSelectorPopup={this.showVersionSelectorPopup}
+            />
+          </DropComponent>
         </Section>
         {currentDefinition && (
           <FullDetailPage

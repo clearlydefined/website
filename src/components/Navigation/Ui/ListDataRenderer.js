@@ -9,22 +9,28 @@ export default class ListDataRenderer extends Component {
   static propTypes = {
     licensed: PropTypes.object,
     item: PropTypes.string,
-    title: PropTypes.string
+    title: PropTypes.string,
+    trigger: PropTypes.string,
+    values: PropTypes.array
+  }
+
+  static defaultProps = {
+    trigger: 'hover'
   }
 
   render() {
-    const { licensed, item, title } = this.props
-    const values = get(licensed, item, [])
-    if (!values) return null
+    const { licensed, item, values, title, trigger } = this.props
+    const data = values || get(licensed, item, [])
+    if (!data) return null
     return (
       <OverlayTrigger
-        trigger="click"
+        trigger={trigger}
         placement="left"
         rootClose
         overlay={
           <Popover title={title} id={title}>
             <div className="popoverRenderer popoverRenderer_scrollY">
-              {values.map((a, index) => (
+              {data.map((a, index) => (
                 <div key={`${a}_${index}`} className="popoverRenderer__items">
                   <div className="popoverRenderer__items__value">
                     <span>{a}</span>
@@ -35,7 +41,7 @@ export default class ListDataRenderer extends Component {
           </Popover>
         }
       >
-        <span className="popoverSpan">{values.join(', ')}</span>
+        <span className="popoverSpan">{data.join(', ')}</span>
       </OverlayTrigger>
     )
   }

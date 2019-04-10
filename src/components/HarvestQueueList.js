@@ -151,6 +151,7 @@ class HarvestQueueList extends React.Component {
     return (
       <div key={key} style={style}>
         <TwoLineEntry
+          item={request}
           image={this.getImage(request)}
           letter={this.getLetter(request)}
           headline={this.renderHeadline(request)}

@@ -4,11 +4,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Button, Col } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
+import get from 'lodash/get'
 import { Tag } from 'antd'
-import Definition from '../../../utils/definition'
 import Curation from '../../../utils/curation'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import ScoreRenderer from '../Ui/ScoreRenderer'
+import DefinitionTitle from '../Ui/DefinitionTitle'
+import DefinitionRevision from '../Ui/DefinitionRevision'
 
 export default class HeaderSection extends Component {
   static propTypes = {
@@ -34,7 +36,7 @@ export default class HeaderSection extends Component {
       handleRevert
     } = this.props
     const { item } = definition
-    const scores = Definition.computeScores(item)
+    const scores = get(item, 'scores')
     const isCurated = Curation.isCurated(curations.item)
     const hasPendingCurations = Curation.isPending(curations.item)
     return (
@@ -42,7 +44,9 @@ export default class HeaderSection extends Component {
         <Col md={8}>
           <div className="detail-header">
             <div className="header-title">
-              <h2>{item && item.coordinates.name}</h2>
+              <h2>
+                <DefinitionTitle definition={item} showNamespace={false} />
+              </h2>
               &nbsp;&nbsp;
               <div className="header-data">
                 {scores && (
@@ -62,21 +66,21 @@ export default class HeaderSection extends Component {
                 )}
               </div>
             </div>
-            <p>{item.coordinates.revision}</p>
+            <p>
+              <DefinitionRevision definition={item} showNamespace={false} />
+            </p>
           </div>
         </Col>
         <Col md={4} className="text-right">
           {!isEmpty(changes) && (
-            <ButtonWithTooltip tip="Revert all changes of the current definition">
-              <Button bsStyle="danger" data-test-id="header-section-revert-button" onClick={() => handleRevert()}>
-                <i className="fas fa-undo" />
-                <span>&nbsp;Revert Changes</span>
-              </Button>
-            </ButtonWithTooltip>
+            <Button bsStyle="danger" data-test-id="header-section-revert-button" onClick={() => handleRevert()}>
+              <i className="fas fa-undo" />
+              <span>&nbsp;Revert Changes</span>
+            </Button>
           )}{' '}
           {modalView && (
             <Button
-              bsStyle="primary"
+              bsStyle="success"
               data-test-id="header-section-ok-button"
               disabled={isEmpty(changes)}
               onClick={handleSave}

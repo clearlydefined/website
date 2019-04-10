@@ -7,8 +7,9 @@ import isEqual from 'lodash/isEqual'
 import { RowEntityList, DefinitionEntry } from './'
 import EntitySpec from '../utils/entitySpec'
 import ComponentButtons from './Navigation/Ui/ComponentButtons'
+import { withResize } from '../utils/WindowProvider'
 
-export default class ComponentList extends React.Component {
+class ComponentList extends React.Component {
   static propTypes = {
     list: PropTypes.array,
     listLength: PropTypes.number,
@@ -41,11 +42,11 @@ export default class ComponentList extends React.Component {
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromCoordinates(component).toPath()]
+    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
   }
 
   getCuration(component) {
-    return this.props.curations.entries[EntitySpec.fromCoordinates(component).toPath()]
+    return this.props.curations.entries[EntitySpec.fromObject(component).toPath()]
   }
 
   revertComponent(component, param) {
@@ -66,7 +67,7 @@ export default class ComponentList extends React.Component {
 
   rowHeight({ index }) {
     const component = this.props.list[index]
-    return component && component.expanded ? 150 : 50
+    return component && component.expanded ? 150 * this.props.isMobileMultiplier : 50
   }
 
   toggleExpanded(component) {
@@ -85,7 +86,8 @@ export default class ComponentList extends React.Component {
       onRemove,
       onRevert,
       showVersionSelectorPopup,
-      hideVersionSelector
+      hideVersionSelector,
+      hideRemoveButton
     } = this.props
     const component = list[index]
     if (!component) return
@@ -117,6 +119,7 @@ export default class ComponentList extends React.Component {
               getDefinition={this.getDefinition}
               showVersionSelectorPopup={showVersionSelectorPopup}
               hideVersionSelector={hideVersionSelector}
+              hideRemoveButton={hideRemoveButton}
             />
           )}
           onRevert={param => this.revertComponent(component, param)}
@@ -146,3 +149,5 @@ export default class ComponentList extends React.Component {
     )
   }
 }
+
+export default withResize(ComponentList)
