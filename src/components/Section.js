@@ -11,11 +11,13 @@ class Section extends Component {
     actionButton: PropTypes.element,
     children: PropTypes.element,
     className: PropTypes.string,
-    name: PropTypes.oneOfType([PropTypes.element, PropTypes.string])
+    name: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+    titleCols: PropTypes.number,
+    buttonCols: PropTypes.number
   }
 
   render() {
-    const { name, className, actionButton, children, isMobile } = this.props
+    const { name, className, actionButton, children, isMobile, titleCols, buttonCols } = this.props
     return (
       <div className={className}>
         {isMobile ? (
@@ -33,10 +35,10 @@ class Section extends Component {
           </>
         ) : (
           <Row className="section-header">
-            <Col md={3} lg={4}>
+            <Col md={titleCols || 4}>
               <div className="section-title">{name}</div>
             </Col>
-            <Col md={9} lg={8}>
+            <Col md={buttonCols || 8}>
               <div className="section-button">{actionButton}</div>
             </Col>
           </Row>
