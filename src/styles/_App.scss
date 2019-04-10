@@ -405,10 +405,22 @@ hr {
 }
 
 .activeFilters {
-  .btn-link {
+  display: flex;
+  align-items: center;
+  .filters-label {
     color: black;
     font-weight: bold;
     text-decoration: none;
+    margin-right: 10px;
+  }
+  .btn {
+    width: 50px;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
   }
 }
 
