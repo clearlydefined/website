@@ -65,10 +65,11 @@ class PageBrowse extends SystemManagedList {
     return (
       <>
         <Row className="show-grid spacer">
-          <Col md={11} mdOffset={1}>
+          <Col md={2} mdOffset={1}>
+            {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
+          </Col>
+          <Col md={8}>
             <div className={'horizontalBlock'}>
-              {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
-              <span>&nbsp;</span>
               {this.renderFilter(providers, 'Provider', 'provider')}
               <span>&nbsp;</span>
               <FilterBar
