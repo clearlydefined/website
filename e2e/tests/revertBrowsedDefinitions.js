@@ -43,7 +43,7 @@ describe(
       await expect(page).toClick(details.revertLicenseButton)
       await page.waitForSelector(details.licenseField)
       const licenseField = await page.$eval(details.licenseField, el => el.textContent)
-      await expect(licenseField).toEqual('MIT')
+      await expect(licenseField).toEqual('MIT OR Apache-2.0')
     })
 
     test('user can revert entire definition changes', async () => {
@@ -55,7 +55,7 @@ describe(
       await page.waitForSelector(firstElement)
       await expect(page).toClick(firstElement)
       const licenseField = await page.$eval(details.licenseField, el => el.textContent)
-      await expect(licenseField).toEqual('MIT')
+      await expect(licenseField).toEqual('MIT OR Apache-2.0')
     })
 
     test('user can revert all changes', async () => {
@@ -67,7 +67,7 @@ describe(
       await page.waitForSelector(firstElement)
       await expect(page).toClick(firstElement)
       const licenseField = await page.$eval(details.licenseField, el => el.textContent)
-      await expect(licenseField).toEqual('MIT')
+      await expect(licenseField).toEqual('MIT OR Apache-2.0')
     })
   },
   defaultTimeout
