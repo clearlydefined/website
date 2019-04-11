@@ -124,6 +124,12 @@ export default class FileList extends Component {
     if (!row || !definition) return null
     const { provider, namespace, name, revision } = definition.coordinates
     const path = get(row, 'path')
+    if (row.token)
+      return (
+        <a href={`https://api.clearlydefined.io/attachments/${row.token}`} target="_blank" rel="noopener noreferrer">
+          {row.name}
+        </a>
+      )
     if (provider !== 'github' || !path || row.children) return <span>{row.name}</span>
     return (
       <a
