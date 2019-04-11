@@ -78,11 +78,11 @@ const licenseEdit = async () => {
   await expect(page).toClick(browseMap.component.details.licensePickerButton)
 
   const inputValue = await page.$eval(browseMap.licensePicker.inputField, el => el.value)
-  await expect(page).toClick(browseMap.licensePicker.inputField, 'MIT OR Apache-2.0')
+  await expect(page).toClick(browseMap.licensePicker.inputField, 'MIT')
   for (let i = 0; i < inputValue.length; i++) {
     await page.keyboard.press('Backspace')
   }
-  await page.type(browseMap.licensePicker.inputField, 'MIT OR Apache-2.0')
+  await page.type(browseMap.licensePicker.inputField, 'MIT')
   await expect(page).toClick(browseMap.licensePicker.listSelection)
   await expect(page).toClick(browseMap.licensePicker.buttonSuccess)
   await expect(page).toMatchElement(browseMap.component.details.licenseFieldUpdated)
