@@ -41,10 +41,10 @@ describe(
       await page.waitForSelector(browseMap.component.details.licenseField)
       const licenseField = await page.$(browseMap.component.details.licenseField)
       const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
     })
 
-    /*test('user can revert entire definition changes', async () => {
+    test('user can revert entire definition changes', async () => {
       await licenseEdit()
       await page.waitForSelector(browseMap.component.revertButton)
       await expect(page).toClick(browseMap.component.revertButton)
@@ -54,7 +54,7 @@ describe(
       await expect(page).toClick(browseMap.component.firstElement)
       const licenseField = await page.$(browseMap.component.details.licenseField)
       const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
     })
 
     test('user can revert all changes', async () => {
@@ -67,8 +67,8 @@ describe(
       await expect(page).toClick(browseMap.component.firstElement)
       const licenseField = await page.$(browseMap.component.details.licenseField)
       const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
-    })*/
+      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
+    })
   },
   defaultTimeout
 )
@@ -83,7 +83,6 @@ const licenseEdit = async () => {
     await page.keyboard.press('Backspace')
   }
   await page.type(browseMap.licensePicker.inputField, 'MIT')
-  await page.waitForSelector(browseMap.licensePicker.listSelection)
   await expect(page).toClick(browseMap.licensePicker.listSelection)
   await expect(page).toClick(browseMap.licensePicker.buttonSuccess)
   await expect(page).toMatchElement(browseMap.component.details.licenseFieldUpdated)
