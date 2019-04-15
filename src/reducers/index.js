@@ -6,13 +6,15 @@ import sessionReducer from './sessionReducer'
 import uiReducer from './uiReducer'
 import definitionReducer from './definitionReducer'
 import suggestionReducer from './suggestionReducer'
+import statReducer from './statReducer'
 // import harvestReducer from './harvestReducer'
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   ui: uiReducer,
   definition: definitionReducer,
-  suggestion: suggestionReducer
+  suggestion: suggestionReducer,
+  stat: statReducer
   // harvest: harvestReducer
 })
 

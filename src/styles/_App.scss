@@ -153,7 +153,7 @@
   box-shadow: 5px 5px 20px -10px lightgrey;
   display: flex;
   min-height: 200px;
-  padding-bottom: $height-filters-list;
+  padding-bottom: $height-filters-section;
 
   .fa-spinner {
     display: none;
@@ -325,6 +325,7 @@
 
 .horizontalBlock {
   display: flex;
+  align-items: center;
 }
 
 .bg-suggested {
@@ -398,4 +399,38 @@ hr {
 
 .ant-dropdown-menu-item {
   font-family: 'Montserrat', sans-serif;
+}
+
+.section--filter-bar {
+  background: $filters-background-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: $height-filters-section;
+}
+
+.activeFilters {
+  display: flex;
+  align-items: center;
+  .filters-label {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  .btn {
+    width: 50px;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+  }
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
 }
