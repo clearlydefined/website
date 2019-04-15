@@ -15,14 +15,20 @@ export default class ActiveFilters extends Component {
 
   render() {
     const { activeFilters, activeSort, activeName, onClear, onClearAll } = this.props
-    return activeFilters || activeSort || activeName ? (
-      <div>
-        <div className="horizontalBlock">
-          <p className="right-space">Active Filters:</p>
+    const hasFilters = activeFilters || activeSort || activeName ? true : false
+    return (
+      <div className="activeFilters">
+        <Button bsStyle="link" onClick={hasFilters && onClearAll}>
+          {hasFilters && <i className="fas fa-times list-remove right-space" />}
+        </Button>
+        <span className="filters-label">Filter / Sort:</span>
+        {hasFilters ? (
           <>
-            {map(activeFilters, (val, i) => (
-              <Tag key={i} closable={true} afterClose={() => onClear('activeFilters', i)}>{`${i}:${val}`}</Tag>
-            ))}
+            {map(
+              activeFilters,
+              (val, i) =>
+                val && <Tag key={i} closable={true} onClose={() => onClear('activeFilters', i)}>{`${i}:${val}`}</Tag>
+            )}
             {activeSort && (
               <Tag
                 key={'sort'}
@@ -31,15 +37,11 @@ export default class ActiveFilters extends Component {
               >{`sort:${activeSort}`}</Tag>
             )}
             {activeName && (
-              <Tag key={'name'} closable={true} afterClose={() => onClear('activeName')}>{`name:${activeName}`}</Tag>
+              <Tag key={'name'} closable={true} onClose={() => onClear('activeName')}>{`name:${activeName}`}</Tag>
             )}
           </>
-        </div>
-        <Button bsStyle="link" onClick={onClearAll}>
-          <i className="fas fa-times list-remove right-space" />
-          Clear current search query, filters and sorts
-        </Button>
+        ) : null}
       </div>
-    ) : null
+    )
   }
 }

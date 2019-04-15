@@ -93,7 +93,7 @@ class FullDetailComponent extends Component {
                   <span>Files</span>
                   &nbsp;
                   {!readOnly && (
-                    <ButtonWithTooltip tip="Revert all changes of all the definitions">
+                    <ButtonWithTooltip tip="Revert all changes to files list">
                       <Button
                         bsSize="small"
                         bsStyle="danger"
