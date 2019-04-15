@@ -21,6 +21,10 @@ class FacetsRenderer extends Component {
     values: PropTypes.array.isRequired
   }
 
+  static defaultProps = {
+    isFolder: false
+  }
+
   state = {
     inputVisible: false
   }
