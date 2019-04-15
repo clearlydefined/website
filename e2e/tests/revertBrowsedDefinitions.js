@@ -41,7 +41,7 @@ describe(
       await page.waitForSelector(browseMap.component.details.licenseField)
       const licenseField = await page.$(browseMap.component.details.licenseField)
       const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
     })
 
     test('user can revert entire definition changes', async () => {
@@ -54,7 +54,7 @@ describe(
       await expect(page).toClick(browseMap.component.firstElement)
       const licenseField = await page.$(browseMap.component.details.licenseField)
       const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
     })
 
     test('user can revert all changes', async () => {
@@ -67,7 +67,7 @@ describe(
       await expect(page).toClick(browseMap.component.firstElement)
       const licenseField = await page.$(browseMap.component.details.licenseField)
       const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
     })
   },
   defaultTimeout
