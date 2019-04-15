@@ -167,8 +167,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
     const key = `open${Date.now()}`
     notification.open({
       message: 'Unsaved Changes',
-      description:
-        'Some information have been changed and are currently unsaved. Are you sure to continue without saving?',
+      description: 'Some information has been changed and is currently unsaved. Are you sure you want to continue?',
       btn: (
         <NotificationButtons
           onClick={() => {
