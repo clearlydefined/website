@@ -2,10 +2,13 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, Row, Jumbotron } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { Grid, Row, Jumbotron, Tabs, Tab } from 'react-bootstrap'
+import { getStatAction } from '../../../../actions/statsActions'
+import get from 'lodash/get'
 import TypeCard from './TypeCard'
+import LicenseBreakdown from './LicenseBreakdown'
 import CountUp from 'react-countup'
-import { getStats } from '../../../../api/clearlyDefined'
 import npm from '../../../../../src/images/n-large.png'
 import maven from '../../../../../src/images/maven.png'
 import nuget from '../../../../../src/images/nuget.svg'
@@ -15,43 +18,75 @@ import crate from '../../../../../src/images/cargo.png'
 import gem from '../../../../../src/images/gem.png'
 import pypi from '../../../../../src/images/pypi.png'
 
-export default class PageStats extends Component {
+const types = {
+  npm: npm,
+  gem: gem,
+  pypi: pypi,
+  maven: maven,
+  nuget: nuget,
+  git: git,
+  crate: crate,
+  pod: pod
+}
+
+class PageStats extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      totalComponents: 0
-    }
+    this.state = {}
   }
 
   async componentDidMount() {
-    const totalComponents = await getStats('totalcount')
-    this.setState({ totalComponents: totalComponents.value })
+    await Promise.all([
+      this.props.dispatch(getStatAction('total')),
+      ...Object.keys(types).map(type => this.props.dispatch(getStatAction(type)))
+    ])
   }
 
   render() {
+    const { stats } = this.props
     return (
       <Grid className="main-container">
         <Row>
           <Jumbotron className="text-center" style={{ backgroundColor: '#ecf0f1' }}>
             <h2>
-              <CountUp end={this.state.totalComponents} separator="," />
+              <CountUp end={get(stats, 'entries.total.value.totalCount') || 0} separator="," />
             </h2>
             <p>Number of total definitions</p>
+            <small>median licensed score: {get(stats, 'entries.total.value.licensedScoreMedian') || 0}</small>
+            <small> | </small>
+            <small>median described score: {get(stats, 'entries.total.value.describedScoreMedian') || 0}</small>
           </Jumbotron>
         </Row>
         <Row>
           <div className="card-container">
-            <TypeCard type="npm" image={npm} />
-            <TypeCard type="maven" image={maven} />
-            <TypeCard type="nuget" image={nuget} />
-            <TypeCard type="git" image={git} />
-            <TypeCard type="pod" image={pod} />
-            <TypeCard type="crate" image={crate} />
-            <TypeCard type="gem" image={gem} />
-            <TypeCard type="pypi" image={pypi} />
+            {Object.keys(types).map(type => (
+              <TypeCard type={type} image={types[type]} stats={get(stats, `entries.${type}.value`)} />
+            ))}
           </div>
+        </Row>
+        <hr />
+        <Row>
+          <h2>Declared License Breakdown</h2>
+          <Tabs>
+            <Tab eventKey="overall" title="Overall">
+              <LicenseBreakdown type="total" stats={get(stats, 'entries.total.value')} />
+            </Tab>
+            {Object.keys(types).map(type => (
+              <Tab eventKey={type} title={type}>
+                <LicenseBreakdown type="total" stats={get(stats, `entries.${type}.value`)} />
+              </Tab>
+            ))}
+          </Tabs>
         </Row>
       </Grid>
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    stats: state.stat.bodies
+  }
+}
+
+export default connect(mapStateToProps)(PageStats)

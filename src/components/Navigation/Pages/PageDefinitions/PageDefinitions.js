@@ -55,7 +55,7 @@ export class PageDefinitions extends UserManagedList {
       const key = `open${Date.now()}`
       notification.open({
         message: 'Unsaved Changes',
-        description: 'Some information has been changed and is currently unsaved. Are you sure to continue?',
+        description: 'Some information has been changed and is currently unsaved. Are you sure you want to continue?',
         btn: (
           <NotificationButtons
             onClick={() => {
