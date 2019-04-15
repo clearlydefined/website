@@ -57,7 +57,6 @@ class PageBrowse extends SystemManagedList {
 
   renderTopFilters() {
     const { filterOptions } = this.props
-    const { activeFilters, activeSort, activeName } = this.state
     const coordinates = filterOptions.list
       .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
       .filter(x => x)
@@ -66,10 +65,11 @@ class PageBrowse extends SystemManagedList {
     return (
       <>
         <Row className="show-grid spacer">
-          <Col md={11} mdOffset={1}>
+          <Col md={2} mdOffset={1}>
+            {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
+          </Col>
+          <Col md={8}>
             <div className={'horizontalBlock'}>
-              {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
-              <span>&nbsp;</span>
               {this.renderFilter(providers, 'Provider', 'provider')}
               <span>&nbsp;</span>
               <FilterBar
@@ -80,17 +80,6 @@ class PageBrowse extends SystemManagedList {
                 clearOnChange
               />
             </div>
-          </Col>
-        </Row>
-        <Row className="show-grid spacer active-filters">
-          <Col md={11} mdOffset={1}>
-            <ActiveFilters
-              activeFilters={activeFilters}
-              activeSort={activeSort}
-              activeName={activeName}
-              onClear={this.clearFilters}
-              onClearAll={this.clearAllFilters}
-            />
           </Col>
         </Row>
       </>
@@ -127,13 +116,23 @@ class PageBrowse extends SystemManagedList {
   // Overrides the default onFilter method
   onFilter(filter, overwrite = false) {
     const activeFilters = overwrite === true ? filter : Object.assign({}, this.state.activeFilters)
+    let activeSort = null
     if (overwrite !== true) {
       const filterValue = get(activeFilters, filter.type)
-      if (filterValue && activeFilters[filter.type] === filter.value) delete activeFilters[filter.type]
+      if ((filterValue && activeFilters[filter.type] === filter.value) || !filter.value)
+        delete activeFilters[filter.type]
       else activeFilters[filter.type] = filter.value
     }
-    this.setState({ ...this.state, activeFilters: Object.keys(activeFilters).length > 0 ? activeFilters : null }, () =>
-      this.updateData()
+    if (filter.type === 'curate') {
+      activeSort = 'score'
+    }
+    this.setState(
+      {
+        ...this.state,
+        activeFilters: Object.keys(activeFilters).length > 0 ? activeFilters : null,
+        activeSort: activeSort ? activeSort : this.state.activeSort
+      },
+      () => this.updateData()
     )
   }
 
@@ -145,6 +144,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   renderFilterBar() {
+    const { activeFilters, activeSort, activeName } = this.state
     const sorts = [
       { value: 'releaseDate-desc', label: 'Newer' },
       { value: 'releaseDate', label: 'Older' },
@@ -154,11 +154,22 @@ class PageBrowse extends SystemManagedList {
 
     return (
       // OMG, structural whitespace?!
-      <div className="filter-list" align="right">
-        <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
-        &nbsp;
-        <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
-        &nbsp; &nbsp; &nbsp; &nbsp;
+      <div className="section--filter-bar">
+        <div className="active-filters">
+          <ActiveFilters
+            activeFilters={activeFilters}
+            activeSort={activeSort}
+            activeName={activeName}
+            onClear={this.clearFilters}
+            onClearAll={this.clearAllFilters}
+          />
+        </div>
+        <div className="filter-list">
+          <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
+          &nbsp;
+          <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
+          &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
       </div>
     )
   }
@@ -256,6 +267,7 @@ class PageBrowse extends SystemManagedList {
               sequence={sequence}
               hasChange={this.hasChange}
               hideVersionSelector
+              hideRemoveButton
             />
             {currentDefinition && (
               <FullDetailPage

@@ -30,13 +30,13 @@ export default class Footer extends Component {
     return (
       <footer className="Footer">
         <Grid>
-          <Col sm={4} xs={3}>
+          <Col sm={4} xs={3} className="vcenter">
             <SocialIcons className="socials" entity={socials} />
           </Col>
-          <Col sm={4} xs={5} className="text-center">
+          <Col sm={4} xs={5} className="text-center vcenter">
             Are you ClearlyDefined?
           </Col>
-          <Col sm={4} xs={4}>
+          <Col sm={4} xs={4} className="vcenter">
             <div className="pull-right right">
               <a href="https://docs.clearlydefined.io/legal/terms" target="_blank" rel="noopener noreferrer">
                 Terms of use
