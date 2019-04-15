@@ -19,6 +19,12 @@ describe(
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
       await page.goto(`${__HOST__}/workspace`, { waitUntil: 'domcontentloaded' })
+      await page.setRequestInterception(true)
+      page.on('request', interceptedRequest => {
+        if (interceptedRequest.url().includes('/curations') && interceptedRequest.method() === 'PATCH')
+          interceptedRequest.respond(responses.curations)
+        else interceptedRequest.continue()
+      })
     })
 
     afterAll(() => {
@@ -149,3 +155,14 @@ describe(
   },
   defaultTimeout
 )
+
+const responses = {
+  curations: {
+    status: 200,
+    headers: { 'access-control-allow-origin': '*' },
+    body: JSON.stringify({
+      prNumber: 750,
+      url: 'https://github.com/clearlydefined/curated-data-dev/pull/750'
+    })
+  }
+}
