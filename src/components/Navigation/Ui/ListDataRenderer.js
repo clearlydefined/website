@@ -10,12 +10,12 @@ export default class ListDataRenderer extends Component {
     licensed: PropTypes.object,
     item: PropTypes.string,
     title: PropTypes.string,
-    trigger: PropTypes.string,
+    trigger: PropTypes.array,
     values: PropTypes.array
   }
 
   static defaultProps = {
-    trigger: 'hover'
+    trigger: ['hover', 'focus']
   }
 
   render() {
