@@ -19,7 +19,7 @@ import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { curateFilters, types } from '../../../../utils/utils'
+import { curateFilters, providers } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
@@ -70,7 +70,7 @@ class PageBrowse extends SystemManagedList {
           </Col>
           <Col md={8}>
             <div className={'horizontalBlock'}>
-              {this.renderFilter(types, 'Type', 'type')}
+              {this.renderFilter(providers, 'Provider', 'provider')}
               <span>&nbsp;</span>
               <FilterBar
                 options={filterOptions}
