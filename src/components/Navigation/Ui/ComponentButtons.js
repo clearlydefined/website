@@ -95,12 +95,14 @@ class ComponentButtons extends Component {
             </Button>
           </ButtonWithTooltip>
         )}
-        <CopyUrlButton
-          route={ROUTE_DEFINITIONS}
-          path={component.toPath()}
+        <a
+          href={`${window.location.origin}${ROUTE_DEFINITIONS}/${component.toPath()}`}
           bsStyle="default"
           className="list-fa-button"
-        />
+          target="_blank"
+        >
+          <i className="fas fa-external-link-alt" />
+        </a>
         {!hideVersionSelector && (
           <ButtonWithTooltip tip="Switch or add other versions of this definition">
             <>
