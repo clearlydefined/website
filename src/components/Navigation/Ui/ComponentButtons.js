@@ -100,6 +100,7 @@ class ComponentButtons extends Component {
           bsStyle="default"
           className="list-fa-button"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <i className="fas fa-external-link-alt" />
         </a>
