@@ -31,7 +31,9 @@ import ActiveFilters from '../../Sections/ActiveFilters'
 class PageBrowse extends SystemManagedList {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      activeSort: 'releaseDate-desc'
+    }
     this.onFilter = this.onFilter.bind(this)
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
