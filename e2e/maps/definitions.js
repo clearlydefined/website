@@ -1,8 +1,8 @@
 export const definitionsMap = {
   componentSearch: {
     input: '.rbt-input-main',
-    list: '.rbt-menu>li',
-    listElement: '.rbt-menu li:nth-child(1) a'
+    list: '.rbt-menu > li',
+    listElement: '.rbt-menu > li:nth-child(1) a'
   },
   componentList: {
     list: '.components-list',

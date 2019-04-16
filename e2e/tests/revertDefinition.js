@@ -10,6 +10,8 @@ setDefaultOptions({ timeout: defaultTimeout })
 let browser
 let page
 
+const { component, componentSearch, componentList, licensePicker, notification } = definitionsMap
+
 describe(
   'Revert changes on Definitions page',
   () => {
@@ -26,80 +28,76 @@ describe(
     })
 
     test('user can type a definition text and should display a component in the list', async () => {
-      await page.waitForSelector(definitionsMap.componentSearch.input)
-      await expect(page).toMatchElement(definitionsMap.componentSearch.input)
-      await expect(page).toClick(definitionsMap.componentSearch.input)
-      await page.type(definitionsMap.componentSearch.input, 'async/2.6.1')
-      await page.waitFor(4000)
-      await expect(page).toMatchElement(definitionsMap.componentSearch.list, { timeout: 30000 })
-      let element = await page.$(definitionsMap.componentSearch.listElement)
+      const { input, listElement } = componentSearch
+      await page.waitForSelector(input)
+      await expect(page).toMatchElement(input)
+      await expect(page).toClick(input)
+      await page.type(input, 'async/2.6.1')
+      await expect(page).toMatchElement(componentSearch.list)
+      await expect(page).toMatchElement(componentSearch.listElement, { text: 'npm/npmjs/-/async/2.6.1' })
+      const element = await page.$(componentSearch.listElement)
       element.click()
-      await expect(page).toMatchElement(definitionsMap.componentList.list)
-      await expect(page).toMatchElement(`${definitionsMap.componentList.list} ${definitionsMap.componentList.tag}`)
-      await expect(page).toMatchElement(
-        `${definitionsMap.componentList.list} ${definitionsMap.componentList.firstElement}`
-      )
-      const componentTitle = await page.$(definitionsMap.component.name)
-      const text = await (await componentTitle.getProperty('textContent')).jsonValue()
-      await expect(text).toMatch('async')
-      await page.waitForSelector(definitionsMap.component.image)
-      await page.waitForSelector(definitionsMap.component.firstElement)
-      await expect(page).toClick(definitionsMap.component.firstElement)
+      await expect(page).toMatchElement(componentList.list)
+      await expect(page).toMatchElement(`${componentList.list} ${componentList.tag}`)
+      await expect(page).toMatchElement(`${componentList.list} ${componentList.firstElement}`)
+      const componentTitle = await page.$eval(component.name, el => el.textContent)
+      await expect(componentTitle).toMatch('async')
+      await page.waitForSelector(component.image)
+      await page.waitForSelector(component.firstElement)
+      await expect(page).toClick(component.firstElement)
     })
 
     test('user can revert license field value', async () => {
+      const { details } = component
+      const { revertLicenseButton } = details
       await licenseEdit()
-      await page.waitForSelector(definitionsMap.component.details.revertLicenseButton)
-      const revertLicenseButton = await page.$(definitionsMap.component.details.revertLicenseButton)
-      const revertClassName = await (await revertLicenseButton.getProperty('className')).jsonValue()
+      await page.waitForSelector(revertLicenseButton)
+      const revertClassName = await page.$eval(revertLicenseButton, el => el.className)
       await expect(revertClassName.includes('fa-disabled')).toBe(false)
-      await expect(page).toClick(definitionsMap.component.details.revertLicenseButton)
-      await page.waitForSelector(definitionsMap.component.details.licenseField)
-      const licenseField = await page.$(definitionsMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      await expect(page).toClick(revertLicenseButton)
+      await page.waitForSelector(details.licenseField)
+      const licenseField = await page.$eval(details.licenseField, el => el.textContent)
+      await expect(licenseField).toEqual('MIT')
     })
 
     test('user can revert entire definition changes', async () => {
       await licenseEdit()
-      await page.waitForSelector(definitionsMap.component.revertButton)
-      await expect(page).toClick(definitionsMap.component.revertButton)
-      await page.waitForSelector(definitionsMap.notification.revertButton)
-      await expect(page).toClick(definitionsMap.notification.revertButton)
-      await page.waitForSelector(definitionsMap.component.firstElement)
-      await expect(page).toClick(definitionsMap.component.firstElement)
-      const licenseField = await page.$(definitionsMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      await page.waitForSelector(component.revertButton)
+      await expect(page).toClick(component.revertButton)
+      await page.waitForSelector(notification.revertButton)
+      await expect(page).toClick(notification.revertButton)
+      await page.waitForSelector(component.firstElement)
+      await expect(page).toClick(component.firstElement)
+      const licenseField = await page.$eval(component.details.licenseField, el => el.textContent)
+      await expect(licenseField).toEqual('MIT')
     })
 
     test('user can revert all changes', async () => {
       await licenseEdit()
       await page.waitForSelector(definitionsMap.revertButton)
       await expect(page).toClick(definitionsMap.revertButton)
-      await page.waitForSelector(definitionsMap.notification.revertButton)
-      await expect(page).toClick(definitionsMap.notification.revertButton)
-      await page.waitForSelector(definitionsMap.component.firstElement)
-      await expect(page).toClick(definitionsMap.component.firstElement)
-      const licenseField = await page.$(definitionsMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT')
+      await page.waitForSelector(notification.revertButton)
+      await expect(page).toClick(notification.revertButton)
+      await page.waitForSelector(component.firstElement)
+      await expect(page).toClick(component.firstElement)
+      const licenseField = await page.$eval(component.details.licenseField, el => el.textContent)
+      await expect(licenseField).toEqual('MIT')
     })
   },
   defaultTimeout
 )
 
 const licenseEdit = async () => {
-  await page.waitForSelector(definitionsMap.component.details.licensePickerButton)
-  await expect(page).toClick(definitionsMap.component.details.licensePickerButton)
+  await page.waitForSelector(component.details.licensePickerButton)
+  await expect(page).toClick(component.details.licensePickerButton)
 
-  const inputValue = await page.$eval(definitionsMap.licensePicker.inputField, el => el.value)
-  await expect(page).toClick(definitionsMap.licensePicker.inputField, 'MIT')
+  const inputValue = await page.$eval(licensePicker.inputField, el => el.value)
+  await expect(page).toClick(licensePicker.inputField, 'MIT')
   for (let i = 0; i < inputValue.length; i++) {
     await page.keyboard.press('Backspace')
   }
-  await page.type(definitionsMap.licensePicker.inputField, 'MIT')
-  await expect(page).toClick(definitionsMap.licensePicker.listSelection)
-  await expect(page).toClick(definitionsMap.licensePicker.buttonSuccess)
-  await expect(page).toMatchElement(definitionsMap.component.details.licenseFieldUpdated)
+  await page.type(licensePicker.inputField, 'MIT')
+  await expect(page).toClick(licensePicker.listSelection)
+  await expect(page).toClick(licensePicker.buttonSuccess)
+  await expect(page).toMatchElement(component.details.licenseFieldUpdated)
 }
