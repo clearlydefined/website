@@ -126,7 +126,6 @@ export default class FileList extends Component {
     const path = get(row, 'path')
     const attachments = new Attachments({ ...definition.coordinates, path, row })
     const url = attachments.getFileAttachmentUrl()
-    console.log(url)
     return url ? (
       <a href={url} target="_blank" rel="noopener noreferrer">
         {row.name}

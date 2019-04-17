@@ -1,3 +1,5 @@
+import { ROUTE_FILES } from './routingConstants'
+
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
@@ -27,6 +29,6 @@ export default class Attachments {
   }
 
   getFileRoute(token) {
-    return `${window.location.origin}/files/${token}`
+    return `${window.location.origin}${ROUTE_FILES}/${token}`
   }
 }
