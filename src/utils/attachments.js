@@ -22,9 +22,10 @@ export default class Attachments {
 
   static async fetchAttachmentWithToken(token) {
     const clearlyDefinedContent = await fetch(this.getClearlyDefinedUrl(token))
-    if (clearlyDefinedContent.status === 200) return clearlyDefinedContent.text()
+    if (clearlyDefinedContent.status === 200) return { source: 'CD', text: await clearlyDefinedContent.text() }
     const swhContent = await fetch(this.getSwhUrl(token))
-    if (swhContent.status === 200) return swhContent.text()
+    if (swhContent.status === 200) return { source: 'SWH', text: await swhContent.text() }
+    return 404
   }
 
   getGitUrl() {

@@ -18,9 +18,25 @@ export default class PageFiles extends Component {
       <Grid className="main-container">
         <Row>
           <Col>
-            <div className="file-content">
-              <pre>{content}</pre>
-            </div>
+            {content !== 404 ? (
+              content && (
+                <>
+                  <div className="file-content">
+                    <pre>{content.text}</pre>
+                  </div>
+                  {content.source === 'SWH' && (
+                    <span>
+                      Content Fetched from{' '}
+                      <a href="https://www.softwareheritage.org/" target="_blank" rel="noopener noreferrer">
+                        Software Heritage
+                      </a>
+                    </span>
+                  )}
+                </>
+              )
+            ) : (
+              <span>The file referenced is not available individulally but they can download the full package</span>
+            )}
           </Col>
         </Row>
       </Grid>
