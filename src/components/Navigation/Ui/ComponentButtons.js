@@ -101,6 +101,7 @@ class ComponentButtons extends Component {
           className="list-fa-button"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={event => event.stopPropagation()}
         >
           <i className="fas fa-external-link-alt" />
         </a>
