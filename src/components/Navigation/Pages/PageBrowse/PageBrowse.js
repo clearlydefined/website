@@ -44,14 +44,16 @@ class PageBrowse extends SystemManagedList {
   componentDidMount() {
     this.props.dispatch(uiNavigation({ to: ROUTE_ROOT }))
     const urlParams = getParamsFromUrl(this.props.location.search)
-    this.setState(
-      {
-        activeSort: urlParams.sort && urlParams.sort,
-        activeName: urlParams.name && urlParams.name,
-        activeFilters: omit(urlParams, ['sort', 'name'])
-      },
-      () => this.updateData()
-    )
+    urlParams
+      ? this.setState(
+          {
+            activeSort: urlParams.sort && urlParams.sort,
+            activeName: urlParams.name && urlParams.name,
+            activeFilters: omit(urlParams, ['sort', 'name'])
+          },
+          () => this.updateData()
+        )
+      : this.updateData()
   }
 
   noRowsRenderer(isFetching) {
