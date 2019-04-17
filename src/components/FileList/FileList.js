@@ -7,6 +7,7 @@ import LicensesRenderer from '../../components/LicensesRenderer'
 import FacetsRenderer from '../../components/FacetsRenderer'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
+import Attachments from '../../utils/attachments'
 export default class FileList extends Component {
   state = {
     files: [],
@@ -122,26 +123,17 @@ export default class FileList extends Component {
 
   getNameCellEntry = (definition, row) => {
     if (!row || !definition) return null
-    const { provider, namespace, name, revision } = definition.coordinates
     const path = get(row, 'path')
-
-    if (provider === 'github' && path && !row.children)
-      return (
-        <a
-          href={`https://github.com/${namespace}/${name}/blob/${revision}/${path}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {row.name}
-        </a>
-      )
-    else if (row.token)
-      return (
-        <a href={`${process.env.REACT_APP_SERVER}/attachments/${row.token}`} target="_blank" rel="noopener noreferrer">
-          {row.name}
-        </a>
-      )
-    return <span>{row.name}</span>
+    const attachments = new Attachments({ ...definition.coordinates, path, row })
+    const url = attachments.getFileAttachmentUrl()
+    console.log(url)
+    return url ? (
+      <a href={url} target="_blank" rel="noopener noreferrer">
+        {row.name}
+      </a>
+    ) : (
+      <span>{row.name}</span>
+    )
   }
 
   render() {
