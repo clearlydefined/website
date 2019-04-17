@@ -18,7 +18,9 @@ export default class PageFiles extends Component {
       <Grid className="main-container">
         <Row>
           <Col>
-            <div className="file-content">{content}</div>
+            <div className="file-content">
+              <pre>{content}</pre>
+            </div>
           </Col>
         </Row>
       </Grid>
