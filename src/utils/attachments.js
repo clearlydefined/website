@@ -20,12 +20,23 @@ export default class Attachments {
     else if (this.row.hashes) return this.getFileRoute(this.row.hashes.sha256)
   }
 
+  static async fetchAttachmentWithToken(token) {
+    const clearlyDefinedContent = await fetch(this.getClearlyDefinedUrl(token))
+    if (clearlyDefinedContent.status === 200) return clearlyDefinedContent.text()
+    const swhContent = await fetch(this.getSwhUrl(token))
+    if (swhContent.status === 200) return swhContent.text()
+  }
+
   getGitUrl() {
     return `https://github.com/${this.namespace}/${this.name}/blob/${this.revision}/${this.path}`
   }
 
-  getClearlyDefinedUrl() {
-    return `${process.env.REACT_APP_SERVER}/attachments/${this.row.token}`
+  static getClearlyDefinedUrl(token) {
+    return `${process.env.REACT_APP_SERVER}/attachments/${token}`
+  }
+
+  static getSwhUrl(token) {
+    return `https://archive.softwareheritage.org/api/1/content/${token}/raw/`
   }
 
   getFileRoute(token) {
