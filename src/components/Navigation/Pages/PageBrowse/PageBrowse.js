@@ -20,7 +20,7 @@ import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { curateFilters, providers, getParamsToUrl, getParamsFromUrl } from '../../../../utils/utils'
+import { curateFilters, types, getParamsToUrl, getParamsFromUrl } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
@@ -32,7 +32,9 @@ import ActiveFilters from '../../Sections/ActiveFilters'
 class PageBrowse extends SystemManagedList {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      activeSort: 'releaseDate-desc'
+    }
     this.onFilter = this.onFilter.bind(this)
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
@@ -79,7 +81,7 @@ class PageBrowse extends SystemManagedList {
           </Col>
           <Col md={8}>
             <div className={'horizontalBlock'}>
-              {this.renderFilter(providers, 'Provider', 'provider')}
+              {this.renderFilter(types, 'Type', 'type')}
               <span>&nbsp;</span>
               <FilterBar
                 options={filterOptions}
