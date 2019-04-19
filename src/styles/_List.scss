@@ -227,7 +227,7 @@
   .btn-default {
     border: none;
     padding: 6px;
-
+    background: transparent !important;
     &:focus,
     &:hover {
       background: transparent;

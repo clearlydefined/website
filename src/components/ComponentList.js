@@ -98,7 +98,8 @@ class ComponentList extends React.Component {
       onSelectAll,
       selected,
       toggleCheckbox,
-      multiSelectEnabled
+      multiSelectEnabled,
+      hideRemoveButton
     } = this.props
 
     const component = list[index]
@@ -135,6 +136,7 @@ class ComponentList extends React.Component {
               getDefinition={this.getDefinition}
               showVersionSelectorPopup={showVersionSelectorPopup}
               hideVersionSelector={hideVersionSelector}
+              hideRemoveButton={hideRemoveButton}
             />
           )}
           onRevert={param => this.revertComponent(component, param)}

@@ -95,12 +95,16 @@ class ComponentButtons extends Component {
             </Button>
           </ButtonWithTooltip>
         )}
-        <CopyUrlButton
-          route={ROUTE_DEFINITIONS}
-          path={component.toPath()}
+        <a
+          href={`${window.location.origin}${ROUTE_DEFINITIONS}/${component.toPath()}`}
           bsStyle="default"
           className="list-fa-button"
-        />
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={event => event.stopPropagation()}
+        >
+          <i className="fas fa-external-link-alt" />
+        </a>
         {!hideVersionSelector && (
           <ButtonWithTooltip tip="Switch or add other versions of this definition">
             <>
@@ -146,13 +150,13 @@ class ComponentButtons extends Component {
   }
 
   render() {
-    const { currentComponent, readOnly, isMobile } = this.props
+    const { currentComponent, readOnly, isMobile, hideRemoveButton } = this.props
     const component = EntitySpec.fromObject(currentComponent)
     return (
       <div className="list-activity-area">
         {isMobile ? this.renderMobileButtonGroup() : this.renderButtonGroup()}
 
-        {!readOnly && (
+        {!readOnly && !hideRemoveButton && (
           <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
             <i className="fas fa-times list-remove" />
           </Button>

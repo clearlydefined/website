@@ -31,7 +31,7 @@ export const definitionsMap = {
     buttons: '.list-activity-area',
     sourceButton: '.list-fa-button > i.fa-code',
     inspectButton: '.list-fa-button > i.fa-search',
-    copyButton: '.list-fa-button > i.fa-copy',
+    linkButton: '.list-fa-button > i.fa-external-link-alt',
     switchButton: '.list-fa-button > i.fa-exchange-alt',
     revertButton: '.list-fa-button > i.fa-undo',
     removeButton: '.btn-link > i.list-remove',
