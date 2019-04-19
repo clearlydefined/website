@@ -24,14 +24,20 @@ export default class PageFile extends Component {
                   <div className="file-content">
                     <pre>{content.text}</pre>
                   </div>
-                  {content.source === 'SWH' && (
-                    <span>
-                      Content Fetched from{' '}
+
+                  <span>
+                    Content fetched from{' '}
+                    {content.source === 'SWH' && (
                       <a href="https://www.softwareheritage.org/" target="_blank" rel="noopener noreferrer">
                         Software Heritage
                       </a>
-                    </span>
-                  )}
+                    )}
+                    {content.source === 'CD' && (
+                      <a href="https://clearlydefined.io" target="_blank" rel="noopener noreferrer">
+                        Clearly Defined
+                      </a>
+                    )}
+                  </span>
                 </>
               )
             ) : (
