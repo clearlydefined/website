@@ -3,18 +3,17 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { ButtonGroup, Checkbox } from 'react-bootstrap'
+import { Checkbox } from 'react-bootstrap'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
-import SpdxPicker from '../../SpdxPicker'
+import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 
 export default class FilterBar extends Component {
   static propTypes = {
     activeSort: PropTypes.string,
     activeFilters: PropTypes.object,
     multiSelectEnabled: PropTypes.bool,
-    onFieldChange: PropTypes.func,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,
     hasComponents: PropTypes.bool,
@@ -37,31 +36,6 @@ export default class FilterBar extends Component {
     showReleaseDateFilter: true
   }
 
-  state = {
-    'licensed.declared': null,
-    release: null,
-    source: null
-  }
-
-  onFieldChange = (field, value) => {
-    const { onFieldChange } = this.props
-    this.setState(prevState => {
-      // toggle
-      if (prevState[field] === value) {
-        onFieldChange && onFieldChange(field, null)
-        return { [field]: null }
-      }
-      onFieldChange && onFieldChange(field, value)
-      return { [field]: value }
-    })
-  }
-
-  renderLicensesDropdown() {
-    return (
-      <SpdxPicker value={''} promptText={'License'} onChange={this.onFieldChange.bind(this, 'licensed.declared')} />
-    )
-  }
-
   renderMultiSelect() {
     const { hasComponents, onSelectAll, selected, components } = this.props
 
@@ -79,7 +53,9 @@ export default class FilterBar extends Component {
         {anySelections && <span>{numSelected} of</span>}
         <span>{components.length} definitions</span>
         {anySelections && (
-          <ButtonGroup className="list-singleLine inlineBlock">{this.renderLicensesDropdown()}</ButtonGroup>
+          <ButtonWithTooltip tip={'Edit a single definition to apply the same change to the entire selection'}>
+            <i className="fas fa-info-circle" />
+          </ButtonWithTooltip>
         )}
       </div>
     )

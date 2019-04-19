@@ -93,6 +93,8 @@ const providers = [
   { value: 'rubygems', label: 'RubyGems' }
 ]
 
+const multiEditableFields = ['licensed.declared']
+
 const noRowsHeight = 260
 
 export {
@@ -107,5 +109,6 @@ export {
   setIfValue,
   sorts,
   sources,
-  types
+  types,
+  multiEditableFields
 }

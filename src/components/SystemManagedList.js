@@ -19,6 +19,7 @@ import { uiBrowseUpdateFilterList, uiRevert, uiInfo, uiDanger } from '../actions
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
+import { multiEditableFields } from '../utils/utils'
 
 /**
  * Abstracts methods for system-managed list
@@ -259,7 +260,28 @@ export default class SystemManagedList extends Component {
     this.incrementSequence()
   }
 
-  onChangeComponent(component, newComponent) {
+  onChangeComponent(component, newComponent, field) {
+    const { components } = this.props
+    const { selected } = this.state
+    const selectedEntries = selected ? Object.entries(selected) : []
+    // contribute all the components
+    if (multiEditableFields.includes(field) && selectedEntries.length > 0) {
+      const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
+      // Apply the same change to all the selected components
+      this.setState({ currentDefinition: null, showFullDetail: false }, () => {
+        this.incrementSequence()
+        selectedComponents.map(selectedComponent =>
+          this.updateList({
+            update: selectedComponent,
+            value: {
+              ...selectedComponent,
+              changes: { [field]: get(newComponent, ['changes', field]) }
+            }
+          })
+        )
+      })
+    }
+
     this.setState({ currentDefinition: null, showFullDetail: false }, () => {
       this.incrementSequence()
       this.updateList({ update: component, value: newComponent })

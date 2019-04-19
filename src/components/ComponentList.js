@@ -62,10 +62,10 @@ class ComponentList extends React.Component {
     onRevert && onRevert(component, param)
   }
 
-  onEntryChange(component, changes) {
+  onEntryChange(component, changes, field) {
     const { onChange } = this.props
     const newComponent = { ...component, changes }
-    onChange && onChange(component, newComponent)
+    onChange && onChange(component, newComponent, field)
     this.incrementSequence()
   }
 

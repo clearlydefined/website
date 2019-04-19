@@ -103,7 +103,6 @@ export class PageDefinitions extends UserManagedList {
       <FilterBar
         components={this.props.components.list}
         multiSelectEnabled={this.multiSelectEnabled}
-        onFieldChange={this.onFieldChange}
         onSelectAll={this.onSelectAll}
         selected={selected}
         activeSort={activeSort}

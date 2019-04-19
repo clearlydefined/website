@@ -50,7 +50,7 @@ class DefinitionEntry extends React.Component {
       const newChanges = { ...component.changes }
       if (isChanged && proposedValue !== null) newChanges[field] = proposedValue
       else delete newChanges[field]
-      onChange && onChange(component, newChanges)
+      onChange && onChange(component, newChanges, field)
     }
   }
 
