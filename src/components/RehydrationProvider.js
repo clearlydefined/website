@@ -30,7 +30,7 @@ import PageDefinitions from './Navigation/Pages/PageDefinitions'
 import PageBrowse from './Navigation/Pages/PageBrowse'
 import PageStats from './Navigation/Pages/PageStats'
 import PageStatus from './Navigation/Pages/PageStatus'
-import PageFiles from './Navigation/Pages/PageFiles'
+import PageFile from './Navigation/Pages/PageFile'
 
 const store = configureStore()
 
@@ -70,7 +70,7 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_STATS} component={withTracker(PageStats)} />
               <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
-              <Route path={ROUTE_FILES} component={withTracker(PageFiles)} />
+              <Route path={ROUTE_FILES} component={withTracker(PageFile)} />
               <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
             </Switch>
           </App>

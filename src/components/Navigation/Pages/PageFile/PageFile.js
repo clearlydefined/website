@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
 import Attachments from '../../../../utils/attachments'
 
-export default class PageFiles extends Component {
+export default class PageFile extends Component {
   state = { content: null }
 
   componentDidMount() {
