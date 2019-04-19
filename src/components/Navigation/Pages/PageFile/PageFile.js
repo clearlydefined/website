@@ -35,7 +35,7 @@ export default class PageFile extends Component {
                 </>
               )
             ) : (
-              <span>The file referenced is not available individulally but they can download the full package</span>
+              <span>This file is not available individually but you can get it by downloading the full package.</span>
             )}
           </Col>
         </Row>
