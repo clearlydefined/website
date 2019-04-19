@@ -7,7 +7,6 @@ import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRendere
 import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
-import github from '../images/GitHub-Mark-120px-plus.png'
 import git from '../images/Git-Logo-2Color.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
