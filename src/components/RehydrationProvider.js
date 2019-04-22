@@ -15,7 +15,7 @@ import {
   ROUTE_SHARE,
   ROUTE_STATS,
   ROUTE_STATUS,
-  ROUTE_FILES
+  ROUTE_FILE
 } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
@@ -70,7 +70,7 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_STATS} component={withTracker(PageStats)} />
               <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
-              <Route path={ROUTE_FILES} component={withTracker(PageFile)} />
+              <Route path={ROUTE_FILE} component={withTracker(PageFile)} />
               <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
             </Switch>
           </App>
