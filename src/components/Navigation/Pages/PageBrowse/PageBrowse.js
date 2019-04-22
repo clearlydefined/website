@@ -109,7 +109,7 @@ class PageBrowse extends SystemManagedList {
       <ButtonsBar
         hasChanges={!this.hasChanges()}
         revertAll={() => this.revertAll('browse')}
-        collapseAll={this.collapseAll}
+        toggleCollapseExpandAll={this.toggleCollapseExpandAll}
         doPromptContribute={this.doPromptContribute}
       />
     )

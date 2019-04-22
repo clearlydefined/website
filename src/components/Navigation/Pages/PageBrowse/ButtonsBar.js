@@ -5,13 +5,14 @@ import ButtonWithTooltip from '../../Ui/ButtonWithTooltip'
 
 export default class ButtonsBar extends Component {
   static propTypes = {
-    revertAll: PropTypes.func,
-    collapseAll: PropTypes.func,
-    doSave: PropTypes.func
+    doPromptContribute: PropTypes.func,
+    toggleCollapseExpandAll: PropTypes.func,
+    hasChanges: PropTypes.bool,
+    revertAll: PropTypes.func
   }
 
   render() {
-    const { hasChanges, revertAll, collapseAll, doPromptContribute } = this.props
+    const { hasChanges, revertAll, toggleCollapseExpandAll, doPromptContribute } = this.props
     return (
       <div className="text-right" data-test-id="page-browse-buttons-bar">
         <ButtonWithTooltip tip="Revert all changes of all the definitions">
@@ -20,8 +21,8 @@ export default class ButtonsBar extends Component {
             <span>&nbsp;Revert Changes</span>
           </Button>
         </ButtonWithTooltip>
-        <Button bsStyle="default" disabled={hasChanges} onClick={collapseAll}>
-          Collapse All
+        <Button bsStyle="default" onClick={toggleCollapseExpandAll}>
+          Toggle Collapse
         </Button>
         <Button bsStyle="success" disabled={hasChanges} onClick={doPromptContribute} data-test-id="contribute-button">
           Contribute

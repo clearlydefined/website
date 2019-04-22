@@ -37,7 +37,7 @@ class PageContribution extends SystemManagedList {
   }
 
   renderButtons() {
-    return <ButtonsBar hasChanges={!this.hasChanges()} collapseAll={this.collapseAll} doSave={this.doSave} />
+    return <ButtonsBar toggleCollapseExpandAll={this.toggleCollapseExpandAll} />
   }
 
   renderFilterBar() {
