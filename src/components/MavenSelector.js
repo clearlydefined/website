@@ -37,7 +37,6 @@ export default class MavenSelector extends Component {
       const options = await getMavenSearch(this.props.token, value.replace(':', '/'))
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [], isLoading: false })
     }
   }
@@ -46,6 +45,7 @@ export default class MavenSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        id="maven-selector"
         ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
         useCache={false}
         options={options}

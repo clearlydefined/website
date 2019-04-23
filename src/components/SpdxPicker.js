@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Typeahead } from 'react-bootstrap-typeahead'
+import Autocomplete from '../components/Navigation/Ui/Autocomplete'
 import spdxLicenseIds from 'spdx-license-ids'
 import deprecatedSpdxLicenseIds from 'spdx-license-ids/deprecated'
 import { customLicenseIds } from '../utils/utils'
@@ -51,7 +51,8 @@ export default class SpdxPicker extends Component {
     const { value, onBlur, onChange, autoFocus, promptText } = this.props
     return (
       <div className="editable-editor" data-test-id="spdx-input-picker">
-        <Typeahead
+        <Autocomplete
+          id="spdx-picker"
           defaultInputValue={value}
           options={identifiers}
           onBlur={event => this.onBlur(event, onBlur)}

@@ -47,7 +47,7 @@ export const browseMap = {
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',
-      revertLicenseButton: '.license-renderer > div > span > .fa-undo',
+      revertLicenseButton: '.license-renderer .fa-undo',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`
       },
@@ -58,9 +58,8 @@ export const browseMap = {
   },
   licensePicker: {
     identifier: '.spdx-picker',
-    inputField:
-      '.spdx-picker [data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
-    listSelection: '#rbt-menu-item-1',
+    inputField: '.spdx-picker [data-test-id="spdx-input-picker"] .rbt-input-main',
+    listSelection: '#spdx-picker-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },
   sourcePicker: {

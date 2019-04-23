@@ -70,7 +70,30 @@ const curateFilters = [
   { value: 'described', label: 'Focus on description issues' }
 ]
 
-const noRowsHeight = 200
+const types = [
+  { value: 'pod', label: 'Pod' },
+  { value: 'crate', label: 'Crate' },
+  { value: 'git', label: 'Git' },
+  { value: 'maven', label: 'Maven' },
+  { value: 'npm', label: 'Npm' },
+  { value: 'nuget', label: 'NuGet' },
+  { value: 'pypi', label: 'PyPi' },
+  { value: 'gem', label: 'Gem' },
+  { value: 'sourcearchive', label: 'SourceArchive' }
+]
+
+const providers = [
+  { value: 'cocoapods', label: 'CocoaPods' },
+  { value: 'cratesio', label: 'Crates.io' },
+  { value: 'github', label: 'GitHub' },
+  { value: 'mavencentral', label: 'MavenCentral' },
+  { value: 'npmjs', label: 'NpmJS' },
+  { value: 'nuget', label: 'NuGet' },
+  { value: 'pypi', label: 'PyPi' },
+  { value: 'rubygems', label: 'RubyGems' }
+]
+
+const noRowsHeight = 260
 
 export {
   asObject,
@@ -79,8 +102,10 @@ export {
   difference,
   licenses,
   noRowsHeight,
+  providers,
   releaseDates,
   setIfValue,
   sorts,
-  sources
+  sources,
+  types
 }

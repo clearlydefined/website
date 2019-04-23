@@ -33,17 +33,15 @@ class InlineEditor extends React.Component {
 
   onChange = nextValue => {
     const { value, onChange, type } = this.props
-
     if (type !== 'date') this.setState({ editing: false })
-
     // sanity check for empty textboxes
     // if (typeof nextValue === 'string' && nextValue.trim().length === 0) return this.renderValue()
-
     // don't bother saving unchanged fields
     if (nextValue === value) return
-
     onChange(nextValue)
   }
+
+  onChangeDate = event => this.setState({ dateValue: event.target.value })
 
   onChangeEvent = event => {
     const { target } = event
@@ -103,7 +101,15 @@ class InlineEditor extends React.Component {
 
   editors = {
     text: value => <input size="45" type="text" defaultValue={value} />,
-    date: value => <input size="45" type="date" defaultValue={value} />,
+    date: value => (
+      <input
+        className="date-picker"
+        size="45"
+        type="date"
+        data-date={this.state.dateValue || value}
+        defaultValue={value}
+      />
+    ),
     license: value => <SpdxPicker value={value} autoFocus={true} />
   }
 
@@ -115,7 +121,10 @@ class InlineEditor extends React.Component {
 
   editorProps = {
     text: this.editorDefaults,
-    date: this.editorDefaults,
+    date: {
+      ...this.editorDefaults,
+      onChange: this.onChangeDate
+    },
     license: {
       ...this.editorDefaults,
       onChange: this.onChange

@@ -10,16 +10,21 @@ export default class ListDataRenderer extends Component {
     licensed: PropTypes.object,
     item: PropTypes.string,
     title: PropTypes.string,
+    trigger: PropTypes.array,
     values: PropTypes.array
   }
 
+  static defaultProps = {
+    trigger: ['hover', 'focus']
+  }
+
   render() {
-    const { licensed, item, values, title } = this.props
+    const { licensed, item, values, title, trigger } = this.props
     const data = values || get(licensed, item, [])
     if (!data) return null
     return (
       <OverlayTrigger
-        trigger="click"
+        trigger={trigger}
         placement="left"
         rootClose
         overlay={

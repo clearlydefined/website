@@ -29,6 +29,7 @@ import Definition from '../../utils/definition'
 import Auth from '../../utils/auth'
 import NotificationButtons from '../Navigation/Ui/NotificationButtons'
 import { AbstractFullDetailsView } from './AbstractFullDetailsView'
+import { withResize } from '../../utils/WindowProvider'
 
 export class FullDetailPage extends AbstractFullDetailsView {
   static defaultProps = {
@@ -150,8 +151,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
     const key = `open${Date.now()}`
     notification.open({
       message: 'Unsaved Changes',
-      description:
-        'Some information have been changed and are currently unsaved. Are you sure to continue without saving?',
+      description: 'Some information has been changed and is currently unsaved. Are you sure you want to continue?',
       btn: (
         <NotificationButtons
           onClick={() => {
@@ -296,7 +296,9 @@ function mapDispatchToProps(dispatch) {
   )
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FullDetailPage)
+export default withResize(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(FullDetailPage)
+)

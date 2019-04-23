@@ -67,7 +67,7 @@ describe('ComponentButtons', () => {
       />
     )
     expect(wrapper.find(ButtonGroup))
-    expect(wrapper.find(Button).length).toBe(6)
+    expect(wrapper.find(Button).length).toBe(5)
   })
 
   it('renders some of the buttons', async () => {
@@ -80,7 +80,7 @@ describe('ComponentButtons', () => {
       />
     )
     expect(wrapper.find(ButtonGroup))
-    expect(wrapper.find(Button).length).toBe(4)
+    expect(wrapper.find(Button).length).toBe(5)
   })
 
   it('check functionality of each button', async () => {
