@@ -16,11 +16,7 @@ export const definitionsMap = {
     revertButton: '[data-test-id="notification-revert-confirm"]'
   },
   filterBar: {
-    selectAllCheckbox: '[data-test-id="select-all-checkbox"]:not([disabled])',
-    sourceButton: '[name="described.sourceLocation"]',
-    releaseDateButton: '[name="described.releaseDate"]',
-    releaseDateInput: '[name="described.releaseDate"] > input',
-    licenseDropdown: '.section--filter-bar .rbt-input'
+    selectAllCheckbox: '[data-test-id="select-all-checkbox"]:not([disabled])'
   },
   get selectCheckbox() {
     return `${this.componentList.firstElement} input[type="checkbox"]`
@@ -63,6 +59,7 @@ export const definitionsMap = {
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',
+      licenseDropdown: '.license-renderer .editable-field',
       revertLicenseButton: '.license-renderer .fa-undo',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`

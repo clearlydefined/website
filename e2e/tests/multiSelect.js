@@ -4,8 +4,8 @@
 import { setDefaultOptions } from 'expect-puppeteer'
 import { definitionsMap } from '../maps/definitions'
 
-const { componentSearch, revertButton, notification, component, filterBar, sourcePicker } = definitionsMap
-const { details, firstElement } = component
+const { componentSearch, revertButton, notification, component, filterBar, licensePicker } = definitionsMap
+const { details } = component
 
 const puppeteer = require('puppeteer')
 const defaultTimeout = process.env.JEST_TIMEOUT ? parseInt(process.env.JEST_TIMEOUT) : 30000
@@ -49,11 +49,21 @@ const selectTheAllCheckbox = async () => {
 }
 
 const editAllLicenses = async () => {
-  const { licenseDropdown } = filterBar
+  const { firstElement } = component
   await selectTheAllCheckbox()
-  await page.type(licenseDropdown, 'MIT-0')
-  await expect(page).toClick(definitionsMap.licensePicker.listSelectionFirst)
+  await page.waitForSelector(firstElement)
   await expect(page).toClick(firstElement)
+  await page.waitForSelector(details.licensePickerButton)
+  await expect(page).toClick(details.licensePickerButton)
+
+  const inputValue = await page.$eval(licensePicker.inputField, el => el.value)
+  await expect(page).toClick(licensePicker.inputField, 'MIT')
+  for (let i = 0; i < inputValue.length; i++) {
+    await page.keyboard.press('Backspace')
+  }
+  await page.type(licensePicker.inputField, 'MIT')
+  await expect(page).toClick(licensePicker.listSelection)
+  await expect(page).toClick(licensePicker.buttonSuccess)
   await expect(page).toMatchElement(details.licenseFieldUpdated)
   const licenseField = await page.$eval(details.licenseFieldUpdated, el => el.innerText)
   expect(licenseField).toBe('MIT-0')
