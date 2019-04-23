@@ -28,12 +28,10 @@ export default class SpdxPicker extends Component {
 
   onKeyPress(event, onChange) {
     const instance = this._typeahead.current.typeahead.getInstance()
-    const isMenuOpen = instance.state.showMenu
-    const resultsExist = instance.state.initialItem != null
     const enterPressed = event.key === 'Enter'
     // if user is in mid-selection, don't hijack Enter key
     // i.e. only fire onChange on Enter if menu closed or no results
-    if (enterPressed && (!isMenuOpen || !resultsExist)) {
+    if (enterPressed) {
       const { target } = event
       const { value } = target
       value && this.onChange(value, onChange)
