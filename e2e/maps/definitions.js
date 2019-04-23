@@ -1,8 +1,8 @@
 export const definitionsMap = {
   componentSearch: {
     input: '.rbt-input-main',
-    list: '.rbt-menu>li',
-    listElement: '.rbt-menu li:nth-child(1) a'
+    list: '.rbt-menu > li',
+    listElement: '.rbt-menu > li:nth-child(1) a'
   },
   componentList: {
     list: '.components-list',
@@ -21,7 +21,7 @@ export const definitionsMap = {
     buttons: '.list-activity-area',
     sourceButton: '.list-fa-button > i.fa-code',
     inspectButton: '.list-fa-button > i.fa-search',
-    copyButton: '.list-fa-button > i.fa-copy',
+    linkButton: '.list-fa-button > i.fa-external-link-alt',
     switchButton: '.list-fa-button > i.fa-exchange-alt',
     revertButton: '.list-fa-button > i.fa-undo',
     removeButton: '.btn-link > i.list-remove',
@@ -64,9 +64,8 @@ export const definitionsMap = {
   },
   licensePicker: {
     identifier: '.spdx-picker',
-    inputField:
-      '.spdx-picker [data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
-    listSelection: '#rbt-menu-item-1',
+    inputField: '.spdx-picker [data-test-id="spdx-input-picker"] .rbt-input-main',
+    listSelection: '#spdx-picker-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },
   sourcePicker: {

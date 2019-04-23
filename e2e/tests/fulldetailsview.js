@@ -11,6 +11,10 @@ setDefaultOptions({ timeout: defaultTimeout })
 let browser
 let page
 
+const { fileList } = fulldetailsMap
+const { columns, firstRow, lastRow, folderIcon } = fileList
+const { identifier } = columns.name
+
 describe(
   'Full details page',
   () => {
@@ -30,81 +34,49 @@ describe(
     })
 
     test('should display the FileList component on the page', async () => {
-      await page.waitForSelector(fulldetailsMap.fileList.identifier)
-      await expect(page).toMatchElement(fulldetailsMap.fileList.identifier)
+      await page.waitForSelector(fileList.identifier)
+      await expect(page).toMatchElement(fileList.identifier)
     })
 
     test('FileList should have Name, Facets, Licenses, Copyrights columns', async () => {
-      await page.waitForSelector(fulldetailsMap.fileList.columns.name.identifier)
-      await expect(page).toMatchElement(fulldetailsMap.fileList.columns.name.identifier)
-      await page.waitForSelector(fulldetailsMap.fileList.columns.facets.identifier)
-      await expect(page).toMatchElement(fulldetailsMap.fileList.columns.facets.identifier)
-      await page.waitForSelector(fulldetailsMap.fileList.columns.license.identifier)
-      await expect(page).toMatchElement(fulldetailsMap.fileList.columns.license.identifier)
-      await page.waitForSelector(fulldetailsMap.fileList.columns.copyrights.identifier)
-      await expect(page).toMatchElement(fulldetailsMap.fileList.columns.copyrights.identifier)
+      await page.waitForSelector(identifier)
+      await expect(page).toMatchElement(identifier)
+      await page.waitForSelector(columns.facets.identifier)
+      await expect(page).toMatchElement(columns.facets.identifier)
+      await page.waitForSelector(columns.license.identifier)
+      await expect(page).toMatchElement(columns.license.identifier)
+      await page.waitForSelector(columns.copyrights.identifier)
+      await expect(page).toMatchElement(columns.copyrights.identifier)
     })
 
     test('first row of FileList should be a folder', async () => {
-      await page.waitForSelector(fulldetailsMap.fileList.firstRow)
-      await expect(page).toMatchElement(fulldetailsMap.fileList.firstRow)
+      await page.waitForSelector(firstRow)
+      await expect(page).toMatchElement(firstRow)
 
-      await page.waitForSelector(
-        `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
-      )
-      await expect(page).toMatchElement(
-        `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
-      )
-      await page.waitForSelector(
-        `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier} > ${
-          fulldetailsMap.fileList.folderIcon
-        }`,
-        {
-          visible: true
-        }
-      )
-      await expect(page).toMatchElement(
-        `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier} > ${
-          fulldetailsMap.fileList.folderIcon
-        }`
-      )
+      await page.waitForSelector(`${firstRow} > ${identifier}`)
+      await expect(page).toMatchElement(`${firstRow} > ${identifier}`)
+      await page.waitForSelector(`${firstRow} > ${identifier} > ${folderIcon}`, {
+        visible: true
+      })
+      await expect(page).toMatchElement(`${firstRow} > ${identifier} > ${folderIcon}`)
 
-      const nameElement = await page.$(
-        `${fulldetailsMap.fileList.firstRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
-      )
-      const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
-      await expect(nameContent).toMatch(fulldetailsMap.fileList.firstRowContent)
+      const nameContent = await page.$eval(`${firstRow} > ${identifier}`, el => el.textContent)
+      await expect(nameContent).toMatch(fileList.firstRowContent)
     })
 
     test('last row of FileList should be a file', async () => {
-      await page.waitForSelector(fulldetailsMap.fileList.lastRow)
-      await expect(page).toMatchElement(fulldetailsMap.fileList.lastRow)
-      await page.waitForSelector(
-        `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
-      )
-      await expect(page).toMatchElement(
-        `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
-      )
+      await page.waitForSelector(lastRow)
+      await expect(page).toMatchElement(lastRow)
+      await page.waitForSelector(`${lastRow} > ${identifier}`)
+      await expect(page).toMatchElement(`${lastRow} > ${identifier}`)
 
-      await page.waitForSelector(
-        `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier} > ${
-          fulldetailsMap.fileList.folderIcon
-        }`,
-        {
-          hidden: true
-        }
-      )
-      await expect(page).toMatchElement(
-        `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier} > ${
-          fulldetailsMap.fileList.folderIcon
-        }`
-      )
+      await page.waitForSelector(`${lastRow} > ${identifier} > ${folderIcon}`, {
+        hidden: true
+      })
+      await expect(page).toMatchElement(`${lastRow} > ${identifier} > ${folderIcon}`)
 
-      const nameElement = await page.$(
-        `${fulldetailsMap.fileList.lastRow} > ${fulldetailsMap.fileList.columns.name.identifier}`
-      )
-      const nameContent = await (await nameElement.getProperty('textContent')).jsonValue()
-      await expect(nameContent).toMatch(fulldetailsMap.fileList.lastRowContent)
+      const nameContent = await page.$eval(`${lastRow} > ${identifier}`, el => el.textContent)
+      await expect(nameContent).toMatch(fileList.lastRowContent)
     })
 
     test('adding and removing a glob to a facet applies correctly (from the FacetsEditor)', async () => {

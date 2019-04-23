@@ -3,7 +3,8 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Typeahead, Highlighter } from 'react-bootstrap-typeahead'
+import { Highlighter } from 'react-bootstrap-typeahead'
+import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class GitHubCommitPicker extends Component {
   static propTypes = {
@@ -29,7 +30,9 @@ export default class GitHubCommitPicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, selected: nextProps.request.commit ? [nextProps.request.commit] : [] })
+    this.setState({ ...this.state, selected: nextProps.request.commit ? [nextProps.request.commit] : [] }, () =>
+      this.getOptions('')
+    )
   }
 
   componentDidUpdate() {
@@ -48,7 +51,6 @@ export default class GitHubCommitPicker extends Component {
       const options = await getGitHubRevisions(path)
       !this.isUnmounted && this.setState({ options, shouldUpdate: false })
     } catch (error) {
-      console.log(error)
       !this.isUnmounted && this.setState({ options: [], shouldUpdate: false })
     }
   }
@@ -71,11 +73,11 @@ export default class GitHubCommitPicker extends Component {
     return <Highlighter search={props.text}>{value}</Highlighter>
   }
 
-  filter(option, text) {
-    if (!text) return true
+  filter(option, props) {
+    if (!props.text) return true
     return (
-      option.tag.toLowerCase().indexOf(text.toLowerCase()) !== -1 ||
-      option.sha.toLowerCase().indexOf(text.toLowerCase()) !== -1
+      option.tag.toLowerCase().indexOf(props.text.toLowerCase()) !== -1 ||
+      option.sha.toLowerCase().indexOf(props.text.toLowerCase()) !== -1
     )
   }
 
@@ -83,10 +85,10 @@ export default class GitHubCommitPicker extends Component {
     const { defaultInputValue, allowNew } = this.props
     const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
-
     return (
       <div onClick={e => e.stopPropagation()}>
-        <Typeahead
+        <Autocomplete
+          id="github-commit-picker"
           selected={selected}
           options={list}
           labelKey="tag"

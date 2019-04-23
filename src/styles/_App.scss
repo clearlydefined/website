@@ -387,6 +387,11 @@ hr {
   margin-top: -40px;
 }
 
+.selector-picker {
+  width: 50%;
+  margin-right: 4px;
+}
+
 .active-filters {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -428,4 +433,32 @@ hr {
   display: inline-block;
   vertical-align: middle;
   float: none;
+}
+
+.date-picker {
+  position: relative;
+  width: 150px !important;
+  height: 20px !important;
+  color: white;
+
+  &:before {
+    display: flex;
+    align-items: center;
+    content: attr(data-date);
+    color: black;
+  }
+
+  &::-webkit-datetime-edit,
+  &::-webkit-inner-spin-button,
+  &::-webkit-clear-button {
+    display: none;
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    color: black;
+    opacity: 1;
+  }
 }

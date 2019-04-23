@@ -34,7 +34,6 @@ class VersionSelector extends Component {
       const options = await getRevisions(token, fullname, component.type, component.provider)
       this.setState({ options, label })
     } catch (error) {
-      console.log(error)
       this.setState({ options: [] })
     }
   }
