@@ -87,7 +87,7 @@ export class PageDefinitions extends UserManagedList {
         hasChanges={!this.hasChanges()}
         revertAll={this.revertAll}
         doRefreshAll={this.doRefreshAll}
-        collapseAll={this.collapseAll}
+        toggleCollapseExpandAll={this.toggleCollapseExpandAll}
         onRemoveAll={this.onRemoveAll}
         doPromptContribute={this.doPromptContribute}
         shareUrl={this.doSaveAsUrl}

@@ -55,7 +55,7 @@ export default class SystemManagedList extends Component {
     this.handleLogin = this.handleLogin.bind(this)
     this.transform = this.transform.bind(this)
     this.createTransform = this.createTransform.bind(this)
-    this.collapseAll = this.collapseAll.bind(this)
+    this.toggleCollapseExpandAll = this.toggleCollapseExpandAll.bind(this)
     this.incrementSequence = this.incrementSequence.bind(this)
     this.getDefinitionsAndNotify = this.getDefinitionsAndNotify.bind(this)
     this.getCurations = this.getCurations.bind(this)
@@ -254,9 +254,17 @@ export default class SystemManagedList extends Component {
     this.onChangeComponent(component, { ...component, expanded: false })
   }
 
-  collapseAll() {
+  expandComponent(component) {
+    this.onChangeComponent(component, { ...component, expanded: true })
+  }
+
+  toggleCollapseExpandAll() {
     const { components } = this.props
-    components.list.forEach(component => component.expanded && this.collapseComponent(component))
+    if (components.list.filter(component => component.expanded).length > 0) {
+      components.list.forEach(component => component.expanded && this.collapseComponent(component))
+    } else {
+      components.list.forEach(component => !component.expanded && this.expandComponent(component))
+    }
     this.incrementSequence()
   }
 
@@ -367,7 +375,7 @@ export default class SystemManagedList extends Component {
     this.getCurations(curationsToGet)
   }
 
-  updateList() {}
+  updateList(_) {}
 
   buildSaveSpec(list) {
     return list.map(component => EntitySpec.fromObject(component))

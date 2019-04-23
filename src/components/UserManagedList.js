@@ -153,9 +153,7 @@ export default class UserManagedList extends SystemManagedList {
       const object = typeof content === 'string' ? JSON.parse(content) : content
       if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
       if (this.isClearlyDefinedList(object)) return object
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
     return null
   }
 

@@ -7,7 +7,7 @@ import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRendere
 import { Row, Checkbox, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
-import github from '../images/GitHub-Mark-120px-plus.png'
+import git from '../images/Git-Logo-2Color.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
@@ -302,12 +302,12 @@ class DefinitionEntry extends React.Component {
   }
 
   getImage(definition) {
-    if (definition.coordinates.provider === 'github') return github
-    if (definition.coordinates.provider === 'npmjs') return npm
-    if (definition.coordinates.provider === 'cratesio') return cargo
-    if (definition.coordinates.provider === 'pypi') return pypi
-    if (definition.coordinates.provider === 'rubygems') return gem
-    if (definition.coordinates.provider === 'nuget') return nuget
+    if (definition.coordinates.type === 'git') return git
+    if (definition.coordinates.type === 'npm') return npm
+    if (definition.coordinates.type === 'crate') return cargo
+    if (definition.coordinates.type === 'pypi') return pypi
+    if (definition.coordinates.type === 'gem') return gem
+    if (definition.coordinates.type === 'nuget') return nuget
     return null
   }
 

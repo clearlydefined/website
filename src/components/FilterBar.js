@@ -38,12 +38,17 @@ export default class FilterBar extends Component {
     return option.toLowerCase().includes(text.toLowerCase())
   }
 
+  clear() {
+    this.typeahead && this.typeahead.getInstance().clear()
+  }
+
   render() {
-    const { options, defaultValue, value, onSearch } = this.props
+    const { options, value, onSearch } = this.props
     return (
       <AsyncTypeahead
+        id="filter-bar"
         className="filter-bar"
-        ref={this.typeahead}
+        ref={typeahead => (this.typeahead = typeahead)}
         useCache={false}
         placeholder="Component search..."
         onChange={this.onChange}
@@ -51,10 +56,8 @@ export default class FilterBar extends Component {
         isLoading={options.isFetching}
         onSearch={onSearch}
         clearButton
-        defaultInputValue={(!value && defaultValue) || ''}
-        // filterBy={this.filter}
         labelKey="path"
-        selected={value && [value]}
+        selected={value ? [value] : []}
       />
     )
   }
