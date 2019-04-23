@@ -23,10 +23,11 @@ export default class SpdxPicker extends Component {
     super(props)
     this.onKeyPress = this.onKeyPress.bind(this)
     this.onChange = this.onChange.bind(this)
+    this._typeahead = React.createRef()
   }
 
   onKeyPress(event, onChange) {
-    const instance = this._typeahead.getInstance()
+    const instance = this._typeahead.current.typeahead.getInstance()
     const isMenuOpen = instance.state.showMenu
     const resultsExist = instance.state.initialItem != null
     const enterPressed = event.key === 'Enter'
@@ -58,9 +59,8 @@ export default class SpdxPicker extends Component {
           onBlur={event => this.onBlur(event, onBlur)}
           onKeyDown={e => this.onKeyPress(e, onChange)}
           onChange={([first]) => this.onChange(first, onChange)}
-          ref={ref => (this._typeahead = ref)}
+          ref={this._typeahead}
           bodyContainer
-          highlightOnlyResult
           autoFocus={autoFocus}
           selectHintOnEnter
           clearButton
