@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { get } from 'lodash'
 import { Button, ButtonGroup, ButtonToolbar, Dropdown as BSDropdown } from 'react-bootstrap'
 import { Menu, Dropdown, Icon } from 'antd'
-import { CopyUrlButton } from '../../'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
@@ -97,7 +96,6 @@ class ComponentButtons extends Component {
         )}
         <a
           href={`${window.location.origin}${ROUTE_DEFINITIONS}/${component.toPath()}`}
-          bsStyle="default"
           className="list-fa-button"
           target="_blank"
           rel="noopener noreferrer"
