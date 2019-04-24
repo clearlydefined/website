@@ -5,7 +5,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Grid } from 'react-bootstrap'
 import get from 'lodash/get'
-import uniq from 'lodash/uniq'
+import uniqBy from 'lodash/uniqBy'
 import difference from 'lodash/difference'
 import classNames from 'classnames'
 import { ROUTE_ROOT } from '../../../../utils/routingConstants'
@@ -62,8 +62,14 @@ class PageBrowse extends SystemManagedList {
     const coordinates = filterOptions.list
       .map(item => EntitySpec.isPath(item) && EntitySpec.fromPath(item))
       .filter(x => x)
-    const names = uniq(coordinates.map(coordinate => coordinate.name))
-    filterOptions.list = names
+    const names = uniqBy(
+      coordinates.map(coordinate => {
+        return { type: coordinate.type, name: coordinate.name }
+      }),
+      'name',
+      'type'
+    )
+    const options = { ...filterOptions, list: names }
     return (
       <>
         <Row className="show-grid spacer">
@@ -75,7 +81,7 @@ class PageBrowse extends SystemManagedList {
               {this.renderFilter(types, 'Type', 'type')}
               <span>&nbsp;</span>
               <FilterBar
-                options={filterOptions}
+                options={options}
                 onChange={this.onBrowse}
                 onSearch={this.onSearch}
                 onClear={this.onBrowse}
