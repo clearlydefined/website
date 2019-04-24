@@ -30,7 +30,6 @@ export default class NuGetSelector extends Component {
       const options = await getNugetSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [], isLoading: false })
     }
   }
@@ -39,6 +38,7 @@ export default class NuGetSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        id="nuget-selector"
         useCache={false}
         options={options}
         placeholder={'Pick a Nuget to harvest'}

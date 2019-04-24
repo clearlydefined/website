@@ -62,7 +62,7 @@ describe(
       await expect(page).toMatchElement(component.buttons)
       await expect(page).toMatchElement(component.sourceButton)
       await expect(page).toMatchElement(component.inspectButton)
-      await expect(page).toMatchElement(component.copyButton)
+      await expect(page).toMatchElement(component.linkButton)
       await expect(page).toMatchElement(component.switchButton)
       await expect(page).toMatchElement(component.revertButton)
       await expect(page).toMatchElement(component.removeButton)
