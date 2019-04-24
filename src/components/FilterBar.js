@@ -66,10 +66,10 @@ export default class FilterBar extends Component {
 
   renderItem = (result, menuProps) => {
     return (
-      <>
-        <img src={types[result.type]} height={30} />
+      <span className="filterBar-itemRenderer">
+        <img src={types[result.type]} />
         <Highlighter search={menuProps.text}>{result.name}</Highlighter>
-      </>
+      </span>
     )
   }
 
