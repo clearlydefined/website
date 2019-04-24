@@ -268,31 +268,69 @@ export default class SystemManagedList extends Component {
     this.incrementSequence()
   }
 
-  onChangeComponent(component, newComponent, field) {
+  async onChangeComponent(component, newComponent, field) {
     const { components } = this.props
     const { selected } = this.state
     const selectedEntries = selected ? Object.entries(selected) : []
     // contribute all the components
     if (multiEditableFields.includes(field) && selectedEntries.length > 0) {
       const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
-      // Apply the same change to all the selected components
+      const res = await this.showMultiSelectNotification(selectedComponents.length)
+      if (res) {
+        // Apply the same change to all the selected components
+        this.setState({ currentDefinition: null, showFullDetail: false }, () => {
+          this.incrementSequence()
+          selectedComponents.map(selectedComponent =>
+            this.updateList({
+              update: selectedComponent,
+              value: {
+                ...selectedComponent,
+                changes: { [field]: get(newComponent, ['changes', field]) }
+              }
+            })
+          )
+        })
+      } else {
+        this.setState({ currentDefinition: null, showFullDetail: false }, () => {
+          this.incrementSequence()
+          this.updateList({ update: component, value: newComponent })
+        })
+      }
+    } else {
       this.setState({ currentDefinition: null, showFullDetail: false }, () => {
         this.incrementSequence()
-        selectedComponents.map(selectedComponent =>
-          this.updateList({
-            update: selectedComponent,
-            value: {
-              ...selectedComponent,
-              changes: { [field]: get(newComponent, ['changes', field]) }
-            }
-          })
-        )
+        this.updateList({ update: component, value: newComponent })
       })
     }
+  }
 
-    this.setState({ currentDefinition: null, showFullDetail: false }, () => {
-      this.incrementSequence()
-      this.updateList({ update: component, value: newComponent })
+  async showMultiSelectNotification(length) {
+    return new Promise(resolve => {
+      const key = `open${Date.now()}`
+      notification.open({
+        message: 'Unsaved Changes',
+        description: `You have ${length} definitions selected. Apply this change to all or just this definition?`,
+        btn: (
+          <NotificationButtons
+            onClick={() => {
+              notification.close(key)
+              return resolve(true)
+            }}
+            onClose={() => {
+              notification.close(key)
+              return resolve(false)
+            }}
+            confirmText="Change all"
+            dismissText="Change just this one"
+          />
+        ),
+        key,
+        onClose: () => {
+          notification.close(key)
+          return resolve(false)
+        },
+        duration: 0
+      })
     })
   }
 

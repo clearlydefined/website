@@ -77,19 +77,6 @@ export default class UserManagedList extends SystemManagedList {
       this.onChangeComponent(component, rest)
     })
 
-  onFieldChange = (field, value) => {
-    if (!value) {
-      this.props.components.transformedList.forEach(component => {
-        if (component.changes) delete component.changes[field]
-        this.onChangeComponent(component, { ...component, changes: component.changes })
-      })
-      return
-    }
-    this.props.components.transformedList.map(component =>
-      this.onChangeComponent(component, { ...component, changes: { ...component.changes, [field]: value } })
-    )
-  }
-
   showVersionSelectorPopup(component, multiple) {
     this.setState({ showVersionSelectorPopup: true, multipleVersionSelection: multiple, selectedComponent: component })
   }
