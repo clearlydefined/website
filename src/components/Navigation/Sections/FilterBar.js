@@ -53,7 +53,7 @@ export default class FilterBar extends Component {
         {anySelections && <span>{numSelected} of</span>}
         <span>{components.length} definitions</span>
         {anySelections && (
-          <ButtonWithTooltip tip={'Edit a single definition to apply the same change to the entire selection'}>
+          <ButtonWithTooltip tip={'Edit one definition and apply a change to all selected'}>
             <i className="fas fa-info-circle" />
           </ButtonWithTooltip>
         )}
