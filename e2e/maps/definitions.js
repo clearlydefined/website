@@ -104,5 +104,14 @@ export const definitionsMap = {
     get contributeButton() {
       return `${this.identifier} [data-test-id="contribute-button"]`
     }
+  },
+  multiSelectNotification: {
+    identifier: '.ant-notification-notice',
+    get changeAllButton() {
+      return `${this.identifier} .ant-btn-primary`
+    },
+    get changeOneButton() {
+      return `${this.identifier} .ant-btn-secondary`
+    }
   }
 }

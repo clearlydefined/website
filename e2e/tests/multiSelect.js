@@ -4,7 +4,15 @@
 import { setDefaultOptions } from 'expect-puppeteer'
 import { definitionsMap } from '../maps/definitions'
 
-const { componentSearch, revertButton, notification, component, filterBar, licensePicker } = definitionsMap
+const {
+  componentSearch,
+  revertButton,
+  notification,
+  component,
+  filterBar,
+  licensePicker,
+  multiSelectNotification
+} = definitionsMap
 const { details } = component
 
 const puppeteer = require('puppeteer')
@@ -24,7 +32,7 @@ describe('Multiselect changes on Definitions page', () => {
   })
 
   afterAll(() => {
-    browser.close()
+    //browser.close()
   })
 
   afterEach(() => page.reload())
@@ -32,7 +40,6 @@ describe('Multiselect changes on Definitions page', () => {
   test('user can update and revert all the licenses', async () => {
     await searchDefinition('async/2.6.1')
     await editAllLicenses()
-
     await revertChanges()
     const licenseField = await page.$eval(details.licenseField, el => el.innerText)
     await expect(licenseField).toBe('MIT')
@@ -51,9 +58,10 @@ const selectTheAllCheckbox = async () => {
 const editAllLicenses = async () => {
   const { firstElement } = component
   await selectTheAllCheckbox()
-  await page.waitForSelector(firstElement)
-  await expect(page).toClick(firstElement)
-  await page.waitForSelector(details.licensePickerButton)
+  await page.waitForSelector(firstElement, { timeout: 30000 })
+  await page.waitFor(4000)
+  await expect(page).toClick(firstElement, { timeout: 30000 })
+  await page.waitForSelector(details.licensePickerButton, { timeout: 30000 })
   await expect(page).toClick(details.licensePickerButton)
 
   const inputValue = await page.$eval(licensePicker.inputField, el => el.value)
@@ -64,6 +72,8 @@ const editAllLicenses = async () => {
   await page.type(licensePicker.inputField, 'MIT')
   await expect(page).toClick(licensePicker.listSelection)
   await expect(page).toClick(licensePicker.buttonSuccess)
+  await page.waitForSelector(multiSelectNotification.identifier)
+  await expect(page).toClick(multiSelectNotification.changeAllButton)
   await expect(page).toMatchElement(details.licenseFieldUpdated)
   const licenseField = await page.$eval(details.licenseFieldUpdated, el => el.innerText)
   expect(licenseField).toBe('MIT-0')
