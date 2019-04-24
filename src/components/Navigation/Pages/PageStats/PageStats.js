@@ -52,9 +52,9 @@ class PageStats extends Component {
               <CountUp end={get(stats, 'entries.total.value.totalCount') || 0} separator="," />
             </h2>
             <p>Number of total definitions</p>
-            <small>median licensed score: {get(stats, 'entries.total.value.licensedScoreMedian') || 0}</small>
-            <small> | </small>
-            <small>median described score: {get(stats, 'entries.total.value.describedScoreMedian') || 0}</small>
+            <span>median licensed score: {get(stats, 'entries.total.value.licensedScoreMedian') || 0}</span>
+            <span> | </span>
+            <span>median described score: {get(stats, 'entries.total.value.describedScoreMedian') || 0}</span>
           </Jumbotron>
         </Row>
         <Row>
