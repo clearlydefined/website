@@ -58,10 +58,10 @@ const selectTheAllCheckbox = async () => {
 const editAllLicenses = async () => {
   const { firstElement } = component
   await selectTheAllCheckbox()
-  await page.waitForSelector(firstElement, { timeout: 30000 })
+  await page.waitForSelector(firstElement)
   await page.waitFor(4000)
-  await expect(page).toClick(firstElement, { timeout: 30000 })
-  await page.waitForSelector(details.licensePickerButton, { timeout: 30000 })
+  await expect(page).toClick(firstElement)
+  await page.waitForSelector(details.licensePickerButton)
   await expect(page).toClick(details.licensePickerButton)
 
   const inputValue = await page.$eval(licensePicker.inputField, el => el.value)
