@@ -32,10 +32,8 @@ describe('Multiselect changes on Definitions page', () => {
   })
 
   afterAll(() => {
-    //browser.close()
+    browser.close()
   })
-
-  afterEach(() => page.reload())
 
   test('user can update and revert all the licenses', async () => {
     await searchDefinition('async/2.6.1')
