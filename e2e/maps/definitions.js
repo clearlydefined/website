@@ -2,7 +2,7 @@ export const definitionsMap = {
   componentSearch: {
     input: '.rbt-input-main',
     list: '.rbt-menu > li',
-    listElement: '.rbt-menu > li:nth-child(1) a'
+    listElement: '#filter-bar-item-0'
   },
   componentList: {
     list: '.components-list',
