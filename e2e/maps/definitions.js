@@ -1,8 +1,8 @@
 export const definitionsMap = {
   componentSearch: {
     input: '.rbt-input-main',
-    list: '.rbt-menu > li',
-    listElement: '.rbt-menu > li:nth-child(1) a'
+    list: '.rbt-menu>li',
+    listElement: '.rbt-menu li:not(.disabled):nth-child(1) a'
   },
   componentList: {
     list: '.components-list',
@@ -14,6 +14,12 @@ export const definitionsMap = {
   contributeSuccess: '[data-test-id="contribution-success"]',
   notification: {
     revertButton: '[data-test-id="notification-revert-confirm"]'
+  },
+  filterBar: {
+    selectAllCheckbox: '[data-test-id="select-all-checkbox"]:not([disabled])'
+  },
+  get selectCheckbox() {
+    return `${this.componentList.firstElement} input[type="checkbox"]`
   },
   component: {
     name: '.list-headline [data-test-id="component-name"]',
@@ -53,6 +59,7 @@ export const definitionsMap = {
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',
+      licenseDropdown: '.license-renderer .editable-field',
       revertLicenseButton: '.license-renderer .fa-undo',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`
@@ -64,9 +71,8 @@ export const definitionsMap = {
   },
   licensePicker: {
     identifier: '.spdx-picker',
-    inputField:
-      '.spdx-picker [data-test-id="spdx-input-picker"] > div.rbt > div.rbt-input.form-control > .rbt-input-wrapper > div > .rbt-input-main',
-    listSelection: '#rbt-menu-item-1',
+    inputField: '.spdx-picker [data-test-id="spdx-input-picker"] .rbt-input-main',
+    listSelection: '#spdx-picker-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },
   sourcePicker: {
@@ -97,6 +103,15 @@ export const definitionsMap = {
     },
     get contributeButton() {
       return `${this.identifier} [data-test-id="contribute-button"]`
+    }
+  },
+  multiSelectNotification: {
+    identifier: '.ant-notification-notice',
+    get changeAllButton() {
+      return `${this.identifier} .ant-btn-primary`
+    },
+    get changeOneButton() {
+      return `${this.identifier} .ant-btn-secondary`
     }
   }
 }

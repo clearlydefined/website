@@ -41,7 +41,6 @@ describe(
     })
 
     test('user can revert license field value', async () => {
-      const { revertLicenseButton } = details
       await licenseEdit()
       await page.waitForSelector(details.revertLicenseButton)
       const revertClassName = await page.$eval(details.revertLicenseButton, el => el.className)

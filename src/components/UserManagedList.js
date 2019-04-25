@@ -27,11 +27,13 @@ export default class UserManagedList extends SystemManagedList {
     this.state = {
       activeFilters: {},
       activeSort: null,
+      selected: {},
       sequence: 0,
       showFullDetail: false,
       path: null
     }
     this.readOnly = false
+    this.multiSelectEnabled = true
     this.onAddComponent = this.onAddComponent.bind(this)
     this.onRemoveComponent = this.onRemoveComponent.bind(this)
     this.loadComponentList = this.loadComponentList.bind(this)
@@ -49,8 +51,31 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   onRemoveAll() {
+    this.setState({ selected: [] })
     this.updateList({ removeAll: {} })
   }
+
+  onSelectAll = ({ target }) => {
+    if (!target.checked) {
+      return this.setState({ selected: {} })
+    }
+    // create object with keys by index with all true
+    this.setState({ selected: this.props.components.transformedList.reduce((o, _, i) => ({ ...o, [i]: true }), {}) })
+  }
+
+  toggleSelectAllCheckbox = index => {
+    if (this.state.selected[index]) {
+      this.setState(prevState => ({ selected: { ...prevState.selected, [index]: !prevState.selected } }))
+    } else {
+      this.setState(prevState => ({ selected: { ...prevState.selected, [index]: true } }))
+    }
+  }
+
+  resetComponents = () =>
+    this.props.components.transformedList.forEach(component => {
+      const { changes, ...rest } = component
+      this.onChangeComponent(component, rest)
+    })
 
   showVersionSelectorPopup(component, multiple) {
     this.setState({ showVersionSelectorPopup: true, multipleVersionSelection: multiple, selectedComponent: component })
@@ -115,9 +140,7 @@ export default class UserManagedList extends SystemManagedList {
       const object = typeof content === 'string' ? JSON.parse(content) : content
       if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
       if (this.isClearlyDefinedList(object)) return object
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
     return null
   }
 

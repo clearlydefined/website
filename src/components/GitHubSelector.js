@@ -14,49 +14,98 @@ export default class GitHubSelector extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { isLoading: false, options: [] }
+    this.state = { namespace: { isLoading: false, options: [] }, component: { isLoading: false, options: [] } }
     this.getOptions = this.getOptions.bind(this)
+    this.getComponentOptions = this.getComponentOptions.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.onComponentChange = this.onComponentChange.bind(this)
+    this._componentselector = React.createRef()
   }
 
   onChange(values) {
+    const value = values.length === 0 ? null : values[0].id
+    return this.setState(
+      state => {
+        return { selectedNamespace: value, selectedComponent: null, component: { ...state.component, options: [] } }
+      },
+      () => {
+        this._componentselector && this._componentselector.getInstance().clear()
+      }
+    )
+  }
+
+  onComponentChange(values) {
     const { onChange } = this.props
     const value = values.length === 0 ? null : values[0].id
     if (!value) return
-    if (value.indexOf('/') > 0 && !value.endsWith('/'))
-      return onChange && onChange({ type: 'git', provider: 'github', name: value }, 'source')
-    this._typeahead._updateText(value + '/')
-    this._typeahead._updateSelected([])
+    this.setState(
+      { selectedComponent: value },
+      () => onChange && onChange({ type: 'git', provider: 'github', name: value }, 'source')
+    )
   }
 
   async getOptions(value) {
     try {
-      this.setState({ ...this.state, isLoading: true })
+      this.setState(state => {
+        return { namespace: { ...state.namespace, isLoading: true } }
+      })
       const options = await getGitHubSearch(this.props.token, value)
-      this.setState({ ...this.state, options, isLoading: false })
+      this.setState({ namespace: { options: options, isLoading: false } })
     } catch (error) {
-      console.log(error)
-      this.setState({ ...this.state, options: [], isLoading: false })
+      this.setState({ namespace: { options: [], isLoading: false } })
+    }
+  }
+
+  async getComponentOptions(value) {
+    try {
+      this.setState(state => {
+        return { component: { ...state.component, isLoading: true } }
+      })
+      const options = await getGitHubSearch(this.props.token, `${this.state.selectedNamespace}/${value}`)
+      this.setState({ component: { options: options, isLoading: false } })
+    } catch (error) {
+      this.setState({ component: { options: [], isLoading: false } })
     }
   }
 
   render() {
-    const { options, isLoading } = this.state
+    const { namespace, component } = this.state
     return (
-      <AsyncTypeahead
-        ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
-        useCache={false}
-        options={options}
-        placeholder={'Pick a login/repo'}
-        onChange={this.onChange}
-        labelKey="id"
-        clearButton
-        highlightOnlyResult
-        emptyLabel=""
-        selectHintOnEnter
-        isLoading={isLoading}
-        onSearch={this.getOptions}
-      />
+      <div className="horizontalBlock">
+        <AsyncTypeahead
+          id="github-namespace-selector"
+          className="selector-picker"
+          ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
+          useCache={false}
+          options={namespace.options}
+          placeholder={'User / Organization'}
+          onChange={this.onChange}
+          labelKey="id"
+          clearButton
+          highlightOnlyResult
+          emptyLabel=""
+          selectHintOnEnter
+          isLoading={namespace.isLoading}
+          onSearch={this.getOptions}
+        />
+
+        <AsyncTypeahead
+          id="github-component-selector"
+          className="selector-picker"
+          ref={typeahead => (this._componentselector = typeahead)}
+          useCache={false}
+          options={component.options}
+          placeholder={'Repo'}
+          onChange={this.onComponentChange}
+          labelKey={option => option.id.substring(option.id.indexOf('/') + 1)}
+          clearButton
+          highlightOnlyResult
+          emptyLabel=""
+          selectHintOnEnter
+          isLoading={component.isLoading}
+          onSearch={this.getComponentOptions}
+        />
+      </div>
     )
   }
 }

@@ -13,6 +13,6 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "no-console": 0
+    "no-console": 1
   }
 }
