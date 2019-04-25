@@ -19,6 +19,7 @@ import { uiBrowseUpdateFilterList, uiRevert, uiInfo, uiDanger } from '../actions
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
+import { multiEditableFields } from '../utils/utils'
 
 /**
  * Abstracts methods for system-managed list
@@ -31,11 +32,13 @@ export default class SystemManagedList extends Component {
     this.state = {
       activeFilters: {},
       activeSort: null,
+      selected: {},
       sequence: 0,
       showFullDetail: false,
       path: null
     }
     this.readOnly = true
+    this.multiSelectEnabled = false
     this.getDefinition = this.getDefinition.bind(this)
     this.getValue = this.getValue.bind(this)
     this.hasChanges = this.hasChanges.bind(this)
@@ -52,11 +55,10 @@ export default class SystemManagedList extends Component {
     this.handleLogin = this.handleLogin.bind(this)
     this.transform = this.transform.bind(this)
     this.createTransform = this.createTransform.bind(this)
-    this.collapseAll = this.collapseAll.bind(this)
+    this.toggleCollapseExpandAll = this.toggleCollapseExpandAll.bind(this)
     this.incrementSequence = this.incrementSequence.bind(this)
     this.getDefinitionsAndNotify = this.getDefinitionsAndNotify.bind(this)
     this.getCurations = this.getCurations.bind(this)
-    this.refresh = this.refresh.bind(this)
     this.revertAll = this.revertAll.bind(this)
     this.revert = this.revert.bind(this)
     this.revertDefinition = this.revertDefinition.bind(this)
@@ -107,11 +109,20 @@ export default class SystemManagedList extends Component {
 
   /**
    * Dispatch the action to save a contribution
-   * @param  {} contributionInfo object that describes the contribution
+   * @param  {*} contributionInfo object that describes the contribution
    */
   doContribute(contributionInfo) {
     const { dispatch, token, components } = this.props
-    const patches = this.buildContributeSpec(components.list)
+    const { selected } = this.state
+    let patches
+    const selectedEntries = selected ? Object.entries(selected) : []
+    // contribute all the components
+    if (selectedEntries.length === 0) {
+      patches = this.buildContributeSpec(components.list)
+    } else {
+      const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
+      patches = this.buildContributeSpec(selectedComponents)
+    }
     const spec = { contributionInfo, patches }
     dispatch(curateAction(token, spec))
     this.refresh(contributionInfo.removeDefinitions)
@@ -243,16 +254,83 @@ export default class SystemManagedList extends Component {
     this.onChangeComponent(component, { ...component, expanded: false })
   }
 
-  collapseAll() {
+  expandComponent(component) {
+    this.onChangeComponent(component, { ...component, expanded: true })
+  }
+
+  toggleCollapseExpandAll() {
     const { components } = this.props
-    components.list.forEach(component => component.expanded && this.collapseComponent(component))
+    if (components.list.filter(component => component.expanded).length > 0) {
+      components.list.forEach(component => component.expanded && this.collapseComponent(component))
+    } else {
+      components.list.forEach(component => !component.expanded && this.expandComponent(component))
+    }
     this.incrementSequence()
   }
 
-  onChangeComponent(component, newComponent) {
-    this.setState({ currentDefinition: null, showFullDetail: false }, () => {
-      this.incrementSequence()
-      this.updateList({ update: component, value: newComponent })
+  async onChangeComponent(component, newComponent, field) {
+    const { components } = this.props
+    const { selected } = this.state
+    const selectedEntries = selected ? Object.entries(selected) : []
+    // contribute all the components
+    if (multiEditableFields.includes(field) && selectedEntries.length > 0) {
+      const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
+      const res = await this.showMultiSelectNotification(selectedComponents.length)
+      if (res) {
+        // Apply the same change to all the selected components
+        this.setState({ currentDefinition: null, showFullDetail: false }, () => {
+          this.incrementSequence()
+          selectedComponents.map(selectedComponent =>
+            this.updateList({
+              update: selectedComponent,
+              value: {
+                ...selectedComponent,
+                changes: { [field]: get(newComponent, ['changes', field]) }
+              }
+            })
+          )
+        })
+      } else {
+        this.setState({ currentDefinition: null, showFullDetail: false }, () => {
+          this.incrementSequence()
+          this.updateList({ update: component, value: newComponent })
+        })
+      }
+    } else {
+      this.setState({ currentDefinition: null, showFullDetail: false }, () => {
+        this.incrementSequence()
+        this.updateList({ update: component, value: newComponent })
+      })
+    }
+  }
+
+  async showMultiSelectNotification(length) {
+    return new Promise(resolve => {
+      const key = `open${Date.now()}`
+      notification.open({
+        message: 'Unsaved Changes',
+        description: `You have ${length} definitions selected. Apply this change to all or just this definition?`,
+        btn: (
+          <NotificationButtons
+            onClick={() => {
+              notification.close(key)
+              return resolve(true)
+            }}
+            onClose={() => {
+              notification.close(key)
+              return resolve(false)
+            }}
+            confirmText="Change all"
+            dismissText="Change just this one"
+          />
+        ),
+        key,
+        onClose: () => {
+          notification.close(key)
+          return resolve(false)
+        },
+        duration: 0
+      })
     })
   }
 
@@ -335,7 +413,7 @@ export default class SystemManagedList extends Component {
     this.getCurations(curationsToGet)
   }
 
-  updateList() {}
+  updateList(_) {}
 
   buildSaveSpec(list) {
     return list.map(component => EntitySpec.fromObject(component))

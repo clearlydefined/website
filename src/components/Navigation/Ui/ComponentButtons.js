@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { get } from 'lodash'
 import { Button, ButtonGroup, ButtonToolbar, Dropdown as BSDropdown } from 'react-bootstrap'
 import { Menu, Dropdown, Icon } from 'antd'
-import { CopyUrlButton } from '../../'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
@@ -95,12 +94,15 @@ class ComponentButtons extends Component {
             </Button>
           </ButtonWithTooltip>
         )}
-        <CopyUrlButton
-          route={ROUTE_DEFINITIONS}
-          path={component.toPath()}
-          bsStyle="default"
+        <a
+          href={`${window.location.origin}${ROUTE_DEFINITIONS}/${component.toPath()}`}
           className="list-fa-button"
-        />
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={event => event.stopPropagation()}
+        >
+          <i className="fas fa-external-link-alt" />
+        </a>
         {!hideVersionSelector && (
           <ButtonWithTooltip tip="Switch or add other versions of this definition">
             <>

@@ -31,7 +31,6 @@ export default class RubyGemsSelector extends Component {
       const options = await getRubyGemsSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [], isLoading: false })
     }
   }
@@ -40,6 +39,7 @@ export default class RubyGemsSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        id="ruby-selector"
         useCache={false}
         options={options}
         placeholder={'Pick a RubyGem to harvest'}

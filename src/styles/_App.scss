@@ -278,6 +278,18 @@
 
 .editable-editor {
   display: inline-block;
+
+  @media screen and (max-width: $screen-sm) {
+    overflow: auto;
+    white-space: nowrap;
+
+    > .ant-tag {
+      font-size: smaller;
+      margin-right: 0;
+      padding: 0 5px;
+      white-space: nowrap;
+    }
+  }
 }
 
 .placeholder-text {
@@ -360,6 +372,36 @@ hr {
   margin: 75px 0;
 }
 
+.section--filter-bar {
+  .checkbox {
+    margin: 6px;
+  }
+
+  .list-singleLine {
+    display: inline-flex;
+  }
+
+  .placeholder-text,
+  .rbt-input-main::placeholder {
+    color: #333;
+  }
+}
+
+.component-list {
+  .form-group.flex-grow-column {
+    height: 100%;
+    width: 100%;
+
+    .checkbox {
+      margin-left: 6px;
+    }
+  }
+}
+
+.ant-checkbox-wrapper {
+  height: 27px;
+}
+
 .rbt-input.form-control {
   padding: 5px 17px;
 }
@@ -387,6 +429,11 @@ hr {
   margin-top: -40px;
 }
 
+.selector-picker {
+  width: 50%;
+  margin-right: 4px;
+}
+
 .active-filters {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -394,6 +441,21 @@ hr {
 
 .ant-dropdown-menu-item {
   font-family: 'Montserrat', sans-serif;
+}
+
+.component-checkbox {
+  margin-top: 15px;
+}
+
+.selected-definitions {
+  display: flex;
+  align-items: center;
+  span {
+    margin-right: 7px;
+  }
+  input[type='checkbox'] {
+    margin-top: 8px;
+  }
 }
 
 .section--filter-bar {

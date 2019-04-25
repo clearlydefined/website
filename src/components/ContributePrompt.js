@@ -47,11 +47,9 @@ export default class ContributePrompt extends Component {
     this.props.actionHandler(contributionInfo)
   }
 
-  handleChange(event) {
-    const target = event.target
+  handleChange({ target }) {
     const value = target.type === 'checkbox' ? target.checked : target.value
-    const name = target.name
-    this.setState({ ...this.state, [name]: value })
+    this.setState({ ...this.state, [target.name]: value })
   }
 
   canSubmit() {
