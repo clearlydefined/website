@@ -42,6 +42,6 @@ export default class Autocomplete extends Component {
   }
 
   render() {
-    return <Typeahead {...this.props} renderMenu={this.renderMenu} />
+    return <Typeahead ref={typeahead => (this.typeahead = typeahead)} {...this.props} renderMenu={this.renderMenu} />
   }
 }
