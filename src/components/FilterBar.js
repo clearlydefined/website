@@ -3,8 +3,27 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { AsyncTypeahead } from 'react-bootstrap-typeahead'
+import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
+import npm from '../images/n-large.png'
+import maven from '../images/maven.png'
+import nuget from '../images/nuget.svg'
+import pod from '../images/pod.png'
+import git from '../images/Git-Logo-2Color.png'
+import crate from '../images/cargo.png'
+import gem from '../images/gem.png'
+import pypi from '../images/pypi.png'
+
+const types = {
+  npm: npm,
+  gem: gem,
+  pypi: pypi,
+  maven: maven,
+  nuget: nuget,
+  git: git,
+  crate: crate,
+  pod: pod
+}
 
 export default class FilterBar extends Component {
   static propTypes = {
@@ -26,7 +45,7 @@ export default class FilterBar extends Component {
   onChange(values) {
     const { onChange, clearOnChange, onClear } = this.props
     if (values.length) {
-      onChange && onChange(values[0])
+      onChange && onChange(values[0].name)
       // timing hack to work around https://github.com/ericgio/react-bootstrap-typeahead/issues/211
       clearOnChange && setTimeout(() => this.refs.typeahead && this.refs.typeahead.getInstance().clear(), 0)
     } else {
@@ -55,9 +74,15 @@ export default class FilterBar extends Component {
         options={options.list}
         isLoading={options.isFetching}
         onSearch={onSearch}
+        labelKey={'name'}
         clearButton
-        labelKey="path"
-        selected={value ? [value] : []}
+        selected={value ? [value.name] : []}
+        renderMenuItemChildren={(option, props) => (
+          <span className="filterBar-itemRenderer">
+            <img src={types[option.type]} alt={option[props.labelKey]} />
+            <Highlighter search={props.text}>{option[props.labelKey]}</Highlighter>
+          </span>
+        )}
       />
     )
   }
