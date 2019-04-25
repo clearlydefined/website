@@ -20,6 +20,7 @@ import LicensedSection from '../Navigation/Sections/LicensedSections'
 import ButtonWithTooltip from '../Navigation/Ui/ButtonWithTooltip'
 import CurationsSection from '../Navigation/Sections/CurationsSection'
 import TitleWithScore from '../Navigation/Ui/TitleWithScore'
+import { withResize } from '../../utils/WindowProvider'
 
 class FullDetailComponent extends Component {
   static propTypes = {
@@ -36,34 +37,99 @@ class FullDetailComponent extends Component {
     getCurationData: PropTypes.func
   }
 
-  render() {
-    const {
-      definition,
-      harvest,
-      onChange,
-      previewDefinition,
-      readOnly,
-      handleRevert,
-      changes,
-      getCurationData,
-      curations,
-      inspectedCuration
-    } = this.props
+  renderFilesSection() {
+    const { definition, onChange, previewDefinition, readOnly, handleRevert, changes } = this.props
     const entry = find(changes, (_, key) => key && key.startsWith('files'))
+    const item = { ...definition.item }
+    return (
+      <Section
+        name={
+          <section>
+            <span>Files</span>
+            &nbsp;
+            {!readOnly && (
+              <ButtonWithTooltip tip="Revert all changes of all the definitions">
+                <Button
+                  bsSize="small"
+                  bsStyle="danger"
+                  onClick={() => handleRevert('files')}
+                  disabled={entry === undefined}
+                >
+                  <i className="fas fa-undo" />
+                  <span>&nbsp;Revert Changes</span>
+                </Button>
+              </ButtonWithTooltip>
+            )}
+          </section>
+        }
+        actionButton={
+          get(item, 'described.urls.download') && (
+            <Button bsStyle="primary" href={get(item, 'described.urls.download')}>
+              <i className="fas fa-download" />
+              <span>&nbsp;Download component</span>
+            </Button>
+          )
+        }
+      >
+        <Row>
+          <Col xs={11}>
+            <FileList
+              files={cloneDeep(item.files)}
+              onChange={onChange}
+              component={definition}
+              previewDefinition={previewDefinition}
+              readOnly={readOnly}
+            />
+          </Col>
+        </Row>
+      </Section>
+    )
+  }
+
+  renderRawDataSection() {
+    const { definition, harvest, getCurationData, inspectedCuration } = this.props
+    const item = { ...definition.item }
+    return (
+      <Section name="Raw data">
+        <Row>
+          <Col xs={11} offset-md={1}>
+            <RawDataSection
+              definition={definition}
+              item={item}
+              getCurationData={getCurationData}
+              inspectedCuration={inspectedCuration}
+              harvest={harvest}
+            />
+          </Col>
+        </Row>
+      </Section>
+    )
+  }
+
+  render() {
+    const { curations, definition, harvest, onChange, previewDefinition, readOnly, handleRevert, isMobile } = this.props
     if (!definition || !definition.item || !curations || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
     return (
       <div>
+        {isMobile && (
+          <Row className="row-detail-header">
+            <Col xs={12} className="text-right">
+              {this.props.renderContributeButton}
+            </Col>
+          </Row>
+        )}
         <Row>
-          <Col md={1}>{image && <img className={`list-image`} src={image} alt="" />}</Col>
-          <Col md={11}>
+          <Col md={1} xs={2}>
+            {image && <img className="list-image" src={image} alt="" />}
+          </Col>
+          <Col md={11} xs={10}>
             <HeaderSection {...this.props} />
           </Col>
         </Row>
         <Row>
-          <Col md={1} />
-          <Col md={11}>
+          <Col xs={11} mdOffset={1}>
             <Section name={<TitleWithScore title={'Described'} domain={item.described} />}>
               <Fragment>
                 <DescribedSection rawDefinition={item} {...this.props} />
@@ -87,61 +153,8 @@ class FullDetailComponent extends Component {
             <Section name={<TitleWithScore title={'Licensed'} domain={item.licensed} />}>
               <LicensedSection rawDefinition={item} {...this.props} />
             </Section>
-            <Section
-              name={
-                <section>
-                  <span>Files</span>
-                  &nbsp;
-                  {!readOnly && (
-                    <ButtonWithTooltip tip="Revert all changes to files list">
-                      <Button
-                        bsSize="small"
-                        bsStyle="danger"
-                        onClick={() => handleRevert('files')}
-                        disabled={entry === undefined}
-                      >
-                        <i className="fas fa-undo" />
-                        <span>&nbsp;Revert Changes</span>
-                      </Button>
-                    </ButtonWithTooltip>
-                  )}
-                </section>
-              }
-              actionButton={
-                get(item, 'described.urls.download') && (
-                  <Button bsStyle="primary" href={get(item, 'described.urls.download')}>
-                    <i className="fas fa-download" />
-                    <span>&nbsp;Download component</span>
-                  </Button>
-                )
-              }
-            >
-              <Row>
-                <Col md={12}>
-                  <FileList
-                    files={cloneDeep(item.files)}
-                    onChange={onChange}
-                    component={definition}
-                    previewDefinition={previewDefinition}
-                    readOnly={readOnly}
-                  />
-                </Col>
-              </Row>
-            </Section>
-            <Section name="Raw data">
-              <Row>
-                <Col md={12}>
-                  <RawDataSection
-                    curations={curations}
-                    definition={definition}
-                    item={item}
-                    getCurationData={getCurationData}
-                    inspectedCuration={inspectedCuration}
-                    harvest={harvest}
-                  />
-                </Col>
-              </Row>
-            </Section>
+            {!isMobile && this.renderFilesSection()}
+            {!isMobile && this.renderRawDataSection()}
           </Col>
         </Row>
       </div>
@@ -149,4 +162,4 @@ class FullDetailComponent extends Component {
   }
 }
 
-export default FullDetailComponent
+export default withResize(FullDetailComponent)
