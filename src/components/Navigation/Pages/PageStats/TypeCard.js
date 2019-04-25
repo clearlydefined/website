@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react'
 import { UserCard } from 'react-ui-cards'
-import { getStats } from '../../../../api/clearlyDefined'
 
 export default class TypeCard extends Component {
   static defaultProps = {

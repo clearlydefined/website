@@ -4,7 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRenderer } from './'
-import { Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
+import { Row, Checkbox, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
 import git from '../images/Git-Logo-2Color.png'
@@ -31,7 +31,9 @@ class DefinitionEntry extends React.Component {
     definition: PropTypes.object.isRequired,
     curation: PropTypes.object.isRequired,
     component: PropTypes.object.isRequired,
-    renderButtons: PropTypes.func
+    multiSelectEnabled: PropTypes.bool,
+    renderButtons: PropTypes.func,
+    isSelected: PropTypes.bool
   }
 
   static defaultProps = {}
@@ -48,7 +50,7 @@ class DefinitionEntry extends React.Component {
       const newChanges = { ...component.changes }
       if (isChanged && proposedValue !== null) newChanges[field] = proposedValue
       else delete newChanges[field]
-      onChange && onChange(component, newChanges)
+      onChange && onChange(component, newChanges, field)
     }
   }
 
@@ -57,9 +59,7 @@ class DefinitionEntry extends React.Component {
   }
 
   ifDifferent(field, then_, else_) {
-    return this.props.otherDefinition && !isEqual(get(this.props.otherDefinition, field), this.getOriginalValue(field))
-      ? then_
-      : else_
+    return !isEqual(this.getValue(field), this.getOriginalValue(field)) ? then_ : else_
   }
 
   classIfDifferent(field) {
@@ -116,7 +116,7 @@ class DefinitionEntry extends React.Component {
   }
 
   renderMessage(definition) {
-    const licenseExpression = definition ? get(definition, 'licensed.declared') : null
+    const licenseExpression = definition ? this.getValue('licensed.declared') : null
     return licenseExpression ? (
       this.renderWithToolTipIfDifferent(
         'licensed.declared',
@@ -312,21 +312,36 @@ class DefinitionEntry extends React.Component {
   }
 
   render() {
-    const { curation, definition, onClick, renderButtons, component, draggable } = this.props
+    const {
+      component,
+      definition,
+      draggable,
+      multiSelectEnabled,
+      onClick,
+      renderButtons,
+      isSelected,
+      toggleCheckbox
+    } = this.props
+
     return (
-      <TwoLineEntry
-        draggable={draggable}
-        item={component}
-        highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
-        image={this.getImage(definition)}
-        letter={definition.coordinates.type.slice(0, 1).toUpperCase()}
-        headline={this.renderHeadline(definition, curation)}
-        message={this.renderMessage(definition)}
-        buttons={renderButtons && renderButtons(definition)}
-        onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
-        isEmpty={Definition.isDefinitionEmpty(definition)}
-        panel={component.expanded ? this.renderPanel(definition) : null}
-      />
+      <>
+        {multiSelectEnabled && (
+          <Checkbox className="pull-left component-checkbox" onChange={toggleCheckbox} checked={isSelected} />
+        )}
+        <TwoLineEntry
+          draggable={draggable}
+          item={component}
+          highlight={component.changes && !!Object.getOwnPropertyNames(component.changes).length}
+          image={this.getImage(definition)}
+          letter={definition.coordinates.type.slice(0, 1).toUpperCase()}
+          headline={this.renderHeadline(definition)}
+          message={this.renderMessage(definition)}
+          buttons={renderButtons && renderButtons(definition)}
+          onClick={!Definition.isDefinitionEmpty(definition) ? onClick : null}
+          isEmpty={Definition.isDefinitionEmpty(definition)}
+          panel={component.expanded ? this.renderPanel(definition) : null}
+        />
+      </>
     )
   }
 }

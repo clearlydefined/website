@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom'
 import { Typeahead, Menu, menuItemContainer, Highlighter } from 'react-bootstrap-typeahead'
 import { MenuItem } from 'react-bootstrap'
 import get from 'lodash/get'
+import isObject from 'lodash/isObject'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 const TypeaheadMenuItem = menuItemContainer(MenuItem)
@@ -29,7 +30,7 @@ export default class Autocomplete extends Component {
 
   renderItem = (result, menuProps) => {
     const { renderMenuItemChildren } = this.props
-
+    if (isObject(result)) return
     return renderMenuItemChildren ? (
       renderMenuItemChildren(result, menuProps)
     ) : (
@@ -40,6 +41,6 @@ export default class Autocomplete extends Component {
   }
 
   render() {
-    return <Typeahead {...this.props} renderMenu={this.renderMenu} />
+    return <Typeahead ref={typeahead => (this.typeahead = typeahead)} {...this.props} renderMenu={this.renderMenu} />
   }
 }

@@ -98,10 +98,15 @@ export class PageDefinitions extends UserManagedList {
   }
 
   renderFilterBar() {
+    const { activeFilters, activeSort, selected } = this.state
     return (
       <FilterBar
-        activeSort={this.state.activeSort}
-        activeFilters={this.state.activeFilters}
+        components={this.props.components.list}
+        multiSelectEnabled={this.multiSelectEnabled}
+        onSelectAll={this.onSelectAll}
+        selected={selected}
+        activeSort={activeSort}
+        activeFilters={activeFilters}
         onFilter={this.onFilter}
         onSort={this.onSort}
         hasComponents={!this.hasComponents()}
@@ -150,7 +155,16 @@ export class PageDefinitions extends UserManagedList {
 
   render() {
     const { components, curations, definitions, session, filterOptions } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition, showSavePopup, saveType } = this.state
+    const {
+      currentComponent,
+      currentDefinition,
+      path,
+      saveType,
+      selected,
+      sequence,
+      showFullDetail,
+      showSavePopup
+    } = this.state
     return (
       <Grid className="main-container flex-column">
         <ContributePrompt
@@ -168,12 +182,16 @@ export class PageDefinitions extends UserManagedList {
           >
             <ComponentList
               readOnly={this.readOnly}
+              onAddComponent={this.onAddComponent}
+              multiSelectEnabled={this.multiSelectEnabled}
               list={components.transformedList}
               listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
               onRemove={this.onRemoveComponent}
               onRevert={this.revertDefinition}
               onChange={this.onChangeComponent}
-              onAddComponent={this.onAddComponent}
+              selected={selected}
+              onSelectAll={this.onSelectAll}
+              toggleCheckbox={this.toggleSelectAllCheckbox}
               onInspect={this.onInspect}
               renderFilterBar={this.renderFilterBar}
               curations={curations}
