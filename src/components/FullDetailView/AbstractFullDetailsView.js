@@ -38,7 +38,7 @@ export class AbstractFullDetailsView extends Component {
         centered={!isMobile}
         destroyOnClose={true}
         visible={visible}
-        width={'85%'}
+        width={isMobile ? '95%' : '85%'}
         className="fullDetaiView__modal"
       >
         {visible && (

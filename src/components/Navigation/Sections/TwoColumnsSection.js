@@ -27,10 +27,14 @@ class TwoColumnsSection extends Component {
     )
   }
 
+  static defaulProps = {
+    className: ''
+  }
+
   render() {
-    const { definition, elements } = this.props
+    const { className, definition, elements } = this.props
     return (
-      <Row>
+      <Row className={className}>
         {elements.map((element, index) => (
           <Col md={6} key={`element_${index}`}>
             <EditableFieldRenderer

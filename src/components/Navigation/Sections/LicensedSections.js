@@ -60,6 +60,7 @@ class LicensedSection extends Component {
 
     return (
       <TwoColumnsSection
+        className="licensed-section"
         elements={elements}
         definition={definition}
         readOnly={readOnly}
