@@ -43,7 +43,7 @@ class PageContribution extends SystemManagedList {
   }
 
   renderButtons() {
-    return <ButtonsBar hasChanges={!this.hasChanges()} collapseAll={this.collapseAll} doSave={this.doSave} />
+    return <ButtonsBar toggleCollapseExpandAll={this.toggleCollapseExpandAll} />
   }
 
   renderFilterBar() {
@@ -78,6 +78,7 @@ class PageContribution extends SystemManagedList {
             <div className="section-body flex-grow">
               <ComponentList
                 readOnly={this.readOnly}
+                multiSelectEnabled={this.multiSelectEnabled}
                 list={components.transformedList}
                 listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
                 onRemove={this.onRemoveComponent}

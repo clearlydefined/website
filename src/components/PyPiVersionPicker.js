@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getPyPiRevisions } from '../api/clearlyDefined'
-import { Typeahead } from 'react-bootstrap-typeahead'
+import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class PyPiVersionPicker extends Component {
   static propTypes = {
@@ -34,7 +34,6 @@ export default class PyPiVersionPicker extends Component {
       const options = await getPyPiRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [] })
     }
   }
@@ -51,9 +50,9 @@ export default class PyPiVersionPicker extends Component {
     onChange(value)
   }
 
-  filter(option, text) {
+  filter(option, props) {
     if (this.props.request.revision) return true
-    return option.toLowerCase().indexOf(text.toLowerCase()) !== -1
+    return option.toLowerCase().indexOf(props.text.toLowerCase()) !== -1
   }
 
   render() {
@@ -61,10 +60,10 @@ export default class PyPiVersionPicker extends Component {
     const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
     return (
-      <Typeahead
+      <Autocomplete
+        id="pypi-version-picker"
         selected={selected}
         options={list}
-        // labelKey='id'
         defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type a PyPi version' : 'Pick a PyPi version'}
         onChange={this.onChange}

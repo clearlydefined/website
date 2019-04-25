@@ -360,6 +360,36 @@ hr {
   margin: 75px 0;
 }
 
+.section--filter-bar {
+  .checkbox {
+    margin: 6px;
+  }
+
+  .list-singleLine {
+    display: inline-flex;
+  }
+
+  .placeholder-text,
+  .rbt-input-main::placeholder {
+    color: #333;
+  }
+}
+
+.component-list {
+  .form-group.flex-grow-column {
+    height: 100%;
+    width: 100%;
+
+    .checkbox {
+      margin-left: 6px;
+    }
+  }
+}
+
+.ant-checkbox-wrapper {
+  height: 27px;
+}
+
 .rbt-input.form-control {
   padding: 5px 17px;
 }
@@ -387,6 +417,11 @@ hr {
   margin-top: -40px;
 }
 
+.selector-picker {
+  width: 50%;
+  margin-right: 4px;
+}
+
 .active-filters {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -394,6 +429,21 @@ hr {
 
 .ant-dropdown-menu-item {
   font-family: 'Montserrat', sans-serif;
+}
+
+.component-checkbox {
+  margin-top: 15px;
+}
+
+.selected-definitions {
+  display: flex;
+  align-items: center;
+  span {
+    margin-right: 7px;
+  }
+  input[type='checkbox'] {
+    margin-top: 8px;
+  }
 }
 
 .section--filter-bar {
@@ -428,4 +478,32 @@ hr {
   display: inline-block;
   vertical-align: middle;
   float: none;
+}
+
+.date-picker {
+  position: relative;
+  width: 150px !important;
+  height: 20px !important;
+  color: white;
+
+  &:before {
+    display: flex;
+    align-items: center;
+    content: attr(data-date);
+    color: black;
+  }
+
+  &::-webkit-datetime-edit,
+  &::-webkit-inner-spin-button,
+  &::-webkit-clear-button {
+    display: none;
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    color: black;
+    opacity: 1;
+  }
 }
