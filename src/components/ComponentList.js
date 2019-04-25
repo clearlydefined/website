@@ -4,6 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import isEqual from 'lodash/isEqual'
+import FormGroup from 'react-bootstrap/lib/FormGroup'
 import { RowEntityList, DefinitionEntry } from './'
 import EntitySpec from '../utils/entitySpec'
 import ComponentButtons from './Navigation/Ui/ComponentButtons'
@@ -14,6 +15,7 @@ class ComponentList extends React.Component {
     list: PropTypes.array,
     listLength: PropTypes.number,
     loadMoreRows: PropTypes.func,
+    multiSelectEnabled: PropTypes.bool,
     onRemove: PropTypes.func,
     onAddComponent: PropTypes.func,
     onChange: PropTypes.func,
@@ -21,8 +23,14 @@ class ComponentList extends React.Component {
     noRowsRenderer: PropTypes.func,
     renderFilterBar: PropTypes.func,
     definitions: PropTypes.object,
-    curations: PropTypes.object,
-    sequence: PropTypes.number
+    selected: PropTypes.object,
+    sequence: PropTypes.number,
+    toggleCheckbox: PropTypes.func,
+    curations: PropTypes.object
+  }
+
+  static defaultProps = {
+    selected: {}
   }
 
   constructor(props) {
@@ -54,10 +62,10 @@ class ComponentList extends React.Component {
     onRevert && onRevert(component, param)
   }
 
-  onEntryChange(component, changes) {
+  onEntryChange(component, changes, field) {
     const { onChange } = this.props
     const newComponent = { ...component, changes }
-    onChange && onChange(component, newComponent)
+    onChange && onChange(component, newComponent, field)
     this.incrementSequence()
   }
 
@@ -87,8 +95,13 @@ class ComponentList extends React.Component {
       onRevert,
       showVersionSelectorPopup,
       hideVersionSelector,
+      onSelectAll,
+      selected,
+      toggleCheckbox,
+      multiSelectEnabled,
       hideRemoveButton
     } = this.props
+
     const component = list[index]
     if (!component) return
     const definition = this.getDefinition(component) || { coordinates: component }
@@ -97,6 +110,10 @@ class ComponentList extends React.Component {
     return (
       <div key={key} style={style} className="component-row">
         <DefinitionEntry
+          multiSelectEnabled={multiSelectEnabled}
+          onSelectAll={onSelectAll}
+          isSelected={selected[index] || false}
+          toggleCheckbox={multiSelectEnabled && toggleCheckbox.bind(this, index)}
           draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
@@ -132,19 +149,21 @@ class ComponentList extends React.Component {
     const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div className="flex-grow">
+      <div className="component-list flex-grow">
         {renderFilterBar()}
-        <RowEntityList
-          list={list}
-          listLength={listLength}
-          loadMoreRows={loadMoreRows}
-          rowRenderer={this.renderRow}
-          rowHeight={this.rowHeight}
-          noRowsRenderer={noRowsRenderer}
-          sortOrder={sortOrder}
-          contentSeq={contentSeq}
-          customClassName={'components-list'}
-        />
+        <FormGroup className="flex-grow-column">
+          <RowEntityList
+            list={list}
+            listLength={listLength}
+            loadMoreRows={loadMoreRows}
+            rowRenderer={this.renderRow}
+            rowHeight={this.rowHeight}
+            noRowsRenderer={noRowsRenderer}
+            sortOrder={sortOrder}
+            contentSeq={contentSeq}
+            customClassName={'components-list'}
+          />
+        </FormGroup>
       </div>
     )
   }

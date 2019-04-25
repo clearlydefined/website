@@ -15,6 +15,12 @@ export const definitionsMap = {
   notification: {
     revertButton: '[data-test-id="notification-revert-confirm"]'
   },
+  filterBar: {
+    selectAllCheckbox: '[data-test-id="select-all-checkbox"]:not([disabled])'
+  },
+  get selectCheckbox() {
+    return `${this.componentList.firstElement} input[type="checkbox"]`
+  },
   component: {
     name: '.list-headline [data-test-id="component-name"]',
     image: '.list-image',
@@ -53,6 +59,7 @@ export const definitionsMap = {
       },
       licenseField: '[name="licensed.declared"] > span',
       licensePickerButton: '.license-renderer > .license-advanced',
+      licenseDropdown: '.license-renderer .editable-field',
       revertLicenseButton: '.license-renderer .fa-undo',
       get licenseFieldUpdated() {
         return `${this.licenseField}.bg-info`
@@ -96,6 +103,15 @@ export const definitionsMap = {
     },
     get contributeButton() {
       return `${this.identifier} [data-test-id="contribute-button"]`
+    }
+  },
+  multiSelectNotification: {
+    identifier: '.ant-notification-notice',
+    get changeAllButton() {
+      return `${this.identifier} .ant-btn-primary`
+    },
+    get changeOneButton() {
+      return `${this.identifier} .ant-btn-secondary`
     }
   }
 }
