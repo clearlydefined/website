@@ -120,7 +120,7 @@ class PageBrowse extends SystemManagedList {
       <ButtonsBar
         hasChanges={!this.hasChanges()}
         revertAll={() => this.revertAll('browse')}
-        collapseAll={this.collapseAll}
+        toggleCollapseExpandAll={this.toggleCollapseExpandAll}
         doPromptContribute={this.doPromptContribute}
       />
     )
@@ -271,6 +271,7 @@ class PageBrowse extends SystemManagedList {
           <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
             <i className="fas fa-spinner fa-spin" />
             <ComponentList
+              multiSelectEnabled={this.multiSelectEnabled}
               readOnly={false}
               list={components.transformedList}
               listLength={get(components, 'headers.pagination.totalCount') || components.list.length}

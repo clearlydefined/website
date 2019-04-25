@@ -117,6 +117,8 @@ const providers = [
   { value: 'rubygems', label: 'RubyGems' }
 ]
 
+const multiEditableFields = ['licensed.declared']
+
 const noRowsHeight = 260
 
 export {
@@ -133,5 +135,6 @@ export {
   sources,
   getParamsToUrl,
   getParamsFromUrl,
-  types
+  types,
+  multiEditableFields
 }

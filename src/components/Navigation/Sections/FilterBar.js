@@ -1,14 +1,19 @@
+// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
 import React, { Component } from 'react'
-import { ButtonGroup } from 'react-bootstrap'
 import PropTypes from 'prop-types'
+import { Checkbox } from 'react-bootstrap'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
-import { sorts, licenses, sources, releaseDates } from '../../../utils/utils'
+import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
+import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 
 export default class FilterBar extends Component {
   static propTypes = {
     activeSort: PropTypes.string,
     activeFilters: PropTypes.object,
+    multiSelectEnabled: PropTypes.bool,
     onFilter: PropTypes.func,
     onSort: PropTypes.func,
     hasComponents: PropTypes.bool,
@@ -16,6 +21,7 @@ export default class FilterBar extends Component {
     showLicenseFilter: PropTypes.bool,
     showSourceFilter: PropTypes.bool,
     showReleaseDateFilter: PropTypes.bool,
+    selected: PropTypes.object,
     customLicenses: PropTypes.array,
     customSorts: PropTypes.array,
     customSources: PropTypes.array,
@@ -23,10 +29,36 @@ export default class FilterBar extends Component {
   }
 
   static defaultProps = {
+    multiSelectEnabled: false,
     showSortFilter: true,
     showLicenseFilter: true,
     showSourceFilter: true,
     showReleaseDateFilter: true
+  }
+
+  renderMultiSelect() {
+    const { hasComponents, onSelectAll, selected, components } = this.props
+
+    const numSelected = Object.values(selected).filter(s => s).length
+    const anySelections = Object.keys(selected).length > 0 && numSelected > 0
+    return (
+      <div className="pull-left selected-definitions">
+        <Checkbox
+          data-test-id="select-all-checkbox"
+          className="inlineBlock btn-group"
+          disabled={hasComponents}
+          onChange={onSelectAll}
+          checked={anySelections}
+        />
+        {anySelections && <span>{numSelected} of</span>}
+        <span>{components.length} definitions</span>
+        {anySelections && (
+          <ButtonWithTooltip tip={'Edit one definition and apply a change to all selected'}>
+            <i className="fas fa-info-circle" />
+          </ButtonWithTooltip>
+        )}
+      </div>
+    )
   }
 
   render() {
@@ -43,12 +75,14 @@ export default class FilterBar extends Component {
       customLicenses,
       customSorts,
       customSources,
-      customReleaseDates
+      customReleaseDates,
+      multiSelectEnabled
     } = this.props
 
     return (
-      <div className="list-filter" align="right">
-        <ButtonGroup>
+      <div className="section--filter-bar">
+        {multiSelectEnabled && this.renderMultiSelect()}
+        <div className="list-filter pull-right">
           {showSortFilter && (
             <SortList
               list={customSorts || sorts}
@@ -61,7 +95,7 @@ export default class FilterBar extends Component {
           )}
           {showLicenseFilter && (
             <FilterList
-              list={customLicenses || licenses}
+              list={customLicenses || defaultLicenses}
               title={'License'}
               id={'licensed.declared'}
               disabled={hasComponents}
@@ -89,7 +123,7 @@ export default class FilterBar extends Component {
               onFilter={onFilter}
             />
           )}
-        </ButtonGroup>
+        </div>
       </div>
     )
   }
