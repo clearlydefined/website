@@ -26,10 +26,10 @@ class FacetsEditor extends Component {
       <div data-test-id="facets-editor">
         {Contribution.nonCoreFacets.map(item => (
           <Row key={item}>
-            <Col md={3}>
+            <Col sm={3} xs={4}>
               <span>{item}</span>
             </Col>
-            <Col md={9}>
+            <Col sm={9} xs={8}>
               <GlobsPicker
                 field={`described.facets.${item}`}
                 readOnly={readOnly}

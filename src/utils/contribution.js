@@ -225,9 +225,9 @@ export default class Contribution {
     const firstChildPath = record.children[0].path
     // if root
     if (firstChildPath.indexOf(`${record.name}/`) === 0) {
-      return `**/${record.name}/*`
+      return `**/${record.name}/**`
     }
-    return `**/${firstChildPath.split(`${record.name}/`)[0]}${record.name}/*`
+    return `**/${firstChildPath.split(`${record.name}/`)[0]}${record.name}/**`
   }
 
   static getFolder(record) {
@@ -242,8 +242,8 @@ export default class Contribution {
   static folderMatchesGlob(record, glob) {
     const path = this.getFolder(record)
     // remove "/*"
-    if (glob.endsWith('/*')) {
-      return minimatch(path, glob.slice(0, -2)) || minimatch(path, glob)
+    if (glob.endsWith('/**')) {
+      return minimatch(path, glob.slice(0, -3)) || minimatch(path, glob)
     }
     return minimatch(path, glob)
   }
@@ -251,8 +251,8 @@ export default class Contribution {
   static folderMatchesGlobExactly(record, glob) {
     const path = this.getFolder(record)
     // remove "/*"
-    if (glob.endsWith('/*')) {
-      return minimatch(path, glob.slice(0, -2))
+    if (glob.endsWith('/**')) {
+      return minimatch(path, glob.slice(0, -3))
     }
     return minimatch(path, glob)
   }
