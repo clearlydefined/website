@@ -8,6 +8,7 @@ import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
 import { sorts, sources, releaseDates } from '../../../utils/utils'
 import SpdxPicker from '../../SpdxPicker'
+import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 
 export default class FilterBar extends Component {
   static propTypes = {
