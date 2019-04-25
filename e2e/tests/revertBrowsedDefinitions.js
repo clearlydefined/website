@@ -45,33 +45,14 @@ describe(
       await page.waitForSelector(details.revertLicenseButton)
       const revertClassName = await page.$eval(details.revertLicenseButton, el => el.className)
       await expect(revertClassName.includes('fa-disabled')).toBe(false)
-<<<<<<< HEAD
-      await expect(page).toClick(browseMap.component.details.revertLicenseButton)
-      await page.waitForSelector(browseMap.component.details.licenseField)
-      const licenseField = await page.$(browseMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
-=======
       await expect(page).toClick(details.revertLicenseButton)
       await page.waitForSelector(details.licenseField)
       const licenseField = await page.$eval(details.licenseField, el => el.textContent)
       await expect(licenseField).toEqual('MIT OR Apache-2.0')
->>>>>>> master
     })
 
     test('user can revert entire definition changes', async () => {
       await licenseEdit()
-<<<<<<< HEAD
-      await page.waitForSelector(browseMap.component.revertButton)
-      await expect(page).toClick(browseMap.component.revertButton)
-      await page.waitForSelector(browseMap.notification.revertButton)
-      await expect(page).toClick(browseMap.notification.revertButton)
-      await page.waitForSelector(browseMap.component.firstElement)
-      await expect(page).toClick(browseMap.component.firstElement)
-      const licenseField = await page.$(browseMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
-=======
       await page.waitForSelector(component.revertButton)
       await expect(page).toClick(component.revertButton)
       await page.waitForSelector(notification.revertButton)
@@ -80,29 +61,18 @@ describe(
       await expect(page).toClick(firstElement)
       const licenseField = await page.$eval(details.licenseField, el => el.textContent)
       await expect(licenseField).toEqual('MIT OR Apache-2.0')
->>>>>>> master
     })
 
     test('user can revert all changes', async () => {
       await licenseEdit()
       await page.waitForSelector(browseMap.revertButton)
       await expect(page).toClick(browseMap.revertButton)
-<<<<<<< HEAD
-      await page.waitForSelector(browseMap.notification.revertButton)
-      await expect(page).toClick(browseMap.notification.revertButton)
-      await page.waitForSelector(browseMap.component.firstElement)
-      await expect(page).toClick(browseMap.component.firstElement)
-      const licenseField = await page.$(browseMap.component.details.licenseField)
-      const licenseFieldValue = await (await licenseField.getProperty('textContent')).jsonValue()
-      await expect(licenseFieldValue).toEqual('MIT OR Apache-2.0')
-=======
       await page.waitForSelector(notification.revertButton)
       await expect(page).toClick(notification.revertButton)
       await page.waitForSelector(firstElement)
       await expect(page).toClick(firstElement)
       const licenseField = await page.$eval(details.licenseField, el => el.textContent)
       await expect(licenseField).toEqual('MIT OR Apache-2.0')
->>>>>>> master
     })
   },
   defaultTimeout
