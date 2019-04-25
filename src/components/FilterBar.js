@@ -3,9 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { AsyncTypeahead, Menu, menuItemContainer, Highlighter } from 'react-bootstrap-typeahead'
-import { MenuItem } from 'react-bootstrap'
-import get from 'lodash/get'
+import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import npm from '../images/n-large.png'
 import maven from '../images/maven.png'
@@ -27,7 +25,6 @@ const types = {
   pod: pod
 }
 
-const TypeaheadMenuItem = menuItemContainer(MenuItem)
 export default class FilterBar extends Component {
   static propTypes = {
     value: PropTypes.string,
@@ -64,15 +61,6 @@ export default class FilterBar extends Component {
     this.typeahead && this.typeahead.getInstance().clear()
   }
 
-  renderItem = (result, menuProps) => {
-    return (
-      <span className="filterBar-itemRenderer">
-        <img src={types[result.type]} />
-        <Highlighter search={menuProps.text}>{result.name}</Highlighter>
-      </span>
-    )
-  }
-
   render() {
     const { options, value, onSearch } = this.props
     return (
@@ -89,24 +77,11 @@ export default class FilterBar extends Component {
         labelKey={'name'}
         clearButton
         selected={value ? [value.name] : []}
-        renderMenu={(results, menuProps) => (
-          <Menu {...menuProps}>
-            {results.map((result, index) => {
-              return (
-                <MenuItem option={result} position={index} key={result.name}>
-                  <TypeaheadMenuItem
-                    key={
-                      menuProps.labelKey && get(result, menuProps.labelKey) ? get(result, menuProps.labelKey) : result
-                    }
-                    option={result}
-                    position={index}
-                  >
-                    {this.renderItem(result, menuProps)}
-                  </TypeaheadMenuItem>
-                </MenuItem>
-              )
-            })}
-          </Menu>
+        renderMenuItemChildren={(option, props) => (
+          <span className="filterBar-itemRenderer">
+            <img src={types[option.type]} alt={option[props.labelKey]} />
+            <Highlighter search={props.text}>{option[props.labelKey]}</Highlighter>
+          </span>
         )}
       />
     )
