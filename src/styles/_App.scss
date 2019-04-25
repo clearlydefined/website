@@ -278,6 +278,18 @@
 
 .editable-editor {
   display: inline-block;
+
+  @media screen and (max-width: $screen-sm) {
+    overflow: auto;
+    white-space: nowrap;
+
+    > .ant-tag {
+      font-size: smaller;
+      margin-right: 0;
+      padding: 0 5px;
+      white-space: nowrap;
+    }
+  }
 }
 
 .placeholder-text {
