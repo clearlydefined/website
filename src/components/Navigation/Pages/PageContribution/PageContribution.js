@@ -32,7 +32,13 @@ class PageContribution extends SystemManagedList {
 
   tableTitle() {
     const { prNumber } = this.props
-    const linkBack = this.props.url.isFetched ? <a href={this.props.url.item}>#{prNumber}</a> : `#${prNumber}`
+    const linkBack = this.props.url.isFetched ? (
+      <a href={this.props.url.item} target="_blank" rel="noopener noreferrer">
+        #{prNumber}
+      </a>
+    ) : (
+      `#${prNumber}`
+    )
     return <span>Definitions from pull request {linkBack}</span>
   }
 
@@ -61,7 +67,13 @@ class PageContribution extends SystemManagedList {
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
       <Grid className="main-container flex-column">
-        <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
+        <Section
+          className="flex-grow-column"
+          name={this.tableTitle()}
+          actionButton={this.renderButtons()}
+          titleCols={6}
+          buttonCols={6}
+        >
           <>
             <div className="section-body flex-grow">
               <ComponentList
