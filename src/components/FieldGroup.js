@@ -13,6 +13,10 @@ export default class FieldGroup extends Component {
     help: PropTypes.oneOf([PropTypes.element, PropTypes.string])
   }
 
+  static defaultProps = {
+    className: ''
+  }
+
   render() {
     const { id, label, help, className, ...otherProps } = this.props
     return (

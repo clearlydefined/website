@@ -6,8 +6,10 @@ import PropTypes from 'prop-types'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import { SpdxPicker } from './'
 import withSuggestions from '../utils/withSuggestions'
+
 class InlineEditor extends React.Component {
   static propTypes = {
+    editIcon: PropTypes.bool,
     field: PropTypes.string.isRequired,
     readOnly: PropTypes.bool,
     initialValue: PropTypes.string,
@@ -21,8 +23,10 @@ class InlineEditor extends React.Component {
   }
 
   static defaultProps = {
-    type: 'text',
-    revertable: true
+    editIcon: true,
+    extraClass: '',
+    revertable: true,
+    type: 'text'
   }
 
   state = { editing: false }
@@ -33,17 +37,15 @@ class InlineEditor extends React.Component {
 
   onChange = nextValue => {
     const { value, onChange, type } = this.props
-
     if (type !== 'date') this.setState({ editing: false })
-
     // sanity check for empty textboxes
     // if (typeof nextValue === 'string' && nextValue.trim().length === 0) return this.renderValue()
-
     // don't bother saving unchanged fields
     if (nextValue === value) return
-
     onChange(nextValue)
   }
+
+  onChangeDate = event => this.setState({ dateValue: event.target.value })
 
   onChangeEvent = event => {
     const { target } = event
@@ -55,9 +57,8 @@ class InlineEditor extends React.Component {
 
   renderValue() {
     const { value, type, initialValue, placeholder, extraClass, readOnly, onClick } = this.props
-    const { editing } = this.state
     const changed = initialValue !== value
-    if (!editing)
+    if (!this.state.editing)
       return (
         <span
           title={this.renderers[type](value)}
@@ -72,12 +73,12 @@ class InlineEditor extends React.Component {
   }
 
   render() {
-    const { onClick, readOnly, initialValue, value, onRevert, revertable, field } = this.props
+    const { editIcon, onClick, readOnly, initialValue, value, onRevert, revertable, field } = this.props
     const changed = initialValue !== value
     return (
       <span className="list-singleLine" name={field}>
         <Fragment>
-          {!readOnly && (
+          {!readOnly && editIcon && (
             <i
               className="fas fa-pencil-alt editable-marker"
               onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
@@ -103,7 +104,15 @@ class InlineEditor extends React.Component {
 
   editors = {
     text: value => <input size="45" type="text" defaultValue={value} />,
-    date: value => <input size="45" type="date" defaultValue={value} />,
+    date: value => (
+      <input
+        className="date-picker"
+        size="45"
+        type="date"
+        data-date={this.state.dateValue || value}
+        defaultValue={value}
+      />
+    ),
     license: value => <SpdxPicker value={value} autoFocus={true} />
   }
 
@@ -115,7 +124,10 @@ class InlineEditor extends React.Component {
 
   editorProps = {
     text: this.editorDefaults,
-    date: this.editorDefaults,
+    date: {
+      ...this.editorDefaults,
+      onChange: this.onChangeDate
+    },
     license: {
       ...this.editorDefaults,
       onChange: this.onChange

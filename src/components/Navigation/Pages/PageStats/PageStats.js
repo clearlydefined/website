@@ -9,14 +9,14 @@ import get from 'lodash/get'
 import TypeCard from './TypeCard'
 import LicenseBreakdown from './LicenseBreakdown'
 import CountUp from 'react-countup'
-import npm from '../../../../../src/images/n-large.png'
-import maven from '../../../../../src/images/maven.png'
-import nuget from '../../../../../src/images/nuget.svg'
-import pod from '../../../../../src/images/pod.png'
-import git from '../../../../../src/images/GitHub-Mark-120px-plus.png'
-import crate from '../../../../../src/images/cargo.png'
-import gem from '../../../../../src/images/gem.png'
-import pypi from '../../../../../src/images/pypi.png'
+import npm from '../../../../images/n-large.png'
+import maven from '../../../../images/maven.png'
+import nuget from '../../../../images/nuget.svg'
+import pod from '../../../../images/pod.png'
+import git from '../../../../images/Git-Logo-2Color.png'
+import crate from '../../../../images/cargo.png'
+import gem from '../../../../images/gem.png'
+import pypi from '../../../../images/pypi.png'
 
 const types = {
   npm: npm,
@@ -52,9 +52,9 @@ class PageStats extends Component {
               <CountUp end={get(stats, 'entries.total.value.totalCount') || 0} separator="," />
             </h2>
             <p>Number of total definitions</p>
-            <small>median licensed score: {get(stats, 'entries.total.value.licensedScoreMedian') || 0}</small>
-            <small> | </small>
-            <small>median described score: {get(stats, 'entries.total.value.describedScoreMedian') || 0}</small>
+            <span>median licensed score: {get(stats, 'entries.total.value.licensedScoreMedian') || 0}</span>
+            <span> | </span>
+            <span>median described score: {get(stats, 'entries.total.value.describedScoreMedian') || 0}</span>
           </Jumbotron>
         </Row>
         <Row>
