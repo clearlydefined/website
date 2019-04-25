@@ -8,7 +8,6 @@ export default class Auth {
    * Open the service's auth page and execute a callback with the returned data from the server
    */
   static doLogin(callback) {
-    console.log('login')
     window.open(url('auth/github'))
     const tokenListener = e => {
       if (e.data.type === 'github-token') {

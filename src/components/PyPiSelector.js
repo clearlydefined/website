@@ -31,7 +31,6 @@ export default class PyPiSelector extends Component {
       const options = await getPyPiSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [], isLoading: false })
     }
   }
@@ -40,6 +39,7 @@ export default class PyPiSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        id="pypi-selector"
         useCache={false}
         options={options}
         placeholder={'Pick a PyPi to harvest'}

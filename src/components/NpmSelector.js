@@ -31,7 +31,6 @@ export default class NpmSelector extends Component {
       const options = await getNpmSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [], isLoading: false })
     }
   }
@@ -40,6 +39,7 @@ export default class NpmSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
+        id="npm-selector"
         useCache={false}
         options={options}
         placeholder={'Pick an NPM to harvest'}

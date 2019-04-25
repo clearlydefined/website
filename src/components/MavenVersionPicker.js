@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getMavenRevisions } from '../api/clearlyDefined'
-import { Typeahead } from 'react-bootstrap-typeahead'
+import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class MavenVersionPicker extends Component {
   static propTypes = {
@@ -34,7 +34,6 @@ export default class MavenVersionPicker extends Component {
       const options = await getMavenRevisions(this.props.token, path.replace(':', '/'))
       this.setState({ ...this.state, options })
     } catch (error) {
-      console.log(error)
       this.setState({ ...this.state, options: [] })
     }
   }
@@ -51,19 +50,19 @@ export default class MavenVersionPicker extends Component {
     onChange(value)
   }
 
-  filter(option, text) {
+  filter(option, props) {
     if (this.props.request.revision) return true
-    return option.toLowerCase().indexOf(text.toLowerCase()) !== -1
+    return option.toLowerCase().indexOf(props.text.toLowerCase()) !== -1
   }
 
   render() {
     const { customValues, options, selected } = this.state
     const list = customValues.concat(options)
     return (
-      <Typeahead
+      <Autocomplete
+        id="maven-version-picker"
         selected={selected}
         options={list}
-        // labelKey='id'
         placeholder={options.length === 0 ? 'Could not fetch versions, type Maven version' : 'Pick a Maven version'}
         onChange={this.onChange}
         bodyContainer

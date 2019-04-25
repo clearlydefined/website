@@ -6,7 +6,6 @@
 // across windows and linux.
 require('cpx').copy('node_modules/monaco-editor/min/vs/**/*', 'public/vs', error => {
   if (error) {
-    console.log(error)
     process.exit(1)
   }
   process.exit(0)
