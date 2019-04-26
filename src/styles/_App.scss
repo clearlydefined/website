@@ -519,3 +519,14 @@ hr {
     opacity: 1;
   }
 }
+
+.filterBar-itemRenderer {
+  color: black !important;
+  img {
+    height: 30px;
+    margin-right: 10px;
+  }
+  a {
+    text-decoration: none;
+  }
+}
