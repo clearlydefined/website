@@ -16,6 +16,7 @@ export default class RawDataRenderer extends Component {
   }
   render() {
     const { value, name, type } = this.props
+    if (!value) return <PlaceholderRenderer message={`Empty data`} />
     if (value.isFetching) return <PlaceholderRenderer message={`Loading the ${name}`} />
     if (value.error && value.error.status !== 404)
       return <PlaceholderRenderer message={`There was a problem loading the ${name}`} />
