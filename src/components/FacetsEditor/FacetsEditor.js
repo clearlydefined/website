@@ -9,7 +9,7 @@ import GlobsPicker from '../GlobsPicker'
 import Curation from '../../utils/curation'
 
 // Hardcoded, maybe it should be kept somewhere else
-const facets = ['data', 'dev', 'docs', 'examples', 'tests']
+const facets = ['data', 'dev', 'doc', 'examples', 'tests']
 
 /**
  * Component that shows active facets for the files of the definition
