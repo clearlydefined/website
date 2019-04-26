@@ -106,9 +106,9 @@ class Header extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
-    navigation: state.ui.navigation,
+    navigation: state.navigation,
     session: state.session,
     ui: state.ui.header
   }
