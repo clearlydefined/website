@@ -198,9 +198,9 @@ export default class SystemManagedList extends Component {
         const value = activeFilters[filterType]
         const fieldValue = this.getValue(definition, filterType)
         if (!value) return true
-        if (value === 'presence') {
+        if (value === 'PRESENCE OF') {
           if (!fieldValue) return false
-        } else if (value === 'absence') {
+        } else if (value === 'ABSENCE OF') {
           if (fieldValue && !['NONE', 'NOASSERTION'].includes(fieldValue)) return false
         } else {
           if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {

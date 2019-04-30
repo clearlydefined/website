@@ -99,6 +99,7 @@ export default class FilterBar extends Component {
               disabled={hasComponents}
               promptText={'License'}
               onChange={value => onFilter({ type: 'licensed.declared', value })}
+              customIdentifiers={['PRESENCE OF', 'ABSENCE OF', '']}
             />
           )}
           {showSourceFilter && (
