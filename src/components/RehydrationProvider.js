@@ -39,6 +39,17 @@ const transformRemoveFetchErr = createTransform(state => omit(state, ['isFetchin
   whitelist: ['session']
 })
 
+// Store only definitions from ui reducer
+const transformUiDefinitions = createTransform(
+  state => {
+    return { definitions: state.definitions }
+  },
+  state => state,
+  {
+    whitelist: ['ui']
+  }
+)
+
 export default class RehydrationDelayedProvider extends Component {
   constructor(props) {
     super(props)
@@ -46,9 +57,13 @@ export default class RehydrationDelayedProvider extends Component {
   }
 
   componentWillMount() {
-    persistStore(store, { whitelist: ['session', 'ui', 'definition'], transforms: [transformRemoveFetchErr] }, () => {
-      this.setState({ rehydrated: true })
-    })
+    persistStore(
+      store,
+      { whitelist: ['session', 'ui', 'definition'], transforms: [transformRemoveFetchErr, transformUiDefinitions] },
+      () => {
+        this.setState({ rehydrated: true })
+      }
+    )
   }
 
   render() {
