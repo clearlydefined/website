@@ -89,7 +89,7 @@ describe(
       await page.waitForSelector(files['README.md'].row)
       await expect(page).toMatchElement(files['README.md'].facets)
       const facets = await page.$$eval(files['README.md'].facets, els => els.map(e => e.textContent))
-      expect(facets).toEqual(['core'])
+      expect(facets).toEqual([''])
       await expect(page).toClick(described.facets.dataFacetTagForInput)
       await expect(page).toFill(described.facets.dataFacetInput, '**/*.md')
       await page.keyboard.press('Enter')
@@ -109,7 +109,7 @@ describe(
       await page.waitForSelector(docs.row)
       await expect(page).toMatchElement(docs.facets)
       const facets = (await page.$$eval(docs.facets, els => els.map(e => e.textContent))).filter(e => e)
-      expect(facets).toEqual(['core'])
+      expect(facets).toEqual([])
       await expect(page).toMatchElement(docs.plusIcon)
       await expect(page).toClick(docs.plusIcon)
       await expect(page).toFill(docs.input, 'doc')
@@ -128,11 +128,10 @@ describe(
       expect(facetsForPopulateHTML).toEqual(['doc'])
       // remove 'doc' facet
       await expect(page).toClick(docs.removeIcon)
-      await expect(page).toMatchElement(populateHTML.facets, { text: 'core' })
       const facetsForPopulateHTMLReverted = (await page.$$eval(populateHTML.facets, els =>
         els.map(e => e.textContent)
       )).filter(e => e)
-      expect(facetsForPopulateHTMLReverted).toEqual(['core'])
+      expect(facetsForPopulateHTMLReverted).toEqual([])
     })
   },
   defaultTimeout

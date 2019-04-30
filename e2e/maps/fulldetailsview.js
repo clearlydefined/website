@@ -38,7 +38,7 @@ export const fulldetailsMap = {
       'README.md': {
         row: '.file-list tbody > tr:nth-child(5) > .column-facets > div',
         get facets() {
-          return `${this.row} .ant-tag`
+          return `${this.row}`
         }
       },
       docs: {
