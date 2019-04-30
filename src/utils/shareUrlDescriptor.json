@@ -1,0 +1,53 @@
+{
+  "nested": {
+    "ShareUrl": {
+      "fields": {
+        "coordinates": {
+          "type": "CoordinatesArray",
+          "id": 1,
+          "map": true,
+          "keyType": "int32",
+          "repeated": true,
+          "rule": "repeated"
+        },
+        "filter": {
+          "type": "string",
+          "id": 2
+        },
+        "sortBy": {
+          "type": "string",
+          "id": 3
+        }
+      }
+    },
+    "CoordinatesArray": {
+      "fields": {
+        "coordinate": {
+          "repeated": true,
+          "type": "Coordinates",
+          "id": 1
+        }
+      }
+    },
+    "Coordinates": {
+      "fields": {
+        "type": {
+          "type": "string",
+          "id": 1
+        },
+        "provider": {
+          "type": "string",
+          "id": 2
+        },
+        "name": {
+          "type": "string",
+          "id": 3
+        },
+        "revision": {
+          "type": "string",
+          "id": 4
+        }
+      }
+    }
+  }
+}

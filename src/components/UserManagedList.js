@@ -255,6 +255,7 @@ export default class UserManagedList extends SystemManagedList {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
+    console.log(JSON.stringify(fileObject))
     const url = `${document.location.origin}${ROUTE_SHARE}/${base64js.fromByteArray(
       pako.deflate(JSON.stringify(fileObject))
     )}`
