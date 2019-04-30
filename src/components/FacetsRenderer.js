@@ -67,7 +67,7 @@ class FacetsRenderer extends Component {
       const isMatchingThisFolder =
         facets && facets[tag].filter(glob => Contribution.folderMatchesGlobExactly(record, glob)).length > 0
       return (
-        <Tag key={i} closable={isMatchingThisFolder} afterClose={() => this.handleClose(tag)}>
+        <Tag key={i} closable={isMatchingThisFolder} onClose={() => this.handleClose(tag)}>
           {tag}
         </Tag>
       )
@@ -87,13 +87,13 @@ class FacetsRenderer extends Component {
               <Tag
                 key={i}
                 closable={isFolder}
-                afterClose={() => this.handleClose(val)}
+                onClose={() => this.handleClose(val)}
                 className={val.isDifferent ? 'facets--isEdited' : ''}
               >
                 {val.value}
               </Tag>
             ))
-          : currentFacets.length === 0 && <Tag>core</Tag>}
+          : currentFacets.length === 0 && <div />}
         {isFolder && this.renderExistingFacets(currentFacets)}
         {isFolder &&
           (!inputVisible ? (
