@@ -119,10 +119,10 @@ class EditableFieldRenderer extends Component {
 
     return (
       <Row className="no-gutters">
-        <Col md={3}>
+        <Col md={3} xs={4}>
           <LabelRenderer text={label} />
         </Col>
-        <Col md={9} className="definition__line">
+        <Col md={9} xs={8} className="definition__line">
           {component ? (
             component
           ) : editable ? (
