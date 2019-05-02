@@ -6,8 +6,8 @@ import { Popover, Overlay } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 export default class ListDataRenderer extends Component {
-  constructor(...args) {
-    super(...args)
+  constructor(props) {
+    super(props)
 
     this.attachRef = target => this.setState({ target })
     this.state = {
@@ -28,7 +28,7 @@ export default class ListDataRenderer extends Component {
   }
 
   render() {
-    const { licensed, item, values, title, trigger } = this.props
+    const { licensed, item, values, title } = this.props
     const { show, target } = this.state
     const data = values || get(licensed, item, [])
     if (!data) return null
