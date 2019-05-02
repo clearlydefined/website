@@ -29,7 +29,7 @@ export default class ListDataRenderer extends Component {
 
   render() {
     const { licensed, item, values, title } = this.props
-    const { show, target } = this.state
+    const { showTooltip, target } = this.state
     const data = values || get(licensed, item, [])
     if (!data) return null
     return (
@@ -39,7 +39,7 @@ export default class ListDataRenderer extends Component {
         </span>
         <Overlay
           target={target}
-          show={this.state.showTooltip}
+          show={showTooltip}
           placement="left"
           rootClose
           rootCloseEvent={'click'}
