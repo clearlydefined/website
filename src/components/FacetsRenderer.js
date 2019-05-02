@@ -81,7 +81,7 @@ class FacetsRenderer extends Component {
     const currentFacets = this.getFacetsForCurrentFolder()
 
     return (
-      <div>
+      <div className="facetsRenderer">
         {values.length > 0
           ? values.map((val, i) => (
               <Tag
@@ -102,12 +102,11 @@ class FacetsRenderer extends Component {
             </Tag>
           ) : (
             <Select
-              autoFocus
               mode="multiple"
               maxTagCount={1}
               style={{ width: '50%' }}
               onChange={this.handleInputConfirm}
-              onBlur={this.handleInputConfirm}
+              //onBlur={this.handleInputConfirm}
             >
               {Contribution.nonCoreFacets
                 .filter(el => !currentFacets.includes(el))
