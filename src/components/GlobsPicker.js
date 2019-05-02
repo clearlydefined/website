@@ -80,7 +80,7 @@ class GlobsPicker extends Component {
         ) : (
           !readOnly && (
             <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-              <Icon type="plus" /> Add a valid Glob expression
+              <Icon type="plus" />
             </Tag>
           )
         )}
