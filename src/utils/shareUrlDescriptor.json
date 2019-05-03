@@ -30,13 +30,17 @@
           "type": "string",
           "id": 2
         },
-        "name": {
+        "namespace": {
           "type": "string",
           "id": 3
         },
-        "revision": {
+        "name": {
           "type": "string",
           "id": 4
+        },
+        "revision": {
+          "type": "string",
+          "id": 5
         }
       }
     }
