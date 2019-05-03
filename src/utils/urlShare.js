@@ -10,7 +10,6 @@ export default class UrlShare {
   start() {
     const root = protobuf.Root.fromJSON(shareUrlDescriptor)
     this.ShareUrlMessage = root.lookupType('ShareUrl')
-    console.log(this.ShareUrlMessage)
   }
 
   isValid() {

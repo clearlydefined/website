@@ -1,14 +1,25 @@
 import UrlShare from '../urlShare'
 
 describe('UrlShare', () => {
-  it('returns an error for coordinates field with a wrong type', () => {
-    const urlShare = new UrlShare({ ...shareObject, coordinates: {} })
-    urlShare.start()
-    expect(urlShare.isValid()).toBe('coordinates: string expected')
-  })
   it('returns an error', () => {
     const urlShare = new UrlShare('invalid (not an object)')
-    //expect(urlShare.isValid()).toBe('object expected')
+    urlShare.start()
+    expect(urlShare.isValid()).toBe('object expected')
+  })
+  it('returns an error for coordinates field with a wrong type', () => {
+    const urlShare = new UrlShare({ ...shareObject, coordinates: 'test' })
+    urlShare.start()
+    expect(urlShare.isValid()).toBe('coordinates: object expected')
+  })
+  it('returns an error for filter field with a wrong type', () => {
+    const urlShare = new UrlShare({ ...shareObject, filter: true })
+    urlShare.start()
+    expect(urlShare.isValid()).toBe('filter: string expected')
+  })
+  it('returns an error for sortBy field with a wrong type', () => {
+    const urlShare = new UrlShare({ ...shareObject, sortBy: true })
+    urlShare.start()
+    expect(urlShare.isValid()).toBe('sortBy: string expected')
   })
 })
 

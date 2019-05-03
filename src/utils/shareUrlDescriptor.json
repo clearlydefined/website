@@ -3,11 +3,11 @@
     "ShareUrl": {
       "fields": {
         "coordinates": {
-          "type": "CoordinatesArray",
+          "type": "Coordinates",
           "id": 1,
-          "map": true,
+          "map": "true",
           "keyType": "int32",
-          "repeated": true,
+          "repeated": "true",
           "rule": "repeated"
         },
         "filter": {
@@ -17,15 +17,6 @@
         "sortBy": {
           "type": "string",
           "id": 3
-        }
-      }
-    },
-    "CoordinatesArray": {
-      "fields": {
-        "coordinate": {
-          "repeated": true,
-          "type": "Coordinates",
-          "id": 1
         }
       }
     },
