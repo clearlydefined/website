@@ -34,7 +34,7 @@ export default class PageFile extends Component {
                     )}
                     {content.source === 'CD' && (
                       <a href="https://clearlydefined.io" target="_blank" rel="noopener noreferrer">
-                        Clearly Defined
+                        ClearlyDefined
                       </a>
                     )}
                   </span>
