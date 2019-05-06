@@ -30,6 +30,7 @@ export default class Autocomplete extends Component {
 
   renderItem = (result, menuProps) => {
     const { renderMenuItemChildren } = this.props
+    if (result === '') return <hr className="no-margin" />
     if (isObject(result)) return
     return renderMenuItemChildren ? (
       renderMenuItemChildren(result, menuProps)
