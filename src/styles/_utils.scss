@@ -1,0 +1,32 @@
+.spacer {
+  margin: 30px;
+}
+
+.top-space {
+  padding-top: 30px;
+  padding-bottom: 7px;
+}
+
+.right-space {
+  margin-right: 10px;
+}
+
+.flex-grow {
+  flex: 1;
+}
+
+.flex-grow-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
+.no-margin {
+  margin: 0px;
+}
