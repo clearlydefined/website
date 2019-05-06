@@ -11,6 +11,7 @@ import LicensesRenderer from '../../components/LicensesRenderer'
 import FacetsRenderer from '../../components/FacetsRenderer'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
+import Attachments from '../../utils/attachments'
 
 export default class FileList extends Component {
   static propTypes = {
@@ -135,17 +136,15 @@ export default class FileList extends Component {
 
   getNameCellEntry = (definition, row) => {
     if (!row || !definition) return null
-    const { provider, namespace, name, revision } = definition.coordinates
     const path = get(row, 'path')
-    if (provider !== 'github' || !path || row.children) return <span>{row.name}</span>
-    return (
-      <a
-        href={`https://github.com/${namespace}/${name}/blob/${revision}/${path}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+    const attachments = new Attachments({ ...definition.coordinates, path, row })
+    const url = attachments.getFileAttachmentUrl()
+    return url ? (
+      <a href={url} target="_blank" rel="noopener noreferrer">
         {row.name}
       </a>
+    ) : (
+      <span>{row.name}</span>
     )
   }
 
