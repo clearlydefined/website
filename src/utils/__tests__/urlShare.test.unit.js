@@ -28,17 +28,13 @@ describe('UrlShare', () => {
       const message = urlShare.toValidObject()
       const encodedMessage = urlShare.encode(message)
       const result = urlShare.decode(encodedMessage)
-      /*expect(message).toEqual({
-        coordinates: { '0': { type: 'npm', provider: 'npmjs', name: 'async', revision: '0.2.10' } },
-        filter: '{}',
-        sortBy: 'test'
-      })*/
+      expect(message).toEqual(shareObject)
     }
   })
 })
 
 const shareObject = {
-  filter: {},
+  filter: { test: 'test' },
   sortBy: 'name',
   coordinates: [
     { type: 'npm', provider: 'npmjs', name: 'async', revision: '0.2.10', changes: { 'licensed.declared': '' } },
