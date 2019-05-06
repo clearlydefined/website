@@ -87,7 +87,7 @@ export default class ContributePrompt extends Component {
     const { session, onLogin } = this.props
 
     return (
-      <Modal show={show} id="contribute-modal">
+      <Modal show={show} onHide={this.close} id="contribute-modal">
         <Form>
           <Modal.Header closeButton>
             <Modal.Title>Describe the changes in this curation</Modal.Title>
