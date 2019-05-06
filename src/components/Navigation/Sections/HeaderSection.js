@@ -11,9 +11,6 @@ import Curation from '../../../utils/curation'
 import ScoreRenderer from '../Ui/ScoreRenderer'
 import DefinitionTitle from '../Ui/DefinitionTitle'
 import DefinitionRevision from '../Ui/DefinitionRevision'
-import CopyUrlButton from '../../CopyUrlButton'
-import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
-import EntitySpec from '../../../utils/entitySpec'
 
 class HeaderSection extends Component {
   static propTypes = {
@@ -68,12 +65,6 @@ class HeaderSection extends Component {
                     Pending curations
                   </Tag>
                 )}
-              </div>
-              <div>
-                <CopyUrlButton
-                  bsStyle="info"
-                  path={`${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(get(item, 'coordinates')).toPath()}`}
-                />
               </div>
             </div>
             <p>

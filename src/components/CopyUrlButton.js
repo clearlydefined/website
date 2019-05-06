@@ -49,7 +49,7 @@ export default class CopyUrlButton extends Component {
 
   renderUrl() {
     const { route, path } = this.props
-    return `${window.location.origin}${route}${path}`
+    return `${window.location.origin}${route}/${path}`
   }
 
   renderTooltip() {
