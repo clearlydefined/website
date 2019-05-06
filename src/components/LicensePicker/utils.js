@@ -10,7 +10,12 @@ const NOASSERTION = 'NOASSERTION'
 // Shared methods appliable to License Picker
 export default class LicensePickerUtils {
   static parseLicense(license) {
-    return license && !['NONE', 'NOASSERTION'].includes(license) ? parse(license) : { license }
+    return license &&
+      !['NONE', 'NOASSERTION'].includes(license) &&
+      !license.includes('NOASSERTION') &&
+      !license.includes('NONE')
+      ? parse(license)
+      : { license }
   }
 
   static isValidExpression(expression) {
