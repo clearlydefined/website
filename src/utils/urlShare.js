@@ -24,14 +24,15 @@ export default class UrlShare {
 
   encode(message) {
     let buffer = this.ShareUrlMessage.encode(message).finish()
-    return pako.deflate(buffer, { to: 'string' })
+    console.log(pako.deflateRaw(buffer).toString())
+    return pako.deflate(buffer).toString()
   }
 
   decode(message) {
     try {
       const definitionSpec = pako.inflate(message)
       var decodedMessage = this.ShareUrlMessage.decode(definitionSpec)
-      return JSON.stringify(decodedMessage)
+      return decodedMessage
     } catch (e) {
       console.log(e)
       return false
