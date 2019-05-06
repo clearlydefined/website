@@ -2,9 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import { combineReducers } from 'redux'
-import { ROUTE_WORKSPACE, ROUTE_HARVEST, ROUTE_ABOUT, ROUTE_STATS } from '../utils/routingConstants'
 import {
-  UI_NAVIGATION,
   UI_NOTIFICATION_NEW,
   UI_NOTIFICATION_DELETE,
   UI_CURATE_UPDATE_FILTER,
@@ -40,52 +38,6 @@ import itemReducer from './itemReducer'
 import yaml from 'js-yaml'
 import EntitySpec from '../utils/entitySpec'
 import { CURATION_BODIES } from '../actions/curationActions'
-
-/**
- * protected:
- * -1 - only public
- * 0 - common
- * 1 - only protected
- */
-const initialStateNavigation = [
-  {
-    title: 'Workspace',
-    to: ROUTE_WORKSPACE,
-    protected: 0,
-    isSelected: false
-  },
-  {
-    title: 'Harvest',
-    to: ROUTE_HARVEST,
-    protected: 1,
-    isSelected: false,
-    permissions: ['harvest']
-  },
-  {
-    title: 'About',
-    to: ROUTE_ABOUT,
-    protected: 0,
-    isSelected: false
-  },
-  {
-    title: 'Stats',
-    to: ROUTE_STATS,
-    protected: 0,
-    isSelected: false
-  }
-]
-
-const navigation = (state = initialStateNavigation, action) => {
-  switch (action.type) {
-    case UI_NAVIGATION:
-      const selected = action.to
-      return state.map(nav => {
-        return { ...nav, isSelected: selected.to === nav.to }
-      })
-    default:
-      return state
-  }
-}
 
 const curate = combineReducers({
   filter: valueReducer(UI_CURATE_UPDATE_FILTER),
@@ -143,7 +95,6 @@ const notifications = (state = [], action) => {
 }
 
 export default combineReducers({
-  navigation,
   definitions,
   browse,
   inspect,

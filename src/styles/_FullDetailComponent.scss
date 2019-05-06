@@ -1,6 +1,29 @@
+@media screen and (max-width: $screen-sm) {
+  .container > div > .row-detail-header {
+    margin-top: 20px;
+  }
+}
+
 .row-detail-header {
   margin-bottom: 30px;
+  @media screen and (max-width: $screen-sm) {
+    margin-bottom: 10px;
+
+    .detail-header {
+      overflow: visible;
+      white-space: normal;
+
+      .ant-tag {
+        margin-top: 4px;
+      }
+    }
+
+    .header-data {
+      text-align: right;
+    }
+  }
 }
+
 .detail-header {
   align-items: baseline;
   margin: 0;
@@ -24,6 +47,7 @@
     padding-left: 5px;
   }
 }
+
 .score-header {
   margin: 0;
   padding: 0;
@@ -34,11 +58,14 @@
 }
 
 .curationSection {
-  height: 120px;
+  max-height: 120px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
+.ant-modal-body {
+  padding: 10px;
+}
 .ReactVirtualized__List {
   outline: none;
 }
@@ -90,5 +117,12 @@
   a:hover,
   a:focus {
     color: $color_highlight;
+  }
+}
+
+// specific selector to fix the 'Files' row in the Licensed section
+@media screen and (max-width: $screen-sm) {
+  .licensed-section > div:nth-child(4) .definition__line .list-singleLine {
+    display: inline;
   }
 }
