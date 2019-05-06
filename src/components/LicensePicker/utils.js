@@ -77,7 +77,7 @@ export default class LicensePickerUtils {
 
   /**
    * Creates a new License Rules in the specified path
-   * @param  {} conjunction used conjuction to merge the new rules expressionects
+   * @param  {} conjunction used conjunction to merge the new rules expressionects
    * @param  {} expression current expressionect rules
    * @param  {} path where apply the change
    * @returns updated expressionect rules

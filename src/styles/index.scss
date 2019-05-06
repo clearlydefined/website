@@ -1,6 +1,8 @@
 /* Copyright (c) Microsoft Corporation and others. Licensed under the MIT license. */
 /* SPDX-License-Identifier: MIT */
 
+@import '~antd/dist/antd.css';
+
 @import './variables';
 @import './bootstrapFixes';
 body {
@@ -55,4 +57,5 @@ main {
 @import './Suggestions.scss';
 @import './ScoreRenderer.scss';
 @import './CopyrightsRenderer.scss';
+@import './FacetsRenderer.scss';
 @import './utils.scss';

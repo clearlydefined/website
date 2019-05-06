@@ -15,7 +15,7 @@ describe('FileList', () => {
       {
         children: [
           {
-            facets: [{ isDifferent: false, value: 'core' }],
+            facets: [],
             folders: ['install.ps1'],
             id: 18,
             key: 27,
@@ -37,7 +37,7 @@ describe('FileList', () => {
         attributions: ['(c) 2018 by Matt Zabriskie'],
         children: [
           {
-            facets: [{ isDifferent: false, value: 'core' }],
+            facets: [],
             folders: ['package.json'],
             hashes: { sha1: 'e2180deb3f1ee8d2c5fe6689bdeffc2e64a64d91' },
             id: 1,
@@ -60,8 +60,6 @@ describe('FileList', () => {
   it('filters files for facets', () => {
     const wrapper = shallow(<FileList component={definition} files={files} />)
     const instance = wrapper.instance()
-    const resultNuget = nugetTreeFolders.map(record => instance.filterValues(record, 'facets', 'core'))
-    expect(resultNuget).toEqual(nugetTreeFolders)
     const resultAxios = axiosTreeFolders.map(record => instance.filterValues(record, 'facets', 'data'))
     expect(resultAxios).toEqual([
       {
@@ -113,7 +111,7 @@ describe('FileList', () => {
             children: [
               {
                 attributions: [{ isDifferent: false, value: '(c) 2018 by Matt Zabriskie' }],
-                facets: [{ isDifferent: false, value: 'core' }],
+                facets: [],
                 folders: ['axios.js'],
                 hashes: { sha1: '94ece417aa560aa8de906e8f54c0985da90364cc' },
                 id: 3,
@@ -143,7 +141,7 @@ describe('FileList', () => {
           },
           {
             attributions: [{ isDifferent: false, value: 'Copyright (c) 2014-present Matt Zabriskie' }],
-            facets: [{ isDifferent: false, value: 'core' }],
+            facets: [],
             folders: ['LICENSE'],
             hashes: { sha1: '0d6395f8c93ddfd98efcac7f511d42a286b22168' },
             id: 0,
@@ -275,7 +273,7 @@ const nugetTreeFolders = [
             key: 3,
             name: 'Newtonsoft.Json.dll',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'lib/net20/Newtonsoft.Json.xml',
@@ -284,7 +282,7 @@ const nugetTreeFolders = [
             key: 4,
             name: 'Newtonsoft.Json.xml',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       },
@@ -302,7 +300,7 @@ const nugetTreeFolders = [
             key: 6,
             name: 'Newtonsoft.Json.dll',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'lib/net35/Newtonsoft.Json.xml',
@@ -311,7 +309,7 @@ const nugetTreeFolders = [
             key: 7,
             name: 'Newtonsoft.Json.xml',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       },
@@ -329,7 +327,7 @@ const nugetTreeFolders = [
             key: 9,
             name: 'Newtonsoft.Json.dll',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'lib/net40/Newtonsoft.Json.xml',
@@ -338,7 +336,7 @@ const nugetTreeFolders = [
             key: 10,
             name: 'Newtonsoft.Json.xml',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       },
@@ -356,7 +354,7 @@ const nugetTreeFolders = [
             key: 12,
             name: 'Newtonsoft.Json.dll',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'lib/net45/Newtonsoft.Json.xml',
@@ -365,7 +363,7 @@ const nugetTreeFolders = [
             key: 13,
             name: 'Newtonsoft.Json.xml',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       },
@@ -383,7 +381,7 @@ const nugetTreeFolders = [
             key: 15,
             name: 'Newtonsoft.Json.dll',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'lib/netstandard1.0/Newtonsoft.Json.xml',
@@ -392,7 +390,7 @@ const nugetTreeFolders = [
             key: 16,
             name: 'Newtonsoft.Json.xml',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       },
@@ -410,7 +408,7 @@ const nugetTreeFolders = [
             key: 18,
             name: 'Newtonsoft.Json.dll',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'lib/netstandard1.3/Newtonsoft.Json.xml',
@@ -419,7 +417,7 @@ const nugetTreeFolders = [
             key: 19,
             name: 'Newtonsoft.Json.xml',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       },
@@ -437,7 +435,7 @@ const nugetTreeFolders = [
             key: 21,
             name: 'Newtonsoft.Json.dll',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'lib/portable-net40+sl5+win8+wpa81+wp8/Newtonsoft.Json.xml',
@@ -446,7 +444,7 @@ const nugetTreeFolders = [
             key: 22,
             name: 'Newtonsoft.Json.xml',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       },
@@ -464,7 +462,7 @@ const nugetTreeFolders = [
             key: 24,
             name: 'Newtonsoft.Json.dll',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'lib/portable-net45+win8+wpa81+wp8/Newtonsoft.Json.xml',
@@ -473,7 +471,7 @@ const nugetTreeFolders = [
             key: 25,
             name: 'Newtonsoft.Json.xml',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       }
@@ -493,7 +491,7 @@ const nugetTreeFolders = [
         key: 27,
         name: 'install.ps1',
         license: '',
-        facets: [{ value: 'core', isDifferent: false }]
+        facets: []
       }
     ]
   },
@@ -504,7 +502,7 @@ const nugetTreeFolders = [
     key: 28,
     name: '.signature.p7s',
     license: '',
-    facets: [{ value: 'core', isDifferent: false }]
+    facets: []
   },
   {
     path: 'LICENSE.md',
@@ -515,7 +513,7 @@ const nugetTreeFolders = [
     folders: ['LICENSE.md'],
     key: 29,
     name: 'LICENSE.md',
-    facets: [{ value: 'core', isDifferent: false }]
+    facets: []
   },
   {
     path: 'Newtonsoft.Json.nuspec',
@@ -524,7 +522,7 @@ const nugetTreeFolders = [
     key: 30,
     name: 'Newtonsoft.Json.nuspec',
     license: '',
-    facets: [{ value: 'core', isDifferent: false }]
+    facets: []
   }
 ]
 
@@ -556,7 +554,7 @@ const axiosTreeFolders = [
             key: 3,
             name: 'axios.js',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'package/dist/axios.map',
@@ -566,7 +564,7 @@ const axiosTreeFolders = [
             key: 4,
             name: 'axios.map',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           },
           {
             path: 'package/dist/axios.min.js',
@@ -587,7 +585,7 @@ const axiosTreeFolders = [
             key: 6,
             name: 'axios.min.map',
             license: '',
-            facets: [{ value: 'core', isDifferent: false }]
+            facets: []
           }
         ]
       },
@@ -600,7 +598,7 @@ const axiosTreeFolders = [
         folders: ['LICENSE'],
         key: 7,
         name: 'LICENSE',
-        facets: [{ value: 'core', isDifferent: false }]
+        facets: []
       },
       {
         path: 'package/README.md',
@@ -610,7 +608,7 @@ const axiosTreeFolders = [
         key: 8,
         name: 'README.md',
         license: '',
-        facets: [{ value: 'core', isDifferent: false }]
+        facets: []
       },
       {
         path: 'package/package.json',
@@ -620,7 +618,7 @@ const axiosTreeFolders = [
         folders: ['package.json'],
         key: 9,
         name: 'package.json',
-        facets: [{ value: 'core', isDifferent: false }]
+        facets: []
       }
     ]
   }
