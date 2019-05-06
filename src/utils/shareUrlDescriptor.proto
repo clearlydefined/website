@@ -1,0 +1,38 @@
+message ShareUrl {
+  map<string, string> filter = 1;
+  optional string sortBy = 2;
+
+  enum Types {
+    pod = 0;
+    crate = 1;
+    git = 2;
+    maven = 3;
+    npm = 4;
+    nuget = 5;
+    pypi = 6;
+    gem = 7;
+    sourcearchive = 8;
+  }
+
+  enum Providers {
+    cocoapods = 0;
+    cratesio = 1;
+    github = 2;
+    mavencentral = 3;
+    npmjs = 4;
+    nuget = 5;
+    pypi = 6;
+    rubygems = 7;
+  }
+
+  message Coordinates {
+    required Types type = 1;
+    required Providers provider = 2;
+    optional string namespace = 3;
+    required string name = 4;
+    optional string revision = 5;
+    map<string, string> changes = 6;
+  }
+
+  repeated Coordinates coordinates = 3;
+}

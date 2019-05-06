@@ -9,12 +9,12 @@ describe('UrlShare', () => {
   it('returns an error for coordinates field with a wrong type', () => {
     const urlShare = new UrlShare({ ...shareObject, coordinates: 'test' })
     urlShare.start()
-    expect(urlShare.isValid()).toBe('coordinates: object expected')
+    expect(urlShare.isValid()).toBe('coordinates: array expected')
   })
   it('returns an error for filter field with a wrong type', () => {
     const urlShare = new UrlShare({ ...shareObject, filter: true })
     urlShare.start()
-    expect(urlShare.isValid()).toBe('filter: string expected')
+    expect(urlShare.isValid()).toBe('filter: object expected')
   })
   it('returns an error for sortBy field with a wrong type', () => {
     const urlShare = new UrlShare({ ...shareObject, sortBy: true })
@@ -38,7 +38,7 @@ describe('UrlShare', () => {
 })
 
 const shareObject = {
-  filter: JSON.stringify({}),
+  filter: {},
   sortBy: 'name',
   coordinates: [
     { type: 'npm', provider: 'npmjs', name: 'async', revision: '0.2.10', changes: { 'licensed.declared': '' } },
