@@ -10,7 +10,7 @@ import get from 'lodash/get'
 import { Section } from '../'
 import FileList from '../FileList'
 import FacetsEditor from '../FacetsEditor'
-import 'antd/dist/antd.css'
+import Tooltip from 'antd/lib/tooltip'
 import Contribution from '../../utils/contribution'
 import DescribedSection from '../Navigation/Sections/DescribedSection'
 import RawDataSection from '../Navigation/Sections/RawDataSection'
@@ -37,10 +37,54 @@ class FullDetailComponent extends Component {
     getCurationData: PropTypes.func
   }
 
+  /* eslint-disable react/jsx-no-comment-textnodes */
+  globTooptipText() {
+    return (
+      <div>
+        <p>
+          Globbing patterns use common wildcard patterns to provide a partial path that can match zero or hundreds of
+          files all at the same time.
+        </p>
+        <p>"?" matches a single character.</p>
+        <p>"*" matches any number of characters within name.</p>
+        For example:
+        <br />
+        // Match any file or folder starting with "foo"
+        <br />
+        <code>foo*</code>
+        <br />
+        // Match any file or folder starting with "foo" and ending with .txt
+        <br />
+        <code>foo*.txt</code>
+        <br />
+        // Match any file or folder ending with "foo"
+        <br />
+        <code>*foo</code>
+        <br />
+        // Match a/b/z but not a/b/c/z
+        <br />
+        <code>a/*/z</code>
+        <br />
+        // Match a/z and a/b/z and a/b/c/z
+        <br />
+        <code>a/**/z</code>
+        <br />
+        // Matches hat but not ham or h/t
+        <br />
+        <code>/h?t</code>
+      </div>
+    )
+    /* eslint-enable react/jsx-no-comment-textnodes */
+  }
+
   renderFilesSection() {
     const { definition, onChange, previewDefinition, readOnly, handleRevert, changes } = this.props
     const entry = find(changes, (_, key) => key && key.startsWith('files'))
     const item = { ...definition.item }
+    const filesOrFacetsHaveBeenChanged = find(
+      changes,
+      (_, key) => (key && key.startsWith('files')) || key.startsWith('described.facets')
+    )
     return (
       <Section
         name={
@@ -48,12 +92,16 @@ class FullDetailComponent extends Component {
             <span>Files</span>
             &nbsp;
             {!readOnly && (
-              <ButtonWithTooltip tip="Revert all changes of all the definitions">
+              <ButtonWithTooltip tip="Revert all file and facet changes on this definitions">
                 <Button
+                  data-test-id="revert-files-and-facets"
                   bsSize="small"
                   bsStyle="danger"
-                  onClick={() => handleRevert('files')}
-                  disabled={entry === undefined}
+                  onClick={() => {
+                    handleRevert('files')
+                    handleRevert('described.facets')
+                  }}
+                  disabled={!filesOrFacetsHaveBeenChanged}
                 >
                   <i className="fas fa-undo" />
                   <span>&nbsp;Revert Changes</span>
@@ -107,7 +155,19 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const { curations, definition, harvest, onChange, previewDefinition, readOnly, handleRevert, isMobile } = this.props
+    const {
+      definition,
+      harvest,
+      onChange,
+      previewDefinition,
+      readOnly,
+      handleRevert,
+      changes,
+      getCurationData,
+      curations,
+      inspectedCuration,
+      isMobile
+    } = this.props
     if (!definition || !definition.item || !curations || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
@@ -133,9 +193,19 @@ class FullDetailComponent extends Component {
             <Section name={<TitleWithScore title={'Described'} domain={item.described} />}>
               <Fragment>
                 <DescribedSection rawDefinition={item} {...this.props} />
-                <Row>
+                <Row className="mt-3">
                   <Col md={6}>
-                    <LabelRenderer text={'Facets'} />
+                    <Row>
+                      <Col md={3}>
+                        <LabelRenderer text="Facets" />
+                      </Col>
+                      <Col md={9}>
+                        {/* using minimatch package in service */}
+                        <Tooltip title={this.globTooptipText()} overlayStyle={{ width: '800px' }}>
+                          <i className="fas fa-info-circle" />
+                        </Tooltip>
+                      </Col>
+                    </Row>
                     <FacetsEditor
                       definition={item}
                       onChange={onChange}

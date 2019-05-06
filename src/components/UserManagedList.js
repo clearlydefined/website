@@ -229,7 +229,7 @@ export default class UserManagedList extends SystemManagedList {
       <div>
         {`${baseMessage}, and ${summary.warnings.noLicense.length} missing licenses`}
         <div>
-          <Button bsStyle="warning" onClick={() => this.onFilter({ 'licensed.declared': 'absence' }, true)}>
+          <Button bsStyle="warning" onClick={() => this.onFilter({ 'licensed.declared': 'ABSENCE OF' }, true)}>
             Filter
           </Button>
           <span>&nbsp;to show just the problem definitions</span>
