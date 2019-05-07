@@ -17,6 +17,7 @@ import {
   ROUTE_STATUS,
   ROUTE_FILE
 } from '../utils/routingConstants'
+import history from '../config/history'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
@@ -71,7 +72,7 @@ export default class RehydrationDelayedProvider extends Component {
   render() {
     if (!this.state.rehydrated) return <div className="loading-site-root">Loading...</div>
     return (
-      <Provider store={store}>
+      <Provider store={store} history={history}>
         <Router>
           <App className="App">
             <Switch>
