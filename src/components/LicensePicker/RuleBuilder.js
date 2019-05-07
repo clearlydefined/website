@@ -50,8 +50,26 @@ export default class RuleBuilder extends Component {
   }
 
   renderRule = (rule, path, conjunction = null, parentRule = {}) => {
+    console.log(rule)
     const { updateLicense, considerLaterVersions, removeRule } = this.props
     const currentPath = path[path.length - 1]
+    if (Object.keys(rule).includes('noassertion'))
+      return (
+        <Col md={12} className="spdx-picker-rule">
+          {currentPath !== 'right' && (!parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right'))
+            ? this.renderHeaderRow(rule, path, conjunction)
+            : null}
+          <Col md={6} className="flex-center">
+            <SpdxPicker value={'NOASSERTION'} onChange={value => updateLicense(value, path)} />
+            {path.length > 0 && (
+              <Button id="removeRule" onClick={() => removeRule(path)}>
+                x
+              </Button>
+            )}
+          </Col>
+        </Col>
+      )
+
     if (rule.license || rule.license === '')
       return (
         <Col md={12} className="spdx-picker-rule">
