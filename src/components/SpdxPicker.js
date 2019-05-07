@@ -9,8 +9,6 @@ import deprecatedSpdxLicenseIds from 'spdx-license-ids/deprecated'
 import { customLicenseIds } from '../utils/utils'
 import LicensePickerUtils from '../components/LicensePicker/utils'
 
-const identifiers = [...customLicenseIds, ...spdxLicenseIds.sort(), ...deprecatedSpdxLicenseIds.sort()]
-
 export default class SpdxPicker extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
@@ -19,15 +17,24 @@ export default class SpdxPicker extends Component {
     promptText: PropTypes.string
   }
 
+  static defaultProps = {
+    customIdentifiers: []
+  }
+
   constructor(props) {
     super(props)
     this.onKeyPress = this.onKeyPress.bind(this)
     this.onChange = this.onChange.bind(this)
     this._typeahead = React.createRef()
+    this.identifiers = [
+      ...customLicenseIds,
+      ...props.customIdentifiers,
+      ...spdxLicenseIds.sort(),
+      ...deprecatedSpdxLicenseIds.sort()
+    ]
   }
 
   onKeyPress(event, onChange) {
-    const instance = this._typeahead.current.typeahead.getInstance()
     const enterPressed = event.key === 'Enter'
     // if user is in mid-selection, don't hijack Enter key
     // i.e. only fire onChange on Enter if menu closed or no results
@@ -53,7 +60,7 @@ export default class SpdxPicker extends Component {
         <Autocomplete
           id="spdx-picker"
           defaultInputValue={value}
-          options={identifiers}
+          options={this.identifiers}
           onBlur={event => this.onBlur(event, onBlur)}
           onKeyDown={e => this.onKeyPress(e, onChange)}
           onChange={([first]) => this.onChange(first, onChange)}

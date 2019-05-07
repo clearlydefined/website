@@ -20,7 +20,7 @@ const expectedFolders = [
         children: [
           {
             attributions: undefined,
-            facets: [{ isDifferent: false, value: 'core' }],
+            facets: [],
             folders: ['Newtonsoft.Json.dll'],
             id: 2,
             key: 3,
@@ -30,7 +30,7 @@ const expectedFolders = [
           },
           {
             attributions: undefined,
-            facets: [{ isDifferent: false, value: 'core' }],
+            facets: [],
             folders: ['Newtonsoft.Json.xml'],
             id: 3,
             key: 4,
@@ -56,7 +56,7 @@ const expectedFolders = [
     children: [
       {
         attributions: undefined,
-        facets: [{ isDifferent: false, value: 'core' }],
+        facets: [],
         folders: ['install.ps1'],
         id: 4,
         key: 6,
@@ -73,7 +73,7 @@ const expectedFolders = [
   },
   {
     attributions: undefined,
-    facets: [{ isDifferent: false, value: 'core' }],
+    facets: [],
     folders: ['.signature.p7s'],
     id: 5,
     key: 7,
@@ -83,7 +83,7 @@ const expectedFolders = [
   },
   {
     attributions: undefined,
-    facets: [{ isDifferent: false, value: 'core' }],
+    facets: [],
     folders: ['LICENSE.md'],
     id: 0,
     key: 8,
@@ -95,7 +95,7 @@ const expectedFolders = [
   },
   {
     attributions: undefined,
-    facets: [{ isDifferent: false, value: 'core' }],
+    facets: [],
     folders: ['Newtonsoft.Json.nuspec'],
     id: 1,
     key: 9,
