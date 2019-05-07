@@ -29,7 +29,7 @@ class DefinitionTitle extends Component {
         </a>
       </span>
     ) : (
-      <span>{definition.coordinates.name}</span>
+      <span data-test-id="component-name">{definition.coordinates.name}</span>
     )
   }
 }
