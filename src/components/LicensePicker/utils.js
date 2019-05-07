@@ -11,7 +11,7 @@ const NOASSERTION = 'NOASSERTION'
 export default class LicensePickerUtils {
   static parseLicense(license) {
     return license &&
-      !['NONE', 'NOASSERTION'].includes(license) &&
+      !['NONE', 'NOASSERTION', 'PRESENCE OF', 'ABSENCE OF'].includes(license) &&
       !license.includes('NOASSERTION') &&
       !license.includes('NONE')
       ? parse(license)
@@ -80,7 +80,7 @@ export default class LicensePickerUtils {
 
   /**
    * Creates a new License Rules in the specified path
-   * @param  {} conjunction used conjuction to merge the new rules expressionects
+   * @param  {} conjunction used conjunction to merge the new rules expressionects
    * @param  {} expression current expressionect rules
    * @param  {} path where apply the change
    * @returns updated expressionect rules

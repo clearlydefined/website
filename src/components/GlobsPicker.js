@@ -6,6 +6,8 @@ import Tag from 'antd/lib/tag'
 import Input from 'antd/lib/input'
 import Tooltip from 'antd/lib/tooltip'
 import Icon from 'antd/lib/icon'
+import isEqual from 'lodash/isEqual'
+import isValidGlob from 'is-valid-glob'
 import withSuggestions from '../utils/withSuggestions'
 
 class GlobsPicker extends Component {
@@ -15,13 +17,8 @@ class GlobsPicker extends Component {
     readOnly: PropTypes.bool
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      inputVisible: false,
-      inputValue: ''
-    }
-    this.saveInputRef = React.createRef()
+  state = {
+    inputVisible: false
   }
 
   handleClose = removedglob => {
@@ -30,39 +27,28 @@ class GlobsPicker extends Component {
     onChange(newGlobs)
   }
 
-  showInput = () => {
-    this.setState({ inputVisible: true }, () => this.saveInputRef.current.focus())
-  }
+  showInput = () => this.setState({ inputVisible: true })
 
-  handleInputChange = e => {
-    this.setState({ inputValue: e.target.value })
-  }
-
-  handleInputConfirm = () => {
+  handleInputConfirm = e => {
+    const { value } = e.target
     const { globs, onChange } = this.props
-    const { inputValue } = this.state
     let newGlobs = [...globs]
-    if (inputValue && globs.indexOf(inputValue) === -1) newGlobs = [...globs, inputValue]
-    this.setState({
-      inputVisible: false,
-      inputValue: ''
-    })
-    onChange(newGlobs)
+    if (isValidGlob(value) && globs.indexOf(value) === -1) newGlobs = [...globs, value]
+    this.setState({ inputVisible: false })
+    if (newGlobs.length > 0 && !isEqual(newGlobs, globs)) onChange(newGlobs)
   }
 
-  onChange = suggestion => {
-    this.props.onChange(suggestion)
-  }
+  onChange = suggestion => this.props.onChange(suggestion)
 
   render() {
     const { globs, className, readOnly, onRevert } = this.props
-    const { inputVisible, inputValue } = this.state
+    const { inputVisible } = this.state
 
     return (
       <div className="editable-editor">
         {!readOnly && (
           <i
-            className={`fas fa-undo editable-marker ${!globs && 'fa-disabled'}`}
+            className={`fas fa-undo editable-marker ${globs.length > -1 ? '' : 'fa-disabled'}`}
             onClick={() => onRevert && globs && onRevert()}
           />
         )}
@@ -84,19 +70,17 @@ class GlobsPicker extends Component {
           })}
         {inputVisible ? (
           <Input
-            ref={this.saveInputRef}
+            autoFocus
             type="text"
             size="small"
             style={{ width: 78 }}
-            value={inputValue}
-            onChange={this.handleInputChange}
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}
           />
         ) : (
           !readOnly && (
             <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-              <Icon type="plus" /> Add a valid Glob expression
+              <Icon type="plus" />
             </Tag>
           )
         )}

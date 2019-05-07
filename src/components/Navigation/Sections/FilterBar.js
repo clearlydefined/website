@@ -6,7 +6,8 @@ import PropTypes from 'prop-types'
 import { Checkbox } from 'react-bootstrap'
 import SortList from '../Ui/SortList'
 import FilterList from '../Ui/FilterList'
-import { sorts, licenses as defaultLicenses, sources, releaseDates } from '../../../utils/utils'
+import { sorts, sources, releaseDates } from '../../../utils/utils'
+import SpdxPicker from '../../SpdxPicker'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 
 export default class FilterBar extends Component {
@@ -72,7 +73,6 @@ export default class FilterBar extends Component {
       showLicenseFilter,
       showReleaseDateFilter,
       showSourceFilter,
-      customLicenses,
       customSorts,
       customSources,
       customReleaseDates,
@@ -94,13 +94,12 @@ export default class FilterBar extends Component {
             />
           )}
           {showLicenseFilter && (
-            <FilterList
-              list={customLicenses || defaultLicenses}
-              title={'License'}
-              id={'licensed.declared'}
+            <SpdxPicker
+              value={''}
               disabled={hasComponents}
-              value={activeFilters}
-              onFilter={onFilter}
+              promptText={'License'}
+              onChange={value => onFilter({ type: 'licensed.declared', value })}
+              customIdentifiers={['PRESENCE OF', 'ABSENCE OF', '']}
             />
           )}
           {showSourceFilter && (
