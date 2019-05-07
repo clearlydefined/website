@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-// Delays loading untill the store is rehydrated
+// Delays loading until the store is rehydrated
 import React, { Component } from 'react'
 import { persistStore, createTransform } from 'redux-persist'
 import {
@@ -14,7 +14,8 @@ import {
   ROUTE_DISCORD,
   ROUTE_SHARE,
   ROUTE_STATS,
-  ROUTE_STATUS
+  ROUTE_STATUS,
+  ROUTE_FILE
 } from '../utils/routingConstants'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
@@ -29,6 +30,7 @@ import PageDefinitions from './Navigation/Pages/PageDefinitions'
 import PageBrowse from './Navigation/Pages/PageBrowse'
 import PageStats from './Navigation/Pages/PageStats'
 import PageStatus from './Navigation/Pages/PageStatus'
+import PageFile from './Navigation/Pages/PageFile'
 
 const store = configureStore()
 
@@ -39,6 +41,17 @@ const transformRemoveFetchErr = createTransform(state => omit(state, ['isFetchin
   whitelist: ['session']
 })
 
+// Store only definitions from ui reducer
+const transformUiDefinitions = createTransform(
+  state => {
+    return { definitions: state.definitions }
+  },
+  state => state,
+  {
+    whitelist: ['ui']
+  }
+)
+
 export default class RehydrationDelayedProvider extends Component {
   constructor(props) {
     super(props)
@@ -46,9 +59,13 @@ export default class RehydrationDelayedProvider extends Component {
   }
 
   componentWillMount() {
-    persistStore(store, { whitelist: ['session', 'ui', 'definition'], transforms: [transformRemoveFetchErr] }, () => {
-      this.setState({ rehydrated: true })
-    })
+    persistStore(
+      store,
+      { whitelist: ['session', 'ui', 'definition'], transforms: [transformRemoveFetchErr, transformUiDefinitions] },
+      () => {
+        this.setState({ rehydrated: true })
+      }
+    )
   }
 
   render() {
@@ -68,6 +85,7 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_STATS} component={withTracker(PageStats)} />
               <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
+              <Route path={ROUTE_FILE} component={withTracker(PageFile)} />
               <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
             </Switch>
           </App>

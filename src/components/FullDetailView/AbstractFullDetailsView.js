@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 import { Grid, Button } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
 import Modal from 'antd/lib/modal'
-import 'antd/dist/antd.css'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
 
@@ -38,7 +37,7 @@ export class AbstractFullDetailsView extends Component {
         centered={!isMobile}
         destroyOnClose={true}
         visible={visible}
-        width={'85%'}
+        width={isMobile ? '95%' : '85%'}
         className="fullDetaiView__modal"
       >
         {visible && (
