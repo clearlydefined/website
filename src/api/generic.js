@@ -11,7 +11,7 @@ function getHeaders(token) {
   return result
 }
 
-function handleResponse(response) {
+export function handleResponse(response) {
   // reject if code is out of range 200-299
   if (!response || !response.ok) {
     const err = new Error(response ? response.statusText : 'Error')

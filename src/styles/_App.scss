@@ -127,25 +127,12 @@
   height: 100%;
 }
 
-.spacer {
-  margin: 30px;
-}
-
 .spacer-search {
   margin: 3rem;
 
   @media screen and (max-width: $screen-sm) {
     margin: 4rem 1rem 1rem;
   }
-}
-
-.top-space {
-  padding-top: 30px;
-  padding-bottom: 7px;
-}
-
-.right-space {
-  margin-right: 10px;
 }
 
 .section-body {
@@ -177,16 +164,6 @@
       top: 70px;
     }
   }
-}
-
-.flex-grow {
-  flex: 1;
-}
-
-.flex-grow-column {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
 }
 
 .section-header {
@@ -484,12 +461,6 @@ hr {
     justify-content: center;
     outline: none;
   }
-}
-
-.vcenter {
-  display: inline-block;
-  vertical-align: middle;
-  float: none;
 }
 
 .date-picker {

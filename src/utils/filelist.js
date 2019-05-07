@@ -53,13 +53,7 @@ export default class FileListSpec {
 
   static getFileFacets(facets, component, preview, key) {
     if (!preview || !preview.files || !preview.files[key] || !preview.files[key].facets) {
-      if (!facets)
-        return [
-          {
-            value: 'core',
-            isDifferent: false
-          }
-        ]
+      if (!facets) return []
       return facets.map(f => {
         return {
           value: f,

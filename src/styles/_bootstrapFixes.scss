@@ -64,30 +64,38 @@
 }
 
 .btn-danger {
-  background-color: $color_red !important;
-  border-color: $color_red !important;
+  background-color: $color_red;
+  border-color: $color_red;
 }
 
 .ant-tag-purple {
-  color: white !important;
-  background: #6f42c1 !important;
-  border-color: #6f42c1 !important;
+  color: white;
+  background: #6f42c1;
+  border-color: #6f42c1;
 }
 
 .ant-tag-green {
-  color: white !important;
-  background: $color_highlight !important;
-  border-color: $color_highlight !important;
+  color: white;
+  background: $color_highlight;
+  border-color: $color_highlight;
 }
 
 .ant-tag-red {
-  color: white !important;
-  background: $color_red !important;
-  border-color: $color_red !important;
+  color: white;
+  background: $color_red;
+  border-color: $color_red;
+}
+
+.ant-tag {
+  line-height: 18px;
 }
 
 @media (min-width: $screen-md) {
   .modal-xl .modal-dialog {
     width: 1220px;
   }
+}
+
+.mt-3 {
+  margin-top: 1rem !important;
 }
