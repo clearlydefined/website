@@ -27,8 +27,22 @@ describe(
           interceptedRequest.method() === 'GET'
         )
           return interceptedRequest.respond(responses.revisions.npm)
+        if (
+          interceptedRequest
+            .url()
+            .includes(`/origins/github/${harvestMap.githubComponent}/${harvestMap.githubRepo}/revisions`) &&
+          interceptedRequest.method() === 'GET'
+        )
+          return interceptedRequest.respond(responses.revisions.github)
         if (interceptedRequest.url().includes('/origins/npm') && interceptedRequest.method() === 'GET')
           return interceptedRequest.respond(responses.origins.npm)
+        if (
+          interceptedRequest.url().includes(`/origins/github/${harvestMap.githubComponent}/`) &&
+          interceptedRequest.method() === 'GET'
+        )
+          return interceptedRequest.respond(responses.origins.github.repo)
+        if (interceptedRequest.url().includes('/origins/github') && interceptedRequest.method() === 'GET')
+          return interceptedRequest.respond(responses.origins.github.user)
         else interceptedRequest.continue()
       })
     })
@@ -102,6 +116,56 @@ describe(
       await expect(page).toMatchElement(harvestMap.githubUserPicker)
       await expect(page).toMatchElement(harvestMap.githubRepoPicker)
     })
+
+    it('should show a list of results when typing on GitHub user picker', async () => {
+      const { githubUserPicker, githubUserSelectorFirstElement, githubComponent } = harvestMap
+      await expect(page).toClick(githubUserPicker)
+      await page.type(githubUserPicker, githubComponent)
+      await expect(page).toMatchElement(githubUserSelectorFirstElement)
+      await expect(page).toMatchElement(githubUserSelectorFirstElement, { text: githubComponent })
+      await expect(page).toClick(githubUserSelectorFirstElement)
+      const componentTitle = await page.$eval(githubUserPicker, el => el.value)
+      await expect(componentTitle).toMatch(githubComponent)
+    })
+
+    it('should show a list of results when typing on GitHub repo picker', async () => {
+      const { githubRepoPicker, githubRepoSelectorFirstElement, githubRepo } = harvestMap
+      await expect(page).toClick(githubRepoPicker)
+      await page.type(githubRepoPicker, githubRepo)
+      await expect(page).toMatchElement(githubRepoSelectorFirstElement)
+      await expect(page).toMatchElement(githubRepoSelectorFirstElement, { text: githubRepo })
+      await expect(page).toClick(githubRepoSelectorFirstElement)
+      const componentTitle = await page.$eval(githubRepoPicker, el => el.value)
+      await expect(componentTitle).toMatch(githubRepo)
+    })
+
+    it('should show it in the list of components when selecting GitHub repo', async () => {
+      const { githubComponent, githubRepo, componentList, component } = harvestMap
+      await expect(page).toMatchElement(componentList.list)
+      await expect(page).toMatchElement(`${componentList.list} ${componentList.secondElement}`)
+      await expect(page).toMatchElement(`${componentList.list} ${componentList.secondElement} ${component.name}`)
+      const componentTitle = await page.$eval(
+        `${componentList.list} ${componentList.secondElement} ${component.name}`,
+        el => el.textContent
+      )
+      await expect(componentTitle).toMatch(`${githubComponent}/${githubRepo}`)
+    })
+
+    it('should show a list of revisions when clicking on the GitHub commit picker', async () => {
+      const { githubCommitPicker, githubCommitSelectorFirstElement } = harvestMap
+      await expect(page).toClick(githubCommitPicker)
+      await expect(page).toMatchElement(githubCommitSelectorFirstElement)
+      await expect(page).toMatchElement(githubCommitSelectorFirstElement, {
+        text: '1.1.0 (724409eb4087dc731ba9d8f158de74a86d9d4244)'
+      })
+    })
+
+    it('should show the value of the selected GitHub commit', async () => {
+      const { githubCommitPicker, githubCommitSelectorFirstElement } = harvestMap
+      await expect(page).toClick(githubCommitSelectorFirstElement)
+      const componentTitle = await page.$eval(githubCommitPicker, el => el.value)
+      await expect(componentTitle).toMatch('1.1.0')
+    })
   },
   defaultTimeout
 )
@@ -119,6 +183,18 @@ const responses = {
         { id: 'webdriverio' },
         { id: 'pathval' }
       ])
+    },
+    github: {
+      user: {
+        status: 200,
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify([{ id: 'clearlydefined' }, { id: 'clearlydefined-test' }])
+      },
+      repo: {
+        status: 200,
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify([{ id: 'clearlydefined/website' }])
+      }
     }
   },
   revisions: {
@@ -126,6 +202,14 @@ const responses = {
       status: 200,
       headers: { 'access-control-allow-origin': '*' },
       body: JSON.stringify(['4.2.0', '4.1.2', '4.1.1'])
+    },
+    github: {
+      status: 200,
+      headers: { 'access-control-allow-origin': '*' },
+      body: JSON.stringify([
+        { tag: '1.1.0', sha: '724409eb4087dc731ba9d8f158de74a86d9d4244' },
+        { tag: '1.0.4', sha: '775b645db6ffc46e7b0f686d5377c0bc2f18fa48' }
+      ])
     }
   }
 }
