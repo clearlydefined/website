@@ -27,6 +27,30 @@ function asObject(item) {
   }
 }
 
+// Function that return a URL string from an object
+function getParamsToUrl(data) {
+  let params = new URLSearchParams()
+  for (let key in data) {
+    if (data.hasOwnProperty(key) && data[key]) params.set(key, data[key])
+  }
+  return params.toString()
+}
+
+function getParamsFromUrl(search) {
+  const params = new URLSearchParams(search)
+  if (params.toString() === '') return
+  return paramsToObject(params.entries())
+}
+
+function paramsToObject(entries) {
+  let result = {}
+  for (let entry of entries) {
+    const [key, value] = entry
+    result[key] = value
+  }
+  return result
+}
+
 const customLicenseIds = ['NONE', 'NOASSERTION']
 
 const sorts = [
@@ -109,6 +133,8 @@ export {
   setIfValue,
   sorts,
   sources,
+  getParamsToUrl,
+  getParamsFromUrl,
   types,
   multiEditableFields
 }
