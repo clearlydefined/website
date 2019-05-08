@@ -22,8 +22,13 @@ describe(
       await page.goto(`${__HOST__}/harvest`, { waitUntil: 'domcontentloaded' })
       await page.setRequestInterception(true)
       page.on('request', interceptedRequest => {
+        if (
+          interceptedRequest.url().includes(`/origins/npm/${harvestMap.npmComponent}/revisions`) &&
+          interceptedRequest.method() === 'GET'
+        )
+          return interceptedRequest.respond(responses.revisions.npm)
         if (interceptedRequest.url().includes('/origins/npm') && interceptedRequest.method() === 'GET')
-          interceptedRequest.respond(responses.origins.npm)
+          return interceptedRequest.respond(responses.origins.npm)
         else interceptedRequest.continue()
       })
     })
@@ -47,7 +52,7 @@ describe(
       await page.waitForSelector(rubygemsButton)
     })
 
-    it('when NPM provider is active, show the NPM picker', async () => {
+    it('should the NPM picker when NPM provider is active', async () => {
       const { npmButton, npmPicker } = harvestMap
       await page.waitForSelector(npmButton)
       const element = await page.$(npmButton)
@@ -55,20 +60,28 @@ describe(
       await expect(page).toMatchElement(npmPicker)
     })
 
-    it('when typing on NPM picker, show a list of results', async () => {
-      const { npmPicker, npmSelectorFirstElement } = harvestMap
+    it('should show a list of results when typing on NPM picker', async () => {
+      const { npmPicker, npmSelectorFirstElement, npmComponent } = harvestMap
       await expect(page).toClick(npmPicker)
-      await page.type(npmPicker, 'chai')
+      await page.type(npmPicker, npmComponent)
       await expect(page).toMatchElement(npmSelectorFirstElement)
-      await expect(page).toMatchElement(npmSelectorFirstElement, { text: 'chai' })
+      await expect(page).toMatchElement(npmSelectorFirstElement, { text: npmComponent })
     })
 
-    it('when selecting NPM library, show it in the list of components', async () => {
-      const { npmSelectorFirstElement } = harvestMap
+    it('should show it in the list of components when selecting NPM library', async () => {
+      const { npmSelectorFirstElement, componentList, component, npmComponent } = harvestMap
       await expect(page).toClick(npmSelectorFirstElement)
+      await expect(page).toMatchElement(componentList.list)
+      await expect(page).toMatchElement(`${componentList.list} ${componentList.firstElement}`)
+      await expect(page).toMatchElement(`${componentList.list} ${componentList.firstElement} ${component.name}`)
+      const componentTitle = await page.$eval(
+        `${componentList.list} ${componentList.firstElement} ${component.name}`,
+        el => el.textContent
+      )
+      await expect(componentTitle).toMatch(npmComponent)
     })
 
-    it('when GitHub provider is active, show the User picker and the Repo pick', async () => {
+    it('should show the User picker and the Repo picker when GitHub provider is active', async () => {
       await page.waitForSelector(harvestMap.githubButton)
       const element = await page.$(harvestMap.githubButton)
       element.click()
@@ -110,6 +123,87 @@ const responses = {
         { id: 'chai-bignumber' },
         { id: 'chai-like' },
         { id: 'chai-dom' }
+      ])
+    }
+  },
+  revisions: {
+    npm: {
+      status: 200,
+      headers: { 'access-control-allow-origin': '*' },
+      body: JSON.stringify([
+        '4.2.0',
+        '4.1.2',
+        '4.1.1',
+        '4.1.0',
+        '4.0.2',
+        '4.0.1',
+        '4.0.0-canary.2',
+        '4.0.0-canary.1',
+        '4.0.0',
+        '3.5.0',
+        '3.4.1',
+        '3.4.0',
+        '3.3.0',
+        '3.2.0',
+        '3.1.0',
+        '3.0.0',
+        '2.3.0',
+        '2.2.0',
+        '2.1.2',
+        '2.1.1',
+        '2.1.0',
+        '2.0.0',
+        '1.9.2',
+        '1.9.1',
+        '1.9.0',
+        '1.8.1',
+        '1.8.0',
+        '1.7.2',
+        '1.7.1',
+        '1.7.0',
+        '1.6.1',
+        '1.6.0',
+        '1.5.0',
+        '1.4.2',
+        '1.4.1',
+        '1.4.0',
+        '1.3.0',
+        '1.2.0',
+        '1.10.0',
+        '1.1.1',
+        '1.1.0',
+        '1.0.4',
+        '1.0.3',
+        '1.0.2',
+        '1.0.1',
+        '1.0.0',
+        '0.5.3',
+        '0.5.2',
+        '0.5.1',
+        '0.5.0',
+        '0.4.2',
+        '0.4.1',
+        '0.4.0',
+        '0.3.4',
+        '0.3.3',
+        '0.3.2',
+        '0.3.1',
+        '0.3.0',
+        '0.2.4',
+        '0.2.3',
+        '0.2.2',
+        '0.2.1',
+        '0.2.0',
+        '0.1.7',
+        '0.1.6',
+        '0.1.5',
+        '0.1.4',
+        '0.1.3',
+        '0.1.2',
+        '0.1.1',
+        '0.1.0',
+        '0.0.2',
+        '0.0.1'
       ])
     }
   }
