@@ -8,9 +8,11 @@ export const harvestMap = {
   pypiButton: '[name="pypi"]',
   rubygemsButton: '[name="rubygems"]',
   npmPicker: '[placeholder="Pick an NPM to harvest"]',
+  npmVersionPicker: '[placeholder="Pick an NPM version"]',
   githubUserPicker: '[placeholder="User / Organization"]',
   githubRepoPicker: '[placeholder="Repo"]',
   npmSelectorFirstElement: '#npm-selector-item-0',
+  npmVersionSelectorFirstElement: '#npm-version-picker-item-0',
   componentList: {
     list: '.ReactVirtualized__Grid__innerScrollContainer',
     firstElement: 'div:nth-child(0n+1) .two-line-entry',

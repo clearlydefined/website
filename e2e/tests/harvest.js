@@ -81,6 +81,20 @@ describe(
       await expect(componentTitle).toMatch(npmComponent)
     })
 
+    it('should show a list of revisions when clicking on the NPM version picker', async () => {
+      const { npmVersionPicker, npmVersionSelectorFirstElement } = harvestMap
+      await expect(page).toClick(npmVersionPicker)
+      await expect(page).toMatchElement(npmVersionSelectorFirstElement)
+      await expect(page).toMatchElement(npmVersionSelectorFirstElement, { text: '4.2.0' })
+    })
+
+    it('should show the value of the selected NPM version', async () => {
+      const { npmVersionPicker, npmVersionSelectorFirstElement } = harvestMap
+      await expect(page).toClick(npmVersionSelectorFirstElement)
+      const componentTitle = await page.$eval(npmVersionPicker, el => el.value)
+      await expect(componentTitle).toMatch('4.2.0')
+    })
+
     it('should show the User picker and the Repo picker when GitHub provider is active', async () => {
       await page.waitForSelector(harvestMap.githubButton)
       const element = await page.$(harvestMap.githubButton)
@@ -103,26 +117,7 @@ const responses = {
         { id: 'deep-eql' },
         { id: 'webpack-chain' },
         { id: 'webdriverio' },
-        { id: 'pathval' },
-        { id: 'chai-subset' },
-        { id: 'check-error' },
-        { id: 'config-chain' },
-        { id: 'get-func-name' },
-        { id: 'karma-mocha-reporter' },
-        { id: 'chai-string' },
-        { id: 'p-try' },
-        { id: 'dirty-chai' },
-        { id: 'chai-immutable' },
-        { id: 'stack-chain' },
-        { id: 'chai-spies' },
-        { id: 'eslint-plugin-chai-expect' },
-        { id: 'chai-fs' },
-        { id: 'chai-datetime' },
-        { id: 'chai-exclude' },
-        { id: 'chai-json-schema' },
-        { id: 'chai-bignumber' },
-        { id: 'chai-like' },
-        { id: 'chai-dom' }
+        { id: 'pathval' }
       ])
     }
   },
@@ -130,81 +125,7 @@ const responses = {
     npm: {
       status: 200,
       headers: { 'access-control-allow-origin': '*' },
-      body: JSON.stringify([
-        '4.2.0',
-        '4.1.2',
-        '4.1.1',
-        '4.1.0',
-        '4.0.2',
-        '4.0.1',
-        '4.0.0-canary.2',
-        '4.0.0-canary.1',
-        '4.0.0',
-        '3.5.0',
-        '3.4.1',
-        '3.4.0',
-        '3.3.0',
-        '3.2.0',
-        '3.1.0',
-        '3.0.0',
-        '2.3.0',
-        '2.2.0',
-        '2.1.2',
-        '2.1.1',
-        '2.1.0',
-        '2.0.0',
-        '1.9.2',
-        '1.9.1',
-        '1.9.0',
-        '1.8.1',
-        '1.8.0',
-        '1.7.2',
-        '1.7.1',
-        '1.7.0',
-        '1.6.1',
-        '1.6.0',
-        '1.5.0',
-        '1.4.2',
-        '1.4.1',
-        '1.4.0',
-        '1.3.0',
-        '1.2.0',
-        '1.10.0',
-        '1.1.1',
-        '1.1.0',
-        '1.0.4',
-        '1.0.3',
-        '1.0.2',
-        '1.0.1',
-        '1.0.0',
-        '0.5.3',
-        '0.5.2',
-        '0.5.1',
-        '0.5.0',
-        '0.4.2',
-        '0.4.1',
-        '0.4.0',
-        '0.3.4',
-        '0.3.3',
-        '0.3.2',
-        '0.3.1',
-        '0.3.0',
-        '0.2.4',
-        '0.2.3',
-        '0.2.2',
-        '0.2.1',
-        '0.2.0',
-        '0.1.7',
-        '0.1.6',
-        '0.1.5',
-        '0.1.4',
-        '0.1.3',
-        '0.1.2',
-        '0.1.1',
-        '0.1.0',
-        '0.0.2',
-        '0.0.1'
-      ])
+      body: JSON.stringify(['4.2.0', '4.1.2', '4.1.1'])
     }
   }
 }
