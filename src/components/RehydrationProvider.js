@@ -17,10 +17,11 @@ import {
   ROUTE_STATUS,
   ROUTE_FILE
 } from '../utils/routingConstants'
+import history from '../config/history'
 import { configureStore } from '../configureStore'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { App, PageHarvest } from './'
+import { App } from './'
 import { omit } from 'lodash'
 import PageAbout from './PageAbout'
 import PageContribution from './Navigation/Pages/PageContribution'
@@ -31,6 +32,7 @@ import PageBrowse from './Navigation/Pages/PageBrowse'
 import PageStats from './Navigation/Pages/PageStats'
 import PageStatus from './Navigation/Pages/PageStatus'
 import PageFile from './Navigation/Pages/PageFile'
+import PageHarvest from './Navigation/Pages/PageHarvest'
 
 const store = configureStore()
 
@@ -71,7 +73,7 @@ export default class RehydrationDelayedProvider extends Component {
   render() {
     if (!this.state.rehydrated) return <div className="loading-site-root">Loading...</div>
     return (
-      <Provider store={store}>
+      <Provider store={store} history={history}>
         <Router>
           <App className="App">
             <Switch>
