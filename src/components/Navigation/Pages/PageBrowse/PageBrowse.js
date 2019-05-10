@@ -4,6 +4,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Grid } from 'react-bootstrap'
+import omit from 'lodash/omit'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 import difference from 'lodash/difference'
@@ -19,7 +20,7 @@ import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { curateFilters, types } from '../../../../utils/utils'
+import { curateFilters, types, getParamsToUrl, getParamsFromUrl } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
@@ -42,7 +43,17 @@ class PageBrowse extends SystemManagedList {
 
   componentDidMount() {
     this.props.dispatch(uiNavigation({ to: ROUTE_ROOT }))
-    this.updateData()
+    const urlParams = getParamsFromUrl(this.props.location.search)
+    urlParams
+      ? this.setState(
+          {
+            activeSort: urlParams.sort && urlParams.sort,
+            activeName: urlParams.name && urlParams.name,
+            activeFilters: omit(urlParams, ['sort', 'name'])
+          },
+          () => this.updateData()
+        )
+      : this.updateData()
   }
 
   noRowsRenderer(isFetching) {
@@ -226,6 +237,11 @@ class PageBrowse extends SystemManagedList {
         query.name = activeName.split('/')[1]
       } else query.name = activeName
     }
+    const urlParams = getParamsToUrl(query)
+    this.props.history.replace({
+      pathname: this.props.location.pathname,
+      search: `?${urlParams}`
+    })
     await this.props.dispatch(uiBrowseGet(this.props.token, query))
     if (this.props.definitions.entries)
       this.props.dispatch(
