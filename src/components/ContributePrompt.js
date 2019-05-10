@@ -89,7 +89,7 @@ export default class ContributePrompt extends Component {
     return (
       <Modal show={show} id="contribute-modal">
         <Form>
-          <Modal.Header closeButton>
+          <Modal.Header closeButton onHide={this.close}>
             <Modal.Title>Describe the changes in this curation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
