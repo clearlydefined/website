@@ -4,8 +4,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Grid, Row, Col, Button } from 'react-bootstrap'
-import { ROUTE_HARVEST } from '../utils/routingConstants'
-import { harvestAction } from '../actions/harvestActions'
+import { ROUTE_HARVEST } from '../../../../utils/routingConstants'
+import { harvestAction } from '../../../../actions/harvestActions'
 import {
   HarvestQueueList,
   GitHubSelector,
@@ -16,10 +16,10 @@ import {
   PyPiSelector,
   RubyGemsSelector,
   Section
-} from './'
-import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../actions/ui'
-import EntitySpec from '../utils/entitySpec'
-import ProviderButtons from './Navigation/Ui/ProviderButtons'
+} from '../../../'
+import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../../../../actions/ui'
+import EntitySpec from '../../../../utils/entitySpec'
+import ProviderButtons from '../../Ui/ProviderButtons'
 
 class PageHarvest extends Component {
   constructor(props) {
@@ -62,7 +62,7 @@ class PageHarvest extends Component {
     this.props.dispatch(uiHarvestUpdateQueue({ update: request, value: newRequest }))
   }
 
-  onClick(event, thing) {
+  onClick(event) {
     const target = event.target
     const activeProvider = target.name
     this.setState({ ...this.state, activeProvider })
