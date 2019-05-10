@@ -50,7 +50,6 @@ export default class RuleBuilder extends Component {
   }
 
   renderRule = (rule, path, conjunction = null, parentRule = {}) => {
-    console.log(rule)
     const { updateLicense, considerLaterVersions, removeRule } = this.props
     const currentPath = path[path.length - 1]
     if (Object.keys(rule).includes('noassertion'))

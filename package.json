@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@clearlydefined/spdx": "^0.1.0",
     "ant-design-palettes": "^1.1.3",
     "antd": "^3.16.3",
     "base64-js": "^1.3.0",
@@ -34,7 +35,6 @@
     "redux": "^3.7.2",
     "redux-persist": "^4.6.0",
     "redux-thunk": "^2.3.0",
-    "spdx": "github:clearlydefined/spdx",
     "spdx-license-ids": "^3.0.3",
     "throat": "^4.1.0",
     "whatwg-fetch": "^2.0.4"
