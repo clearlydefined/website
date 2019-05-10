@@ -12,6 +12,7 @@ import sortBy from 'lodash/sortBy'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
+import isNumber from 'lodash/isNumber'
 import notification from 'antd/lib/notification'
 import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
@@ -276,7 +277,7 @@ export default class SystemManagedList extends Component {
     const selectedEntries = selected
       ? Object.entries(selected)
           .map(s => (s[1] ? parseInt(s[0]) : null))
-          .filter(x => x)
+          .filter(x => isNumber(x))
       : []
     const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
     // contribute all the components
