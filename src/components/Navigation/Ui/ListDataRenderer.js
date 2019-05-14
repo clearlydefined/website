@@ -34,7 +34,7 @@ export default class ListDataRenderer extends Component {
     document.body.removeEventListener('showTooltip', this.handleShowTooltip)
   }
 
-  handleShowTooltip = () => {
+  handleShowTooltip = e => {
     if (e.detail !== this.props.title) this.setState({ showTooltip: false })
   }
 
