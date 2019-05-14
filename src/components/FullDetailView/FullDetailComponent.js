@@ -197,10 +197,7 @@ class FullDetailComponent extends Component {
                   <Col md={6}>
                     <Row>
                       <Col md={3}>
-                        <LabelRenderer text="Facets" />
-                      </Col>
-                      <Col md={9}>
-                        {/* using minimatch package in service */}
+                        <LabelRenderer text="Facets" />{' '}
                         <Tooltip title={this.globTooptipText()} overlayStyle={{ width: '800px' }}>
                           <i className="fas fa-info-circle" />
                         </Tooltip>
