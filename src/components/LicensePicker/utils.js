@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-import parse from 'spdx-expression-parse'
+import { parse } from '@clearlydefined/spdx'
 import isNil from 'lodash/isNil'
 import unset from 'lodash/unset'
 import get from 'lodash/get'
