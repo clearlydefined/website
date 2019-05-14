@@ -237,7 +237,7 @@ class PageBrowse extends SystemManagedList {
         query.name = activeName.split('/')[1]
       } else query.name = activeName
     }
-    const urlParams = getParamsToUrl(query)
+    const urlParams = getParamsToUrl(omit(query, ['continuationToken']))
     this.props.history.replace({
       pathname: this.props.location.pathname,
       search: `?${urlParams}`
