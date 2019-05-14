@@ -9,7 +9,6 @@ export default class ListDataRenderer extends Component {
   constructor(props) {
     super(props)
 
-    this.attachRef = target => this.setState({ target })
     this.state = {
       showTooltip: false
     }
@@ -27,18 +26,34 @@ export default class ListDataRenderer extends Component {
     trigger: ['click']
   }
 
+  componentDidMount() {
+    document.body.addEventListener('test', e => {
+      if (e.detail !== this.props.title) this.setState({ showTooltip: false })
+    })
+  }
+
+  dispatchShowTooltip = () => {
+    var event = new CustomEvent('test', { detail: this.props.title })
+    document.body.dispatchEvent(event)
+    this.setState({ showTooltip: true })
+  }
+
   render() {
     const { licensed, item, values, title } = this.props
-    const { showTooltip, target } = this.state
+    const { showTooltip } = this.state
     const data = values || get(licensed, item, [])
     if (!data) return null
     return (
       <>
-        <span ref={this.attachRef} className="popoverSpan" onMouseOver={() => this.setState({ showTooltip: true })}>
+        <span
+          ref={elem => (this.attachRef = elem)}
+          className="popoverSpan"
+          onMouseOver={() => this.dispatchShowTooltip()}
+        >
           {data.join(', ')}
         </span>
         <Overlay
-          target={target}
+          target={this.attachRef}
           show={showTooltip}
           placement="left"
           rootClose
