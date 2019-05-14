@@ -27,13 +27,15 @@ export default class ListDataRenderer extends Component {
   }
 
   componentDidMount() {
-    document.body.addEventListener('showTooltip', e => {
-      if (e.detail !== this.props.title) this.setState({ showTooltip: false })
-    })
+    document.body.addEventListener('showTooltip', this.handleShowTooltip)
   }
 
   componentWillMount() {
-    document.body.removeEventListener('showTooltip')
+    document.body.removeEventListener('showTooltip', this.handleShowTooltip)
+  }
+
+  handleShowTooltip = () => {
+    if (e.detail !== this.props.title) this.setState({ showTooltip: false })
   }
 
   dispatchShowTooltip = () => {
