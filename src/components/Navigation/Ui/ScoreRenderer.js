@@ -49,7 +49,8 @@ class ScoreRenderer extends Component {
     const color = this.getColor(score[name], maxScores[name] || 100, ['#d6af22', '#2cbe4e'])
     return (
       <p style={{ color }}>
-        {label}: {score[name]}/100 points
+        {label}: {score[name]}
+        {this.renderUnit()}
       </p>
     )
   }
@@ -82,16 +83,28 @@ class ScoreRenderer extends Component {
     return (
       <div className="ScoreRenderer__domain">
         <div className="ScoreRenderer__domain__section">
-          <h2>{`Effective: ${isNumber(effective.total) ? effective.total : effective}`}</h2>
+          <h2>
+            {`Effective: ${isNumber(effective.total) ? effective.total : effective}`}
+            {this.renderUnit()}
+          </h2>
           {this.renderScore(effective)}
         </div>
         <div className="ScoreRenderer__domain__section">
-          <h2>{`Tools: ${isNumber(tools.total) ? tools.total : tools}`}</h2>
+          <h2>
+            {`Tools: ${isNumber(tools.total) ? tools.total : tools}`}
+            {this.renderUnit()}
+          </h2>
           {this.renderScore(tools)}
         </div>
       </div>
     )
   }
+
+  renderUnit = () => (
+    <span>
+      / 100 <span className="unit">points</span>
+    </span>
+  )
 
   render() {
     const { domain, scores } = this.props
