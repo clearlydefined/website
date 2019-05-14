@@ -7,7 +7,7 @@
   }
   .ScoreRenderer__domain {
     display: flex;
-    width: 300px;
+    width: 400px;
   }
   .ScoreRenderer__domain__section {
     padding: 10px;
@@ -20,5 +20,6 @@
   }
 }
 .ant-tooltip-inner {
-  width: 300px !important;
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 400px !important;
 }
