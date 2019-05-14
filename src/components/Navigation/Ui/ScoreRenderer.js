@@ -49,7 +49,7 @@ class ScoreRenderer extends Component {
     const color = this.getColor(score[name], maxScores[name] || 100, ['#d6af22', '#2cbe4e'])
     return (
       <p style={{ color }}>
-        {label}: {score[name]}
+        {label}: {score[name]}/100 points
       </p>
     )
   }
