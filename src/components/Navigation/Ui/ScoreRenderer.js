@@ -72,10 +72,15 @@ class ScoreRenderer extends Component {
 
           <h2>Licensed</h2>
           {this.renderScores(licensedScore, licensedToolScore)}
+          {this.renderScoreInfo()}
         </div>
       )
     } else {
-      return <div className="ScoreRenderer">{this.renderScores(get(domain, 'score'), get(domain, 'toolScore'))}</div>
+      return (
+        <div className="ScoreRenderer">
+          {this.renderScores(get(domain, 'score'), get(domain, 'toolScore'))} {this.renderScoreInfo()}
+        </div>
+      )
     }
   }
 
@@ -104,6 +109,17 @@ class ScoreRenderer extends Component {
     <span>
       / 100 <span className="unit">points</span>
     </span>
+  )
+
+  renderScoreInfo = () => (
+    <div className="ScoreInfo">
+      <a
+        href="https://github.com/clearlydefined/license-score/blob/master/ClearlyLicensedMetrics.md#clearlylicensed-scoring-formula"
+        target="_blank"
+      >
+        What does these scores mean?
+      </a>
+    </div>
   )
 
   render() {
