@@ -91,7 +91,8 @@ export default class ContributePrompt extends Component {
           {definitions &&
             definitions.map(definition => (
               <li>
-                {definition.name} {definition.revision}
+                <span className="definition-name">{definition.name}</span>
+                <span className="definition-revision">{definition.revision}</span>
               </li>
             ))}
         </ul>

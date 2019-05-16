@@ -13,5 +13,14 @@
   .definitions-list {
     max-height: 350px;
     overflow-x: auto;
+    overflow-y: hidden;
+    .definition-name {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .definition-revision {
+      font-size: 11px;
+      display: inline-block;
+    }
   }
 }
