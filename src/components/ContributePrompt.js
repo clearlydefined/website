@@ -82,6 +82,23 @@ export default class ContributePrompt extends Component {
     )
   }
 
+  renderEditedDefinitions = () => {
+    const { definitions } = this.props
+    return (
+      <FormGroup>
+        <ControlLabel>Involved Components</ControlLabel>
+        <ul className="definitions-list">
+          {definitions &&
+            definitions.map(definition => (
+              <li>
+                {definition.name} {definition.revision}
+              </li>
+            ))}
+        </ul>
+      </FormGroup>
+    )
+  }
+
   render() {
     const { details, summary, show, resolution } = this.state
     const { session, onLogin } = this.props
@@ -93,56 +110,61 @@ export default class ContributePrompt extends Component {
             <Modal.Title>Describe the changes in this curation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div>
-              <FormGroup className="inlineBlock">
-                <ControlLabel>Contributor</ControlLabel>
+            <div className="container" style={{ display: 'flex' }}>
+              <div className="contribution-container">
                 <div>
-                  <FormControl.Static style={{ display: 'inline-block' }}>
-                    {session.isAnonymous ? 'anonymous' : `@${session.username}`}
-                  </FormControl.Static>{' '}
-                  {session.isAnonymous && (
-                    <Button bsStyle="success" data-test-id="login-button" onClick={onLogin}>
-                      Login
-                    </Button>
-                  )}
+                  <FormGroup className="inlineBlock">
+                    <ControlLabel>Contributor</ControlLabel>
+                    <div>
+                      <FormControl.Static style={{ display: 'inline-block' }}>
+                        {session.isAnonymous ? 'anonymous' : `@${session.username}`}
+                      </FormControl.Static>{' '}
+                      {session.isAnonymous && (
+                        <Button bsStyle="success" data-test-id="login-button" onClick={onLogin}>
+                          Login
+                        </Button>
+                      )}
+                    </div>
+                  </FormGroup>
+                  {this.renderTypeField()}
                 </div>
-              </FormGroup>
-              {this.renderTypeField()}
+                <FieldGroup
+                  name="summary"
+                  type="text"
+                  label="Title"
+                  value={summary || ''}
+                  onChange={this.handleChange}
+                  placeholder="Short (100 char) description"
+                  maxLength={100}
+                  required
+                />
+                <FieldGroup
+                  name="details"
+                  type="text"
+                  label="Details"
+                  value={details || ''}
+                  onChange={this.handleChange}
+                  placeholder="Describe here the problem(s) being addressed"
+                  maxLength={300}
+                  componentClass="textarea"
+                  rows="3"
+                  required
+                />
+                <FieldGroup
+                  name="resolution"
+                  type="text"
+                  label="Resolution"
+                  value={resolution || ''}
+                  onChange={this.handleChange}
+                  placeholder="What does this PR do to address the issue? Include references to docs where the new data was found and, for example, links to public conversations with the affected project team"
+                  maxLength={300}
+                  componentClass="textarea"
+                  rows="3"
+                  required
+                />
+              </div>
+              <div className="definition-container">{this.renderEditedDefinitions()}</div>
             </div>
-            <FieldGroup
-              name="summary"
-              type="text"
-              label="Title"
-              value={summary || ''}
-              onChange={this.handleChange}
-              placeholder="Short (100 char) description"
-              maxLength={100}
-              required
-            />
-            <FieldGroup
-              name="details"
-              type="text"
-              label="Details"
-              value={details || ''}
-              onChange={this.handleChange}
-              placeholder="Describe here the problem(s) being addressed"
-              maxLength={300}
-              componentClass="textarea"
-              rows="3"
-              required
-            />
-            <FieldGroup
-              name="resolution"
-              type="text"
-              label="Resolution"
-              value={resolution || ''}
-              onChange={this.handleChange}
-              placeholder="What does this PR do to address the issue? Include references to docs where the new data was found and, for example, links to public conversations with the affected project team"
-              maxLength={300}
-              componentClass="textarea"
-              rows="3"
-              required
-            />
           </Modal.Body>
           <Modal.Footer>
             <div>

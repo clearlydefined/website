@@ -172,6 +172,7 @@ export class PageDefinitions extends UserManagedList {
           session={session}
           onLogin={this.handleLogin}
           actionHandler={this.doContribute}
+          definitions={this.getDefinitionsWithChanges()}
         />
         <SearchBar filterOptions={filterOptions} onChange={this.onAddComponent} onSearch={this.onSearch} />
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
