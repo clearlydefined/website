@@ -203,7 +203,7 @@ export default class SystemManagedList extends Component {
         if (value === 'PRESENCE OF') {
           if (!fieldValue) return false
         } else if (value === 'ABSENCE OF') {
-          if (fieldValue && !['NONE', 'NOASSERTION'].includes(fieldValue)) return false
+          if (fieldValue && !['NONE', 'NOASSERTION', 'OTHER'].includes(fieldValue)) return false
         } else {
           if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
             return false
