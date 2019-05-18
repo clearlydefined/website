@@ -113,10 +113,10 @@ const responses = {
             urls: {
               registry: 'https://npmjs.com/package/@angular/language-service',
               version: 'https://npmjs.com/package/@angular/language-service/v/7.2.13',
-              download: 'https://registry.npmjs.com/@angular/language-service/-/language-service-7.2.13.tgz'
+              download: 'https://registry.npmjs.com/@angular/language-service/-/language-service-7.2.13.tgz',
+              projectWebsite: 'https://github.com/angular/angular#readme',
+              issueTracker: 'https://github.com/angular/angular/issues'
             },
-            projectWebsite: 'https://github.com/angular/angular#readme',
-            issueTracker: 'https://github.com/angular/angular/issues',
             hashes: {
               sha1: '941cb098657efdbc386ef8e54d2d893497f68c20',
               sha256: '593bf8a62f6c0ea6899bb3618854141ffe0465f65eea37f0b549c0bddbd4c1df'
@@ -161,10 +161,10 @@ const responses = {
             urls: {
               registry: 'https://npmjs.com/package/@microsoft.azure/openapi',
               version: 'https://npmjs.com/package/@microsoft.azure/openapi/v/2.1.63',
-              download: 'https://registry.npmjs.com/@microsoft.azure/openapi/-/openapi-2.1.63.tgz'
+              download: 'https://registry.npmjs.com/@microsoft.azure/openapi/-/openapi-2.1.63.tgz',
+              projectWebsite: 'https://github.com/Azure/perks#readme',
+              issueTracker: 'https://github.com/Azure/perks/issues'
             },
-            projectWebsite: 'https://github.com/Azure/perks#readme',
-            issueTracker: 'https://github.com/Azure/perks/issues',
             hashes: {
               sha1: '7c9be65748ff2638c04ed3b196fd0982d4ddb0e3',
               sha256: 'e0037ae92a84948400de151ff31ae641202db68daa281e8235611f29ead18fcd'
@@ -222,10 +222,10 @@ const responses = {
             urls: {
               registry: 'https://npmjs.com/package/url-parse',
               version: 'https://npmjs.com/package/url-parse/v/1.4.6',
-              download: 'https://registry.npmjs.com/url-parse/-/url-parse-1.4.6.tgz'
+              download: 'https://registry.npmjs.com/url-parse/-/url-parse-1.4.6.tgz',
+              projectWebsite: 'https://github.com/unshiftio/url-parse#readme',
+              issueTracker: 'https://github.com/unshiftio/url-parse/issues'
             },
-            projectWebsite: 'https://github.com/unshiftio/url-parse#readme',
-            issueTracker: 'https://github.com/unshiftio/url-parse/issues',
             hashes: {
               sha1: 'baf91d6e6783c8a795eb476892ffef2737fc0456',
               sha256: '6f12cb928f970a3da517a7fcfc98885c18a1f28fd19fb611c1afca51c89747e3'

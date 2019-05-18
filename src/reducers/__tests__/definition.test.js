@@ -12,8 +12,10 @@ const mockedDefinition = {
         name: 'async'
       },
       releaseDate: '2017-11-16',
-      projectWebsite: 'https://caolan.github.io/async/',
-      issueTracker: 'https://github.com/caolan/async/issues',
+      urls: {
+        projectWebsite: 'https://caolan.github.io/async/',
+        issueTracker: 'https://github.com/caolan/async/issues'
+      },
       tools: ['scancode/2.2.1', 'clearlydefined/1', 'curation/63b2dde4188849a660de4ebe44f301f34c2e7886'],
       toolScore: { total: 2 },
       score: { total: 2 }
