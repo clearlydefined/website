@@ -51,7 +51,7 @@ function paramsToObject(entries) {
   return result
 }
 
-const customLicenseIds = ['NONE', 'NOASSERTION']
+const customLicenseIds = ['NONE', 'OTHER']
 
 const sorts = [
   { value: 'license', label: 'License' },
