@@ -149,7 +149,7 @@ class HarvestQueueList extends React.Component {
     const request = list[index]
     const clickHandler = () => {}
     return (
-      <div key={key} style={style}>
+      <div key={key} style={style} className="component-row">
         <TwoLineEntry
           item={request}
           image={this.getImage(request)}

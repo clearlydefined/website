@@ -11,6 +11,8 @@ import set from 'lodash/set'
 import sortBy from 'lodash/sortBy'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
+import isNumber from 'lodash/isNumber'
 import notification from 'antd/lib/notification'
 import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
@@ -201,7 +203,7 @@ export default class SystemManagedList extends Component {
         if (value === 'PRESENCE OF') {
           if (!fieldValue) return false
         } else if (value === 'ABSENCE OF') {
-          if (fieldValue && !['NONE', 'NOASSERTION'].includes(fieldValue)) return false
+          if (fieldValue && !['NONE', 'NOASSERTION', 'OTHER'].includes(fieldValue)) return false
         } else {
           if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
             return false
@@ -272,10 +274,18 @@ export default class SystemManagedList extends Component {
   async onChangeComponent(component, newComponent, field) {
     const { components } = this.props
     const { selected } = this.state
-    const selectedEntries = selected ? Object.entries(selected) : []
+    const selectedEntries = selected
+      ? Object.entries(selected)
+          .map(s => (s[1] ? parseInt(s[0]) : null))
+          .filter(x => isNumber(x))
+      : []
+    const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
     // contribute all the components
-    if (multiEditableFields.includes(field) && selectedEntries.length > 0) {
-      const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
+    if (
+      multiEditableFields.includes(field) &&
+      selectedEntries.length > 0 &&
+      selectedComponents.find(selectedComponent => isEqual(selectedComponent, component))
+    ) {
       const res = await this.showMultiSelectNotification(selectedComponents.length)
       if (res) {
         // Apply the same change to all the selected components

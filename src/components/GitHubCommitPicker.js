@@ -69,7 +69,7 @@ export default class GitHubCommitPicker extends Component {
   }
 
   renderMenuItemChildren(option, props) {
-    const value = option.tag === option.sha ? option.sha : `${option.tag} (${option.sha})`
+    const value = option.tag === option.sha ? option.sha : `${option.tag}${option.sha ? ` (${option.sha})` : ''}`
     return <Highlighter search={props.text}>{value}</Highlighter>
   }
 
