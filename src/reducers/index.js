@@ -8,6 +8,7 @@ import definitionReducer from './definitionReducer'
 import suggestionReducer from './suggestionReducer'
 import statReducer from './statReducer'
 import navigationReducer from './navigationReducer'
+import loaderReducer from './loaderReducer'
 // import harvestReducer from './harvestReducer'
 
 const rootReducer = combineReducers({
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   definition: definitionReducer,
   suggestion: suggestionReducer,
   stat: statReducer,
-  navigation: navigationReducer
+  navigation: navigationReducer,
+  loader: loaderReducer
   // harvest: harvestReducer
 })
 

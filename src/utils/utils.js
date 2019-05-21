@@ -51,7 +51,7 @@ function paramsToObject(entries) {
   return result
 }
 
-const customLicenseIds = ['NONE', 'NOASSERTION']
+const customLicenseIds = ['NONE', 'OTHER']
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -84,9 +84,10 @@ const licenses = [
   { value: 'absence', label: 'Absence Of' }
 ]
 
-const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+const sources = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
 
-const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+const releaseDates = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
+const changes = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
 
 const curateFilters = [
   { value: 'effective', label: 'Focus on overall issues' },
@@ -130,6 +131,7 @@ export {
   noRowsHeight,
   providers,
   releaseDates,
+  changes,
   setIfValue,
   sorts,
   sources,
