@@ -12,7 +12,7 @@ import {
   searchDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiDefinitionsUpdateList, UI_BROWSE_REVERT, uiBrowseUpdateList } from './ui'
+import { uiDefinitionsUpdateList, UI_BROWSE_REVERT, uiBrowseUpdateList, uiInfo } from './ui'
 import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
@@ -31,25 +31,32 @@ export function getDefinitionAction(token, entity, name) {
   }
 }
 
-export function getDefinitionsAction(token, entities) {
+export function getDefinitionsAction(token, entities, isMissedDefinition = false) {
   return dispatch => {
     const actions = asyncActions(DEFINITION_BODIES)
     dispatch(actions.start())
     return getDefinitions(token, entities).then(
-      result => dispatch(actions.success({ add: result })),
+      result => {
+        if (isMissedDefinition) {
+          uiInfo(dispatch, 'Some definitions have been harvested. You are now able to check them out.')
+        }
+        dispatch(actions.success({ add: result }))
+      },
       error => dispatch(actions.error(error))
     )
   }
 }
 
-export function checkForMissingDefinition(token) {
+export function checkForMissingDefinition(token, isFirstAttempt = false) {
   return (dispatch, getState) => {
     const missingDefinitions = map(
       get(getState(), 'definition.bodies.entries'),
       (item, key) => !get(item, 'described.tools') && key
     ).filter(x => x)
     if (missingDefinitions.length > 0) {
-      dispatch(getDefinitionsAction(token, missingDefinitions))
+      if (isFirstAttempt)
+        uiInfo(dispatch, "Some definitions are not already harvested, we'll notice you once the operation will finish")
+      dispatch(getDefinitionsAction(token, missingDefinitions, true))
       setTimeout(() => dispatch(checkForMissingDefinition(token)), 20000)
     }
   }

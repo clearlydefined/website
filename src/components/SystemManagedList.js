@@ -403,7 +403,7 @@ export default class SystemManagedList extends Component {
     Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
       .then(() => {
         uiInfo(dispatch, message)
-        dispatch(checkForMissingDefinition(token))
+        dispatch(checkForMissingDefinition(token, true))
       })
       .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
   }
