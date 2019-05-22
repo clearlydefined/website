@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Table, Input, Button, Icon } from 'antd'
 import get from 'lodash/get'
@@ -13,7 +13,7 @@ import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
 import Attachments from '../../utils/attachments'
 
-export default class FileList extends Component {
+export default class FileList extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func,
     files: PropTypes.array,
@@ -279,7 +279,7 @@ export default class FileList extends Component {
         pagination={false}
         bordered={false}
         indentSize={8}
-        scroll={{ x: false, y: 650 }}
+        scroll={{ x: 500, y: 650 }}
       />
     )
   }

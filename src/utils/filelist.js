@@ -1,11 +1,18 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 import orderBy from 'lodash/orderBy'
+import memoize from 'lodash/memoize'
 import Contribution from './contribution'
 
 // Abstract methods for FileList
 let key = 0
 export default class FileListSpec {
+  constructor() {
+    this.pathToTreeFolders = memoize(this.pathToTreeFolders)
+    this.getFolders = memoize(this.getFolders)
+    this.getFileFacets = memoize(this.getFileFacets)
+    this.getFileAttributions = memoize(this.getFileAttributions)
+  }
   static pathToTreeFolders(files, component, preview) {
     if (!files) return []
     const newFiles = files.map((file, index) => {
@@ -93,18 +100,17 @@ export default class FileListSpec {
     )
   }
 
-  static getFlattenFilesList(files) {
-    return files.reduce((acc, x) => {
-      acc = acc.concat(x)
-      if (x.children) {
-        acc = acc.concat(this.getFlattenFilesList(x.children))
-      }
-      return acc
-    }, [])
-  }
-
   static getFilesKeys(files) {
-    const flattenList = this.getFlattenFilesList(files)
+    const memoizedFlattenList = memoize(files => {
+      return files.reduce((acc, x) => {
+        acc = acc.concat(x)
+        if (x.children) {
+          acc = acc.concat(memoizedFlattenList(x.children))
+        }
+        return acc
+      }, [])
+    })
+    const flattenList = memoizedFlattenList(files)
     return flattenList.map(item => item.children && item.key).filter(x => x)
   }
 }
