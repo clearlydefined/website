@@ -40,8 +40,10 @@ export default class FileList extends Component {
   }
 
   updateFileList = props => {
+    const files = FileListSpec.pathToTreeFolders(props.files, props.component.item, props.previewDefinition)
     this.setState({
-      files: FileListSpec.pathToTreeFolders(props.files, props.component.item, props.previewDefinition)
+      files,
+      expandedRows: FileListSpec.getFilesKeys(files)
     })
   }
 
@@ -270,12 +272,14 @@ export default class FileList extends Component {
         className="file-list"
         columns={columns}
         dataSource={searchText ? filteredFiles : files}
+        defaultExpandAllRows
         onChange={this.handleChange}
         expandedRowKeys={expandedRows}
         onExpandedRowsChange={expandedRows => this.setState({ expandedRows })}
         pagination={false}
         bordered={false}
         indentSize={8}
+        scroll={{ x: false, y: 650 }}
       />
     )
   }

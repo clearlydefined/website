@@ -92,4 +92,19 @@ export default class FileListSpec {
       Contribution.getValueAndIfDifferent(component, preview, `files[${key}].attributions[${index}]`)
     )
   }
+
+  static getFlattenFilesList(files) {
+    return files.reduce((acc, x) => {
+      acc = acc.concat(x)
+      if (x.children) {
+        acc = acc.concat(this.getFlattenFilesList(x.children))
+      }
+      return acc
+    }, [])
+  }
+
+  static getFilesKeys(files) {
+    const flattenList = this.getFlattenFilesList(files)
+    return flattenList.map(item => item.children && item.key).filter(x => x)
+  }
 }
