@@ -5,9 +5,6 @@ import { connect } from 'react-redux'
 import { getLoadingStatus } from '../../../reducers/loaderReducer'
 
 export class FullScreenLoader extends Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     const { loadingStatus } = this.props
     return loadingStatus
