@@ -40,10 +40,8 @@ export default class FileList extends PureComponent {
   }
 
   updateFileList = props => {
-    const files = FileListSpec.pathToTreeFolders(props.files, props.component.item, props.previewDefinition)
     this.setState({
-      files,
-      expandedRows: FileListSpec.getFilesKeys(files)
+      files: FileListSpec.pathToTreeFolders(props.files, props.component.item, props.previewDefinition)
     })
   }
 
@@ -117,12 +115,19 @@ export default class FileList extends PureComponent {
   handleSearch = (dataIndex, selectedKeys, confirm) => {
     confirm()
     const filteredFiles = this.filterFiles(this.state.files, dataIndex, selectedKeys[0])
-    this.setState({ searchText: selectedKeys[0], filteredFiles })
+    this.setState(state => {
+      return {
+        ...state,
+        searchText: selectedKeys[0],
+        filteredFiles,
+        expandedRows: FileListSpec.getFilesKeys(state.files)
+      }
+    })
   }
 
   handleReset = clearFilters => {
     clearFilters()
-    this.setState({ searchText: '' })
+    this.setState({ searchText: '', expandedRows: [] })
   }
 
   handleChange = (pagination, filters, sorter) => {
@@ -171,7 +176,7 @@ export default class FileList extends PureComponent {
 
   render() {
     const { onChange, definition, readOnly, component, previewDefinition } = this.props
-    let { expandedRows, searchText, filteredFiles, files } = this.state
+    const { expandedRows, searchText, filteredFiles, files } = this.state
 
     const facets = Contribution.getValue(definition, previewDefinition, 'described.facets')
     const columns = [
@@ -272,10 +277,9 @@ export default class FileList extends PureComponent {
         className="file-list"
         columns={columns}
         dataSource={searchText ? filteredFiles : files}
-        defaultExpandAllRows
         onChange={this.handleChange}
         expandedRowKeys={expandedRows}
-        onExpandedRowsChange={expandedRows => this.setState({ expandedRows })}
+        onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
         pagination={false}
         bordered={false}
         indentSize={8}
