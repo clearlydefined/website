@@ -13,6 +13,7 @@ import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import isNumber from 'lodash/isNumber'
+import isString from 'lodash/isString'
 import notification from 'antd/lib/notification'
 import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
@@ -69,7 +70,9 @@ export default class SystemManagedList extends Component {
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+    const definition = this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+    if (component.changes) definition.changes = component.changes
+    return definition
   }
 
   getValue(component, field) {
@@ -209,9 +212,9 @@ export default class SystemManagedList extends Component {
         if (value === 'PRESENCE OF') {
           if (!fieldValue) return false
         } else if (value === 'ABSENCE OF') {
-          if (fieldValue && !['NONE', 'NOASSERTION'].includes(fieldValue)) return false
+          if (fieldValue && !['NONE', 'NOASSERTION', 'OTHER'].includes(fieldValue)) return false
         } else {
-          if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
+          if (!fieldValue || (isString(fieldValue) && !fieldValue.toLowerCase().includes(value.toLowerCase()))) {
             return false
           }
         }

@@ -2,10 +2,18 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import get from 'lodash/get'
-import { Popover, OverlayTrigger } from 'react-bootstrap'
+import { Popover, Overlay } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 export default class ListDataRenderer extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      showTooltip: false
+    }
+  }
+
   static propTypes = {
     licensed: PropTypes.object,
     item: PropTypes.string,
@@ -15,19 +23,49 @@ export default class ListDataRenderer extends Component {
   }
 
   static defaultProps = {
-    trigger: ['hover', 'focus']
+    trigger: ['click']
+  }
+
+  componentDidMount() {
+    document.body.addEventListener('showTooltip', this.handleShowTooltip)
+  }
+
+  componentWillMount() {
+    document.body.removeEventListener('showTooltip', this.handleShowTooltip)
+  }
+
+  handleShowTooltip = e => {
+    if (e.detail !== this.props.title) this.setState({ showTooltip: false })
+  }
+
+  dispatchShowTooltip = () => {
+    var event = new CustomEvent('showTooltip', { detail: this.props.title })
+    document.body.dispatchEvent(event)
+    this.setState({ showTooltip: true })
   }
 
   render() {
-    const { licensed, item, values, title, trigger } = this.props
+    const { licensed, item, values, title } = this.props
+    const { showTooltip } = this.state
     const data = values || get(licensed, item, [])
     if (!data) return null
     return (
-      <OverlayTrigger
-        trigger={trigger}
-        placement="left"
-        rootClose
-        overlay={
+      <>
+        <span
+          ref={elem => (this.attachRef = elem)}
+          className="popoverSpan"
+          onMouseOver={() => this.dispatchShowTooltip()}
+        >
+          {data.join(', ')}
+        </span>
+        <Overlay
+          target={this.attachRef}
+          show={showTooltip}
+          placement="left"
+          rootClose
+          rootCloseEvent={'click'}
+          onHide={() => this.setState({ showTooltip: false })}
+        >
           <Popover title={title} id={title}>
             <div className="popoverRenderer popoverRenderer_scrollY">
               {data.map((a, index) => (
@@ -39,10 +77,8 @@ export default class ListDataRenderer extends Component {
               ))}
             </div>
           </Popover>
-        }
-      >
-        <span className="popoverSpan">{data.join(', ')}</span>
-      </OverlayTrigger>
+        </Overlay>
+      </>
     )
   }
 }
