@@ -55,6 +55,8 @@ class PageBrowse extends SystemManagedList {
         )
       : this.updateData()
   }
+  
+  
 
   noRowsRenderer(isFetching) {
     return isFetching ? <div /> : <div className="list-noRows">Broaden your filters to find more results</div>
@@ -65,7 +67,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   tableTitle() {
-    return 'Browse'
+    return 'Browse!!!'
   }
 
   renderTopFilters() {
