@@ -40,14 +40,16 @@ export default class PageStatus extends Component {
       this.fetchRequestsPerDay(),
       this.fetchDefinitionAvailability(),
       this.fetchCrawledPerDay(),
-      this.fetchRecentlyCrawled()
+      this.fetchRecentlyCrawled(),
+      this.fetchCrawlbreakdown()
     ])
     this.setState({
       loaded: true,
       requestsPerDay: data[0],
       definitionAvailability: data[1],
       crawledPerDay: data[2],
-      recentlyCrawled: data[3]
+      recentlyCrawled: data[3],
+      crawlbreakdown: data[4]
     })
   }
 
@@ -77,6 +79,14 @@ export default class PageStatus extends Component {
     const data = await getStatus('recentlycrawled')
     return data.map(entry => {
       entry.timestamp = new Date(entry.timestamp).toLocaleString()
+      return entry
+    })
+  }
+
+  async fetchCrawlbreakdown() {
+    const data = await getStatus('crawlbreakdown')
+    return data.map(entry => {
+      entry.date = new Date(entry.date).toLocaleDateString()
       return entry
     })
   }
@@ -112,6 +122,11 @@ export default class PageStatus extends Component {
             <Row>
               <h2>Recently crawled components</h2>
               {this.renderRecentlyCrawled()}
+            </Row>
+            <hr />
+            <Row>
+              <h2>Types processed / day</h2>
+              {this.renderCrawlbreakdown()}
             </Row>
           </div>
         )}
@@ -227,6 +242,32 @@ export default class PageStatus extends Component {
           </tbody>
         </Table>
       </div>
+    )
+  }
+
+  renderCrawlbreakdown() {
+    return (
+      <ResponsiveContainer height={500}>
+        <BarChart data={this.state.crawlbreakdown}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          {Object.keys(
+            this.state.crawlbreakdown.reduce((result, entry) => {
+              Object.keys(entry).forEach(x => {
+                result[x] = 1
+              })
+              return result
+            }, {})
+          )
+            .filter(x => x !== 'date' && x !== '')
+            .map((host, index) => {
+              return <Bar dataKey={host} fill={colors[index % colors.length]} stackId="a" />
+            })}
+        </BarChart>
+      </ResponsiveContainer>
     )
   }
 
