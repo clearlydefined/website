@@ -3,6 +3,7 @@
 
 import React, { Component } from 'react'
 import { Grid, Row, Col, Table } from 'react-bootstrap'
+import ColorScheme from 'color-scheme'
 import {
   Bar,
   BarChart,
@@ -18,10 +19,14 @@ import {
   XAxis,
   YAxis
 } from 'recharts'
-import { primaryColor, secondaryColor, describedColor, secureColor } from '../../../Clearly'
 import { getStatus } from '../../../../api/clearlyDefined'
 
-const colors = [primaryColor.color, secondaryColor.color, describedColor.color, secureColor.color]
+const scheme = new ColorScheme()
+scheme
+  .from_hex('0064b5')
+  .scheme('analogic')
+  .variation('default')
+const colors = scheme.colors()
 
 export default class PageStatus extends Component {
   constructor(props) {
@@ -141,7 +146,7 @@ export default class PageStatus extends Component {
           <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey="count" stroke={colors[0]} />
+          <Line type="monotone" dataKey="count" stroke={`#${colors[0]}`} />
         </LineChart>
       </ResponsiveContainer>
     )
@@ -157,7 +162,7 @@ export default class PageStatus extends Component {
                 <td>
                   <span
                     style={{
-                      backgroundColor: colors[index % colors.length],
+                      backgroundColor: `#${colors[index % colors.length]}`,
                       height: '20px',
                       width: '20px',
                       marginRight: '10px',
@@ -190,7 +195,7 @@ export default class PageStatus extends Component {
             fill="#8884d8"
           >
             {this.state.definitionAvailability.map((entry, index) => (
-              <Cell fill={colors[index % colors.length]} />
+              <Cell fill={`#${colors[index % colors.length]}`} />
             ))}
           </Pie>
         </PieChart>
@@ -217,7 +222,7 @@ export default class PageStatus extends Component {
           )
             .filter(x => x !== 'date')
             .map((host, index) => {
-              return <Bar dataKey={host} fill={colors[index % colors.length]} stackId="a" />
+              return <Bar dataKey={host} fill={`#${colors[index % colors.length]}`} stackId="a" />
             })}
         </BarChart>
       </ResponsiveContainer>
@@ -264,7 +269,8 @@ export default class PageStatus extends Component {
           )
             .filter(x => x !== 'date' && x !== '')
             .map((host, index) => {
-              return <Bar dataKey={host} fill={colors[index % colors.length]} stackId="a" />
+              console.log(index, colors.length, index % colors.length)
+              return <Bar dataKey={host} fill={`#${colors[index % colors.length]}`} stackId="a" />
             })}
         </BarChart>
       </ResponsiveContainer>
