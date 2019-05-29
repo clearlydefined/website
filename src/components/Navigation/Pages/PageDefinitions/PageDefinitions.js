@@ -165,6 +165,7 @@ export class PageDefinitions extends UserManagedList {
       showFullDetail,
       showSavePopup
     } = this.state
+
     return (
       <Grid className="main-container flex-column">
         <ContributePrompt
