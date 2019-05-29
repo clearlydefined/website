@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-import { deepFind } from '../utils/utils'
 import get from 'lodash/get'
 
 const initialState = {
