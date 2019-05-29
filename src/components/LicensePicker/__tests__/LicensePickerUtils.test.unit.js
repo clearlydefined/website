@@ -23,9 +23,9 @@ describe('LicensePickerUtils', () => {
       'MIT-0': true,
       'MIT AND Apache-2.0': true,
       'MIT OR Apache-2.0': true,
-      junk: false,
+      junk: true,
       'MIT AND ADSL AND (AFL-3.0 OR AGPL-1.0-only)': true,
-      null: false,
+      null: true,
       NONE: true,
       NOASSERTION: true
     }

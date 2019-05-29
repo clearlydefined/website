@@ -27,7 +27,31 @@ function asObject(item) {
   }
 }
 
-const customLicenseIds = ['NONE', 'NOASSERTION']
+// Function that return a URL string from an object
+function getParamsToUrl(data) {
+  let params = new URLSearchParams()
+  for (let key in data) {
+    if (data.hasOwnProperty(key) && data[key]) params.set(key, data[key])
+  }
+  return params.toString()
+}
+
+function getParamsFromUrl(search) {
+  const params = new URLSearchParams(search)
+  if (params.toString() === '') return
+  return paramsToObject(params.entries())
+}
+
+function paramsToObject(entries) {
+  let result = {}
+  for (let entry of entries) {
+    const [key, value] = entry
+    result[key] = value
+  }
+  return result
+}
+
+const customLicenseIds = ['NONE', 'OTHER']
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -60,9 +84,10 @@ const licenses = [
   { value: 'absence', label: 'Absence Of' }
 ]
 
-const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+const sources = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
 
-const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+const releaseDates = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
+const changes = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
 
 const curateFilters = [
   { value: 'effective', label: 'Focus on overall issues' },
@@ -106,9 +131,12 @@ export {
   noRowsHeight,
   providers,
   releaseDates,
+  changes,
   setIfValue,
   sorts,
   sources,
+  getParamsToUrl,
+  getParamsFromUrl,
   types,
   multiEditableFields
 }
