@@ -4,7 +4,6 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col, Table } from 'react-bootstrap'
 import ColorScheme from 'color-scheme'
-import map from 'lodash/map'
 import {
   Bar,
   BarChart,
