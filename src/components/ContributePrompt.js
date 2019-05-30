@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { Modal, Form, Button } from 'react-bootstrap'
 import { FormGroup, ControlLabel, FormControl, Checkbox } from 'react-bootstrap'
 import { FieldGroup } from './'
+import Contribution from '../utils/contribution'
 
 export default class ContributePrompt extends Component {
   constructor(props) {
@@ -84,17 +85,26 @@ export default class ContributePrompt extends Component {
 
   renderEditedDefinitions = () => {
     const { definitions } = this.props
+    console.log(definitions)
     return (
       <FormGroup>
         <ControlLabel>Involved Components</ControlLabel>
         <ul className="definitions-list">
           {definitions &&
-            definitions.map(definition => (
-              <li>
-                <span className="definition-name">{definition.name}</span>
-                <span className="definition-revision">{definition.revision}</span>
-              </li>
-            ))}
+            definitions.map(definition => {
+              const image = Contribution.getImage({ coordinates: definition })
+              console.log(image)
+              return (
+                <li>
+                  {image && <img className="list-image" src={image} alt="" />}
+                  <span className="definition-name">
+                    {definition.namespace && `${definition.namespace}/`}
+                    {definition.name}
+                  </span>
+                  <span className="definition-revision">{definition.revision}</span>
+                </li>
+              )
+            })}
         </ul>
       </FormGroup>
     )
