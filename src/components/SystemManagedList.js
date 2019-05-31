@@ -55,6 +55,7 @@ export default class SystemManagedList extends Component {
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
+    this.getDefinitionsWithChanges = this.getDefinitionsWithChanges.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
     this.transform = this.transform.bind(this)
     this.createTransform = this.createTransform.bind(this)
@@ -159,6 +160,11 @@ export default class SystemManagedList extends Component {
   doPromptContribute() {
     if (!this.hasChanges()) return
     this.contributeModal.current.open()
+  }
+
+  getDefinitionsWithChanges() {
+    const { components } = this.props
+    return components.list.filter(component => this.hasChange(component))
   }
 
   getSort(eventKey) {

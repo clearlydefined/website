@@ -276,6 +276,7 @@ class PageBrowse extends SystemManagedList {
           session={session}
           onLogin={this.handleLogin}
           actionHandler={this.doContribute}
+          definitions={this.getDefinitionsWithChanges()}
         />
         {this.renderTopFilters()}
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
