@@ -1,0 +1,30 @@
+#contribute-modal {
+  .modal-dialog {
+    width: 700px !important;
+  }
+  .container {
+    width: 100%;
+    .contribution-container,
+    .definition-container {
+      width: 50%;
+      padding: 10px;
+    }
+  }
+  .definitions-list {
+    max-height: 350px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    li {
+      margin-top: 5px;
+      list-style-type: none;
+    }
+    .definition-name {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .definition-revision {
+      font-size: 11px;
+      display: inline-block;
+    }
+  }
+}
