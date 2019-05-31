@@ -85,7 +85,6 @@ export default class ContributePrompt extends Component {
 
   renderEditedDefinitions = () => {
     const { definitions } = this.props
-    console.log(definitions)
     return (
       <FormGroup>
         <ControlLabel>Involved Components</ControlLabel>
@@ -93,7 +92,6 @@ export default class ContributePrompt extends Component {
           {definitions &&
             definitions.map(definition => {
               const image = Contribution.getImage({ coordinates: definition })
-              console.log(image)
               return (
                 <li>
                   {image && <img className="list-image" src={image} alt="" />}
