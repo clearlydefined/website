@@ -105,11 +105,7 @@ class ScoreRenderer extends Component {
     )
   }
 
-  renderUnit = () => (
-    <span>
-      / 100 <span className="unit">points</span>
-    </span>
-  )
+  renderUnit = () => <span>/100</span>
 
   renderScoreInfo = () => (
     <div className="ScoreInfo">
@@ -117,7 +113,7 @@ class ScoreRenderer extends Component {
         href="https://github.com/clearlydefined/license-score/blob/master/ClearlyLicensedMetrics.md#clearlylicensed-scoring-formula"
         target="_blank"
       >
-        What does these scores mean?
+        Scoring Formula
       </a>
     </div>
   )

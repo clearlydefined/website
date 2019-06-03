@@ -49,19 +49,13 @@ describe('ScoreRenderer', () => {
       <div className="ScoreRenderer__domain">
         <div className="ScoreRenderer__domain__section">
           <h2>
-            Effective: 0
-            <span>
-              / 100 <span className="unit">points</span>
-            </span>
+            Effective: 0<span>/100</span>
           </h2>
           {instance.renderScore(licensedScore)}
         </div>
         <div className="ScoreRenderer__domain__section">
           <h2>
-            Tools: 0
-            <span>
-              / 100 <span className="unit">points</span>
-            </span>
+            Tools: 0<span>/100</span>
           </h2>
           {instance.renderScore(licensedToolScore)}
         </div>
