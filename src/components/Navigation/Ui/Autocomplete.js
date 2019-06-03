@@ -17,7 +17,7 @@ export default class Autocomplete extends Component {
       <Menu {...menuProps}>
         {results.map((result, index) => (
           <TypeaheadMenuItem
-            key={menuProps.labelKey && get(result, menuProps.labelKey) ? get(result, menuProps.labelKey) : result}
+            key={this.props.labelKey && get(result, this.props.labelKey) ? get(result, this.props.labelKey) : result}
             option={result}
             position={index}
           >
@@ -30,7 +30,8 @@ export default class Autocomplete extends Component {
 
   renderItem = (result, menuProps) => {
     const { renderMenuItemChildren } = this.props
-    if (isObject(result)) return
+    if (isObject(result) && !renderMenuItemChildren) return
+    if (result === '') return <hr className="no-margin" />
     return renderMenuItemChildren ? (
       renderMenuItemChildren(result, menuProps)
     ) : (

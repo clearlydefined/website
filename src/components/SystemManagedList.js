@@ -11,6 +11,9 @@ import set from 'lodash/set'
 import sortBy from 'lodash/sortBy'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
+import isNumber from 'lodash/isNumber'
+import isString from 'lodash/isString'
 import notification from 'antd/lib/notification'
 import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
@@ -52,6 +55,7 @@ export default class SystemManagedList extends Component {
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
+    this.getDefinitionsWithChanges = this.getDefinitionsWithChanges.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
     this.transform = this.transform.bind(this)
     this.createTransform = this.createTransform.bind(this)
@@ -66,7 +70,9 @@ export default class SystemManagedList extends Component {
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+    const definition = this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+    if (component.changes) definition.changes = component.changes
+    return definition
   }
 
   getValue(component, field) {
@@ -156,6 +162,11 @@ export default class SystemManagedList extends Component {
     this.contributeModal.current.open()
   }
 
+  getDefinitionsWithChanges() {
+    const { components } = this.props
+    return components.list.filter(component => this.hasChange(component))
+  }
+
   getSort(eventKey) {
     const sorts = {
       name: coordinates => (coordinates.name ? coordinates.name : null),
@@ -197,12 +208,13 @@ export default class SystemManagedList extends Component {
       for (let filterType in activeFilters) {
         const value = activeFilters[filterType]
         const fieldValue = this.getValue(definition, filterType)
-        if (value === 'presence') {
+        if (!value) return true
+        if (value === 'PRESENCE OF') {
           if (!fieldValue) return false
-        } else if (value === 'absence') {
-          if (fieldValue && !['NONE', 'NOASSERTION'].includes(fieldValue)) return false
+        } else if (value === 'ABSENCE OF') {
+          if (fieldValue && !['NONE', 'NOASSERTION', 'OTHER'].includes(fieldValue)) return false
         } else {
-          if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
+          if (!fieldValue || (isString(fieldValue) && !fieldValue.toLowerCase().includes(value.toLowerCase()))) {
             return false
           }
         }
@@ -271,10 +283,18 @@ export default class SystemManagedList extends Component {
   async onChangeComponent(component, newComponent, field) {
     const { components } = this.props
     const { selected } = this.state
-    const selectedEntries = selected ? Object.entries(selected) : []
+    const selectedEntries = selected
+      ? Object.entries(selected)
+          .map(s => (s[1] ? parseInt(s[0]) : null))
+          .filter(x => isNumber(x))
+      : []
+    const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
     // contribute all the components
-    if (multiEditableFields.includes(field) && selectedEntries.length > 0) {
-      const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
+    if (
+      multiEditableFields.includes(field) &&
+      selectedEntries.length > 0 &&
+      selectedComponents.find(selectedComponent => isEqual(selectedComponent, component))
+    ) {
       const res = await this.showMultiSelectNotification(selectedComponents.length)
       if (res) {
         // Apply the same change to all the selected components

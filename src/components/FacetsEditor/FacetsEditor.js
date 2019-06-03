@@ -8,9 +8,6 @@ import Contribution from '../../utils/contribution'
 import GlobsPicker from '../GlobsPicker'
 import Curation from '../../utils/curation'
 
-// Hardcoded, maybe it should be kept somewhere else
-const facets = ['data', 'dev', 'doc', 'examples', 'tests']
-
 /**
  * Component that shows active facets for the files of the definition
  * Each facet is editable and it applies the change to the files of the definition
@@ -26,8 +23,8 @@ class FacetsEditor extends Component {
     const { onChange, definition, previewDefinition, readOnly, onRevert, curationSuggestions } = this.props
 
     return (
-      <div>
-        {facets.map(item => (
+      <div data-test-id="facets-editor">
+        {Contribution.nonCoreFacets.map(item => (
           <Row key={item}>
             <Col sm={3} xs={4}>
               <span>{item}</span>
