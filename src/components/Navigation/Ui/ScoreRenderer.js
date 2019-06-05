@@ -50,7 +50,7 @@ class ScoreRenderer extends Component {
     return (
       <p style={{ color }}>
         {label}: {score[name]}
-        {this.renderUnit()}
+        {this.renderUnit(maxScores[name])}
       </p>
     )
   }
@@ -105,7 +105,7 @@ class ScoreRenderer extends Component {
     )
   }
 
-  renderUnit = () => <span>/100</span>
+  renderUnit = maxScore => <span>/{maxScore || 100}</span>
 
   renderScoreInfo = () => (
     <div className="ScoreInfo">
