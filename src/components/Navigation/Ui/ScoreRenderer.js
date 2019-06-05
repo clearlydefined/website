@@ -105,7 +105,7 @@ class ScoreRenderer extends Component {
     )
   }
 
-  renderUnit = maxScore => <span>/{maxScore || 100}</span>
+  renderUnit = maxScore => <span>{`/${maxScore || 100}`}</span>
 
   renderScoreInfo = () => (
     <div className="ScoreInfo">
