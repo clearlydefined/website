@@ -43,10 +43,23 @@ export default class LicensePicker extends Component {
       this.setState({
         ...this.state,
         licenseExpression,
-        rules: LicensePickerUtils.parseLicense(licenseExpression),
         isValid: LicensePickerUtils.isValidExpression(licenseExpression)
       })
     }
+  }
+
+  restoreRules = async rule => {
+    return this.setState(
+      {
+        rules: {},
+        sequence: this.state.sequence + 1
+      },
+      () =>
+        this.setState({
+          rules: LicensePickerUtils.parseLicense(rule),
+          sequence: this.state.sequence + 1
+        })
+    )
   }
 
   updateLicense = async (value, path) => {
@@ -82,6 +95,7 @@ export default class LicensePicker extends Component {
   }
 
   removeRule = async rule => {
+    console.log(rule)
     const rules = { ...this.state.rules }
     return this.setState({
       rules: LicensePickerUtils.removeRule(rules, rule),

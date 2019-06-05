@@ -22,7 +22,7 @@ export default class EnhancedLicensePicker extends LicensePicker {
         licenseExpression={licenseExpression}
         field={'licensed.declared'}
         {...this.props}
-        onChange={suggestion => this.updateLicense(suggestion, [])}
+        onChange={suggestion => this.restoreRules(suggestion)}
       />
     )
   }
