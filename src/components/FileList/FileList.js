@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Table, Input, Button, Icon } from 'antd'
 import get from 'lodash/get'
@@ -13,7 +13,7 @@ import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
 import Attachments from '../../utils/attachments'
 
-export default class FileList extends Component {
+export default class FileList extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func,
     files: PropTypes.array,
@@ -115,12 +115,19 @@ export default class FileList extends Component {
   handleSearch = (dataIndex, selectedKeys, confirm) => {
     confirm()
     const filteredFiles = this.filterFiles(this.state.files, dataIndex, selectedKeys[0])
-    this.setState({ searchText: selectedKeys[0], filteredFiles })
+    this.setState(state => {
+      return {
+        ...state,
+        searchText: selectedKeys[0],
+        filteredFiles,
+        expandedRows: FileListSpec.getFilesKeys(state.files)
+      }
+    })
   }
 
   handleReset = clearFilters => {
     clearFilters()
-    this.setState({ searchText: '' })
+    this.setState({ searchText: '', expandedRows: [] })
   }
 
   handleChange = (pagination, filters, sorter) => {
@@ -169,7 +176,7 @@ export default class FileList extends Component {
 
   render() {
     const { onChange, definition, readOnly, component, previewDefinition } = this.props
-    let { expandedRows, searchText, filteredFiles, files } = this.state
+    const { expandedRows, searchText, filteredFiles, files } = this.state
 
     const facets = Contribution.getValue(definition, previewDefinition, 'described.facets')
     const columns = [
@@ -272,10 +279,11 @@ export default class FileList extends Component {
         dataSource={searchText ? filteredFiles : files}
         onChange={this.handleChange}
         expandedRowKeys={expandedRows}
-        onExpandedRowsChange={expandedRows => this.setState({ expandedRows })}
+        onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
         pagination={false}
         bordered={false}
         indentSize={8}
+        scroll={{ x: 500, y: 650 }}
       />
     )
   }
