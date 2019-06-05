@@ -10,6 +10,13 @@ const EnhancedLicenseExpression = withSuggestions(LicenseExpression)
 
 export default class EnhancedLicensePicker extends LicensePicker {
   renderLicenseExpression = (isValid, licenseExpression) => {
-    return <EnhancedLicenseExpression isValid={isValid} licenseExpression={licenseExpression} />
+    return (
+      <EnhancedLicenseExpression
+        isValid={isValid}
+        licenseExpression={licenseExpression}
+        field={'licensed.declared'}
+        {...this.props}
+      />
+    )
   }
 }

@@ -71,6 +71,7 @@ class LicensesRenderer extends Component {
             onChange={spec => this.advancedPickerChange(spec, onChange)}
             onClose={this.toggleAdvancedView}
             value={value}
+            definition={definition}
           />
         </Modal>
       </div>

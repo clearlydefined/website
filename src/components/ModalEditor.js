@@ -20,7 +20,8 @@ class ModalEditor extends React.Component {
     onRevert: PropTypes.func,
     placeholder: PropTypes.string,
     revertable: PropTypes.bool,
-    showEditIcon: PropTypes.bool
+    showEditIcon: PropTypes.bool,
+    definition: PropTypes.object
   }
 
   static defaultProps = {
@@ -47,7 +48,8 @@ class ModalEditor extends React.Component {
       placeholder,
       readOnly,
       showEditIcon,
-      value
+      value,
+      definition
     } = this.props
     const { editing } = this.state
     const changed = initialValue !== value
@@ -79,7 +81,8 @@ class ModalEditor extends React.Component {
               this.setState({ editing: false })
             },
             onClose: () => this.setState({ editing: false }),
-            value
+            value,
+            definition
           })}
         </Modal>
       </span>
