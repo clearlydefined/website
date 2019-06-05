@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { Component } from 'react'
 import LicensePicker from '../components/LicensePicker'
 import withSuggestions from './withSuggestions'
 
-const LicenseExpression = ({ isValid, licenseExpression }) => (
-  <span className={`spdx-picker-expression ${isValid ? 'is-valid' : 'is-not-valid'}`}>{licenseExpression}</span>
-)
+class LicenseExpression extends Component {
+  onChange = suggestion => this.props.onChange(suggestion)
+  render() {
+    const { isValid, licenseExpression } = this.props
+    return (
+      <span className={`spdx-picker-expression ${isValid ? 'is-valid' : 'is-not-valid'}`}>{licenseExpression}</span>
+    )
+  }
+}
 
 const EnhancedLicenseExpression = withSuggestions(LicenseExpression)
 
@@ -16,6 +22,7 @@ export default class EnhancedLicensePicker extends LicensePicker {
         licenseExpression={licenseExpression}
         field={'licensed.declared'}
         {...this.props}
+        onChange={suggestion => this.updateLicense(suggestion, [])}
       />
     )
   }

@@ -43,6 +43,7 @@ export default class LicensePicker extends Component {
       this.setState({
         ...this.state,
         licenseExpression,
+        rules: LicensePickerUtils.parseLicense(licenseExpression),
         isValid: LicensePickerUtils.isValidExpression(licenseExpression)
       })
     }
