@@ -55,7 +55,7 @@ export function checkForMissingDefinition(token, isFirstAttempt = false) {
     ).filter(x => x)
     if (missingDefinitions.length > 0) {
       if (isFirstAttempt)
-        uiInfo(dispatch, "Some definitions are not already harvested, we'll notice you once the operation will finish")
+        uiInfo(dispatch, "Some definitions are not already harvested, we'll let you know when the operation finishes.")
       dispatch(getDefinitionsAction(token, missingDefinitions, true))
       setTimeout(() => dispatch(checkForMissingDefinition(token)), 20000)
     }
