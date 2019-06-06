@@ -13,6 +13,7 @@ import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import isNumber from 'lodash/isNumber'
+import isString from 'lodash/isString'
 import notification from 'antd/lib/notification'
 import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
@@ -54,6 +55,7 @@ export default class SystemManagedList extends Component {
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
+    this.getDefinitionsWithChanges = this.getDefinitionsWithChanges.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
     this.transform = this.transform.bind(this)
     this.createTransform = this.createTransform.bind(this)
@@ -68,7 +70,9 @@ export default class SystemManagedList extends Component {
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+    const definition = this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+    if (component.changes) definition.changes = component.changes
+    return definition
   }
 
   getValue(component, field) {
@@ -158,6 +162,11 @@ export default class SystemManagedList extends Component {
     this.contributeModal.current.open()
   }
 
+  getDefinitionsWithChanges() {
+    const { components } = this.props
+    return components.list.filter(component => this.hasChange(component))
+  }
+
   getSort(eventKey) {
     const sorts = {
       name: coordinates => (coordinates.name ? coordinates.name : null),
@@ -205,7 +214,7 @@ export default class SystemManagedList extends Component {
         } else if (value === 'ABSENCE OF') {
           if (fieldValue && !['NONE', 'NOASSERTION', 'OTHER'].includes(fieldValue)) return false
         } else {
-          if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
+          if (!fieldValue || (isString(fieldValue) && !fieldValue.toLowerCase().includes(value.toLowerCase()))) {
             return false
           }
         }
