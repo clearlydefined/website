@@ -95,7 +95,6 @@ export default class LicensePicker extends Component {
   }
 
   removeRule = async rule => {
-    console.log(rule)
     const rules = { ...this.state.rules }
     return this.setState({
       rules: LicensePickerUtils.removeRule(rules, rule),
