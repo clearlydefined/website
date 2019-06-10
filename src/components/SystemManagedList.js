@@ -131,7 +131,6 @@ export default class SystemManagedList extends Component {
     }
     const spec = { contributionInfo, patches }
     dispatch(curateAction(token, spec))
-    this.refresh(contributionInfo.removeDefinitions)
   }
 
   buildContributeSpec(list) {
