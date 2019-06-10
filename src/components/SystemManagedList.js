@@ -38,7 +38,8 @@ export default class SystemManagedList extends Component {
       selected: {},
       sequence: 0,
       showFullDetail: false,
-      path: null
+      path: null,
+      removeContributedDefinitions: false
     }
     this.readOnly = true
     this.multiSelectEnabled = false
@@ -131,7 +132,7 @@ export default class SystemManagedList extends Component {
     }
     const spec = { contributionInfo, patches }
     dispatch(curateAction(token, spec))
-    this.refresh(contributionInfo.removeDefinitions)
+    this.setState({ removeContributedDefinitions: contributionInfo.removeDefinitions })
   }
 
   buildContributeSpec(list) {
@@ -164,6 +165,14 @@ export default class SystemManagedList extends Component {
 
   getDefinitionsWithChanges() {
     const { components } = this.props
+    const { selected } = this.state
+    const selectedEntries = selected
+      ? Object.entries(selected)
+          .map(s => (s[1] ? parseInt(s[0]) : null))
+          .filter(x => isNumber(x))
+      : []
+    const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
+    if (selectedComponents.length > 0) return selectedComponents.filter(component => this.hasChange(component))
     return components.list.filter(component => this.hasChange(component))
   }
 
@@ -423,9 +432,9 @@ export default class SystemManagedList extends Component {
     Promise.all(chunks.map(throat(10, chunk => dispatch(getCurationsAction(token, chunk)))))
   }
 
-  refresh = removeDefinitions => {
+  refresh = () => {
     const { components } = this.props
-    const refreshedData = removeDefinitions
+    const refreshedData = this.state.removeContributedDefinitions
       ? components.list.filter(item => isEmpty(item.changes))
       : components.list.map(({ changes, ...keepAttrs }) => keepAttrs)
     if (this.hasChanges()) this.updateList({ updateAll: refreshedData })
@@ -434,6 +443,7 @@ export default class SystemManagedList extends Component {
     const curationsToGet = definitions.map(definition => definition.toPath())
     this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
     this.getCurations(curationsToGet)
+    this.setState({ removeContributedDefinitions: false })
   }
 
   updateList(_) {}

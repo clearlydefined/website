@@ -49,9 +49,14 @@ export function getDefinitionsAction(token, entities, isMissedDefinition = false
 
 export function checkForMissingDefinition(token, isFirstAttempt = false) {
   return (dispatch, getState) => {
+    const components = get(getState(), 'definition.bodies.entries')
+    const workspaceComponents = map(
+      get(getState(), 'ui.definitions.componentList.list'),
+      component => components[EntitySpec.fromObject(component).toPath()]
+    ).filter(x => x)
     const missingDefinitions = map(
-      get(getState(), 'definition.bodies.entries'),
-      (item, key) => !get(item, 'described.tools') && key
+      workspaceComponents,
+      item => !get(item, 'described.tools') && EntitySpec.fromObject(item).toPath()
     ).filter(x => x)
     if (missingDefinitions.length > 0) {
       if (isFirstAttempt)
