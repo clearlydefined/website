@@ -78,7 +78,11 @@ export class AbstractFullDetailsView extends Component {
           getCurationData={this.getCurationData}
           inspectedCuration={inspectedCuration}
           renderContributeButton={
-            <Button bsStyle="success" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
+            <Button
+              bsStyle="success"
+              disabled={isEmpty(changes) || isEmpty(harvest.item)}
+              onClick={this.doPromptContribute}
+            >
               Contribute
             </Button>
           }
