@@ -37,12 +37,13 @@ import valueReducer from './valueReducer'
 import itemReducer from './itemReducer'
 import yaml from 'js-yaml'
 import EntitySpec from '../utils/entitySpec'
-import { CURATION_BODIES } from '../actions/curationActions'
+import { CURATION_BODIES, CURATION_POST } from '../actions/curationActions'
 
 const curate = combineReducers({
   filter: valueReducer(UI_CURATE_UPDATE_FILTER),
   filterList: listReducer(UI_CURATE_UPDATE_FILTER_LIST),
   bodies: tableReducer(CURATION_BODIES),
+  status: itemReducer(CURATION_POST),
   currentCuration: itemReducer(UI_CURATE_GET),
   proposedCuration: itemReducer(UI_CURATE_GET_PROPOSED),
   currentDefinition: itemReducer(UI_CURATE_GET_DEFINITION),

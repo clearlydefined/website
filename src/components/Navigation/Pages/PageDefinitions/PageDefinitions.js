@@ -46,6 +46,16 @@ export class PageDefinitions extends UserManagedList {
     dispatch(uiNavigation({ to: ROUTE_WORKSPACE }))
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      JSON.stringify(nextProps.curationStatus) !== JSON.stringify(this.props.curationStatus) &&
+      !nextProps.curationStatus.isFetching &&
+      !nextProps.curationStatus.error
+    ) {
+      this.refresh()
+    }
+  }
+
   tableTitle() {
     return 'Workspace'
   }
@@ -239,6 +249,7 @@ function mapStateToProps(state, ownProps) {
     filterOptions: state.ui.definitions.filterList,
     components: state.ui.definitions.componentList,
     curations: state.ui.curate.bodies,
+    curationStatus: state.ui.curate.status,
     definitions: state.definition.bodies,
     session: state.session
   }

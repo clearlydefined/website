@@ -13,7 +13,7 @@ import { Button } from 'react-bootstrap'
 import { uiDefinitionsUpdateList, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
-import { getDefinitionsAction } from '../actions/definitionActions'
+import { getDefinitionsAction, checkForMissingDefinition } from '../actions/definitionActions'
 import { getCurationsAction } from '../actions/curationActions'
 import SystemManagedList from './SystemManagedList'
 
@@ -127,6 +127,7 @@ export default class UserManagedList extends SystemManagedList {
     !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
     !curations.entries[path] && dispatch(getCurationsAction(token, [path]))
     dispatch(uiDefinitionsUpdateList({ add: component }))
+    dispatch(checkForMissingDefinition(token, true))
   }
 
   loadComponentList(content, name) {
