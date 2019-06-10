@@ -164,6 +164,14 @@ export default class SystemManagedList extends Component {
 
   getDefinitionsWithChanges() {
     const { components } = this.props
+    const { selected } = this.state
+    const selectedEntries = selected
+      ? Object.entries(selected)
+          .map(s => (s[1] ? parseInt(s[0]) : null))
+          .filter(x => isNumber(x))
+      : []
+    const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
+    if (selectedComponents.length > 0) return selectedComponents.filter(component => this.hasChange(component))
     return components.list.filter(component => this.hasChange(component))
   }
 
