@@ -93,7 +93,7 @@ class HeaderSection extends Component {
               </div>
               <div>
                 {!isSourceComponent && !isSourceEmpty && (
-                  <ButtonWithTooltip tip="Open the definition for source that matches this package">
+                  <ButtonWithTooltip tip="Open the definition for source that matches this package" placement="bottom">
                     <Button bsStyle="info" onClick={this.openSourceForComponent.bind(this, item)}>
                       <i className="fas fa-code" />
                     </Button>
