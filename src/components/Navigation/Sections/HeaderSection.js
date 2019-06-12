@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Row, Button, Col } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
-import { Tag } from 'antd'
+import { Tag, Dropdown, Menu, Icon } from 'antd'
 import { withResize } from '../../../utils/WindowProvider'
 import Curation from '../../../utils/curation'
 import ScoreRenderer from '../Ui/ScoreRenderer'
@@ -43,6 +43,31 @@ class HeaderSection extends Component {
     const scores = get(item, 'scores')
     const isCurated = Curation.isCurated(curations.item)
     const hasPendingCurations = Curation.isPending(curations.item)
+
+    const menu = (
+      <Menu>
+        <Menu.Item key="1">
+          Copy Component Url{' '}
+          <CopyUrlButton
+            className="list-fa-button"
+            path={`${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(get(item, 'coordinates')).toPath()}`}
+          />
+        </Menu.Item>
+        <Menu.Item key="1">
+          Open Source Definition{' '}
+          <Button className="list-fa-button">
+            <i className="fas fa-code" />
+          </Button>
+        </Menu.Item>
+        <Menu.Item key="1">
+          List other version of this component{' '}
+          <Button className="list-fa-button">
+            <i class="fas fa-list" />
+          </Button>
+        </Menu.Item>
+      </Menu>
+    )
+
     return (
       <Row className="row-detail-header">
         <Col md={8}>
@@ -70,10 +95,11 @@ class HeaderSection extends Component {
                 )}
               </div>
               <div>
-                <CopyUrlButton
-                  bsStyle="info"
-                  path={`${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(get(item, 'coordinates')).toPath()}`}
-                />
+                <Dropdown overlay={menu}>
+                  <Button bsStyle="info">
+                    <i class="fas fa-ellipsis-v" />
+                  </Button>
+                </Dropdown>
               </div>
             </div>
             <p>
