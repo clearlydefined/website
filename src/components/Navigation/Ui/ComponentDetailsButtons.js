@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Dropdown, Menu } from 'antd'
 import { Button } from 'react-bootstrap'
 import get from 'lodash/get'
-import CopyUrlButton from '../../CopyUrlButton'
 import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import EntitySpec from '../../../utils/entitySpec'
@@ -33,19 +32,41 @@ class ComponentDetailsButtons extends Component {
     window.open(`${window.location.origin}${path}`)
   }
 
+  renderUrl() {
+    const { item } = this.props
+    return `${window.location.origin}${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(get(item, 'coordinates')).toPath()}`
+  }
+
+  copyToClipboard = str => {
+    const el = document.createElement('textarea')
+    el.value = str
+    el.setAttribute('readonly', '')
+    el.style.position = 'absolute'
+    el.style.left = '-9999px'
+    document.body.appendChild(el)
+    const selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false
+    el.select()
+    document.execCommand('copy')
+    document.body.removeChild(el)
+    if (selected) {
+      document.getSelection().removeAllRanges()
+      document.getSelection().addRange(selected)
+    }
+  }
+
   render() {
     const { item } = this.props
     const isSourceComponent = this.isSourceComponent(item.coordinates)
     const isSourceEmpty = Definition.isSourceEmpty(item)
     const menu = (
       <Menu>
-        <Menu.Item key="1" onClick={() => this.copyUrlButton.current.onCopy()}>
+        <Menu.Item key="1" onClick={() => this.copyToClipboard(this.renderUrl())}>
           Copy Component Url{' '}
-          <CopyUrlButton
-            ref={this.copyUrlButton}
-            className="list-fa-button"
-            path={`${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(get(item, 'coordinates')).toPath()}`}
-          />
+          <ButtonWithTooltip tip="Copy URL to clipboard" placement="bottom">
+            <Button className="list-fa-button">
+              <i className="fas fa-copy" />
+            </Button>
+          </ButtonWithTooltip>
         </Menu.Item>
         {!isSourceComponent && !isSourceEmpty && (
           <Menu.Item key="2" onClick={() => this.openSourceForComponent(item)}>

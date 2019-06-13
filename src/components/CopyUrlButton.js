@@ -44,6 +44,7 @@ export default class CopyUrlButton extends Component {
   }
 
   didCopy() {
+    alert('copied!')
     this.setState({ ...this.state, copied: false, timeoutId: null })
   }
 
