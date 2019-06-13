@@ -14,6 +14,8 @@ import DefinitionRevision from '../Ui/DefinitionRevision'
 import CopyUrlButton from '../../CopyUrlButton'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import EntitySpec from '../../../utils/entitySpec'
+import Definition from '../../../utils/definition'
+import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 
 class HeaderSection extends Component {
   static propTypes = {
@@ -25,6 +27,22 @@ class HeaderSection extends Component {
     handleClose: PropTypes.func,
     handleSave: PropTypes.func,
     handleRevert: PropTypes.func
+  }
+
+  constructor(props) {
+    super(props)
+    this.copyUrlButton = React.createRef()
+  }
+
+  isSourceComponent(component) {
+    return ['github', 'sourcearchive'].includes(component.provider)
+  }
+
+  openSourceForComponent = definition => {
+    const sourceLocation = get(definition, 'described.sourceLocation')
+    const sourceEntity = sourceLocation && EntitySpec.fromObject(sourceLocation)
+    const path = `${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(sourceEntity).toPath()}`
+    window.open(`${window.location.origin}${path}`)
   }
 
   render() {
@@ -46,20 +64,25 @@ class HeaderSection extends Component {
 
     const menu = (
       <Menu>
-        <Menu.Item key="1">
+        <Menu.Item key="1" onClick={() => this.copyUrlButton.current.onCopy()}>
           Copy Component Url{' '}
           <CopyUrlButton
+            ref={this.copyUrlButton}
             className="list-fa-button"
             path={`${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(get(item, 'coordinates')).toPath()}`}
           />
         </Menu.Item>
-        <Menu.Item key="1">
-          Open Source Definition{' '}
-          <Button className="list-fa-button">
-            <i className="fas fa-code" />
-          </Button>
-        </Menu.Item>
-        <Menu.Item key="1">
+        {!isSourceComponent && !isSourceEmpty && (
+          <Menu.Item key="2" onClick={() => this.openSourceForComponent(item)}>
+            Open Source Definition{' '}
+            <ButtonWithTooltip tip="Open the definition for source that matches this package" placement="bottom">
+              <Button className="list-fa-button">
+                <i className="fas fa-code" />
+              </Button>
+            </ButtonWithTooltip>
+          </Menu.Item>
+        )}
+        <Menu.Item key="3">
           List other version of this component{' '}
           <Button className="list-fa-button">
             <i class="fas fa-list" />
@@ -68,6 +91,8 @@ class HeaderSection extends Component {
       </Menu>
     )
 
+    const isSourceComponent = this.isSourceComponent(item.coordinates)
+    const isSourceEmpty = Definition.isSourceEmpty(item)
     return (
       <Row className="row-detail-header">
         <Col md={8}>
@@ -95,7 +120,7 @@ class HeaderSection extends Component {
                 )}
               </div>
               <div>
-                <Dropdown overlay={menu}>
+                <Dropdown overlay={menu} trigger="hover">
                   <Button bsStyle="info">
                     <i class="fas fa-ellipsis-v" />
                   </Button>
