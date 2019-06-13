@@ -24,6 +24,15 @@ class ComponentDetailsButtons extends Component {
     const path = `${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(sourceEntity).toPath()}`
     window.open(`${window.location.origin}${path}`)
   }
+
+  openRelatedComponents = definition => {
+    const path = `/?type=${get(definition, 'coordinates.type')}&name=${get(
+      definition,
+      'coordinates.name'
+    )}&sortDesc=true&sort=releaseDate`
+    window.open(`${window.location.origin}${path}`)
+  }
+
   render() {
     const { item } = this.props
     const isSourceComponent = this.isSourceComponent(item.coordinates)
@@ -48,7 +57,7 @@ class ComponentDetailsButtons extends Component {
             </ButtonWithTooltip>
           </Menu.Item>
         )}
-        <Menu.Item key="3">
+        <Menu.Item key="3" onClick={() => this.openRelatedComponents(item)}>
           List other version of this component{' '}
           <Button className="list-fa-button">
             <i class="fas fa-list" />
