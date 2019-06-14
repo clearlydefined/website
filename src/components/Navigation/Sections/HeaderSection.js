@@ -11,11 +11,7 @@ import Curation from '../../../utils/curation'
 import ScoreRenderer from '../Ui/ScoreRenderer'
 import DefinitionTitle from '../Ui/DefinitionTitle'
 import DefinitionRevision from '../Ui/DefinitionRevision'
-import CopyUrlButton from '../../CopyUrlButton'
-import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
-import EntitySpec from '../../../utils/entitySpec'
-import Definition from '../../../utils/definition'
-import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
+import ComponentDetailsButtons from '../Ui/ComponentDetailsButtons'
 
 class HeaderSection extends Component {
   static propTypes = {
@@ -27,18 +23,6 @@ class HeaderSection extends Component {
     handleClose: PropTypes.func,
     handleSave: PropTypes.func,
     handleRevert: PropTypes.func
-  }
-
-  isSourceComponent(component) {
-    return ['github', 'sourcearchive'].includes(component.provider)
-  }
-
-  openSourceForComponent(definition, event) {
-    event.stopPropagation()
-    const sourceLocation = get(definition, 'described.sourceLocation')
-    const sourceEntity = sourceLocation && EntitySpec.fromObject(sourceLocation)
-    const path = `${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(sourceEntity).toPath()}`
-    window.open(`${window.location.origin}${path}`)
   }
 
   render() {
@@ -57,8 +41,7 @@ class HeaderSection extends Component {
     const scores = get(item, 'scores')
     const isCurated = Curation.isCurated(curations.item)
     const hasPendingCurations = Curation.isPending(curations.item)
-    const isSourceComponent = this.isSourceComponent(item.coordinates)
-    const isSourceEmpty = Definition.isSourceEmpty(item)
+
     return (
       <Row className="row-detail-header">
         <Col md={8}>
@@ -85,20 +68,8 @@ class HeaderSection extends Component {
                   </Tag>
                 )}
               </div>
-              <div className="right-space">
-                <CopyUrlButton
-                  bsStyle="info"
-                  path={`${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(get(item, 'coordinates')).toPath()}`}
-                />
-              </div>
               <div>
-                {!isSourceComponent && !isSourceEmpty && (
-                  <ButtonWithTooltip tip="Open the definition for source that matches this package" placement="bottom">
-                    <Button bsStyle="info" onClick={this.openSourceForComponent.bind(this, item)}>
-                      <i className="fas fa-code" />
-                    </Button>
-                  </ButtonWithTooltip>
-                )}
+                <ComponentDetailsButtons item={item} />
               </div>
             </div>
             <p>
