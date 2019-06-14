@@ -61,7 +61,7 @@ class ComponentDetailsButtons extends Component {
     const menu = (
       <Menu>
         <Menu.Item key="1" onClick={() => this.copyToClipboard(this.renderUrl())}>
-          Copy Component Url{' '}
+          Copy component URL{' '}
           <ButtonWithTooltip tip="Copy URL to clipboard" placement="bottom">
             <Button className="list-fa-button">
               <i className="fas fa-copy" />
@@ -70,7 +70,7 @@ class ComponentDetailsButtons extends Component {
         </Menu.Item>
         {!isSourceComponent && !isSourceEmpty && (
           <Menu.Item key="2" onClick={() => this.openSourceForComponent(item)}>
-            Open Source Definition{' '}
+            Open the definition for source{' '}
             <ButtonWithTooltip tip="Open the definition for source that matches this package" placement="bottom">
               <Button className="list-fa-button">
                 <i className="fas fa-code" />
@@ -79,7 +79,7 @@ class ComponentDetailsButtons extends Component {
           </Menu.Item>
         )}
         <Menu.Item key="3" onClick={() => this.openRelatedComponents(item)}>
-          List other version of this component{' '}
+          List other versions of this component{' '}
           <Button className="list-fa-button">
             <i class="fas fa-list" />
           </Button>
