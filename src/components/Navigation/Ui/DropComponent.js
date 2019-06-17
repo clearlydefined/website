@@ -12,7 +12,7 @@ import { getGist } from '../../../api/github'
 import { uiInfo, uiWarning } from '../../../actions/ui'
 import EntitySpec from '../../../utils/entitySpec'
 
-class DropComponent extends Component {
+export class DropComponent extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onLoad: PropTypes.func,
@@ -22,15 +22,17 @@ class DropComponent extends Component {
   constructor(props) {
     super(props)
     this.onDrop = this.onDrop.bind(this)
+    this.handleDropEntityUrl = this.handleDropEntityUrl.bind(this)
   }
 
   onDragOver = e => e.preventDefault()
   onDragEnter = e => e.preventDefault()
 
   async onDrop(event) {
+    console.log(event)
     const { dispatch } = this.props
     event.preventDefault()
-    event.persist()
+    //event.persist()
     try {
       let result
       if ((result = await this.handleTextDrop(event)) !== false) return result
@@ -38,6 +40,7 @@ class DropComponent extends Component {
       uiWarning(dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
       return Promise.reject('ClearlyDefined does not understand whatever it is you just dropped')
     } catch (error) {
+      console.log(error)
       uiWarning(dispatch, error.message)
       return Promise.reject(error.message)
     }

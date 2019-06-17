@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import ConnectedDropComponent, { DropComponent } from '../DropComponent'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -9,21 +9,29 @@ const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
 
 const store = mockStore({ session: { token: '' } })
-const props = { children: <ComponentList /> }
+const props = { children: <ComponentList renderFilterBar={() => null} />, dispatch: () => null }
 
 describe('DropComponent', () => {
-  it('renders without crashing', () => {
+  it('renders connected component without crashing', () => {
     shallow(<ConnectedDropComponent store={store} {...props} />)
   })
+  it('renders component without crashing', () => {
+    shallow(<DropComponent {...props} />)
+  })
   describe('drops fossa input', () => {
-    it('configure data transfer', () => {
-      const container = ReactTestUtils.renderIntoDocument(<ConnectedDropComponent store={store} children={<></>} />)
+    it('configure data transfer', async () => {
+      const wrapper = shallow(<DropComponent {...props} />)
+      const instance = wrapper.instance()
+
       const st = JSON.stringify(fossaInput)
       const blob = new Blob([st], { type: 'application/json' })
       const file = new File([blob], 'fossaInput.json')
       const mockDataTransfer = { files: [file] }
-      const item = ReactTestUtils.findRenderedDOMComponentWithTag(container, 'div')
-      ReactTestUtils.Simulate.dragStart(item, { dataTransfer: mockDataTransfer })
+      const event = createCustomEvent(EVENT_TYPES.DRAG_START, mockDataTransfer)
+      const dropEvent = createCustomEvent(EVENT_TYPES.DROP)
+      dropEvent.dataTransfer = event.dataTransfer
+      const res = await instance.onDrop(dropEvent)
+      console.log(res)
     })
   })
 })
@@ -64,4 +72,26 @@ const fossaInput = {
       }
     ]
   }
+}
+
+function createCustomEvent(type, data) {
+  var event = new CustomEvent('CustomEvent')
+  event.initCustomEvent(type, true, true, null)
+  event.dataTransfer = {
+    data,
+    setData: function(type, val) {
+      this.data[type] = val
+    },
+    getData: function(type) {
+      return this.data[type]
+    },
+    persist: function() {}
+  }
+  return event
+}
+
+const EVENT_TYPES = {
+  DRAG_END: 'dragend',
+  DRAG_START: 'dragstart',
+  DROP: 'drop'
 }
