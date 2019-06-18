@@ -44,7 +44,7 @@ class HeaderSection extends Component {
 
     return (
       <Row className="row-detail-header">
-        <Col md={10}>
+        <Col md={8}>
           <div className="detail-header">
             <div className="header-title">
               <h2>
@@ -77,7 +77,7 @@ class HeaderSection extends Component {
             </p>
           </div>
         </Col>
-        <Col md={2} className="text-right">
+        <Col md={4} className="text-right">
           {!isEmpty(changes) && (
             <Button bsStyle="danger" data-test-id="header-section-revert-button" onClick={() => handleRevert()}>
               <i className="fas fa-undo" />
