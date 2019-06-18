@@ -31,10 +31,17 @@
   .header-title {
     display: flex;
     align-items: center;
+    max-width: 80%;
     h2 {
       margin: 0;
       padding: 0;
       font-size: 2.5em;
+      max-width: 100%;
+      a {
+        width: 100%;
+        word-wrap: break-word;
+        display: inline-block;
+      }
       .header-data {
         display: flex;
         align-items: center;
@@ -109,7 +116,6 @@
   font-weight: bold;
   margin-bottom: 2px;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
   a {
     color: inherit;
