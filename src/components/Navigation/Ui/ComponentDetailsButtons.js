@@ -54,6 +54,10 @@ class ComponentDetailsButtons extends Component {
     }
   }
 
+  openRegistryURL = item => {
+    window.open(get(item, 'described.urls.registry'))
+  }
+
   render() {
     const { item } = this.props
     const isSourceComponent = this.isSourceComponent(item.coordinates)
@@ -83,6 +87,14 @@ class ComponentDetailsButtons extends Component {
           <Button className="list-fa-button">
             <i class="fas fa-list" />
           </Button>
+        </Menu.Item>
+        <Menu.Item key="4" onClick={() => this.openRegistryURL(item)}>
+          Open package URL{' '}
+          <ButtonWithTooltip tip="Open package URL" placement="bottom">
+            <Button className="list-fa-button">
+              <i className="fas fa-external-link-alt" />
+            </Button>
+          </ButtonWithTooltip>
         </Menu.Item>
       </Menu>
     )
