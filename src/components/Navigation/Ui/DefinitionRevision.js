@@ -16,13 +16,13 @@ class DefinitionRevision extends Component {
       <span>
         &nbsp;&nbsp;&nbsp;
         <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
-          {definition.coordinates.revision.slice(0, 7)}
+          {definition.coordinates.revision.slice(0, 10)}
         </a>
       </span>
     ) : (
       <span>
         &nbsp;&nbsp;&nbsp;
-        {definition.coordinates.revision.slice(0, 7)}
+        {definition.coordinates.revision.slice(0, 10)}
       </span>
     )
   }
