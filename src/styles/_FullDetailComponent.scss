@@ -31,7 +31,7 @@
   .header-title {
     display: flex;
     align-items: center;
-    max-width: 80%;
+    max-width: 70%;
     h2 {
       margin: 0;
       padding: 0;
@@ -39,13 +39,14 @@
       max-width: 100%;
       a {
         width: 100%;
-        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
         display: inline-block;
       }
-      .header-data {
-        display: flex;
-        align-items: center;
-      }
+    }
+    .header-data {
+      display: flex;
+      align-items: center;
     }
   }
   p {
