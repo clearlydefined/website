@@ -3,26 +3,30 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
+import Tooltip from 'antd/lib/tooltip'
 
 class DefinitionRevision extends Component {
   static propTypes = {
-    definition: PropTypes.object
+    definition: PropTypes.object,
+    className: PropTypes.string
   }
 
   render() {
-    const { definition } = this.props
+    const { definition, className } = this.props
 
     return get(definition, 'described.urls.version') ? (
-      <span>
+      <span className={className}>
         &nbsp;&nbsp;&nbsp;
-        <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
-          {definition.coordinates.revision.slice(0, 10)}
-        </a>
+        <Tooltip title={definition.coordinates.revision}>
+          <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
+            {definition.coordinates.revision}
+          </a>
+        </Tooltip>
       </span>
     ) : (
-      <span>
+      <span className={className}>
         &nbsp;&nbsp;&nbsp;
-        {definition.coordinates.revision.slice(0, 10)}
+        <Tooltip title={definition.coordinates.revision}>{definition.coordinates.revision}</Tooltip>
       </span>
     )
   }
