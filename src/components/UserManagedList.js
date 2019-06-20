@@ -140,6 +140,7 @@ export default class UserManagedList extends SystemManagedList {
     try {
       const object = typeof content === 'string' ? JSON.parse(content) : content
       if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
+      if (this.isFossaInput(object)) return object
       if (this.isClearlyDefinedList(object)) return object
     } catch (error) {}
     return null
@@ -148,6 +149,10 @@ export default class UserManagedList extends SystemManagedList {
   isPackageLock(content) {
     // TODO better, more definitive test here
     return !!content.dependencies
+  }
+
+  isFossaInput(content) {
+    return !!content.Build
   }
 
   isClearlyDefinedList(content) {

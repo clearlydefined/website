@@ -29,7 +29,6 @@ export class DropComponent extends Component {
   onDragEnter = e => e.preventDefault()
 
   async onDrop(event) {
-    console.log(event)
     const { dispatch } = this.props
     event.preventDefault()
     //event.persist()
@@ -40,7 +39,6 @@ export class DropComponent extends Component {
       uiWarning(dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
       return Promise.reject('ClearlyDefined does not understand whatever it is you just dropped')
     } catch (error) {
-      console.log(error)
       uiWarning(dispatch, error.message)
       return Promise.reject(error.message)
     }
@@ -102,6 +100,7 @@ export class DropComponent extends Component {
     const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
     if (acceptedFiles.length) await this.handleDropAcceptedFiles(acceptedFiles)
     if (rejectedFiles.length) this.handleDropRejectedFiles(rejectedFiles)
+    return true
   }
 
   sortDroppedFiles(files) {
@@ -124,6 +123,7 @@ export class DropComponent extends Component {
       reader.onload = () => onLoad(reader.result, file.name)
       reader.readAsBinaryString(file)
     })
+    return true
   }
 
   handleDropRejectedFiles = files => {
