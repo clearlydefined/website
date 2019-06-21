@@ -101,7 +101,7 @@ function createCustomEvent(type, data, files) {
     getData: function(type) {
       return this.data[type]
     },
-    persist: function() {}
+    persist: jest.fn()
   }
   return event
 }

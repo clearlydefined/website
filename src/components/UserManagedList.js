@@ -176,8 +176,14 @@ export default class UserManagedList extends SystemManagedList {
   getListFromFossaPackage(dependencies) {
     const coordinates = []
     for (const dependency in dependencies) {
-      let [type, name, revision] = dependencies[dependency].locator.split(/[\s+$]+/)
-      coordinates.push({ type, provider: 'npmjs', namespace: '-', name, revision })
+      const locator = dependencies[dependency].locator.split(/[\s+$/]+/)
+      coordinates.push({
+        type: locator[0],
+        provider: 'npmjs',
+        namespace: locator.length > 3 ? locator[1] : '-',
+        name: locator.length > 3 ? locator[2] : locator[1],
+        revision: locator.length > 3 ? locator[3] : locator[2]
+      })
     }
     return { coordinates }
   }
