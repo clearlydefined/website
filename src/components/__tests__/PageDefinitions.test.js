@@ -69,7 +69,7 @@ const fossaInput = {
       'npm+once$'
     ],
     Dependencies: [
-      { locator: 'npm+setprototypeof$1.1.0' },
+      { locator: 'npm+test/setprototypeof$1.1.0' },
       {
         locator: 'npm+handlebars$4.1.0',
         imports: ['npm+async$2.6.2', 'npm+source-map$0.6.1', 'npm+optimist$0.6.1', 'npm+uglify-js$3.4.9']
@@ -92,7 +92,7 @@ const fossaInput = {
 
 const expectedFossaCoordinates = {
   coordinates: [
-    { name: 'setprototypeof', namespace: '-', provider: 'npmjs', revision: '1.1.0', type: 'npm' },
+    { name: 'setprototypeof', namespace: 'test', provider: 'npmjs', revision: '1.1.0', type: 'npm' },
     { name: 'handlebars', namespace: '-', provider: 'npmjs', revision: '4.1.0', type: 'npm' },
     { name: 'no-case', namespace: '-', provider: 'npmjs', revision: '2.3.2', type: 'npm' },
     { name: 'clean-css', namespace: '-', provider: 'npmjs', revision: '4.2.1', type: 'npm' },
