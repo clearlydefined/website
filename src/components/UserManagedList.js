@@ -140,7 +140,7 @@ export default class UserManagedList extends SystemManagedList {
     try {
       const object = typeof content === 'string' ? JSON.parse(content) : content
       if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
-      if (this.isFossaInput(object)) return object
+      if (this.isFossaInput(object)) return this.getListFromFossaPackage(object.Build.Dependencies)
       if (this.isClearlyDefinedList(object)) return object
     } catch (error) {}
     return null
@@ -152,7 +152,7 @@ export default class UserManagedList extends SystemManagedList {
   }
 
   isFossaInput(content) {
-    return !!content.Build
+    return !!content.Build.Dependencies
   }
 
   isClearlyDefinedList(content) {
@@ -169,6 +169,15 @@ export default class UserManagedList extends SystemManagedList {
         namespace = null
       }
       coordinates.push({ type: 'npm', provider: 'npmjs', namespace, name, revision: dependencies[dependency].version })
+    }
+    return { coordinates }
+  }
+
+  getListFromFossaPackage(dependencies) {
+    const coordinates = []
+    for (const dependency in dependencies) {
+      let [type, name, revision] = dependencies[dependency].locator.split(/[\s+$]+/)
+      coordinates.push({ type, provider: 'npmjs', namespace: '-', name, revision })
     }
     return { coordinates }
   }

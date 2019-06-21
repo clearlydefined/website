@@ -1,1 +1,1 @@
-export { default } from './PageDefinitions'
+export { default, PageDefinitions } from './PageDefinitions'

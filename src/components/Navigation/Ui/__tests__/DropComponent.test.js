@@ -3,7 +3,6 @@ import { shallow, mount } from 'enzyme'
 import ConnectedDropComponent, { DropComponent } from '../DropComponent'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import ReactTestUtils from 'react-dom/test-utils'
 import ComponentList from '../../../ComponentList'
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
@@ -23,7 +22,7 @@ describe('DropComponent', () => {
   it('renders component without crashing', () => {
     shallow(<DropComponent {...props} />)
   })
-  describe('drops fossa input', () => {
+  describe('drops json file', () => {
     it('configure data transfer', async () => {
       const onLoad = jest.fn()
       const wrapper = shallow(<DropComponent {...props} onLoad={onLoad} />)
