@@ -112,6 +112,7 @@ class ScoreRenderer extends Component {
       <a
         href="https://github.com/clearlydefined/license-score/blob/master/ClearlyLicensedMetrics.md#clearlylicensed-scoring-formula"
         target="_blank"
+        rel="noopener noreferrer"
       >
         Scoring Formula
       </a>
