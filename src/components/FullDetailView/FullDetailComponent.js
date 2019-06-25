@@ -79,7 +79,6 @@ class FullDetailComponent extends Component {
 
   renderFilesSection() {
     const { definition, onChange, previewDefinition, readOnly, handleRevert, changes } = this.props
-    const entry = find(changes, (_, key) => key && key.startsWith('files'))
     const item = { ...definition.item }
     const filesOrFacetsHaveBeenChanged = find(
       changes,
@@ -155,19 +154,7 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const {
-      definition,
-      harvest,
-      onChange,
-      previewDefinition,
-      readOnly,
-      handleRevert,
-      changes,
-      getCurationData,
-      curations,
-      inspectedCuration,
-      isMobile
-    } = this.props
+    const { definition, harvest, onChange, previewDefinition, readOnly, handleRevert, curations, isMobile } = this.props
     if (!definition || !definition.item || !curations || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)
