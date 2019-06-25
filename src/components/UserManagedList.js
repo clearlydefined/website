@@ -12,6 +12,7 @@ import { saveGist } from '../api/github'
 import { Button } from 'react-bootstrap'
 import { uiDefinitionsUpdateList, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
+import { types } from '../utils/utils'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction, checkForMissingDefinition } from '../actions/definitionActions'
 import { getCurationsAction } from '../actions/curationActions'
@@ -177,9 +178,10 @@ export default class UserManagedList extends SystemManagedList {
     const coordinates = []
     for (const dependency in dependencies) {
       const locator = dependencies[dependency].locator.split(/[\s+$/]+/)
+      const type = types.find(item => item.value === locator[0])
       coordinates.push({
-        type: locator[0],
-        provider: 'npmjs',
+        type: type.value,
+        provider: type.provider,
         namespace: locator.length > 3 ? locator[1] : '-',
         name: locator.length > 3 ? locator[2] : locator[1],
         revision: locator.length > 3 ? locator[3] : locator[2]
