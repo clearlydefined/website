@@ -21,6 +21,7 @@ import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
+import debian from '../images/debian.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
@@ -140,6 +141,7 @@ class HarvestQueueList extends React.Component {
     if (request.provider === 'rubygems') return gem
     if (request.provider === 'cratesio') return cargo
     if (request.provider === 'nuget') return nuget
+    if (request.provider === 'debian') return debian
     return null
   }
 
