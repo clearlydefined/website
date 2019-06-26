@@ -12,6 +12,7 @@ import {
   MavenVersionPicker,
   PyPiVersionPicker,
   CrateVersionPicker,
+  DebianVersionPicker,
   NuGetVersionPicker,
   RubyGemsVersionPicker
 } from './'
@@ -94,6 +95,9 @@ class HarvestQueueList extends React.Component {
         )}
         {request.provider === 'nuget' && (
           <NuGetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
+        {request.provider === 'debian' && (
+          <DebianVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
         <i className="fas fa-times list-remove" onClick={this.removeRequest.bind(this, request)} />
       </div>

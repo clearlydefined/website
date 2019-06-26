@@ -39,7 +39,7 @@ export default class DebianSelector extends Component {
     const { options, isLoading } = this.state
     return (
       <AsyncTypeahead
-        id="ruby-selector"
+        id="debian-selector"
         useCache={false}
         options={options}
         placeholder={'Pick a Debian to harvest'}
