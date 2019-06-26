@@ -104,7 +104,8 @@ const types = [
   { value: 'nuget', label: 'NuGet' },
   { value: 'pypi', label: 'PyPi' },
   { value: 'gem', label: 'Gem' },
-  { value: 'sourcearchive', label: 'SourceArchive' }
+  { value: 'sourcearchive', label: 'SourceArchive' },
+  { value: 'deb', label: 'Deb', provider: 'debian' }
 ]
 
 const providers = [
@@ -115,7 +116,8 @@ const providers = [
   { value: 'npmjs', label: 'NpmJS' },
   { value: 'nuget', label: 'NuGet' },
   { value: 'pypi', label: 'PyPi' },
-  { value: 'rubygems', label: 'RubyGems' }
+  { value: 'rubygems', label: 'RubyGems' },
+  { value: 'debian', label: 'Debian' }
 ]
 
 const multiEditableFields = ['licensed.declared']
