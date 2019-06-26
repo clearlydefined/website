@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getDebianSearch } from '../api/clearlyDefined'
+import { getDebianSearch } from '../../../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 

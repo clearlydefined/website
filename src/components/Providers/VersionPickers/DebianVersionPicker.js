@@ -3,8 +3,8 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getDebianRevisions } from '../api/clearlyDefined'
-import Autocomplete from './Navigation/Ui/Autocomplete'
+import { getDebianRevisions } from '../../../api/clearlyDefined'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
 
 export default class DebianVersionPicker extends Component {
   static propTypes = {
