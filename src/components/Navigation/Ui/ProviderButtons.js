@@ -33,6 +33,9 @@ export default class ProviderButtons extends Component {
         <Button name="rubygems" onClick={onClick} active={activeProvider === 'rubygems'}>
           RubyGems
         </Button>
+        <Button name="debian" onClick={onClick} active={activeProvider === 'debian'}>
+          Debian
+        </Button>
       </ButtonGroup>
     )
   }

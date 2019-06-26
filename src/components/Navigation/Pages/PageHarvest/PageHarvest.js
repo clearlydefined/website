@@ -13,6 +13,7 @@ import {
   MavenSelector,
   NuGetSelector,
   CrateSelector,
+  DebianSelector,
   PyPiSelector,
   RubyGemsSelector,
   Section
@@ -100,6 +101,7 @@ class PageHarvest extends Component {
             {activeProvider === 'cratesio' && <CrateSelector onChange={this.onAddRequest} />}
             {activeProvider === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
             {activeProvider === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'debian' && <DebianSelector onChange={this.onAddRequest} />}
           </Col>
         </Row>
         <Section className="flex-grow-column" name={'Components to harvest'} actionButton={this.renderActionButton()}>
