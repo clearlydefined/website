@@ -17,6 +17,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
+import debian from '../images/debian.png'
 import moment from 'moment'
 import { difference } from './utils'
 
@@ -216,6 +217,8 @@ export default class Contribution {
         return cargo
       case 'nuget':
         return nuget
+      case 'debian':
+        return debian
       default:
         return null
     }
