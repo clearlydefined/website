@@ -86,4 +86,14 @@ describe('EntitySpec', () => {
     const result = EntitySpec.fromUrl('https://rubygems.org/gems/tzinfo/versions/1.2.5')
     expect(result.toString()).toEqual('gem/rubygems/-/tzinfo/1.2.5')
   })
+
+  it('returns a debian path with a version', async () => {
+    const result = EntitySpec.fromUrl('https://sources.debian.org/api/src/amoeba/1.1-30/')
+    expect(result.toString()).toEqual('deb/debian/-/amoeba/1.1-30')
+  })
+
+  it('returns a debian path without a version', async () => {
+    const result = EntitySpec.fromUrl('https://sources.debian.org/api/src/amoeba')
+    expect(result.toString()).toEqual('deb/debian/-/amoeba')
+  })
 })
