@@ -30,7 +30,7 @@ export const ORIGINS = {
   mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
   pypi: { pypi: ORIGINS_PYPI },
   rubygems: { gem: ORIGINS_RUBYGEMS },
-  debian: { gem: ORIGINS_DEBIAN }
+  debian: { deb: ORIGINS_DEBIAN }
 }
 
 export function getHarvestResults(token, entity) {
