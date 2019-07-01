@@ -23,7 +23,7 @@ const entityMapping = [
   { hostnames: ['crates.io'], parser: cratesParser },
   { hostnames: ['pypi.org'], parser: pypiParser },
   { hostnames: ['rubygems.org'], parser: rubygemsParser },
-  { hostnames: ['debian.org'], parser: debianParser }
+  { hostnames: ['sources.debian.org'], parser: debianParser }
 ]
 
 function npmParser(path) {
@@ -69,7 +69,7 @@ function rubygemsParser(path) {
 }
 
 function debianParser(path) {
-  const [, name, version] = path.split('/')
+  const [, , name, version] = path.split('/')
   return new EntitySpec('deb', 'debian', null, name, version)
 }
 
