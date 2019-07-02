@@ -22,7 +22,7 @@ class ComponentButtons extends Component {
   }
 
   isSourceComponent(component) {
-    return ['github', 'sourcearchive'].includes(component.provider)
+    return ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
   }
 
   removeComponent(component, event) {

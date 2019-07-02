@@ -105,7 +105,8 @@ const types = [
   { value: 'pypi', label: 'PyPi', provider: 'pypi' },
   { value: 'gem', label: 'Gem', provider: 'rubygems' },
   { value: 'sourcearchive', label: 'SourceArchive' },
-  { value: 'deb', label: 'Deb', provider: 'debian' }
+  { value: 'deb', label: 'Deb', provider: 'debian' },
+  { value: 'debsrc', label: 'Debian Sources' }
 ]
 
 const providers = [

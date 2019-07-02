@@ -195,7 +195,7 @@ export default class Contribution {
 
   static getPercentage = (count, total) => Math.round(((count || 0) / total) * 100)
 
-  static isSourceComponent = component => ['github', 'sourcearchive'].includes(component.provider)
+  static isSourceComponent = component => ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
 
   /**
    *  Get image of definition based on the provider
