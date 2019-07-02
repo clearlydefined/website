@@ -1,6 +1,15 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 import deepDiff from 'deep-diff'
+import npmImage from '../images/n-large.png'
+import mavenImage from '../images/maven.png'
+import nugetImage from '../images/nuget.svg'
+import podImage from '../images/pod.png'
+import gitImage from '../images/Git-Logo-2Color.png'
+import crateImage from '../images/cargo.png'
+import gemImage from '../images/gem.png'
+import pypiImage from '../images/pypi.png'
+import debianImage from '../images/debian.png'
 
 const { set } = require('lodash')
 
@@ -110,15 +119,15 @@ const types = [
 ]
 
 const providers = [
-  { value: 'cocoapods', label: 'CocoaPods' },
-  { value: 'cratesio', label: 'Crates.io' },
-  { value: 'github', label: 'GitHub' },
-  { value: 'mavencentral', label: 'MavenCentral' },
-  { value: 'npmjs', label: 'NpmJS' },
-  { value: 'nuget', label: 'NuGet' },
-  { value: 'pypi', label: 'PyPi' },
-  { value: 'rubygems', label: 'RubyGems' },
-  { value: 'debian', label: 'Debian' }
+  { value: 'cocoapods', label: 'CocoaPods', image: podImage },
+  { value: 'cratesio', label: 'Crates.io', image: crateImage },
+  { value: 'github', label: 'GitHub', image: gitImage },
+  { value: 'mavencentral', label: 'MavenCentral', image: mavenImage },
+  { value: 'npmjs', label: 'NpmJS', image: npmImage },
+  { value: 'nuget', label: 'NuGet', image: nugetImage },
+  { value: 'pypi', label: 'PyPi', image: pypiImage },
+  { value: 'rubygems', label: 'RubyGems', image: gemImage },
+  { value: 'debian', label: 'Debian', image: debianImage }
 ]
 
 const multiEditableFields = ['licensed.declared']
