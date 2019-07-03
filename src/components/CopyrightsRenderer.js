@@ -63,7 +63,11 @@ class CopyrightsRenderer extends Component {
     this.setState({
       values: nextProps.item.map(item => {
         return { value: item, isDifferent: !this.state.originalValues.find(originalItem => originalItem === item) }
-      })
+      }),
+      classIfDifferent:
+        nextProps.item.find(item => {
+          return !this.state.originalValues.find(originalItem => originalItem === item)
+        }) && 'bg-info'
     })
   }
 
@@ -108,8 +112,8 @@ class CopyrightsRenderer extends Component {
   onChange = suggestion => this.addItem(suggestion, null, true)
 
   render() {
-    const { readOnly, classIfDifferent, field } = this.props
-    const { hasChanges, values, showAddRow, visible } = this.state
+    const { readOnly, field } = this.props
+    const { hasChanges, values, showAddRow, visible, classIfDifferent } = this.state
     if (!values.length && readOnly) return null
 
     return (
