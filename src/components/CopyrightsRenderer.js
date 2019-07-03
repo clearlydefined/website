@@ -53,9 +53,10 @@ class CopyrightsRenderer extends Component {
     this.props.item &&
       this.setState({
         values: this.props.item.map(item => {
-          return { value: item, isDifferent: false }
+          return { value: item, isDifferent: this.props.initialValue !== this.props.item }
         }),
-        originalValues: this.props.item
+        originalValues: this.props.item,
+        classIfDifferent: this.props.initialValue !== this.props.item && 'bg-info'
       })
   }
 
