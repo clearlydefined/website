@@ -37,7 +37,8 @@
     "redux-thunk": "^2.3.0",
     "spdx-license-ids": "^3.0.3",
     "throat": "^4.1.0",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^2.0.4",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.3.0",
@@ -80,7 +81,9 @@
     "test:unit": "jest -c jest.config.unit.js",
     "test:integration": "jest -c jest.config.integration.js",
     "eject": "react-scripts eject",
-    "e2e:test": "jest -c e2e/jest.config.js --detectOpenHandles"
+    "e2e:test": "jest -c e2e/jest.config.js --detectOpenHandles",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "browserslist": {
     "development": [
@@ -93,5 +96,6 @@
       "not op_mini all",
       "ie 11"
     ]
-  }
+  },
+  "snyk": true
 }
