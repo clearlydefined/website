@@ -179,6 +179,7 @@ export default class FileList extends PureComponent {
     const { expandedRows, searchText, filteredFiles, files } = this.state
 
     const facets = Contribution.getValue(definition, previewDefinition, 'described.facets')
+    const licenses = get(component.item, 'licensed.facets.core.discovered.expressions', [])
     const columns = [
       {
         title: 'Name',
@@ -212,7 +213,14 @@ export default class FileList extends PureComponent {
         dataIndex: 'license',
         key: 'license',
         className: 'column-license',
-        ...this.getColumnSearchProps('license'),
+        filters: licenses.map(license => {
+          return { text: license, value: license }
+        }),
+        onFilter: (value, record) => {
+          console.log(value, record)
+          return get(record, 'license', '') === value
+        },
+        filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
         render: (value, record) =>
           !record.children && (
             <LicensesRenderer
