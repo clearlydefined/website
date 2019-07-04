@@ -3,7 +3,7 @@
 
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Table, Input, Button, Icon } from 'antd'
+import { Table, Input, Button, Icon, Checkbox } from 'antd'
 import get from 'lodash/get'
 import isArray from 'lodash/isArray'
 import CopyrightsRenderer from '../../components/CopyrightsRenderer'
@@ -50,6 +50,7 @@ export default class FileList extends PureComponent {
   }
 
   filterValues = (record, dataIndex, value) => {
+    if (!value) return record
     if (Object.keys(record).includes('children')) {
       const children = record.children.reduce((previousValue, item) => {
         const filteredValue = this.filterValues(item, dataIndex, value)
@@ -89,6 +90,35 @@ export default class FileList extends PureComponent {
           onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
           style={{ width: 188, marginBottom: 8, display: 'block' }}
         />
+        <Button
+          type="primary"
+          onClick={() => this.handleSearch(dataIndex, selectedKeys, confirm)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+          Reset
+        </Button>
+      </div>
+    ),
+    sorter: false,
+    filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select())
+      }
+    }
+  })
+
+  getLicenseColumnFilter = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, filters }) => (
+      <div style={{ padding: 8 }}>
+        <div>
+          <Checkbox.Group options={filters} value={selectedKeys} onChange={e => setSelectedKeys(e)} />
+        </div>
         <Button
           type="primary"
           onClick={() => this.handleSearch(dataIndex, selectedKeys, confirm)}
@@ -214,12 +244,9 @@ export default class FileList extends PureComponent {
         key: 'license',
         className: 'column-license',
         filters: licenses.map(license => {
-          return { text: license, value: license }
+          return { label: license, value: license }
         }),
-        onFilter: (value, record) => {
-          console.log(value, record)
-          return get(record, 'license', '') === value
-        },
+        ...this.getLicenseColumnFilter('license'),
         filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
         render: (value, record) =>
           !record.children && (
