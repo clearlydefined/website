@@ -12,7 +12,7 @@ import { getGist } from '../../../api/github'
 import { uiInfo, uiWarning } from '../../../actions/ui'
 import EntitySpec from '../../../utils/entitySpec'
 
-class DropComponent extends Component {
+export class DropComponent extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     onLoad: PropTypes.func,
@@ -22,6 +22,7 @@ class DropComponent extends Component {
   constructor(props) {
     super(props)
     this.onDrop = this.onDrop.bind(this)
+    this.handleDropEntityUrl = this.handleDropEntityUrl.bind(this)
   }
 
   onDragOver = e => e.preventDefault()
@@ -29,12 +30,12 @@ class DropComponent extends Component {
 
   async onDrop(event) {
     const { dispatch } = this.props
+    const { dataTransfer } = event
     event.preventDefault()
-    event.persist()
     try {
       let result
-      if ((result = await this.handleTextDrop(event)) !== false) return result
-      if ((result = await this.handleDropFiles(event)) !== false) return result
+      if ((result = await this.handleTextDrop(dataTransfer)) !== false) return result
+      if ((result = await this.handleDropFiles(dataTransfer)) !== false) return result
       uiWarning(dispatch, 'ClearlyDefined does not understand whatever it is you just dropped')
       return Promise.reject('ClearlyDefined does not understand whatever it is you just dropped')
     } catch (error) {
@@ -43,8 +44,8 @@ class DropComponent extends Component {
     }
   }
 
-  async handleTextDrop(event) {
-    const text = event.dataTransfer.getData('Text')
+  async handleTextDrop(dataTransfer) {
+    const text = dataTransfer.getData('Text')
     if (!text) return false
     if (this.handleDropObject(text) !== false) return
     if ((await this.handleDropGist(text)) !== false) return
@@ -93,12 +94,13 @@ class DropComponent extends Component {
     for (let name in content) onLoad(content[name], name)
   }
 
-  async handleDropFiles(event) {
-    const files = Object.values(event.dataTransfer.files)
+  async handleDropFiles(dataTransfer) {
+    const files = Object.values(dataTransfer.files)
     if (!files || !files.length) return false
     const { acceptedFiles, rejectedFiles } = this.sortDroppedFiles(files)
     if (acceptedFiles.length) await this.handleDropAcceptedFiles(acceptedFiles)
     if (rejectedFiles.length) this.handleDropRejectedFiles(rejectedFiles)
+    return true
   }
 
   sortDroppedFiles(files) {
@@ -121,6 +123,7 @@ class DropComponent extends Component {
       reader.onload = () => onLoad(reader.result, file.name)
       reader.readAsBinaryString(file)
     })
+    return true
   }
 
   handleDropRejectedFiles = files => {

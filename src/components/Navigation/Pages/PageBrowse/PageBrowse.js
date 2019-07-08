@@ -184,7 +184,12 @@ class PageBrowse extends SystemManagedList {
           />
         </div>
         <div className="filter-list">
-          <SpdxPicker value={''} promptText={'License'} onChange={value => this.onFilter({ type: 'license', value })} />
+          <SpdxPicker
+            value={''}
+            promptText={'License'}
+            onChange={value => this.onFilter({ type: 'license', value })}
+            customIdentifiers={['NOASSERTION', '']}
+          />
           &nbsp;
           <SortList list={sorts} title={'Sort By'} id={'sort'} value={this.state.activeSort} onSort={this.onSort} />
           &nbsp; &nbsp; &nbsp; &nbsp;
@@ -237,7 +242,7 @@ class PageBrowse extends SystemManagedList {
         query.name = activeName.split('/')[1]
       } else query.name = activeName
     }
-    const urlParams = getParamsToUrl(query)
+    const urlParams = getParamsToUrl(omit(query, ['continuationToken']))
     this.props.history.replace({
       pathname: this.props.location.pathname,
       search: `?${urlParams}`
@@ -271,6 +276,7 @@ class PageBrowse extends SystemManagedList {
           session={session}
           onLogin={this.handleLogin}
           actionHandler={this.doContribute}
+          definitions={this.getDefinitionsWithChanges()}
         />
         {this.renderTopFilters()}
         <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>

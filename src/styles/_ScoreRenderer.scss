@@ -5,9 +5,18 @@
     color: white;
     font-size: 16px;
   }
+  .ScoreInfo {
+    font-size: 12px;
+    text-decoration: underline;
+    width: 100%;
+    text-align: right;
+    a {
+      color: white;
+    }
+  }
   .ScoreRenderer__domain {
     display: flex;
-    width: 300px;
+    width: 400px;
   }
   .ScoreRenderer__domain__section {
     padding: 10px;
@@ -18,7 +27,11 @@
       padding: 0;
     }
   }
+  .unit {
+    font-size: 12px;
+  }
 }
 .ant-tooltip-inner {
-  width: 300px !important;
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 400px !important;
 }

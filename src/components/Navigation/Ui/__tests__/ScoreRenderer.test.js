@@ -48,11 +48,15 @@ describe('ScoreRenderer', () => {
     expect(resultScores).toEqual(
       <div className="ScoreRenderer__domain">
         <div className="ScoreRenderer__domain__section">
-          <h2>Effective: 0</h2>
+          <h2>
+            Effective: 0<span>/100</span>
+          </h2>
           {instance.renderScore(licensedScore)}
         </div>
         <div className="ScoreRenderer__domain__section">
-          <h2>Tools: 0</h2>
+          <h2>
+            Tools: 0<span>/100</span>
+          </h2>
           {instance.renderScore(licensedToolScore)}
         </div>
       </div>

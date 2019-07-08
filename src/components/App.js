@@ -3,6 +3,7 @@
 
 import React, { Component } from 'react'
 import { Header, Footer, NotificationList } from './'
+import FullScreenLoader from './Navigation/Ui/FullScreenLoader'
 import { WindowProvider } from '../utils/WindowProvider'
 
 export default class App extends Component {
@@ -15,6 +16,7 @@ export default class App extends Component {
           <main className="App-content flex-grow">{children}</main>
           <Footer />
           <NotificationList />
+          <FullScreenLoader />
         </WindowProvider>
       </div>
     )
