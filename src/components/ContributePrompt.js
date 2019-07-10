@@ -112,6 +112,7 @@ export default class ContributePrompt extends Component {
   render() {
     const { details, summary, show, resolution } = this.state
     const { session, onLogin } = this.props
+    console.log(session)
     return (
       <Modal show={show} id="contribute-modal">
         <Form>
