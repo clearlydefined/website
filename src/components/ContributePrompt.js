@@ -112,7 +112,6 @@ export default class ContributePrompt extends Component {
   render() {
     const { details, summary, show, resolution } = this.state
     const { session, onLogin } = this.props
-    console.log(session)
     return (
       <Modal show={show} id="contribute-modal">
         <Form>
@@ -120,7 +119,7 @@ export default class ContributePrompt extends Component {
             <Modal.Title>Describe the changes in this curation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {!session.publicEmails && (
+            {!session.isAnonymous && !session.publicEmails && (
               <Alert bsStyle="warning">
                 Since you set your email as private on your GitHub profile, you can submit this contribution but the
                 commits would not be attributed to you.
