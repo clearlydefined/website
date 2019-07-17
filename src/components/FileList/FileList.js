@@ -250,6 +250,7 @@ export default class FileList extends PureComponent {
             !record.children && (
               <CopyrightsRenderer
                 field={record && `files[${record.id}].attributions`}
+                initialValue={get(component.item, `files[${record.id}].attributions`, [])}
                 item={
                   Contribution.getValue(component.item, previewDefinition, `files[${record.id}].attributions`) || []
                 }
