@@ -121,8 +121,8 @@ export default class ContributePrompt extends Component {
           <Modal.Body>
             {!session.isAnonymous && !session.publicEmails && (
               <Alert bsStyle="warning">
-                Since you set your email as private on your GitHub profile, you can submit this contribution but the
-                commits would not be attributed to you.
+                Since your email is set as private on your GitHub profile, you can submit this contribution but the
+                commits will not be attributed to you.
               </Alert>
             )}
             <div className="container" style={{ display: 'flex' }}>
