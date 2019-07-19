@@ -89,6 +89,7 @@ export default class GitHubCommitPicker extends Component {
       <div onClick={e => e.stopPropagation()}>
         <Autocomplete
           id="github-commit-picker"
+          inputProps={{ dataTestId: 'github-commit-picker' }}
           selected={selected}
           options={list}
           labelKey="tag"
