@@ -97,11 +97,10 @@ export default class GitHubCommitPicker extends Component {
             options.length === 0 ? 'No tags found, enter a commit hash' : 'Pick a tag or enter a commit hash'
           }
           onChange={this.onChange}
-          bodyContainer
+          positionFixed
           allowNew={allowNew}
           clearButton
           newSelectionPrefix="SHA:"
-          emptyLabel=""
           filterBy={this.filter}
           selectHintOnEnter
           renderMenuItemChildren={this.renderMenuItemChildren}

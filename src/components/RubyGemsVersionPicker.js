@@ -69,7 +69,7 @@ export default class RubyGemsVersionPicker extends Component {
           options.length === 0 ? 'Could not fetch versions, type a RubyGem version' : 'Pick a RubyGem version'
         }
         onChange={this.onChange}
-        bodyContainer
+        positionFixed
         clearButton
         allowNew
         newSelectionPrefix="Version:"

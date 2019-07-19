@@ -83,7 +83,6 @@ export default class GitHubSelector extends Component {
           labelKey="id"
           clearButton
           highlightOnlyResult
-          emptyLabel=""
           selectHintOnEnter
           isLoading={namespace.isLoading}
           onSearch={this.getOptions}
@@ -100,7 +99,6 @@ export default class GitHubSelector extends Component {
           labelKey={option => option.id.substring(option.id.indexOf('/') + 1)}
           clearButton
           highlightOnlyResult
-          emptyLabel=""
           selectHintOnEnter
           isLoading={component.isLoading}
           onSearch={this.getComponentOptions}

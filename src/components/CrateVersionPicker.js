@@ -62,7 +62,7 @@ export default class CrateVersionPicker extends Component {
         defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type a Crate version' : 'Pick a Crate version'}
         onChange={this.onChange}
-        bodyContainer
+        positionFixed
         clearButton
         allowNew
         newSelectionPrefix="Version:"

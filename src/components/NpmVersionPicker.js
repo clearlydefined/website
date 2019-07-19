@@ -68,7 +68,7 @@ export default class NpmVersionPicker extends Component {
         defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
         onChange={this.onChange}
-        bodyContainer
+        positionFixed
         clearButton
         allowNew
         newSelectionPrefix="Version:"
