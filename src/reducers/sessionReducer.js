@@ -18,7 +18,8 @@ export default function sessionReducer(state = initialState, action) {
         isAnonymous: false,
         token: action.token,
         permissions: action.permissions,
-        username: action.username
+        username: action.username,
+        publicEmails: action.publicEmails
       }
     case LOGOUT:
       return { ...initialState }
