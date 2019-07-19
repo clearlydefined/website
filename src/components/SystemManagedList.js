@@ -365,8 +365,8 @@ export default class SystemManagedList extends Component {
 
   handleLogin(e) {
     e.preventDefault()
-    Auth.doLogin((token, permissions, username) => {
-      this.props.dispatch(login(token, permissions, username))
+    Auth.doLogin((token, permissions, username, publicEmails) => {
+      this.props.dispatch(login(token, permissions, username, publicEmails))
     })
   }
 
