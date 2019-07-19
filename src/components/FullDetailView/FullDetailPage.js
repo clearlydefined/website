@@ -247,8 +247,8 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
   handleLogin(e) {
     e.preventDefault()
-    Auth.doLogin((token, permissions, username) => {
-      this.props.login(token, permissions, username)
+    Auth.doLogin((token, permissions, username, publicEmails) => {
+      this.props.login(token, permissions, username, publicEmails)
     })
   }
 
