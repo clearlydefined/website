@@ -68,7 +68,7 @@ export default class NuGetVersionPicker extends Component {
         defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type a Nuget version' : 'Pick an Nuget version'}
         onChange={this.onChange}
-        bodyContainer
+        positionFixed
         clearButton
         allowNew
         newSelectionPrefix="Version:"

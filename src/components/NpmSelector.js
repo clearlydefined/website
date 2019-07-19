@@ -40,6 +40,7 @@ export default class NpmSelector extends Component {
     return (
       <AsyncTypeahead
         id="npm-selector"
+        inputProps={{ dataTestId: 'npm-selector' }}
         useCache={false}
         options={options}
         placeholder={'Pick an NPM to harvest'}

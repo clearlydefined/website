@@ -67,7 +67,7 @@ export default class PyPiVersionPicker extends Component {
         defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type a PyPi version' : 'Pick a PyPi version'}
         onChange={this.onChange}
-        bodyContainer
+        positionFixed
         clearButton
         allowNew
         newSelectionPrefix="Version:"
