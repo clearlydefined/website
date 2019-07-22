@@ -63,12 +63,13 @@ export default class NpmVersionPicker extends Component {
     return (
       <Autocomplete
         id="npm-version-picker"
+        inputProps={{ dataTestId: 'npm-version-picker' }}
         selected={selected}
         options={list}
         defaultInputValue={defaultInputValue}
         placeholder={options.length === 0 ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
         onChange={this.onChange}
-        bodyContainer
+        positionFixed
         clearButton
         allowNew
         newSelectionPrefix="Version:"

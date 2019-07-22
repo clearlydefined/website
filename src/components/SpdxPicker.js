@@ -65,7 +65,7 @@ export default class SpdxPicker extends Component {
           onKeyDown={e => this.onKeyPress(e, onChange)}
           onChange={([first]) => this.onChange(first, onChange)}
           ref={this._typeahead}
-          bodyContainer
+          positionFixed
           autoFocus={autoFocus}
           selectHintOnEnter
           clearButton
