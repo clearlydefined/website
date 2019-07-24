@@ -5,7 +5,6 @@ import React from 'react'
 import notification from 'antd/lib/notification'
 import { saveAs } from 'file-saver'
 import base64js from 'base64-js'
-import pako from 'pako'
 import { ROUTE_SHARE } from '../utils/routingConstants'
 import { getNotices } from '../api/clearlyDefined'
 import { saveGist } from '../api/github'
@@ -17,6 +16,7 @@ import NotificationButtons from './Navigation/Ui/NotificationButtons'
 import { getDefinitionsAction, checkForMissingDefinition } from '../actions/definitionActions'
 import { getCurationsAction } from '../actions/curationActions'
 import SystemManagedList from './SystemManagedList'
+import UrlShare from '../utils/urlShare'
 
 /**
  * Abstracts methods for user-managed list
@@ -278,10 +278,17 @@ export default class UserManagedList extends SystemManagedList {
     const { components } = this.props
     const spec = this.buildSaveSpec(components.list)
     const fileObject = { filter: this.state.activeFilters, sortBy: this.state.activeSort, coordinates: spec }
-    const url = `${document.location.origin}${ROUTE_SHARE}/${base64js.fromByteArray(
-      pako.deflate(JSON.stringify(fileObject))
-    )}`
-    this.copyToClipboard(url, 'URL copied to clipboard')
+    const urlShare = new UrlShare(fileObject)
+    urlShare.start()
+    try {
+      urlShare.isValid()
+      const message = urlShare.toMessage()
+      const encodedMessage = urlShare.encode(message)
+      const url = `${document.location.origin}${ROUTE_SHARE}/${base64js.fromByteArray(encodedMessage)}`
+      this.copyToClipboard(url, 'URL copied to clipboard')
+    } catch (e) {
+      return false
+    }
   }
 
   copyToClipboard(text, message) {

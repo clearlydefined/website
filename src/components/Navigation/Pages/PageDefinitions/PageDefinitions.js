@@ -20,6 +20,7 @@ import VersionSelector from '../../Ui/VersionSelector'
 import ButtonsBar from './ButtonsBar'
 import UserManagedList from '../../../UserManagedList'
 import SavePopUp from '../../Ui/SavePopUp'
+import UrlShare from '../../../../utils/urlShare'
 
 export class PageDefinitions extends UserManagedList {
   constructor(props) {
@@ -37,8 +38,10 @@ export class PageDefinitions extends UserManagedList {
     const { dispatch, path } = this.props
     if (path.length > 1) {
       try {
-        const definitionSpec = pako.inflate(base64js.toByteArray(path), { to: 'string' })
-        this.loadFromListSpec(JSON.parse(definitionSpec))
+        const urlShare = new UrlShare()
+        urlShare.start()
+        const definitionSpec = urlShare.decode(base64js.toByteArray(path))
+        this.loadFromListSpec(definitionSpec)
       } catch (e) {
         uiWarning(dispatch, 'Loading components from URL failed')
       }
