@@ -96,14 +96,14 @@ const curateFilters = [
 ]
 
 const types = [
-  { value: 'pod', label: 'Pod' },
-  { value: 'crate', label: 'Crate' },
-  { value: 'git', label: 'Git' },
-  { value: 'maven', label: 'Maven' },
-  { value: 'npm', label: 'Npm' },
-  { value: 'nuget', label: 'NuGet' },
-  { value: 'pypi', label: 'PyPi' },
-  { value: 'gem', label: 'Gem' },
+  { value: 'pod', label: 'Pod', provider: 'cocoapods' },
+  { value: 'crate', label: 'Crate', provider: 'cratesio' },
+  { value: 'git', label: 'Git', provider: 'github' },
+  { value: 'maven', label: 'Maven', provider: 'mavencentral' },
+  { value: 'npm', label: 'Npm', provider: 'npmjs' },
+  { value: 'nuget', label: 'NuGet', provider: 'nuget' },
+  { value: 'pypi', label: 'PyPi', provider: 'pypi' },
+  { value: 'gem', label: 'Gem', provider: 'rubygems' },
   { value: 'sourcearchive', label: 'SourceArchive' }
 ]
 

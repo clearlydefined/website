@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Table, Input, Button, Icon } from 'antd'
+import { Table, Input, Button, Icon, Checkbox } from 'antd'
 import get from 'lodash/get'
 import isArray from 'lodash/isArray'
 import CopyrightsRenderer from '../../components/CopyrightsRenderer'
@@ -13,7 +13,7 @@ import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
 import Attachments from '../../utils/attachments'
 
-export default class FileList extends Component {
+export default class FileList extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func,
     files: PropTypes.array,
@@ -50,6 +50,7 @@ export default class FileList extends Component {
   }
 
   filterValues = (record, dataIndex, value) => {
+    if (!value) return record
     if (Object.keys(record).includes('children')) {
       const children = record.children.reduce((previousValue, item) => {
         const filteredValue = this.filterValues(item, dataIndex, value)
@@ -112,15 +113,51 @@ export default class FileList extends Component {
     }
   })
 
+  getLicenseColumnFilter = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, filters }) => (
+      <div style={{ padding: 8 }}>
+        <div>
+          <Checkbox.Group options={filters} value={selectedKeys} onChange={e => setSelectedKeys(e)} />
+        </div>
+        <Button
+          type="primary"
+          onClick={() => this.handleSearch(dataIndex, selectedKeys, confirm)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Search
+        </Button>
+        <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+          Reset
+        </Button>
+      </div>
+    ),
+    sorter: false,
+    filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+    onFilterDropdownVisibleChange: visible => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select())
+      }
+    }
+  })
+
   handleSearch = (dataIndex, selectedKeys, confirm) => {
     confirm()
     const filteredFiles = this.filterFiles(this.state.files, dataIndex, selectedKeys[0])
-    this.setState({ searchText: selectedKeys[0], filteredFiles })
+    this.setState(state => {
+      return {
+        ...state,
+        searchText: selectedKeys[0],
+        filteredFiles,
+        expandedRows: FileListSpec.getFilesKeys(state.files)
+      }
+    })
   }
 
   handleReset = clearFilters => {
     clearFilters()
-    this.setState({ searchText: '' })
+    this.setState({ searchText: '', expandedRows: [] })
   }
 
   handleChange = (pagination, filters, sorter) => {
@@ -169,9 +206,10 @@ export default class FileList extends Component {
 
   render() {
     const { onChange, definition, readOnly, component, previewDefinition } = this.props
-    let { expandedRows, searchText, filteredFiles, files } = this.state
+    const { expandedRows, searchText, filteredFiles, files } = this.state
 
     const facets = Contribution.getValue(definition, previewDefinition, 'described.facets')
+    const licenses = get(component.item, 'licensed.facets.core.discovered.expressions', [])
     const columns = [
       {
         title: 'Name',
@@ -205,7 +243,11 @@ export default class FileList extends Component {
         dataIndex: 'license',
         key: 'license',
         className: 'column-license',
-        ...this.getColumnSearchProps('license'),
+        filters: licenses.map(license => {
+          return { label: license, value: license }
+        }),
+        ...this.getLicenseColumnFilter('license'),
+        filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
         render: (value, record) =>
           !record.children && (
             <LicensesRenderer
@@ -243,6 +285,7 @@ export default class FileList extends Component {
             !record.children && (
               <CopyrightsRenderer
                 field={record && `files[${record.id}].attributions`}
+                initialValue={get(component.item, `files[${record.id}].attributions`, [])}
                 item={
                   Contribution.getValue(component.item, previewDefinition, `files[${record.id}].attributions`) || []
                 }
@@ -272,10 +315,11 @@ export default class FileList extends Component {
         dataSource={searchText ? filteredFiles : files}
         onChange={this.handleChange}
         expandedRowKeys={expandedRows}
-        onExpandedRowsChange={expandedRows => this.setState({ expandedRows })}
+        onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
         pagination={false}
         bordered={false}
         indentSize={8}
+        scroll={{ x: 500, y: 650 }}
       />
     )
   }

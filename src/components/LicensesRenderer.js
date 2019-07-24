@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { InlineEditor } from './'
 import { Modal } from 'react-bootstrap'
-import LicensePicker from './LicensePicker'
+import EnhancedLicensePicker from '../utils/EnhancedLicensePicker'
 
 /**
  * Specific renderer for Licenses data
@@ -67,10 +67,11 @@ class LicensesRenderer extends Component {
         />
         {!readOnly && <i className="fas fa-eye license-advanced" onClick={this.toggleAdvancedView} />}
         <Modal bsSize="large" show={advancedView} onHide={this.toggleAdvancedView}>
-          <LicensePicker
+          <EnhancedLicensePicker
             onChange={spec => this.advancedPickerChange(spec, onChange)}
             onClose={this.toggleAdvancedView}
             value={value}
+            definition={definition}
           />
         </Modal>
       </div>

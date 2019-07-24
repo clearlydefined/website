@@ -93,7 +93,7 @@ class DefinitionEntry extends React.Component {
     return (
       <span>
         <DefinitionTitle definition={definition} />
-        <DefinitionRevision definition={definition} />
+        <DefinitionRevision definition={definition} className={'definition-revision'} />
         {scoreTag}
         {curationTag}
       </span>
