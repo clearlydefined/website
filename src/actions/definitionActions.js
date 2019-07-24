@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-
+import map from 'lodash/map'
+import get from 'lodash/get'
 import { asyncActions } from './'
 import {
   getDefinitions,
@@ -11,12 +12,13 @@ import {
   searchDefinitions
 } from '../api/clearlyDefined'
 import Definition from '../utils/definition'
-import { uiDefinitionsUpdateList, UI_BROWSE_REVERT, uiBrowseUpdateList } from './ui'
+import { uiDefinitionsUpdateList, UI_BROWSE_REVERT, uiBrowseUpdateList, uiInfo } from './ui'
 import EntitySpec from '../utils/entitySpec'
 
 export const DEFINITION_LIST = 'DEFINITION_LIST'
 export const DEFINITION_BODIES = 'DEFINITION_BODIES'
 export const DEFINITION_SUGGESTIONS = 'DEFINITION_SUGGESTIONS'
+export const DEFINITION_MISSING = 'DEFINITION_MISSING'
 
 export function getDefinitionAction(token, entity, name) {
   return dispatch => {
@@ -29,14 +31,39 @@ export function getDefinitionAction(token, entity, name) {
   }
 }
 
-export function getDefinitionsAction(token, entities) {
+export function getDefinitionsAction(token, entities, isMissedDefinition = false) {
   return dispatch => {
     const actions = asyncActions(DEFINITION_BODIES)
     dispatch(actions.start())
     return getDefinitions(token, entities).then(
-      result => dispatch(actions.success({ add: result })),
+      result => {
+        if (isMissedDefinition) {
+          uiInfo(dispatch, 'Some definitions have been harvested. You are now able to check them out.')
+        }
+        dispatch(actions.success({ add: result }))
+      },
       error => dispatch(actions.error(error))
     )
+  }
+}
+
+export function checkForMissingDefinition(token, isFirstAttempt = false) {
+  return (dispatch, getState) => {
+    const components = get(getState(), 'definition.bodies.entries')
+    const workspaceComponents = map(
+      get(getState(), 'ui.definitions.componentList.list'),
+      component => components[EntitySpec.fromObject(component).toPath()]
+    ).filter(x => x)
+    const missingDefinitions = map(
+      workspaceComponents,
+      item => !get(item, 'described.tools') && EntitySpec.fromObject(item).toPath()
+    ).filter(x => x)
+    if (missingDefinitions.length > 0) {
+      if (isFirstAttempt)
+        uiInfo(dispatch, "Some definitions are not already harvested, we'll let you know when the operation finishes.")
+      dispatch(getDefinitionsAction(token, missingDefinitions, true))
+      setTimeout(() => dispatch(checkForMissingDefinition(token)), 20000)
+    }
   }
 }
 

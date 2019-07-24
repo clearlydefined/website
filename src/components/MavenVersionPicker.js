@@ -65,7 +65,7 @@ export default class MavenVersionPicker extends Component {
         options={list}
         placeholder={options.length === 0 ? 'Could not fetch versions, type Maven version' : 'Pick a Maven version'}
         onChange={this.onChange}
-        bodyContainer
+        positionFixed
         clearButton
         allowNew
         newSelectionPrefix="Version:"

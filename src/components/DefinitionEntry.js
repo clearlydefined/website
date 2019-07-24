@@ -93,7 +93,7 @@ class DefinitionEntry extends React.Component {
     return (
       <span>
         <DefinitionTitle definition={definition} />
-        <DefinitionRevision definition={definition} />
+        <DefinitionRevision definition={definition} className={'definition-revision'} />
         {scoreTag}
         {curationTag}
       </span>
@@ -132,7 +132,7 @@ class DefinitionEntry extends React.Component {
   }
 
   foldFacets(definition, facets = null) {
-    facets = facets || ['core', 'data', 'dev', 'docs', 'examples', 'tests']
+    facets = facets || Contribution.defaultFacets
     let files = 0
     let attributionUnknown = 0
     let discoveredUnknown = 0

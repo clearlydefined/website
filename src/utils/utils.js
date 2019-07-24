@@ -27,7 +27,31 @@ function asObject(item) {
   }
 }
 
-const customLicenseIds = ['NONE', 'NOASSERTION']
+// Function that return a URL string from an object
+function getParamsToUrl(data) {
+  let params = new URLSearchParams()
+  for (let key in data) {
+    if (data.hasOwnProperty(key) && data[key]) params.set(key, data[key])
+  }
+  return params.toString()
+}
+
+function getParamsFromUrl(search) {
+  const params = new URLSearchParams(search)
+  if (params.toString() === '') return
+  return paramsToObject(params.entries())
+}
+
+function paramsToObject(entries) {
+  let result = {}
+  for (let entry of entries) {
+    const [key, value] = entry
+    result[key] = value
+  }
+  return result
+}
+
+const customLicenseIds = ['NONE', 'OTHER']
 
 const sorts = [
   { value: 'license', label: 'License' },
@@ -60,9 +84,10 @@ const licenses = [
   { value: 'absence', label: 'Absence Of' }
 ]
 
-const sources = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+const sources = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
 
-const releaseDates = [{ value: 'presence', label: 'Presence Of' }, { value: 'absence', label: 'Absence Of' }]
+const releaseDates = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
+const changes = [{ value: 'PRESENCE OF', label: 'Presence Of' }, { value: 'ABSENCE OF', label: 'Absence Of' }]
 
 const curateFilters = [
   { value: 'effective', label: 'Focus on overall issues' },
@@ -71,14 +96,14 @@ const curateFilters = [
 ]
 
 const types = [
-  { value: 'pod', label: 'Pod' },
-  { value: 'crate', label: 'Crate' },
-  { value: 'git', label: 'Git' },
-  { value: 'maven', label: 'Maven' },
-  { value: 'npm', label: 'Npm' },
-  { value: 'nuget', label: 'NuGet' },
-  { value: 'pypi', label: 'PyPi' },
-  { value: 'gem', label: 'Gem' },
+  { value: 'pod', label: 'Pod', provider: 'cocoapods' },
+  { value: 'crate', label: 'Crate', provider: 'cratesio' },
+  { value: 'git', label: 'Git', provider: 'github' },
+  { value: 'maven', label: 'Maven', provider: 'mavencentral' },
+  { value: 'npm', label: 'Npm', provider: 'npmjs' },
+  { value: 'nuget', label: 'NuGet', provider: 'nuget' },
+  { value: 'pypi', label: 'PyPi', provider: 'pypi' },
+  { value: 'gem', label: 'Gem', provider: 'rubygems' },
   { value: 'sourcearchive', label: 'SourceArchive' }
 ]
 
@@ -106,9 +131,12 @@ export {
   noRowsHeight,
   providers,
   releaseDates,
+  changes,
   setIfValue,
   sorts,
   sources,
+  getParamsToUrl,
+  getParamsFromUrl,
   types,
   multiEditableFields
 }

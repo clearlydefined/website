@@ -50,6 +50,7 @@ class ScoreRenderer extends Component {
     return (
       <p style={{ color }}>
         {label}: {score[name]}
+        {this.renderUnit(maxScores[name])}
       </p>
     )
   }
@@ -71,10 +72,15 @@ class ScoreRenderer extends Component {
 
           <h2>Licensed</h2>
           {this.renderScores(licensedScore, licensedToolScore)}
+          {this.renderScoreInfo()}
         </div>
       )
     } else {
-      return <div className="ScoreRenderer">{this.renderScores(get(domain, 'score'), get(domain, 'toolScore'))}</div>
+      return (
+        <div className="ScoreRenderer">
+          {this.renderScores(get(domain, 'score'), get(domain, 'toolScore'))} {this.renderScoreInfo()}
+        </div>
+      )
     }
   }
 
@@ -82,16 +88,36 @@ class ScoreRenderer extends Component {
     return (
       <div className="ScoreRenderer__domain">
         <div className="ScoreRenderer__domain__section">
-          <h2>{`Effective: ${isNumber(effective.total) ? effective.total : effective}`}</h2>
+          <h2>
+            {`Effective: ${isNumber(effective.total) ? effective.total : effective}`}
+            {this.renderUnit()}
+          </h2>
           {this.renderScore(effective)}
         </div>
         <div className="ScoreRenderer__domain__section">
-          <h2>{`Tools: ${isNumber(tools.total) ? tools.total : tools}`}</h2>
+          <h2>
+            {`Tools: ${isNumber(tools.total) ? tools.total : tools}`}
+            {this.renderUnit()}
+          </h2>
           {this.renderScore(tools)}
         </div>
       </div>
     )
   }
+
+  renderUnit = maxScore => <span>{`/${maxScore || 100}`}</span>
+
+  renderScoreInfo = () => (
+    <div className="ScoreInfo">
+      <a
+        href="https://github.com/clearlydefined/license-score/blob/master/ClearlyLicensedMetrics.md#clearlylicensed-scoring-formula"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Scoring Formula
+      </a>
+    </div>
+  )
 
   render() {
     const { domain, scores } = this.props

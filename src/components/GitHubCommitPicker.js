@@ -69,7 +69,7 @@ export default class GitHubCommitPicker extends Component {
   }
 
   renderMenuItemChildren(option, props) {
-    const value = option.tag === option.sha ? option.sha : `${option.tag} (${option.sha})`
+    const value = option.tag === option.sha ? option.sha : `${option.tag}${option.sha ? ` (${option.sha})` : ''}`
     return <Highlighter search={props.text}>{value}</Highlighter>
   }
 
@@ -89,6 +89,7 @@ export default class GitHubCommitPicker extends Component {
       <div onClick={e => e.stopPropagation()}>
         <Autocomplete
           id="github-commit-picker"
+          inputProps={{ dataTestId: 'github-commit-picker' }}
           selected={selected}
           options={list}
           labelKey="tag"
@@ -97,11 +98,10 @@ export default class GitHubCommitPicker extends Component {
             options.length === 0 ? 'No tags found, enter a commit hash' : 'Pick a tag or enter a commit hash'
           }
           onChange={this.onChange}
-          bodyContainer
+          positionFixed
           allowNew={allowNew}
           clearButton
           newSelectionPrefix="SHA:"
-          emptyLabel=""
           filterBy={this.filter}
           selectHintOnEnter
           renderMenuItemChildren={this.renderMenuItemChildren}

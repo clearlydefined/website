@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-import parse from 'spdx-expression-parse'
+import { parse } from '@clearlydefined/spdx'
 import isNil from 'lodash/isNil'
 import unset from 'lodash/unset'
 import get from 'lodash/get'
@@ -10,7 +10,9 @@ const NOASSERTION = 'NOASSERTION'
 // Shared methods appliable to License Picker
 export default class LicensePickerUtils {
   static parseLicense(license) {
-    return license && !['NONE', 'NOASSERTION'].includes(license) ? parse(license) : { license }
+    return license && !['NONE', 'NOASSERTION', 'OTHER', 'PRESENCE OF', 'ABSENCE OF'].includes(license)
+      ? parse(license)
+      : { license }
   }
 
   static isValidExpression(expression) {
@@ -75,7 +77,7 @@ export default class LicensePickerUtils {
 
   /**
    * Creates a new License Rules in the specified path
-   * @param  {} conjunction used conjuction to merge the new rules expressionects
+   * @param  {} conjunction used conjunction to merge the new rules expressionects
    * @param  {} expression current expressionect rules
    * @param  {} path where apply the change
    * @returns updated expressionect rules

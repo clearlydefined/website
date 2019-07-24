@@ -12,8 +12,9 @@ import { saveGist } from '../api/github'
 import { Button } from 'react-bootstrap'
 import { uiDefinitionsUpdateList, uiInfo, uiWarning } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
+import { types } from '../utils/utils'
 import NotificationButtons from './Navigation/Ui/NotificationButtons'
-import { getDefinitionsAction } from '../actions/definitionActions'
+import { getDefinitionsAction, checkForMissingDefinition } from '../actions/definitionActions'
 import { getCurationsAction } from '../actions/curationActions'
 import SystemManagedList from './SystemManagedList'
 
@@ -127,6 +128,7 @@ export default class UserManagedList extends SystemManagedList {
     !definitions.entries[path] && dispatch(getDefinitionsAction(token, [path]))
     !curations.entries[path] && dispatch(getCurationsAction(token, [path]))
     dispatch(uiDefinitionsUpdateList({ add: component }))
+    dispatch(checkForMissingDefinition(token, true))
   }
 
   loadComponentList(content, name) {
@@ -139,6 +141,7 @@ export default class UserManagedList extends SystemManagedList {
     try {
       const object = typeof content === 'string' ? JSON.parse(content) : content
       if (this.isPackageLock(object)) return this.getListFromPackageLock(object.dependencies)
+      if (this.isFossaInput(object)) return this.getListFromFossaPackage(object.Build.Dependencies)
       if (this.isClearlyDefinedList(object)) return object
     } catch (error) {}
     return null
@@ -147,6 +150,10 @@ export default class UserManagedList extends SystemManagedList {
   isPackageLock(content) {
     // TODO better, more definitive test here
     return !!content.dependencies
+  }
+
+  isFossaInput(content) {
+    return !!content.Build.Dependencies
   }
 
   isClearlyDefinedList(content) {
@@ -163,6 +170,22 @@ export default class UserManagedList extends SystemManagedList {
         namespace = null
       }
       coordinates.push({ type: 'npm', provider: 'npmjs', namespace, name, revision: dependencies[dependency].version })
+    }
+    return { coordinates }
+  }
+
+  getListFromFossaPackage(dependencies) {
+    const coordinates = []
+    for (const dependency in dependencies) {
+      const locator = dependencies[dependency].locator.split(/[\s+$/]+/)
+      const type = types.find(item => item.value === locator[0])
+      coordinates.push({
+        type: type.value,
+        provider: type.provider,
+        namespace: locator.length > 3 ? locator[1] : '-',
+        name: locator.length > 3 ? locator[2] : locator[1],
+        revision: locator.length > 3 ? locator[3] : locator[2]
+      })
     }
     return { coordinates }
   }
@@ -229,7 +252,7 @@ export default class UserManagedList extends SystemManagedList {
       <div>
         {`${baseMessage}, and ${summary.warnings.noLicense.length} missing licenses`}
         <div>
-          <Button bsStyle="warning" onClick={() => this.onFilter({ 'licensed.declared': 'absence' }, true)}>
+          <Button bsStyle="warning" onClick={() => this.onFilter({ 'licensed.declared': 'ABSENCE OF' }, true)}>
             Filter
           </Button>
           <span>&nbsp;to show just the problem definitions</span>

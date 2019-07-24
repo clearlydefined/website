@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
+import Tooltip from 'antd/lib/tooltip'
 
 class DefinitionTitle extends Component {
   static propTypes = {
@@ -14,22 +15,35 @@ class DefinitionTitle extends Component {
     showNamespace: true
   }
 
-  render() {
+  renderDefinitionTitle = () => {
     const { definition, showNamespace } = this.props
+    return (
+      <>
+        {showNamespace && definition.coordinates.namespace ? definition.coordinates.namespace + '/' : ''}
+        {definition.coordinates.name}
+      </>
+    )
+  }
+
+  render() {
+    const { definition } = this.props
     return get(definition, 'described.urls.registry') ? (
       <span>
-        <a
-          href={get(definition, 'described.urls.registry')}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-test-id="component-name"
-        >
-          {showNamespace && definition.coordinates.namespace ? definition.coordinates.namespace + '/' : ''}
-          {definition.coordinates.name}
-        </a>
+        <Tooltip title={this.renderDefinitionTitle()}>
+          <a
+            href={get(definition, 'described.urls.registry')}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-test-id="component-name"
+          >
+            {this.renderDefinitionTitle()}
+          </a>
+        </Tooltip>
       </span>
     ) : (
-      <span>{definition.coordinates.name}</span>
+      <Tooltip title={this.renderDefinitionTitle()}>
+        <span data-test-id="component-name">{this.renderDefinitionTitle()}</span>
+      </Tooltip>
     )
   }
 }

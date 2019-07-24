@@ -11,6 +11,7 @@ import Curation from '../../../utils/curation'
 import ScoreRenderer from '../Ui/ScoreRenderer'
 import DefinitionTitle from '../Ui/DefinitionTitle'
 import DefinitionRevision from '../Ui/DefinitionRevision'
+import ComponentDetailsButtons from '../Ui/ComponentDetailsButtons'
 
 class HeaderSection extends Component {
   static propTypes = {
@@ -40,6 +41,7 @@ class HeaderSection extends Component {
     const scores = get(item, 'scores')
     const isCurated = Curation.isCurated(curations.item)
     const hasPendingCurations = Curation.isPending(curations.item)
+
     return (
       <Row className="row-detail-header">
         <Col md={8}>
@@ -65,6 +67,9 @@ class HeaderSection extends Component {
                     Pending curations
                   </Tag>
                 )}
+              </div>
+              <div>
+                <ComponentDetailsButtons item={item} />
               </div>
             </div>
             <p>

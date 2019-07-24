@@ -9,6 +9,7 @@ import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import union from 'lodash/union'
 import compact from 'lodash/compact'
+import minimatch from 'minimatch'
 import EntitySpec from './entitySpec'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
@@ -220,9 +221,48 @@ export default class Contribution {
     }
   }
 
+  static generateGlob(record) {
+    const firstChildPath = record.children[0].path
+    // if root
+    if (firstChildPath.indexOf(`${record.name}/`) === 0) {
+      return `**/${record.name}/**`
+    }
+    return `**/${firstChildPath.split(`${record.name}/`)[0]}${record.name}/**`
+  }
+
+  static getFolder(record) {
+    const firstChildPath = record.children[0].path
+    // if root
+    if (firstChildPath.indexOf(`${record.name}/`) === 0) {
+      return `/${record.name}`
+    }
+    return `/${firstChildPath.split(`${record.name}/`)[0]}${record.name}`
+  }
+
+  static folderMatchesGlob(record, glob) {
+    const path = this.getFolder(record)
+    // remove "/*"
+    if (glob.endsWith('/**')) {
+      return minimatch(path, glob.slice(0, -3)) || minimatch(path, glob)
+    }
+    return minimatch(path, glob)
+  }
+
+  static folderMatchesGlobExactly(record, glob) {
+    const path = this.getFolder(record)
+    // remove "/*"
+    if (glob.endsWith('/**')) {
+      return minimatch(path, glob.slice(0, -3))
+    }
+    return minimatch(path, glob)
+  }
+
+  static defaultFacets = ['core', 'data', 'dev', 'doc', 'examples', 'tests']
+  static nonCoreFacets = ['data', 'dev', 'doc', 'examples', 'tests']
+
   // Function that retrieve informations about facets from the definition
   static foldFacets(definition, facets = null) {
-    facets = facets || ['core', 'data', 'dev', 'docs', 'examples', 'tests']
+    facets = facets || this.defaultFacets
     let files = 0
     let attributionUnknown = 0
     let discoveredUnknown = 0

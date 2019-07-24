@@ -11,10 +11,13 @@ import set from 'lodash/set'
 import sortBy from 'lodash/sortBy'
 import chunk from 'lodash/chunk'
 import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
+import isNumber from 'lodash/isNumber'
+import isString from 'lodash/isString'
 import notification from 'antd/lib/notification'
 import { curateAction, getCurationsAction } from '../actions/curationActions'
 import { login } from '../actions/sessionActions'
-import { getDefinitionsAction } from '../actions/definitionActions'
+import { getDefinitionsAction, checkForMissingDefinition } from '../actions/definitionActions'
 import { uiBrowseUpdateFilterList, uiRevert, uiInfo, uiDanger } from '../actions/ui'
 import EntitySpec from '../utils/entitySpec'
 import Auth from '../utils/auth'
@@ -35,7 +38,8 @@ export default class SystemManagedList extends Component {
       selected: {},
       sequence: 0,
       showFullDetail: false,
-      path: null
+      path: null,
+      removeContributedDefinitions: false
     }
     this.readOnly = true
     this.multiSelectEnabled = false
@@ -52,6 +56,7 @@ export default class SystemManagedList extends Component {
     this.onChangeComponent = this.onChangeComponent.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
     this.doContribute = this.doContribute.bind(this)
+    this.getDefinitionsWithChanges = this.getDefinitionsWithChanges.bind(this)
     this.handleLogin = this.handleLogin.bind(this)
     this.transform = this.transform.bind(this)
     this.createTransform = this.createTransform.bind(this)
@@ -66,7 +71,9 @@ export default class SystemManagedList extends Component {
   }
 
   getDefinition(component) {
-    return this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+    const definition = this.props.definitions.entries[EntitySpec.fromObject(component).toPath()]
+    if (component.changes) definition.changes = component.changes
+    return definition
   }
 
   getValue(component, field) {
@@ -125,7 +132,7 @@ export default class SystemManagedList extends Component {
     }
     const spec = { contributionInfo, patches }
     dispatch(curateAction(token, spec))
-    this.refresh(contributionInfo.removeDefinitions)
+    this.setState({ removeContributedDefinitions: contributionInfo.removeDefinitions })
   }
 
   buildContributeSpec(list) {
@@ -154,6 +161,19 @@ export default class SystemManagedList extends Component {
   doPromptContribute() {
     if (!this.hasChanges()) return
     this.contributeModal.current.open()
+  }
+
+  getDefinitionsWithChanges() {
+    const { components } = this.props
+    const { selected } = this.state
+    const selectedEntries = selected
+      ? Object.entries(selected)
+          .map(s => (s[1] ? parseInt(s[0]) : null))
+          .filter(x => isNumber(x))
+      : []
+    const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
+    if (selectedComponents.length > 0) return selectedComponents.filter(component => this.hasChange(component))
+    return components.list.filter(component => this.hasChange(component))
   }
 
   getSort(eventKey) {
@@ -197,12 +217,13 @@ export default class SystemManagedList extends Component {
       for (let filterType in activeFilters) {
         const value = activeFilters[filterType]
         const fieldValue = this.getValue(definition, filterType)
-        if (value === 'presence') {
+        if (!value) return true
+        if (value === 'PRESENCE OF') {
           if (!fieldValue) return false
-        } else if (value === 'absence') {
-          if (fieldValue && !['NONE', 'NOASSERTION'].includes(fieldValue)) return false
+        } else if (value === 'ABSENCE OF') {
+          if (fieldValue && !['NONE', 'NOASSERTION', 'OTHER'].includes(fieldValue)) return false
         } else {
-          if (!fieldValue || !fieldValue.toLowerCase().includes(value.toLowerCase())) {
+          if (!fieldValue || (isString(fieldValue) && !fieldValue.toLowerCase().includes(value.toLowerCase()))) {
             return false
           }
         }
@@ -271,10 +292,18 @@ export default class SystemManagedList extends Component {
   async onChangeComponent(component, newComponent, field) {
     const { components } = this.props
     const { selected } = this.state
-    const selectedEntries = selected ? Object.entries(selected) : []
+    const selectedEntries = selected
+      ? Object.entries(selected)
+          .map(s => (s[1] ? parseInt(s[0]) : null))
+          .filter(x => isNumber(x))
+      : []
+    const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
     // contribute all the components
-    if (multiEditableFields.includes(field) && selectedEntries.length > 0) {
-      const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
+    if (
+      multiEditableFields.includes(field) &&
+      selectedEntries.length > 0 &&
+      selectedComponents.find(selectedComponent => isEqual(selectedComponent, component))
+    ) {
       const res = await this.showMultiSelectNotification(selectedComponents.length)
       if (res) {
         // Apply the same change to all the selected components
@@ -336,8 +365,8 @@ export default class SystemManagedList extends Component {
 
   handleLogin(e) {
     e.preventDefault()
-    Auth.doLogin((token, permissions, username) => {
-      this.props.dispatch(login(token, permissions, username))
+    Auth.doLogin((token, permissions, username, publicEmails) => {
+      this.props.dispatch(login(token, permissions, username, publicEmails))
     })
   }
 
@@ -390,7 +419,10 @@ export default class SystemManagedList extends Component {
     const { dispatch, token } = this.props
     const chunks = chunk(definitions, 100)
     Promise.all(chunks.map(throat(10, chunk => dispatch(getDefinitionsAction(token, chunk)))))
-      .then(() => uiInfo(dispatch, message))
+      .then(() => {
+        uiInfo(dispatch, message)
+        dispatch(checkForMissingDefinition(token, true))
+      })
       .catch(() => uiDanger(dispatch, 'There was an issue retrieving components'))
   }
 
@@ -400,9 +432,9 @@ export default class SystemManagedList extends Component {
     Promise.all(chunks.map(throat(10, chunk => dispatch(getCurationsAction(token, chunk)))))
   }
 
-  refresh = removeDefinitions => {
+  refresh = () => {
     const { components } = this.props
-    const refreshedData = removeDefinitions
+    const refreshedData = this.state.removeContributedDefinitions
       ? components.list.filter(item => isEmpty(item.changes))
       : components.list.map(({ changes, ...keepAttrs }) => keepAttrs)
     if (this.hasChanges()) this.updateList({ updateAll: refreshedData })
@@ -411,6 +443,7 @@ export default class SystemManagedList extends Component {
     const curationsToGet = definitions.map(definition => definition.toPath())
     this.getDefinitionsAndNotify(definitionsToGet, 'All components have been refreshed')
     this.getCurations(curationsToGet)
+    this.setState({ removeContributedDefinitions: false })
   }
 
   updateList(_) {}

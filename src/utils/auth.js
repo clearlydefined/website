@@ -11,7 +11,7 @@ export default class Auth {
     window.open(url('auth/github'))
     const tokenListener = e => {
       if (e.data.type === 'github-token') {
-        callback(e.data.token, e.data.permissions, e.data.username)
+        callback(e.data.token, e.data.permissions, e.data.username, e.data.publicEmails)
         window.removeEventListener('message', tokenListener)
       }
     }

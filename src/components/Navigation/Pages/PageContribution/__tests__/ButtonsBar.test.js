@@ -8,6 +8,6 @@ const components = {
 
 describe('ButtonsBar', () => {
   it('renders without crashing', () => {
-    shallow(<ButtonsBar />)
+    shallow(<ButtonsBar toggleCollapseExpandAll={() => false} />)
   })
 })

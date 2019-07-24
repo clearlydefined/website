@@ -9,7 +9,6 @@ import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
 import PropTypes from 'prop-types'
 import notification from 'antd/lib/notification'
-import 'antd/dist/antd.css'
 import {
   uiInspectGetDefinition,
   uiInspectGetCurations,
@@ -121,10 +120,27 @@ export class FullDetailPage extends AbstractFullDetailsView {
     )
       return uiCurateResetDefinitionPreview()
     const previewComponent = nextComponent ? nextComponent : component
-    const patches = Contribution.buildPatch([], previewComponent, changes)
-    !isEmpty(patches)
-      ? uiCurateGetDefinitionPreview(token, previewComponent, patches)
+    const patch = Contribution.buildPatch([], previewComponent, changes)
+    const cleanPatch = this.cleanPatch(patch, 'facets')
+    !isEmpty(cleanPatch)
+      ? uiCurateGetDefinitionPreview(token, previewComponent, cleanPatch)
       : uiCurateResetDefinitionPreview()
+  }
+
+  // remove empty arrays from described.facets to workaround issue on Service API
+  // https://github.com/clearlydefined/service/issues/456
+  cleanPatch(patch, key) {
+    const { described } = patch
+    if (!described || !described[key]) return patch
+    const cleanPatch = { ...patch, described: { ...described, [key]: {} } }
+    for (const s in described[key]) {
+      const elem = described[key][s]
+      if (elem.length) cleanPatch.described[key][s] = elem
+    }
+    if (Object.keys(cleanPatch.described[key]).length === 0) {
+      delete cleanPatch.described[key]
+    }
+    return cleanPatch
   }
 
   // Shows the Modal to save a Contribution
@@ -196,7 +212,7 @@ export class FullDetailPage extends AbstractFullDetailsView {
         />
       ),
       key,
-      onClose: notification.close(key),
+      onClose: () => notification.close(key),
       duration: 0
     })
   }
@@ -231,8 +247,8 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
   handleLogin(e) {
     e.preventDefault()
-    Auth.doLogin((token, permissions, username) => {
-      this.props.login(token, permissions, username)
+    Auth.doLogin((token, permissions, username, publicEmails) => {
+      this.props.login(token, permissions, username, publicEmails)
     })
   }
 

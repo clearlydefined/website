@@ -4,8 +4,8 @@
 import React, { Component } from 'react'
 import { Grid, Button } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
+import get from 'lodash/get'
 import Modal from 'antd/lib/modal'
-import 'antd/dist/antd.css'
 import ContributePrompt from '../ContributePrompt'
 import FullDetailComponent from './FullDetailComponent'
 
@@ -78,7 +78,11 @@ export class AbstractFullDetailsView extends Component {
           getCurationData={this.getCurationData}
           inspectedCuration={inspectedCuration}
           renderContributeButton={
-            <Button bsStyle="success" disabled={isEmpty(changes)} onClick={this.doPromptContribute}>
+            <Button
+              bsStyle="success"
+              disabled={isEmpty(changes) || isEmpty(harvest.item)}
+              onClick={this.doPromptContribute}
+            >
               Contribute
             </Button>
           }
@@ -88,6 +92,7 @@ export class AbstractFullDetailsView extends Component {
           session={session}
           onLogin={this.handleLogin}
           actionHandler={this.doContribute}
+          definitions={get(definition, 'item.coordinates') ? [get(definition, 'item.coordinates')] : []}
         />
       </Grid>
     )
