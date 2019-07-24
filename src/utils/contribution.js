@@ -16,7 +16,7 @@ import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
-import nuget from '../images/nuget.svg'
+import nuget from '../images/nuget.png'
 import moment from 'moment'
 import { difference } from './utils'
 
