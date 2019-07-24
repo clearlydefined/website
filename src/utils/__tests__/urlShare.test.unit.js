@@ -25,7 +25,7 @@ describe('UrlShare', () => {
     const urlShare = new UrlShare({ ...shareObject })
     urlShare.start()
     if (urlShare.isValid()) {
-      const message = urlShare.toValidObject()
+      const message = urlShare.toMessage()
       const encodedMessage = urlShare.encode(message)
       const result = urlShare.decode(encodedMessage)
       expect(result).toEqual(shareObject)

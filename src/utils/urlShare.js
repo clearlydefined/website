@@ -18,22 +18,24 @@ export default class UrlShare {
     return result !== null ? result : true
   }
 
-  toValidObject() {
-    return this.ShareUrlMessage.toObject(this.payload)
+  toMessage() {
+    return this.ShareUrlMessage.fromObject(this.payload)
   }
 
   encode(message) {
     let buffer = this.ShareUrlMessage.encode(message).finish()
-    return buffer
+    return pako.deflate(buffer)
   }
 
   decode(message) {
     try {
-      //const definitionSpec = pako.inflate(message)
-      var decodedMessage = this.ShareUrlMessage.decode(message)
-      return decodedMessage
+      const definitionSpec = pako.inflate(message)
+      const decodedMessage = this.ShareUrlMessage.decode(definitionSpec)
+      const object = this.ShareUrlMessage.toObject(decodedMessage, {
+        enums: String
+      })
+      return object
     } catch (e) {
-      console.log(e)
       return false
     }
   }
