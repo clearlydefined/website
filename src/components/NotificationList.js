@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { AlertList } from 'react-bs-notifier'
 import { uiNotificationDelete } from '../actions/ui'
+import NotificationContent from './Navigation/Ui/NotificationContent'
 
 class NotificationList extends Component {
   static propTypes = {
@@ -31,7 +32,17 @@ class NotificationList extends Component {
     const { position, notifications } = this.props
     return (
       <div>
-        <AlertList position={position} alerts={notifications} onDismiss={this.onDismiss} />
+        <AlertList
+          position={position}
+          alerts={notifications.map(notification => {
+            return {
+              id: notification.id,
+              type: notification.type,
+              message: <NotificationContent notification={notification} key={notification.id} />
+            }
+          })}
+          onDismiss={this.onDismiss}
+        />
       </div>
     )
   }
