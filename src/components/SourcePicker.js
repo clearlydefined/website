@@ -49,7 +49,10 @@ class SourcePicker extends Component {
     const { onChange, onClose } = this.props
     return (
       <FormGroup className="pull-right">
-        <Button bsStyle="success" onClick={() => onChange(this.state.selectedComponent)}>
+        <Button
+          bsStyle="success"
+          onClick={() => (this.state.selectedComponent ? onChange(this.state.selectedComponent) : onClose())}
+        >
           OK
         </Button>
         <Button onClick={() => onClose()}>Cancel</Button>
