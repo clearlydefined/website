@@ -12,66 +12,18 @@
           "id": 2
         },
         "coordinates": {
-          "rule": "repeated",
-          "type": "Coordinates",
+          "keyType": "string",
+          "type": "Coordinate",
           "id": 3
         }
       },
       "nested": {
-        "Types": {
-          "values": {
-            "pod": 0,
-            "crate": 1,
-            "git": 2,
-            "maven": 3,
-            "npm": 4,
-            "nuget": 5,
-            "pypi": 6,
-            "gem": 7,
-            "sourcearchive": 8
-          }
-        },
-        "Providers": {
-          "values": {
-            "cocoapods": 0,
-            "cratesio": 1,
-            "github": 2,
-            "mavencentral": 3,
-            "npmjs": 4,
-            "nuget": 5,
-            "pypi": 6,
-            "rubygems": 7
-          }
-        },
-        "Coordinates": {
+        "Coordinate": {
           "fields": {
-            "type": {
-              "rule": "required",
-              "type": "Types",
-              "id": 1
-            },
-            "provider": {
-              "rule": "required",
-              "type": "Providers",
-              "id": 2
-            },
-            "namespace": {
-              "type": "string",
-              "id": 3
-            },
-            "name": {
-              "rule": "required",
-              "type": "string",
-              "id": 4
-            },
-            "revision": {
-              "type": "string",
-              "id": 5
-            },
             "changes": {
               "keyType": "string",
               "type": "string",
-              "id": 6
+              "id": 1
             }
           }
         }

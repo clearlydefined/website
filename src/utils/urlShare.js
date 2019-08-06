@@ -1,6 +1,9 @@
 import protobuf from 'protobufjs'
 import pako from 'pako'
+import map from 'lodash/map'
+import base64js from 'base64-js'
 import shareUrlDescriptor from './shareUrlDescriptor.json'
+import EntitySpec from './entitySpec.js'
 
 export default class UrlShare {
   constructor(payload) {
@@ -19,24 +22,43 @@ export default class UrlShare {
   }
 
   toMessage() {
-    return this.ShareUrlMessage.fromObject(this.payload)
+    return this.ShareUrlMessage.fromObject(this.coordinatesToPath(this.payload))
+  }
+
+  coordinatesToPath(payload) {
+    const coordinates = payload.coordinates.reduce((previous, current) => {
+      const obj = {}
+      if (current.changes) obj.changes = current.changes
+      previous[EntitySpec.fromObject(current).toPath()] = obj
+      return previous
+    }, {})
+    return { ...payload, coordinates: coordinates }
   }
 
   encode(message) {
     let buffer = this.ShareUrlMessage.encode(message).finish()
-    return pako.deflate(buffer)
+    return base64js.fromByteArray(pako.deflate(buffer))
   }
 
   decode(message) {
     try {
-      const definitionSpec = pako.inflate(message)
+      const definitionSpec = pako.inflate(base64js.toByteArray(message))
       const decodedMessage = this.ShareUrlMessage.decode(definitionSpec)
-      const object = this.ShareUrlMessage.toObject(decodedMessage, {
-        enums: String
-      })
-      return object
+      const object = this.ShareUrlMessage.toObject(decodedMessage)
+      return this.pathToCoordinates(object)
     } catch (e) {
       return false
     }
+  }
+
+  pathToCoordinates(object) {
+    const coordinates = map(object.coordinates, (component, path) => {
+      const obj = { ...EntitySpec.fromPath(path) }
+      if (Object.keys(component).length > 0) {
+        obj.changes = component.changes
+      }
+      return obj
+    })
+    return { ...object, coordinates: coordinates }
   }
 }

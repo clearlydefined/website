@@ -9,7 +9,7 @@ describe('UrlShare', () => {
   it('returns an error for coordinates field with a wrong type', () => {
     const urlShare = new UrlShare({ ...shareObject, coordinates: 'test' })
     urlShare.start()
-    expect(urlShare.isValid()).toBe('coordinates: array expected')
+    expect(urlShare.isValid()).toBe('coordinates: object expected')
   })
   it('returns an error for filter field with a wrong type', () => {
     const urlShare = new UrlShare({ ...shareObject, filter: true })
