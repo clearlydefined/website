@@ -4,7 +4,6 @@
 import React from 'react'
 import notification from 'antd/lib/notification'
 import { saveAs } from 'file-saver'
-import base64js from 'base64-js'
 import { ROUTE_SHARE } from '../utils/routingConstants'
 import { getNotices } from '../api/clearlyDefined'
 import { saveGist } from '../api/github'
@@ -284,7 +283,7 @@ export default class UserManagedList extends SystemManagedList {
       urlShare.isValid()
       const message = urlShare.toMessage()
       const encodedMessage = urlShare.encode(message)
-      const url = `${document.location.origin}${ROUTE_SHARE}/${base64js.fromByteArray(encodedMessage)}`
+      const url = `${document.location.origin}${ROUTE_SHARE}/${encodedMessage}`
       this.copyToClipboard(url, 'URL copied to clipboard')
     } catch (e) {
       return false
