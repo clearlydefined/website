@@ -1,0 +1,10 @@
+message ShareUrl {
+  map<string, string> filter = 1;
+  optional string sortBy = 2;
+
+  message Coordinate {
+    map <string, string> changes = 1;
+  }
+
+  map<string, Coordinate> coordinates = 3;
+}

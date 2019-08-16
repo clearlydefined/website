@@ -17,6 +17,7 @@
     "minimatch": "^3.0.4",
     "moment": "^2.22.2",
     "pako": "^1.0.6",
+    "protobufjs": "^6.8.8",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.3",
     "react-bootstrap-typeahead": "^3.4.6",

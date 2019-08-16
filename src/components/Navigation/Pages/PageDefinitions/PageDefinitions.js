@@ -3,9 +3,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import pako from 'pako'
 import { Grid, Tooltip } from 'react-bootstrap'
-import base64js from 'base64-js'
 import notification from 'antd/lib/notification'
 import get from 'lodash/get'
 import { uiDefinitionsUpdateList, uiNavigation, uiWarning } from '../../../../actions/ui'
@@ -20,6 +18,7 @@ import VersionSelector from '../../Ui/VersionSelector'
 import ButtonsBar from './ButtonsBar'
 import UserManagedList from '../../../UserManagedList'
 import SavePopUp from '../../Ui/SavePopUp'
+import UrlShare from '../../../../utils/urlShare'
 
 export class PageDefinitions extends UserManagedList {
   constructor(props) {
@@ -37,8 +36,10 @@ export class PageDefinitions extends UserManagedList {
     const { dispatch, path } = this.props
     if (path.length > 1) {
       try {
-        const definitionSpec = pako.inflate(base64js.toByteArray(path), { to: 'string' })
-        this.loadFromListSpec(JSON.parse(definitionSpec))
+        const urlShare = new UrlShare()
+        urlShare.start()
+        const definitionSpec = urlShare.decode(path)
+        this.loadFromListSpec(definitionSpec)
       } catch (e) {
         uiWarning(dispatch, 'Loading components from URL failed')
       }

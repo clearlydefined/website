@@ -1,0 +1,33 @@
+{
+  "nested": {
+    "ShareUrl": {
+      "fields": {
+        "filter": {
+          "keyType": "string",
+          "type": "string",
+          "id": 1
+        },
+        "sortBy": {
+          "type": "string",
+          "id": 2
+        },
+        "coordinates": {
+          "keyType": "string",
+          "type": "Coordinate",
+          "id": 3
+        }
+      },
+      "nested": {
+        "Coordinate": {
+          "fields": {
+            "changes": {
+              "keyType": "string",
+              "type": "string",
+              "id": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}
