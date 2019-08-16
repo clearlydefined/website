@@ -77,7 +77,7 @@
     "start:dev-api": "env-cmd --fallback ./.env.development npm run build-scripts",
     "start:local-api": "env-cmd --fallback ./.env.localhost npm run build-scripts",
     "start:prod-api": "env-cmd --fallback ./.env.production npm run build-scripts",
-    "build": "env-cmd --fallback ./.env.production npm run build-css && npm run copy-monaco && react-scripts build",
+    "build": "env-cmd --fallback ./.env.production npm run build-css && npm run copy-monaco && react-scripts --max_old_space_size=4096 build",
     "test": "eslint --fix src && react-scripts test --env=jsdom --coverage",
     "test:unit": "jest -c jest.config.unit.js",
     "test:integration": "jest -c jest.config.integration.js",
