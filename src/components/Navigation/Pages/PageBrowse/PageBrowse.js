@@ -75,11 +75,12 @@ class PageBrowse extends SystemManagedList {
       .filter(x => x)
     const names = uniqBy(
       coordinates.map(coordinate => {
-        return { type: coordinate.type, name: coordinate.name }
+        return { type: coordinate.type, namespace: coordinate.namespace, name: coordinate.name }
       }),
       'name',
       'type'
     )
+
     const options = { ...filterOptions, list: names }
     return (
       <>
