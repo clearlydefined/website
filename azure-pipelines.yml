@@ -8,3 +8,4 @@ pool:
 
 steps:
   - script: docker build -t clearlydefined/website:latest .
+    displayName: 'Docker build'
