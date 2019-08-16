@@ -74,15 +74,19 @@ export default class FilterBar extends Component {
         options={options.list}
         isLoading={options.isFetching}
         onSearch={onSearch}
-        labelKey={'name'}
+        labelKey={option => {
+          return option.namespace ? `${option.namespace}/${option.name}` : option.name
+        }}
         clearButton
         selected={value ? [value.name] : []}
-        renderMenuItemChildren={(option, props) => (
-          <span className="filterBar-itemRenderer">
-            <img src={types[option.type]} alt={option[props.labelKey]} />
-            <Highlighter search={props.text}>{option[props.labelKey]}</Highlighter>
-          </span>
-        )}
+        renderMenuItemChildren={(option, props) => {
+          return (
+            <span className="filterBar-itemRenderer">
+              <img src={types[option.type]} alt={option[props.labelKey]} />
+              <Highlighter search={props.text}>{props.labelKey(option)}</Highlighter>
+            </span>
+          )
+        }}
       />
     )
   }
