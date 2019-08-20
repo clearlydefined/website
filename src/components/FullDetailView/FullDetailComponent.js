@@ -169,7 +169,7 @@ class FullDetailComponent extends Component {
         )}
         <Row>
           <Col md={1} xs={2}>
-            {image && <img className="list-image" src={image} alt="" />}
+            {image && <img className="component-image" src={image} alt="" />}
           </Col>
           <Col md={11} xs={10}>
             <HeaderSection {...this.props} />
