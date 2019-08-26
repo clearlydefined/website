@@ -4,17 +4,22 @@ import React, { Component } from 'react'
 import { Tag, Tooltip } from 'antd'
 
 class HarvestIndicator extends Component {
+  getTools = tools => {
+    console.log('tools', tools)
+    return !tools ? 0 : tools.length > 2 ? 2 : tools.length
+  }
+
   getColor = tools => {
     const colors = ['#cb2431', '#d6af22', '#2cbe4e']
-    return colors[tools.length > 2 ? 2 : tools.length]
+    return colors[this.getTools(tools)]
   }
   getHarvestStatus = tools => {
     const status = ['Not Harvested', 'Partially Harvested', 'Harvested']
-    return status[tools.length > 2 ? 2 : tools.length]
+    return status[this.getTools(tools)]
   }
   getTooltip = tools => {
     const tooltip = ['Not Harvested', 'Partially Harvested', 'Harvested']
-    return tooltip[tools.length > 2 ? 2 : tools.length]
+    return tooltip[this.getTools(tools)]
   }
   render() {
     const { tools } = this.props

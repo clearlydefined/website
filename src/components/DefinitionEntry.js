@@ -13,6 +13,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.png'
+import composer from '../images/packagist.png'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import Curation from '../utils/curation'
@@ -308,6 +309,7 @@ class DefinitionEntry extends React.Component {
     if (definition.coordinates.type === 'pypi') return pypi
     if (definition.coordinates.type === 'gem') return gem
     if (definition.coordinates.type === 'nuget') return nuget
+    if (definition.coordinates.type === 'composer') return composer
     return null
   }
 

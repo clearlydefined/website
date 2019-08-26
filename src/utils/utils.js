@@ -96,6 +96,7 @@ const curateFilters = [
 ]
 
 const types = [
+  { value: 'composer', label: 'Composer', provider: 'packagist' },
   { value: 'pod', label: 'Pod', provider: 'cocoapods' },
   { value: 'crate', label: 'Crate', provider: 'cratesio' },
   { value: 'git', label: 'Git', provider: 'github' },
@@ -108,6 +109,7 @@ const types = [
 ]
 
 const providers = [
+  { value: 'packagist', label: 'Packagist' },
   { value: 'cocoapods', label: 'CocoaPods' },
   { value: 'cratesio', label: 'Crates.io' },
   { value: 'github', label: 'GitHub' },

@@ -22,7 +22,8 @@ const entityMapping = [
   { hostnames: ['nuget.org'], parser: nugetParser },
   { hostnames: ['crates.io'], parser: cratesParser },
   { hostnames: ['pypi.org'], parser: pypiParser },
-  { hostnames: ['rubygems.org'], parser: rubygemsParser }
+  { hostnames: ['rubygems.org'], parser: rubygemsParser },
+  { hostnames: ['packagist.org'], parser: composerParser }
 ]
 
 function npmParser(path) {
@@ -67,6 +68,12 @@ function rubygemsParser(path) {
   return new EntitySpec('gem', 'rubygems', null, name, version)
 }
 
+function composerParser(path, hash) {
+  const [, namespace, name] = path.split('/')
+  const version = hash.substr(1)
+  return new EntitySpec('composer', 'packagist', namespace, name, version)
+}
+
 function normalize(value, provider, property) {
   if (!value) return value
   const mask = toLowerCaseMap[provider] || 0
@@ -88,11 +95,12 @@ export default class EntitySpec {
 
   static fromUrl(url) {
     const urlObject = new URL(url)
+    console.log(urlObject)
     const path = urlObject.pathname.startsWith('/') ? urlObject.pathname.slice(1) : urlObject.pathname
     const hostname = urlObject.hostname.toLowerCase().replace('www.', '')
     const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))
     if (!entry) throw new Error(`${hostname} is not currently supported`)
-    return entry.parser(path)
+    return entry.parser(path, urlObject.hash)
   }
 
   static fromObject(o) {

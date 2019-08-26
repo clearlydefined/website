@@ -15,6 +15,7 @@ import nuget from '../../../../images/nuget.png'
 import pod from '../../../../images/pod.png'
 import git from '../../../../images/Git-Logo-2Color.png'
 import crate from '../../../../images/cargo.png'
+import composer from '../../../../images/packagist.png'
 import gem from '../../../../images/gem.png'
 import pypi from '../../../../images/pypi.png'
 
@@ -26,6 +27,7 @@ const types = {
   nuget: nuget,
   git: git,
   crate: crate,
+  composer: composer,
   pod: pod
 }
 

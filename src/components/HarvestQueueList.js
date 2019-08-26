@@ -13,7 +13,8 @@ import {
   PyPiVersionPicker,
   CrateVersionPicker,
   NuGetVersionPicker,
-  RubyGemsVersionPicker
+  RubyGemsVersionPicker,
+  ComposerVersionPicker
 } from './'
 import { getGitHubRevisions } from '../api/clearlyDefined'
 import { clone } from 'lodash'
@@ -23,6 +24,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.png'
+import composer from '../images/packagist.png'
 
 class HarvestQueueList extends React.Component {
   static propTypes = {
@@ -95,6 +97,9 @@ class HarvestQueueList extends React.Component {
         {request.provider === 'nuget' && (
           <NuGetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
+        {request.provider === 'packagist' && (
+          <ComposerVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
         <i className="fas fa-times list-remove" onClick={this.removeRequest.bind(this, request)} />
       </div>
     )
@@ -136,6 +141,7 @@ class HarvestQueueList extends React.Component {
     if (request.provider === 'rubygems') return gem
     if (request.provider === 'cratesio') return cargo
     if (request.provider === 'nuget') return nuget
+    if (request.provider === 'packagist') return composer
     return null
   }
 
