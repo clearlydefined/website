@@ -13,7 +13,7 @@ import git from '../images/Git-Logo-2Color.png'
 import crate from '../images/cargo.png'
 import gem from '../images/gem.png'
 import pypi from '../images/pypi.png'
-import composer from '../images/nuget.png'
+import composer from '../images/packagist.png'
 
 const types = {
   npm: npm,

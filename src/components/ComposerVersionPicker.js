@@ -26,8 +26,8 @@ export default class ComposerVersionPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { name } = this.props.request
-      const options = await getComposerRevisions(this.props.token, name)
+      const { name, namespace } = this.props.request
+      const options = await getComposerRevisions(this.props.token, `${namespace}/${name}`)
       this.setState({ ...this.state, options })
     } catch (error) {
       this.setState({ ...this.state, options: [] })
