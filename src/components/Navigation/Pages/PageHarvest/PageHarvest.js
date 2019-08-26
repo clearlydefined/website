@@ -13,6 +13,7 @@ import {
   MavenSelector,
   NuGetSelector,
   CrateSelector,
+  ComposerSelector,
   PyPiSelector,
   RubyGemsSelector,
   Section
@@ -98,6 +99,7 @@ class PageHarvest extends Component {
             {activeProvider === 'npmjs' && <NpmSelector onChange={this.onAddRequest} />}
             {activeProvider === 'nuget' && <NuGetSelector onChange={this.onAddRequest} />}
             {activeProvider === 'cratesio' && <CrateSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'packagist' && <ComposerSelector onChange={this.onAddRequest} />}
             {activeProvider === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
             {activeProvider === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
           </Col>

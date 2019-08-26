@@ -16,6 +16,7 @@ import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
+import composer from '../images/composer.png'
 import nuget from '../images/nuget.png'
 import moment from 'moment'
 import { difference } from './utils'
@@ -214,6 +215,8 @@ export default class Contribution {
         return gem
       case 'cratesio':
         return cargo
+      case 'packagist':
+        return composer
       case 'nuget':
         return nuget
       default:

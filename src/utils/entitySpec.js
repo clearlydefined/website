@@ -22,7 +22,8 @@ const entityMapping = [
   { hostnames: ['nuget.org'], parser: nugetParser },
   { hostnames: ['crates.io'], parser: cratesParser },
   { hostnames: ['pypi.org'], parser: pypiParser },
-  { hostnames: ['rubygems.org'], parser: rubygemsParser }
+  { hostnames: ['rubygems.org'], parser: rubygemsParser },
+  { hostnames: ['packagist.org'], parser: composerParser }
 ]
 
 function npmParser(path) {
@@ -65,6 +66,11 @@ function cratesParser(path) {
 function rubygemsParser(path) {
   const [, name, , version] = path.split('/')
   return new EntitySpec('gem', 'rubygems', null, name, version)
+}
+
+function composerParser(path) {
+  const [, name, version] = path.split('/')
+  return new EntitySpec('composer', 'packagist', null, name, version)
 }
 
 function normalize(value, provider, property) {

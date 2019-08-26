@@ -13,6 +13,7 @@ import git from '../images/Git-Logo-2Color.png'
 import crate from '../images/cargo.png'
 import gem from '../images/gem.png'
 import pypi from '../images/pypi.png'
+import composer from '../images/nuget.png'
 
 const types = {
   npm: npm,
@@ -22,7 +23,8 @@ const types = {
   nuget: nuget,
   git: git,
   crate: crate,
-  pod: pod
+  pod: pod,
+  composer: composer
 }
 
 export default class FilterBar extends Component {
