@@ -24,6 +24,7 @@ import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.png'
+import composer from '../images/packagist.png'
 
 class HarvestQueueList extends React.Component {
   static propTypes = {
