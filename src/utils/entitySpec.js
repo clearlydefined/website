@@ -68,9 +68,10 @@ function rubygemsParser(path) {
   return new EntitySpec('gem', 'rubygems', null, name, version)
 }
 
-function composerParser(path) {
-  const [, name, version] = path.split('/')
-  return new EntitySpec('composer', 'packagist', null, name, version)
+function composerParser(path, hash) {
+  const [, namespace, name] = path.split('/')
+  const version = hash.substr(1)
+  return new EntitySpec('composer', 'packagist', namespace, name, version)
 }
 
 function normalize(value, provider, property) {
@@ -94,11 +95,12 @@ export default class EntitySpec {
 
   static fromUrl(url) {
     const urlObject = new URL(url)
+    console.log(urlObject)
     const path = urlObject.pathname.startsWith('/') ? urlObject.pathname.slice(1) : urlObject.pathname
     const hostname = urlObject.hostname.toLowerCase().replace('www.', '')
     const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))
     if (!entry) throw new Error(`${hostname} is not currently supported`)
-    return entry.parser(path)
+    return entry.parser(path, urlObject.hash)
   }
 
   static fromObject(o) {
