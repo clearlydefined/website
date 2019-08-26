@@ -21,6 +21,7 @@ export const ORIGINS_CRATE = 'origins/crate'
 export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
+export const ORIGINS_COMPOSER = 'origins/composer'
 export const ORIGINS = {
   github: { git: ORIGINS_GITHUB },
   npmjs: { npm: ORIGINS_NPM },
@@ -28,7 +29,8 @@ export const ORIGINS = {
   cratesio: { crate: ORIGINS_CRATE },
   mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
   pypi: { pypi: ORIGINS_PYPI },
-  rubygems: { gem: ORIGINS_RUBYGEMS }
+  rubygems: { gem: ORIGINS_RUBYGEMS },
+  packagist: { composer: ORIGINS_COMPOSER }
 }
 
 export function getHarvestResults(token, entity) {
@@ -195,6 +197,14 @@ export function getNugetSearch(token, path) {
 
 export function getNugetRevisions(token, path) {
   return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
+}
+
+export function getComposerSearch(token, path) {
+  return get(url(`${ORIGINS_COMPOSER}/${path}`), token)
+}
+
+export function getComposerRevisions(token, path) {
+  return get(url(`${ORIGINS_COMPOSER}/${path}/revisions`), token)
 }
 
 export function getRevisions(token, path, type, provider) {

@@ -9,6 +9,7 @@ export const harvestMap = {
   cratesioButton: '[name="cratesio"]',
   pypiButton: '[name="pypi"]',
   rubygemsButton: '[name="rubygems"]',
+  packagistButton: '[name="packagist"]',
   npmPicker: '[datatestid="npm-selector"]',
   npmVersionPicker: '[datatestid="npm-version-picker"]',
   githubUserPicker: '[datatestid="github-namespace-selector"]',
