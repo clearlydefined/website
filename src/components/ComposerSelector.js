@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { getComposerSearch } from '../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
 
-export default class CrateSelector extends Component {
+export default class ComposerSelector extends Component {
   static propTypes = {
     onChange: PropTypes.func
   }
