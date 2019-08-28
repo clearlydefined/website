@@ -18,6 +18,7 @@ import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
 import composer from '../images/packagist.png'
 import nuget from '../images/nuget.png'
+import maven from '../images/maven.png'
 import moment from 'moment'
 import { difference } from './utils'
 
@@ -219,6 +220,8 @@ export default class Contribution {
         return composer
       case 'nuget':
         return nuget
+      case 'mavencentral':
+        return maven
       default:
         return null
     }

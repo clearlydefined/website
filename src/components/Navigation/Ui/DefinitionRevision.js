@@ -16,7 +16,6 @@ class DefinitionRevision extends Component {
 
     return get(definition, 'described.urls.version') ? (
       <span className={className}>
-        &nbsp;&nbsp;&nbsp;
         <Tooltip title={definition.coordinates.revision}>
           <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
             {definition.coordinates.revision}
@@ -25,7 +24,6 @@ class DefinitionRevision extends Component {
       </span>
     ) : (
       <span className={className}>
-        &nbsp;&nbsp;&nbsp;
         <Tooltip title={definition.coordinates.revision}>{definition.coordinates.revision}</Tooltip>
       </span>
     )
