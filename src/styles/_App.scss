@@ -531,3 +531,16 @@ hr {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.ant-table-thead > tr > th .anticon-filter,
+.ant-table-thead > tr > th .ant-table-filter-icon {
+  position: relative;
+}
+
+.ant-table-thead > tr > th .anticon-filter > svg,
+.ant-table-thead > tr > th .ant-table-filter-icon > svg {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: 0;
+}
