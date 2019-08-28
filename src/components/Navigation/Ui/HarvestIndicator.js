@@ -5,7 +5,6 @@ import { Tag, Tooltip } from 'antd'
 
 class HarvestIndicator extends Component {
   getTools = tools => {
-    console.log('tools', tools)
     return !tools ? 0 : tools.length > 2 ? 2 : tools.length
   }
 
