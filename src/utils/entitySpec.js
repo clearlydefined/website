@@ -95,7 +95,6 @@ export default class EntitySpec {
 
   static fromUrl(url) {
     const urlObject = new URL(url)
-    console.log(urlObject)
     const path = urlObject.pathname.startsWith('/') ? urlObject.pathname.slice(1) : urlObject.pathname
     const hostname = urlObject.hostname.toLowerCase().replace('www.', '')
     const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))

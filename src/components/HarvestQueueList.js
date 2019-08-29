@@ -23,6 +23,7 @@ import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
+import maven from '../images/maven.png'
 import nuget from '../images/nuget.png'
 import composer from '../images/packagist.png'
 
@@ -140,6 +141,7 @@ class HarvestQueueList extends React.Component {
     if (request.provider === 'pypi') return pypi
     if (request.provider === 'rubygems') return gem
     if (request.provider === 'cratesio') return cargo
+    if (request.provider === 'mavencentral') return maven
     if (request.provider === 'nuget') return nuget
     if (request.provider === 'packagist') return composer
     return null

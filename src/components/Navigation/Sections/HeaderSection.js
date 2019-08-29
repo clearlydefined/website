@@ -47,24 +47,6 @@ class HeaderSection extends Component {
       <Row className="row-detail-header">
         <Col md={8}>
           <div className="detail-header">
-            <div className="header-data">
-              {scores && (
-                <span className="score-header">
-                  <ScoreRenderer scores={scores} definition={item} />
-                </span>
-              )}
-              {isCurated && (
-                <Tag className="cd-badge" color="purple">
-                  Curated
-                </Tag>
-              )}
-              {hasPendingCurations && (
-                <Tag className="cd-badge" color="green">
-                  Pending curations
-                </Tag>
-              )}
-              <HarvestIndicator tools={get(item, 'described.tools')} />
-            </div>
             <div className="header-title">
               <h2>
                 <DefinitionTitle definition={item} showNamespace={false} />
@@ -73,9 +55,25 @@ class HeaderSection extends Component {
                 <ComponentDetailsButtons item={item} />
               </div>
             </div>
-            <p>
-              <DefinitionRevision definition={item} showNamespace={false} />
-            </p>
+            <DefinitionRevision definition={item} showNamespace={false} />
+          </div>
+          <div className="header-data">
+            {scores && (
+              <span className="score-header">
+                <ScoreRenderer scores={scores} definition={item} />
+              </span>
+            )}
+            {isCurated && (
+              <Tag className="cd-badge" color="purple">
+                Curated
+              </Tag>
+            )}
+            {hasPendingCurations && (
+              <Tag className="cd-badge" color="green">
+                Pending curations
+              </Tag>
+            )}
+            <HarvestIndicator tools={get(item, 'described.tools')} />
           </div>
         </Col>
         <Col md={4} className="text-right">

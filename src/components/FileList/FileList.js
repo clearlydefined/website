@@ -319,7 +319,7 @@ export default class FileList extends PureComponent {
         pagination={false}
         bordered={false}
         indentSize={8}
-        scroll={{ x: 500, y: 650 }}
+        scroll={{ y: 650 }}
       />
     )
   }
