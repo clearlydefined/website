@@ -74,6 +74,7 @@ export default class GitHubSelector extends Component {
       <div className="horizontalBlock">
         <AsyncTypeahead
           id="github-namespace-selector"
+          inputProps={{ dataTestId: 'github-namespace-selector' }}
           className="selector-picker"
           ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
           useCache={false}
@@ -83,7 +84,6 @@ export default class GitHubSelector extends Component {
           labelKey="id"
           clearButton
           highlightOnlyResult
-          emptyLabel=""
           selectHintOnEnter
           isLoading={namespace.isLoading}
           onSearch={this.getOptions}
@@ -92,6 +92,7 @@ export default class GitHubSelector extends Component {
         <AsyncTypeahead
           id="github-component-selector"
           className="selector-picker"
+          inputProps={{ dataTestId: 'github-component-selector' }}
           ref={typeahead => (this._componentselector = typeahead)}
           useCache={false}
           options={component.options}
@@ -100,7 +101,6 @@ export default class GitHubSelector extends Component {
           labelKey={option => option.id.substring(option.id.indexOf('/') + 1)}
           clearButton
           highlightOnlyResult
-          emptyLabel=""
           selectHintOnEnter
           isLoading={component.isLoading}
           onSearch={this.getComponentOptions}

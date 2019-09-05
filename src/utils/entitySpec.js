@@ -23,7 +23,8 @@ const entityMapping = [
   { hostnames: ['crates.io'], parser: cratesParser },
   { hostnames: ['pypi.org'], parser: pypiParser },
   { hostnames: ['rubygems.org'], parser: rubygemsParser },
-  { hostnames: ['sources.debian.org'], parser: debianParser }
+  { hostnames: ['sources.debian.org'], parser: debianParser },
+  { hostnames: ['packagist.org'], parser: composerParser }
 ]
 
 function npmParser(path) {
@@ -72,6 +73,11 @@ function debianParser(path) {
   const [, , name, version] = path.split('/')
   return new EntitySpec('deb', 'debian', null, name, version)
 }
+function composerParser(path, hash) {
+  const [, namespace, name] = path.split('/')
+  const version = hash.substr(1)
+  return new EntitySpec('composer', 'packagist', namespace, name, version)
+}
 
 function normalize(value, provider, property) {
   if (!value) return value
@@ -98,7 +104,7 @@ export default class EntitySpec {
     const hostname = urlObject.hostname.toLowerCase().replace('www.', '')
     const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))
     if (!entry) throw new Error(`${hostname} is not currently supported`)
-    return entry.parser(path)
+    return entry.parser(path, urlObject.hash)
   }
 
   static fromObject(o) {

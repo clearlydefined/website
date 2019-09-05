@@ -12,6 +12,7 @@ import ScoreRenderer from '../Ui/ScoreRenderer'
 import DefinitionTitle from '../Ui/DefinitionTitle'
 import DefinitionRevision from '../Ui/DefinitionRevision'
 import ComponentDetailsButtons from '../Ui/ComponentDetailsButtons'
+import HarvestIndicator from '../Ui/HarvestIndicator'
 
 class HeaderSection extends Component {
   static propTypes = {
@@ -50,31 +51,29 @@ class HeaderSection extends Component {
               <h2>
                 <DefinitionTitle definition={item} showNamespace={false} />
               </h2>
-              &nbsp;&nbsp;
-              <div className="header-data">
-                {scores && (
-                  <span className="score-header">
-                    <ScoreRenderer scores={scores} definition={item} />
-                  </span>
-                )}
-                {isCurated && (
-                  <Tag className="cd-badge" color="purple">
-                    Curated
-                  </Tag>
-                )}
-                {hasPendingCurations && (
-                  <Tag className="cd-badge" color="green">
-                    Pending curations
-                  </Tag>
-                )}
-              </div>
               <div>
                 <ComponentDetailsButtons item={item} />
               </div>
             </div>
-            <p>
-              <DefinitionRevision definition={item} showNamespace={false} />
-            </p>
+            <DefinitionRevision definition={item} showNamespace={false} />
+          </div>
+          <div className="header-data">
+            {scores && (
+              <span className="score-header">
+                <ScoreRenderer scores={scores} definition={item} />
+              </span>
+            )}
+            {isCurated && (
+              <Tag className="cd-badge" color="purple">
+                Curated
+              </Tag>
+            )}
+            {hasPendingCurations && (
+              <Tag className="cd-badge" color="green">
+                Pending curations
+              </Tag>
+            )}
+            <HarvestIndicator tools={get(item, 'described.tools')} />
           </div>
         </Col>
         <Col md={4} className="text-right">

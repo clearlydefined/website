@@ -67,6 +67,9 @@ export default class ProviderButtons extends Component {
             title="Debian"
           />
         </Button>
+        <Button name="packagist" onClick={onClick} active={activeProvider === 'packagist'}>
+          Composer
+        </Button>
       </ButtonGroup>
     )
   }

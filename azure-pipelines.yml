@@ -10,9 +10,12 @@ steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '10.x'
-    displayName: 'Install Node.js'
+    displayName: 'Use Node.js 10'
 
   - script: |
       npm install
       npm test
     displayName: 'npm install and test'
+
+  - script: docker build -t clearlydefined/website:latest .
+    displayName: 'Docker build'

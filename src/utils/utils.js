@@ -10,6 +10,7 @@ import crateImage from '../images/cargo.png'
 import gemImage from '../images/gem.png'
 import pypiImage from '../images/pypi.png'
 import debianImage from '../images/debian.png'
+import composerImage from '../images/packagist.png'
 
 const { set } = require('lodash')
 
@@ -105,6 +106,7 @@ const curateFilters = [
 ]
 
 const types = [
+  { value: 'composer', label: 'Composer', provider: 'packagist' },
   { value: 'pod', label: 'Pod', provider: 'cocoapods' },
   { value: 'crate', label: 'Crate', provider: 'cratesio' },
   { value: 'git', label: 'Git', provider: 'github' },
@@ -127,7 +129,8 @@ const providers = [
   { value: 'nuget', label: 'NuGet', image: nugetImage },
   { value: 'pypi', label: 'PyPi', image: pypiImage },
   { value: 'rubygems', label: 'RubyGems', image: gemImage },
-  { value: 'debian', label: 'Debian', image: debianImage }
+  { value: 'debian', label: 'Debian', image: debianImage },
+  { value: 'packagist', label: 'Packagist', image: composerImage }
 ]
 
 const multiEditableFields = ['licensed.declared']

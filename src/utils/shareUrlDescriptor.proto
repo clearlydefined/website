@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+// ShareUrl is used to encode a coordinate list into a shareable Clearly
+// Defined URL in the form of https://clearlydefined.io/share/<key> where key
+// is this message seralized and then run through pako deflate and base64
+// encoding.
+message ShareUrl {
+  // Filters to enable.
+  map<string, string> filter = 1;
+
+  // Initial sorting to display
+  // Valid values are "name",...
+  optional string sortBy = 2;
+
+  // Values of the coordinates map, contains changes.
+  message Coordinate {
+    // Unsaved changes to load.
+    map <string, string> changes = 1;
+  }
+
+  // Coordinates map of definitions to load, the keys must be valid Clearly
+  // Defined paths: <type>/<provider>/<namespace>/<name>/<revision>
+  // Ex: "npm/npmjs/-/lodash/4.8.0"
+  map<string, Coordinate> coordinates = 3;
+}

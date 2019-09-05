@@ -11,10 +11,11 @@ import LicenseBreakdown from './LicenseBreakdown'
 import CountUp from 'react-countup'
 import npm from '../../../../images/n-large.png'
 import maven from '../../../../images/maven.png'
-import nuget from '../../../../images/nuget.svg'
+import nuget from '../../../../images/nuget.png'
 import pod from '../../../../images/pod.png'
 import git from '../../../../images/Git-Logo-2Color.png'
 import crate from '../../../../images/cargo.png'
+import composer from '../../../../images/packagist.png'
 import gem from '../../../../images/gem.png'
 import pypi from '../../../../images/pypi.png'
 import debian from '../../../../images/debian.png'
@@ -28,7 +29,9 @@ const types = {
   git: git,
   crate: crate,
   pod: pod,
-  debian: debian
+  debian: debian,
+  composer: composer,
+  pod: pod
 }
 
 class PageStats extends Component {

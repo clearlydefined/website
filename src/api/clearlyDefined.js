@@ -22,6 +22,7 @@ export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
 export const ORIGINS_DEBIAN = 'origins/debian'
+export const ORIGINS_COMPOSER = 'origins/composer'
 export const ORIGINS = {
   github: { git: ORIGINS_GITHUB },
   npmjs: { npm: ORIGINS_NPM },
@@ -30,7 +31,8 @@ export const ORIGINS = {
   mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
   pypi: { pypi: ORIGINS_PYPI },
   rubygems: { gem: ORIGINS_RUBYGEMS },
-  debian: { deb: ORIGINS_DEBIAN, debsrc: ORIGINS_DEBIAN }
+  debian: { deb: ORIGINS_DEBIAN, debsrc: ORIGINS_DEBIAN },
+  packagist: { composer: ORIGINS_COMPOSER }
 }
 
 export function getHarvestResults(token, entity) {
@@ -205,6 +207,14 @@ export function getNugetSearch(token, path) {
 
 export function getNugetRevisions(token, path) {
   return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
+}
+
+export function getComposerSearch(token, path) {
+  return get(url(`${ORIGINS_COMPOSER}/${path}`), token)
+}
+
+export function getComposerRevisions(token, path) {
+  return get(url(`${ORIGINS_COMPOSER}/${path}/revisions`), token)
 }
 
 export function getRevisions(token, path, type, provider) {
