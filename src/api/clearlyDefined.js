@@ -21,7 +21,7 @@ export const ORIGINS_CRATE = 'origins/crate'
 export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
-export const ORIGINS_DEBIAN = 'origins/debian'
+export const ORIGINS_DEBIAN = 'origins/deb'
 export const ORIGINS_COMPOSER = 'origins/composer'
 export const ORIGINS = {
   github: { git: ORIGINS_GITHUB },

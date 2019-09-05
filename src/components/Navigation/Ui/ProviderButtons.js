@@ -68,7 +68,12 @@ export default class ProviderButtons extends Component {
           />
         </Button>
         <Button name="packagist" onClick={onClick} active={activeProvider === 'packagist'}>
-          Composer
+          <img
+            src={providers.find(provider => provider.value === 'packagist').image}
+            height="20"
+            alt="Composer"
+            title="Composer"
+          />
         </Button>
       </ButtonGroup>
     )

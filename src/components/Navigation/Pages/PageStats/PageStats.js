@@ -28,7 +28,6 @@ const types = {
   nuget: nuget,
   git: git,
   crate: crate,
-  pod: pod,
   debian: debian,
   composer: composer,
   pod: pod
