@@ -73,7 +73,7 @@ function debianParser(path) {
   const extensions = ['.deb', '.tar.gz', '.tar.xz', '.dsc']
   const expStr = extensions.join('|')
   const [, , , , name, packageName] = path.split('/')
-  const withoutExtension = packageName.replace(new RegExp('\\b(' + expStr + ')\\b', 'gi'), ' ').replace(/\s{2,}/g, '')
+  const withoutExtension = packageName.replace(new RegExp('\\b(' + expStr + ')\\b', 'gi'), '').replace(/\s{2,}/g, '')
   const [, version] = withoutExtension.split(`${name}_`)
 
   return new EntitySpec('deb', 'debian', null, name, version)
