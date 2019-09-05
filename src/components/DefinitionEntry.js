@@ -313,7 +313,7 @@ class DefinitionEntry extends React.Component {
     if (definition.coordinates.type === 'gem') return gem
     if (definition.coordinates.type === 'maven') return maven
     if (definition.coordinates.type === 'nuget') return nuget
-    if (definition.coordinates.type === 'debian') return debian
+    if (definition.coordinates.type === 'deb') return debian
     if (definition.coordinates.type === 'composer') return composer
     return null
   }

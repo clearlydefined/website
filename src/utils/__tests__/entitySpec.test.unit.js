@@ -88,12 +88,9 @@ describe('EntitySpec', () => {
   })
 
   it('returns a debian path with a version', async () => {
-    const result = EntitySpec.fromUrl('https://sources.debian.org/api/src/amoeba/1.1-30/')
-    expect(result.toString()).toEqual('deb/debian/-/amoeba/1.1-30')
-  })
-
-  it('returns a debian path without a version', async () => {
-    const result = EntitySpec.fromUrl('https://sources.debian.org/api/src/amoeba')
-    expect(result.toString()).toEqual('deb/debian/-/amoeba')
+    const result = EntitySpec.fromUrl(
+      'http://ftp.debian.org/debian/pool/main/m/m2m-aligner/m2m-aligner_1.2-2_amd64.deb'
+    )
+    expect(result.toString()).toEqual('deb/debian/-/m2m-aligner/1.2-2_amd64')
   })
 })

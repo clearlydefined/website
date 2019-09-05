@@ -70,12 +70,12 @@ function rubygemsParser(path) {
 }
 
 function debianParser(path) {
-  //["debian", "pool", "main", "m", "m2m-aligner", "m2m-aligner_1.2-2_amd64.deb"]
   const extensions = ['.deb', '.tar.gz', '.tar.xz', '.dsc']
   const expStr = extensions.join('|')
   const [, , , , name, packageName] = path.split('/')
   const withoutExtension = packageName.replace(new RegExp('\\b(' + expStr + ')\\b', 'gi'), ' ').replace(/\s{2,}/g, '')
   const [, version] = withoutExtension.split(`${name}_`)
+
   return new EntitySpec('deb', 'debian', null, name, version)
 }
 function composerParser(path, hash) {
