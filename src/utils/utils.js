@@ -121,14 +121,14 @@ const types = [
 ]
 
 const providers = [
-  { value: 'cocoapods', label: 'CocoaPods', image: podImage },
-  { value: 'cratesio', label: 'Crates.io', image: crateImage },
+  { value: 'npmjs', label: 'NpmJS', image: npmImage },
   { value: 'github', label: 'GitHub', image: gitImage },
   { value: 'mavencentral', label: 'MavenCentral', image: mavenImage },
-  { value: 'npmjs', label: 'NpmJS', image: npmImage },
   { value: 'nuget', label: 'NuGet', image: nugetImage },
   { value: 'pypi', label: 'PyPi', image: pypiImage },
   { value: 'rubygems', label: 'RubyGems', image: gemImage },
+  { value: 'cocoapods', label: 'CocoaPods', image: podImage },
+  { value: 'cratesio', label: 'Crates.io', image: crateImage },
   { value: 'debian', label: 'Debian', image: debianImage },
   { value: 'packagist', label: 'Packagist', image: composerImage }
 ]

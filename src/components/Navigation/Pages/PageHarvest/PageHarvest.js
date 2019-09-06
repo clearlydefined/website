@@ -64,9 +64,7 @@ class PageHarvest extends Component {
     this.props.dispatch(uiHarvestUpdateQueue({ update: request, value: newRequest }))
   }
 
-  onClick(event) {
-    const target = event.target
-    const activeProvider = target.name
+  onClick(activeProvider) {
     this.setState({ ...this.state, activeProvider })
   }
 
