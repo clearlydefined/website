@@ -19,7 +19,6 @@ describe(
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}/harvest`, { waitUntil: 'domcontentloaded' })
       await page.setRequestInterception(true)
       page.on('request', interceptedRequest => {
         if (
@@ -45,6 +44,8 @@ describe(
           return interceptedRequest.respond(responses.origins.github.user)
         else interceptedRequest.continue()
       })
+
+      await page.goto(`${__HOST__}/harvest`, { waitUntil: 'domcontentloaded' })
     })
 
     afterAll(() => {
