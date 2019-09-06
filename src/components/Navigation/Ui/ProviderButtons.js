@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Button, ButtonGroup } from 'react-bootstrap'
+import { providers } from '../../../utils/utils'
 
 export default class ProviderButtons extends Component {
   static propTypes = {
@@ -10,32 +11,14 @@ export default class ProviderButtons extends Component {
 
   render() {
     const { onClick, activeProvider } = this.props
+
     return (
       <ButtonGroup>
-        <Button name="npmjs" onClick={onClick} active={activeProvider === 'npmjs'}>
-          NPM
-        </Button>
-        <Button name="github" onClick={onClick} active={activeProvider === 'github'}>
-          GitHub
-        </Button>
-        <Button name="mavencentral" onClick={onClick} active={activeProvider === 'mavencentral'}>
-          Maven
-        </Button>
-        <Button name="nuget" onClick={onClick} active={activeProvider === 'nuget'}>
-          NuGet
-        </Button>
-        <Button name="cratesio" onClick={onClick} active={activeProvider === 'cratesio'}>
-          Crate
-        </Button>
-        <Button name="pypi" onClick={onClick} active={activeProvider === 'pypi'}>
-          PyPi
-        </Button>
-        <Button name="rubygems" onClick={onClick} active={activeProvider === 'rubygems'}>
-          RubyGems
-        </Button>
-        <Button name="packagist" onClick={onClick} active={activeProvider === 'packagist'}>
-          Composer
-        </Button>
+        {providers.map(item => (
+          <Button name={item.value} onClick={() => onClick(item.value)} active={activeProvider === item.value}>
+            <img src={item.image} height="20" alt={item.label} title={item.label} />
+          </Button>
+        ))}
       </ButtonGroup>
     )
   }

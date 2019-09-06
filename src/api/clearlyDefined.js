@@ -21,6 +21,7 @@ export const ORIGINS_CRATE = 'origins/crate'
 export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
+export const ORIGINS_DEBIAN = 'origins/deb'
 export const ORIGINS_COMPOSER = 'origins/composer'
 export const ORIGINS = {
   github: { git: ORIGINS_GITHUB },
@@ -30,6 +31,7 @@ export const ORIGINS = {
   mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
   pypi: { pypi: ORIGINS_PYPI },
   rubygems: { gem: ORIGINS_RUBYGEMS },
+  debian: { deb: ORIGINS_DEBIAN, debsrc: ORIGINS_DEBIAN },
   packagist: { composer: ORIGINS_COMPOSER }
 }
 
@@ -189,6 +191,14 @@ export function getCrateSearch(token, path) {
 
 export function getCrateRevisions(token, path) {
   return get(url(`${ORIGINS_CRATE}/${path}/revisions`), token)
+}
+
+export function getDebianSearch(token, path) {
+  return get(url(`${ORIGINS_DEBIAN}/${path}`), token)
+}
+
+export function getDebianRevisions(token, path) {
+  return get(url(`${ORIGINS_DEBIAN}/${path}/revisions`), token)
 }
 
 export function getNugetSearch(token, path) {

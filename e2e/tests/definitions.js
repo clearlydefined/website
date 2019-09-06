@@ -22,13 +22,13 @@ describe(
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}/workspace`, { waitUntil: 'domcontentloaded' })
       await page.setRequestInterception(true)
       page.on('request', interceptedRequest => {
         if (interceptedRequest.url().includes('/curations') && interceptedRequest.method() === 'PATCH')
           interceptedRequest.respond(responses.curations)
         else interceptedRequest.continue()
       })
+      await page.goto(`${__HOST__}/workspace`, { waitUntil: 'domcontentloaded' })
     })
 
     afterAll(() => {

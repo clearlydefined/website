@@ -19,7 +19,6 @@ describe(
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}/harvest`, { waitUntil: 'domcontentloaded' })
       await page.setRequestInterception(true)
       page.on('request', interceptedRequest => {
         if (
@@ -45,6 +44,8 @@ describe(
           return interceptedRequest.respond(responses.origins.github.user)
         else interceptedRequest.continue()
       })
+
+      await page.goto(`${__HOST__}/harvest`, { waitUntil: 'domcontentloaded' })
     })
 
     afterAll(() => {
@@ -57,13 +58,24 @@ describe(
     })
 
     it('should display all providers buttons', async () => {
-      const { npmButton, githubButton, mavencentralButton, nugetButton, pypiButton, rubygemsButton } = harvestMap
+      const {
+        npmButton,
+        githubButton,
+        mavencentralButton,
+        nugetButton,
+        pypiButton,
+        rubygemsButton,
+        debianButton,
+        cratesioButton
+      } = harvestMap
       await page.waitForSelector(npmButton)
       await page.waitForSelector(githubButton)
       await page.waitForSelector(mavencentralButton)
       await page.waitForSelector(nugetButton)
       await page.waitForSelector(pypiButton)
       await page.waitForSelector(rubygemsButton)
+      await page.waitForSelector(debianButton)
+      await page.waitForSelector(cratesioButton)
     })
 
     it('should the NPM picker when NPM provider is active', async () => {

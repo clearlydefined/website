@@ -18,6 +18,7 @@ import crate from '../../../../images/cargo.png'
 import composer from '../../../../images/packagist.png'
 import gem from '../../../../images/gem.png'
 import pypi from '../../../../images/pypi.png'
+import debian from '../../../../images/debian.png'
 
 const types = {
   npm: npm,
@@ -27,6 +28,7 @@ const types = {
   nuget: nuget,
   git: git,
   crate: crate,
+  debian: debian,
   composer: composer,
   pod: pod
 }

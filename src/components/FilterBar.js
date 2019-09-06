@@ -13,6 +13,7 @@ import git from '../images/Git-Logo-2Color.png'
 import crate from '../images/cargo.png'
 import gem from '../images/gem.png'
 import pypi from '../images/pypi.png'
+import debian from '../images/debian.png'
 import composer from '../images/packagist.png'
 
 const types = {
@@ -24,6 +25,7 @@ const types = {
   git: git,
   crate: crate,
   pod: pod,
+  debian: debian,
   composer: composer
 }
 

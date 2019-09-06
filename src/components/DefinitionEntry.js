@@ -12,7 +12,8 @@ import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
-import nuget from '../images/nuget.png'
+import nuget from '../images/nuget.svg'
+import debian from '../images/debian.png'
 import maven from '../images/maven.png'
 import composer from '../images/packagist.png'
 import Contribution from '../utils/contribution'
@@ -41,7 +42,7 @@ class DefinitionEntry extends React.Component {
   static defaultProps = {}
 
   isSourceComponent(component) {
-    return ['github', 'sourcearchive'].includes(component.provider)
+    return ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
   }
 
   fieldChange(field, equality = isEqual, transform = a => a) {
@@ -312,6 +313,7 @@ class DefinitionEntry extends React.Component {
     if (definition.coordinates.type === 'gem') return gem
     if (definition.coordinates.type === 'maven') return maven
     if (definition.coordinates.type === 'nuget') return nuget
+    if (definition.coordinates.type === 'deb') return debian
     if (definition.coordinates.type === 'composer') return composer
     return null
   }

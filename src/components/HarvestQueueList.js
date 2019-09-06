@@ -12,6 +12,7 @@ import {
   MavenVersionPicker,
   PyPiVersionPicker,
   CrateVersionPicker,
+  DebianVersionPicker,
   NuGetVersionPicker,
   RubyGemsVersionPicker,
   ComposerVersionPicker
@@ -21,6 +22,7 @@ import { clone } from 'lodash'
 import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
+import debian from '../images/debian.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
 import maven from '../images/maven.png'
@@ -98,6 +100,9 @@ class HarvestQueueList extends React.Component {
         {request.provider === 'nuget' && (
           <NuGetVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
+        {request.provider === 'debian' && (
+          <DebianVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
         {request.provider === 'packagist' && (
           <ComposerVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
@@ -143,6 +148,7 @@ class HarvestQueueList extends React.Component {
     if (request.provider === 'cratesio') return cargo
     if (request.provider === 'mavencentral') return maven
     if (request.provider === 'nuget') return nuget
+    if (request.provider === 'debian') return debian
     if (request.provider === 'packagist') return composer
     return null
   }

@@ -23,6 +23,7 @@ const entityMapping = [
   { hostnames: ['crates.io'], parser: cratesParser },
   { hostnames: ['pypi.org'], parser: pypiParser },
   { hostnames: ['rubygems.org'], parser: rubygemsParser },
+  { hostnames: ['ftp.debian.org'], parser: debianParser },
   { hostnames: ['packagist.org'], parser: composerParser }
 ]
 
@@ -66,6 +67,16 @@ function cratesParser(path) {
 function rubygemsParser(path) {
   const [, name, , version] = path.split('/')
   return new EntitySpec('gem', 'rubygems', null, name, version)
+}
+
+function debianParser(path) {
+  const extensions = ['.deb', '.tar.gz', '.tar.xz', '.dsc']
+  const expStr = extensions.join('|')
+  const [, , , , name, packageName] = path.split('/')
+  const withoutExtension = packageName.replace(new RegExp('\\b(' + expStr + ')\\b', 'gi'), '').replace(/\s{2,}/g, '')
+  const [, version] = withoutExtension.split(`${name}_`)
+
+  return new EntitySpec('deb', 'debian', null, name, version)
 }
 
 function composerParser(path, hash) {

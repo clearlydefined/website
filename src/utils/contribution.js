@@ -16,8 +16,9 @@ import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
 import cargo from '../images/cargo.png'
+import nuget from '../images/nuget.svg'
+import debian from '../images/debian.png'
 import composer from '../images/packagist.png'
-import nuget from '../images/nuget.png'
 import maven from '../images/maven.png'
 import moment from 'moment'
 import { difference } from './utils'
@@ -196,7 +197,7 @@ export default class Contribution {
 
   static getPercentage = (count, total) => Math.round(((count || 0) / total) * 100)
 
-  static isSourceComponent = component => ['github', 'sourcearchive'].includes(component.provider)
+  static isSourceComponent = component => ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
 
   /**
    *  Get image of definition based on the provider
@@ -220,6 +221,8 @@ export default class Contribution {
         return composer
       case 'nuget':
         return nuget
+      case 'debian':
+        return debian
       case 'mavencentral':
         return maven
       default:
