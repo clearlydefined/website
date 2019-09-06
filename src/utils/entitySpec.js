@@ -78,6 +78,7 @@ function debianParser(path) {
 
   return new EntitySpec('deb', 'debian', null, name, version)
 }
+
 function composerParser(path, hash) {
   const [, namespace, name] = path.split('/')
   const version = hash.substr(1)
