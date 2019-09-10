@@ -108,7 +108,8 @@ export function getDefinition(token, entity, params = {}) {
   const { expandPrs } = params
   return get(
     url(`${DEFINITIONS}/${entity.toPath()}`, {
-      expand: expandPrs ? 'prs' : null
+      expand: expandPrs ? 'prs' : null,
+      matchCasing: false
     }),
     token
   )
@@ -119,15 +120,15 @@ export function getContributionData(token, entity) {
 }
 
 export function searchDefinitions(token, query) {
-  return get(url(DEFINITIONS, query), token)
+  return get(url(DEFINITIONS, { ...query, matchCasing: false }), token)
 }
 
 export function getDefinitions(token, list) {
-  return post(url(DEFINITIONS), token, list)
+  return post(url(DEFINITIONS, { matchCasing: false }), token, list)
 }
 
 export function getDefinitionSuggestions(token, prefix) {
-  return getList(url(DEFINITIONS, { pattern: prefix }), token)
+  return getList(url(DEFINITIONS, { pattern: prefix, matchCasing: false }), token)
 }
 
 export function getSuggestedData(token, entity) {
@@ -135,7 +136,7 @@ export function getSuggestedData(token, entity) {
 }
 
 export function previewDefinition(token, entity, curation) {
-  return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true }), token, curation)
+  return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true, matchCasing: false }), token, curation)
 }
 
 export async function getNotices(token, coordinates, renderer, options) {
