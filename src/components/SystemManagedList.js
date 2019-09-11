@@ -120,14 +120,12 @@ export default class SystemManagedList extends Component {
    */
   doContribute(contributionInfo) {
     const { dispatch, token, components } = this.props
-    const { selected } = this.state
     let patches
-    const selectedEntries = selected ? Object.entries(selected) : []
+    const { selectedEntries, selectedComponents } = this.getSelectedComponents()
     // contribute all the components
     if (selectedEntries.length === 0) {
-      patches = this.buildContributeSpec(components.list)
+      patches = this.buildContributeSpec(components.transformedList)
     } else {
-      const selectedComponents = components.list.filter((_, i) => selectedEntries[i] && selectedEntries[i][1])
       patches = this.buildContributeSpec(selectedComponents)
     }
     const spec = { contributionInfo, patches }
@@ -165,15 +163,9 @@ export default class SystemManagedList extends Component {
 
   getDefinitionsWithChanges() {
     const { components } = this.props
-    const { selected } = this.state
-    const selectedEntries = selected
-      ? Object.entries(selected)
-          .map(s => (s[1] ? parseInt(s[0]) : null))
-          .filter(x => isNumber(x))
-      : []
-    const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
-    if (selectedComponents.length > 0) return selectedComponents.filter(component => this.hasChange(component))
-    return components.list.filter(component => this.hasChange(component))
+    const res = this.getSelectedComponents()
+    if (res.selectedComponents.length > 0) return res.selectedComponents.filter(component => this.hasChange(component))
+    return components.transformedList.filter(component => this.hasChange(component))
   }
 
   getSort(eventKey) {
@@ -289,7 +281,7 @@ export default class SystemManagedList extends Component {
     this.incrementSequence()
   }
 
-  async onChangeComponent(component, newComponent, field) {
+  getSelectedComponents() {
     const { components } = this.props
     const { selected } = this.state
     const selectedEntries = selected
@@ -297,7 +289,12 @@ export default class SystemManagedList extends Component {
           .map(s => (s[1] ? parseInt(s[0]) : null))
           .filter(x => isNumber(x))
       : []
-    const selectedComponents = components.list.filter((_, i) => selectedEntries.includes(i))
+    const selectedComponents = components.transformedList.filter((_, i) => selectedEntries.includes(i))
+    return { selectedEntries, selectedComponents }
+  }
+
+  async onChangeComponent(component, newComponent, field) {
+    const { selectedEntries, selectedComponents } = this.getSelectedComponents()
     // contribute all the components
     if (
       multiEditableFields.includes(field) &&
