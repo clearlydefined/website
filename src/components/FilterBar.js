@@ -25,7 +25,7 @@ const types = {
   git: git,
   crate: crate,
   pod: pod,
-  debian: debian,
+  deb: debian,
   composer: composer
 }
 
