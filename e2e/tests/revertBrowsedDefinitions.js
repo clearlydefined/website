@@ -3,6 +3,9 @@
 import { browseMap } from '../maps/browse'
 import { setDefaultOptions } from 'expect-puppeteer'
 
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
+
 const puppeteer = require('puppeteer')
 const defaultTimeout = process.env.JEST_TIMEOUT ? process.env.JEST_TIMEOUT : 30000
 
