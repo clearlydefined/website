@@ -37,6 +37,7 @@ class FullDetailComponent extends Component {
     getCurationData: PropTypes.func
   }
 
+  /* eslint-disable react/jsx-no-comment-textnodes */
   globTooptipText() {
     return (
       <div>
@@ -73,6 +74,7 @@ class FullDetailComponent extends Component {
         <code>/h?t</code>
       </div>
     )
+    /* eslint-enable react/jsx-no-comment-textnodes */
   }
 
   renderFilesSection() {
