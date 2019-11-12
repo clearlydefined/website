@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'production') {
   ReactGA.initialize(process.env['REACT_APP_GA_TRACKINGID'])
   ReactGA.pageview(window.location.pathname + window.location.search)
 }
-console.log('')
+
 if (!Array.prototype.includes)
   alert(
     'You need a browser that supports modern JavaScript features to view this site. Please switch to another browser.'
