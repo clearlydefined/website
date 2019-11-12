@@ -79,7 +79,7 @@
     "start:local-api": "env-cmd --fallback ./.env.localhost npm run build-scripts",
     "start:prod-api": "env-cmd --fallback ./.env.production npm run build-scripts",
     "build": "env-cmd --fallback ./.env.production npm run build-css && npm run copy-monaco && react-scripts --max_old_space_size=4096 build",
-    "test": "eslint --fix src && react-scripts test --env=jsdom --watchAll=false --coverage",
+    "test": "jest --no-cache -w 2 --watchAll=false --coverage",
     "test:unit": "jest -c jest.config.unit.js",
     "test:integration": "jest -c jest.config.integration.js",
     "eject": "react-scripts eject",
