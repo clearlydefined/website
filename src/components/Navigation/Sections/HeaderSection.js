@@ -40,7 +40,7 @@ class HeaderSection extends Component {
     } = this.props
     const { item } = definition
     const scores = get(item, 'scores')
-    const isCurated = Curation.isCurated(curations.item)
+    const isCurated = Curation.isCurated(curations.item, item)
     const hasPendingCurations = Curation.isPending(curations.item)
 
     return (
