@@ -47,7 +47,7 @@ export default class PageStatus extends Component {
       this.fetchCrawledPerDay(),
       this.fetchRecentlyCrawled(),
       this.fetchCrawlbreakdown(),
-      this.fetchToolsranperday()
+      this.fetchToolsRanPerDay()
     ])
     this.setState({
       loaded: true,
@@ -56,7 +56,7 @@ export default class PageStatus extends Component {
       crawledPerDay: data[2],
       recentlyCrawled: data[3],
       crawlbreakdown: data[4],
-      toolsranperday: data[5]
+      toolsRanPerDay: data[5]
     })
   }
 
@@ -98,7 +98,7 @@ export default class PageStatus extends Component {
     })
   }
 
-  async fetchToolsranperday() {
+  async fetchToolsRanPerDay() {
     const data = await getStatus('toolsranperday')
     return data.map(entry => {
       entry.date = new Date(entry.date).toLocaleDateString()
@@ -146,7 +146,7 @@ export default class PageStatus extends Component {
             <hr />
             <Row>
               <h2>Tools ran per day</h2>
-              {this.renderToolsranperday()}
+              {this.renderToolsRanPerDay()}
             </Row>
           </div>
         )}
@@ -304,17 +304,17 @@ export default class PageStatus extends Component {
     )
   }
 
-  renderToolsranperday() {
+  renderToolsRanPerDay() {
     return (
       <ResponsiveContainer height={500}>
-        <BarChart data={this.state.toolsranperday}>
+        <BarChart data={this.state.toolsRanPerDay}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
           <Legend />
           {Object.keys(
-            this.state.toolsranperday.reduce((result, entry) => {
+            this.state.toolsRanPerDay.reduce((result, entry) => {
               Object.keys(entry).forEach(x => {
                 result[x] = 1
               })
