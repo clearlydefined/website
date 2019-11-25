@@ -36,7 +36,7 @@ export default class Curation {
 
     const definitionContributions = contributions.filter(contribution => {
       const matchingCoordinates = contribution.files.filter(file => {
-        return JSON.stringify(file.coordinates) == JSON.stringify(coordinatesWithoutRevision).toLowerCase()
+        return JSON.stringify(file.coordinates) === JSON.stringify(coordinatesWithoutRevision).toLowerCase()
       })
       const res = matchingCoordinates.find(file => {
         return file.revisions.find(fileRevision => fileRevision.revision === revision) !== undefined
