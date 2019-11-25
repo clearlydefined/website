@@ -6,7 +6,7 @@ The doc has a [guide to using the website](https://docs.clearlydefined.io/using-
 
 # Getting started in the code
 
-If you are interested in working on the code for the website, follow the steps below. If you want to get the whole ClearlyDefined infrastructure running on you machine, check out the [system quick start guide](https://github.com/clearlydefined/service/readme.md).
+If you are interested in working on the code for the website, follow the steps below. If you want to get the whole ClearlyDefined infrastructure running on you machine, check out the [system quick start guide](https://github.com/clearlydefined/service/#quick-start).
 
 1.  The site is based on [React]() so you need to [install NPM]().
 1.  Clone [this repo](https://github.com/clearlydefined/website.git) using `git clone https://github.com/clearlydefined/website.git` or equivalent.
