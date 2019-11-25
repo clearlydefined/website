@@ -48,27 +48,27 @@ class FullDetailComponent extends Component {
         <p>"*" matches any number of characters within name.</p>
         For example:
         <br />
-        // Match any file or folder starting with "foo"
+        {/* Match any file or folder starting with "foo" */}
         <br />
         <code>foo*</code>
         <br />
-        // Match any file or folder starting with "foo" and ending with .txt
+        {/* Match any file or folder starting with "foo" and ending with .txt */}
         <br />
         <code>foo*.txt</code>
         <br />
-        // Match any file or folder ending with "foo"
+        {/* Match any file or folder ending with "foo" */}
         <br />
         <code>*foo</code>
         <br />
-        // Match a/b/z but not a/b/c/z
+        {/* Match a/b/z but not a/b/c/z */}
         <br />
         <code>a/*/z</code>
         <br />
-        // Match a/z and a/b/z and a/b/c/z
+        {/* Match a/z and a/b/z and a/b/c/z */}
         <br />
         <code>a/**/z</code>
         <br />
-        // Matches hat but not ham or h/t
+        {/* Matches hat but not ham or h/t */}
         <br />
         <code>/h?t</code>
       </div>
