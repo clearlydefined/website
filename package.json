@@ -16,6 +16,8 @@
     "lodash": "^4.17.10",
     "minimatch": "^3.0.4",
     "moment": "^2.22.2",
+    "@monaco-editor/react": "^2.3.0",
+    "monaco-editor": "^0.18.1",
     "pako": "^1.0.6",
     "protobufjs": "^6.8.8",
     "react": "^16.4.1",
@@ -26,7 +28,6 @@
     "react-countup": "^4.0.0",
     "react-dom": "^16.4.1",
     "react-ga": "^2.5.3",
-    "react-monaco-editor": "^0.13.0",
     "react-redux": "^5.0.7",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
@@ -41,6 +42,7 @@
     "spdx-license-ids": "^3.0.3",
     "spdx-satisfies": "^5.0.0",
     "throat": "^4.1.0",
+    "typescript": "^3.7.2",
     "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
@@ -70,7 +72,6 @@
     "serve": "^11.0.0"
   },
   "scripts": {
-    "copy-monaco": "node ./src/utils/install-monaco.js",
     "build-css": "node-sass src/ -o src/",
     "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
@@ -79,7 +80,7 @@
     "start:dev-api": "env-cmd --fallback ./.env.development npm run build-scripts",
     "start:local-api": "env-cmd --fallback ./.env.localhost npm run build-scripts",
     "start:prod-api": "env-cmd --fallback ./.env.production npm run build-scripts",
-    "build": "env-cmd --fallback ./.env.production npm run build-css && npm run copy-monaco && react-scripts --max_old_space_size=4096 build",
+    "build": "env-cmd --fallback ./.env.production npm run build-css && react-scripts --max_old_space_size=4096 build",
     "test": "jest --no-cache -w 2 --watchAll=false --coverage",
     "test:unit": "jest -c jest.config.unit.js",
     "test:integration": "jest -c jest.config.integration.js",
