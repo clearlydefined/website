@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import PlaceholderRenderer from './PlaceholderRenderer'
-import MonacoEditorWrapper from '../../MonacoEditorWrapper'
+import Editor from '@monaco-editor/react';
 
 export default class RawDataRenderer extends Component {
   static propTypes = {
@@ -24,11 +24,15 @@ export default class RawDataRenderer extends Component {
       return <PlaceholderRenderer message={'Search for some part of a component name to see details'} />
     if (!value.item) return <PlaceholderRenderer message={`No ${name} found`} />
     const options = {
-      selectOnLineNumbers: true
+      selectOnLineNumbers: true,
+      cursorSmoothCaretAnimation: true,
+      cursorStyle: 'block',
+      cursorSurroundingLines: 1,
+      mouseWheelZoom: true
     }
     return (
-      <MonacoEditorWrapper
-        height="400"
+      <Editor
+        height="400px"
         language={type}
         value={value.transformed}
         options={options}
