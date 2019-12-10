@@ -57,13 +57,13 @@ export default class LicenseBreakdown extends Component {
               data={stats.declaredLicenseBreakdown}
               margin={{ top: 5, right: 0, left: 0, bottom: 25 }}
             >
-              <XAxis dataKey="value" tickSize dy="25" />
+              <XAxis dataKey="value" tickSize={10} dy={5} />
               <YAxis hide />
               <Tooltip />
               <CartesianGrid vertical={false} stroke="#ebf3f0" />
               <Bar dataKey="count" barSize={170}>
                 {stats.declaredLicenseBreakdown.map((entry, index) => (
-                  <Cell fill={colors[index % colors.length]} />
+                  <Cell fill={colors[index % colors.length]} key={index} />
                 ))}
               </Bar>
             </BarChart>
