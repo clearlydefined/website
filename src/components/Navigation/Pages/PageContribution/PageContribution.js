@@ -27,7 +27,7 @@ class PageContribution extends SystemManagedList {
   }
 
   noRowsRenderer() {
-    return <div className="placeholder-message">Fetching details on the components included in the pull request (if pull request is unmerged).</div>
+    return <div className="placeholder-message">No unmerged definitions found in this pull request</div>
   }
 
   tableTitle() {
