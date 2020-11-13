@@ -27,7 +27,7 @@ class PageContribution extends SystemManagedList {
   }
 
   noRowsRenderer() {
-    return <div className="placeholder-message">No components in this pull request that are not in the master branch.</div>
+    return <div className="placeholder-message">Fetching details on the components included in the pull request.</div>
   }
 
   tableTitle() {
@@ -37,8 +37,8 @@ class PageContribution extends SystemManagedList {
         #{prNumber}
       </a>
     ) : (
-        `#${prNumber}`
-      )
+      `#${prNumber}`
+    )
     return <span>Definitions from pull request {linkBack}</span>
   }
 
