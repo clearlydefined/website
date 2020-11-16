@@ -27,7 +27,7 @@ class PageContribution extends SystemManagedList {
   }
 
   noRowsRenderer() {
-    return <div className="placeholder-message">Fetching details on the components included in the pull request.</div>
+    return <div className="placeholder-message">No open (unmerged) definitions found in this pull request</div>
   }
 
   tableTitle() {
@@ -37,9 +37,9 @@ class PageContribution extends SystemManagedList {
         #{prNumber}
       </a>
     ) : (
-      `#${prNumber}`
-    )
-    return <span>Definitions from pull request {linkBack}</span>
+        `#${prNumber}`
+      )
+    return <span>Open (unmerged) definitions from pull request {linkBack}</span>
   }
 
   renderButtons() {
