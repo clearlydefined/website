@@ -21,6 +21,8 @@ export const ORIGINS_CRATE = 'origins/crate'
 export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
+export const ORIGINS_DEBIAN = 'origins/deb'
+export const ORIGINS_COMPOSER = 'origins/composer'
 export const ORIGINS = {
   github: { git: ORIGINS_GITHUB },
   npmjs: { npm: ORIGINS_NPM },
@@ -28,7 +30,9 @@ export const ORIGINS = {
   cratesio: { crate: ORIGINS_CRATE },
   mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
   pypi: { pypi: ORIGINS_PYPI },
-  rubygems: { gem: ORIGINS_RUBYGEMS }
+  rubygems: { gem: ORIGINS_RUBYGEMS },
+  debian: { deb: ORIGINS_DEBIAN, debsrc: ORIGINS_DEBIAN },
+  packagist: { composer: ORIGINS_COMPOSER }
 }
 
 export function getHarvestResults(token, entity) {
@@ -104,7 +108,8 @@ export function getDefinition(token, entity, params = {}) {
   const { expandPrs } = params
   return get(
     url(`${DEFINITIONS}/${entity.toPath()}`, {
-      expand: expandPrs ? 'prs' : null
+      expand: expandPrs ? 'prs' : null,
+      matchCasing: 'false'
     }),
     token
   )
@@ -115,15 +120,15 @@ export function getContributionData(token, entity) {
 }
 
 export function searchDefinitions(token, query) {
-  return get(url(DEFINITIONS, query), token)
+  return get(url(DEFINITIONS, { ...query, matchCasing: 'false' }), token)
 }
 
 export function getDefinitions(token, list) {
-  return post(url(DEFINITIONS), token, list)
+  return post(url(DEFINITIONS, { matchCasing: false }), token, list)
 }
 
 export function getDefinitionSuggestions(token, prefix) {
-  return getList(url(DEFINITIONS, { pattern: prefix }), token)
+  return getList(url(DEFINITIONS, { pattern: prefix, matchCasing: 'false' }), token)
 }
 
 export function getSuggestedData(token, entity) {
@@ -131,7 +136,7 @@ export function getSuggestedData(token, entity) {
 }
 
 export function previewDefinition(token, entity, curation) {
-  return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true }), token, curation)
+  return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true, matchCasing: 'false' }), token, curation)
 }
 
 export async function getNotices(token, coordinates, renderer, options) {
@@ -189,12 +194,28 @@ export function getCrateRevisions(token, path) {
   return get(url(`${ORIGINS_CRATE}/${path}/revisions`), token)
 }
 
+export function getDebianSearch(token, path) {
+  return get(url(`${ORIGINS_DEBIAN}/${path}`), token)
+}
+
+export function getDebianRevisions(token, path) {
+  return get(url(`${ORIGINS_DEBIAN}/${path}/revisions`), token)
+}
+
 export function getNugetSearch(token, path) {
   return get(url(`${ORIGINS_NUGET}/${path}`), token)
 }
 
 export function getNugetRevisions(token, path) {
   return get(url(`${ORIGINS_NUGET}/${path}/revisions`), token)
+}
+
+export function getComposerSearch(token, path) {
+  return get(url(`${ORIGINS_COMPOSER}/${path}`), token)
+}
+
+export function getComposerRevisions(token, path) {
+  return get(url(`${ORIGINS_COMPOSER}/${path}/revisions`), token)
 }
 
 export function getRevisions(token, path, type, provider) {

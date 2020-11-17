@@ -9,7 +9,7 @@ const mockStore = configureMockStore(middlewares)
 const props = {
   match: { path: '/definitions', url: '/definitions', isExact: true, params: {} },
   location: { pathname: '/definitions', search: '', hash: '', key: 'ip23w9' },
-  components: { list: [] },
+  components: { list: [], transformedList: [] },
   path: [],
   dispatch: () => {
     return {}

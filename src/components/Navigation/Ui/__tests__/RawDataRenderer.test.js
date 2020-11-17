@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import RawDataRenderer from '../RawDataRenderer'
 import PlaceholderRenderer from '../PlaceholderRenderer'
-import MonacoEditorWrapper from '../../../MonacoEditorWrapper'
+import Editor from '@monaco-editor/react';
 
 describe('RawDataRenderer', () => {
   it('renders without crashing', () => {
@@ -45,6 +45,6 @@ describe('RawDataRenderer', () => {
         name={'test'}
       />
     )
-    expect(wrapper.find(MonacoEditorWrapper).exists()).toBeTruthy()
+    expect(wrapper.find(Editor).exists()).toBeTruthy()
   })
 })

@@ -126,4 +126,13 @@ describe('VersionSelector', () => {
     })
     expect(wrapper.state().options).toEqual(mockedStringVersions)
   })
+  it('renders with debian component', async () => {
+    const debianComponent = { type: 'deb', provider: 'debian', name: 'pyaml', revision: '17.8.0' }
+    const wrapper = shallow(<VersionSelector />)
+    wrapper.setProps({ component: debianComponent })
+    wrapper.setState({
+      options: mockedStringVersions
+    })
+    expect(wrapper.state().options).toEqual(mockedStringVersions)
+  })
 })

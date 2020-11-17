@@ -1,6 +1,16 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 import deepDiff from 'deep-diff'
+import npmImage from '../images/n-large.png'
+import mavenImage from '../images/maven.png'
+import nugetImage from '../images/nuget.svg'
+import podImage from '../images/pod.png'
+import gitImage from '../images/Git-Logo-2Color.png'
+import crateImage from '../images/cargo.png'
+import gemImage from '../images/gem.png'
+import pypiImage from '../images/pypi.png'
+import debianImage from '../images/debian.png'
+import composerImage from '../images/packagist.png'
 
 const { set } = require('lodash')
 
@@ -96,6 +106,7 @@ const curateFilters = [
 ]
 
 const types = [
+  { value: 'composer', label: 'Composer', provider: 'packagist' },
   { value: 'pod', label: 'Pod', provider: 'cocoapods' },
   { value: 'crate', label: 'Crate', provider: 'cratesio' },
   { value: 'git', label: 'Git', provider: 'github' },
@@ -104,18 +115,22 @@ const types = [
   { value: 'nuget', label: 'NuGet', provider: 'nuget' },
   { value: 'pypi', label: 'PyPi', provider: 'pypi' },
   { value: 'gem', label: 'Gem', provider: 'rubygems' },
-  { value: 'sourcearchive', label: 'SourceArchive' }
+  { value: 'sourcearchive', label: 'SourceArchive' },
+  { value: 'deb', label: 'Deb', provider: 'debian' },
+  { value: 'debsrc', label: 'Debian Sources' }
 ]
 
 const providers = [
-  { value: 'cocoapods', label: 'CocoaPods' },
-  { value: 'cratesio', label: 'Crates.io' },
-  { value: 'github', label: 'GitHub' },
-  { value: 'mavencentral', label: 'MavenCentral' },
-  { value: 'npmjs', label: 'NpmJS' },
-  { value: 'nuget', label: 'NuGet' },
-  { value: 'pypi', label: 'PyPi' },
-  { value: 'rubygems', label: 'RubyGems' }
+  { value: 'npmjs', label: 'NpmJS', image: npmImage },
+  { value: 'github', label: 'GitHub', image: gitImage },
+  { value: 'mavencentral', label: 'MavenCentral', image: mavenImage },
+  { value: 'nuget', label: 'NuGet', image: nugetImage },
+  { value: 'pypi', label: 'PyPi', image: pypiImage },
+  { value: 'rubygems', label: 'RubyGems', image: gemImage },
+  { value: 'cocoapods', label: 'CocoaPods', image: podImage },
+  { value: 'cratesio', label: 'Crates.io', image: crateImage },
+  { value: 'debian', label: 'Debian', image: debianImage },
+  { value: 'packagist', label: 'Packagist', image: composerImage }
 ]
 
 const multiEditableFields = ['licensed.declared']

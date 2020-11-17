@@ -4,6 +4,7 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import omit from 'lodash/omit'
 import { difference } from './utils'
+import EntitySpec from './entitySpec'
 
 /**
  * Abstract methods for Curation
@@ -27,10 +28,24 @@ export default class Curation {
     return get(component, field) || ''
   }
 
-  static isCurated(curation) {
+  static isCurated(curation, definition) {
     const contributions = get(curation, 'contributions')
     if (!contributions) return false
-    return !!contributions.filter(Curation.isMerged).length
+    const coordinatesWithoutRevision = EntitySpec.withoutRevision(definition.coordinates)
+    const { revision } = definition.coordinates
+
+    const definitionContributions = contributions.filter(contribution => {
+      const matchingCoordinates = contribution.files.filter(file => {
+        return JSON.stringify(file.coordinates) === JSON.stringify(coordinatesWithoutRevision).toLowerCase()
+      })
+      const res = matchingCoordinates.find(file => {
+        return file.revisions.find(fileRevision => fileRevision.revision === revision) !== undefined
+      })
+
+      return res
+    })
+
+    return !!definitionContributions.filter(Curation.isMerged).length
   }
 
   static isPending(curation) {

@@ -55,7 +55,7 @@ export default class RuleBuilder extends Component {
     if (Object.keys(rule).includes('noassertion'))
       return (
         <Col md={12} className="spdx-picker-rule">
-          {currentPath !== 'right' && (!parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right'))
+          {currentPath !== 'right' && !parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right')
             ? this.renderHeaderRow(rule, path, conjunction)
             : null}
           <Col md={6} className="flex-center">
@@ -72,7 +72,7 @@ export default class RuleBuilder extends Component {
     if (rule.license || rule.license === '')
       return (
         <Col md={12} className="spdx-picker-rule">
-          {currentPath !== 'right' && (!parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right'))
+          {currentPath !== 'right' && !parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right')
             ? this.renderHeaderRow(rule, path, conjunction)
             : null}
           <Col md={6} className="flex-center">

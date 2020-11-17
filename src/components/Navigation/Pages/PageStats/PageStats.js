@@ -11,12 +11,16 @@ import LicenseBreakdown from './LicenseBreakdown'
 import CountUp from 'react-countup'
 import npm from '../../../../images/n-large.png'
 import maven from '../../../../images/maven.png'
-import nuget from '../../../../images/nuget.svg'
+import nuget from '../../../../images/nuget.png'
 import pod from '../../../../images/pod.png'
 import git from '../../../../images/Git-Logo-2Color.png'
 import crate from '../../../../images/cargo.png'
+import composer from '../../../../images/packagist.png'
 import gem from '../../../../images/gem.png'
 import pypi from '../../../../images/pypi.png'
+import debian from '../../../../images/debian.png'
+import { uiNavigation } from '../../../../actions/ui'
+import { ROUTE_STATS } from '../../../../utils/routingConstants'
 
 const types = {
   npm: npm,
@@ -26,6 +30,9 @@ const types = {
   nuget: nuget,
   git: git,
   crate: crate,
+  deb: debian,
+  debsrc: debian,
+  composer: composer,
   pod: pod
 }
 
@@ -36,6 +43,7 @@ class PageStats extends Component {
   }
 
   async componentDidMount() {
+    this.props.dispatch(uiNavigation({ to: ROUTE_STATS }))
     await Promise.all([
       this.props.dispatch(getStatAction('total')),
       ...Object.keys(types).map(type => this.props.dispatch(getStatAction(type)))
@@ -60,19 +68,19 @@ class PageStats extends Component {
         <Row>
           <div className="card-container">
             {Object.keys(types).map(type => (
-              <TypeCard type={type} image={types[type]} stats={get(stats, `entries.${type}.value`)} />
+              <TypeCard type={type} image={types[type]} stats={get(stats, `entries.${type}.value`)} key={type}/>
             ))}
           </div>
         </Row>
         <hr />
         <Row>
           <h2>Declared License Breakdown</h2>
-          <Tabs>
+          <Tabs id="packages">
             <Tab eventKey="overall" title="Overall">
               <LicenseBreakdown type="total" stats={get(stats, 'entries.total.value')} />
             </Tab>
             {Object.keys(types).map(type => (
-              <Tab eventKey={type} title={type}>
+              <Tab eventKey={type} title={type} key={type}>
                 <LicenseBreakdown type="total" stats={get(stats, `entries.${type}.value`)} />
               </Tab>
             ))}

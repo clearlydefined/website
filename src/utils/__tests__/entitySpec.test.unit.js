@@ -86,4 +86,11 @@ describe('EntitySpec', () => {
     const result = EntitySpec.fromUrl('https://rubygems.org/gems/tzinfo/versions/1.2.5')
     expect(result.toString()).toEqual('gem/rubygems/-/tzinfo/1.2.5')
   })
+
+  it('returns a debian path with a version', async () => {
+    const result = EntitySpec.fromUrl(
+      'http://ftp.debian.org/debian/pool/main/m/m2m-aligner/m2m-aligner_1.2-2_amd64.deb'
+    )
+    expect(result.toString()).toEqual('deb/debian/-/m2m-aligner/1.2-2_amd64')
+  })
 })

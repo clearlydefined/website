@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
-
+import compact from 'lodash/compact'
+import last from 'lodash/last'
+import remove from 'lodash/remove'
 import { setIfValue } from './utils'
 
 const NAMESPACE = 0x4
@@ -18,11 +20,15 @@ const toLowerCaseMap = {
 const entityMapping = [
   { hostnames: ['npmjs.com', 'npmjs.org'], parser: npmParser },
   { hostnames: ['github.com'], parser: githubParser },
+  { hostnames: ['repo1.maven.org'], parser: mavenOrgParser },
+  { hostnames: ['central.maven.org'], parser: mavenOrgParser },
   { hostnames: ['mvnrepository.com'], parser: mavenParser },
   { hostnames: ['nuget.org'], parser: nugetParser },
   { hostnames: ['crates.io'], parser: cratesParser },
   { hostnames: ['pypi.org'], parser: pypiParser },
-  { hostnames: ['rubygems.org'], parser: rubygemsParser }
+  { hostnames: ['rubygems.org'], parser: rubygemsParser },
+  { hostnames: ['ftp.debian.org'], parser: debianParser },
+  { hostnames: ['packagist.org'], parser: composerParser }
 ]
 
 function npmParser(path) {
@@ -40,6 +46,17 @@ function githubParser(path) {
   // if there is no version but there is something after repo, it's not for us so return
   if (!version && type) return null
   return new EntitySpec('git', 'github', org, repo, version)
+}
+
+function mavenOrgParser(path) {
+  const urlParams = compact(path.split('/'))
+  remove(urlParams, n => n === 'maven2')
+  const version = last(urlParams)
+  urlParams.pop()
+  const name = last(urlParams)
+  urlParams.pop()
+  const namespace = urlParams.join('.')
+  return new EntitySpec('maven', 'mavencentral', namespace, name, version)
 }
 
 function mavenParser(path) {
@@ -67,6 +84,22 @@ function rubygemsParser(path) {
   return new EntitySpec('gem', 'rubygems', null, name, version)
 }
 
+function debianParser(path) {
+  const extensions = ['.deb', '.tar.gz', '.tar.xz', '.dsc']
+  const expStr = extensions.join('|')
+  const [, , , , name, packageName] = path.split('/')
+  const withoutExtension = packageName.replace(new RegExp('\\b(' + expStr + ')\\b', 'gi'), '').replace(/\s{2,}/g, '')
+  const [, version] = withoutExtension.split(`${name}_`)
+
+  return new EntitySpec('deb', 'debian', null, name, version)
+}
+
+function composerParser(path, hash) {
+  const [, namespace, name] = path.split('/')
+  const version = hash.substr(1)
+  return new EntitySpec('composer', 'packagist', namespace, name, version)
+}
+
 function normalize(value, provider, property) {
   if (!value) return value
   const mask = toLowerCaseMap[provider] || 0
@@ -92,7 +125,7 @@ export default class EntitySpec {
     const hostname = urlObject.hostname.toLowerCase().replace('www.', '')
     const entry = entityMapping.find(entry => entry.hostnames.includes(hostname))
     if (!entry) throw new Error(`${hostname} is not currently supported`)
-    return entry.parser(path)
+    return entry.parser(path, urlObject.hash)
   }
 
   static fromObject(o) {

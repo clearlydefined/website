@@ -13,6 +13,8 @@ import {
   MavenSelector,
   NuGetSelector,
   CrateSelector,
+  DebianSelector,
+  ComposerSelector,
   PyPiSelector,
   RubyGemsSelector,
   Section
@@ -62,9 +64,7 @@ class PageHarvest extends Component {
     this.props.dispatch(uiHarvestUpdateQueue({ update: request, value: newRequest }))
   }
 
-  onClick(event) {
-    const target = event.target
-    const activeProvider = target.name
+  onClick(activeProvider) {
     this.setState({ ...this.state, activeProvider })
   }
 
@@ -98,8 +98,10 @@ class PageHarvest extends Component {
             {activeProvider === 'npmjs' && <NpmSelector onChange={this.onAddRequest} />}
             {activeProvider === 'nuget' && <NuGetSelector onChange={this.onAddRequest} />}
             {activeProvider === 'cratesio' && <CrateSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'packagist' && <ComposerSelector onChange={this.onAddRequest} />}
             {activeProvider === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
             {activeProvider === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
+            {activeProvider === 'debian' && <DebianSelector onChange={this.onAddRequest} />}
           </Col>
         </Row>
         <Section className="flex-grow-column" name={'Components to harvest'} actionButton={this.renderActionButton()}>

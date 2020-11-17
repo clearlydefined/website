@@ -2,7 +2,7 @@ export const definitionsMap = {
   componentSearch: {
     input: '.rbt-input-main',
     list: '.rbt-menu > li',
-    listElement: '#filter-bar-item-0'
+    listElement: '#rbt-menu-item-0'
   },
   componentList: {
     list: '.components-list',
@@ -72,7 +72,7 @@ export const definitionsMap = {
   licensePicker: {
     identifier: '.spdx-picker',
     inputField: '.spdx-picker [data-test-id="spdx-input-picker"] .rbt-input-main',
-    listSelection: '#spdx-picker-item-1',
+    listSelection: '#rbt-menu-item-1',
     buttonSuccess: '[data-test-id="license-picker-ok-button"]'
   },
   sourcePicker: {

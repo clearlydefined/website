@@ -4,6 +4,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
 import omitBy from 'lodash/omitBy'
 import isEmpty from 'lodash/isEmpty'
 import cloneDeep from 'lodash/cloneDeep'
@@ -29,6 +30,7 @@ import Auth from '../../utils/auth'
 import NotificationButtons from '../Navigation/Ui/NotificationButtons'
 import { AbstractFullDetailsView } from './AbstractFullDetailsView'
 import { withResize } from '../../utils/WindowProvider'
+import EntitySpec from '../../utils/entitySpec'
 
 export class FullDetailPage extends AbstractFullDetailsView {
   static defaultProps = {
@@ -102,9 +104,12 @@ export class FullDetailPage extends AbstractFullDetailsView {
    * @param  {} contributionInfo object that describes the contribution
    */
   doContribute(contributionInfo) {
-    const { token, component, curateAction } = this.props
+    const { token, component, definition, curateAction } = this.props
+    // Make sure the right casing is used to create a curation:
+    const coordinates = get(definition, 'item.coordinates')
+    const casedComponent = coordinates ? EntitySpec.fromObject(coordinates) : undefined
     const { changes } = this.state
-    const patches = Contribution.buildContributeSpec([], component, changes)
+    const patches = Contribution.buildContributeSpec([], casedComponent || component, changes)
     const spec = { contributionInfo, patches }
     curateAction(token, spec)
   }
@@ -247,8 +252,8 @@ export class FullDetailPage extends AbstractFullDetailsView {
 
   handleLogin(e) {
     e.preventDefault()
-    Auth.doLogin((token, permissions, username) => {
-      this.props.login(token, permissions, username)
+    Auth.doLogin((token, permissions, username, publicEmails) => {
+      this.props.login(token, permissions, username, publicEmails)
     })
   }
 
@@ -312,9 +317,4 @@ function mapDispatchToProps(dispatch) {
   )
 }
 
-export default withResize(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(FullDetailPage)
-)
+export default withResize(connect(mapStateToProps, mapDispatchToProps)(FullDetailPage))

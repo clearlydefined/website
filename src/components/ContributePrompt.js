@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Form, Button } from 'react-bootstrap'
+import { Modal, Form, Button, Alert } from 'react-bootstrap'
 import { FormGroup, ControlLabel, FormControl, Checkbox } from 'react-bootstrap'
 import { FieldGroup } from './'
 import Contribution from '../utils/contribution'
@@ -23,7 +23,8 @@ export default class ContributePrompt extends Component {
     onLogin: PropTypes.func.isRequired,
     session: PropTypes.shape({
       isAnonymous: PropTypes.bool,
-      username: PropTypes.string
+      username: PropTypes.string,
+      publicEmails: PropTypes.bool
     }).isRequired
   }
 
@@ -93,7 +94,7 @@ export default class ContributePrompt extends Component {
             definitions.map(definition => {
               const image = Contribution.getImage({ coordinates: definition })
               return (
-                <li>
+                <li key={image}>
                   {image && <img className="list-image" src={image} alt="" />}
                   <span className="definition-name">
                     {definition.namespace && `${definition.namespace}/`}
@@ -111,7 +112,6 @@ export default class ContributePrompt extends Component {
   render() {
     const { details, summary, show, resolution } = this.state
     const { session, onLogin } = this.props
-
     return (
       <Modal show={show} id="contribute-modal">
         <Form>
@@ -119,6 +119,12 @@ export default class ContributePrompt extends Component {
             <Modal.Title>Describe the changes in this curation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {!session.isAnonymous && !session.publicEmails && (
+              <Alert bsStyle="warning">
+                Since your email is set as private on your GitHub profile, you can submit this contribution but the
+                commits will not be attributed to you.
+              </Alert>
+            )}
             <div className="container" style={{ display: 'flex' }}>
               <div className="contribution-container">
                 <div>

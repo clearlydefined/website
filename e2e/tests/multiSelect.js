@@ -3,6 +3,8 @@
 
 import { setDefaultOptions } from 'expect-puppeteer'
 import { definitionsMap } from '../maps/definitions'
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 
 const {
   componentSearch,

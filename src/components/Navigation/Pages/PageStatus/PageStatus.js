@@ -3,6 +3,7 @@
 
 import React, { Component } from 'react'
 import { Grid, Row, Col, Table } from 'react-bootstrap'
+import ColorScheme from 'color-scheme'
 import {
   Bar,
   BarChart,
@@ -18,10 +19,14 @@ import {
   XAxis,
   YAxis
 } from 'recharts'
-import { primaryColor, secondaryColor, describedColor, secureColor } from '../../../Clearly'
 import { getStatus } from '../../../../api/clearlyDefined'
 
-const colors = [primaryColor.color, secondaryColor.color, describedColor.color, secureColor.color]
+const scheme = new ColorScheme()
+scheme
+  .from_hex('0064b5')
+  .scheme('analogic')
+  .variation('default')
+const colors = scheme.colors()
 
 export default class PageStatus extends Component {
   constructor(props) {
@@ -40,14 +45,18 @@ export default class PageStatus extends Component {
       this.fetchRequestsPerDay(),
       this.fetchDefinitionAvailability(),
       this.fetchCrawledPerDay(),
-      this.fetchRecentlyCrawled()
+      this.fetchRecentlyCrawled(),
+      this.fetchCrawlbreakdown(),
+      this.fetchToolsRanPerDay()
     ])
     this.setState({
       loaded: true,
       requestsPerDay: data[0],
       definitionAvailability: data[1],
       crawledPerDay: data[2],
-      recentlyCrawled: data[3]
+      recentlyCrawled: data[3],
+      crawlbreakdown: data[4],
+      toolsRanPerDay: data[5]
     })
   }
 
@@ -77,6 +86,22 @@ export default class PageStatus extends Component {
     const data = await getStatus('recentlycrawled')
     return data.map(entry => {
       entry.timestamp = new Date(entry.timestamp).toLocaleString()
+      return entry
+    })
+  }
+
+  async fetchCrawlbreakdown() {
+    const data = await getStatus('crawlbreakdown')
+    return data.map(entry => {
+      entry.date = new Date(entry.date).toLocaleDateString()
+      return entry
+    })
+  }
+
+  async fetchToolsRanPerDay() {
+    const data = await getStatus('toolsranperday')
+    return data.map(entry => {
+      entry.date = new Date(entry.date).toLocaleDateString()
       return entry
     })
   }
@@ -113,6 +138,16 @@ export default class PageStatus extends Component {
               <h2>Recently crawled components</h2>
               {this.renderRecentlyCrawled()}
             </Row>
+            <hr />
+            <Row>
+              <h2>Types processed / day</h2>
+              {this.renderCrawlbreakdown()}
+            </Row>
+            <hr />
+            <Row>
+              <h2>Tools ran per day</h2>
+              {this.renderToolsRanPerDay()}
+            </Row>
           </div>
         )}
       </Grid>
@@ -126,7 +161,7 @@ export default class PageStatus extends Component {
           <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey="count" stroke={colors[0]} />
+          <Line type="monotone" dataKey="count" stroke={`#${colors[0]}`} />
         </LineChart>
       </ResponsiveContainer>
     )
@@ -138,11 +173,11 @@ export default class PageStatus extends Component {
         <tbody>
           {this.state.definitionAvailability.map((entry, index) => {
             return (
-              <tr>
+              <tr key={entry.name}>
                 <td>
                   <span
                     style={{
-                      backgroundColor: colors[index % colors.length],
+                      backgroundColor: `#${colors[index % colors.length]}`,
                       height: '20px',
                       width: '20px',
                       marginRight: '10px',
@@ -175,7 +210,7 @@ export default class PageStatus extends Component {
             fill="#8884d8"
           >
             {this.state.definitionAvailability.map((entry, index) => (
-              <Cell fill={colors[index % colors.length]} />
+              <Cell fill={`#${colors[index % colors.length]}`} key={entry.name} />
             ))}
           </Pie>
         </PieChart>
@@ -202,7 +237,7 @@ export default class PageStatus extends Component {
           )
             .filter(x => x !== 'date')
             .map((host, index) => {
-              return <Bar dataKey={host} fill={colors[index % colors.length]} stackId="a" />
+              return <Bar dataKey={host} key={host} fill={`#${colors[index % colors.length]}`} stackId="a" />
             })}
         </BarChart>
       </ResponsiveContainer>
@@ -216,7 +251,7 @@ export default class PageStatus extends Component {
           <tbody>
             {this.state.recentlyCrawled.map(entry => {
               return (
-                <tr>
+                <tr key={`${entry.timestamp}-${entry.coordinates}`}>
                   <td>{entry.timestamp}</td>
                   <td>
                     <a href={`/definitions/${entry.coordinates}`}>{entry.coordinates}</a>
@@ -227,6 +262,71 @@ export default class PageStatus extends Component {
           </tbody>
         </Table>
       </div>
+    )
+  }
+
+  objectDeepKeys = obj => {
+    return Object.keys(obj)
+      .filter(key => obj[key] instanceof Object)
+      .map(key => this.objectDeepKeys(obj[key]).map(k => `${key}.${k}`))
+      .reduce((x, y) => x.concat(y), Object.keys(obj))
+  }
+
+  renderCrawlbreakdown() {
+    const types = Object.keys(
+      this.state.crawlbreakdown.reduce((result, entry) => {
+        const entries = Object.keys(entry)
+          .filter(key => entry[key] instanceof Object)
+          .map(key => this.objectDeepKeys(entry[key]).map(k => `${key}.${k}`))
+          .reduce((x, y) => x.concat(y), [])
+        entries.forEach(x => {
+          result[x] = 1
+        })
+        return result
+      }, {})
+    )
+    return (
+      <ResponsiveContainer height={500}>
+        <BarChart data={this.state.crawlbreakdown}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          {types.map((type, index) => {
+            const tool = type.substr(0, type.indexOf('.'))
+            return (
+              <Bar dataKey={type} key={type} fill={`#${colors[index % colors.length]}`} stackId={tool} name={type} />
+            )
+          })}
+        </BarChart>
+      </ResponsiveContainer>
+    )
+  }
+
+  renderToolsRanPerDay() {
+    return (
+      <ResponsiveContainer height={500}>
+        <BarChart data={this.state.toolsRanPerDay}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          {Object.keys(
+            this.state.toolsRanPerDay.reduce((result, entry) => {
+              Object.keys(entry).forEach(x => {
+                result[x] = 1
+              })
+              return result
+            }, {})
+          )
+            .filter(x => x !== 'date')
+            .map((host, index) => {
+              return <Bar dataKey={host} key={host} fill={`#${colors[index % colors.length]}`} stackId="a" />
+            })}
+        </BarChart>
+      </ResponsiveContainer>
     )
   }
 

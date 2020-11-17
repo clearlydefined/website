@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: MIT
 import { harvestMap } from '../maps/harvest'
 import { setDefaultOptions } from 'expect-puppeteer'
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 
 const puppeteer = require('puppeteer')
 const defaultTimeout = process.env.JEST_TIMEOUT ? process.env.JEST_TIMEOUT : 30000
@@ -19,7 +21,6 @@ describe(
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}/harvest`, { waitUntil: 'domcontentloaded' })
       await page.setRequestInterception(true)
       page.on('request', interceptedRequest => {
         if (
@@ -45,6 +46,8 @@ describe(
           return interceptedRequest.respond(responses.origins.github.user)
         else interceptedRequest.continue()
       })
+
+      await page.goto(`${__HOST__}/harvest`, { waitUntil: 'domcontentloaded' })
     })
 
     afterAll(() => {
@@ -57,13 +60,24 @@ describe(
     })
 
     it('should display all providers buttons', async () => {
-      const { npmButton, githubButton, mavencentralButton, nugetButton, pypiButton, rubygemsButton } = harvestMap
+      const {
+        npmButton,
+        githubButton,
+        mavencentralButton,
+        nugetButton,
+        pypiButton,
+        rubygemsButton,
+        debianButton,
+        cratesioButton
+      } = harvestMap
       await page.waitForSelector(npmButton)
       await page.waitForSelector(githubButton)
       await page.waitForSelector(mavencentralButton)
       await page.waitForSelector(nugetButton)
       await page.waitForSelector(pypiButton)
       await page.waitForSelector(rubygemsButton)
+      await page.waitForSelector(debianButton)
+      await page.waitForSelector(cratesioButton)
     })
 
     it('should the NPM picker when NPM provider is active', async () => {
@@ -75,16 +89,16 @@ describe(
     })
 
     it('should show a list of results when typing on NPM picker', async () => {
-      const { npmPicker, npmSelectorFirstElement, npmComponent } = harvestMap
+      const { npmPicker, npmSelector, listFirstElement, npmComponent } = harvestMap
       await expect(page).toClick(npmPicker)
       await page.type(npmPicker, npmComponent)
-      await expect(page).toMatchElement(npmSelectorFirstElement)
-      await expect(page).toMatchElement(npmSelectorFirstElement, { text: npmComponent })
+      await expect(page).toMatchElement(`${npmSelector} ${listFirstElement}`)
+      await expect(page).toMatchElement(`${npmSelector} ${listFirstElement}`, { text: npmComponent })
     })
 
     it('should show it in the list of components when selecting NPM library', async () => {
-      const { npmSelectorFirstElement, componentList, component, npmComponent } = harvestMap
-      await expect(page).toClick(npmSelectorFirstElement)
+      const { npmSelector, listFirstElement, componentList, component, npmComponent } = harvestMap
+      await expect(page).toClick(`${npmSelector} ${listFirstElement}`)
       await expect(page).toMatchElement(componentList.list)
       await expect(page).toMatchElement(`${componentList.list} ${componentList.firstElement}`)
       await expect(page).toMatchElement(`${componentList.list} ${componentList.firstElement} ${component.name}`)
@@ -96,15 +110,15 @@ describe(
     })
 
     it('should show a list of revisions when clicking on the NPM version picker', async () => {
-      const { npmVersionPicker, npmVersionSelectorFirstElement } = harvestMap
+      const { npmVersionPicker, npmVersionSelector, listFirstElement } = harvestMap
       await expect(page).toClick(npmVersionPicker)
-      await expect(page).toMatchElement(npmVersionSelectorFirstElement)
-      await expect(page).toMatchElement(npmVersionSelectorFirstElement, { text: '4.2.0' })
+      await expect(page).toMatchElement(`${npmVersionSelector} ${listFirstElement}`)
+      await expect(page).toMatchElement(`${npmVersionSelector} ${listFirstElement}`, { text: '4.2.0' })
     })
 
     it('should show the value of the selected NPM version', async () => {
-      const { npmVersionPicker, npmVersionSelectorFirstElement } = harvestMap
-      await expect(page).toClick(npmVersionSelectorFirstElement)
+      const { npmVersionPicker, npmVersionSelector, listFirstElement } = harvestMap
+      await expect(page).toClick(`${npmVersionSelector} ${listFirstElement}`)
       const componentTitle = await page.$eval(npmVersionPicker, el => el.value)
       await expect(componentTitle).toMatch('4.2.0')
     })
@@ -118,23 +132,23 @@ describe(
     })
 
     it('should show a list of results when typing on GitHub user picker', async () => {
-      const { githubUserPicker, githubUserSelectorFirstElement, githubComponent } = harvestMap
+      const { githubUserPicker, githubUserSelector, listFirstElement, githubComponent } = harvestMap
       await expect(page).toClick(githubUserPicker)
       await page.type(githubUserPicker, githubComponent)
-      await expect(page).toMatchElement(githubUserSelectorFirstElement)
-      await expect(page).toMatchElement(githubUserSelectorFirstElement, { text: githubComponent })
-      await expect(page).toClick(githubUserSelectorFirstElement)
+      await expect(page).toMatchElement(`${githubUserSelector} ${listFirstElement}`)
+      await expect(page).toMatchElement(`${githubUserSelector} ${listFirstElement}`, { text: githubComponent })
+      await expect(page).toClick(`${githubUserSelector} ${listFirstElement}`)
       const componentTitle = await page.$eval(githubUserPicker, el => el.value)
       await expect(componentTitle).toMatch(githubComponent)
     })
 
     it('should show a list of results when typing on GitHub repo picker', async () => {
-      const { githubRepoPicker, githubRepoSelectorFirstElement, githubRepo } = harvestMap
+      const { githubRepoPicker, githubRepoSelector, listFirstElement, githubRepo } = harvestMap
       await expect(page).toClick(githubRepoPicker)
       await page.type(githubRepoPicker, githubRepo)
-      await expect(page).toMatchElement(githubRepoSelectorFirstElement)
-      await expect(page).toMatchElement(githubRepoSelectorFirstElement, { text: githubRepo })
-      await expect(page).toClick(githubRepoSelectorFirstElement)
+      await expect(page).toMatchElement(`${githubRepoSelector} ${listFirstElement}`)
+      await expect(page).toMatchElement(`${githubRepoSelector} ${listFirstElement}`, { text: githubRepo })
+      await expect(page).toClick(`${githubRepoSelector} ${listFirstElement}`)
       const componentTitle = await page.$eval(githubRepoPicker, el => el.value)
       await expect(componentTitle).toMatch(githubRepo)
     })
@@ -152,17 +166,17 @@ describe(
     })
 
     it('should show a list of revisions when clicking on the GitHub commit picker', async () => {
-      const { githubCommitPicker, githubCommitSelectorFirstElement } = harvestMap
+      const { githubCommitPicker, githubCommitSelector, listFirstElement } = harvestMap
       await expect(page).toClick(githubCommitPicker)
-      await expect(page).toMatchElement(githubCommitSelectorFirstElement)
-      await expect(page).toMatchElement(githubCommitSelectorFirstElement, {
+      await expect(page).toMatchElement(`${githubCommitSelector} ${listFirstElement}`)
+      await expect(page).toMatchElement(`${githubCommitSelector} ${listFirstElement}`, {
         text: '1.1.0 (724409eb4087dc731ba9d8f158de74a86d9d4244)'
       })
     })
 
     it('should show the value of the selected GitHub commit', async () => {
-      const { githubCommitPicker, githubCommitSelectorFirstElement } = harvestMap
-      await expect(page).toClick(githubCommitSelectorFirstElement)
+      const { githubCommitPicker, githubCommitSelector, listFirstElement } = harvestMap
+      await expect(page).toClick(`${githubCommitSelector} ${listFirstElement}`)
       const componentTitle = await page.$eval(githubCommitPicker, el => el.value)
       await expect(componentTitle).toMatch('1.1.0')
     })

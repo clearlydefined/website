@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: MIT
 import { browseMap } from '../maps/browse'
 import { setDefaultOptions } from 'expect-puppeteer'
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 
 const puppeteer = require('puppeteer')
 const defaultTimeout = process.env.JEST_TIMEOUT ? process.env.JEST_TIMEOUT : 30000
@@ -21,13 +23,13 @@ describe(
       browser = await puppeteer.launch({ headless: process.env.NODE_ENV !== 'debug', slowMo: 80 })
       page = await browser.newPage()
       await page.setViewport({ width: 1920, height: 1080 })
-      await page.goto(`${__HOST__}`, { waitUntil: 'domcontentloaded' })
-      await page.setRequestInterception(true)
+      page.setRequestInterception(true)
       page.on('request', interceptedRequest => {
         if (interceptedRequest.url().includes('/definitions') && interceptedRequest.method() === 'GET')
           interceptedRequest.respond(responses.definitions)
         else interceptedRequest.continue()
       })
+      await page.goto(`${__HOST__}`, { waitUntil: 'domcontentloaded' })
     })
 
     afterAll(() => {

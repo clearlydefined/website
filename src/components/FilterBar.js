@@ -7,12 +7,14 @@ import { AsyncTypeahead, Highlighter } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import npm from '../images/n-large.png'
 import maven from '../images/maven.png'
-import nuget from '../images/nuget.svg'
+import nuget from '../images/nuget.png'
 import pod from '../images/pod.png'
 import git from '../images/Git-Logo-2Color.png'
 import crate from '../images/cargo.png'
 import gem from '../images/gem.png'
 import pypi from '../images/pypi.png'
+import debian from '../images/debian.png'
+import composer from '../images/packagist.png'
 
 const types = {
   npm: npm,
@@ -22,7 +24,9 @@ const types = {
   nuget: nuget,
   git: git,
   crate: crate,
-  pod: pod
+  pod: pod,
+  deb: debian,
+  composer: composer
 }
 
 export default class FilterBar extends Component {
@@ -74,15 +78,19 @@ export default class FilterBar extends Component {
         options={options.list}
         isLoading={options.isFetching}
         onSearch={onSearch}
-        labelKey={'name'}
+        labelKey={option => {
+          return option.namespace ? `${option.namespace}/${option.name}` : option.name
+        }}
         clearButton
         selected={value ? [value.name] : []}
-        renderMenuItemChildren={(option, props) => (
-          <span className="filterBar-itemRenderer">
-            <img src={types[option.type]} alt={option[props.labelKey]} />
-            <Highlighter search={props.text}>{option[props.labelKey]}</Highlighter>
-          </span>
-        )}
+        renderMenuItemChildren={(option, props) => {
+          return (
+            <span className="filterBar-itemRenderer">
+              <img src={types[option.type]} alt={option[props.labelKey]} />
+              <Highlighter search={props.text}>{props.labelKey(option)}</Highlighter>
+            </span>
+          )
+        }}
       />
     )
   }

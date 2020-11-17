@@ -89,8 +89,15 @@ export function curateAction(token, spec) {
         dispatch(actions.error(error))
         if (error.status === 400) {
           const errors = flatten(error.body.errors)
+          const { patchesInError } = error.body
           errors.forEach(e => {
-            dispatch(uiNotificationNew({ type: 'danger', message: `Contribution ERROR: ${e.error.message}` }))
+            dispatch(
+              uiNotificationNew({
+                type: 'danger',
+                message: `Contribution ERROR: ${e.error.message}`,
+                code: patchesInError
+              })
+            )
           })
         } else dispatch(uiNotificationNew({ type: 'info', message: 'Failed contribution.', timeout: 5000 }))
       }
