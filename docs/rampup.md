@@ -50,7 +50,7 @@ This project uses two tools to monitor (and fix) vulnerabilities in this project
 * Only project maintainers can see Dependabot alerts
 
 ### Snyk
-* [Synk Open Source](https://solutions.snyk.io/snyk-academy/open-source) is similar, it also tracks vulnerabilities.
+* [Synk Open Source](https://solutions.snyk.io/snyk-academy/open-source) is similar to Dependabot, though not GitHub specific. It also tracks vulnerabilities in dependencies.
 * When Synk detects a vulnerability in the [Synk Intel Vulnerability Database](https://snyk.io/product/vulnerability-database/), it also opens a pull request with a fix for the vulnerability.
 * Everyone can see pull requests opened by Snyk, but only members of the Clearly Defined organization on Snyk can see details of the vulnerability.
 * If you do not have access to the Clearly Defined Snyk organization, reach out to @nellshamrell 
