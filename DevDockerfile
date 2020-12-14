@@ -9,4 +9,4 @@ RUN apk add --no-cache git
 RUN npm install
 
 EXPOSE 3000
-CMD ["npm", "run", "start-js"]
+CMD ["npm", "run", "start:local-api"]
