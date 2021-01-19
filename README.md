@@ -6,7 +6,15 @@ The doc has a [guide to using the website](https://docs.clearlydefined.io/using-
 
 # Getting started in the code
 
-If you are interested in working on the code for the website, follow the steps below. If you want to get the whole ClearlyDefined infrastructure running on you machine, check out the [system quick start guide](https://github.com/clearlydefined/service/#quick-start).
+If you are interested in working on the code for the website, follow the steps below. 
+
+## Fastest Set Up
+
+The quickest way to get a fully functional local ClearlyDefined set up (including the website) is to use the [Dockerized ClearlyDefined environment setup](https://github.com/clearlydefined/docker_dev_env_experiment). This runs all services locally and does not require access to the ClearlyDefined Azure account.
+
+## Alternative Set Up
+
+Some parts of this set up may require access to the ClearlyDefined Azure Account.
 
 1.  The site is based on [React]() so you need to [install NPM]().
 1.  Clone [this repo](https://github.com/clearlydefined/website.git) using `git clone https://github.com/clearlydefined/website.git` or equivalent.
@@ -17,7 +25,6 @@ If you are interested in working on the code for the website, follow the steps b
 This sequence will get the code for site, fetch all the prerequisites, build the site, start it running and open a browser on http://localhost:3000. You should see the ClearlyDefined website and be able to browse the data etc. If you login (top right corner), more functionality will light up.
 
 This simple setup uses the _development_ instance of the service. That may be highly volatile and will change without notice.
-Having said that, we use it all the time so you're probably good. If you want setup your own service (and crawler for that matter), use the [simple local system setup guide](https://docs.clearlydefined.io/contributing-code) that has only a few more steps and gets you running all of ClearlyDefined on you local machine.
 
 Since you are not forced to consume only the local APIs, but you can even consume directly the remote development or production APIs, for the `website` repo only you are able to point out different APIs endpoints, depending on your needs, using different kinds of npm scripts: - `npm start` use the default environment, which is actually the DEV environment, and it refers to development APIs - `npm run start:dev-api` points out specifically to the development APIs - `npm run start:local-api` points out the local environment, which works only if the service repo is started - `npm run start:prod-api` points out specifically to the production APIs
 
