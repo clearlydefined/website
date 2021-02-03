@@ -132,8 +132,9 @@ class FullDetailComponent extends Component {
   }
 
   renderRawDataSection() {
-    const { definition, harvest, getCurationData, inspectedCuration } = this.props
+    const { definition, harvest, curations, getCurationData, inspectedCuration } = this.props
     const item = { ...definition.item }
+
     return (
       <Section name="Raw data">
         <Row>
@@ -141,6 +142,7 @@ class FullDetailComponent extends Component {
             <RawDataSection
               definition={definition}
               item={item}
+              curations={curations}
               getCurationData={getCurationData}
               inspectedCuration={inspectedCuration}
               harvest={harvest}
