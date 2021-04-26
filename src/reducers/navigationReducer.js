@@ -20,9 +20,8 @@ const initialState = [
   {
     title: 'Harvest',
     to: ROUTE_HARVEST,
-    protected: 1,
+    protected: 0,
     isSelected: false,
-    permissions: ['harvest']
   },
   {
     title: 'About',
