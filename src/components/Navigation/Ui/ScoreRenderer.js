@@ -38,7 +38,13 @@ class ScoreRenderer extends Component {
   )
 
   getColor(score, topScore = 100, customColors) {
-    const colors = customColors || ['#cb2431', '#d6af22', '#2cbe4e']
+    const colors = customColors || ['#F9E6E8', '#FFFAE6', '#EAF5F1']
+    const percentScore = score / topScore
+    const bucket = Math.floor(percentScore * colors.length)
+    return colors[Math.min(colors.length - 1, bucket)]
+  }
+  fontColor(score, topScore = 100, customColors) {
+    const colors = customColors || ['#ce3643', '#ed9f00', '#00875a']
     const percentScore = score / topScore
     const bucket = Math.floor(percentScore * colors.length)
     return colors[Math.min(colors.length - 1, bucket)]
@@ -125,11 +131,16 @@ class ScoreRenderer extends Component {
     return (
       <Tooltip title={this.renderTooltipContent} key={this.renderTooltipContent} overlayStyle={{ width: '800px' }}>
         {domain ? (
-          <Tag className="cd-badge" color={this.getColor(get(domain, 'score.total'))}>
+          <Tag className="cd-badge"
+            color={this.getColor(get(domain, 'score.total'))}
+            style={{ color: this.fontColor(get(domain, 'score.total')) }}>
             {get(domain, 'score.total')}
           </Tag>
         ) : (
-          <Tag className="cd-badge" color={this.getColor(scores.effective)}>
+          <Tag className="cd-badge"
+            color={this.getColor(scores.effective)}
+            style={{ color: this.fontColor(scores.effective) }}
+          >
             {scores.effective}
           </Tag>
         )}

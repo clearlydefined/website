@@ -56,7 +56,7 @@ export default class ListDataRenderer extends Component {
           className="popoverSpan"
           onMouseOver={() => this.dispatchShowTooltip()}
         >
-          {data.join(', ')}
+          {data}
         </span>
         <Overlay
           target={this.attachRef}

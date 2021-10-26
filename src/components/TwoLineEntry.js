@@ -3,7 +3,8 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import carrotRight from '../images/icons/carrotRight.svg'
+import carrotdown from '../images/icons/carrortDown.svg'
 export default class TwoLineEntry extends React.Component {
   static propTypes = {
     buttons: PropTypes.element,
@@ -18,7 +19,7 @@ export default class TwoLineEntry extends React.Component {
   }
 
   static defaultProps = {
-    onClick: () => {}
+    onClick: () => { }
   }
 
   render() {
@@ -44,6 +45,7 @@ export default class TwoLineEntry extends React.Component {
         }}
       >
         <div className={`list-row${isEmpty ? ' isEmpty' : ''}`} onClick={onClick}>
+          <img className={`open-panel-img  ${!isEmpty && panel ? 'rotate-img' : "."}`} src={carrotRight} alt="open panel" />
           {image && (
             <img
               className={`list-image${highlight ? ' list-highlight' : ''}`}
@@ -61,8 +63,8 @@ export default class TwoLineEntry extends React.Component {
             <div className="list-headline">{headline}</div>
             <div className="list-message">{message}</div>
           </div>
-          {buttons}
         </div>
+        {buttons}
         {!isEmpty && panel && <div className="list-panel">{panel}</div>}
       </div>
     )

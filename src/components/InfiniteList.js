@@ -20,7 +20,7 @@ export default class InfiniteList extends React.Component {
   }
 
   static defaultProps = {
-    loadMoreRows: () => {}
+    loadMoreRows: () => { }
   }
 
   constructor(props) {

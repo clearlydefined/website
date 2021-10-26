@@ -28,7 +28,6 @@ class DefinitionTitle extends Component {
   render() {
     const { definition } = this.props
     return get(definition, 'described.urls.registry') ? (
-      <span>
         <Tooltip title={this.renderDefinitionTitle()}>
           <a
             href={get(definition, 'described.urls.registry')}
@@ -39,7 +38,6 @@ class DefinitionTitle extends Component {
             {this.renderDefinitionTitle()}
           </a>
         </Tooltip>
-      </span>
     ) : (
       <Tooltip title={this.renderDefinitionTitle()}>
         <span data-test-id="component-name">{this.renderDefinitionTitle()}</span>

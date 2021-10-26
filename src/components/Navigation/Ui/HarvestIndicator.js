@@ -24,9 +24,12 @@ class HarvestIndicator extends Component {
     const { tools } = this.props
     return (
       <Tooltip title={this.getTooltip(tools)}>
-        <Tag className="cd-badge" color={this.getColor(tools)}>
+        {/* <Tag className="cd-badge" color={this.getColor(tools)}>
           {this.getHarvestStatus(tools)}
-        </Tag>
+        </Tag> */}
+        <div className="clearly-badge">
+          {this.getHarvestStatus(tools)}
+        </div>
       </Tooltip>
     )
   }

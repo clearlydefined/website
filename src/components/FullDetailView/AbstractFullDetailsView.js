@@ -62,7 +62,7 @@ export class AbstractFullDetailsView extends Component {
         )}
       </Modal>
     ) : (
-      <Grid>
+      <>
         <FullDetailComponent
           curations={curations}
           definition={definition}
@@ -79,7 +79,7 @@ export class AbstractFullDetailsView extends Component {
           inspectedCuration={inspectedCuration}
           renderContributeButton={
             <Button
-              bsStyle="success"
+              className="contribute-btn"
               disabled={isEmpty(changes) || isEmpty(harvest.item)}
               onClick={this.doPromptContribute}
             >
@@ -94,7 +94,7 @@ export class AbstractFullDetailsView extends Component {
           actionHandler={this.doContribute}
           definitions={get(definition, 'item.coordinates') ? [get(definition, 'item.coordinates')] : []}
         />
-      </Grid>
+      </>
     )
   }
 }

@@ -11,14 +11,14 @@ class FilterList extends Component {
     disabled: PropTypes.bool,
     value: PropTypes.object,
     onFilter: PropTypes.func.isRequired,
-    variant: PropTypes.string
+    // variant: PropTypes.string
   }
   render() {
     const { list, title, id, disabled, onFilter, value, variant } = this.props
     return (
       <DropdownButton
-        className="list-button"
-        bsStyle={variant || 'default'}
+        className="top-search-side-dropdown"
+        // bsStyle={variant || 'default'}
         pullRight
         title={title}
         disabled={disabled}
@@ -27,7 +27,7 @@ class FilterList extends Component {
         {list.map((filterType, index) => {
           return (
             <MenuItem
-              className="page-definitions__menu-item"
+              className=""
               key={index}
               onSelect={onFilter}
               eventKey={{ type: id, value: filterType.value }}

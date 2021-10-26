@@ -3,7 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, InlineEditor, ModalEditor, SourcePicker, FileCountRenderer } from './'
+import { TwoLineEntry, InlineEditor, QuickEditModel, ModalEditor, SourcePicker, FileCountRenderer } from './'
 import { Row, Checkbox, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
@@ -26,6 +26,13 @@ import DefinitionTitle from './Navigation/Ui/DefinitionTitle'
 import DefinitionRevision from './Navigation/Ui/DefinitionRevision'
 
 class DefinitionEntry extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleModel = this.handleModel.bind(this)
+    this.state = {
+      modelOpen: false,
+    };
+  }
   static propTypes = {
     onChange: PropTypes.func,
     onCurate: PropTypes.func,
@@ -78,11 +85,19 @@ class DefinitionEntry extends React.Component {
     const scores = get(definition, 'scores')
     const isCurationPending = Curation.isPending(curation)
     const scoreTag = scores ? (
-      <span>
-        &nbsp;&nbsp;&nbsp;
+      <span className="score-badge-table">
         <ScoreRenderer scores={scores} definition={definition} />
       </span>
-    ) : null
+    ) : null;
+    const releasedDate = definition?.described?.releaseDate ? (
+      <span className="releasedDate-table">
+        {definition.described.releaseDate}
+      </span>
+    ) : (
+      <span className="releasedDate-table">
+        -- -- --
+      </span>
+    );
     const curationTag = isCurationPending ? (
       <span>
         &nbsp;&nbsp;
@@ -93,14 +108,17 @@ class DefinitionEntry extends React.Component {
         </a>
       </span>
     ) : null
-    return (
-      <span>
+    return (<>
+      <span className="table-title">
         <DefinitionTitle definition={definition} />
-        &nbsp;&nbsp;&nbsp;
-        <DefinitionRevision definition={definition} className={'definition-revision'} />
-        {scoreTag}
-        {curationTag}
+        &nbsp;/&nbsp;
+        <span><DefinitionRevision definition={definition} className={'definition-revision'} /></span>
       </span>
+
+      {scoreTag}
+      {releasedDate}
+      {curationTag}
+    </>
     )
   }
 
@@ -126,9 +144,7 @@ class DefinitionEntry extends React.Component {
         'licensed.declared',
         <span className={this.classIfDifferent('licensed.declared')}>{licenseExpression}</span>
       )
-    ) : (
-      <span>&nbsp;</span>
-    )
+    ) : null
   }
 
   getPercentage(count, total) {
@@ -170,6 +186,9 @@ class DefinitionEntry extends React.Component {
   renderLabel(text) {
     return <b>{text}</b>
   }
+  handleModel() {
+    this.setState({ modelOpen: !this.state.modelOpen })
+  }
 
   renderPanel(rawDefinition) {
     if (!rawDefinition)
@@ -184,93 +203,236 @@ class DefinitionEntry extends React.Component {
     const { licensed } = definition
     const { readOnly, onRevert } = this.props
     return (
-      <Row>
-        <Col sm={5}>
-          <Row>
-            <Col xs={3}>{this.renderLabel('Declared')}</Col>
-            <Col xs={9} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'licensed.declared',
-                <LicensesRenderer
-                  definition={definition}
-                  field={'licensed.declared'}
-                  readOnly={readOnly}
-                  initialValue={this.getOriginalValue('licensed.declared')}
-                  value={this.getValue('licensed.declared')}
-                  onChange={this.fieldChange('licensed.declared')}
-                  revertable
-                  onRevert={() => onRevert('licensed.declared')}
-                />
-              )}
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>{this.renderLabel('Source')}</Col>
-            <Col xs={9} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'described.sourceLocation',
-                <ModalEditor
-                  definition={definition}
-                  field={'described.sourceLocation'}
-                  extraClass={this.classIfDifferent('described.sourceLocation')}
-                  readOnly={readOnly}
-                  initialValue={Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
-                  value={Contribution.printCoordinates(this.getValue('described.sourceLocation'))}
-                  onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.toSourceLocation)}
-                  editor={SourcePicker}
-                  validator={value => true}
-                  placeholder={'Source location'}
-                  revertable
-                  onRevert={() => onRevert('described.sourceLocation')}
-                />,
-                'right',
-                Contribution.printCoordinates
-              )}
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>{this.renderLabel('Release')}</Col>
-            <Col xs={9} className="definition__line">
-              {this.renderWithToolTipIfDifferent(
-                'described.releaseDate',
-                <InlineEditor
-                  field={'described.releaseDate'}
-                  extraClass={this.classIfDifferent('described.releaseDate')}
-                  readOnly={readOnly}
-                  type="date"
-                  initialValue={Contribution.printDate(this.getOriginalValue('described.releaseDate'))}
-                  value={Contribution.printDate(this.getValue('described.releaseDate'))}
-                  onChange={this.fieldChange('described.releaseDate')}
-                  validator={value => true}
-                  placeholder={'YYYY-MM-DD'}
-                  revertable
-                  onRevert={() => onRevert('described.releaseDate')}
-                />
-              )}
-            </Col>
-          </Row>
-        </Col>
-        <Col sm={7}>
-          <Row>
-            <Col xs={3}>{this.renderLabel('Discovered')}</Col>
-            <Col xs={9} className="definition__line">
-              {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>{this.renderLabel('Attribution')}</Col>
-            <Col xs={9} className="definition__line">
-              {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={3}>{this.renderLabel('Files')}</Col>
-            <Col xs={9} className="definition__line">
-              <FileCountRenderer definition={definition} />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+      <div className="row row-panel-details">
+        <div className="col-md-6 d-flex justify-content-start align-items-center">
+          <span className="panel-details__title">
+            {this.renderLabel('Declared')}:
+          </span>
+          <div className="panel-details__value">
+            <p>
+              {this.getValue('licensed.declared')}
+            </p>
+            {/* {this.renderWithToolTipIfDifferent(
+              'licensed.declared',
+              <LicensesRenderer
+                definition={definition}
+                field={'licensed.declared'}
+                readOnly={readOnly}
+                initialValue={this.getOriginalValue('licensed.declared')}
+                value={this.getValue('licensed.declared')}
+                onChange={this.fieldChange('licensed.declared')}
+                revertable
+                onRevert={() => onRevert('licensed.declared')}
+              />
+            )} */}
+          </div>
+        </div>
+        <div className="col-md-6 d-flex justify-content-start align-items-center">
+          <span className="panel-details__title">
+            {this.renderLabel('Discovered')}:
+          </span>
+          <div className="panel-details__value">
+            {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
+          </div>
+        </div>
+        <div className="col-md-6 d-flex justify-content-start align-items-center">
+          <span className="panel-details__title">
+            {this.renderLabel('Source')}:
+          </span>
+          <div className="panel-details__value">
+            <p>
+              {Contribution.printCoordinates(this.getValue('described.sourceLocation'))}
+            </p>
+            {/* {this.renderWithToolTipIfDifferent(
+              'described.sourceLocation',
+              <ModalEditor
+                definition={definition}
+                field={'described.sourceLocation'}
+                extraClass={this.classIfDifferent('described.sourceLocation')}
+                readOnly={readOnly}
+                initialValue={Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
+                value={Contribution.printCoordinates(this.getValue('described.sourceLocation'))}
+                onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.toSourceLocation)}
+                editor={SourcePicker}
+                validator={value => true}
+                placeholder={'Source location'}
+                revertable
+                onRevert={() => onRevert('described.sourceLocation')}
+              />,
+              'right',
+              Contribution.printCoordinates
+            )} */}
+          </div>
+        </div>
+        <div className="col-md-6 d-flex justify-content-start align-items-center">
+          <span className="panel-details__title">
+            {this.renderLabel('Attribution')}:
+          </span>
+          <div className="panel-details__value">
+            {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
+          </div>
+        </div>
+        <div className="col-md-6 d-flex justify-content-start align-items-center">
+          <span className="panel-details__title">
+            {this.renderLabel('Release')}:
+          </span>
+          <div className="panel-details__value">
+            <p>{
+              Contribution.printDate(this.getValue('described.releaseDate'))
+            }</p>
+            {/* {this.renderWithToolTipIfDifferent(
+              'described.releaseDate',
+              <InlineEditor
+                field={'described.releaseDate'}
+                extraClass={this.classIfDifferent('described.releaseDate')}
+                readOnly={readOnly}
+                type="date"
+                initialValue={Contribution.printDate(this.getOriginalValue('described.releaseDate'))}
+                value={Contribution.printDate(this.getValue('described.releaseDate'))}
+                onChange={this.fieldChange('described.releaseDate')}
+                validator={value => true}
+                placeholder={'YYYY-MM-DD'}
+                revertable
+                onRevert={() => onRevert('described.releaseDate')}
+              />
+            )} */}
+          </div>
+        </div>
+        <div className="col-md-6 d-flex justify-content-start align-items-center">
+          <span className="panel-details__title">
+            {this.renderLabel('Files')}:
+          </span>
+          <div className="panel-details__value">
+            <FileCountRenderer definition={definition} />
+          </div>
+        </div>
+        <div className="list-panel__quick-edit">
+          <QuickEditModel
+            open={this.state.modelOpen}
+            closeModel={this.handleModel}
+            definition={
+              definition
+            }
+            field={'described.sourceLocation'}
+            extraClass={this.classIfDifferent('described.sourceLocation')}
+            readOnly={readOnly}
+            initialValue={{
+              declared: this.getOriginalValue('licensed.declared'),
+              source: Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation')),
+              release: Contribution.printDate(this.getOriginalValue('described.releaseDate')),
+              repo: "",
+            }}
+
+            values={{
+              declared: this.getValue('licensed.declared'),
+              source: Contribution.printCoordinates(this.getValue('described.sourceLocation')),
+              release: Contribution.printDate(this.getValue('described.releaseDate')),
+              repo: "",
+            }}
+            onChange={{
+              declared: this.fieldChange('licensed.declared'),
+              source: this.fieldChange('described.sourceLocation', isEqual, Contribution.toSourceLocation),
+              release: this.fieldChange('described.releaseDate'),
+              repo: "",
+            }}
+            editor={SourcePicker}
+            validator={value => true}
+            placeholder={'Source location'}
+            revertable
+            onRevert={() => onRevert('described.sourceLocation')}
+          />
+          <button onClick={this.handleModel} className="quick-edit-btn">
+            Edit
+          </button>
+        </div>
+      </div>
+      // <Row>
+      //   <Col sm={5}>
+      //     <Row>
+      //       <Col xs={3}>{this.renderLabel('Declared')}</Col>
+      //       <Col xs={9} className="definition__line">
+      //         {this.renderWithToolTipIfDifferent(
+      //           'licensed.declared',
+      //           <LicensesRenderer
+      //             definition={definition}
+      //             field={'licensed.declared'}
+      //             readOnly={readOnly}
+      //             initialValue={this.getOriginalValue('licensed.declared')}
+      //             value={this.getValue('licensed.declared')}
+      //             onChange={this.fieldChange('licensed.declared')}
+      //             revertable
+      //             onRevert={() => onRevert('licensed.declared')}
+      //           />
+      //         )}
+      //       </Col>
+      //     </Row>
+      //     <Row>
+      //       <Col xs={3}>{this.renderLabel('Source')}</Col>
+      //       <Col xs={9} className="definition__line">
+      //         {this.renderWithToolTipIfDifferent(
+      //           'described.sourceLocation',
+      //           <ModalEditor
+      //             definition={definition}
+      //             field={'described.sourceLocation'}
+      //             extraClass={this.classIfDifferent('described.sourceLocation')}
+      //             readOnly={readOnly}
+      //             initialValue={Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation'))}
+      //             value={Contribution.printCoordinates(this.getValue('described.sourceLocation'))}
+      //             onChange={this.fieldChange('described.sourceLocation', isEqual, Contribution.toSourceLocation)}
+      //             editor={SourcePicker}
+      //             validator={value => true}
+      //             placeholder={'Source location'}
+      //             revertable
+      //             onRevert={() => onRevert('described.sourceLocation')}
+      //           />,
+      //           'right',
+      //           Contribution.printCoordinates
+      //         )}
+      //       </Col>
+      //     </Row>
+      //     <Row>
+      //       <Col xs={3}>{this.renderLabel('Release')}</Col>
+      //       <Col xs={9} className="definition__line">
+      //         {this.renderWithToolTipIfDifferent(
+      //           'described.releaseDate',
+      //           <InlineEditor
+      //             field={'described.releaseDate'}
+      //             extraClass={this.classIfDifferent('described.releaseDate')}
+      //             readOnly={readOnly}
+      //             type="date"
+      //             initialValue={Contribution.printDate(this.getOriginalValue('described.releaseDate'))}
+      //             value={Contribution.printDate(this.getValue('described.releaseDate'))}
+      //             onChange={this.fieldChange('described.releaseDate')}
+      //             validator={value => true}
+      //             placeholder={'YYYY-MM-DD'}
+      //             revertable
+      //             onRevert={() => onRevert('described.releaseDate')}
+      //           />
+      //         )}
+      //       </Col>
+      //     </Row>
+      //   </Col>
+      //   <Col sm={7}>
+      //     <Row>
+      //       <Col xs={3}>{this.renderLabel('Discovered')}</Col>
+      //       <Col xs={9} className="definition__line">
+      //         {this.renderPopover(licensed, 'discovered.expressions', 'Discovered')}
+      //       </Col>
+      //     </Row>
+      //     <Row>
+      //       <Col xs={3}>{this.renderLabel('Attribution')}</Col>
+      //       <Col xs={9} className="definition__line">
+      //         {this.renderPopover(licensed, 'attribution.parties', 'Attributions')}
+      //       </Col>
+      //     </Row>
+      //     <Row>
+      //       <Col xs={3}>{this.renderLabel('Files')}</Col>
+      //       <Col xs={9} className="definition__line">
+      //         <FileCountRenderer definition={definition} />
+      //       </Col>
+      //     </Row>
+      //   </Col>
+      // </Row>
     )
   }
 

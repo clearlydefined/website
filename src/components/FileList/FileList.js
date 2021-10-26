@@ -12,7 +12,8 @@ import FacetsRenderer from '../../components/FacetsRenderer'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
 import Attachments from '../../utils/attachments'
-
+import folderIcon from "../../images/icons/folderIcon.svg"
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 export default class FileList extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func,
@@ -310,16 +311,17 @@ export default class FileList extends PureComponent {
 
     return (
       <Table
-        className="file-list"
+        // className="file-list"
         columns={columns}
         dataSource={searchText ? filteredFiles : files}
+        expandableRowIcon={<FolderOpenIcon />}
         onChange={this.handleChange}
         expandedRowKeys={expandedRows}
         onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
         pagination={false}
-        bordered={false}
-        indentSize={8}
-        scroll={{ y: 650 }}
+      // bordered={false}
+      // indentSize={28}
+      // scroll={{ y: 650 }}
       />
     )
   }

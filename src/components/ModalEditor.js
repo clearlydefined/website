@@ -93,20 +93,21 @@ class ModalEditor extends React.Component {
     const { onClick, onRevert, revertable, readOnly, showEditIcon, initialValue, value, field } = this.props
     const changed = initialValue !== value
     return (
-      <span className="list-singleLine" name={field}>
+      <span className="list-singleLine detail-card" name={field}>
+        {this.renderValue()}
         {showEditIcon && !readOnly && (
           <i
-            className="fas fa-pencil-alt editable-marker"
+            className="edit-icon fas fa-pencil-alt editable-marker"
             onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
           />
         )}
-        {!readOnly && revertable && (
+        {/* {!readOnly && revertable && (
           <i
             className={`fas fa-undo editable-marker ${!changed && 'fa-disabled'}`}
             onClick={() => onRevert && changed && onRevert()}
           />
-        )}
-        {this.renderValue()}
+        )} */}
+
       </span>
     )
   }

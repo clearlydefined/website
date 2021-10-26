@@ -78,19 +78,20 @@ class InlineEditor extends React.Component {
     return (
       <span className="list-singleLine" name={field}>
         <Fragment>
+          {this.renderValue()}
           {!readOnly && editIcon && (
             <i
               className="fas fa-pencil-alt editable-marker"
               onClick={() => this.setState({ editing: true }, () => onClick && onClick())}
             />
           )}
-          {!readOnly && revertable && (
+          {/* {!readOnly && revertable && (
             <i
               className={`fas fa-undo editable-marker ${!changed && 'fa-disabled'}`}
               onClick={() => onRevert && changed && onRevert()}
             />
-          )}
-          {this.renderValue()}
+          )} */}
+
         </Fragment>
       </span>
     )

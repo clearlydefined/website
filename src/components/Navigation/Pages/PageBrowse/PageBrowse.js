@@ -25,7 +25,8 @@ import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
 import ActiveFilters from '../../Sections/ActiveFilters'
-
+import { Typography } from '@material-ui/core'
+import searchSvg from "../../../../images/icons/searchSvg.svg"
 /**
  * Page that show to the user a list of interesting definitions to curate
  */
@@ -46,13 +47,13 @@ class PageBrowse extends SystemManagedList {
     const urlParams = getParamsFromUrl(this.props.location.search)
     urlParams
       ? this.setState(
-          {
-            activeSort: urlParams.sort && urlParams.sort,
-            activeName: urlParams.name && urlParams.name,
-            activeFilters: omit(urlParams, ['sort', 'name'])
-          },
-          () => this.updateData()
-        )
+        {
+          activeSort: urlParams.sort && urlParams.sort,
+          activeName: urlParams.name && urlParams.name,
+          activeFilters: omit(urlParams, ['sort', 'name'])
+        },
+        () => this.updateData()
+      )
       : this.updateData()
   }
 
@@ -84,12 +85,30 @@ class PageBrowse extends SystemManagedList {
     const options = { ...filterOptions, list: names }
     return (
       <>
-        <Row className="show-grid spacer">
+        <div className="top-search-bar">
+          <div className="search-logo">
+            <img src={searchSvg} alt="search" />
+          </div>
+          <div className="search-input-container">
+            <FilterBar
+              options={options}
+              onChange={this.onBrowse}
+              onSearch={this.onSearch}
+              onClear={this.onBrowse}
+              clearOnChange
+            />
+          </div>
+          <div className="search-dropdown-wrapper">
+            {/* {this.renderFilter(types, 'Type', 'type')} */}
+            {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
+          </div>
+        </div>
+        {/* <Row className="show-grid spacer">
           <Col md={2} mdOffset={1}>
             {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
           </Col>
-          <Col md={8}>
-            <div className={'horizontalBlock'}>
+          <Col md={8}> */}
+        {/* <div className={'horizontalBlock'}>
               {this.renderFilter(types, 'Type', 'type')}
               <span>&nbsp;</span>
               <FilterBar
@@ -99,9 +118,9 @@ class PageBrowse extends SystemManagedList {
                 onClear={this.onBrowse}
                 clearOnChange
               />
-            </div>
-          </Col>
-        </Row>
+            </div> */}
+        {/* </Col>
+        </Row> */}
       </>
     )
   }
@@ -213,6 +232,7 @@ class PageBrowse extends SystemManagedList {
   }
 
   async updateData(continuationToken) {
+
     const { activeFilters, activeSort, activeName } = this.state
     const query = Object.assign({}, activeFilters)
     if (continuationToken) query.continuationToken = continuationToken
@@ -271,51 +291,68 @@ class PageBrowse extends SystemManagedList {
     const { components, curations, definitions, session } = this.props
     const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
     return (
-      <Grid className="main-container flex-column">
-        <ContributePrompt
-          ref={this.contributeModal}
-          session={session}
-          onLogin={this.handleLogin}
-          actionHandler={this.doContribute}
-          definitions={this.getDefinitionsWithChanges()}
-        />
-        {this.renderTopFilters()}
-        <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
-          <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
-            <i className="fas fa-spinner fa-spin" />
-            <ComponentList
-              multiSelectEnabled={this.multiSelectEnabled}
-              readOnly={false}
-              list={components.transformedList}
-              listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-              loadMoreRows={this.loadMoreRows}
-              onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
-              onChange={this.onChangeComponent}
-              onInspect={this.onInspect}
-              renderFilterBar={this.renderFilterBar}
-              curations={curations}
-              definitions={definitions}
-              noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
-              sequence={sequence}
-              hasChange={this.hasChange}
-              hideVersionSelector
-              hideRemoveButton
-            />
-            {currentDefinition && (
-              <FullDetailPage
-                modalView
-                visible={showFullDetail}
-                onClose={this.onInspectClose}
-                onSave={this.onChangeComponent}
-                path={path}
-                currentDefinition={currentDefinition}
-                component={currentComponent}
-                readOnly={false}
-              />
-            )}
+      <div className="container search-components-wrap">
+        <div className="row">
+          <div className="col-12">
+            <h2 className="h1 mb-4">Search Components</h2>
           </div>
-        </Section>
-      </Grid>
+          <div>
+            {this.renderTopFilters()}
+          </div>
+          <div className="col-12">
+            <ContributePrompt
+              ref={this.contributeModal}
+              session={session}
+              onLogin={this.handleLogin}
+              actionHandler={this.doContribute}
+              definitions={this.getDefinitionsWithChanges()}
+            />
+          </div>
+          <div className="col-12">
+            <Section className="flex-grow-column clearly-component-wrap"
+            // name={this.tableTitle()}
+            // actionButton={this.renderButtons()}
+            >
+              <div
+                className={
+                  classNames('clearly-table flex-grow',
+                    { loading: components.isFetching })}>
+                <i className="fas fa-spinner fa-spin" />
+                <ComponentList
+                  multiSelectEnabled={this.multiSelectEnabled}
+                  readOnly={false}
+                  list={components.transformedList}
+                  listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+                  loadMoreRows={this.loadMoreRows}
+                  onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
+                  onChange={this.onChangeComponent}
+                  onInspect={this.onInspect}
+                  renderFilterBar={this.renderFilterBar}
+                  curations={curations}
+                  definitions={definitions}
+                  noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
+                  sequence={sequence}
+                  hasChange={this.hasChange}
+                  hideVersionSelector
+                  hideRemoveButton
+                />
+                {currentDefinition && (
+                  <FullDetailPage
+                    modalView
+                    visible={showFullDetail}
+                    onClose={this.onInspectClose}
+                    onSave={this.onChangeComponent}
+                    path={path}
+                    currentDefinition={currentDefinition}
+                    component={currentComponent}
+                    readOnly={false}
+                  />
+                )}
+              </div>
+            </Section>
+          </div>
+        </div>
+      </div>
     )
   }
 }

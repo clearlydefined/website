@@ -73,7 +73,7 @@ export default class FilterBar extends Component {
         className="filter-bar"
         ref={typeahead => (this.typeahead = typeahead)}
         useCache={false}
-        placeholder="Component search..."
+        placeholder="Search for descriptors like “composer”, or “gem”"
         onChange={this.onChange}
         options={options.list}
         isLoading={options.isFetching}

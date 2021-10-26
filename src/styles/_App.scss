@@ -1,11 +1,31 @@
 /* Copyright (c) Microsoft Corporation and others. Licensed under the MIT license. */
 /* SPDX-License-Identifier: MIT */
 
+html,
+body {
+  font-size: 62.5%;
+  font-family: 'inter', sans-serif;
+}
+
+body,
+input,
+button,
+select,
+textarea {
+  font-family: 'inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+}
+
 .App {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'inter', sans-serif;
   font-weight: 400;
 }
 
@@ -530,4 +550,15 @@ hr {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+
+.clearly-component-wrap {
+  > .section-header {
+    display: none;
+  }
+}
+
+.search-components-wrap {
+  margin-top: 38px;
 }

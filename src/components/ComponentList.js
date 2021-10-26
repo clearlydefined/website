@@ -9,6 +9,7 @@ import { RowEntityList, DefinitionEntry } from './'
 import EntitySpec from '../utils/entitySpec'
 import ComponentButtons from './Navigation/Ui/ComponentButtons'
 import { withResize } from '../utils/WindowProvider'
+import carrotdownFill from "../images/icons/carrotdownFill.svg"
 
 class ComponentList extends React.Component {
   static propTypes = {
@@ -108,13 +109,13 @@ class ComponentList extends React.Component {
     let curation = this.getCuration(component)
     curation = curation || { contributions: [], curations: {} }
     return (
-      <div key={key} style={style} className="component-row">
+      <div key={key} className="component-row">
         <DefinitionEntry
-          multiSelectEnabled={multiSelectEnabled}
-          onSelectAll={onSelectAll}
-          isSelected={selected[index] || false}
-          toggleCheckbox={multiSelectEnabled && toggleCheckbox.bind(this, index)}
-          draggable
+          // multiSelectEnabled={multiSelectEnabled}
+          // onSelectAll={onSelectAll}
+          // isSelected={selected[index] || false}
+          // toggleCheckbox={multiSelectEnabled && toggleCheckbox.bind(this, index)}
+          // draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
           curation={curation}
@@ -149,9 +150,14 @@ class ComponentList extends React.Component {
     const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div className="component-list flex-grow">
-        {renderFilterBar()}
-        <FormGroup className="flex-grow-column">
+      <div className="clearly-table-body flex-grow">
+        {/* {renderFilterBar()} */}
+        <div className="clearly-header">
+          <div className="table-header-fcloumn"><h4>Component</h4></div>
+          <div className="table-header-cloumn"><h4>Score </h4><img src={carrotdownFill} alt="filter" /></div>
+          <div className="table-header-cloumn"><h4>Release Date </h4>  <img src={carrotdownFill} alt="filter" /></div>
+        </div>
+        <FormGroup className="flex-grow-column ">
           <RowEntityList
             list={list}
             listLength={listLength}
