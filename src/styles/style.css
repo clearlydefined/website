@@ -244,7 +244,7 @@ a:hover {
   border: none;
   color: #000;
   text-align: left;
-  font-size: 14px;
+  font-size: 14px !important;
   padding-left: 24px;
   box-shadow: none !important; }
 
@@ -265,7 +265,7 @@ a:hover {
 .top-search-side-dropdown::after {
   all: unset;
   position: absolute;
-  top: 5px;
+  top: 10px;
   right: 2px;
   content: '';
   width: 15px;
@@ -274,6 +274,9 @@ a:hover {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 72%; }
+  
+.top-search-side-dropdown-items .dropdown-items {
+    font-size: 14px !important; }
 
 .search-dropdown-wrapper .dropdown-menu {
   width: 100%;
