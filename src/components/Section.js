@@ -22,7 +22,7 @@ class Section extends Component {
       <div className={className}>
         {isMobile ? (
           <>
-            <Row className="section-header">
+            <Row className={`section-header`}>
               <Col xs={12}>
                 <div className="section-title">{name}</div>
               </Col>

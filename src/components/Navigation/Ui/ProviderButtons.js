@@ -13,9 +13,14 @@ export default class ProviderButtons extends Component {
     const { onClick, activeProvider } = this.props
 
     return (
-      <ButtonGroup>
+      <ButtonGroup className="providers-button-wrapper">
         {providers.map(item => (
-          <Button name={item.value} onClick={() => onClick(item.value)} active={activeProvider === item.value}>
+          <Button
+            className="provider-button"
+            name={item.value}
+            onClick={() => onClick(item.value)}
+            active={activeProvider === item.value}
+          >
             <img src={item.image} height="20" alt={item.label} title={item.label} />
           </Button>
         ))}

@@ -1,12 +1,39 @@
 /* Copyright (c) Microsoft Corporation and others. Licensed under the MIT license. */
 /* SPDX-License-Identifier: MIT */
 
+html,
+body {
+  font-size: 62.5%;
+  font-family: 'inter', sans-serif !important;
+}
+
+body,
+input,
+button,
+select,
+textarea {
+  font-family: 'inter', sans-serif !important;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+}
+
 .App {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'inter', sans-serif;
   font-weight: 400;
+  .app-header {
+    z-index: 1;
+  }
+}
+
+main {
+  margin: 0;
 }
 
 .App-content {
@@ -16,6 +43,21 @@
     height: 20px;
     line-height: 0.1;
     padding: 8px 4px 1px 4px;
+    font-weight: 600 !important;
+  }
+}
+
+.pckg-title-details {
+  .cd-badge {
+    height: 32px;
+    width: 32px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    border-radius: 100%;
+    margin-left: 10px;
+    margin-bottom: 2px;
+    padding: 0px;
   }
 }
 
@@ -25,6 +67,75 @@
 
 .semi-bold {
   font-weight: 600;
+}
+
+.mkt-h1 {
+  font-style: normal;
+  font-weight: 800 !important;
+  font-size: 48px !important;
+  line-height: 105% !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 24px !important;
+  color: inherit;
+
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  @include start-at($medium) {
+    font-size: 64px !important;
+  }
+}
+.mkt-h2 {
+  font-style: normal;
+  font-weight: 600 !important;
+  font-size: 36px !important;
+  line-height: 105% !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 24px !important;
+  color: inherit;
+
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  @include start-at($medium) {
+    font-size: 48px !important;
+  }
+}
+.mkt-h3 {
+  font-style: normal;
+  font-weight: 600 !important;
+  font-size: 24px !important;
+  line-height: 105% !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 12px !important;
+  color: inherit;
+
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  @include start-at($medium) {
+    font-size: 32px !important;
+  }
+}
+.mkt-h4 {
+  font-style: normal;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  line-height: 105% !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 12px !important;
+  color: inherit;
+
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  @include start-at($medium) {
+    font-size: 24px !important;
+  }
 }
 
 .main-container {
@@ -99,17 +210,6 @@
   }
 }
 
-.about-container {
-  font-size: 1.25em;
-  @media (max-width: $screen-sm) {
-    margin-top: -80px;
-  }
-
-  .center-block {
-    vertical-align: top;
-  }
-}
-
 .labelled-button {
   display: inline-block;
   width: 100%;
@@ -179,16 +279,27 @@
 }
 
 .section-title {
-  font-size: 2em;
+  font-size: 18px;
+  color: $gray-900;
+  font-weight: 700;
+
+  a {
+    color: $brand !important;
+    text-decoration: underline !important;
+  }
 
   @media screen and (max-width: $screen-lg) {
-    font-size: 1.5em;
+    font-size: 24px;
   }
 
   .cd-badge {
     margin-bottom: 3px;
     vertical-align: middle;
   }
+}
+
+.section-body {
+  margin-bottom: 72px;
 }
 
 .section-button,
@@ -251,6 +362,10 @@
   font-size: x-small;
   padding-right: 4px;
   cursor: pointer;
+
+  &:hover {
+    color: blue;
+  }
 }
 
 .editable-editor {
@@ -276,6 +391,12 @@
 .two-line-entry {
   display: flex;
   flex-direction: column;
+
+  &:hover {
+    // border: 1px solid #86b7fe;
+    //border: 1px solid $gray-100;
+    // border-bottom: 2px solid #86b7fe !important;
+  }
 }
 
 .definition {
@@ -530,4 +651,127 @@ hr {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.clearly-component-wrap {
+  > .section-header {
+    display: none;
+  }
+}
+
+.search-components-wrap {
+  margin-top: 38px;
+  margin-bottom: 80px;
+}
+
+.clearly-menu {
+  min-width: 228px;
+  position: absolute;
+  top: 100%;
+  right: 8px;
+  background-color: var(--cl-white);
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 999;
+  box-shadow: 0px 0px 11px 2px rgba(0, 0, 0, 0.05), 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.disabled-btn {
+  color: gray !important;
+}
+.clearly-menu-btns {
+  border: none;
+  //color: $gray-900;
+  color: $brand;
+  font-weight: 500;
+  outline: none;
+  background: var(--cl-white);
+  border-radius: 4px;
+  padding: 6px 8px;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  display: block;
+  margin: 1px auto 3px auto;
+  transition: background 0.4s ease;
+}
+
+.clearly-menu-btns:hover {
+  background: #e8eeff;
+  color: $brand;
+}
+
+.opened {
+  display: block;
+  opacity: 1;
+}
+
+.closed {
+  display: none;
+  opacity: 0;
+}
+
+.MuiTypography-h1,
+.MuiTypography-h2,
+.MuiTypography-h3,
+.MuiTypography-h4,
+.MuiTypography-h5,
+.MuiTypography-h6 {
+  font-family: 'inter', sans-serif !important;
+}
+
+.alert {
+  border-radius: 8px !important;
+  padding: 12px 36px 12px 18px !important;
+  color: $gray-900 !important;
+  border: none !important;
+  box-shadow: 0px 1px 2px rgba(43, 59, 83, 0.29) !important;
+
+  &.alert-warning,
+  &.alert-danger {
+    background: #f9e6e8 !important;
+    a,
+    .btn {
+      color: rgb(206, 54, 67) !important;
+      padding: 0;
+      font-weight: 500;
+      border: none !important;
+      padding: 0 !important;
+      min-width: auto !important;
+      height: auto !important;
+      background: transparent !important;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+  &.alert-success {
+    background: #eaf5f1 !important;
+
+    a {
+      color: rgb(0, 135, 90) !important;
+    }
+  }
+
+  &.alert-info {
+    background: $gray-100;
+    border-radius: 0 !important;
+    border: 1px solid #dfe5ee !important;
+    border-left: 4px solid $brand !important;
+  }
+
+  button.close {
+    appearance: none;
+    box-shadow: none;
+    border: none;
+    color: $gray-900;
+    font-size: 20px;
+    background: transparent;
+    position: absolute;
+    top: 4px;
+    right: 0;
+    padding: 12px;
+    line-height: 12px;
+  }
 }

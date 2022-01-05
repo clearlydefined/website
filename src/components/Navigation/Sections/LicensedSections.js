@@ -38,23 +38,25 @@ class LicensedSection extends Component {
         placeholder: 'SPDX license',
         type: 'license',
         editable: true,
-        editor: EnhancedLicensePicker
-      },
-      {
-        multiple: true,
-        label: 'Attributions',
-        field: 'attribution.parties'
+        editor: EnhancedLicensePicker,
       },
       {
         label: 'Discovered',
         field: 'discovered.expressions',
-        multiple: true
+        multiple: true,
       },
+      {
+        multiple: true,
+        label: 'Attributions',
+        field: 'attribution.parties',
+      },
+
       {
         editable: true,
         field: 'files',
         label: 'Files',
-        component: <FileCountRenderer definition={definition} />
+        component: <FileCountRenderer detailView={true} definition={definition} />,
+        lastIndex: true,
       }
     ]
 

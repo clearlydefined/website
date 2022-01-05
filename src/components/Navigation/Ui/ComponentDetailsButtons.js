@@ -6,7 +6,11 @@ import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
-
+import techIcon from '../../../images/icons/tech.svg'
+import shareIcon from '../../../images/icons/share.svg'
+import linkCopyIcon from '../../../images/icons/linkCopy.svg'
+import { IconButton } from '@material-ui/core'
+import { asyncLocalStorage } from 'redux-persist/storages'
 class ComponentDetailsButtons extends Component {
   constructor(props) {
     super(props)
@@ -18,9 +22,14 @@ class ComponentDetailsButtons extends Component {
   }
 
   openSourceForComponent = definition => {
-    const sourceLocation = get(definition, 'described.sourceLocation')
-    const sourceEntity = sourceLocation && EntitySpec.fromObject(sourceLocation)
-    const path = `${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(sourceEntity).toPath()}`
+    // const sourceLocation = get(definition, 'described.sourceLocation')
+    // const sourceEntity = sourceLocation && EntitySpec.fromObject(sourceLocation)
+    // const path = `${ROUTE_DEFINITIONS}/${EntitySpec.fromObject(sourceEntity).toPath()}`
+    const path = `/?type=${get(definition, 'coordinates.type')}&sortDesc=true&sort=releaseDate&name=${get(
+      definition,
+      'coordinates.name'
+    )}`
+    console.log('pathpathpath', path)
     window.open(`${window.location.origin}${path}`)
   }
 
@@ -99,11 +108,34 @@ class ComponentDetailsButtons extends Component {
       </Menu>
     )
     return (
-      <Dropdown overlay={menu} trigger="hover">
-        <Button bsStyle="info">
-          <i class="fas fa-ellipsis-v" />
-        </Button>
-      </Dropdown>
+      <>
+        <IconButton
+          className="radius-btn border mx-2"
+          onClick={() => this.openRegistryURL(item)}
+          title="Open package URL"
+        >
+          <img src={shareIcon} alt="" />
+        </IconButton>
+        <IconButton
+          className="radius-btn border mx-2"
+          onClick={() => this.openSourceForComponent(item)}
+          title="List other versions of this component"
+        >
+          <img src={techIcon} alt="" />
+        </IconButton>
+        <IconButton
+          className="radius-btn border mx-2"
+          onClick={() => this.copyToClipboard(this.renderUrl())}
+          title="Copy component URL"
+        >
+          <img src={linkCopyIcon} alt="" />
+        </IconButton>
+      </>
+      // <Dropdown overlay={menu} trigger="hover">
+      //   <Button bsStyle="info">
+      //     <i class="fas fa-ellipsis-v" />
+      //   </Button>
+      // </Dropdown>
     )
   }
 }

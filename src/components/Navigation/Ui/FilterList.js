@@ -1,9 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import PropTypes from 'prop-types'
 import find from 'lodash/find'
-import { DropdownButton, MenuItem } from 'react-bootstrap'
+import { Menu, MenuItem, Button, Icon } from '@material-ui/core'
 
 class FilterList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { menu: null }
+  }
+
   static propTypes = {
     list: PropTypes.array.isRequired,
     title: PropTypes.string,
@@ -11,35 +16,57 @@ class FilterList extends Component {
     disabled: PropTypes.bool,
     value: PropTypes.object,
     onFilter: PropTypes.func.isRequired,
-    variant: PropTypes.string
+    className: PropTypes.string
+    // variant: PropTypes.string
+  }
+  handleClose = () => {
+    this.setState({ menu: null })
+  }
+  handleClick = event => {
+    this.setState({ menu: event.currentTarget })
   }
   render() {
-    const { list, title, id, disabled, onFilter, value, variant } = this.props
+    const { list, title, id, disabled, onFilter, value, variant, className } = this.props
     return (
-      <DropdownButton
-        className="list-button"
-        bsStyle={variant || 'default'}
-        pullRight
-        title={title}
-        disabled={disabled}
-        id={id}
-      >
-        {list.map((filterType, index) => {
-          return (
-            <MenuItem
-              className="page-definitions__menu-item"
-              key={index}
-              onSelect={onFilter}
-              eventKey={{ type: id, value: filterType.value }}
-            >
-              <span>{filterType.label}</span>
-              {value && find(value, (filter, filterId) => filterId === id && filter === filterType.value) && (
-                <i className="fas fa-check" />
-              )}
-            </MenuItem>
-          )
-        })}
-      </DropdownButton>
+      <div className={`w-100 ${className}`}>
+        <Button
+          className="top-search-side-dropdown w-100"
+          id="basic-button"
+          aria-haspopup="true"
+          aria-expanded={this.state.menu ? 'true' : undefined}
+          onClick={this.handleClick}
+          disabled={disabled}
+          size="large"
+          disableRipple
+        >
+          {title}
+        </Button>
+        <Menu
+          id="basic-menu"
+          open={Boolean(this.state.menu)}
+          onClose={this.handleClose}
+          anchorEl={this.state.menu}
+          className="top-search-side-dropdown-items"
+          MenuListProps={{
+            'aria-labelledby': 'basic-button'
+          }}
+        >
+          {list.map((filterType, index) => {
+            return (
+              <MenuItem
+                className="dropdown-items"
+                key={index}
+                onClick={e => (onFilter({ type: id, value: filterType.value }), this.handleClose())}
+              >
+                <span>{filterType.label}</span>
+                {value && find(value, (filter, filterId) => filterId === id && filter === filterType.value) && (
+                  <i className="fas fa-check filter-selected-check-icon" />
+                )}
+              </MenuItem>
+            )
+          })}
+        </Menu>
+      </div>
     )
   }
 }

@@ -1,20 +1,357 @@
-.card-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  .user-card-body {
-    .user-card-name {
-      font-size: 2rem;
+.stats-container {
+  background: #121212;
+  margin-bottom: -111px;
+  .stats-header {
+    color: #fff;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 80px;
+    .header-left-icon {
+      position: relative;
+      height: 126px;
+      width: 84px;
+      @media screen and (max-width: 525px) {
+        width: 60px;
+        height: 90px;
+      }
+      .top-left {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        top: 0;
+        left: 0;
+        background-color: rgba(90, 202, 250, 1);
+        @media screen and (max-width: 525px) {
+          width: 30px;
+          height: 30px;
+        }
+      }
+      .bottom-left {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(90, 202, 250, 1);
+        @media screen and (max-width: 525px) {
+          width: 30px;
+          height: 30px;
+        }
+      }
+      .center-right {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        top: 33.33%;
+        right: 0;
+        background-color: rgba(29, 82, 212, 1);
+        @media screen and (max-width: 525px) {
+          width: 30px;
+          height: 30px;
+        }
+      }
     }
-
-    .user-card-position-name {
-      font-size: 1.5rem;
+    .header-content {
+      h2 {
+        font-family: Inter;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 64px;
+        line-height: 105%;
+        text-align: center;
+        letter-spacing: -0.02em;
+        color: #ffffff;
+        @media screen and (max-width: 525px) {
+          font-size: 50px;
+        }
+        @media screen and (max-width: 425px) {
+          font-size: 40px;
+        }
+      }
+      p {
+        font-family: Inter;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 125%;
+        text-align: center;
+        letter-spacing: -0.01em;
+        color: #ffffff;
+        @media screen and (max-width: 525px) {
+          font-size: 20px;
+        }
+        @media screen and (max-width: 425px) {
+          font-size: 15px;
+        }
+      }
+    }
+    .header-right-icon {
+      position: relative;
+      height: 126px;
+      width: 84px;
+      @media screen and (max-width: 525px) {
+        width: 60px;
+        height: 90px;
+      }
+      .top-right {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        top: 0;
+        right: 0;
+        background-color: rgba(90, 202, 250, 1);
+        @media screen and (max-width: 525px) {
+          width: 30px;
+          height: 30px;
+        }
+      }
+      .bottom-right {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(90, 202, 250, 1);
+        @media screen and (max-width: 525px) {
+          width: 30px;
+          height: 30px;
+        }
+      }
+      .center-left {
+        position: absolute;
+        width: 42px;
+        height: 42px;
+        top: 33.33%;
+        left: 0;
+        background-color: rgba(29, 82, 212, 1);
+        @media screen and (max-width: 525px) {
+          width: 30px;
+          height: 30px;
+        }
+      }
     }
   }
+  .header-subcontent {
+    display: flex;
+    justify-content: center;
+    color: #fff;
+    margin-top: 30px;
+    margin-bottom: 80px;
+    & div:nth-child(1) {
+      margin-right: 15px;
+    }
+    .value {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 105%;
+      text-align: center;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+    .label {
+      font-family: Inter;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 125%;
+      text-align: center;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+  }
+  .card-container {
+    display: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: auto;
+    .card {
+      background: #383a43 !important;
+      color: #ffffff;
+    }
+    @media screen and (max-width: 767px) {
+      display: flex;
+    }
+    .user-card-header {
+      background-size: contain !important;
+    }
+    .user-card-body {
+      .user-card-name {
+        font-size: 2rem;
+        color: #ffffff;
+      }
 
-  .user-card-stats {
-    font-size: 1.1rem;
-    text-align: center;
+      .user-card-position-name {
+        font-size: 1.5rem;
+        color: #ffffff;
+      }
+    }
+
+    .user-card-stats {
+      font-size: 1.1rem;
+      text-align: center;
+      .stat-container {
+        .stat-value {
+          color: #ffffff;
+        }
+        .stat-name {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+  .card-list-contianer {
+    display: flex;
+    width: 816px;
+    margin: auto auto 16px auto;
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+    .image {
+      width: 80px;
+      height: 80px;
+      background-color: #fff;
+    }
+    .list-content {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+      background: #383a43;
+      color: #fff;
+      padding-left: 28px;
+      padding-right: 28px;
+      .title {
+        width: 50%;
+        font-family: Inter;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 105%;
+        letter-spacing: -0.02em;
+        color: #ffffff;
+      }
+      .details {
+        display: flex;
+        width: 50%;
+        justify-content: space-between;
+        align-items: center;
+        .total {
+          & p:nth-child(1) {
+            font-family: Inter;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 125%;
+            text-align: center;
+            letter-spacing: -0.01em;
+            color: #ffffff;
+          }
+
+          & p:nth-child(2) {
+            font-family: Inter;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 125%;
+            text-align: center;
+            letter-spacing: -0.01em;
+            color: #ffffff;
+          }
+        }
+        .licensed,
+        .described {
+          & p:nth-child(1) {
+            font-family: Inter;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 105%;
+            text-align: center;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+          }
+
+          & p:nth-child(2) {
+            font-family: Inter;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 125%;
+
+            text-align: center;
+            letter-spacing: -0.01em;
+            color: #ffffff;
+          }
+        }
+        p {
+          margin: 0;
+        }
+      }
+    }
+  }
+  .community-item-container {
+    padding-top: 60px;
+    background: #121212;
+    margin-bottom: -112px;
+    padding-bottom: 135px !important;
+    @media (max-width: 767px) and (min-width: 320px) {
+    }
+    .title {
+      text-align: center;
+      font-weight: 600;
+      font-size: 32px;
+      color: #ffffff;
+      padding-bottom: 30px;
+    }
+    .community-items {
+      border-bottom: 1px solid #4a4a4a;
+      padding-bottom: 20px;
+      .community-item {
+        text-align: center;
+        padding-left: 20px;
+        padding-right: 20px;
+        @media (max-width: 767px) and (min-width: 320px) {
+          margin-top: 10px;
+          &:not(:last-child) {
+            border-bottom: 1px solid #e5e5e5;
+            padding-bottom: 10px;
+          }
+        }
+        img {
+          width: 50px;
+          height: 69px;
+        }
+        .community-item-name {
+          padding-top: 30px;
+          padding-bottom: 20px;
+          font-weight: 600;
+          font-size: 18px;
+          color: #ffffff;
+          @media (max-width: 767px) and (min-width: 320px) {
+            padding-top: 15px;
+            padding-bottom: 10px;
+          }
+        }
+        .community-item-discription {
+          font-size: 14px;
+          line-height: 150%;
+          color: #ffffff;
+          letter-spacing: -0.01em;
+          min-height: 63px;
+          @media (max-width: 767px) and (min-width: 320px) {
+            min-height: auto;
+          }
+        }
+        a {
+          font-family: Inter;
+          font-size: 14px;
+          text-decoration-line: underline;
+          color: #ffffff;
+        }
+      }
+    }
   }
 }

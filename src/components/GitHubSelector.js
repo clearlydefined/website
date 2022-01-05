@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getGitHubSearch } from '../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
+import searchSvg from '../images/icons/searchSvg.svg'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 export default class GitHubSelector extends Component {
@@ -14,7 +15,10 @@ export default class GitHubSelector extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { namespace: { isLoading: false, options: [] }, component: { isLoading: false, options: [] } }
+    this.state = {
+      namespace: { isLoading: false, options: [], focus: false },
+      component: { isLoading: false, options: [], focus: false }
+    }
     this.getOptions = this.getOptions.bind(this)
     this.getComponentOptions = this.getComponentOptions.bind(this)
     this.onChange = this.onChange.bind(this)
@@ -72,39 +76,52 @@ export default class GitHubSelector extends Component {
     const { namespace, component } = this.state
     return (
       <div className="horizontalBlock">
-        <AsyncTypeahead
-          id="github-namespace-selector"
-          inputProps={{ dataTestId: 'github-namespace-selector' }}
-          className="selector-picker"
-          ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
-          useCache={false}
-          options={namespace.options}
-          placeholder={'User / Organization'}
-          onChange={this.onChange}
-          labelKey="id"
-          clearButton
-          highlightOnlyResult
-          selectHintOnEnter
-          isLoading={namespace.isLoading}
-          onSearch={this.getOptions}
-        />
-
-        <AsyncTypeahead
-          id="github-component-selector"
-          className="selector-picker"
-          inputProps={{ dataTestId: 'github-component-selector' }}
-          ref={typeahead => (this._componentselector = typeahead)}
-          useCache={false}
-          options={component.options}
-          placeholder={'Repo'}
-          onChange={this.onComponentChange}
-          labelKey={option => option.id.substring(option.id.indexOf('/') + 1)}
-          clearButton
-          highlightOnlyResult
-          selectHintOnEnter
-          isLoading={component.isLoading}
-          onSearch={this.getComponentOptions}
-        />
+        <div className={`harvest-searchbar ${namespace.focus ? 'active' : ''}`}>
+          <div className="search-logo">
+            <img src={searchSvg} alt="search" />
+          </div>
+          <AsyncTypeahead
+            id="github-namespace-selector"
+            inputProps={{ dataTestId: 'github-namespace-selector' }}
+            className="selector-picker harvest-search"
+            ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
+            useCache={false}
+            onFocus={() => this.setState({ ...this.state, namespace: { ...this.state.namespace, focus: true } })}
+            onBlur={() => this.setState({ ...this.state, namespace: { ...this.state.namespace, focus: false } })}
+            options={namespace.options}
+            placeholder={'User / Organization'}
+            onChange={this.onChange}
+            labelKey="id"
+            clearButton
+            highlightOnlyResult
+            selectHintOnEnter
+            isLoading={namespace.isLoading}
+            onSearch={this.getOptions}
+          />
+        </div>
+        <div className={`harvest-searchbar ${component.focus ? 'active' : ''}`}>
+          <div className="search-logo">
+            <img src={searchSvg} alt="search" />
+          </div>
+          <AsyncTypeahead
+            id="github-component-selector"
+            className="selector-picker harvest-search"
+            inputProps={{ dataTestId: 'github-component-selector' }}
+            ref={typeahead => (this._componentselector = typeahead)}
+            useCache={false}
+            onFocus={() => this.setState({ ...this.state, component: { ...this.state.component, focus: true } })}
+            onBlur={() => this.setState({ ...this.state, component: { ...this.state.component, focus: false } })}
+            options={component.options}
+            placeholder={'Repo'}
+            onChange={this.onComponentChange}
+            labelKey={option => option.id.substring(option.id.indexOf('/') + 1)}
+            clearButton
+            highlightOnlyResult
+            selectHintOnEnter
+            isLoading={component.isLoading}
+            onSearch={this.getComponentOptions}
+          />
+        </div>
       </div>
     )
   }

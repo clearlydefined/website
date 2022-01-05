@@ -7,6 +7,7 @@ import toPath from 'lodash/toPath'
 import { Button, Row, Col } from 'react-bootstrap'
 import RuleBuilder from './RuleBuilder'
 import LicensePickerUtils from './utils'
+import CloseIcon from '@material-ui/icons/Close'
 import './style.css'
 /**
  * A standalone SPDX License Picker
@@ -103,34 +104,27 @@ export default class LicensePicker extends Component {
   }
 
   renderLicenseExpression = (isValid, licenseExpression) => (
-    <span className={`spdx-picker-expression ${isValid ? 'is-valid' : 'is-not-valid'}`}>{licenseExpression}</span>
+    <span className={`spdx-picker-expression-version ${isValid ? 'is-valisdsdsddd' : 'is-not-valid'}`}>
+      {licenseExpression}
+    </span>
   )
 
   render() {
     const { onChange, onClose } = this.props
     const { rules, licenseExpression, isValid } = this.state
     return (
-      <div className="spdx-picker">
+      <div className="spdx-picker spdx-picker-license">
         <Row>
-          <Col md={10} className="spdx-picker-header-title flex-center">
-            <h2>License Expression: </h2>
-            {this.renderLicenseExpression(isValid, licenseExpression)}
-          </Col>
-          <Col md={2} className="spdx-picker-header-buttons">
-            <Button
-              bsStyle="success"
-              data-test-id="license-picker-ok-button"
-              onClick={() => onChange(licenseExpression)}
-            >
-              OK
-            </Button>
-            <Button bsStyle="danger" data-test-id="license-picker-cancel-button" onClick={onClose}>
-              Cancel
-            </Button>
+          <Col md={12} className="spdx-picker-header-title flex-center">
+            <h6>License Expression: </h6>
+            <span className={`spdx-picker-expression-version ${isValid ? 'is-valisdsdsddd' : 'is-not-valid'}`}>
+              {licenseExpression}
+            </span>
+            <CloseIcon className="close-modal" />
           </Col>
         </Row>
         <Row>
-          <Col md={12}>
+          <Col md={12} className="spdx-picker-license-rules">
             <RuleBuilder
               rule={rules}
               changeRulesOperator={this.changeRulesConjunction}
@@ -139,6 +133,23 @@ export default class LicensePicker extends Component {
               addNewGroup={this.addNewGroup}
               removeRule={this.removeRule}
             />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="divider"></Col>
+        </Row>
+        <Row>
+          <Col md={12} className="spdx-picker-header-buttons">
+            <Button bsStyle="danger" data-test-id="license-picker-cancel-button" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              bsStyle="success"
+              data-test-id="license-picker-ok-button"
+              onClick={() => onChange(licenseExpression)}
+            >
+              Save
+            </Button>
           </Col>
         </Row>
       </div>

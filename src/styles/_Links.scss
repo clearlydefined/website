@@ -1,0 +1,89 @@
+
+
+@mixin btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border-radius: 50px !important;
+  padding: 8px 16px !important;
+  min-width: 97px;
+  height: 48px;
+
+  border: 1px solid $border !important;
+  background: transparent !important;
+  color: $gray-700 !important;
+  transition: border-color $trans, color $trans, background $trans;
+
+  &[disabled] {
+
+  }
+
+  &:hover {
+    background: $border !important;
+    color: $gray-900 !important;
+  }
+}
+
+.btn {
+  @include btn;
+}
+
+@mixin btn-success {
+  border-color: $brand !important;
+  background: $brand !important;
+  color: $white !important;
+
+  &:hover {
+    border-color: $brand !important;
+    background: darken($brand, 10%) !important;
+    color: $white !important;
+  }
+
+  &[disabled],
+  &[disabled]:hover {
+    opacity: .5;
+    cursor: default;
+  }
+}
+
+.btn-success {
+  @include btn-success;
+}
+
+@mixin btn-wide {
+  width: 136px;
+}
+
+@mixin no-btn {
+  font-weight: inherit !important;
+  border: none !important;
+  min-width: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+  border-radius: 0 !important;
+
+  &:hover {
+    border: none !important;
+    background: transparent !important;
+    color: inherit !important;
+  }
+}
+
+
+.btn-mkt {
+  @include btn;
+  @include btn-success;
+  min-width: 148px;
+}
+
+#curate {
+  @include no-btn;
+  justify-content: flex-start !important;
+  padding: 0 24px !important;
+}

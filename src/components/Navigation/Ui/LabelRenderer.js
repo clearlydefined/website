@@ -2,5 +2,5 @@
 // SPDX-License-Identifier: MIT
 import React from 'react'
 
-const LabelRenderer = ({ text }) => <b>{text}</b>
+const LabelRenderer = ({ text }) => <span>{text}</span>
 export default LabelRenderer

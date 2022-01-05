@@ -106,7 +106,7 @@ class HarvestQueueList extends React.Component {
         {request.provider === 'packagist' && (
           <ComposerVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
-        <i className="fas fa-times list-remove" onClick={this.removeRequest.bind(this, request)} />
+        <i className="fas fa-times list-trash" onClick={this.removeRequest.bind(this, request)} />
       </div>
     )
   }

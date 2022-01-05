@@ -18,13 +18,28 @@ class FileCountRenderer extends Component {
     const attributed = totalFiles - (get(licensed, 'attribution.unknown') || 0)
     const discoveredPercent = totalFiles ? Contribution.getPercentage(discovered, totalFiles) : '-'
     const attributedPercent = totalFiles ? Contribution.getPercentage(attributed, totalFiles) : '-'
+
     return (
       // prettier-ignore
-      <p className="list-singleLine">
-        Total:&nbsp;<b>{totalFiles}</b>, 
-        Licensed:&nbsp;<b>{discovered < 0 ? '-' : `${discovered} (${discoveredPercent}%)`}</b>, 
-        Attributed:&nbsp;<b>{attributed < 0 ? '-' : `${attributed} (${attributedPercent}%)`}</b>
-      </p>
+      this.props.detailView ?
+        <div className="list-singleLine flex-column">
+          <p className="w-100 m-0">
+            Total:&nbsp;<b>{totalFiles}</b>
+          </p>
+          <p className="w-100 m-0">
+            Licensed:&nbsp;<b>{discovered < 0 ? '-' : `${discovered} (${discoveredPercent}%)`}</b>
+          </p>
+          <p className="w-100 m-0">
+            Attributed:&nbsp;<b>{attributed < 0 ? '-' : `${attributed} (${attributedPercent}%)`}</b>
+          </p>
+        </div>
+        :
+        <span className="list-singleLine">
+          <span>Total: <b>{totalFiles}</b></span>
+          <span>Licensed: <b>{discovered < 0 ? '-' : `${discovered} (${discoveredPercent}%)`}</b></span>
+          <span>Attributed: <b>{attributed < 0 ? '-' : `${attributed} (${attributedPercent}%)`}</b></span>
+        </span>
+
     )
   }
 }

@@ -37,7 +37,8 @@ export default class FilterBar extends Component {
     clearOnChange: PropTypes.bool,
     defaultValue: PropTypes.string,
     onSearch: PropTypes.func.isRequired,
-    onClear: PropTypes.func
+    onClear: PropTypes.func,
+    onFocusChange: PropTypes.func
   }
 
   constructor(props) {
@@ -69,15 +70,20 @@ export default class FilterBar extends Component {
     const { options, value, onSearch } = this.props
     return (
       <AsyncTypeahead
+        inputProps={{
+          name: 'filter-search'
+        }}
         id="filter-bar"
         className="filter-bar"
         ref={typeahead => (this.typeahead = typeahead)}
         useCache={false}
-        placeholder="Component search..."
+        placeholder="Search for descriptors like “composer”, or “gem”"
         onChange={this.onChange}
         options={options.list}
         isLoading={options.isFetching}
         onSearch={onSearch}
+        onFocus={e => this.props.onFocusChange(true)}
+        onBlur={e => this.props.onFocusChange(false)}
         labelKey={option => {
           return option.namespace ? `${option.namespace}/${option.name}` : option.name
         }}

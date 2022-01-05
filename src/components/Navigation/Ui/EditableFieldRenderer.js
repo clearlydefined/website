@@ -7,7 +7,8 @@ import LabelRenderer from './LabelRenderer'
 import { InlineEditor, ModalEditor } from '../..'
 import Contribution from '../../../utils/contribution'
 import ListDataRenderer from '../Ui/ListDataRenderer'
-
+import { Divider } from '@material-ui/core'
+import carrortDown from "../../../images/icons/carrortDown.svg"
 class EditableFieldRenderer extends Component {
   static propTypes = {
     label: PropTypes.string,
@@ -22,13 +23,16 @@ class EditableFieldRenderer extends Component {
     value: PropTypes.any,
     editable: PropTypes.bool,
     multiple: PropTypes.bool,
-    component: PropTypes.any
+    component: PropTypes.any,
+    dropDown: PropTypes.bool,
   }
 
   constructor(props) {
     super(props)
+    this.handleOpenForm = this.handleOpenForm.bind(this)
     this.state = {
-      computedValue: ''
+      computedValue: '',
+      openedForm: false
     }
   }
 
@@ -62,6 +66,10 @@ class EditableFieldRenderer extends Component {
     }
     this.setState({ computedValue, initialValue })
   }
+  // open close edit form
+  handleOpenForm() {
+    this.setState({ openedForm: !this.state.openedForm })
+  }
 
   render() {
     const {
@@ -78,7 +86,12 @@ class EditableFieldRenderer extends Component {
       editable,
       editor,
       multiple,
-      component
+      component,
+      lastIndex,
+      labelIcon,
+      dropDown,
+      customBox,
+      customBoxIcon,
     } = this.props
     const { computedValue, initialValue } = this.state
     const { licensed } = definition || {}
@@ -117,25 +130,61 @@ class EditableFieldRenderer extends Component {
         />
       )
 
+
     return (
-      <Row className="no-gutters">
-        <Col md={3} xs={4}>
-          <LabelRenderer text={label} />
-        </Col>
-        <Col md={9} xs={8} className="definition__line">
-          {component ? (
-            component
-          ) : editable ? (
-            renderEditor()
-          ) : multiple ? (
-            <ListDataRenderer licensed={licensed} item={field} title={label} />
-          ) : (
-            <p className={`list-singleLine ${Contribution.classIfDifferent(definition, previewDefinition, field)}`}>
-              {value}
-            </p>
-          )}
-        </Col>
-      </Row>
+      <>
+        {customBox ?
+          <div className="row justify-content-center my-2 pt-2 align-items-start">
+            <div className="col-12">
+              <div className="custom-box">
+                <div className="custom-box-header">
+                  {customBoxIcon && customBoxIcon}
+                  <LabelRenderer text={label} />
+                </div>
+                <div className="custom-box-body">
+                  {component}
+                </div>
+              </div>
+            </div>
+          </div>
+          :
+          <>
+            <Row className="tile-row">
+              <Col md={labelIcon ? 12 : 3} xs={labelIcon ? 12 : 4} className="tile-row__title">
+                <LabelRenderer text={label} />
+                {labelIcon && labelIcon}:
+                {dropDown &&
+                  <img onClick={this.handleOpenForm}
+                    className={`carrotImg ${this.state.openedForm ? 'openedForm' : 'closeForm'}`} src={carrortDown} alt="openForm" />
+                }
+              </Col>
+              {dropDown && <Divider className="mt-3" />}
+              <Col md={labelIcon ? 12 : 9} xs={labelIcon ? 12 : 8}
+                className={`tile-row__definition ${dropDown ? !this.state.openedForm ? 'no-height' : '.' : ''}`}>
+                {component ? (
+                  dropDown ?
+                    this.state.openedForm ?
+                      component : null
+                    :
+                    component
+                ) : editable ? (
+                  renderEditor()
+                ) : multiple ? (
+                  <ListDataRenderer licensed={licensed} item={field} title={label} />
+                ) : (
+                  <p className={`list-singleLine ${Contribution.classIfDifferent(definition, previewDefinition, field)}`}>
+                    {value}
+                  </p>
+                )}
+              </Col>
+            </Row>
+            {lastIndex || dropDown ?
+              null :
+              <Divider />
+            }
+          </>
+        }
+      </>
     )
   }
 }

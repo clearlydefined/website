@@ -9,6 +9,9 @@
   display: flex;
   align-items: center; }
 
+.spdx-picker-license {
+  padding: 32px; }
+
 .spdx-picker-expression {
   padding: 5px; }
 
@@ -22,6 +25,25 @@
   margin: 0;
   padding: 10px;
   font-size: 2.5em; }
+
+.spdx-picker-header-title > h6 {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 100%; }
+
+.spdx-picker-header-title .close-modal {
+  position: absolute;
+  right: 15px;
+  top: 20px; }
+
+.spdx-picker-expression-version {
+  border: 1px solid;
+  border-radius: 30px;
+  padding: 3px 5px;
+  margin-left: 10px;
+  font-size: 10px; }
 
 .spdx-picker-header-title > h2 > .header-data {
   display: flex;
@@ -48,3 +70,54 @@
   padding-right: 0px;
   background: lightgrey;
   border: 1px solid black; }
+
+.spdx-picker-license-rules .spdx-picker-rule {
+  padding: 0; }
+
+.spdx-picker-license-rules .spdx-picker-rule .editable-container {
+  margin-top: 10px; }
+
+.spdx-picker-license-rules .spdx-picker-rule .btn-group .btn.btn-default {
+  min-width: 55px !important;
+  padding: 0 !important;
+  display: flex;
+  border: 0 !important;
+  margin-right: 20px; }
+
+.spdx-picker-license-rules .spdx-picker-rule .btn-group .btn.btn-default input {
+  margin-right: 10px; }
+
+.spdx-picker-license-rules .spdx-picker-rule .action-buttons {
+  margin: auto 0; }
+
+.spdx-picker-license-rules .spdx-picker-rule #changeRulesOperator {
+  min-width: auto;
+  height: 34px;
+  font-size: 12px !important;
+  margin-right: 4px; }
+
+.spdx-picker-license-rules .spdx-picker-rule #addNewGroup {
+  min-width: auto;
+  height: 34px;
+  font-size: 12px !important; }
+
+.spdx-picker-license-rules .spdx-picker-rule .editable-editor {
+  margin-right: 24px; }
+
+.spdx-picker-license-rules .spdx-picker-rule #removeRule {
+  border: 0 !important;
+  color: #1d52d4 !important;
+  height: auto;
+  min-width: 50px; }
+
+.spdx-picker-license-rules .spdx-picker-rule .checkbox {
+  margin-right: 8px; }
+
+.spdx-picker-license .divider {
+  background: #dfe5ee;
+  height: 1px;
+  margin-top: 83px; }
+
+.spdx-picker-license .spdx-picker-header-buttons {
+  display: flex;
+  justify-content: space-between; }

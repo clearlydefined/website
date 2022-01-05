@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getMavenSearch } from '../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
+import searchSvg from '../images/icons/searchSvg.svg'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 export default class MavenSelector extends Component {
@@ -14,7 +15,7 @@ export default class MavenSelector extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { isLoading: false, options: [] }
+    this.state = { isLoading: false, options: [], focus: false }
     this.getOptions = this.getOptions.bind(this)
     this.onChange = this.onChange.bind(this)
   }
@@ -42,23 +43,31 @@ export default class MavenSelector extends Component {
   }
 
   render() {
-    const { options, isLoading } = this.state
+    const { options, isLoading, focus } = this.state
     return (
-      <AsyncTypeahead
-        id="maven-selector"
-        ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
-        useCache={false}
-        options={options}
-        placeholder={'Pick a groupId:artifactId to harvest'}
-        onChange={this.onChange}
-        labelKey="id"
-        clearButton
-        highlightOnlyResult
-        emptyLabel=""
-        selectHintOnEnter
-        isLoading={isLoading}
-        onSearch={this.getOptions}
-      />
+      <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
+        <div className="search-logo">
+          <img src={searchSvg} alt="search" />
+        </div>
+        <AsyncTypeahead
+          id="maven-selector"
+          className="harvest-search"
+          ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
+          useCache={false}
+          options={options}
+          onFocus={() => this.setState({ ...this.state, focus: true })}
+          onBlur={() => this.setState({ ...this.state, focus: false })}
+          placeholder={'Pick a groupId:artifactId to harvest'}
+          onChange={this.onChange}
+          labelKey="id"
+          clearButton
+          highlightOnlyResult
+          emptyLabel=""
+          selectHintOnEnter
+          isLoading={isLoading}
+          onSearch={this.getOptions}
+        />
+      </div>
     )
   }
 }

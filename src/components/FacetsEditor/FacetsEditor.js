@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Col, Row } from 'react-bootstrap'
 import Contribution from '../../utils/contribution'
 import GlobsPicker from '../GlobsPicker'
 import Curation from '../../utils/curation'
@@ -23,13 +22,13 @@ class FacetsEditor extends Component {
     const { onChange, definition, previewDefinition, readOnly, onRevert, curationSuggestions } = this.props
 
     return (
-      <div data-test-id="facets-editor">
+      <div data-test-id="facets-editor" className="facts-fields">
         {Contribution.nonCoreFacets.map(item => (
-          <Row key={item}>
-            <Col sm={3} xs={4}>
+          <div className="row w-100 mx-0 justify-content-start align-items-center" key={item}>
+            <div className="col-md-2  text-right col-3">
               <span>{item}</span>
-            </Col>
-            <Col sm={9} xs={8}>
+            </div>
+            <div className="col-md-10 col-9 px-4">
               <GlobsPicker
                 field={`described.facets.${item}`}
                 readOnly={readOnly}
@@ -48,8 +47,8 @@ class FacetsEditor extends Component {
                 onChange={value => onChange(`described.facets.${item}`, value)}
                 onRevert={() => onRevert(`described.facets.${item}`)}
               />
-            </Col>
-          </Row>
+            </div>
+          </div>
         ))}
       </div>
     )

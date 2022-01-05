@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getComposerRevisions } from '../api/clearlyDefined'
 import Autocomplete from './Navigation/Ui/Autocomplete'
+import searchSvg from '../images/icons/searchSvg.svg'
 
 export default class ComposerVersionPicker extends Component {
   static propTypes = {
@@ -15,7 +16,7 @@ export default class ComposerVersionPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { customValues: [], options: [] }
+    this.state = { customValues: [], options: [], focus: false }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
@@ -53,25 +54,32 @@ export default class ComposerVersionPicker extends Component {
 
   render() {
     const { defaultInputValue } = this.props
-    const { customValues, options } = this.state
+    const { customValues, options, focus } = this.state
     const list = customValues.concat(options)
     return (
-      <Autocomplete
-        id="composer-version-picker"
-        options={list}
-        defaultInputValue={defaultInputValue}
-        placeholder={
-          options.length === 0 ? 'Could not fetch versions, type a Composer version' : 'Pick a Composer version'
-        }
-        onChange={this.onChange}
-        positionFixed
-        clearButton
-        allowNew
-        newSelectionPrefix="Version:"
-        emptyLabel=""
-        filterBy={this.filter}
-        selectHintOnEnter
-      />
+      <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
+        <div className="search-logo">
+          <img src={searchSvg} alt="search" />
+        </div>
+        <Autocomplete
+          id="composer-version-picker"
+          options={list}
+          defaultInputValue={defaultInputValue}
+          placeholder={
+            options.length === 0 ? 'Could not fetch versions, type a Composer version' : 'Pick a Composer version'
+          }
+          onChange={this.onChange}
+          onFocus={() => this.setState({ ...this.state, focus: true })}
+          onBlur={() => this.setState({ ...this.state, focus: false })}
+          positionFixed
+          clearButton
+          allowNew
+          newSelectionPrefix="Version:"
+          emptyLabel=""
+          filterBy={this.filter}
+          selectHintOnEnter
+        />
+      </div>
     )
   }
 }

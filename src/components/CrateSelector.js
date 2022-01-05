@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getCrateSearch } from '../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
+import searchSvg from '../images/icons/searchSvg.svg'
 
 export default class CrateSelector extends Component {
   static propTypes = {
@@ -13,7 +14,7 @@ export default class CrateSelector extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { isLoading: false, options: [] }
+    this.state = { isLoading: false, options: [], focus: false }
     this.getOptions = this.getOptions.bind(this)
     this.onChange = this.onChange.bind(this)
   }
@@ -35,22 +36,30 @@ export default class CrateSelector extends Component {
   }
 
   render() {
-    const { options, isLoading } = this.state
+    const { options, isLoading, focus } = this.state
     return (
-      <AsyncTypeahead
-        id="crate-selector"
-        useCache={false}
-        options={options}
-        placeholder={'Pick a Crate to harvest'}
-        onChange={this.onChange}
-        labelKey="id"
-        clearButton
-        highlightOnlyResult
-        emptyLabel=""
-        selectHintOnEnter
-        isLoading={isLoading}
-        onSearch={this.getOptions}
-      />
+      <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
+        <div className="search-logo">
+          <img src={searchSvg} alt="search" />
+        </div>
+        <AsyncTypeahead
+          id="crate-selector"
+          className="harvest-search"
+          useCache={false}
+          options={options}
+          placeholder={'Pick a Crate to harvest'}
+          onChange={this.onChange}
+          labelKey="id"
+          onFocus={() => this.setState({ ...this.state, focus: true })}
+          onBlur={() => this.setState({ ...this.state, focus: false })}
+          clearButton
+          highlightOnlyResult
+          emptyLabel=""
+          selectHintOnEnter
+          isLoading={isLoading}
+          onSearch={this.getOptions}
+        />
+      </div>
     )
   }
 }

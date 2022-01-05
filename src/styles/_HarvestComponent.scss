@@ -1,0 +1,258 @@
+.harvest-component {
+
+
+  .section-body.flex-grow {
+    min-height: 400px;
+    margin-bottom: 80px;
+  }
+
+  .page-title {
+    padding-top: 36px;
+    padding-bottom: 24px;
+  }
+  .providers-button-wrapper {
+    border-radius: 16px 16px 16px 16px !important;
+    background-color: #fff;
+    .provider-button {
+      min-width: 56px !important;
+      max-width: 56px !important;
+      height: 64px;
+      border-radius: 0 !important;
+      img {
+        border-radius: 0 !important;
+      }
+    }
+    :first-child {
+      border-radius: 16px 0px 0px 16px !important;
+    }
+    :last-child {
+      border-radius: 0px 16px 16px 0px !important;
+    }
+    .active {
+      background-color: #dfe5ee !important;
+    }
+  }
+  .harvest-searchbar {
+    display: flex;
+    background: #ffffff;
+    border: 1px solid #dfe5ee;
+    box-sizing: border-box;
+    border-radius: 100px;
+    height: 64px;
+    align-items: center;
+    position: relative;
+    .harvest-search {
+      height: 100%;
+      width: 80%;
+      position: unset !important;
+      .rbt-input-hint-container {
+        height: 100%;
+        .rbt-input-main {
+          height: 100%;
+          border: 0;
+          font-size: 14px;
+          padding: 0;
+          background: transparent;
+          &:focus {
+            box-shadow: none;
+            border: 0;
+          }
+        }
+      }
+      & button.close {
+        border: 0;
+        background: transparent;
+        font-size: 19px;
+      }
+      .dropdown-menu.show {
+        width: 100% !important;
+        border-radius: 20px;
+        left: -50px !important;
+        top: 0 !important;
+        margin-top: 5px;
+        &::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+          border-radius: 10px;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+          background: #4a4a4a;
+          border-radius: 10px;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+          background: #4a4a4a;
+        }
+        li {
+          margin: 5px;
+          a {
+            padding: 10px;
+            border-radius: 10px;
+            &:hover {
+              background-color: #f6f7f9;
+            }
+          }
+        }
+      }
+    }
+    &.active {
+      border: 1px solid #86b7fe;
+    }
+  }
+  .horizontalBlock {
+    height: 100%;
+    .selector-picker {
+      height: 100%;
+      .rbt-input-hint-container {
+        height: 100%;
+        .rbt-input-main {
+          height: 100%;
+        }
+      }
+    }
+  }
+  .show-grid {
+    .harvest-action {
+      text-align: right;
+      margin: auto;
+      & button {
+        background: #1d52d4 !important;
+        padding: 17px 32px 17px 32px !important;
+        font-size: 14px !important;
+      }
+    }
+  }
+  .flex-grow-column {
+    .clearly-header {
+      border: 1px solid lightgray;
+      border-bottom: 0;
+      .table-header-cloumn {
+        width: 50%;
+        text-align: left;
+      }
+    }
+    .section-body.flex-grow {
+      background-color: #fff;
+      .ReactVirtualized__Grid__innerScrollContainer {
+        overflow: auto !important;
+        max-height: 100% !important;
+        height: 100% !important;
+        &::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+          border-radius: 10px;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+          background: #4a4a4a;
+          border-radius: 10px;
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+          background: #4a4a4a;
+        }
+      }
+      .component-row {
+        height: auto !important;
+        position: unset !important;
+        .two-line-entry {
+          flex-direction: row;
+          .list-row {
+            .open-panel-img {
+              display: none;
+            }
+            .list-body {
+              .list-message {
+                span {
+                  border: 0;
+                  padding: 0;
+                }
+              }
+            }
+          }
+          .list-activity-area {
+            position: unset;
+            justify-content: space-between;
+            padding-right: 20px;
+            width: 100%;
+            .harvest-searchbar {
+              .rbt-input-main {
+                border: 0;
+                font-size: 14px;
+                padding: 0;
+                background-color: transparent;
+                &:focus {
+                  box-shadow: none;
+                  border: 0;
+                }
+              }
+            }
+            .list-trash {
+              color: gray;
+              &:before {
+                content: '\f2ed';
+              }
+            }
+            & button.close {
+              border: 0;
+              background: transparent;
+              font-size: 19px;
+            }
+          }
+        }
+      }
+      .list-noRows {
+        p {
+          text-align: center;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+.dropdown-menu.show {
+  width: 508px !important;
+  top: 25px !important;
+  left: -50px !important;
+  border-radius: 10px;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #4a4a4a;
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #4a4a4a;
+  }
+  li {
+    margin: 5px;
+    a {
+      padding: 10px;
+      border-radius: 10px;
+      &:hover {
+        background-color: #f6f7f9;
+      }
+    }
+  }
+}

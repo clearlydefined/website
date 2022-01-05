@@ -45,8 +45,16 @@ class GlobsPicker extends Component {
     const { inputVisible } = this.state
 
     return (
-      <div className="editable-editor">
-        {!readOnly && (
+      <div className="editable-editor w-100">
+        <Input
+          autoFocus
+          type="text"
+          size=""
+          className="form-control w-100" id="exampleInputEmail1"
+          onBlur={this.handleInputConfirm}
+          onPressEnter={this.handleInputConfirm}
+        />
+        {/* {!readOnly && (
           <i
             className={`fas fa-undo editable-marker ${globs.length > -1 ? '' : 'fa-disabled'}`}
             onClick={() => onRevert && globs && onRevert()}
@@ -72,8 +80,8 @@ class GlobsPicker extends Component {
           <Input
             autoFocus
             type="text"
-            size="small"
-            style={{ width: 78 }}
+            size=""
+            className="form-control w-100" id="exampleInputEmail1"
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}
           />
@@ -83,7 +91,7 @@ class GlobsPicker extends Component {
               <Icon type="plus" />
             </Tag>
           )
-        )}
+        )} */}
       </div>
     )
   }

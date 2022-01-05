@@ -20,13 +20,14 @@ import {
   Section
 } from '../../../'
 import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../../../../actions/ui'
+import { providers } from '../../../../utils/utils'
 import EntitySpec from '../../../../utils/entitySpec'
-import ProviderButtons from '../../Ui/ProviderButtons'
+import ProviderListDropdown from '../../Ui/ProviderListDropdown'
 
 class PageHarvest extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeProvider: 'npmjs' }
+    this.state = { activeProvider: providers[0] }
     this.harvestHandler = this.harvestHandler.bind(this)
     this.onAddRequest = this.onAddRequest.bind(this)
     this.onRemoveRequest = this.onRemoveRequest.bind(this)
@@ -70,7 +71,16 @@ class PageHarvest extends Component {
 
   renderProviderButtons() {
     const { activeProvider } = this.state
-    return <ProviderButtons activeProvider={activeProvider} onClick={this.onClick} />
+    return (
+      <ProviderListDropdown
+        title={'Type'}
+        value={activeProvider}
+        onProviderChange={this.onClick}
+        variant={'success'}
+        className="harvest-provider"
+      />
+    )
+    // return <ProviderButtons activeProvider={activeProvider} onClick={this.onClick} />
   }
 
   renderActionButton() {
@@ -82,29 +92,50 @@ class PageHarvest extends Component {
   }
 
   noRowsRenderer() {
-    return <div className="list-noRows">Use the search box above to add components to harvest.</div>
+    return (
+      <div className="list-noRows">
+        <div>
+          <p>
+            <b>There are no components to harvest.</b>
+          </p>
+          <p>Select an component to be added to this list.</p>
+        </div>
+      </div>
+    )
   }
 
   render() {
     const { activeProvider } = this.state
     const { queue } = this.props
     return (
-      <Grid className="main-container flex-column">
-        <Row className="show-grid spacer">
+      <Grid className="main-container flex-column harvest-component">
+        <h3 className="page-title h1">Harvest Components</h3>
+        <Row className="show-grid">
           <Col md={6}>{this.renderProviderButtons()}</Col>
-          <Col md={6}>
-            {activeProvider === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'mavencentral' && <MavenSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'npmjs' && <NpmSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'nuget' && <NuGetSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'cratesio' && <CrateSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'packagist' && <ComposerSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
-            {activeProvider === 'debian' && <DebianSelector onChange={this.onAddRequest} />}
+          <Col md={4}>
+            {activeProvider.value === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'mavencentral' && <MavenSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'npmjs' && <NpmSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'nuget' && <NuGetSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'cratesio' && <CrateSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'packagist' && <ComposerSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'debian' && <DebianSelector onChange={this.onAddRequest} />}
+          </Col>
+          <Col md={2} className="harvest-action">
+            {this.renderActionButton()}
           </Col>
         </Row>
-        <Section className="flex-grow-column" name={'Components to harvest'} actionButton={this.renderActionButton()}>
+        <Section className="flex-grow-column">
+          <div className="clearly-header">
+            <div className="table-header-fcloumn">
+              <h4>Selected Component</h4>
+            </div>
+            <div className="table-header-cloumn">
+              <h4>Version </h4>
+            </div>
+          </div>
           <div className="section-body flex-grow">
             <HarvestQueueList
               list={queue.list}

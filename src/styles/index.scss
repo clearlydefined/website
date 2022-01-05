@@ -5,31 +5,38 @@
 
 @import './variables';
 @import './bootstrapFixes';
+
+$brand: #1d52d4;
+$white: #ffffff;
+$black: #000000;
+
+$transition-speed: 0.3s;
+$transition: $transition-speed ease-in-out;
+// cuz I no type good
+$trans: $transition-speed ease-in-out;
+
 body {
   padding: 0;
   min-height: 100vh;
   position: relative;
-  font-family: sans-serif;
+  font-size: 16px !important;
+  font-family: 'inter', sans-serif;
   background-color: $color_background_main;
   color: $color-text-main;
 }
 
-h1 {
-  color: $color-text-bold;
-  margin: 0px;
-  text-align: left;
-  font-size: 1.5rem;
+h1,
+.h1 {
   display: block;
+  font-size: 24px;
+  font-weight: 700 !important;
 }
 
-h2 {
-  color: $color-text-bold;
-  margin: 0px;
-  text-align: left;
-  font-size: 1.3rem;
-  font-weight: 500;
+h2,
+.h2 {
   display: block;
-  // text-align: center;
+  font-size: 24px;
+  font-weight: 700 !important;
 }
 
 main {
@@ -44,12 +51,17 @@ main {
   text-align: center;
 }
 
+@import './Fonts.scss';
+@import './Settings.scss';
+
 @import './App.scss';
+@import './Links.scss';
 @import './ContributePrompt.scss';
 @import './Header.scss';
 @import './Footer.scss';
 @import './List.scss';
 @import './Popover.scss';
+@import './Forms.scss';
 @import './FilterCustomComponent.scss';
 @import './FullDetailComponent.scss';
 @import './FacetsEditor.scss';
@@ -59,4 +71,9 @@ main {
 @import './ScoreRenderer.scss';
 @import './CopyrightsRenderer.scss';
 @import './FacetsRenderer.scss';
+@import './HarvestComponent.scss';
+@import './GetInvolved.scss';
+@import './PageAbout.scss';
+@import './charter.scss';
+
 @import './utils.scss';

@@ -1,0 +1,56 @@
+// ----------------------------------------
+// Colors
+// ----------------------------------------
+
+$brand: #1D52D4;
+$brand-light: #1D52D4;
+$white: #ffffff;
+$black: #000000;
+
+$border: #DFE5EE;
+
+$gray-100: #F6F7F9;
+$gray-300: #DFE5EE;
+
+$gray-500: #4A4A4A;
+$gray-700: #383A43;
+$gray-900: #121212;
+
+
+// ----------------------------------------
+// Breakpoints
+// ----------------------------------------
+
+$xlarge: 1280px;
+$large: 1012px;
+$medium: 800px;
+$small: 544px;
+
+@mixin start-at($device-width) {
+  @media (min-width: $device-width) {
+    @content;
+  }
+}
+
+@mixin stop-at($device-width) {
+  @media (max-width: $device-width - 1) {
+    @content;
+  }
+}
+
+
+// ----------------------------------------
+// Global Variables
+// ----------------------------------------
+
+
+$header-breakpoint: $medium;
+
+$transition-speed: 0.4s;
+$transition: $transition-speed ease-in-out;
+// cuz I no type good
+$trans: $transition-speed ease-in-out;
+
+$wrapper-percentage: 92%;
+$wrapper-width: 1280px;
+$wrapper-padding: (100% - $wrapper-percentage) / 2;

@@ -15,6 +15,8 @@ import {
   ROUTE_SHARE,
   ROUTE_STATS,
   ROUTE_STATUS,
+  ROUTE_GETINVOLED,
+  ROUTE_CHARTER,
   ROUTE_FILE
 } from '../utils/routingConstants'
 import history from '../config/history'
@@ -33,15 +35,21 @@ import PageStats from './Navigation/Pages/PageStats'
 import PageStatus from './Navigation/Pages/PageStatus'
 import PageFile from './Navigation/Pages/PageFile'
 import PageHarvest from './Navigation/Pages/PageHarvest'
+import GetInvolved from './GetInvolved'
+import Charter from './Charter'
 
 const store = configureStore()
 
 // * store only SESSION
 // * do not persist isFetching from the session
 // * state in, state out, whitelist
-const transformRemoveFetchErr = createTransform(state => omit(state, ['isFetching', 'error']), state => state, {
-  whitelist: ['session']
-})
+const transformRemoveFetchErr = createTransform(
+  state => omit(state, ['isFetching', 'error']),
+  state => state,
+  {
+    whitelist: ['session']
+  }
+)
 
 // Store only definitions from ui reducer
 const transformUiDefinitions = createTransform(
@@ -84,6 +92,8 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_CURATIONS} component={withTracker(PageContribution)} />
               <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
               <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
+              <Route path={ROUTE_GETINVOLED} component={withTracker(GetInvolved)} />
+              <Route path={ROUTE_CHARTER} component={withTracker(Charter)} />
               <Route path={ROUTE_STATS} component={withTracker(PageStats)} />
               <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
