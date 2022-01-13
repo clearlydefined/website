@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { get } from 'lodash'
 import { ButtonToolbar, Dropdown as BSDropdown } from 'react-bootstrap'
 import EntitySpec from '../../../utils/entitySpec'
-import Definition from '../../../utils/definition'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import { withResize } from '../../../utils/WindowProvider'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
@@ -192,8 +191,6 @@ class ComponentButtons extends Component {
     this.setState({ menuOpen: !this.state.menuOpen })
   }
   render() {
-    const { currentComponent } = this.props
-
     return (
       <div className="list-activity-area">{this.renderButtonGroup()}</div>
     )

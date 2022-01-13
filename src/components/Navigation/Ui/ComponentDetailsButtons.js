@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { Menu } from 'antd'
-import { Button } from 'react-bootstrap'
 import get from 'lodash/get'
-import ButtonWithTooltip from '../Ui/ButtonWithTooltip'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'
@@ -69,8 +66,6 @@ class ComponentDetailsButtons extends Component {
 
   render() {
     const { item } = this.props
-    const isSourceComponent = this.isSourceComponent(item.coordinates)
-    const isSourceEmpty = Definition.isSourceEmpty(item)
     return (
       <>
         <IconButton

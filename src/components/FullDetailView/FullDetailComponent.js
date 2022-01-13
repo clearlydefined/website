@@ -82,12 +82,8 @@ class FullDetailComponent extends Component {
   }
 
   renderFilesSection() {
-    const { definition, onChange, previewDefinition, readOnly, handleRevert, changes } = this.props
+    const { definition, onChange, previewDefinition, readOnly, changes } = this.props
     const item = { ...definition.item }
-    const filesOrFacetsHaveBeenChanged = find(
-      changes,
-      (_, key) => (key && key.startsWith('files')) || key.startsWith('described.facets')
-    )
     return (
       <div name="Raw data" className="py-0">
         <div className="pt-2 pb-2 d-flex justify-content-between align-items-start">
@@ -195,7 +191,7 @@ class FullDetailComponent extends Component {
   }
 
   render() {
-    const { definition, harvest, onChange, previewDefinition, readOnly, handleRevert, curations, isMobile } = this.props
+    const { definition, harvest, curations } = this.props
     if (!definition || !definition.item || !curations || !harvest) return null
     const item = { ...definition.item }
     const image = Contribution.getImage(item)

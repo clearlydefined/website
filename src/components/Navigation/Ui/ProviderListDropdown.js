@@ -31,7 +31,7 @@ class ProviderListDropdown extends Component {
     return option.toLowerCase().indexOf(props.text.toLowerCase()) !== -1
   }
   render() {
-    const { title, disabled, onProviderChange, value, variant, className } = this.props
+    const { onProviderChange, value, className } = this.props
     const { focus } = this.state
 
     return (
