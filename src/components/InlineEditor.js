@@ -73,8 +73,7 @@ class InlineEditor extends React.Component {
   }
 
   render() {
-    const { editIcon, onClick, readOnly, initialValue, value, onRevert, revertable, field } = this.props
-    const changed = initialValue !== value
+    const { editIcon, onClick, readOnly, initialValue, value, field } = this.props
     return (
       <span className="list-singleLine" name={field}>
         <Fragment>

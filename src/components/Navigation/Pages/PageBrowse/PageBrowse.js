@@ -3,7 +3,6 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Grid } from 'react-bootstrap'
 import omit from 'lodash/omit'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
@@ -16,17 +15,15 @@ import SystemManagedList from '../../../SystemManagedList'
 import Section from '../../../Section'
 import ComponentList from '../../../ComponentList'
 import ButtonsBar from './ButtonsBar'
-import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
 import ProviderListDropdown from '../../Ui/ProviderListDropdown'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { curateFilters, types, getParamsToUrl, getParamsFromUrl, providers } from '../../../../utils/utils'
+import { curateFilters, getParamsToUrl, getParamsFromUrl, providers } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
 import ActiveFilters from '../../Sections/ActiveFilters'
-import { Typography } from '@material-ui/core'
 import searchSvg from '../../../../images/icons/searchSvg.svg'
 /**
  * Page that show to the user a list of interesting definitions to curate
@@ -51,13 +48,13 @@ class PageBrowse extends SystemManagedList {
     const urlParams = getParamsFromUrl(this.props.location.search)
     urlParams
       ? this.setState(
-          {
-            activeSort: urlParams.sort && urlParams.sort,
-            activeName: urlParams.name && urlParams.name,
-            activeFilters: omit(urlParams, ['sort', 'name'])
-          },
-          () => this.updateData()
-        )
+        {
+          activeSort: urlParams.sort && urlParams.sort,
+          activeName: urlParams.name && urlParams.name,
+          activeFilters: omit(urlParams, ['sort', 'name'])
+        },
+        () => this.updateData()
+      )
       : this.updateData()
   }
 
@@ -337,8 +334,8 @@ class PageBrowse extends SystemManagedList {
           <div className="col-12">
             <Section
               className="flex-grow-column clearly-component-wrap"
-              // name={this.tableTitle()}
-              // actionButton={this.renderButtons()}
+            // name={this.tableTitle()}
+            // actionButton={this.renderButtons()}
             >
               <div className={classNames('clearly-table flex-grow', { loading: components.isFetching })}>
                 <i className="fas fa-spinner fa-spin" />

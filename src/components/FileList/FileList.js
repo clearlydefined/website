@@ -7,15 +7,12 @@ import { Table, Input, Button, Icon, Checkbox } from 'antd'
 import { Paper } from '@material-ui/core'
 import get from 'lodash/get'
 import isArray from 'lodash/isArray'
-import CopyrightsRenderer from '../../components/CopyrightsRenderer'
-import LicensesRenderer from '../../components/LicensesRenderer'
 import FacetsDropdown from '../../components/FacetsDropdown'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
 import Attachments from '../../utils/attachments'
 import folderIcon from '../../images/icons/folder.svg'
 import fileIcon from '../../images/icons/file.svg'
-import editIcon from '../../images/icons/edit.svg'
 import FolderOpenIcon from '@material-ui/icons/FolderOpen'
 export default class FileList extends PureComponent {
   static propTypes = {
@@ -267,9 +264,8 @@ export default class FileList extends PureComponent {
         {breadcrumbs.map((item, index) => {
           return (
             <div
-              className={`${
-                breadcrumbs.length - 1 === index ? 'breadcrumb-item breadcrumb-last-item' : 'breadcrumb-item'
-              }`}
+              className={`${breadcrumbs.length - 1 === index ? 'breadcrumb-item breadcrumb-last-item' : 'breadcrumb-item'
+                }`}
               key={index}
               onClick={e => this.onBreadcrumbSelect(item, index)}
             >
@@ -413,10 +409,10 @@ export default class FileList extends PureComponent {
             expandedRowKeys={expandedRows}
             onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
             pagination={false}
-            // onRowClick={e => (e.children ? this.onDirectorySelect(e) : null)}
-            // bordered={false}
-            // indentSize={28}
-            // scroll={{ y: 650 }}
+          // onRowClick={e => (e.children ? this.onDirectorySelect(e) : null)}
+          // bordered={false}
+          // indentSize={28}
+          // scroll={{ y: 650 }}
           />
         </Paper>
       </div>

@@ -3,11 +3,10 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Jumbotron, Tabs, Tab, Col } from 'react-bootstrap'
+import { Grid, Row, Jumbotron, Col } from 'react-bootstrap'
 import { getStatAction } from '../../../../actions/statsActions'
 import get from 'lodash/get'
 import TypeCard from './TypeCard'
-import LicenseBreakdown from './LicenseBreakdown'
 import CountUp from 'react-countup'
 import npm from '../../../../images/n-large.png'
 import maven from '../../../../images/maven.png'

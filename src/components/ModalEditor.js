@@ -90,8 +90,7 @@ class ModalEditor extends React.Component {
   }
 
   render() {
-    const { onClick, onRevert, revertable, readOnly, showEditIcon, initialValue, value, field } = this.props
-    const changed = initialValue !== value
+    const { onClick, readOnly, showEditIcon, initialValue, value, field } = this.props
     return (
       <span className="list-singleLine detail-card" name={field}>
         {this.renderValue()}

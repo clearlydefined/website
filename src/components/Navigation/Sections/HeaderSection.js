@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Row, Button, Col } from 'react-bootstrap'
-import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import { Tag } from 'antd'
 import { withResize } from '../../../utils/WindowProvider'

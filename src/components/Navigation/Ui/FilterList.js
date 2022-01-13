@@ -1,7 +1,7 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import find from 'lodash/find'
-import { Menu, MenuItem, Button, Icon } from '@material-ui/core'
+import { Menu, MenuItem, Button } from '@material-ui/core'
 
 class FilterList extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class FilterList extends Component {
     this.setState({ menu: event.currentTarget })
   }
   render() {
-    const { list, title, id, disabled, onFilter, value, variant, className } = this.props
+    const { list, title, id, disabled, onFilter, value, className } = this.props
     return (
       <div className={`w-100 ${className}`}>
         <Button

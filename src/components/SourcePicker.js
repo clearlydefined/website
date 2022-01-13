@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, ButtonGroup, FormGroup } from 'react-bootstrap'
+import { Grid, Button, ButtonGroup, FormGroup } from 'react-bootstrap'
 import { GitHubSelector, GitHubCommitPicker } from './'
 import { getGitHubRevisions } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'

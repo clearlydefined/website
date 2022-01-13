@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
-import { Tag, Tooltip } from 'antd'
+import { Tooltip } from 'antd'
 
 class HarvestIndicator extends Component {
   getTools = tools => {

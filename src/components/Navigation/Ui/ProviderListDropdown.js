@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Menu, MenuItem, Button } from '@material-ui/core'
 import { providers } from '../../../utils/utils'
 import Autocomplete from '../../Navigation/Ui/Autocomplete'
 import searchSvg from '../../../images/icons/carrortDown.svg'

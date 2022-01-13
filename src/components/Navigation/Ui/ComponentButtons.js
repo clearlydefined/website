@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash'
-import { Button, ButtonGroup, ButtonToolbar, Dropdown as BSDropdown } from 'react-bootstrap'
+import { ButtonToolbar, Dropdown as BSDropdown } from 'react-bootstrap'
 import { Menu, Dropdown, Icon } from 'antd'
 import EntitySpec from '../../../utils/entitySpec'
 import Definition from '../../../utils/definition'

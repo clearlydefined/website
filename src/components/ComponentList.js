@@ -96,10 +96,6 @@ class ComponentList extends React.Component {
       onRevert,
       showVersionSelectorPopup,
       hideVersionSelector,
-      onSelectAll,
-      selected,
-      toggleCheckbox,
-      multiSelectEnabled,
       hideRemoveButton
     } = this.props
 
@@ -147,11 +143,10 @@ class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
+    const { loadMoreRows, noRowsRenderer, list, listLength } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
       <div className="clearly-table-body flex-grow">
-        {/* {renderFilterBar()} */}
         <div className="clearly-header">
           <div className="table-header-fcloumn">
             <h4>Component</h4>

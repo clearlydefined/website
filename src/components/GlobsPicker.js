@@ -2,10 +2,7 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Tag from 'antd/lib/tag'
 import Input from 'antd/lib/input'
-import Tooltip from 'antd/lib/tooltip'
-import Icon from 'antd/lib/icon'
 import isEqual from 'lodash/isEqual'
 import isValidGlob from 'is-valid-glob'
 import withSuggestions from '../utils/withSuggestions'

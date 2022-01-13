@@ -3,8 +3,7 @@
 
 import React, { Component } from 'react'
 import { SocialIcons } from './'
-import { Typography } from '@material-ui/core';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 // import { API_DEVELOP, API_PROD, API_LOCAL } from '../api/clearlyDefined';
 // function colorize(content) {
@@ -34,17 +33,17 @@ export default class Footer extends Component {
           <div className="row justify-content-between align-items-center footer-row">
             <SocialIcons className="clearly-footer-socials pb-2" entity={socials} />
             <div className="col-md-8">
-            <p class="mb-0">
-            ClearlyDefined was created by the
-            <Link to="/" className="mx-1 highlighted-link-blue">Open Source Initiative</Link>
-             in partnership with
-             <Link to="/" className="mx-1 highlighted-link-blue">Microsoft.</Link>
-            </p>
+              <p class="mb-0">
+                ClearlyDefined was created by the
+                <Link to="/" className="mx-1 highlighted-link-blue">Open Source Initiative</Link>
+                in partnership with
+                <Link to="/" className="mx-1 highlighted-link-blue">Microsoft.</Link>
+              </p>
             </div>
-             <div className="col-md-4 footer-links col-12 ml-md-auto mt-md-0 mt-4">
-                <Link to="/" className="text-decoration-underline mx-2 d-inline text-white">Terms</Link>
-                <Link to="/" className="text-decoration-underline mx-2 d-inline  text-white">Privacy</Link>
-                <Link to="/" className="text-decoration-underline mx-2 d-inline text-white">Notices</Link>
+            <div className="col-md-4 footer-links col-12 ml-md-auto mt-md-0 mt-4">
+              <Link to="/" className="text-decoration-underline mx-2 d-inline text-white">Terms</Link>
+              <Link to="/" className="text-decoration-underline mx-2 d-inline  text-white">Privacy</Link>
+              <Link to="/" className="text-decoration-underline mx-2 d-inline text-white">Notices</Link>
             </div>
           </div>
         </div>

@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 import {
-    ROUTE_WORKSPACE,
     ROUTE_HARVEST,
     ROUTE_ABOUT,
     ROUTE_STATS
@@ -54,7 +53,7 @@ export default (state = initialState, action) => {
         case UI_NAVIGATION:
             const selected = action.to
             return state.map(nav => {
-                return {...nav, isSelected: selected.to === nav.to }
+                return { ...nav, isSelected: selected.to === nav.to }
             })
         default:
             return state

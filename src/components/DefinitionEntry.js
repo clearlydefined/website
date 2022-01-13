@@ -3,8 +3,8 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, InlineEditor, QuickEditModel, ModalEditor, SourcePicker, FileCountRenderer } from './'
-import { Row, Checkbox, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
+import { TwoLineEntry, QuickEditModel, SourcePicker, FileCountRenderer } from './'
+import { Checkbox, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
 import git from '../images/Git-Logo-2Color.png'
@@ -20,7 +20,6 @@ import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import Curation from '../utils/curation'
 import { withResize } from '../utils/WindowProvider'
-import LicensesRenderer from './LicensesRenderer'
 import ScoreRenderer from './Navigation/Ui/ScoreRenderer'
 import DefinitionTitle from './Navigation/Ui/DefinitionTitle'
 import DefinitionRevision from './Navigation/Ui/DefinitionRevision'
@@ -141,9 +140,9 @@ class DefinitionEntry extends React.Component {
     const licenseExpression = definition ? this.getValue('licensed.declared') : null
     return licenseExpression
       ? this.renderWithToolTipIfDifferent(
-          'licensed.declared',
-          <span className={this.classIfDifferent('licensed.declared')}>{licenseExpression}</span>
-        )
+        'licensed.declared',
+        <span className={this.classIfDifferent('licensed.declared')}>{licenseExpression}</span>
+      )
       : null
   }
 

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import Modal from 'antd/lib/modal'
@@ -25,7 +25,6 @@ export class AbstractFullDetailsView extends Component {
       visible,
       previewDefinition,
       readOnly,
-      session,
       inspectedCuration,
       component
     } = this.props

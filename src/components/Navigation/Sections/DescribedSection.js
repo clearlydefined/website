@@ -39,11 +39,6 @@ class DescribedSection extends Component {
     } = this.props
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
     const item = { ...definition.item }
-    // trim tool text if it starts with curation, as what follows is a long hash
-    // e.g. curation/1032ce558db47eee59b75d84132f5fbe6e19efbb
-    const toolList = get(definition.described, 'tools', []).map(tool =>
-      tool.startsWith('curation') ? tool.slice(0, 16) : tool
-    )
     const toolListView = get(definition.described, 'tools', []).map((tool, ind) => (
       <p className="view-details-tools-para" key={ind}>
         {tool.startsWith('curation') ? tool.slice(0, 16) : tool}
