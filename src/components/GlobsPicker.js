@@ -38,9 +38,6 @@ class GlobsPicker extends Component {
   onChange = suggestion => this.props.onChange(suggestion)
 
   render() {
-    const { globs, className, readOnly, onRevert } = this.props
-    const { inputVisible } = this.state
-
     return (
       <div className="editable-editor w-100">
         <Input

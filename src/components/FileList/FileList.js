@@ -278,7 +278,7 @@ export default class FileList extends PureComponent {
   }
 
   render() {
-    const { onChange, definition, readOnly, component, previewDefinition } = this.props
+    const { definition, component, previewDefinition } = this.props
     const { expandedRows, searchText, filteredFiles, files } = this.state
 
     const facets = Contribution.getValue(definition, previewDefinition, 'described.facets')

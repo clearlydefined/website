@@ -314,7 +314,7 @@ class PageBrowse extends SystemManagedList {
 
   render() {
     const { components, curations, definitions, session } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
+    const { sequence } = this.state
     return (
       <div className="container search-components-wrap">
         <div className="row">

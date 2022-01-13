@@ -79,11 +79,8 @@ class ComponentButtons extends Component {
   }
 
   renderButtonGroup() {
-    const { definition, currentComponent, readOnly, hasChange, hideVersionSelector } = this.props
+    const { definition, currentComponent, hasChange } = this.props
     const component = EntitySpec.fromObject(currentComponent)
-    const isSourceComponent = this.isSourceComponent(component)
-    const isSourceEmpty = Definition.isSourceEmpty(definition)
-    const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
     return (
       <>
         <IconButton className="menuOpenBtn" onClick={this.handleMenu} aria-label="button">
@@ -195,20 +192,10 @@ class ComponentButtons extends Component {
     this.setState({ menuOpen: !this.state.menuOpen })
   }
   render() {
-    const { definition, currentComponent, readOnly, isMobile, hideRemoveButton } = this.props
-    const component = EntitySpec.fromObject(currentComponent)
+    const { currentComponent } = this.props
 
     return (
       <div className="list-activity-area">{this.renderButtonGroup()}</div>
-
-      // <div className="list-activity-area">
-      //   {isMobile ? this.renderMobileButtonGroup() : this.renderButtonGroup()}
-      //  {!readOnly && !hideRemoveButton && (
-      //       <Button bsStyle="link" onClick={this.removeComponent.bind(this, component)}>
-      //         <i className="fas fa-times list-remove" />
-      //       </Button>
-      //     )}
-      //    </div>
     )
   }
 }

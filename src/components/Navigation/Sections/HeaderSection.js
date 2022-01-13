@@ -26,15 +26,8 @@ class HeaderSection extends Component {
 
   render() {
     const {
-      changes,
       curations,
       definition,
-      handleClose,
-      handleRevert,
-      handleSave,
-      isMobile,
-      modalView,
-      renderContributeButton,
       component
     } = this.props
     const { item } = definition

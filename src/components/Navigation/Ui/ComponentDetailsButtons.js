@@ -10,7 +10,6 @@ import techIcon from '../../../images/icons/tech.svg'
 import shareIcon from '../../../images/icons/share.svg'
 import linkCopyIcon from '../../../images/icons/linkCopy.svg'
 import { IconButton } from '@material-ui/core'
-import { asyncLocalStorage } from 'redux-persist/storages'
 
 class ComponentDetailsButtons extends Component {
   constructor(props) {
@@ -72,42 +71,6 @@ class ComponentDetailsButtons extends Component {
     const { item } = this.props
     const isSourceComponent = this.isSourceComponent(item.coordinates)
     const isSourceEmpty = Definition.isSourceEmpty(item)
-    const menu = (
-      <Menu>
-        <Menu.Item key="1" onClick={() => this.copyToClipboard(this.renderUrl())}>
-          Copy component URL{' '}
-          <ButtonWithTooltip tip="Copy URL to clipboard" placement="bottom">
-            <Button className="list-fa-button">
-              <i className="fas fa-copy" />
-            </Button>
-          </ButtonWithTooltip>
-        </Menu.Item>
-        {!isSourceComponent && !isSourceEmpty && (
-          <Menu.Item key="2" onClick={() => this.openSourceForComponent(item)}>
-            Open the definition for source{' '}
-            <ButtonWithTooltip tip="Open the definition for source that matches this package" placement="bottom">
-              <Button className="list-fa-button">
-                <i className="fas fa-code" />
-              </Button>
-            </ButtonWithTooltip>
-          </Menu.Item>
-        )}
-        <Menu.Item key="3" onClick={() => this.openRelatedComponents(item)}>
-          List other versions of this component{' '}
-          <Button className="list-fa-button">
-            <i class="fas fa-list" />
-          </Button>
-        </Menu.Item>
-        <Menu.Item key="4" onClick={() => this.openRegistryURL(item)}>
-          Open package URL{' '}
-          <ButtonWithTooltip tip="Open package URL" placement="bottom">
-            <Button className="list-fa-button">
-              <i className="fas fa-external-link-alt" />
-            </Button>
-          </ButtonWithTooltip>
-        </Menu.Item>
-      </Menu>
-    )
     return (
       <>
         <IconButton
