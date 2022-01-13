@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@clearlydefined/spdx": "^0.1.1",
+    "@clearlydefined/spdx": "^0.1.6",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@monaco-editor/react": "^2.3.0",
