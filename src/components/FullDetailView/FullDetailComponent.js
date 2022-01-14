@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 import { Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import cloneDeep from 'lodash/cloneDeep'
-import find from 'lodash/find'
 import get from 'lodash/get'
 import FileList from '../FileList'
 import Contribution from '../../utils/contribution'
@@ -82,7 +81,7 @@ class FullDetailComponent extends Component {
   }
 
   renderFilesSection() {
-    const { definition, onChange, previewDefinition, readOnly, changes } = this.props
+    const { definition, onChange, previewDefinition, readOnly } = this.props
     const item = { ...definition.item }
     return (
       <div name="Raw data" className="py-0">
