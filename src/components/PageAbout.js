@@ -152,7 +152,7 @@ class PageAbout extends Component {
               <div className="right-bottom"></div>
             </div>
             <div className="community-image">
-              <img src={community} alt="Image of people gathered around a computer" />
+              <img src={community} alt="People gathered around a computer" />
               <div className="left-top"></div>
               <div className="left-bottom">
                 <div className="left-bottom-top"></div>
