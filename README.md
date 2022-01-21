@@ -4,6 +4,7 @@ This project implements the website for [ClearlyDefined](https://clearlydefined.
 
 The doc has a [guide to using the website](https://docs.clearlydefined.io/using-data) to browse, inspect and curate data.
 
+
 # Getting started in the code
 
 If you are interested in working on the code for the website, follow the steps below. 
