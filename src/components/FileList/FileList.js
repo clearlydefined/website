@@ -257,15 +257,19 @@ export default class FileList extends PureComponent {
       <div className="breadcrumbs-container">
         <div
           className="breadcrumb-item"
-          onClick={e => (this.updateFileList(this.props), this.setState({ breadcrumbs: [] }))}
+          onClick={e => {
+            this.updateFileList(this.props)
+            this.setState({ breadcrumbs: [] })
+          }}
         >
           {coordinates?.name}-{coordinates?.revision}
         </div>
         {breadcrumbs.map((item, index) => {
           return (
             <div
-              className={`${breadcrumbs.length - 1 === index ? 'breadcrumb-item breadcrumb-last-item' : 'breadcrumb-item'
-                }`}
+              className={`${
+                breadcrumbs.length - 1 === index ? 'breadcrumb-item breadcrumb-last-item' : 'breadcrumb-item'
+              }`}
               key={index}
               onClick={e => this.onBreadcrumbSelect(item, index)}
             >
@@ -401,7 +405,6 @@ export default class FileList extends PureComponent {
         {this.renderBreadcrumbs()}
         <Paper className="w-100 rounded">
           <Table
-            // className="file-list"
             columns={columns}
             dataSource={searchText ? filteredFiles : files}
             expandableRowIcon={<FolderOpenIcon />}
@@ -409,10 +412,6 @@ export default class FileList extends PureComponent {
             expandedRowKeys={expandedRows}
             onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
             pagination={false}
-          // onRowClick={e => (e.children ? this.onDirectorySelect(e) : null)}
-          // bordered={false}
-          // indentSize={28}
-          // scroll={{ y: 650 }}
           />
         </Paper>
       </div>

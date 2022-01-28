@@ -45,37 +45,43 @@ class PageAbout extends Component {
       img: UseData,
       name: 'Use the Data',
       text: 'The simplest thing you can do to get involved is to use the data.',
-      linkText: 'Learn more'
+      linkText: 'Learn more',
+      linkUrl: 'https://docs.clearlydefined.io/using-data'
     },
     {
       img: CurateData,
       name: 'Curate Data',
       text: 'Vet, discuss and merge contributions to the project.',
-      linkText: 'Learn more'
+      linkText: 'Learn more',
+      linkUrl: 'https://docs.clearlydefined.io/data-curation'
     },
     {
       img: ContributeData,
       name: 'Contribute Data',
       text: 'Enhacing the data is something that anyone can do.',
-      linkText: 'Learn more'
+      linkText: 'Learn more',
+      linkUrl: 'https://docs.clearlydefined.io/contributing-data'
     },
     {
       img: ContributeCode,
       name: 'Contribute Code',
       text: 'It’s about the data but there is a non-trivial service that drives it.',
-      linkText: 'Learn more'
+      linkText: 'Learn more',
+      linkUrl: 'https://docs.clearlydefined.io/contributing-code'
     },
     {
       img: AddHarvest,
       name: 'Add a Harvest',
       text: 'Add to our growing types of packages.',
-      linkText: 'Learn more'
+      linkText: 'Learn more',
+      linkUrl: '/harvest'
     },
     {
       img: AdoptPractices,
       name: 'Adopt Practices',
       text: 'Help ensure that the information for components is correct.',
-      linkText: 'Learn more'
+      linkText: 'Learn more',
+      linkUrl: 'https://docs.clearlydefined.io/adopting'
     }
   ]
 
@@ -83,7 +89,6 @@ class PageAbout extends Component {
     return (
       <>
         <div className="about-container">
-
           <div className="about-hero">
             <div className="container">
               <div className="about-hero__content">
@@ -91,7 +96,9 @@ class PageAbout extends Component {
                 <p className="about-description">
                   Welcome to your centralized and curated data store for Open Source Software licenses.
                 </p>
-                <a className="btn-mkt" href="/get-involved">Get Involved</a>
+                <a className="btn-mkt" href="https://docs.clearlydefined.io/get-involved">
+                  Get Involved
+                </a>
               </div>
             </div>
           </div>
@@ -145,7 +152,9 @@ class PageAbout extends Component {
               <div>
                 <div className="mkt-h4 pb-4">Goals</div>
                 <div className="mkt-h2">This is a community-wide challenge that needs a community-wide approach.</div>
-                <a className="learn-more" href="/stats">Learn more</a>
+                <a className="learn-more" href="/stats">
+                  Learn more
+                </a>
               </div>
               <div className="left-top"></div>
               <div className="right-top"></div>
@@ -173,7 +182,7 @@ class PageAbout extends Component {
                       <img src={item.img} alt="335group" />
                       <h3 className="community-item-name">{item.name}</h3>
                       <p className="community-item-discription">{item.text}</p>
-                      <a href="#" className="community-item-link">
+                      <a href={item.linkUrl} className="community-item-link">
                         {item.linkText}
                       </a>
                     </Col>

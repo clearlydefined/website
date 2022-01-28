@@ -117,7 +117,7 @@ class Header extends Component {
             <div className="d-flex justify-content-end align-items-center">
               <nav className="top-nav px-2 d-flex justify-content-center align-items-center">
                 <ul role="group">
-                  <NavItem href="/get-involved">Get Involved</NavItem>
+                  <NavItem href="https://docs.clearlydefined.io/get-involved">Get Involved</NavItem>
                   {this.renderLogin()}
                 </ul>
               </nav>

@@ -334,13 +334,11 @@ class PageBrowse extends SystemManagedList {
           <div className="col-12">
             <Section
               className="flex-grow-column clearly-component-wrap"
-            // name={this.tableTitle()}
-            // actionButton={this.renderButtons()}
             >
               <div className={classNames('clearly-table flex-grow', { loading: components.isFetching })}>
                 <i className="fas fa-spinner fa-spin" />
                 <ComponentList
-                  aria-role="row"
+                  role="tree"
                   multiSelectEnabled={this.multiSelectEnabled}
                   readOnly={false}
                   list={components.transformedList}
@@ -358,18 +356,6 @@ class PageBrowse extends SystemManagedList {
                   hideVersionSelector
                   hideRemoveButton
                 />
-                {/* {currentDefinition && (
-                  <FullDetailPage
-                    modalView
-                    visible={showFullDetail}
-                    onClose={this.onInspectClose}
-                    onSave={this.onChangeComponent}
-                    path={path}
-                    currentDefinition={currentDefinition}
-                    component={currentComponent}
-                    readOnly={false}
-                  />
-                )} */}
               </div>
             </Section>
           </div>

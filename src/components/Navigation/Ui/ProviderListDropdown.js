@@ -39,8 +39,7 @@ class ProviderListDropdown extends Component {
         <Autocomplete
           id="provider-picker"
           className="provider-drop-down"
-          defaultInputValue={'npm'}
-          defaultInputValue={value.value}
+          defaultInputValue={value.value || 'npm'}
           selected={[value]}
           onFocus={() => this.setState({ ...this.state, focus: true })}
           onBlur={() => this.setState({ ...this.state, focus: false })}

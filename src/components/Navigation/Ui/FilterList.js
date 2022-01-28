@@ -56,7 +56,10 @@ class FilterList extends Component {
               <MenuItem
                 className="dropdown-items"
                 key={index}
-                onClick={e => (onFilter({ type: id, value: filterType.value }), this.handleClose())}
+                onClick={e => {
+                  onFilter({ type: id, value: filterType.value })
+                  this.handleClose()
+                }}
               >
                 <span>{filterType.label}</span>
                 {value && find(value, (filter, filterId) => filterId === id && filter === filterType.value) && (
