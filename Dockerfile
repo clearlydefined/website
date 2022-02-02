@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 # SPDX-License-Identifier: MIT
-FROM node:10-alpine as builder
+FROM node:12-alpine as builder
 COPY . /opt/website
 WORKDIR /opt/website
 ARG REACT_APP_SERVER=http://localhost:4000
