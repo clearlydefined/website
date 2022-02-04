@@ -20,13 +20,10 @@ The website is a simple React app, see the [README](/README.md) for basic info. 
     * https://dev.azure.com/clearlydefined/ClearlyDefined/_build?definitionId=23&_a=summary 
     * https://dev.azure.com/clearlydefined/ClearlyDefined/_build?definitionId=28&_a=summary
 0. First one uses azure-pipelines.yaml in repo, you can view that file to see what is running
-0. Second one is e2e test, graphical setup of pipeline in AzDO
-    * Points to netlify preview.
-    * Uses ‘jest’ framework
 0. Get your PR reviewed/merged
 0. Once PR is merged:
    * Pipelines runs to build and push container image to ACR, also artifact: drop
-   * Release: Deploys to Azure App Service (Linux/Docker), runs e2e test against dev.
+   * Release: Deploys to Azure App Service (Linux/Docker)
 0. Can test change in dev environment now. (If it were more than a package version change)
 0. Can push from master to prod, will start production build (requires write access)
     * Builds and pushes image to ACR.

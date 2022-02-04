@@ -29,21 +29,6 @@ This simple setup uses the _development_ instance of the service. That may be hi
 
 Since you are not forced to consume only the local APIs, but you can even consume directly the remote development or production APIs, for the `website` repo only you are able to point out different APIs endpoints, depending on your needs, using different kinds of npm scripts: - `npm start` use the default environment, which is actually the DEV environment, and it refers to development APIs - `npm run start:dev-api` points out specifically to the development APIs - `npm run start:local-api` points out the local environment, which works only if the service repo is started - `npm run start:prod-api` points out specifically to the production APIs
 
-### Running e2e Tests
-
-If you want to test the development running e2e tests, just simply run:
-
-- `npm run e2e:test` runs all the test that are saved into the folder `e2e/tests/`
-
-You can write your own tests, just create a new file inside the `e2e/tests/` folder.
-All e2e are written using `jest` and `puppeteer`.
-
-Note that by default all the e2e tests runs checking the development website on https://dev.clearlydefined.io
-If you want to run test on your local environment, you should run:
-
-- `npm start` start the website as normal. Builds the application and starts it on localhost:3000
-- `npm run e2e:test` run all the test checking on http://localhost:3000
-
 # Contributing
 
 This project welcomes contributions and suggestions, and we've documented the details in the [contribution policy](CONTRIBUTING.md).
