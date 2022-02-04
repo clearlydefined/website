@@ -11,6 +11,7 @@ If you are interested in working on the code for the website, follow the steps b
 
 ## Fastest Set Up
 
+
 The quickest way to get a fully functional local ClearlyDefined set up (including the website) is to use the [Dockerized ClearlyDefined environment setup](https://github.com/clearlydefined/docker_dev_env_experiment). This runs all services locally and does not require access to the ClearlyDefined Azure account.
 
 ## Alternative Set Up
