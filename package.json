@@ -84,8 +84,7 @@
     "test": "jest --no-cache -w 2 --watchAll=false --coverage",
     "test:unit": "jest -c jest.config.unit.js",
     "test:integration": "jest -c jest.config.integration.js",
-    "eject": "react-scripts eject",
-    "e2e:test": "jest -c e2e/jest.config.js --detectOpenHandles --no-cache"
+    "eject": "react-scripts eject"
   },
   "browserslist": {
     "development": [
