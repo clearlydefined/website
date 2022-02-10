@@ -71,7 +71,18 @@
 .modal-dialog {
   font-size: 14px;
   top: 50%;
-  margin: 0 auto;
+  transform: translate3d(0, -50%, 0) !important;
+
+  margin: 0 auto !important;
+
+  .close-modal {
+    transition: opacity $trans;
+
+    &:hover {
+      opacity: 0.6;
+      cursor: pointer;
+    }
+  }
 
   h4 {
     font-size: 16px;

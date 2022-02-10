@@ -19,10 +19,7 @@ class DefinitionRevision extends Component {
     return get(definition, 'described.urls.version') ? (
       <span className={className}>
         <Tooltip title={definition.coordinates.revision}>
-          <a
-            href={`${window.location.origin}${ROUTE_DEFINITIONS}/${currentComponent.toPath()}`}
-            rel="noopener noreferrer"
-          >
+          <a href={get(definition, 'described.urls.version')} target="_blank" rel="noopener noreferrer">
             {definition.coordinates.revision}
           </a>
         </Tooltip>
