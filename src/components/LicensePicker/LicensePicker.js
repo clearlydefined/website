@@ -120,7 +120,7 @@ export default class LicensePicker extends Component {
             <span className={`spdx-picker-expression-version ${isValid ? 'is-valisdsdsddd' : 'is-not-valid'}`}>
               {licenseExpression}
             </span>
-            <CloseIcon className="close-modal" />
+            <CloseIcon className="close-modal" onClick={onClose} />
           </Col>
         </Row>
         <Row>
