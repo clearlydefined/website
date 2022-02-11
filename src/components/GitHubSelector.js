@@ -84,7 +84,7 @@ export default class GitHubSelector extends Component {
             id="github-namespace-selector"
             inputProps={{ dataTestId: 'github-namespace-selector' }}
             className="selector-picker harvest-search"
-            ref={component => (this._typeahead = component ? component.getInstance() : this._typeahead)}
+            ref={component => (this._typeahead = component ? component?.getInstance() : this._typeahead)}
             useCache={false}
             onFocus={() => this.setState({ ...this.state, namespace: { ...this.state.namespace, focus: true } })}
             onBlur={() => this.setState({ ...this.state, namespace: { ...this.state.namespace, focus: false } })}
