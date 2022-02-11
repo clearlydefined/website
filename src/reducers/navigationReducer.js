@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import {
+    ROUTE_WORKSPACE,
     ROUTE_HARVEST,
     ROUTE_ABOUT,
     ROUTE_STATS
@@ -15,12 +16,12 @@ import { UI_NAVIGATION } from '../actions/ui'
  * 1 - only protected
  */
 const initialState = [
-    // {
-    //   title: 'Workspace',
-    //   to: ROUTE_WORKSPACE,
-    //   protected: 0,
-    //   isSelected: false
-    // },
+    {
+      title: 'Workspace',
+      to: ROUTE_WORKSPACE,
+      protected: 0,
+      isSelected: false
+    },
     {
         title: 'Harvest',
         to: ROUTE_HARVEST,
