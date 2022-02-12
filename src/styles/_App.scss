@@ -775,3 +775,23 @@ hr {
     line-height: 12px;
   }
 }
+
+.workspace .rbt-input.form-control {
+  margin-top: 72px;
+  padding: 0 60px;
+  border-radius: 30px;
+}
+
+.harvest-search {
+  .form-control {
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+    border: none;
+    border-radius: 0 30px 30px 0;
+  }
+
+  .rbt-input-hint {
+    border: none;
+  }
+}

@@ -178,7 +178,7 @@ export class PageDefinitions extends UserManagedList {
     } = this.state
 
     return (
-      <Grid className="main-container flex-column">
+      <Grid className="main-container flex-column workspace">
         <ContributePrompt
           ref={this.contributeModal}
           session={session}
