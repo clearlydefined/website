@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import Tooltip from 'antd/lib/tooltip'
 import EntitySpec from '../../../utils/entitySpec'
-import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 
 class DefinitionRevision extends Component {
   static propTypes = {
@@ -15,7 +14,6 @@ class DefinitionRevision extends Component {
 
   render() {
     const { definition, className, component } = this.props
-    const currentComponent = EntitySpec.fromObject(component)
     return get(definition, 'described.urls.version') ? (
       <span className={className}>
         <Tooltip title={definition.coordinates.revision}>
