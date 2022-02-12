@@ -4,7 +4,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import get from 'lodash/get'
 import Tooltip from 'antd/lib/tooltip'
-import EntitySpec from '../../../utils/entitySpec'
 
 class DefinitionRevision extends Component {
   static propTypes = {
@@ -13,7 +12,7 @@ class DefinitionRevision extends Component {
   }
 
   render() {
-    const { definition, className, component } = this.props
+    const { definition, className } = this.props
     return get(definition, 'described.urls.version') ? (
       <span className={className}>
         <Tooltip title={definition.coordinates.revision}>
