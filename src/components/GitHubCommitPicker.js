@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Highlighter } from 'react-bootstrap-typeahead'
+import searchSvg from '../images/icons/searchSvg.svg'
 import Autocomplete from './Navigation/Ui/Autocomplete'
 
 export default class GitHubCommitPicker extends Component {
@@ -17,7 +18,12 @@ export default class GitHubCommitPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { customValues: [], options: [], selected: props.request.commit ? [props.request.commit] : [] }
+    this.state = {
+      customValues: [],
+      options: [],
+      focus: false,
+      selected: props.request.commit ? [props.request.commit] : []
+    }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
@@ -83,29 +89,36 @@ export default class GitHubCommitPicker extends Component {
 
   render() {
     const { defaultInputValue, allowNew } = this.props
-    const { customValues, options, selected } = this.state
+    const { customValues, options, selected, focus } = this.state
     const list = customValues.concat(options)
     return (
       <div onClick={e => e.stopPropagation()}>
-        <Autocomplete
-          id="github-commit-picker"
-          inputProps={{ dataTestId: 'github-commit-picker' }}
-          selected={selected}
-          options={list}
-          labelKey="tag"
-          defaultInputValue={defaultInputValue}
-          placeholder={
-            options.length === 0 ? 'No tags found, enter a commit hash' : 'Pick a tag or enter a commit hash'
-          }
-          onChange={this.onChange}
-          positionFixed
-          allowNew={allowNew}
-          clearButton
-          newSelectionPrefix="SHA:"
-          filterBy={this.filter}
-          selectHintOnEnter
-          renderMenuItemChildren={this.renderMenuItemChildren}
-        />
+        <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
+          <div className="search-logo">
+            <img src={searchSvg} alt="search" />
+          </div>
+          <Autocomplete
+            id="github-commit-picker"
+            inputProps={{ dataTestId: 'github-commit-picker' }}
+            selected={selected}
+            options={list}
+            labelKey="tag"
+            defaultInputValue={defaultInputValue}
+            placeholder={
+              options.length === 0 ? 'No tags found, enter a commit hash' : 'Pick a tag or enter a commit hash'
+            }
+            onChange={this.onChange}
+            onFocus={() => this.setState({ ...this.state, focus: true })}
+            onBlur={() => this.setState({ ...this.state, focus: false })}
+            positionFixed
+            allowNew={allowNew}
+            clearButton
+            newSelectionPrefix="SHA:"
+            filterBy={this.filter}
+            selectHintOnEnter
+            renderMenuItemChildren={this.renderMenuItemChildren}
+          />
+        </div>
       </div>
     )
   }

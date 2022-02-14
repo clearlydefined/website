@@ -16,13 +16,16 @@ class TwoColumnsSection extends Component {
     elements: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
+        labelIcon: PropTypes.any,
+        lastIndex: PropTypes.bool,
         field: PropTypes.string,
         placeholder: PropTypes.string,
         type: PropTypes.string,
         editable: PropTypes.bool,
         editor: PropTypes.func,
         multiple: PropTypes.bool,
-        component: PropTypes.any
+        component: PropTypes.any,
+
       })
     )
   }
@@ -36,11 +39,13 @@ class TwoColumnsSection extends Component {
     return (
       <Row className={className}>
         {elements.map((element, index) => (
-          <Col md={6} key={`element_${index}`}>
+          <Col md={12} key={`element_${index}`}>
             <EditableFieldRenderer
               editable={element.editable}
               editor={element.editor}
               label={element.label}
+              lastIndex={element.lastIndex || false}
+              labelIcon={element.labelIcon || null}
               field={element.field}
               placeholder={element.placeholder || null}
               type={element.type}
@@ -49,6 +54,9 @@ class TwoColumnsSection extends Component {
               value={element.value || null}
               definition={definition}
               {...this.props}
+              dropDown={element.dropDown}
+              customBox={element.customBox}
+              customBoxIcon={element.customBoxIcon}
             />
           </Col>
         ))}

@@ -3,7 +3,6 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Grid } from 'react-bootstrap'
 import omit from 'lodash/omit'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
@@ -16,16 +15,16 @@ import SystemManagedList from '../../../SystemManagedList'
 import Section from '../../../Section'
 import ComponentList from '../../../ComponentList'
 import ButtonsBar from './ButtonsBar'
-import FullDetailPage from '../../../FullDetailView/FullDetailPage'
 import FilterList from '../../Ui/FilterList'
+import ProviderListDropdown from '../../Ui/ProviderListDropdown'
 import SortList from '../../Ui/SortList'
 import ContributePrompt from '../../../ContributePrompt'
-import { curateFilters, types, getParamsToUrl, getParamsFromUrl } from '../../../../utils/utils'
+import { curateFilters, getParamsToUrl, getParamsFromUrl, providers } from '../../../../utils/utils'
 import SpdxPicker from '../../../SpdxPicker'
 import FilterBar from '../../../FilterBar'
 import EntitySpec from '../../../../utils/entitySpec'
 import ActiveFilters from '../../Sections/ActiveFilters'
-
+import searchSvg from '../../../../images/icons/searchSvg.svg'
 /**
  * Page that show to the user a list of interesting definitions to curate
  */
@@ -33,12 +32,15 @@ class PageBrowse extends SystemManagedList {
   constructor(props) {
     super(props)
     this.state = {
-      activeSort: 'releaseDate-desc'
+      activeSort: 'releaseDate-desc',
+      searchFocused: false,
+      selectedProvider: providers[0]
     }
     this.onFilter = this.onFilter.bind(this)
     this.onSort = this.onSort.bind(this)
     this.updateData = this.updateData.bind(this)
     this.renderFilterBar = this.renderFilterBar.bind(this)
+    this.onProviderChange = this.onProviderChange.bind(this)
   }
 
   componentDidMount() {
@@ -46,13 +48,13 @@ class PageBrowse extends SystemManagedList {
     const urlParams = getParamsFromUrl(this.props.location.search)
     urlParams
       ? this.setState(
-          {
-            activeSort: urlParams.sort && urlParams.sort,
-            activeName: urlParams.name && urlParams.name,
-            activeFilters: omit(urlParams, ['sort', 'name'])
-          },
-          () => this.updateData()
-        )
+        {
+          activeSort: urlParams.sort && urlParams.sort,
+          activeName: urlParams.name && urlParams.name,
+          activeFilters: omit(urlParams, ['sort', 'name'])
+        },
+        () => this.updateData()
+      )
       : this.updateData()
   }
 
@@ -62,6 +64,10 @@ class PageBrowse extends SystemManagedList {
 
   onBrowse = value => {
     this.setState({ activeName: value }, () => this.updateData())
+  }
+
+  onFocusChange = value => {
+    this.setState({ searchFocused: value })
   }
 
   tableTitle() {
@@ -84,12 +90,35 @@ class PageBrowse extends SystemManagedList {
     const options = { ...filterOptions, list: names }
     return (
       <>
-        <Row className="show-grid spacer">
+        <div className="row top-search-and-filter d-flex">
+          <div className="top-search-bar col-10">
+            <div className={this.state.searchFocused ? 'focused-search-bar-container' : 'search-bar-container'}>
+              <div className="search-logo">
+                <img src={searchSvg} alt="search" />
+              </div>
+              <div className="search-input-container">
+                <FilterBar
+                  options={options}
+                  onChange={this.onBrowse}
+                  onSearch={this.onSearch}
+                  onClear={this.onBrowse}
+                  onFocusChange={this.onFocusChange}
+                  clearOnChange
+                />
+              </div>
+            </div>
+            <div className="search-dropdown-wrapper">{this.renderProvider('Type', 'success')}</div>
+          </div>
+          <div className="right-side-filter mx-5 col-2">
+            {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success', 'right-filter-dropdown')}
+          </div>
+        </div>
+        {/* <Row className="show-grid spacer">
           <Col md={2} mdOffset={1}>
             {this.renderFilter(curateFilters, 'Fix something', 'curate', 'success')}
           </Col>
-          <Col md={8}>
-            <div className={'horizontalBlock'}>
+          <Col md={8}> */}
+        {/* <div className={'horizontalBlock'}>
               {this.renderFilter(types, 'Type', 'type')}
               <span>&nbsp;</span>
               <FilterBar
@@ -99,9 +128,9 @@ class PageBrowse extends SystemManagedList {
                 onClear={this.onBrowse}
                 clearOnChange
               />
-            </div>
-          </Col>
-        </Row>
+            </div> */}
+        {/* </Col>
+        </Row> */}
       </>
     )
   }
@@ -131,6 +160,10 @@ class PageBrowse extends SystemManagedList {
         doPromptContribute={this.doPromptContribute}
       />
     )
+  }
+
+  onProviderChange(item) {
+    this.setState({ selectedProvider: item })
   }
 
   // Overrides the default onFilter method
@@ -173,7 +206,6 @@ class PageBrowse extends SystemManagedList {
     ]
 
     return (
-      // OMG, structural whitespace?!
       <div className="section--filter-bar">
         <div className="active-filters">
           <ActiveFilters
@@ -199,7 +231,7 @@ class PageBrowse extends SystemManagedList {
     )
   }
 
-  renderFilter(list, title, id, variant) {
+  renderFilter(list, title, id, variant, className) {
     return (
       <FilterList
         list={list}
@@ -208,6 +240,19 @@ class PageBrowse extends SystemManagedList {
         value={this.state.activeFilters}
         onFilter={this.onFilter}
         variant={variant}
+        className={className || ''}
+      />
+    )
+  }
+
+  renderProvider(title, variant, className) {
+    return (
+      <ProviderListDropdown
+        title={title}
+        value={this.state.selectedProvider}
+        onProviderChange={this.onProviderChange}
+        variant={variant}
+        className={'harvest-provider border-none'}
       />
     )
   }
@@ -269,53 +314,53 @@ class PageBrowse extends SystemManagedList {
 
   render() {
     const { components, curations, definitions, session } = this.props
-    const { sequence, showFullDetail, path, currentComponent, currentDefinition } = this.state
+    const { sequence } = this.state
     return (
-      <Grid className="main-container flex-column">
-        <ContributePrompt
-          ref={this.contributeModal}
-          session={session}
-          onLogin={this.handleLogin}
-          actionHandler={this.doContribute}
-          definitions={this.getDefinitionsWithChanges()}
-        />
-        {this.renderTopFilters()}
-        <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
-          <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
-            <i className="fas fa-spinner fa-spin" />
-            <ComponentList
-              multiSelectEnabled={this.multiSelectEnabled}
-              readOnly={false}
-              list={components.transformedList}
-              listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
-              loadMoreRows={this.loadMoreRows}
-              onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
-              onChange={this.onChangeComponent}
-              onInspect={this.onInspect}
-              renderFilterBar={this.renderFilterBar}
-              curations={curations}
-              definitions={definitions}
-              noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
-              sequence={sequence}
-              hasChange={this.hasChange}
-              hideVersionSelector
-              hideRemoveButton
-            />
-            {currentDefinition && (
-              <FullDetailPage
-                modalView
-                visible={showFullDetail}
-                onClose={this.onInspectClose}
-                onSave={this.onChangeComponent}
-                path={path}
-                currentDefinition={currentDefinition}
-                component={currentComponent}
-                readOnly={false}
-              />
-            )}
+      <div className="container search-components-wrap">
+        <div className="row">
+          <div className="col-12">
+            <h2 className="h1 mb-4">Search Components</h2>
           </div>
-        </Section>
-      </Grid>
+          <div>{this.renderTopFilters()}</div>
+          <div className="col-12">
+            <ContributePrompt
+              ref={this.contributeModal}
+              session={session}
+              onLogin={this.handleLogin}
+              actionHandler={this.doContribute}
+              definitions={this.getDefinitionsWithChanges()}
+            />
+          </div>
+          <div className="col-12">
+            <Section
+              className="flex-grow-column clearly-component-wrap"
+            >
+              <div className={classNames('clearly-table flex-grow', { loading: components.isFetching })}>
+                <i className="fas fa-spinner fa-spin" />
+                <ComponentList
+                  role="tree"
+                  multiSelectEnabled={this.multiSelectEnabled}
+                  readOnly={false}
+                  list={components.transformedList}
+                  listLength={get(components, 'headers.pagination.totalCount') || components.list.length}
+                  loadMoreRows={this.loadMoreRows}
+                  onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
+                  onChange={this.onChangeComponent}
+                  onInspect={this.onInspect}
+                  renderFilterBar={this.renderFilterBar}
+                  curations={curations}
+                  definitions={definitions}
+                  noRowsRenderer={() => this.noRowsRenderer(components.isFetching)}
+                  sequence={sequence}
+                  hasChange={this.hasChange}
+                  hideVersionSelector
+                  hideRemoveButton
+                />
+              </div>
+            </Section>
+          </div>
+        </div>
+      </div>
     )
   }
 }

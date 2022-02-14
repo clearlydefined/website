@@ -9,6 +9,7 @@ import { RowEntityList, DefinitionEntry } from './'
 import EntitySpec from '../utils/entitySpec'
 import ComponentButtons from './Navigation/Ui/ComponentButtons'
 import { withResize } from '../utils/WindowProvider'
+import carrotdownFill from '../images/icons/carrotdownFill.svg'
 
 class ComponentList extends React.Component {
   static propTypes = {
@@ -75,7 +76,7 @@ class ComponentList extends React.Component {
 
   rowHeight({ index }) {
     const component = this.props.list[index]
-    return component && component.expanded ? 150 * this.props.isMobileMultiplier : 50
+    return component && component.expanded ? 250 * this.props.isMobileMultiplier : 83
   }
 
   toggleExpanded(component) {
@@ -95,10 +96,6 @@ class ComponentList extends React.Component {
       onRevert,
       showVersionSelectorPopup,
       hideVersionSelector,
-      onSelectAll,
-      selected,
-      toggleCheckbox,
-      multiSelectEnabled,
       hideRemoveButton
     } = this.props
 
@@ -108,13 +105,13 @@ class ComponentList extends React.Component {
     let curation = this.getCuration(component)
     curation = curation || { contributions: [], curations: {} }
     return (
-      <div key={key} style={style} className="component-row">
+      <div key={key} className="component-row" style={style}>
         <DefinitionEntry
-          multiSelectEnabled={multiSelectEnabled}
-          onSelectAll={onSelectAll}
-          isSelected={selected[index] || false}
-          toggleCheckbox={multiSelectEnabled && toggleCheckbox.bind(this, index)}
-          draggable
+          // multiSelectEnabled={multiSelectEnabled}
+          // onSelectAll={onSelectAll}
+          // isSelected={selected[index] || false}
+          // toggleCheckbox={multiSelectEnabled && toggleCheckbox.bind(this, index)}
+          // draggable
           readOnly={readOnly}
           onClick={() => this.toggleExpanded(component)}
           curation={curation}
@@ -146,13 +143,25 @@ class ComponentList extends React.Component {
   }
 
   render() {
-    const { loadMoreRows, noRowsRenderer, list, listLength, renderFilterBar } = this.props
+    const { loadMoreRows, noRowsRenderer, list, listLength } = this.props
     const { sortOrder, contentSeq } = this.state
     return (
-      <div className="component-list flex-grow">
-        {renderFilterBar()}
-        <FormGroup className="flex-grow-column">
+      <div className="clearly-table-body flex-grow">
+        <div className="clearly-header">
+          <div className="table-header-fcloumn">
+            <h4>Component</h4>
+          </div>
+          <div className="table-header-cloumn">
+            <h4>Score </h4>
+            <img src={carrotdownFill} alt="filter" />
+          </div>
+          <div className="table-header-cloumn">
+            <h4>Release Date </h4> <img src={carrotdownFill} alt="filter" />
+          </div>
+        </div>
+        <FormGroup className="flex-grow-column ">
           <RowEntityList
+            role="rowgroup1"
             list={list}
             listLength={listLength}
             loadMoreRows={loadMoreRows}

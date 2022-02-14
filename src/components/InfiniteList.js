@@ -58,6 +58,7 @@ export default class InfiniteList extends React.Component {
           <AutoSizer>
             {({ width, height }) => (
               <List
+                aria-checked="false"
                 ref={this.hookRef(registerChild)}
                 className={`${customClassName}`}
                 height={totalRows() === 0 ? noRowsHeight : height}

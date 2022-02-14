@@ -1,0 +1,46 @@
+
+@mixin text-input {
+  height: 36px;
+  font-size: 14px;
+  background: $white;
+  border: 1px solid $gray-300;
+  border-radius: 4px;
+  padding: 0 14px;
+}
+
+input.date-picker {
+  background: $gray-100;
+  border: none !important;
+  border-bottom: 1px solid $gray-900 !important;
+  height: 42px !important;
+  position: relative;
+  border-radius: 0;
+  padding: 0 16px !important;
+  box-shadow: none !important;
+  line-height: 1;
+
+  &:focus,
+  &:active {
+    //border-color: $brand !important;
+    outline: none !important;
+  }
+
+  &:before {
+    color: $gray-500;
+    margin: 0;
+    padding: 0;
+  }
+
+  &::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0);
+    opacity: 1;
+    display: block;
+    background: url('../images/icons/calender.svg') center / 15px 16px no-repeat;
+    width: 18px;
+    height: 20px;
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translate3d(0, -50%, 0);
+  }
+}

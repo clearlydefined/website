@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Row, Col, Button, ButtonGroup, FormGroup } from 'react-bootstrap'
+import { Grid, Button, ButtonGroup, FormGroup } from 'react-bootstrap'
 import { GitHubSelector, GitHubCommitPicker } from './'
 import { getGitHubRevisions } from '../api/clearlyDefined'
 import EntitySpec from '../utils/entitySpec'
@@ -71,26 +71,24 @@ class SourcePicker extends Component {
     const { value } = this.props
     return (
       <Grid className="main-container" id="source-picker">
-        <Row className="show-grid spacer">
-          <Col md={2}>{this.renderProviderButtons()}</Col>
-          <Col md={5}>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</Col>
-          <Col md={5}>
-            {selectedComponent && activeProvider === 'github' && (
-              <GitHubCommitPicker
-                allowNew
-                request={selectedComponent}
-                getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
-                onChange={this.commitChanged.bind(this, selectedComponent)}
-              />
-            )}
-          </Col>
-        </Row>
-        <Row className="spacer">
+        <div>{this.renderProviderButtons()}</div>
+        <div>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</div>
+        <div>
+          {selectedComponent && activeProvider === 'github' && (
+            <GitHubCommitPicker
+              allowNew
+              request={selectedComponent}
+              getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
+              onChange={this.commitChanged.bind(this, selectedComponent)}
+            />
+          )}
+        </div>
+        <div className="source-picker__current-source">
           <a href={selectedComponent ? selectedComponent.url : value} target="_blank" rel="noopener noreferrer">
             {selectedComponent ? selectedComponent.url : value}
           </a>
           {this.renderActionButton()}
-        </Row>
+        </div>
       </Grid>
     )
   }

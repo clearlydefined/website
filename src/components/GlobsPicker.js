@@ -2,10 +2,7 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Tag from 'antd/lib/tag'
 import Input from 'antd/lib/input'
-import Tooltip from 'antd/lib/tooltip'
-import Icon from 'antd/lib/icon'
 import isEqual from 'lodash/isEqual'
 import isValidGlob from 'is-valid-glob'
 import withSuggestions from '../utils/withSuggestions'
@@ -41,12 +38,17 @@ class GlobsPicker extends Component {
   onChange = suggestion => this.props.onChange(suggestion)
 
   render() {
-    const { globs, className, readOnly, onRevert } = this.props
-    const { inputVisible } = this.state
-
     return (
-      <div className="editable-editor">
-        {!readOnly && (
+      <div className="editable-editor w-100">
+        <Input
+          autoFocus
+          type="text"
+          size=""
+          className="form-control w-100" id="exampleInputEmail1"
+          onBlur={this.handleInputConfirm}
+          onPressEnter={this.handleInputConfirm}
+        />
+        {/* {!readOnly && (
           <i
             className={`fas fa-undo editable-marker ${globs.length > -1 ? '' : 'fa-disabled'}`}
             onClick={() => onRevert && globs && onRevert()}
@@ -72,8 +74,8 @@ class GlobsPicker extends Component {
           <Input
             autoFocus
             type="text"
-            size="small"
-            style={{ width: 78 }}
+            size=""
+            className="form-control w-100" id="exampleInputEmail1"
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}
           />
@@ -83,7 +85,7 @@ class GlobsPicker extends Component {
               <Icon type="plus" />
             </Tag>
           )
-        )}
+        )} */}
       </div>
     )
   }

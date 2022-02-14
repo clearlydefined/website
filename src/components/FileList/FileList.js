@@ -4,15 +4,16 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Table, Input, Button, Icon, Checkbox } from 'antd'
+import { Paper } from '@material-ui/core'
 import get from 'lodash/get'
 import isArray from 'lodash/isArray'
-import CopyrightsRenderer from '../../components/CopyrightsRenderer'
-import LicensesRenderer from '../../components/LicensesRenderer'
-import FacetsRenderer from '../../components/FacetsRenderer'
+import FacetsDropdown from '../../components/FacetsDropdown'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
 import Attachments from '../../utils/attachments'
-
+import folderIcon from '../../images/icons/folder.svg'
+import fileIcon from '../../images/icons/file.svg'
+import FolderOpenIcon from '@material-ui/icons/FolderOpen'
 export default class FileList extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func,
@@ -28,7 +29,9 @@ export default class FileList extends PureComponent {
     filteredInfo: {},
     sortedInfo: {},
     expandedRows: [],
-    searchText: null
+    searchText: null,
+    selectedDirectory: null,
+    breadcrumbs: []
   }
 
   componentDidMount() {
@@ -177,11 +180,39 @@ export default class FileList extends PureComponent {
     const attachments = new Attachments({ ...definition.coordinates, path, row })
     const url = attachments.getFileAttachmentUrl()
     return url ? (
-      <a href={url} target="_blank" rel="noopener noreferrer">
-        {row.name}
-      </a>
+      <span>
+        <img src={fileIcon} alt="folder-icon" className="directory-folder-icon" />
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          {row.name}
+        </a>
+      </span>
     ) : (
-      <span>{row.name}</span>
+      <span>
+        <img src={folderIcon} alt="folder-icon" className="directory-folder-icon" />
+        {row.name}
+      </span>
+    )
+  }
+
+  renderCopyrightCell = (record, component, previewDefinition) => {
+    let copyrights = Contribution.getValue(
+      component.item,
+      previewDefinition,
+      `files[${record.id}].attributions`
+    ).toString()
+    const haveLongText = copyrights.length && copyrights.length > 42 ? true : false
+    // console.log('copyrights', copyrights.toString())
+    var showFulltext = false
+    return (
+      !record.children &&
+      (copyrights ? (
+        <div>
+          <p className="text-black">{copyrights.slice(0, showFulltext ? copyrights.length : 42)}</p>
+          {haveLongText && <div onClick={e => (showFulltext = true)}>More</div>}
+        </div>
+      ) : (
+        <p className="text-gray"></p>
+      ))
     )
   }
 
@@ -204,8 +235,54 @@ export default class FileList extends PureComponent {
     onChange(`described.facets.${facet}`, newGlobs)
   }
 
+  onDirectorySelect = e => {
+    let tempdata = this.state.breadcrumbs
+    tempdata.push(e)
+    this.setState({ files: e.children, breadcrumbs: tempdata })
+    tempdata = []
+  }
+
+  onBreadcrumbSelect(item, index) {
+    const { breadcrumbs } = this.state
+    if (breadcrumbs.length !== index) {
+      this.setState({ files: item.children })
+      breadcrumbs.length = index + 1
+    }
+  }
+
+  renderBreadcrumbs() {
+    const { coordinates } = this.props
+    const { breadcrumbs } = this.state
+    return (
+      <div className="breadcrumbs-container">
+        <div
+          className="breadcrumb-item"
+          onClick={e => {
+            this.updateFileList(this.props)
+            this.setState({ breadcrumbs: [] })
+          }}
+        >
+          {coordinates?.name}-{coordinates?.revision}
+        </div>
+        {breadcrumbs.map((item, index) => {
+          return (
+            <div
+              className={`${
+                breadcrumbs.length - 1 === index ? 'breadcrumb-item breadcrumb-last-item' : 'breadcrumb-item'
+              }`}
+              key={index}
+              onClick={e => this.onBreadcrumbSelect(item, index)}
+            >
+              {item.name}
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
   render() {
-    const { onChange, definition, readOnly, component, previewDefinition } = this.props
+    const { definition, component, previewDefinition } = this.props
     const { expandedRows, searchText, filteredFiles, files } = this.state
 
     const facets = Contribution.getValue(definition, previewDefinition, 'described.facets')
@@ -215,18 +292,24 @@ export default class FileList extends PureComponent {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        ...this.getColumnSearchProps('name'),
-        render: (_, record) => this.getNameCellEntry(component.item, record),
-        width: '40%',
+        // ...this.getColumnSearchProps('name'),
+        render: (_, record) => {
+          return (
+            <div onClick={e => (record.children ? this.onDirectorySelect(record) : null)}>
+              {this.getNameCellEntry(component.item, record)}
+            </div>
+          )
+        },
+        width: '25%',
         className: 'column-name'
       },
       {
         title: 'Facets',
         dataIndex: 'facets',
         key: 'facets',
-        ...this.getColumnSearchProps('facets'),
+        // ...this.getColumnSearchProps('facets'),
         render: (value, record) => (
-          <FacetsRenderer
+          <FacetsDropdown
             isFolder={(record.children && true) || false}
             onFacetSelected={this.onFacetSelected}
             facets={facets}
@@ -246,81 +329,92 @@ export default class FileList extends PureComponent {
         filters: licenses.map(license => {
           return { label: license, value: license }
         }),
-        ...this.getLicenseColumnFilter('license'),
+        // ...this.getLicenseColumnFilter('license'),
         filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
-        render: (value, record) =>
-          !record.children && (
-            <LicensesRenderer
-              revertable={false}
-              field={`files[${record.id}].license`}
-              readOnly={readOnly}
-              initialValue={get(component.item, `files[${record.id}].license`)}
-              value={Contribution.getValue(component.item, previewDefinition, `files[${record.id}].license`)}
-              onChange={license => {
-                onChange(`files[${record.id}]`, license, null, license => {
-                  const attributions = Contribution.getValue(
-                    component.item,
-                    previewDefinition,
-                    `files[${record.id}].attributions`
-                  )
-                  return {
-                    path: record.path,
-                    license,
-                    ...(attributions ? { attributions } : {})
-                  }
-                })
-              }}
-            />
-          ),
-        width: '20%'
+        // render: (value, record) =>
+        //   !record.children && (
+        //     <LicensesRenderer
+        //       revertable={false}
+        //       field={`files[${record.id}].license`}
+        //       readOnly={readOnly}
+        //       initialValue={get(component.item, `files[${record.id}].license`)}
+        //       value={Contribution.getValue(component.item, previewDefinition, `files[${record.id}].license`)}
+        //       onChange={license => {
+        //         onChange(`files[${record.id}]`, license, null, license => {
+        //           const attributions = Contribution.getValue(
+        //             component.item,
+        //             previewDefinition,
+        //             `files[${record.id}].attributions`
+        //           )
+        //           return {
+        //             path: record.path,
+        //             license,
+        //             ...(attributions ? { attributions } : {})
+        //           }
+        //         })
+        //       }}
+        //     />
+        //   ),
+        render: (value, record) => {
+          let license = Contribution.getValue(component.item, previewDefinition, `files[${record.id}].license`)
+          return (
+            !record.children &&
+            (license ? <p className="text-black">{license}</p> : <p className="text-gray">SPDX license</p>)
+          )
+        },
+        width: '15%'
       },
       {
         title: 'Copyrights',
         dataIndex: 'attributions',
         key: 'attributions',
         className: 'column-copyrights',
-        ...this.getColumnSearchProps('attributions'),
-        render: (value, record) => {
-          return (
-            !record.children && (
-              <CopyrightsRenderer
-                field={record && `files[${record.id}].attributions`}
-                initialValue={get(component.item, `files[${record.id}].attributions`, [])}
-                item={
-                  Contribution.getValue(component.item, previewDefinition, `files[${record.id}].attributions`) || []
-                }
-                readOnly={readOnly}
-                selections={false}
-                onSave={value => {
-                  onChange(`files[${record.id}]`, value, null, value => {
-                    return {
-                      path: record.path,
-                      license: Contribution.getValue(component.item, previewDefinition, `files[${record.id}].license`),
-                      attributions: value
-                    }
-                  })
-                }}
+        // ...this.getColumnSearchProps('attributions'),
+        render: (value, record) => this.renderCopyrightCell(record, component, previewDefinition),
+        width: '25%'
+      },
+      {
+        title: '',
+        dataIndex: 'edit',
+        key: 'edit',
+        className: 'edit-data',
+        // ...this.getColumnSearchProps('attributions'),
+        render: (value, record) =>
+          !record.children && (
+            <svg
+              className="edit-icon"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M22.5 19.5H1.5V21H22.5V19.5Z" fill="#383A43" />
+              <path
+                d="M19.05 6.75C19.65 6.15 19.65 5.25 19.05 4.65L16.35 1.95C15.75 1.35 14.85 1.35 14.25 1.95L3 13.2V18H7.8L19.05 6.75ZM15.3 3L18 5.7L15.75 7.95L13.05 5.25L15.3 3ZM4.5 16.5V13.8L12 6.3L14.7 9L7.2 16.5H4.5Z"
+                fill="#383A43"
               />
-            )
-          )
-        },
-        width: '20%'
+            </svg>
+          ),
+        width: '5%'
       }
     ]
 
     return (
-      <Table
-        className="file-list"
-        columns={columns}
-        dataSource={searchText ? filteredFiles : files}
-        onChange={this.handleChange}
-        expandedRowKeys={expandedRows}
-        onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
-        pagination={false}
-        bordered={false}
-        indentSize={8}
-        scroll={{ y: 650 }}
-      />
+      <div className="diractry-viewer">
+        {this.renderBreadcrumbs()}
+        <Paper className="w-100 rounded">
+          <Table
+            columns={columns}
+            dataSource={searchText ? filteredFiles : files}
+            expandableRowIcon={<FolderOpenIcon />}
+            onChange={this.handleChange}
+            expandedRowKeys={expandedRows}
+            onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
+            pagination={false}
+          />
+        </Paper>
+      </div>
     )
   }
 }

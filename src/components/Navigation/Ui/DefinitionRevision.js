@@ -13,7 +13,6 @@ class DefinitionRevision extends Component {
 
   render() {
     const { definition, className } = this.props
-
     return get(definition, 'described.urls.version') ? (
       <span className={className}>
         <Tooltip title={definition.coordinates.revision}>

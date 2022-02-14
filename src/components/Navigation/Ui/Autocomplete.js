@@ -7,6 +7,16 @@ import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 export default class Autocomplete extends Component {
   render() {
-    return <Typeahead ref={typeahead => (this.typeahead = typeahead)} {...this.props} />
+    return (
+      <Typeahead
+        inputProps={{
+          autoComplete: 'off',
+          'aria-label': 'receptacle-id-autocomplete-is-on'
+        }}
+        id="given-name"
+        ref={typeahead => (this.typeahead = typeahead)}
+        {...this.props}
+      />
+    )
   }
 }

@@ -2,6 +2,7 @@
 
 This project implements the website for [ClearlyDefined](https://clearlydefined.io). It's a relatively straightforward React app that serves mainly as a portal to discover and curate project data managed by the ClearDefined service.
 
+
 The doc has a [guide to using the website](https://docs.clearlydefined.io/using-data) to browse, inspect and curate data.
 
 

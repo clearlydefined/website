@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { ToggleButtonGroup, ToggleButton, Button, Row, Col } from 'react-bootstrap'
 import SpdxPicker from '../SpdxPicker'
+import CloseIcon from '@material-ui/icons/Close'
 
 export default class RuleBuilder extends Component {
   static propTypes = {
@@ -37,7 +38,7 @@ export default class RuleBuilder extends Component {
             OR
           </ToggleButton>
         </ToggleButtonGroup>
-        <div>
+        <div className="action-buttons">
           <Button id="changeRulesOperator" onClick={() => changeRulesOperator('AND', path)}>
             Add Rule
           </Button>
@@ -58,29 +59,29 @@ export default class RuleBuilder extends Component {
           {currentPath !== 'right' && !parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right')
             ? this.renderHeaderRow(rule, path, conjunction)
             : null}
-          <Col md={6} className="flex-center">
+          <Col md={12} className="flex-center">
             <SpdxPicker value={'NOASSERTION'} onChange={value => updateLicense(value, path)} />
-            {path.length > 0 && (
+            {/* {path.length > 0 && (
               <Button id="removeRule" onClick={() => removeRule(path)}>
                 x
               </Button>
-            )}
+            )} */}
           </Col>
         </Col>
       )
-
-    if (rule.license || rule.license === '')
+    else if (rule.license || rule.license === '')
       return (
         <Col md={12} className="spdx-picker-rule">
           {currentPath !== 'right' && !parentRule.hasOwnProperty('left') && !parentRule.hasOwnProperty('right')
             ? this.renderHeaderRow(rule, path, conjunction)
             : null}
-          <Col md={6} className="flex-center">
+          <Col md={12} className="flex-center editable-container">
             <SpdxPicker value={rule.license} onChange={value => updateLicense(value, path)} />
             {rule.license && (
               <div>
                 <input
                   type="checkbox"
+                  className="checkbox"
                   onChange={event => considerLaterVersions(event.target.checked, path)}
                   value="+"
                 />
@@ -89,33 +90,34 @@ export default class RuleBuilder extends Component {
             )}
             {path.length > 0 && (
               <Button id="removeRule" onClick={() => removeRule(path)}>
-                x
+                <CloseIcon />
               </Button>
             )}
           </Col>
         </Col>
       )
-
-    return (
-      <Col md={12} className="spdx-picker-group">
-        {this.renderHeaderRow(rule, path, rule.conjunction, true)}
-        <div>
-          {this.renderRule(
-            rule.left,
-            [...path, 'left'],
-            rule.left.conjunction ? rule.left.conjunction : rule.conjunction,
-            rule
-          )}
-        </div>
-        <div>
-          {this.renderRule(rule.right, [...path, 'right'], rule.right.conjunction && rule.right.conjunction, rule)}
-        </div>
-      </Col>
-    )
+    else
+      return (
+        <Col md={12} className="spdx-picker-rule">
+          {this.renderHeaderRow(rule, path, rule.conjunction, true)}
+          <div>
+            {this.renderRule(
+              rule.left,
+              [...path, 'left'],
+              rule.left.conjunction ? rule.left.conjunction : rule.conjunction,
+              rule
+            )}
+          </div>
+          <div>
+            {this.renderRule(rule.right, [...path, 'right'], rule.right.conjunction && rule.right.conjunction, rule)}
+          </div>
+        </Col>
+      )
   }
 
   render() {
     const { rule } = this.props
+    console.log(rule)
     return (
       <Row>
         <Col md={12} className="flex">

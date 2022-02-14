@@ -68,11 +68,13 @@
 }
 
 .list-headline {
+  width: 100%;
+  display: flex;
+  justify-content: between;
+  align-items: center;
   font-weight: bold;
   margin-bottom: 2px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+
   a {
     color: inherit;
   }
@@ -90,9 +92,87 @@
   flex-direction: column;
 }
 
+// ----------------------------------------
+// Score and release date
+// ----------------------------------------
+
+.score-badge-table {
+  width: 25%;
+  text-align: center;
+
+  span {
+    font-size: 14px !important;
+    width: 35px !important;
+    height: 24px !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.releasedDate-table {
+  width: 25%;
+  text-align: center;
+  font-weight: normal !important;
+  font-size: 14px;
+  line-height: 100%;
+  color: #4a4a4a;
+}
+
+.score-badge-table > *,
+.releasedDate-table > * {
+  margin: 0 auto;
+  text-align: center;
+  font-size: 14px;
+}
+
+.score-badge-table,
+.releasedDate-table {
+  transform: translateY(12px);
+}
+
+// ----------------------------------------
+// List panel
+// ----------------------------------------
+
 .list-panel {
-  margin-left: 70px;
-  margin-right: 20px;
+  position: relative;
+  font-size: 14px;
+  width: 90%;
+  margin: 0 auto;
+  border-radius: 8px;
+  background: #f6f7f9;
+  padding: 16px 13px;
+  margin: 4px auto 24px auto;
+
+  .list-panel__quick-edit {
+    @media screen and (min-width: $screen-md) {
+      position: absolute;
+      right: 12px;
+      bottom: 16px;
+      width: auto;
+    }
+  }
+
+  .quick-edit-btn {
+    border: 1px solid #dfe5ee;
+    padding: 4px 13px;
+    border-radius: 50px;
+    text-align: center;
+    outline: none;
+    background: #fff;
+    font-size: 14px;
+    transition: all $trans;
+
+    &:hover {
+      background: $brand;
+      color: $white;
+      border-color: $brand;
+    }
+  }
+
   p {
     margin: 0;
   }
@@ -103,6 +183,70 @@
 
   @media screen and (max-width: $screen-md) {
     margin: 0 10px;
+  }
+}
+
+.row-panel-details {
+  > div {
+    margin: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media screen and (min-width: $screen-md) {
+    padding-right: 96px;
+  }
+  @media screen and (min-width: $screen-lg) {
+    padding-right: 140px;
+  }
+
+  .list-singleLine {
+    span {
+      display: inline-block;
+
+      b {
+        font-weight: 500;
+      }
+
+      + span {
+        &:before {
+          content: '|';
+          margin: 0 8px;
+          color: #dfe5ee;
+        }
+      }
+    }
+  }
+}
+
+.panel-details__title {
+  padding-right: 6px;
+  min-width: 90px;
+
+  @media screen and (max-width: $screen-md) {
+    min-width: 108px;
+  }
+
+  b {
+    font-weight: 600;
+    font-size: 15px;
+    color: $gray-500;
+  }
+}
+
+.panel-details__value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  p {
+    font-weight: 400;
+    color: $gray-900;
+  }
+  .popoverSpan {
+    font-weight: 400;
+    color: $gray-900;
   }
 }
 
@@ -171,18 +315,26 @@
   color: #38a038;
   background: transparent;
   border: none;
-  padding: 5px 7px;
+  padding: 5px 8px;
 }
 
 .list-message {
-  font-size: 0.85em;
-  color: $color-text-main;
+  width: 100%;
+
   a {
     color: inherit;
   }
   a:hover,
   a:focus {
     color: $color_highlight;
+  }
+  span {
+    border: 1px solid gray;
+    border-radius: 50px;
+    padding: 2px 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4a4a4a;
   }
 }
 
@@ -237,5 +389,43 @@
 
   .open > .dropdown-toggle.btn-default {
     background: transparent;
+  }
+}
+
+.component-row {
+  border-bottom: 1px solid #dfe5ee;
+  position: relative;
+
+  .list-row {
+    transition: background $trans;
+
+    &:hover {
+      background: $gray-100 !important;
+    }
+  }
+
+  &:hover .list-row {
+    background: $gray-100 !important;
+  }
+
+  .table-title {
+    display: flex;
+    align-items: center;
+    color: $gray-900;
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 500 !important;
+
+    a {
+      transition: color $trans;
+
+      &:hover {
+        color: $brand;
+      }
+    }
+
+    span {
+      font-weight: 400;
+    }
   }
 }

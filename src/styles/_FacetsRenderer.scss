@@ -3,3 +3,18 @@
     width: 60% !important;
   }
 }
+
+.facetsDropdown {
+  .ant-select-selection {
+    border: none;
+    color: black;
+    font-size: 14px;
+    .ant-select-selection__placeholder {
+      color: black;
+      font-size: 14px;
+    }
+  }
+  .ant-select-arrow-icon {
+    color: black;
+  }
+}

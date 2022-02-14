@@ -18,7 +18,7 @@ export default class RawDataSection extends Component {
   render() {
     const { curations, definition, harvest } = this.props
     return (
-      <Tabs>
+      <Tabs className="mb-4">
         <Tabs.TabPane tab="Current definition" key="1">
           <RawDataRenderer value={definition} name={'Current definition'} type={'yaml'} />
         </Tabs.TabPane>

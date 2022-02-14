@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import { Grid, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import isEmpty from 'lodash/isEmpty'
 import get from 'lodash/get'
 import Modal from 'antd/lib/modal'
@@ -25,8 +25,8 @@ export class AbstractFullDetailsView extends Component {
       visible,
       previewDefinition,
       readOnly,
-      session,
-      inspectedCuration
+      inspectedCuration,
+      component
     } = this.props
     const { changes } = this.state
 
@@ -58,11 +58,12 @@ export class AbstractFullDetailsView extends Component {
             applyCurationSuggestion={this.applyCurationSuggestion}
             getCurationData={this.getCurationData}
             inspectedCuration={inspectedCuration}
+            component={component}
           />
         )}
       </Modal>
     ) : (
-      <Grid>
+      <>
         <FullDetailComponent
           curations={curations}
           definition={definition}
@@ -77,24 +78,35 @@ export class AbstractFullDetailsView extends Component {
           applyCurationSuggestion={this.applyCurationSuggestion}
           getCurationData={this.getCurationData}
           inspectedCuration={inspectedCuration}
+          component={component}
           renderContributeButton={
-            <Button
-              bsStyle="success"
-              disabled={isEmpty(changes) || isEmpty(harvest.item)}
-              onClick={this.doPromptContribute}
-            >
-              Contribute
-            </Button>
+            <div className="d-contents">
+              {!isEmpty(changes) && (
+                <Button
+                  className="revert-btn mr-2"
+                  disabled={isEmpty(changes) || isEmpty(harvest.item)}
+                  onClick={e => this.handleRevert()}
+                >
+                  Revert
+                </Button>
+              )}
+              <Button
+                className="contribute-btn"
+                disabled={isEmpty(changes) || isEmpty(harvest.item)}
+                onClick={this.doPromptContribute}
+              >
+                Contribute
+              </Button>
+            </div>
           }
         />
         <ContributePrompt
           ref={this.contributeModal}
-          session={session}
           onLogin={this.handleLogin}
           actionHandler={this.doContribute}
           definitions={get(definition, 'item.coordinates') ? [get(definition, 'item.coordinates')] : []}
         />
-      </Grid>
+      </>
     )
   }
 }

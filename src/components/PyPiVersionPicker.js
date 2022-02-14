@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { getPyPiRevisions } from '../api/clearlyDefined'
 import Autocomplete from './Navigation/Ui/Autocomplete'
+import searchSvg from '../images/icons/searchSvg.svg'
 
 export default class PyPiVersionPicker extends Component {
   static propTypes = {
@@ -15,7 +16,12 @@ export default class PyPiVersionPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { customValues: [], options: [], selected: props.request.revision ? [props.request.revision] : [] }
+    this.state = {
+      customValues: [],
+      options: [],
+      focus: false,
+      selected: props.request.revision ? [props.request.revision] : []
+    }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
@@ -57,24 +63,31 @@ export default class PyPiVersionPicker extends Component {
 
   render() {
     const { defaultInputValue } = this.props
-    const { customValues, options, selected } = this.state
+    const { customValues, options, selected, focus } = this.state
     const list = customValues.concat(options)
     return (
-      <Autocomplete
-        id="pypi-version-picker"
-        selected={selected}
-        options={list}
-        defaultInputValue={defaultInputValue}
-        placeholder={options.length === 0 ? 'Could not fetch versions, type a PyPi version' : 'Pick a PyPi version'}
-        onChange={this.onChange}
-        positionFixed
-        clearButton
-        allowNew
-        newSelectionPrefix="Version:"
-        emptyLabel=""
-        filterBy={this.filter}
-        selectHintOnEnter
-      />
+      <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
+        <div className="search-logo">
+          <img src={searchSvg} alt="search" />
+        </div>
+        <Autocomplete
+          id="pypi-version-picker"
+          selected={selected}
+          options={list}
+          defaultInputValue={defaultInputValue}
+          placeholder={options.length === 0 ? 'Could not fetch versions, type a PyPi version' : 'Pick a PyPi version'}
+          onChange={this.onChange}
+          positionFixed
+          clearButton
+          onFocus={() => this.setState({ ...this.state, focus: true })}
+          onBlur={() => this.setState({ ...this.state, focus: false })}
+          allowNew
+          newSelectionPrefix="Version:"
+          emptyLabel=""
+          filterBy={this.filter}
+          selectHintOnEnter
+        />
+      </div>
     )
   }
 }

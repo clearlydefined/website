@@ -119,7 +119,7 @@ export default class ContributePrompt extends Component {
             <Modal.Title>Describe the changes in this curation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {!session.isAnonymous && !session.publicEmails && (
+            {!session?.isAnonymous && !session?.publicEmails && (
               <Alert bsStyle="warning">
                 Since your email is set as private on your GitHub profile, you can submit this contribution but the
                 commits will not be attributed to you.
@@ -132,9 +132,9 @@ export default class ContributePrompt extends Component {
                     <ControlLabel>Contributor</ControlLabel>
                     <div>
                       <FormControl.Static style={{ display: 'inline-block' }}>
-                        {session.isAnonymous ? 'anonymous' : `@${session.username}`}
+                        {session?.isAnonymous ? 'anonymous' : `@${session?.username}`}
                       </FormControl.Static>{' '}
-                      {session.isAnonymous && (
+                      {session?.isAnonymous && (
                         <Button bsStyle="success" data-test-id="login-button" onClick={onLogin}>
                           Login
                         </Button>

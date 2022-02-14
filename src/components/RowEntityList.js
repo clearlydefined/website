@@ -42,6 +42,7 @@ export default class RowEntityList extends React.Component {
     } = this.props
     return (
       <InfiniteList
+        role="row"
         isRowLoaded={this.isRowLoaded}
         loadMoreRows={loadMoreRows}
         totalRows={() => listLength}

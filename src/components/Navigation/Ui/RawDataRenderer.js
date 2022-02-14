@@ -28,13 +28,14 @@ export default class RawDataRenderer extends Component {
       cursorSmoothCaretAnimation: true,
       cursorStyle: 'block',
       cursorSurroundingLines: 1,
-      mouseWheelZoom: true
+      mouseWheelZoom: true,
     }
     return (
       <Editor
         height="400px"
         language={type}
         value={value.transformed}
+        theme="vs-dark"
         options={options}
         editorDidMount={this.editorDidMount}
       />
