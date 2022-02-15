@@ -34,10 +34,10 @@ export default class Footer extends Component {
             <SocialIcons className="clearly-footer-socials pb-2" entity={socials} />
             <div className="col-md-8">
               <p class="mb-0">
-                ClearlyDefined was created by the
-                <Link to="/" className="mx-1 highlighted-link-blue">Open Source Initiative</Link>
-                in partnership with
-                <Link to="/" className="mx-1 highlighted-link-blue">Microsoft.</Link>
+                ClearlyDefined was created by
+                <Link to="/" className="mx-1 highlighted-link-blue">Microsoft</Link>
+                in partnership with the
+                <Link to="/" className="mx-1 highlighted-link-blue">Open Source Initiative.</Link>
               </p>
             </div>
             <div className="col-md-4 footer-links col-12 ml-md-auto mt-md-0 mt-4">
