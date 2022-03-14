@@ -327,8 +327,12 @@ export default class FileList extends PureComponent {
         key: 'license',
         className: 'column-license',
         filters: licenses.map(license => {
-          return { label: license, value: license }
+          return { text: license, value: license }
         }),
+        onFilter: (value, record) => {
+          const license = Contribution.getValue(component.item, previewDefinition, `files[${record.id}].license`)
+          return license === value
+        },
         // ...this.getLicenseColumnFilter('license'),
         filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
         // render: (value, record) =>
