@@ -47,12 +47,12 @@ class HeaderSection extends Component {
           <DefinitionRevision definition={item} showNamespace={false} component={component} />
         </div>
         {isCurated && (
-          <Tag className="cd-badge" color="purple">
+          <Tag className="clearly-badge" color="purple">
             Curated
           </Tag>
         )}
         {hasPendingCurations && (
-          <Tag className="cd-badge" color="green">
+          <Tag className="clearly-badge" color="green">
             Pending curations
           </Tag>
         )}
