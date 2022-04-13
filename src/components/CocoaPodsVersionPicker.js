@@ -19,8 +19,7 @@ export default class CocoaPodsVersionPicker extends Component {
     this.state = {
       customValues: [],
       options: [],
-      focus: false,
-      selected: props.request.revision ? [props.request.revision] : []
+      focus: false
     }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
@@ -28,10 +27,6 @@ export default class CocoaPodsVersionPicker extends Component {
 
   componentDidMount() {
     this.getOptions('')
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
   }
 
   async getOptions(value) {
@@ -62,8 +57,9 @@ export default class CocoaPodsVersionPicker extends Component {
   }
 
   render() {
-    const { defaultInputValue } = this.props
-    const { customValues, options, selected, focus } = this.state
+    const { defaultInputValue, request } = this.props
+    const selected = request.revision ? [request.revision] : []
+    const { customValues, options, focus } = this.state
     const list = customValues.concat(options)
     return (
       <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
