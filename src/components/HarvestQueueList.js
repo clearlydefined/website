@@ -15,7 +15,8 @@ import {
   DebianVersionPicker,
   NuGetVersionPicker,
   RubyGemsVersionPicker,
-  ComposerVersionPicker
+  ComposerVersionPicker,
+  CocoaPodsVersionPicker
 } from './'
 import { getGitHubRevisions } from '../api/clearlyDefined'
 import { clone } from 'lodash'
@@ -28,6 +29,7 @@ import cargo from '../images/cargo.png'
 import maven from '../images/maven.png'
 import nuget from '../images/nuget.png'
 import composer from '../images/packagist.png'
+import pod from '../images/pod.png'
 
 class HarvestQueueList extends React.Component {
   static propTypes = {
@@ -39,7 +41,7 @@ class HarvestQueueList extends React.Component {
   }
 
   static defaultProps = {
-    loadMoreRows: () => {}
+    loadMoreRows: () => { }
   }
 
   constructor(props) {
@@ -106,6 +108,9 @@ class HarvestQueueList extends React.Component {
         {request.provider === 'packagist' && (
           <ComposerVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
+        {request.provider === 'cocoapods' && (
+          <CocoaPodsVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
         <i className="fas fa-times list-trash" onClick={this.removeRequest.bind(this, request)} />
       </div>
     )
@@ -150,6 +155,7 @@ class HarvestQueueList extends React.Component {
     if (request.provider === 'nuget') return nuget
     if (request.provider === 'debian') return debian
     if (request.provider === 'packagist') return composer
+    if (request.provider === 'cocoapods') return pod
     return null
   }
 
@@ -161,7 +167,7 @@ class HarvestQueueList extends React.Component {
   renderRow({ index, key, style }) {
     const { list } = this.props
     const request = list[index]
-    const clickHandler = () => {}
+    const clickHandler = () => { }
     return (
       <div key={key} style={style} className="component-row">
         <TwoLineEntry

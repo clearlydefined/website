@@ -71,6 +71,10 @@ export { default as RubyGemsSelector }
 from './RubyGemsSelector'
 export { default as RubyGemsVersionPicker }
 from './RubyGemsVersionPicker'
+export { default as CocoaPodsSelector }
+from './CocoaPodsSelector'
+export { default as CocoaPodsVersionPicker }
+from './CocoaPodsVersionPicker'
 export { default as PageAbout }
 from './PageAbout'
 export { default as RehydrationProvider }

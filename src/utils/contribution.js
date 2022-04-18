@@ -20,6 +20,7 @@ import nuget from '../images/nuget.svg'
 import debian from '../images/debian.png'
 import composer from '../images/packagist.png'
 import maven from '../images/maven.png'
+import pod from '../images/pod.png'
 import moment from 'moment'
 import { difference } from './utils'
 
@@ -225,6 +226,8 @@ export default class Contribution {
         return debian
       case 'mavencentral':
         return maven
+      case 'cocoapods':
+        return pod
       default:
         return null
     }
