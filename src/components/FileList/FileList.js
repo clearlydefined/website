@@ -38,10 +38,6 @@ export default class FileList extends PureComponent {
     this.updateFileList(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.updateFileList(nextProps)
-  }
-
   updateFileList = props => {
     this.setState({
       files: FileListSpec.pathToTreeFolders(props.files, props.component.item, props.previewDefinition)
