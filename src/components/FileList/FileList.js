@@ -237,7 +237,7 @@ export default class FileList extends PureComponent {
     onChange(`described.facets.${facet}`, newGlobs)
   }
 
-  onLicenseChange(record, license) {
+  onLicenseChange = (record, license) => {
     const { onChange, component, previewDefinition } = this.props
     const attributions = Contribution.getValue(component.item, previewDefinition, `files[${record.id}].attributions`)
     onChange(`files[${record.id}]`, license, null, license => ({
@@ -293,7 +293,7 @@ export default class FileList extends PureComponent {
     )
   }
 
-  renderLicenseCell(record) {
+  renderLicenseCell = (value, record) => {
     const { readOnly, component, previewDefinition } = this.props
     const field = `files[${record.id}].license`
     const editor = EnhancedLicensePicker
@@ -390,7 +390,7 @@ export default class FileList extends PureComponent {
         //       }}
         //     />
         //   ),
-        render: (value, record) => this.renderLicenseCell(record),
+        render: this.renderLicenseCell,
         width: '20%'
       },
       {
