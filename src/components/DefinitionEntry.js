@@ -426,6 +426,7 @@ class DefinitionEntry extends React.Component {
       <OverlayTrigger
         trigger="click"
         placement="left"
+        animation={false}
         rootClose
         overlay={
           <Popover title={title} id={title}>

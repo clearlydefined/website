@@ -116,7 +116,7 @@ class PageAbout extends Component {
                   <div className="content-block-description">
                     <h3 className="mkt-h3">Centralized</h3>
                     <p>
-                      ClearlyDefined is you central hub for all things Open Source Software licenses. It’s here you’ll
+                      ClearlyDefined is your central hub for all things Open Source Software licenses. It’s here you’ll
                       find, or contribute, to critical license data.
                     </p>
                   </div>

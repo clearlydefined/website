@@ -6,7 +6,6 @@ import get from 'lodash/get'
 import Contribution from '../../../utils/contribution'
 import TwoColumnsSection from '../Sections/TwoColumnsSection'
 import { SourcePicker } from '../..'
-import ListDataRenderer from '../Ui/ListDataRenderer'
 import FacetsTooltipIcon from '../Ui/FacetsTooltipIcon'
 import FacetsEditor from '../../FacetsEditor'
 // import infoIcon from '../../../images/icons/infoIcon.svg'
@@ -82,7 +81,7 @@ class DescribedSection extends Component {
         label: 'Tools',
         customBox: true,
         customBoxIcon: <img src={toolBoxIcon} alt="tools" />,
-        component: <ListDataRenderer values={toolListView} title={'Tools'} />
+        component: <span>{toolListView}</span>
       },
       {
         label: 'Curations',
