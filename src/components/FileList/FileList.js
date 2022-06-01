@@ -11,6 +11,8 @@ import FacetsDropdown from '../../components/FacetsDropdown'
 import Contribution from '../../utils/contribution'
 import FileListSpec from '../../utils/filelist'
 import Attachments from '../../utils/attachments'
+import ModalEditor from '../ModalEditor'
+import EnhancedLicensePicker from '../../utils/EnhancedLicensePicker'
 import folderIcon from '../../images/icons/folder.svg'
 import fileIcon from '../../images/icons/file.svg'
 import FolderOpenIcon from '@material-ui/icons/FolderOpen'
@@ -235,6 +237,16 @@ export default class FileList extends PureComponent {
     onChange(`described.facets.${facet}`, newGlobs)
   }
 
+  onLicenseChange = (record, license) => {
+    const { onChange, component, previewDefinition } = this.props
+    const attributions = Contribution.getValue(component.item, previewDefinition, `files[${record.id}].attributions`)
+    onChange(`files[${record.id}]`, license, null, license => ({
+      path: record.path,
+      license,
+      ...(attributions ? { attributions } : {})
+    }))
+  }
+
   onDirectorySelect = e => {
     let tempdata = this.state.breadcrumbs
     tempdata.push(e)
@@ -278,6 +290,25 @@ export default class FileList extends PureComponent {
           )
         })}
       </div>
+    )
+  }
+
+  renderLicenseCell = (value, record) => {
+    const { readOnly, component, previewDefinition } = this.props
+    const field = `files[${record.id}].license`
+    const editor = EnhancedLicensePicker
+    return (
+      !record.children && (
+        <ModalEditor
+          revertable={false}
+          field={field}
+          readOnly={readOnly}
+          initialValue={get(component.item, field)}
+          value={Contribution.getValue(component.item, previewDefinition, field)}
+          placeholder={'SPDX license'}
+          editor={editor}
+          onChange={license => this.onLicenseChange(record, license)} />
+      )
     )
   }
 
@@ -359,14 +390,8 @@ export default class FileList extends PureComponent {
         //       }}
         //     />
         //   ),
-        render: (value, record) => {
-          let license = Contribution.getValue(component.item, previewDefinition, `files[${record.id}].license`)
-          return (
-            !record.children &&
-            (license ? <p className="text-black">{license}</p> : <p className="text-gray">SPDX license</p>)
-          )
-        },
-        width: '15%'
+        render: this.renderLicenseCell,
+        width: '20%'
       },
       {
         title: 'Copyrights',
@@ -376,31 +401,6 @@ export default class FileList extends PureComponent {
         // ...this.getColumnSearchProps('attributions'),
         render: (value, record) => this.renderCopyrightCell(record, component, previewDefinition),
         width: '25%'
-      },
-      {
-        title: '',
-        dataIndex: 'edit',
-        key: 'edit',
-        className: 'edit-data',
-        // ...this.getColumnSearchProps('attributions'),
-        render: (value, record) =>
-          !record.children && (
-            <svg
-              className="edit-icon"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M22.5 19.5H1.5V21H22.5V19.5Z" fill="#383A43" />
-              <path
-                d="M19.05 6.75C19.65 6.15 19.65 5.25 19.05 4.65L16.35 1.95C15.75 1.35 14.85 1.35 14.25 1.95L3 13.2V18H7.8L19.05 6.75ZM15.3 3L18 5.7L15.75 7.95L13.05 5.25L15.3 3ZM4.5 16.5V13.8L12 6.3L14.7 9L7.2 16.5H4.5Z"
-                fill="#383A43"
-              />
-            </svg>
-          ),
-        width: '5%'
       }
     ]
 
