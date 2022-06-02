@@ -16,6 +16,7 @@ import nuget from '../images/nuget.svg'
 import debian from '../images/debian.png'
 import maven from '../images/maven.png'
 import composer from '../images/packagist.png'
+import pod from '../images/pod.png'
 import Contribution from '../utils/contribution'
 import Definition from '../utils/definition'
 import Curation from '../utils/curation'
@@ -425,6 +426,7 @@ class DefinitionEntry extends React.Component {
       <OverlayTrigger
         trigger="click"
         placement="left"
+        animation={false}
         rootClose
         overlay={
           <Popover title={title} id={title}>
@@ -455,6 +457,7 @@ class DefinitionEntry extends React.Component {
     if (definition.coordinates.type === 'nuget') return nuget
     if (definition.coordinates.type === 'deb') return debian
     if (definition.coordinates.type === 'composer') return composer
+    if (definition.coordinates.type === 'pod') return pod
     return null
   }
 
