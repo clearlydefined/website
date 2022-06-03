@@ -3,11 +3,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getNugetRevisions } from '../api/clearlyDefined'
-import Autocomplete from './Navigation/Ui/Autocomplete'
-import searchSvg from '../images/icons/searchSvg.svg'
+import { getCrateRevisions } from '../../../api/clearlyDefined'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 
-export default class NuGetVersionPicker extends Component {
+export default class CrateVersionPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
@@ -16,12 +16,7 @@ export default class NuGetVersionPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      customValues: [],
-      options: [],
-      selected: props.request.revision ? [props.request.revision] : [],
-      focus: false
-    }
+    this.state = { customValues: [], options: [], focus: false }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
@@ -30,14 +25,10 @@ export default class NuGetVersionPicker extends Component {
     this.getOptions('')
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
-  }
-
   async getOptions(value) {
     try {
       const { name } = this.props.request
-      const options = await getNugetRevisions(this.props.token, name)
+      const options = await getCrateRevisions(this.props.token, name)
       this.setState({ ...this.state, options })
     } catch (error) {
       this.setState({ ...this.state, options: [] })
@@ -63,31 +54,27 @@ export default class NuGetVersionPicker extends Component {
 
   render() {
     const { defaultInputValue } = this.props
-    const { customValues, options, selected, focus } = this.state
+    const { customValues, options, focus } = this.state
     const list = customValues.concat(options)
-
     return (
       <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
         <div className="search-logo">
           <img src={searchSvg} alt="search" />
-        </div>
+        </div>{' '}
         <Autocomplete
-          id="nuget-version-picker"
-          selected={selected}
+          id="crate-version-picker"
           options={list}
           defaultInputValue={defaultInputValue}
-          placeholder={
-            options.length === 0 ? 'Could not fetch versions, type a Nuget version' : 'Pick an Nuget version'
-          }
+          placeholder={options.length === 0 ? 'Could not fetch versions, type a Crate version' : 'Pick a Crate version'}
           onChange={this.onChange}
           positionFixed
+          clearButton
           onFocus={() => this.setState({ ...this.state, focus: true })}
           onBlur={() => this.setState({ ...this.state, focus: false })}
-          clearButton
           allowNew
           newSelectionPrefix="Version:"
           emptyLabel=""
-          filterBy={this.filter}
+          // filterBy={this.filter}
           selectHintOnEnter
         />
       </div>
