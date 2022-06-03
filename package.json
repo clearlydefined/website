@@ -23,7 +23,7 @@
     "monaco-editor": "^0.18.1",
     "node-sass": "^4.14.1",
     "pako": "^1.0.6",
-    "protobufjs": "^6.8.8",
+    "protobufjs": "^6.11.3",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.3",
     "react-bootstrap-typeahead": "^4.1.0",
