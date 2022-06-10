@@ -4,8 +4,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Highlighter } from 'react-bootstrap-typeahead'
-import searchSvg from '../images/icons/searchSvg.svg'
-import Autocomplete from './Navigation/Ui/Autocomplete'
+import searchSvg from '../../../images/icons/searchSvg.svg'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
 
 export default class GitHubCommitPicker extends Component {
   static propTypes = {

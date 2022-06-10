@@ -3,11 +3,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getComposerSearch } from '../api/clearlyDefined'
+import { getNugetSearch } from '../../../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
-import searchSvg from '../images/icons/searchSvg.svg'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 
-export default class ComposerSelector extends Component {
+export default class NuGetSelector extends Component {
   static propTypes = {
     onChange: PropTypes.func
   }
@@ -22,13 +22,13 @@ export default class ComposerSelector extends Component {
   onChange(values) {
     const { onChange } = this.props
     const value = values.length === 0 ? null : values[0]
-    value && onChange && onChange({ type: 'composer', provider: 'packagist', name: value.id }, 'package')
+    value && onChange && onChange({ type: 'nuget', provider: 'nuget', name: value.id }, 'package')
   }
 
   async getOptions(value) {
     try {
       this.setState({ ...this.state, isLoading: true })
-      const options = await getComposerSearch(this.props.token, value)
+      const options = await getNugetSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
       this.setState({ ...this.state, options: [], isLoading: false })
@@ -43,16 +43,16 @@ export default class ComposerSelector extends Component {
           <img src={searchSvg} alt="search" />
         </div>
         <AsyncTypeahead
-          id="composer-selector"
+          id="nuget-selector"
           className="harvest-search"
           useCache={false}
           options={options}
-          placeholder={'Pick a Composer to harvest'}
+          placeholder={'Pick a Nuget to harvest'}
           onChange={this.onChange}
           labelKey="id"
+          clearButton
           onFocus={() => this.setState({ ...this.state, focus: true })}
           onBlur={() => this.setState({ ...this.state, focus: false })}
-          clearButton
           highlightOnlyResult
           emptyLabel=""
           selectHintOnEnter

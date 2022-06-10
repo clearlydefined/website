@@ -3,11 +3,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getRubyGemsRevisions } from '../api/clearlyDefined'
-import Autocomplete from './Navigation/Ui/Autocomplete'
-import searchSvg from '../images/icons/searchSvg.svg'
+import { getNpmRevisions } from '../../../api/clearlyDefined'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 
-export default class RubyGemsVersionPicker extends Component {
+export default class NpmVersionPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
@@ -36,8 +36,9 @@ export default class RubyGemsVersionPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { name } = this.props.request
-      const options = await getRubyGemsRevisions(this.props.token, name)
+      const { namespace, name } = this.props.request
+      const path = namespace ? `${namespace}/${name}` : name
+      const options = await getNpmRevisions(this.props.token, path)
       this.setState({ ...this.state, options })
     } catch (error) {
       this.setState({ ...this.state, options: [] })
@@ -69,15 +70,14 @@ export default class RubyGemsVersionPicker extends Component {
       <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
         <div className="search-logo">
           <img src={searchSvg} alt="search" />
-        </div>{' '}
+        </div>
         <Autocomplete
-          id="rubygems-version-picker"
+          id="npm-version-picker"
+          inputProps={{ dataTestId: 'npm-version-picker' }}
           selected={selected}
           options={list}
           defaultInputValue={defaultInputValue}
-          placeholder={
-            options.length === 0 ? 'Could not fetch versions, type a RubyGem version' : 'Pick a RubyGem version'
-          }
+          placeholder={options.length === 0 ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
           onChange={this.onChange}
           onFocus={() => this.setState({ ...this.state, focus: true })}
           onBlur={() => this.setState({ ...this.state, focus: false })}
