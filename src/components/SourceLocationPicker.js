@@ -12,23 +12,34 @@ import { PropTypes } from 'prop-types'
 class SourceLocationPicker extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeProvider: 'github' }
+    this.state = { activeProvider: this.props.activeProvider }
     this.onSelectComponent = this.onSelectComponent.bind(this)
+    this.onChangeComponent = this.onChangeComponent.bind(this)
     this.onProviderClick = this.onProviderClick.bind(this)
   }
 
   static propTypes = {
     token: PropTypes.string,
     value: PropTypes.string,
-    selectedComponent: PropTypes.object,
+    activeProvider: PropTypes.string,
     onChangeComponent: PropTypes.func.isRequired
   }
 
+  static defaultProps = {
+    value: '',
+    activeProvider: 'github'
+  }
+
   onSelectComponent(value, tool) {
-    const { onChangeComponent } = this.props
     const [namespace, name] = value.name.split('/')
     const component = new EntitySpec(value.type, value.provider, namespace, name)
     component.tool = tool
+    this.onChangeComponent(component)
+  }
+
+  onChangeComponent(component) {
+    const { onChangeComponent } = this.props
+    this.setState({ ...this.state, selectedComponent: component })
     onChangeComponent(component)
   }
 
@@ -49,15 +60,14 @@ class SourceLocationPicker extends Component {
   }
 
   commitChanged(component, value) {
-    const { onChangeComponent } = this.props
     const newComponent = clone(component)
     newComponent.revision = value ? value.sha : null
-    onChangeComponent(newComponent)
+    this.onChangeComponent(newComponent)
   }
 
   render() {
-    const { activeProvider } = this.state
-    const { token, selectedComponent, value } = this.props
+    const { activeProvider, selectedComponent } = this.state
+    const { token, value } = this.props
 
     return (
       <>

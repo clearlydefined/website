@@ -3,7 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, QuickEditModel, SourcePicker, FileCountRenderer } from './'
+import { TwoLineEntry, QuickEditModel, FileCountRenderer } from './'
 import { Checkbox, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
@@ -199,18 +199,11 @@ class DefinitionEntry extends React.Component {
     const { onChange, definition, component } = this.props
 
     const newChanges = Object.entries(updates).reduce((changes, [key, value]) => {
-      if (key === 'declared') return Contribution.applyChanges(definition, changes, 'licensed.declared', value)
-      if (key === 'source')
-        return Contribution.applyChanges(
-          definition,
-          changes,
-          'described.sourceLocation',
-          value,
-          undefined,
-          Contribution.toSourceLocation
-        )
-      if (key === 'release') return Contribution.applyChanges(definition, changes, 'described.releaseDate', value)
-      return changes
+      let field
+      if (key === 'declared') field = 'licensed.declared'
+      if (key === 'sourceComponent') field = 'described.sourceLocation'
+      if (key === 'release') field = 'described.releaseDate'
+      return field ? Contribution.applyChanges(definition, changes, field, value) : changes
     }, {})
 
     if (Object.keys(newChanges).length !== 0) {
@@ -325,13 +318,10 @@ class DefinitionEntry extends React.Component {
             closeModel={this.handleModel}
             initialValues={{
               declared: this.getValue('licensed.declared'),
-              source: Contribution.printCoordinates(this.getValue('described.sourceLocation')),
-              release: Contribution.printDate(this.getValue('described.releaseDate')),
-              repo: ''
+              sourceComponent: this.getValue('described.sourceLocation'),
+              release: Contribution.printDate(this.getValue('described.releaseDate'))
             }}
             onSave={this.handleSaveEdit}
-            //TODO hook up SourcePicker
-            editor={SourcePicker}
             //TODO validation
             validator={value => true}
           />

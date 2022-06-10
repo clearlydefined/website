@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { PropTypes } from 'prop-types'
-import { Modal, Button } from 'react-bootstrap'
+import { Grid, Modal, Button } from 'react-bootstrap'
 import closeSvg from '../images/icons/closeSvg.svg'
+import SourceLocationPicker from './SourceLocationPicker'
 
 const QuickEditModel = props => {
-  const { open, closeModel, onSave } = props
+  const { initialValues, token, open, closeModel, onSave } = props
 
   const [values, setValues] = useState({
-    declared: null,
-    source: null,
-    repo: null,
-    release: null
+    declared: initialValues.declared,
+    release: initialValues.release
   })
 
   useEffect(() => {
-    setValues(props.initialValues)
-  }, [props.initialValues])
+    setValues({
+      declared: initialValues.declared,
+      release: initialValues.release
+    })
+  }, [initialValues])
 
   const handleChange = ({ target }) => {
     setValues({ ...values, [target.id]: target.value })
+  }
+
+  const handleComponentChange = newComponent => {
+    setValues({ ...values, sourceComponent: newComponent })
   }
 
   const handleSave = () => {
@@ -57,23 +63,14 @@ const QuickEditModel = props => {
                 Source
               </label>
               <div className="col-sm-10 d-flex justify-content-between align-items-center">
-                <input
-                  onChange={handleChange}
-                  value={values.source || ''}
-                  type="text"
-                  className="form-control mr-4 model-input"
-                  id="source"
-                  placeholder="User / Organization"
-                />
-                &nbsp;&nbsp;&nbsp;
-                <input
-                  onChange={handleChange}
-                  value={values.repo || ''}
-                  type="text"
-                  className="form-control model-input"
-                  id="repo"
-                  placeholder="Repo"
-                />
+                <Grid className="edit" id="source-picker">
+                  <SourceLocationPicker
+                    token={token}
+                    value={initialValues.sourceComponent?.url || ''}
+                    activeProvider={initialValues.sourceComponent?.provider}
+                    onChangeComponent={handleComponentChange}
+                  />
+                </Grid>
               </div>
             </div>
             <div className="form-group row">
@@ -106,7 +103,7 @@ const QuickEditModel = props => {
 }
 
 QuickEditModel.propsType = {
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool,
   closeModel: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   onSave: PropTypes.object.isRequired
