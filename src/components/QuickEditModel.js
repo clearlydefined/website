@@ -1,15 +1,37 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { PropTypes } from 'prop-types'
 import { Modal, Button } from 'react-bootstrap'
 import closeSvg from '../images/icons/closeSvg.svg'
 
 const QuickEditModel = props => {
-  const { open, closeModel, values, onChange } = props
+  const { open, closeModel, onSave } = props
+
+  const [values, setValues] = useState({
+    declared: null,
+    source: null,
+    repo: null,
+    release: null
+  })
+
+  useEffect(() => {
+    setValues(props.initialValues)
+  }, [props.initialValues])
+
+  const handleChange = ({ target }) => {
+    setValues({ ...values, [target.id]: target.value })
+  }
+
+  const handleSave = () => {
+    closeModel()
+    onSave(values)
+  }
+
   return (
     <div>
       <Modal className={`clearly-model  ${open ? 'show' : '.'}`} show={open} onHide={closeModel}>
         <div className="model-header">
           <h4>Quick Edit Component</h4>
-          <span className="model-close-btn" onClick={() => closeModel()}>
+          <span className="model-close-btn" onClick={closeModel}>
             <img src={closeSvg} alt="" />
           </span>
         </div>
@@ -21,12 +43,12 @@ const QuickEditModel = props => {
               </label>
               <div className="col-sm-10">
                 <input
-                  onChange={e => (typeof onChange.declared === 'function' ? onChange.declared() : null)}
+                  onChange={handleChange}
                   value={values.declared || ''}
                   type="text"
                   className="form-control model-input"
                   id="declared"
-                  placeholder="MIT"
+                  placeholder="SPDX license"
                 />
               </div>
             </div>
@@ -36,7 +58,7 @@ const QuickEditModel = props => {
               </label>
               <div className="col-sm-10 d-flex justify-content-between align-items-center">
                 <input
-                  onChange={e => (typeof onChange.source === 'function' ? onChange.source() : null)}
+                  onChange={handleChange}
                   value={values.source || ''}
                   type="text"
                   className="form-control mr-4 model-input"
@@ -45,7 +67,7 @@ const QuickEditModel = props => {
                 />
                 &nbsp;&nbsp;&nbsp;
                 <input
-                  onChange={e => (typeof onChange.repo === 'function' ? onChange.repo() : null)}
+                  onChange={handleChange}
                   value={values.repo || ''}
                   type="text"
                   className="form-control model-input"
@@ -61,7 +83,7 @@ const QuickEditModel = props => {
               <div className="col-sm-10">
                 <input
                   type="date"
-                  onChange={e => (typeof onChange.release === 'function' ? onChange.release() : null)}
+                  onChange={handleChange}
                   value={values.release || ''}
                   className="form-control model-input"
                   id="release"
@@ -71,16 +93,23 @@ const QuickEditModel = props => {
           </form>
         </div>
         <div className="clearly-model-footer">
-          <Button onClick={() => closeModel()} className="modal__btn modal__btn--secondary" variant="secondary">
+          <Button onClick={closeModel} className="modal__btn modal__btn--secondary" variant="secondary">
             Close
           </Button>
-          <Button className="modal__btn modal__btn-primary" variant="secondary">
+          <Button onClick={handleSave} className="modal__btn modal__btn-primary" variant="secondary">
             Save
           </Button>
         </div>
       </Modal>
     </div>
   )
+}
+
+QuickEditModel.propsType = {
+  open: PropTypes.bool.isRequired,
+  closeModel: PropTypes.func.isRequired,
+  initialValues: PropTypes.object.isRequired,
+  onSave: PropTypes.object.isRequired
 }
 
 export default QuickEditModel
