@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types'
 import { Grid, Modal, Button } from 'react-bootstrap'
 import closeSvg from '../images/icons/closeSvg.svg'
 import SourceLocationPicker from './SourceLocationPicker'
+import SpdxPicker from './SpdxPicker'
 
 const QuickEditModel = props => {
   const { initialValues, token, open, closeModel, onSave } = props
@@ -23,8 +24,12 @@ const QuickEditModel = props => {
     setValues({ ...values, [target.id]: target.value })
   }
 
-  const handleComponentChange = newComponent => {
+  const handleSourceComponentChange = newComponent => {
     setValues({ ...values, sourceComponent: newComponent })
+  }
+
+  const handleLicenseChange = license => {
+    setValues({ ...values, declared: license })
   }
 
   const handleSave = () => {
@@ -48,14 +53,7 @@ const QuickEditModel = props => {
                 Declared
               </label>
               <div className="col-sm-10">
-                <input
-                  onChange={handleChange}
-                  value={values.declared || ''}
-                  type="text"
-                  className="form-control model-input"
-                  id="declared"
-                  placeholder="SPDX license"
-                />
+                <SpdxPicker value={values.declared || ''} promptText={'SPDX license'} onChange={handleLicenseChange} />
               </div>
             </div>
             <div className="form-group row">
@@ -68,7 +66,7 @@ const QuickEditModel = props => {
                     token={token}
                     value={initialValues.sourceComponent?.url || ''}
                     activeProvider={initialValues.sourceComponent?.provider}
-                    onChangeComponent={handleComponentChange}
+                    onChangeComponent={handleSourceComponentChange}
                   />
                 </Grid>
               </div>

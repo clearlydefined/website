@@ -322,8 +322,6 @@ class DefinitionEntry extends React.Component {
               release: Contribution.printDate(this.getValue('described.releaseDate'))
             }}
             onSave={this.handleSaveEdit}
-            //TODO validation
-            validator={value => true}
           />
           <button onClick={this.handleModel} className="quick-edit-btn">
             Edit
