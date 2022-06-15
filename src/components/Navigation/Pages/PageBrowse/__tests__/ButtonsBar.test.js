@@ -12,7 +12,7 @@ describe('ButtonsBar', () => {
   })
 
   it("checks if buttons are enabled when there aren't changes", async () => {
-    const wrapper = await shallow(<ButtonsBar hasChanges={false} />)
+    const wrapper = await shallow(<ButtonsBar hasChanges={false} toggleCollapseExpandAll={jest.fn()} />)
     const toggleCollapseButton = wrapper.find({ children: 'Toggle Collapse' })
     expect(toggleCollapseButton.exists()).toBeTruthy()
     const contributeButton = wrapper.find({ children: 'Contribute' })
@@ -21,7 +21,9 @@ describe('ButtonsBar', () => {
   })
 
   it('checks if buttons are disabled when there are changes', async () => {
-    const wrapper = await shallow(<ButtonsBar components={components} hasChanges={true} />)
+    const wrapper = await shallow(
+      <ButtonsBar components={components} hasChanges={true} toggleCollapseExpandAll={jest.fn()} />
+    )
     const toggleCollapseButton = wrapper.find({ children: 'Toggle Collapse' })
     expect(toggleCollapseButton.exists()).toBeTruthy()
     const contributeButton = wrapper.find({ children: 'Contribute' })

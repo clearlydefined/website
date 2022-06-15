@@ -156,7 +156,6 @@ class PageBrowse extends SystemManagedList {
       <ButtonsBar
         hasChanges={!this.hasChanges()}
         revertAll={() => this.revertAll('browse')}
-        toggleCollapseExpandAll={this.toggleCollapseExpandAll}
         doPromptContribute={this.doPromptContribute}
       />
     )
@@ -332,10 +331,8 @@ class PageBrowse extends SystemManagedList {
             />
           </div>
           <div className="col-12">
-            <Section
-              className="flex-grow-column clearly-component-wrap"
-            >
-              <div className={classNames('clearly-table flex-grow', { loading: components.isFetching })}>
+            <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
+              <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
                 <i className="fas fa-spinner fa-spin" />
                 <ComponentList
                   role="tree"
