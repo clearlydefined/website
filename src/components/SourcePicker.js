@@ -43,7 +43,7 @@ class SourcePicker extends Component {
   render() {
     const { value, token } = this.props
     return (
-      <Grid className="main-container" id="source-picker">
+      <Grid className="main-container source-picker">
         <SourceLocationPicker token={token} value={value} onChangeComponent={this.onChangeComponent} />
         {this.renderActionButton()}
       </Grid>

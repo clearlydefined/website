@@ -1,4 +1,4 @@
-// Copyright (c) Codescoop Oy and others. Licensed under the MIT license.
+// (c) Copyright 2022, SAP SE and ClearlyDefined contributors. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
@@ -70,7 +70,7 @@ class SourceLocationPicker extends Component {
     const { token, value } = this.props
 
     return (
-      <>
+      <div id="source-picker">
         <div>{this.renderProviderButtons()}</div>
         <div>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</div>
         <div>
@@ -88,7 +88,7 @@ class SourceLocationPicker extends Component {
             {selectedComponent ? selectedComponent.url : value}
           </a>
         </div>
-      </>
+      </div>
     )
   }
 }

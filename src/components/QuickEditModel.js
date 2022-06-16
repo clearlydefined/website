@@ -1,6 +1,9 @@
+// (c) Copyright 2022, SAP SE and ClearlyDefined contributors. Licensed under the MIT license.
+// SPDX-License-Identifier: MIT
+
 import React, { useState, useEffect } from 'react'
 import { PropTypes } from 'prop-types'
-import { Grid, Modal, Button } from 'react-bootstrap'
+import { Modal, Button } from 'react-bootstrap'
 import closeSvg from '../images/icons/closeSvg.svg'
 import SourceLocationPicker from './SourceLocationPicker'
 import SpdxPicker from './SpdxPicker'
@@ -60,15 +63,13 @@ const QuickEditModel = props => {
               <label htmlFor="source" className="col-sm-2 col-form-label model-label">
                 Source
               </label>
-              <div className="col-sm-10 d-flex justify-content-between align-items-center">
-                <Grid className="edit" id="source-picker">
-                  <SourceLocationPicker
-                    token={token}
-                    value={initialValues.sourceComponent?.url || ''}
-                    activeProvider={initialValues.sourceComponent?.provider}
-                    onChangeComponent={handleSourceComponentChange}
-                  />
-                </Grid>
+              <div className="col-sm-10 d-flex justify-content-between align-items-center edit">
+                <SourceLocationPicker
+                  token={token}
+                  value={initialValues.sourceComponent?.url || ''}
+                  activeProvider={initialValues.sourceComponent?.provider}
+                  onChangeComponent={handleSourceComponentChange}
+                />
               </div>
             </div>
             <div className="form-group row">
