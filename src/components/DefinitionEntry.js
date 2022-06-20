@@ -34,7 +34,7 @@ class DefinitionEntry extends React.Component {
     }
   }
   static propTypes = {
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     onCurate: PropTypes.func,
     onInspect: PropTypes.func,
     activeFacets: PropTypes.array,
@@ -60,7 +60,7 @@ class DefinitionEntry extends React.Component {
       const newChanges = { ...component.changes }
       if (isChanged && proposedValue !== null) newChanges[field] = proposedValue
       else delete newChanges[field]
-      onChange && onChange(component, newChanges, field)
+      onChange(component, newChanges, field)
     }
   }
 
@@ -208,7 +208,7 @@ class DefinitionEntry extends React.Component {
 
     if (Object.keys(newChanges).length !== 0) {
       const combinedChanges = { ...component.changes, ...newChanges }
-      onChange && onChange(component, combinedChanges)
+      onChange(component, combinedChanges)
     }
   }
 
