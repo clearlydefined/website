@@ -3,46 +3,26 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Button, ButtonGroup, FormGroup } from 'react-bootstrap'
-import { GitHubSelector, GitHubCommitPicker } from './'
-import { getGitHubRevisions } from '../api/clearlyDefined'
-import EntitySpec from '../utils/entitySpec'
-import { clone } from 'lodash'
+import { Grid, Button, FormGroup } from 'react-bootstrap'
+import SourceLocationPicker from './SourceLocationPicker'
+import { PropTypes } from 'prop-types'
 
 class SourcePicker extends Component {
   constructor(props) {
     super(props)
-    this.state = { activeProvider: 'github' }
-    this.onSelectComponent = this.onSelectComponent.bind(this)
+    this.state = {}
     this.onChangeComponent = this.onChangeComponent.bind(this)
-    this.onClick = this.onClick.bind(this)
   }
 
-  onSelectComponent(value, tool) {
-    const [namespace, name] = value.name.split('/')
-    const component = new EntitySpec(value.type, value.provider, namespace, name)
-    component.tool = tool
-    this.setState({ selectedComponent: component })
+  static propTypes = {
+    token: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired
   }
 
-  onChangeComponent(component, newComponent) {
+  onChangeComponent(newComponent) {
     this.setState({ selectedComponent: newComponent })
-  }
-
-  onClick(event) {
-    const activeProvider = event.target.name
-    this.setState({ activeProvider })
-  }
-
-  renderProviderButtons() {
-    const { activeProvider } = this.state
-    return (
-      <ButtonGroup>
-        <Button name="github" onClick={this.onClick} active={activeProvider === 'github'}>
-          GitHub
-        </Button>
-      </ButtonGroup>
-    )
   }
 
   renderActionButton() {
@@ -60,35 +40,12 @@ class SourcePicker extends Component {
     )
   }
 
-  commitChanged(component, value) {
-    const newComponent = clone(component)
-    newComponent.revision = value ? value.sha : null
-    this.onChangeComponent(component, newComponent)
-  }
-
   render() {
-    const { activeProvider, selectedComponent } = this.state
-    const { value } = this.props
+    const { value, token } = this.props
     return (
-      <Grid className="main-container" id="source-picker">
-        <div>{this.renderProviderButtons()}</div>
-        <div>{activeProvider === 'github' && <GitHubSelector onChange={this.onSelectComponent} />}</div>
-        <div>
-          {selectedComponent && activeProvider === 'github' && (
-            <GitHubCommitPicker
-              allowNew
-              request={selectedComponent}
-              getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
-              onChange={this.commitChanged.bind(this, selectedComponent)}
-            />
-          )}
-        </div>
-        <div className="source-picker__current-source">
-          <a href={selectedComponent ? selectedComponent.url : value} target="_blank" rel="noopener noreferrer">
-            {selectedComponent ? selectedComponent.url : value}
-          </a>
-          {this.renderActionButton()}
-        </div>
+      <Grid className="main-container source-picker">
+        <SourceLocationPicker token={token} value={value} onChangeComponent={this.onChangeComponent} />
+        {this.renderActionButton()}
       </Grid>
     )
   }
