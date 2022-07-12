@@ -138,7 +138,7 @@ export function getSuggestedData(token, entity) {
 }
 
 export function previewDefinition(token, entity, curation) {
-  return post(url(`${DEFINITIONS}/${entity.toPath()}`, { preview: true, matchCasing: 'false' }), token, curation)
+  return patch(url(DEFINITIONS), token, { coordinates: entity.toPath(), curation })
 }
 
 export async function getNotices(token, coordinates, renderer, options) {
