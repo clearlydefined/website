@@ -354,7 +354,6 @@ class PageBrowse extends SystemManagedList {
                   loadMoreRows={this.loadMoreRows}
                   onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
                   onChange={this.onChangeComponent}
-                  onInspect={this.onInspect}
                   renderFilterBar={this.renderFilterBar}
                   curations={curations}
                   definitions={definitions}
