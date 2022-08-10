@@ -35,6 +35,7 @@ class ComponentButtons extends Component {
 
   removeComponent(component, event) {
     event.stopPropagation()
+    this.handleMenu()
     const { onRemove } = this.props
     onRemove && onRemove(component)
   }
@@ -113,7 +114,7 @@ class ComponentButtons extends Component {
   }
 
   renderButtonGroup() {
-    const { definition, currentComponent, hasChange, readOnly, onAddComponent, onInspect } = this.props
+    const { definition, currentComponent, hasChange, readOnly, onAddComponent, onInspect, onRemove } = this.props
     const component = EntitySpec.fromObject(currentComponent)
 
     const isSourceComponent = this.isSourceComponent(component)
@@ -157,6 +158,13 @@ class ComponentButtons extends Component {
                 {this.renderDropdown(currentComponent)}
               </ButtonWithTooltip>
             )*/}
+            {!readOnly && onRemove && (
+              <ButtonWithTooltip tip="Remove this definition">
+                <Button className="list-fa-button" onClick={this.removeComponent.bind(this, currentComponent)}>
+                  <i className="fas fa-trash" />
+                </Button>
+              </ButtonWithTooltip>
+            )}
             {!readOnly && !isDefinitionEmpty && (
               <ButtonWithTooltip tip="Revert Changes of this Definition">
                 <Button
