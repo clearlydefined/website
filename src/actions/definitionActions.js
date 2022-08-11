@@ -56,7 +56,7 @@ export function checkForMissingDefinition(token, isFirstAttempt = false) {
     ).filter(x => x)
     const missingDefinitions = map(
       workspaceComponents,
-      item => !get(item, 'described.tools') && EntitySpec.fromObject(item).toPath()
+      item => !get(item, 'described.tools') && EntitySpec.fromObject(item.coordinates).toPath()
     ).filter(x => x)
     if (missingDefinitions.length > 0) {
       if (isFirstAttempt)

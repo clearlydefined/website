@@ -6,9 +6,11 @@ import EntitySpec from '../../../utils/entitySpec'
 import { ROUTE_DEFINITIONS } from '../../../utils/routingConstants'
 import { withResize } from '../../../utils/WindowProvider'
 import Definition from '../../../utils/definition'
+import { ORIGINS } from '../../../api/clearlyDefined'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { IconButton } from '@material-ui/core'
 import ButtonWithTooltip from './ButtonWithTooltip'
+import { Menu, Dropdown, Icon } from 'antd'
 
 class ComponentButtons extends Component {
   constructor(props) {
@@ -31,6 +33,10 @@ class ComponentButtons extends Component {
 
   isSourceComponent(component) {
     return ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
+  }
+
+  _isProviderSupported(component) {
+    return !!get(ORIGINS, component.provider)
   }
 
   removeComponent(component, event) {
@@ -86,40 +92,50 @@ class ComponentButtons extends Component {
   }
 
   renderDropdown(currentComponent) {
-    // return (
-    //   <Dropdown
-    //     trigger={['click']}
-    //     overlay={
-    //       <Menu>
-    //         <Menu.Item
-    //           data-test-id="switch-component-version"
-    //           onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}
-    //         >
-    //           Switch version
-    //         </Menu.Item>
-    //         <Menu.Item
-    //           data-test-id="add-component-version"
-    //           onClick={this.showVersionSelectorPopup.bind(this, currentComponent, true)}
-    //         >
-    //           Add more versions
-    //         </Menu.Item>
-    //       </Menu>
-    //     }
-    //   >
-    //     <Button className="list-fa-button" onClick={event => event.stopPropagation()}>
-    //       <i className="fas fa-exchange-alt" /> <Icon type="down" />
-    //     </Button>
-    //   </Dropdown>
-    // )
+    return (
+      <Dropdown
+        trigger={['click']}
+        overlay={
+          <Menu>
+            <Menu.Item
+              data-test-id="switch-component-version"
+              onClick={this.showVersionSelectorPopup.bind(this, currentComponent, false)}
+            >
+              Switch version
+            </Menu.Item>
+            <Menu.Item
+              data-test-id="add-component-version"
+              onClick={this.showVersionSelectorPopup.bind(this, currentComponent, true)}
+            >
+              Add more versions
+            </Menu.Item>
+          </Menu>
+        }
+      >
+        <Button className="list-fa-button" onClick={event => event.stopPropagation()}>
+          <i className="fas fa-exchange-alt" /> <Icon type="down" />
+        </Button>
+      </Dropdown>
+    )
   }
 
   renderButtonGroup() {
-    const { definition, currentComponent, hasChange, readOnly, onAddComponent, onInspect, onRemove } = this.props
+    const {
+      definition,
+      currentComponent,
+      hasChange,
+      readOnly,
+      onAddComponent,
+      onInspect,
+      onRemove,
+      hideVersionSelector
+    } = this.props
     const component = EntitySpec.fromObject(currentComponent)
 
     const isSourceComponent = this.isSourceComponent(component)
     const isSourceEmpty = Definition.isSourceEmpty(definition)
     const isDefinitionEmpty = Definition.isDefinitionEmpty(definition)
+    const isProviderSupported = this._isProviderSupported(component)
     return (
       <>
         <IconButton className="menuOpenBtn" onClick={this.handleMenu} aria-label="button">
@@ -153,11 +169,11 @@ class ComponentButtons extends Component {
             >
               <i className="fas fa-external-link-alt" />
             </a>
-            {/*!hideVersionSelector && (
+            {!hideVersionSelector && isProviderSupported && (
               <ButtonWithTooltip tip="Switch or add other versions of this definition">
                 {this.renderDropdown(currentComponent)}
               </ButtonWithTooltip>
-            )*/}
+            )}
             {!readOnly && onRemove && (
               <ButtonWithTooltip tip="Remove this definition">
                 <Button className="list-fa-button" onClick={this.removeComponent.bind(this, currentComponent)}>

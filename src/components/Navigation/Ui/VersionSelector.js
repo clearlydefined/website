@@ -29,7 +29,7 @@ class VersionSelector extends Component {
     const fullname = component.namespace ? `${component.namespace}/${component.name}` : component.name
     try {
       const label = multiple
-        ? `Pick one or move versions of ${fullname} to add to the definitions list`
+        ? `Add one or more versions of ${fullname}`
         : `Pick a different version of ${fullname}`
       const options = await getRevisions(token, fullname, component.type, component.provider)
       this.setState({ options, label })
@@ -58,7 +58,7 @@ class VersionSelector extends Component {
     const { options, label, selected } = this.state
 
     return (
-      <Modal show={show} onHide={this.onClose} backdrop={selected.length > 0 ? 'static' : true}>
+      <Modal show={show} onHide={this.onClose} backdrop={selected.length > 0 ? 'static' : true} dialogClassName='version-selector'>
         <Modal.Header closeButton>
           <Modal.Title>{label}</Modal.Title>
         </Modal.Header>
@@ -67,8 +67,10 @@ class VersionSelector extends Component {
             <Select
               mode={multiple && 'multiple'}
               style={{ width: '100%' }}
+              dropdownClassName='select-in-modal'
               placeholder={label}
               onChange={this.handleChange}
+              defaultValue={component?.revision}
             >
               {options.map(option => (
                 <Option key={Definition.getRevisionToKey(option, component)}>
