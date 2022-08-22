@@ -30,7 +30,7 @@ export default class ListDataRenderer extends Component {
     document.body.addEventListener('showTooltip', this.handleShowTooltip)
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     document.body.removeEventListener('showTooltip', this.handleShowTooltip)
   }
 
