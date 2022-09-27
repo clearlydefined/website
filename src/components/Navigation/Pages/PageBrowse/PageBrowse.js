@@ -34,7 +34,8 @@ class PageBrowse extends SystemManagedList {
     this.state = {
       activeSort: 'releaseDate-desc',
       searchFocused: false,
-      selectedProvider: providers[0]
+      selectedProvider: providers[0],
+      searchTerm: ''
     }
     this.onFilter = this.onFilter.bind(this)
     this.onSort = this.onSort.bind(this)
@@ -63,11 +64,17 @@ class PageBrowse extends SystemManagedList {
   }
 
   onBrowse = value => {
-    this.setState({ activeName: value }, () => this.updateData())
+    this.setState({ activeName: value, searchTerm: '' }, () => this.updateData())
   }
 
   onFocusChange = value => {
     this.setState({ searchFocused: value })
+  }
+
+  onSearch = value => {
+    this.setState({ searchTerm: value })
+    const provider = this.state.selectedProvider.value
+    super.onSearch(provider + '/' + value)
   }
 
   tableTitle() {
@@ -163,6 +170,7 @@ class PageBrowse extends SystemManagedList {
 
   onProviderChange(item) {
     this.setState({ selectedProvider: item })
+    this.state.searchTerm && super.onSearch(item.value + '/' + this.state.searchTerm)
   }
 
   // Overrides the default onFilter method
