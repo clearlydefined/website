@@ -13,18 +13,18 @@ export default class ShareButton extends Component {
     const disabled = !components || components.list.length === 0
     return (
       <DropdownButton disabled={disabled} id={'sharedropdown'} title="Share" bsStyle="success">
-        <MenuItem eventKey="1" onSelect={() => onSelect('url')}>
+        <MenuItem eventKey="1" className="dropdown-item" onSelect={() => onSelect('url')}>
           URL
         </MenuItem>
-        <MenuItem eventKey="2" onSelect={() => onSelect('file')}>
+        <MenuItem eventKey="2" className="dropdown-item" onSelect={() => onSelect('file')}>
           Coordinate list (JSON)
         </MenuItem>
-        <MenuItem eventKey="2" onSelect={() => onSelect('notice')}>
+        <MenuItem eventKey="2" className="dropdown-item" onSelect={() => onSelect('notice')}>
           Notice file
         </MenuItem>
-        <MenuItem divider />
+        {/* <MenuItem divider />
         <MenuItem disabled>Definitions (Not implemented)</MenuItem>
-        <MenuItem disabled>SPDX (Not implemented)</MenuItem>
+        <MenuItem disabled>SPDX (Not implemented)</MenuItem> */}
       </DropdownButton>
     )
   }
