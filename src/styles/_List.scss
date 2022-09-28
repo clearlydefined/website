@@ -373,6 +373,10 @@
   height: $height-filters-list;
 }
 
+.show-filter.clearly-table-body {
+  margin-bottom: $height-filters-section;
+}
+
 .filter-list,
 .list-filter,
 .section--filter-bar {
