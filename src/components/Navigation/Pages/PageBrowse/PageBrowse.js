@@ -10,7 +10,7 @@ import difference from 'lodash/difference'
 import classNames from 'classnames'
 import { ROUTE_ROOT } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
-import { uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
+import { uiBrowseUpdateFilterList, uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
 import SystemManagedList from '../../../SystemManagedList'
 import Section from '../../../Section'
 import ComponentList from '../../../ComponentList'
@@ -73,8 +73,8 @@ class PageBrowse extends SystemManagedList {
 
   onSearch = value => {
     this.setState({ searchTerm: value })
-    const provider = this.state.selectedProvider.value
-    super.onSearch(provider + '/' + value)
+    const valueToSearch = this.state.selectedProvider.value + '/' + value
+    this.props.dispatch(uiBrowseUpdateFilterList(this.props.token, valueToSearch))
   }
 
   tableTitle() {
@@ -170,7 +170,10 @@ class PageBrowse extends SystemManagedList {
 
   onProviderChange(item) {
     this.setState({ selectedProvider: item })
-    this.state.searchTerm && super.onSearch(item.value + '/' + this.state.searchTerm)
+    if (this.state.searchTerm) {
+      const valueToSearch = item.value + '/' + this.state.searchTerm
+      this.props.dispatch(uiBrowseUpdateFilterList(this.props.token, valueToSearch))
+    }
   }
 
   // Overrides the default onFilter method
