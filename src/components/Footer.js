@@ -42,9 +42,9 @@ export default class Footer extends Component {
               </p>
             </div>
             <div className="col-md-4 footer-links col-12 ml-md-auto mt-md-0 mt-4">
-              <Link to="/" className="text-decoration-underline mx-2 d-inline text-white">Terms</Link>
-              <Link to="/" className="text-decoration-underline mx-2 d-inline  text-white">Privacy</Link>
-              <Link to="/" className="text-decoration-underline mx-2 d-inline text-white">Notices</Link>
+              <a href="https://docs.clearlydefined.io/legal/terms" className="text-decoration-underline mx-2 d-inline text-white">Terms</a>
+              <a href="https://docs.clearlydefined.io/legal/privacy" className="text-decoration-underline mx-2 d-inline  text-white">Privacy</a>
+              <a href="https://docs.clearlydefined.io/legal/NOTICES" className="text-decoration-underline mx-2 d-inline text-white">Notices</a>
             </div>
           </div>
         </div>
