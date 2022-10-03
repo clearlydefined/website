@@ -3,7 +3,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TwoLineEntry, QuickEditModel, SourcePicker, FileCountRenderer } from './'
+import { TwoLineEntry, QuickEditModel, FileCountRenderer } from './'
 import { Checkbox, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import { Tag } from 'antd'
 import { get, isEqual, union } from 'lodash'
@@ -34,7 +34,7 @@ class DefinitionEntry extends React.Component {
     }
   }
   static propTypes = {
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     onCurate: PropTypes.func,
     onInspect: PropTypes.func,
     activeFacets: PropTypes.array,
@@ -60,7 +60,7 @@ class DefinitionEntry extends React.Component {
       const newChanges = { ...component.changes }
       if (isChanged && proposedValue !== null) newChanges[field] = proposedValue
       else delete newChanges[field]
-      onChange && onChange(component, newChanges, field)
+      onChange(component, newChanges, field)
     }
   }
 
@@ -90,10 +90,10 @@ class DefinitionEntry extends React.Component {
         <ScoreRenderer scores={scores} definition={definition} />
       </span>
     ) : null
-    const releasedDate = definition?.described?.releaseDate ? (
-      <span className="releasedDate-table">{definition.described.releaseDate}</span>
-    ) : (
-      <span className="releasedDate-table">-- -- --</span>
+    const releasedDate = (
+      <span className="releasedDate-table">
+        {this.renderFieldWithToolTipIfDifferent('described.releaseDate', a => a || '-- -- --')}
+      </span>
     )
     const curationTag = isCurationPending ? (
       <span>
@@ -125,7 +125,7 @@ class DefinitionEntry extends React.Component {
   renderWithToolTipIfDifferent(field, content, placement = 'right', transform = x => x) {
     const toolTip = (
       <Tooltip id={`tooltip-${field}`} className="definition__tooltip">
-        Original: {transform(get(this.props.otherDefinition, field))}
+        Original: {transform(this.getOriginalValue(field))}
       </Tooltip>
     )
     return this.ifDifferent(
@@ -137,14 +137,19 @@ class DefinitionEntry extends React.Component {
     )
   }
 
+  renderFieldWithToolTipIfDifferent(field, transform = a => a) {
+    const displayValue = transform(this.getValue(field))
+    return this.renderWithToolTipIfDifferent(
+      field,
+      <span className={this.classIfDifferent(field)}>{displayValue}</span>,
+      undefined,
+      transform
+    )
+  }
+
   renderMessage(definition) {
     const licenseExpression = definition ? this.getValue('licensed.declared') : null
-    return licenseExpression
-      ? this.renderWithToolTipIfDifferent(
-        'licensed.declared',
-        <span className={this.classIfDifferent('licensed.declared')}>{licenseExpression}</span>
-      )
-      : null
+    return licenseExpression ? this.renderFieldWithToolTipIfDifferent('licensed.declared') : null
   }
 
   getPercentage(count, total) {
@@ -190,6 +195,23 @@ class DefinitionEntry extends React.Component {
     this.setState({ modelOpen: !this.state.modelOpen })
   }
 
+  handleSaveEdit = updates => {
+    const { onChange, definition, component } = this.props
+
+    const newChanges = Object.entries(updates).reduce((changes, [key, value]) => {
+      let field
+      if (key === 'declared') field = 'licensed.declared'
+      if (key === 'sourceComponent') field = 'described.sourceLocation'
+      if (key === 'release') field = 'described.releaseDate'
+      return field ? Contribution.applyChanges(definition, changes, field, value) : changes
+    }, {})
+
+    if (Object.keys(newChanges).length !== 0) {
+      const combinedChanges = { ...component.changes, ...newChanges }
+      onChange(component, combinedChanges)
+    }
+  }
+
   renderPanel(rawDefinition) {
     if (!rawDefinition)
       return (
@@ -201,13 +223,12 @@ class DefinitionEntry extends React.Component {
     // TODO: find a way of calling this method less frequently. It's relatively expensive.
     const definition = this.foldFacets(rawDefinition, this.props.activeFacets)
     const { licensed } = definition
-    const { readOnly, onRevert } = this.props
     return (
       <div className="row row-panel-details">
         <div className="col-md-6 d-flex justify-content-start align-items-center">
           <span className="panel-details__title">{this.renderLabel('Declared')}:</span>
           <div className="panel-details__value">
-            <p>{this.getValue('licensed.declared')}</p>
+            {this.renderFieldWithToolTipIfDifferent('licensed.declared')}
             {/* {this.renderWithToolTipIfDifferent(
               'licensed.declared',
               <LicensesRenderer
@@ -232,7 +253,7 @@ class DefinitionEntry extends React.Component {
         <div className="col-md-6 d-flex justify-content-start align-items-center">
           <span className="panel-details__title">{this.renderLabel('Source')}:</span>
           <div className="panel-details__value">
-            <p>{Contribution.printCoordinates(this.getValue('described.sourceLocation'))}</p>
+            {this.renderFieldWithToolTipIfDifferent('described.sourceLocation', a => Contribution.printCoordinates(a))}
             {/* {this.renderWithToolTipIfDifferent(
               'described.sourceLocation',
               <ModalEditor
@@ -263,7 +284,10 @@ class DefinitionEntry extends React.Component {
         <div className="col-md-6 d-flex justify-content-start align-items-center">
           <span className="panel-details__title">{this.renderLabel('Release')}:</span>
           <div className="panel-details__value">
-            <p>{Contribution.printDate(this.getValue('described.releaseDate'))}</p>
+            {this.renderFieldWithToolTipIfDifferent(
+              'described.releaseDate',
+              a => Contribution.printDate(a) || '-- -- --'
+            )}
             {/* {this.renderWithToolTipIfDifferent(
               'described.releaseDate',
               <InlineEditor
@@ -292,33 +316,12 @@ class DefinitionEntry extends React.Component {
           <QuickEditModel
             open={this.state.modelOpen}
             closeModel={this.handleModel}
-            definition={definition}
-            field={'described.sourceLocation'}
-            extraClass={this.classIfDifferent('described.sourceLocation')}
-            readOnly={readOnly}
-            initialValue={{
-              declared: this.getOriginalValue('licensed.declared'),
-              source: Contribution.printCoordinates(this.getOriginalValue('described.sourceLocation')),
-              release: Contribution.printDate(this.getOriginalValue('described.releaseDate')),
-              repo: ''
-            }}
-            values={{
+            initialValues={{
               declared: this.getValue('licensed.declared'),
-              source: Contribution.printCoordinates(this.getValue('described.sourceLocation')),
-              release: Contribution.printDate(this.getValue('described.releaseDate')),
-              repo: ''
+              sourceComponent: this.getValue('described.sourceLocation'),
+              release: Contribution.printDate(this.getValue('described.releaseDate'))
             }}
-            onChange={{
-              declared: this.fieldChange('licensed.declared'),
-              source: this.fieldChange('described.sourceLocation', isEqual, Contribution.toSourceLocation),
-              release: this.fieldChange('described.releaseDate'),
-              repo: ''
-            }}
-            editor={SourcePicker}
-            validator={value => true}
-            placeholder={'Source location'}
-            revertable
-            onRevert={() => onRevert('described.sourceLocation')}
+            onSave={this.handleSaveEdit}
           />
           <button onClick={this.handleModel} className="quick-edit-btn">
             Edit

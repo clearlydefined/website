@@ -3,9 +3,9 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getCocoaPodsRevisions } from '../api/clearlyDefined'
-import Autocomplete from './Navigation/Ui/Autocomplete'
-import searchSvg from '../images/icons/searchSvg.svg'
+import { getCocoaPodsRevisions } from '../../../api/clearlyDefined'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 
 export default class CocoaPodsVersionPicker extends Component {
   static propTypes = {

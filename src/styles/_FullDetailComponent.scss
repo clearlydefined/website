@@ -317,14 +317,16 @@
   }
 }
 
-#source-picker {
+.source-picker.main-container {
   padding: 24px;
   border-radius: 8px;
 
   @include start-at($medium) {
     padding: 36px;
   }
+}
 
+#source-picker {
   button[name='github'] {
     @include no-btn;
     font-weight: 600 !important;
@@ -340,12 +342,19 @@
     border-radius: 4px;
     padding: 0 14px;
   }
+}
 
-  .form-group {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+.source-picker .form-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit #source-picker {
+  padding-top: 5px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
 }
 
 .source-picker__current-source {

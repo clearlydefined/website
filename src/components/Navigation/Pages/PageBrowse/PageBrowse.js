@@ -10,7 +10,7 @@ import difference from 'lodash/difference'
 import classNames from 'classnames'
 import { ROUTE_ROOT } from '../../../../utils/routingConstants'
 import { getCurationsAction } from '../../../../actions/curationActions'
-import { uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
+import { uiBrowseUpdateFilterList, uiBrowseUpdateList, uiNavigation, uiBrowseGet } from '../../../../actions/ui'
 import SystemManagedList from '../../../SystemManagedList'
 import Section from '../../../Section'
 import ComponentList from '../../../ComponentList'
@@ -34,7 +34,8 @@ class PageBrowse extends SystemManagedList {
     this.state = {
       activeSort: 'releaseDate-desc',
       searchFocused: false,
-      selectedProvider: providers[0]
+      selectedProvider: providers[0],
+      searchTerm: ''
     }
     this.onFilter = this.onFilter.bind(this)
     this.onSort = this.onSort.bind(this)
@@ -63,11 +64,17 @@ class PageBrowse extends SystemManagedList {
   }
 
   onBrowse = value => {
-    this.setState({ activeName: value }, () => this.updateData())
+    this.setState({ activeName: value, searchTerm: '' }, () => this.updateData())
   }
 
   onFocusChange = value => {
     this.setState({ searchFocused: value })
+  }
+
+  onSearch = value => {
+    this.setState({ searchTerm: value })
+    const valueToSearch = this.state.selectedProvider.value + '/' + value
+    this.props.dispatch(uiBrowseUpdateFilterList(this.props.token, valueToSearch))
   }
 
   tableTitle() {
@@ -156,7 +163,6 @@ class PageBrowse extends SystemManagedList {
       <ButtonsBar
         hasChanges={!this.hasChanges()}
         revertAll={() => this.revertAll('browse')}
-        toggleCollapseExpandAll={this.toggleCollapseExpandAll}
         doPromptContribute={this.doPromptContribute}
       />
     )
@@ -164,6 +170,10 @@ class PageBrowse extends SystemManagedList {
 
   onProviderChange(item) {
     this.setState({ selectedProvider: item })
+    if (this.state.searchTerm) {
+      const valueToSearch = item.value + '/' + this.state.searchTerm
+      this.props.dispatch(uiBrowseUpdateFilterList(this.props.token, valueToSearch))
+    }
   }
 
   // Overrides the default onFilter method
@@ -332,10 +342,8 @@ class PageBrowse extends SystemManagedList {
             />
           </div>
           <div className="col-12">
-            <Section
-              className="flex-grow-column clearly-component-wrap"
-            >
-              <div className={classNames('clearly-table flex-grow', { loading: components.isFetching })}>
+            <Section className="flex-grow-column" name={this.tableTitle()} actionButton={this.renderButtons()}>
+              <div className={classNames('section-body flex-grow', { loading: components.isFetching })}>
                 <i className="fas fa-spinner fa-spin" />
                 <ComponentList
                   role="tree"
@@ -346,7 +354,6 @@ class PageBrowse extends SystemManagedList {
                   loadMoreRows={this.loadMoreRows}
                   onRevert={(definition, value) => this.revertDefinition(definition, value, 'browse')}
                   onChange={this.onChangeComponent}
-                  onInspect={this.onInspect}
                   renderFilterBar={this.renderFilterBar}
                   curations={curations}
                   definitions={definitions}

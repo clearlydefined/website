@@ -32,7 +32,8 @@ export class AbstractFullDetailsView extends Component {
 
     return modalView ? (
       <Modal
-        closable={false}
+        closable={!!this.handleClose}
+        onCancel={this.handleClose}
         footer={null}
         // if it's mobile do not center the Modal
         centered={!isMobile}
@@ -50,7 +51,6 @@ export class AbstractFullDetailsView extends Component {
             readOnly={readOnly}
             modalView={modalView}
             onChange={this.onChange}
-            handleClose={this.handleClose}
             handleSave={this.handleSave}
             handleRevert={this.handleRevert}
             previewDefinition={previewDefinition}

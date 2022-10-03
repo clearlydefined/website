@@ -23,7 +23,6 @@ import UrlShare from '../../../../utils/urlShare'
 export class PageDefinitions extends UserManagedList {
   constructor(props) {
     super(props)
-    this.onAddComponent = this.onAddComponent.bind(this)
     this.doSave = this.doSave.bind(this)
     this.doSaveAsUrl = this.doSaveAsUrl.bind(this)
     this.revertAll = this.revertAll.bind(this)
@@ -225,7 +224,7 @@ export class PageDefinitions extends UserManagedList {
             path={path}
             currentDefinition={currentDefinition}
             component={currentComponent}
-            readOnly={this.readOnly}
+            readOnly={true}
           />
         )}
         {showSavePopup && (
