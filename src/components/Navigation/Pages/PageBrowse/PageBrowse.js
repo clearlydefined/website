@@ -73,8 +73,12 @@ class PageBrowse extends SystemManagedList {
 
   onSearch = value => {
     this.setState({ searchTerm: value })
-    const valueToSearch = this.state.selectedProvider.value + '/' + value
-    this.props.dispatch(uiBrowseUpdateFilterList(this.props.token, valueToSearch))
+    const searchPattern = this._buildSearchPattern(this.state.selectedProvider, value)
+    this.props.dispatch(uiBrowseUpdateFilterList(this.props.token, searchPattern))
+  }
+
+  _buildSearchPattern = (provider, value) => {
+    return provider.type + '/' + provider.value + '/' + value
   }
 
   tableTitle() {
@@ -171,8 +175,8 @@ class PageBrowse extends SystemManagedList {
   onProviderChange(item) {
     this.setState({ selectedProvider: item })
     if (this.state.searchTerm) {
-      const valueToSearch = item.value + '/' + this.state.searchTerm
-      this.props.dispatch(uiBrowseUpdateFilterList(this.props.token, valueToSearch))
+      const searchPattern = this._buildSearchPattern(item, this.state.searchTerm)
+      this.props.dispatch(uiBrowseUpdateFilterList(this.props.token, searchPattern))
     }
   }
 
