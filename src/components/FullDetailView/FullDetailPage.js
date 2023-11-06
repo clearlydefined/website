@@ -166,9 +166,9 @@ export class FullDetailPage extends AbstractFullDetailsView {
   }
 
   handleClose() {
-    const { onClose } = this.props
+    const { readOnly, onClose } = this.props
     const { changes } = this.state
-    if (isEmpty(changes)) return onClose()
+    if (readOnly || isEmpty(changes)) return onClose()
     const key = `open${Date.now()}`
     notification.open({
       message: 'Unsaved Changes',

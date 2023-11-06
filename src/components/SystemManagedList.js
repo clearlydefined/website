@@ -51,6 +51,7 @@ export default class SystemManagedList extends Component {
     this.updateList = this.updateList.bind(this)
     this.onSearch = this.onSearch.bind(this)
     this.onInspect = this.onInspect.bind(this)
+    this.onInspectClose = this.onInspectClose.bind(this)
     this.onSort = this.onSort.bind(this)
     this.onFilter = this.onFilter.bind(this)
     this.onChangeComponent = this.onChangeComponent.bind(this)

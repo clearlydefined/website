@@ -1,21 +1,21 @@
-// Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
+// (c) Copyright 2022, SAP SE and ClearlyDefined contributors. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getPyPiSearch } from '../api/clearlyDefined'
+import { getCocoaPodsSearch } from '../../../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
-import searchSvg from '../images/icons/searchSvg.svg'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 
-export default class PyPiSelector extends Component {
+export default class CocoaPodsSelector extends Component {
   static propTypes = {
     onChange: PropTypes.func
   }
 
   constructor(props) {
     super(props)
-    this.state = { isLoading: false, options: [], focus: false }
+    this.state = { isLoading: false, options: [], focus: true }
     this.getOptions = this.getOptions.bind(this)
     this.onChange = this.onChange.bind(this)
   }
@@ -23,13 +23,13 @@ export default class PyPiSelector extends Component {
   onChange(values) {
     const { onChange } = this.props
     const value = values.length === 0 ? null : values[0]
-    value && onChange && onChange({ type: 'pypi', provider: 'pypi', name: value.id }, 'package')
+    value && onChange && onChange({ type: 'pod', provider: 'cocoapods', name: value.id }, 'package')
   }
 
   async getOptions(value) {
     try {
       this.setState({ ...this.state, isLoading: true })
-      const options = await getPyPiSearch(this.props.token, value)
+      const options = await getCocoaPodsSearch(this.props.token, value)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
       this.setState({ ...this.state, options: [], isLoading: false })
@@ -44,11 +44,11 @@ export default class PyPiSelector extends Component {
           <img src={searchSvg} alt="search" />
         </div>
         <AsyncTypeahead
-          id="pypi-selector"
+          id="pod-selector"
           className="harvest-search"
           useCache={false}
           options={options}
-          placeholder={'Pick a PyPi to harvest'}
+          placeholder={'Pick a CocoaPod to harvest'}
           onChange={this.onChange}
           labelKey="id"
           onFocus={() => this.setState({ ...this.state, focus: true })}

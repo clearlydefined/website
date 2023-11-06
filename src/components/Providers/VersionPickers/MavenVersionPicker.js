@@ -3,9 +3,9 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getMavenRevisions } from '../api/clearlyDefined'
-import Autocomplete from './Navigation/Ui/Autocomplete'
-import searchSvg from '../images/icons/searchSvg.svg'
+import { getMavenRevisions } from '../../../api/clearlyDefined'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 
 export default class MavenVersionPicker extends Component {
   static propTypes = {

@@ -5,6 +5,11 @@ import ButtonWithTooltip from '../../Ui/ButtonWithTooltip'
 import ShareButton from '../../Ui/ShareButton'
 
 export default class ButtonsBar extends Component {
+  constructor(props) {
+    super(props)
+    this.onSelect = this.onSelect.bind(this)
+  }
+
   static propTypes = {
     components: PropTypes.object,
     hasChanges: PropTypes.bool,

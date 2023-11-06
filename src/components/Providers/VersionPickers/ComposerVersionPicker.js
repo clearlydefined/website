@@ -3,11 +3,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getPyPiRevisions } from '../api/clearlyDefined'
-import Autocomplete from './Navigation/Ui/Autocomplete'
-import searchSvg from '../images/icons/searchSvg.svg'
+import { getComposerRevisions } from '../../../api/clearlyDefined'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 
-export default class PyPiVersionPicker extends Component {
+export default class ComposerVersionPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
@@ -16,12 +16,7 @@ export default class PyPiVersionPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      customValues: [],
-      options: [],
-      focus: false,
-      selected: props.request.revision ? [props.request.revision] : []
-    }
+    this.state = { customValues: [], options: [], focus: false }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
@@ -30,14 +25,10 @@ export default class PyPiVersionPicker extends Component {
     this.getOptions('')
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
-  }
-
   async getOptions(value) {
     try {
-      const { name } = this.props.request
-      const options = await getPyPiRevisions(this.props.token, name)
+      const { name, namespace } = this.props.request
+      const options = await getComposerRevisions(this.props.token, `${namespace}/${name}`)
       this.setState({ ...this.state, options })
     } catch (error) {
       this.setState({ ...this.state, options: [] })
@@ -63,7 +54,7 @@ export default class PyPiVersionPicker extends Component {
 
   render() {
     const { defaultInputValue } = this.props
-    const { customValues, options, selected, focus } = this.state
+    const { customValues, options, focus } = this.state
     const list = customValues.concat(options)
     return (
       <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
@@ -71,16 +62,17 @@ export default class PyPiVersionPicker extends Component {
           <img src={searchSvg} alt="search" />
         </div>
         <Autocomplete
-          id="pypi-version-picker"
-          selected={selected}
+          id="composer-version-picker"
           options={list}
           defaultInputValue={defaultInputValue}
-          placeholder={options.length === 0 ? 'Could not fetch versions, type a PyPi version' : 'Pick a PyPi version'}
+          placeholder={
+            options.length === 0 ? 'Could not fetch versions, type a Composer version' : 'Pick a Composer version'
+          }
           onChange={this.onChange}
-          positionFixed
-          clearButton
           onFocus={() => this.setState({ ...this.state, focus: true })}
           onBlur={() => this.setState({ ...this.state, focus: false })}
+          positionFixed
+          clearButton
           allowNew
           newSelectionPrefix="Version:"
           emptyLabel=""

@@ -21,9 +21,11 @@ export default class ButtonsBar extends Component {
             <span>&nbsp;Revert Changes</span>
           </Button>
         </ButtonWithTooltip>
-        <Button bsStyle="default" onClick={toggleCollapseExpandAll}>
-          Toggle Collapse
-        </Button>
+        {toggleCollapseExpandAll && (
+          <Button bsStyle="default" onClick={toggleCollapseExpandAll}>
+            Toggle Collapse
+          </Button>
+        )}
         <Button bsStyle="success" disabled={hasChanges} onClick={doPromptContribute} data-test-id="contribute-button">
           Contribute
         </Button>

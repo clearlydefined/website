@@ -12,17 +12,17 @@ from './ContributePrompt'
 export { default as CopyUrlButton }
 from './CopyUrlButton'
 export { default as CrateSelector }
-from './CrateSelector'
+from './Providers/Selectors/CrateSelector'
 export { default as CrateVersionPicker }
-from './CrateVersionPicker'
+from './Providers/VersionPickers/CrateVersionPicker'
 export { default as DebianSelector }
 from './Providers/Selectors/DebianSelector'
 export { default as DebianVersionPicker }
 from './Providers/VersionPickers/DebianVersionPicker'
 export { default as ComposerSelector }
-from './ComposerSelector'
+from './Providers/Selectors/ComposerSelector'
 export { default as ComposerVersionPicker }
-from './ComposerVersionPicker'
+from './Providers/VersionPickers/ComposerVersionPicker'
 export { default as DefinitionEntry }
 from './DefinitionEntry'
 export { default as FieldGroup }
@@ -34,9 +34,9 @@ from './FilterBar'
 export { default as Footer }
 from './Footer'
 export { default as GitHubCommitPicker }
-from './GitHubCommitPicker'
+from './Providers/VersionPickers/GitHubCommitPicker'
 export { default as GitHubSelector }
-from './GitHubSelector'
+from './Providers/Selectors/GitHubSelector'
 export { default as HarvestQueueList }
 from './HarvestQueueList'
 export { default as Header }
@@ -50,31 +50,31 @@ from './ModalEditor'
 export { default as SourcePicker }
 from './SourcePicker'
 export { default as MavenSelector }
-from './MavenSelector'
+from './Providers/Selectors/MavenSelector'
 export { default as MavenVersionPicker }
-from './MavenVersionPicker'
+from './Providers/VersionPickers/MavenVersionPicker'
 export { default as NotificationList }
 from './NotificationList'
 export { default as NpmSelector }
-from './NpmSelector'
+from './Providers/Selectors/NpmSelector'
 export { default as NpmVersionPicker }
-from './NpmVersionPicker'
+from './Providers/VersionPickers/NpmVersionPicker'
 export { default as NuGetSelector }
-from './NuGetSelector'
+from './Providers/Selectors/NuGetSelector'
 export { default as NuGetVersionPicker }
-from './NuGetVersionPicker'
+from './Providers/VersionPickers/NuGetVersionPicker'
 export { default as PyPiSelector }
-from './PyPiSelector'
+from './Providers/Selectors/PyPiSelector'
 export { default as PyPiVersionPicker }
-from './PyPiVersionPicker'
+from './Providers/VersionPickers/PyPiVersionPicker'
 export { default as RubyGemsSelector }
-from './RubyGemsSelector'
+from './Providers/Selectors/RubyGemsSelector'
 export { default as RubyGemsVersionPicker }
-from './RubyGemsVersionPicker'
+from './Providers/VersionPickers/RubyGemsVersionPicker'
 export { default as CocoaPodsSelector }
-from './CocoaPodsSelector'
+from './Providers/Selectors/CocoaPodsSelector'
 export { default as CocoaPodsVersionPicker }
-from './CocoaPodsVersionPicker'
+from './Providers/VersionPickers/CocoaPodsVersionPicker'
 export { default as PageAbout }
 from './PageAbout'
 export { default as RehydrationProvider }
