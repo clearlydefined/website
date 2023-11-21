@@ -15,6 +15,9 @@ import github from '../images/GitHub-Mark-120px-plus.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
+import anaconda_r from '../images/anaconda-r.png'
+import anaconda_main from '../images/anaconda-main.svg'
+import conda_forge from '../images/conda-forge.png'
 import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import debian from '../images/debian.png'
@@ -198,7 +201,7 @@ export default class Contribution {
 
   static getPercentage = (count, total) => Math.round(((count || 0) / total) * 100)
 
-  static isSourceComponent = component => ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
+  static isSourceComponent = component => ['github', 'sourcearchive', 'debsrc', 'condasource'].includes(component.provider)
 
   /**
    *  Get image of definition based on the provider
@@ -208,6 +211,10 @@ export default class Contribution {
    */
   static getImage(item) {
     switch (item.coordinates.provider) {
+      case 'anaconda-main':
+        return anaconda_main
+      case 'anaconda-r':
+        return anaconda_r
       case 'github':
         return github
       case 'npmjs':
@@ -216,6 +223,8 @@ export default class Contribution {
         return pypi
       case 'rubygems':
         return gem
+      case 'conda-forge':
+        return conda_forge
       case 'cratesio':
         return cargo
       case 'packagist':

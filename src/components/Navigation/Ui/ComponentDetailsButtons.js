@@ -14,7 +14,7 @@ class ComponentDetailsButtons extends Component {
   }
 
   isSourceComponent(component) {
-    return ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
+    return ['github', 'sourcearchive', 'debsrc', 'condasource'].includes(component.provider)
   }
 
   openSourceForComponent = definition => {

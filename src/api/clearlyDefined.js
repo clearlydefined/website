@@ -17,6 +17,7 @@ export const BROWSE = 'browse'
 export const ORIGINS_GITHUB = 'origins/github'
 export const ORIGINS_NPM = 'origins/npm'
 export const ORIGINS_NUGET = 'origins/nuget'
+export const ORIGINS_CONDA = 'origins/conda'
 export const ORIGINS_CRATE = 'origins/crate'
 export const ORIGINS_MAVEN = 'origins/maven'
 export const ORIGINS_PYPI = 'origins/pypi'
@@ -25,9 +26,12 @@ export const ORIGINS_DEBIAN = 'origins/deb'
 export const ORIGINS_COMPOSER = 'origins/composer'
 export const ORIGINS_POD = 'origins/pod'
 export const ORIGINS = {
+  "anaconda-main": { conda: ORIGINS_CONDA, condasource: ORIGINS_CONDA },
+  "anaconda-r": { conda: ORIGINS_CONDA, condasource: ORIGINS_CONDA },
   github: { git: ORIGINS_GITHUB },
   npmjs: { npm: ORIGINS_NPM },
   nuget: { nuget: ORIGINS_NUGET },
+  "conda-forge": { conda: ORIGINS_CONDA, condasource: ORIGINS_CONDA },
   cratesio: { crate: ORIGINS_CRATE },
   mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
   pypi: { pypi: ORIGINS_PYPI },
@@ -186,6 +190,14 @@ export function getRubyGemsSearch(token, path) {
 
 export function getRubyGemsRevisions(token, path) {
   return get(url(`${ORIGINS_RUBYGEMS}/${path}/revisions`), token)
+}
+
+export function getCondaSearch(token, path) {
+  return get(url(`${ORIGINS_CONDA}/${path}`), token)
+}
+
+export function getCondaRevisions(token, path) {
+  return get(url(`${ORIGINS_CONDA}/${path}/revisions`), token)
 }
 
 export function getCrateSearch(token, path) {
