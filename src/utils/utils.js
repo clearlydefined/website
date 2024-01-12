@@ -112,7 +112,7 @@ const types = [
   { value: 'composer', label: 'Composer', provider: 'packagist' },
   { value: 'pod', label: 'Pod', provider: 'cocoapods' },
   { value: 'conda', label: 'Conda', provider: 'conda-forge' },
-  { value: 'condasource', label: 'Conda', provider: 'conda-forge' },
+  { value: 'condasrc', label: 'Conda', provider: 'conda-forge' },
   { value: 'crate', label: 'Crate', provider: 'cratesio' },
   { value: 'git', label: 'Git', provider: 'github' },
   { value: 'maven', label: 'Maven', provider: 'mavencentral' },

@@ -50,7 +50,7 @@ class DefinitionEntry extends React.Component {
   static defaultProps = {}
 
   isSourceComponent(component) {
-    return ['github', 'sourcearchive', 'debsrc', 'condasource'].includes(component.provider)
+    return ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
   }
 
   fieldChange(field, equality = isEqual, transform = a => a) {

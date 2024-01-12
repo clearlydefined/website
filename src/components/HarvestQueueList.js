@@ -77,6 +77,15 @@ class HarvestQueueList extends React.Component {
     this.props.onChange(request, newRequest)
   }
 
+  condaVersionChanged(request, value) {
+    const newRequest = clone(request)
+    let [namespace, revision] = value.split(':')
+    newRequest.namespace = namespace
+    newRequest.revision = revision
+    this.setState({ contentSeq: this.state.contentSeq + 1 })
+    this.props.onChange(request, newRequest)
+  }
+
   renderButtons(request) {
     return (
       <div className="list-activity-area">
@@ -92,10 +101,10 @@ class HarvestQueueList extends React.Component {
           <CondaVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
         {request.provider === 'anaconda-r' && (
-          <CondaVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+          <CondaVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
         )}
         {request.provider === 'cratesio' && (
-          <CrateVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+          <CrateVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
         )}
         {request.provider === 'npmjs' && (
           <NpmVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
@@ -110,7 +119,7 @@ class HarvestQueueList extends React.Component {
           <RubyGemsVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
         {request.provider === 'conda-forge' && (
-          <CondaVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+          <CondaVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
         )}
         {request.provider === 'cratesio' && (
           <CrateVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />

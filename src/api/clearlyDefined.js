@@ -26,12 +26,12 @@ export const ORIGINS_DEBIAN = 'origins/deb'
 export const ORIGINS_COMPOSER = 'origins/composer'
 export const ORIGINS_POD = 'origins/pod'
 export const ORIGINS = {
-  "anaconda-main": { conda: ORIGINS_CONDA, condasource: ORIGINS_CONDA },
-  "anaconda-r": { conda: ORIGINS_CONDA, condasource: ORIGINS_CONDA },
+  "anaconda-main": { conda: ORIGINS_CONDA, condasrc: ORIGINS_CONDA },
+  "anaconda-r": { conda: ORIGINS_CONDA, condasrc: ORIGINS_CONDA },
   github: { git: ORIGINS_GITHUB },
   npmjs: { npm: ORIGINS_NPM },
   nuget: { nuget: ORIGINS_NUGET },
-  "conda-forge": { conda: ORIGINS_CONDA, condasource: ORIGINS_CONDA },
+  "conda-forge": { conda: ORIGINS_CONDA, condasrc: ORIGINS_CONDA },
   cratesio: { crate: ORIGINS_CRATE },
   mavencentral: { maven: ORIGINS_MAVEN, sourcearchive: ORIGINS_MAVEN },
   pypi: { pypi: ORIGINS_PYPI },

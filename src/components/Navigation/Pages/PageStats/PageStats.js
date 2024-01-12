@@ -36,7 +36,7 @@ const types = {
   nuget: nuget,
   git: git,
   conda: conda,
-  condasource: conda,
+  condasrc: conda,
   crate: crate,
   deb: debian,
   debsrc: debian,
