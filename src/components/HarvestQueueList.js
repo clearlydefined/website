@@ -98,13 +98,13 @@ class HarvestQueueList extends React.Component {
           />
         )}
         {request.provider === 'anaconda-main' && (
-          <CondaVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+          <CondaVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
         )}
         {request.provider === 'anaconda-r' && (
           <CondaVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
         )}
         {request.provider === 'cratesio' && (
-          <CrateVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
+          <CrateVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
         {request.provider === 'npmjs' && (
           <NpmVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />

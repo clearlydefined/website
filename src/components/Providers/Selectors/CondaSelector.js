@@ -28,7 +28,7 @@ export default class CondaSelector extends Component {
   async getOptions(value) {
     try {
       this.setState({ ...this.state, isLoading: true })
-      const options = await getCondaSearch(this.props.token, `${value}/${this.props.provider}`)
+      const options = await getCondaSearch(this.props.token, `${this.props.provider}/${value}`)
       this.setState({ ...this.state, options, isLoading: false })
     } catch (error) {
       this.setState({ ...this.state, options: [], isLoading: false })
