@@ -26,8 +26,8 @@ export default class CondaVersionPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { name, provider } = this.props.request
-      const options = await getCondaRevisions(this.props.token, `${provider}/${name}`)
+      const { name, namespace, provider } = this.props.request
+      const options = await getCondaRevisions(this.props.token, `${provider}/${namespace || '-'}/${name}`)
       this.setState({ ...this.state, options })
     } catch (error) {
       this.setState({ ...this.state, options: [] })
