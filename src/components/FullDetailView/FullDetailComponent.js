@@ -29,7 +29,6 @@ class FullDetailComponent extends Component {
     }
   }
   static propTypes = {
-    handleClose: PropTypes.func,
     handleSave: PropTypes.func,
     handleRevert: PropTypes.func,
     curations: PropTypes.object.isRequired,

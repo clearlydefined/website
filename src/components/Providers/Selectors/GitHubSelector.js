@@ -3,9 +3,9 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getGitHubSearch } from '../api/clearlyDefined'
+import { getGitHubSearch } from '../../../api/clearlyDefined'
 import { AsyncTypeahead } from 'react-bootstrap-typeahead'
-import searchSvg from '../images/icons/searchSvg.svg'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 export default class GitHubSelector extends Component {

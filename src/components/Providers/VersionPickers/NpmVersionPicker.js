@@ -3,11 +3,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getNugetRevisions } from '../api/clearlyDefined'
-import Autocomplete from './Navigation/Ui/Autocomplete'
-import searchSvg from '../images/icons/searchSvg.svg'
+import { getNpmRevisions } from '../../../api/clearlyDefined'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 
-export default class NuGetVersionPicker extends Component {
+export default class NpmVersionPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
     request: PropTypes.object.isRequired,
@@ -19,8 +19,8 @@ export default class NuGetVersionPicker extends Component {
     this.state = {
       customValues: [],
       options: [],
-      selected: props.request.revision ? [props.request.revision] : [],
-      focus: false
+      focus: false,
+      selected: props.request.revision ? [props.request.revision] : []
     }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
@@ -36,8 +36,9 @@ export default class NuGetVersionPicker extends Component {
 
   async getOptions(value) {
     try {
-      const { name } = this.props.request
-      const options = await getNugetRevisions(this.props.token, name)
+      const { namespace, name } = this.props.request
+      const path = namespace ? `${namespace}/${name}` : name
+      const options = await getNpmRevisions(this.props.token, path)
       this.setState({ ...this.state, options })
     } catch (error) {
       this.setState({ ...this.state, options: [] })
@@ -65,24 +66,22 @@ export default class NuGetVersionPicker extends Component {
     const { defaultInputValue } = this.props
     const { customValues, options, selected, focus } = this.state
     const list = customValues.concat(options)
-
     return (
       <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
         <div className="search-logo">
           <img src={searchSvg} alt="search" />
         </div>
         <Autocomplete
-          id="nuget-version-picker"
+          id="npm-version-picker"
+          inputProps={{ dataTestId: 'npm-version-picker' }}
           selected={selected}
           options={list}
           defaultInputValue={defaultInputValue}
-          placeholder={
-            options.length === 0 ? 'Could not fetch versions, type a Nuget version' : 'Pick an Nuget version'
-          }
+          placeholder={options.length === 0 ? 'Could not fetch versions, type an NPM version' : 'Pick an NPM version'}
           onChange={this.onChange}
-          positionFixed
           onFocus={() => this.setState({ ...this.state, focus: true })}
           onBlur={() => this.setState({ ...this.state, focus: false })}
+          positionFixed
           clearButton
           allowNew
           newSelectionPrefix="Version:"

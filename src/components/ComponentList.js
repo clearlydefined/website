@@ -145,8 +145,9 @@ class ComponentList extends React.Component {
   render() {
     const { loadMoreRows, noRowsRenderer, list, listLength } = this.props
     const { sortOrder, contentSeq } = this.state
+    const showFilterBar = false
     return (
-      <div className="clearly-table-body flex-grow">
+      <div className={`clearly-table-body flex-grow ${showFilterBar ? 'show-filter' : ''}`}>
         <div className="clearly-header">
           <div className="table-header-fcloumn">
             <h4>Component</h4>

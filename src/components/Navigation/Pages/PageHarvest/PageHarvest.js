@@ -17,6 +17,7 @@ import {
   ComposerSelector,
   PyPiSelector,
   RubyGemsSelector,
+  CocoaPodsSelector,
   Section
 } from '../../../'
 import { uiNavigation, uiHarvestUpdateQueue, uiNotificationNew } from '../../../../actions/ui'
@@ -122,6 +123,7 @@ class PageHarvest extends Component {
             {activeProvider.value === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
             {activeProvider.value === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
             {activeProvider.value === 'debian' && <DebianSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'cocoapods' && <CocoaPodsSelector onChange={this.onAddRequest} />}
           </Col>
           <Col md={2} className="harvest-action">
             {this.renderActionButton()}

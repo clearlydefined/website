@@ -23,6 +23,7 @@ export const ORIGINS_PYPI = 'origins/pypi'
 export const ORIGINS_RUBYGEMS = 'origins/rubygems'
 export const ORIGINS_DEBIAN = 'origins/deb'
 export const ORIGINS_COMPOSER = 'origins/composer'
+export const ORIGINS_POD = 'origins/pod'
 export const ORIGINS = {
   github: { git: ORIGINS_GITHUB },
   npmjs: { npm: ORIGINS_NPM },
@@ -32,7 +33,8 @@ export const ORIGINS = {
   pypi: { pypi: ORIGINS_PYPI },
   rubygems: { gem: ORIGINS_RUBYGEMS },
   debian: { deb: ORIGINS_DEBIAN, debsrc: ORIGINS_DEBIAN },
-  packagist: { composer: ORIGINS_COMPOSER }
+  packagist: { composer: ORIGINS_COMPOSER },
+  cocoapods: { pod: ORIGINS_POD }
 }
 
 export function getHarvestResults(token, entity) {
@@ -216,6 +218,14 @@ export function getComposerSearch(token, path) {
 
 export function getComposerRevisions(token, path) {
   return get(url(`${ORIGINS_COMPOSER}/${path}/revisions`), token)
+}
+
+export function getCocoaPodsSearch(token, path) {
+  return get(url(`${ORIGINS_POD}/${path}`), token)
+}
+
+export function getCocoaPodsRevisions(token, path) {
+  return get(url(`${ORIGINS_POD}/${path}/revisions`), token)
 }
 
 export function getRevisions(token, path, type, provider) {

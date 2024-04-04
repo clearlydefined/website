@@ -3,20 +3,24 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { getComposerRevisions } from '../api/clearlyDefined'
-import Autocomplete from './Navigation/Ui/Autocomplete'
-import searchSvg from '../images/icons/searchSvg.svg'
+import { getMavenRevisions } from '../../../api/clearlyDefined'
+import Autocomplete from '../../Navigation/Ui/Autocomplete'
+import searchSvg from '../../../images/icons/searchSvg.svg'
 
-export default class ComposerVersionPicker extends Component {
+export default class MavenVersionPicker extends Component {
   static propTypes = {
     onChange: PropTypes.func,
-    request: PropTypes.object.isRequired,
-    defaultInputValue: PropTypes.string
+    request: PropTypes.object.isRequired
   }
 
   constructor(props) {
     super(props)
-    this.state = { customValues: [], options: [], focus: false }
+    this.state = {
+      customValues: [],
+      options: [],
+      focus: false,
+      selected: props.request.revision ? [props.request.revision] : []
+    }
     this.onChange = this.onChange.bind(this)
     this.filter = this.filter.bind(this)
   }
@@ -25,10 +29,15 @@ export default class ComposerVersionPicker extends Component {
     this.getOptions('')
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
+  }
+
   async getOptions(value) {
     try {
-      const { name, namespace } = this.props.request
-      const options = await getComposerRevisions(this.props.token, `${namespace}/${name}`)
+      const { namespace, name } = this.props.request
+      const path = namespace ? `${namespace}/${name}` : name
+      const options = await getMavenRevisions(this.props.token, path.replace(':', '/'))
       this.setState({ ...this.state, options })
     } catch (error) {
       this.setState({ ...this.state, options: [] })
@@ -53,8 +62,7 @@ export default class ComposerVersionPicker extends Component {
   }
 
   render() {
-    const { defaultInputValue } = this.props
-    const { customValues, options, focus } = this.state
+    const { customValues, options, selected, focus } = this.state
     const list = customValues.concat(options)
     return (
       <div className={`harvest-searchbar ${focus ? 'active' : ''}`}>
@@ -62,17 +70,15 @@ export default class ComposerVersionPicker extends Component {
           <img src={searchSvg} alt="search" />
         </div>
         <Autocomplete
-          id="composer-version-picker"
+          id="maven-version-picker"
+          selected={selected}
           options={list}
-          defaultInputValue={defaultInputValue}
-          placeholder={
-            options.length === 0 ? 'Could not fetch versions, type a Composer version' : 'Pick a Composer version'
-          }
+          placeholder={options.length === 0 ? 'Could not fetch versions, type Maven version' : 'Pick a Maven version'}
           onChange={this.onChange}
-          onFocus={() => this.setState({ ...this.state, focus: true })}
-          onBlur={() => this.setState({ ...this.state, focus: false })}
           positionFixed
           clearButton
+          onFocus={() => this.setState({ ...this.state, focus: true })}
+          onBlur={() => this.setState({ ...this.state, focus: false })}
           allowNew
           newSelectionPrefix="Version:"
           emptyLabel=""
