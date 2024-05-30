@@ -30,3 +30,6 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Docker build
+        run: docker build -t clearlydefined/website:latest .
