@@ -35,10 +35,8 @@ export default class Footer extends Component {
             <div className="col-md-8">
               <p class="mb-0">
                 ClearlyDefined is an 
-                <a href="https://opensource.org" className="mx-1 highlighted-link-blue">OSI</a> incubator project, 
-                originally contributed with ❤️ by 
-                <a href="https://opensource.microsoft.com" className="mx-1 highlighted-link-blue">Microsoft</a> 
-                and maintained by a growing community.
+                <a href="https://opensource.org" className="mx-1 highlighted-link-blue">OSI</a> project 
+                maintained by a growing community.
               </p>
             </div>
             <div className="col-md-4 footer-links col-12 ml-md-auto mt-md-0 mt-4">
