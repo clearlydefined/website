@@ -96,7 +96,7 @@ class PageAbout extends Component {
                 <p className="about-description">
                   Welcome to your centralized and curated data store for Open Source Software licenses.
                 </p>
-                <a className="btn-mkt" href="https://docs.clearlydefined.io//docs/get-involved/intro">
+                <a className="btn-mkt" href="https://docs.clearlydefined.io/docs/get-involved/intro">
                   Get Involved
                 </a>
               </div>
