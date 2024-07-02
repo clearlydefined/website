@@ -46,28 +46,28 @@ class PageAbout extends Component {
       name: 'Use the Data',
       text: 'The simplest thing you can do to get involved is to use the data.',
       linkText: 'Learn more',
-      linkUrl: 'https://docs.clearlydefined.io/using-data'
+      linkUrl: 'https://docs.clearlydefined.io/docs/get-involved/using-data'
     },
     {
       img: CurateData,
       name: 'Curate Data',
       text: 'Vet, discuss and merge contributions to the project.',
       linkText: 'Learn more',
-      linkUrl: 'https://docs.clearlydefined.io/data-curation'
+      linkUrl: 'https://docs.clearlydefined.io/docs/get-involved/data-curation'
     },
     {
       img: ContributeData,
       name: 'Contribute Data',
       text: 'Enhacing the data is something that anyone can do.',
       linkText: 'Learn more',
-      linkUrl: 'https://docs.clearlydefined.io/contributing-data'
+      linkUrl: 'https://docs.clearlydefined.io/docs/get-involved/contributing-data'
     },
     {
       img: ContributeCode,
       name: 'Contribute Code',
       text: 'It’s about the data but there is a non-trivial service that drives it.',
       linkText: 'Learn more',
-      linkUrl: 'https://docs.clearlydefined.io/contributing-code'
+      linkUrl: 'https://docs.clearlydefined.io/docs/get-involved/contributing-code'
     },
     {
       img: AddHarvest,
@@ -81,7 +81,7 @@ class PageAbout extends Component {
       name: 'Adopt Practices',
       text: 'Help ensure that the information for components is correct.',
       linkText: 'Learn more',
-      linkUrl: 'https://docs.clearlydefined.io/adopting'
+      linkUrl: 'https://docs.clearlydefined.io/docs/get-involved/adopting'
     }
   ]
 
@@ -96,7 +96,7 @@ class PageAbout extends Component {
                 <p className="about-description">
                   Welcome to your centralized and curated data store for Open Source Software licenses.
                 </p>
-                <a className="btn-mkt" href="https://docs.clearlydefined.io/get-involved">
+                <a className="btn-mkt" href="https://docs.clearlydefined.io//docs/get-involved/intro">
                   Get Involved
                 </a>
               </div>
