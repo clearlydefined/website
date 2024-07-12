@@ -20,9 +20,19 @@ jobs:
           name: package-lock.json
           path: package-lock.json
 
+  make-react-secret-available:
+    name: Make REACT_APP_GA_TRACKINGID_DEV secret available in env
+    runs-on: ubuntu-latest
+    outputs:
+      trackingid: "${{ env.REACT_APP_GA_TRACKINGID }}"
+    steps:
+      - name: Make secret available
+        run: |
+          echo "REACT_APP_GA_TRACKINGID=$REACT_APP_GA_TRACKINGID_DEV" >> $GITHUB_ENV
+
   build-and-deploy:
     name: Build and Deploy
-    needs: upload-package-lock-json
+    needs: [upload-package-lock-json, make-react-secret-available]
     uses: clearlydefined/operations/.github/workflows/app-build-and-deploy.yml@v2.0.0
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
@@ -36,4 +46,4 @@ jobs:
       azure-app-name-postfix: -dev
       docker-build-args: |
         REACT_APP_SERVER="https://dev-api.clearlydefined.io"
-        REACT_APP_GA_TRACKINGID="${{ secrets.REACT_APP_GA_TRACKINGID_DEV }}"
+        REACT_APP_GA_TRACKINGID="${{ needs.make-react-secret-available.outputs.trackingid }}"
