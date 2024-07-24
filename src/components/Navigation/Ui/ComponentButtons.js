@@ -32,7 +32,7 @@ class ComponentButtons extends Component {
   }
 
   isSourceComponent(component) {
-    return ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
+    return ['github', 'sourcearchive', 'debsrc', 'condasrc'].includes(component.provider)
   }
 
   _isProviderSupported(component) {
@@ -152,7 +152,7 @@ class ComponentButtons extends Component {
             )}
             {!isDefinitionEmpty && onInspect && (
               <ButtonWithTooltip tip="Dig into this definition">
-              <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, currentComponent, definition)}>
+                <Button className="list-fa-button" onClick={this.inspectComponent.bind(this, currentComponent, definition)}>
                   <i className="fas fa-search" />
                 </Button>
               </ButtonWithTooltip>
