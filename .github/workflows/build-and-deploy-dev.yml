@@ -46,4 +46,4 @@ jobs:
       azure-app-name-postfix: -dev
       docker-build-args: |
         REACT_APP_SERVER=https://dev-api.clearlydefined.io
-        REACT_APP_GA_TRACKINGID="${{ needs.make-react-secret-available.outputs.trackingid }}"
+        REACT_APP_GA_TRACKINGID=${{ needs.make-react-secret-available.outputs.trackingid }}
