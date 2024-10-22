@@ -113,7 +113,7 @@ const types = [
   { value: 'maven', label: 'Maven', provider: 'mavencentral' },
   { value: 'npm', label: 'Npm', provider: 'npmjs' },
   { value: 'nuget', label: 'NuGet', provider: 'nuget' },
-  { value: 'pypi', label: 'PyPi', provider: 'pypi' },
+  { value: 'pypi', label: 'PyPI', provider: 'pypi' },
   { value: 'gem', label: 'Gem', provider: 'rubygems' },
   { value: 'sourcearchive', label: 'SourceArchive' },
   { value: 'deb', label: 'Deb', provider: 'debian' },
@@ -121,16 +121,16 @@ const types = [
 ]
 
 const providers = [
-  { value: 'npmjs', label: 'NpmJS', image: npmImage },
-  { value: 'github', label: 'GitHub', image: gitImage },
-  { value: 'mavencentral', label: 'MavenCentral', image: mavenImage },
-  { value: 'nuget', label: 'NuGet', image: nugetImage },
-  { value: 'pypi', label: 'PyPi', image: pypiImage },
-  { value: 'rubygems', label: 'RubyGems', image: gemImage },
-  { value: 'cocoapods', label: 'CocoaPods', image: podImage },
-  { value: 'cratesio', label: 'Crates.io', image: crateImage },
-  { value: 'debian', label: 'Debian', image: debianImage },
-  { value: 'packagist', label: 'Packagist', image: composerImage }
+  { value: 'npmjs', label: 'NpmJS', image: npmImage, type: 'npm' },
+  { value: 'github', label: 'GitHub', image: gitImage, type: 'git' },
+  { value: 'mavencentral', label: 'MavenCentral', image: mavenImage, type: 'maven' },
+  { value: 'nuget', label: 'NuGet', image: nugetImage, type: 'nuget' },
+  { value: 'pypi', label: 'PyPI', image: pypiImage, type: 'pypi' },
+  { value: 'rubygems', label: 'RubyGems', image: gemImage, type: 'gem' },
+  { value: 'cocoapods', label: 'CocoaPods', image: podImage, type: 'pod' },
+  { value: 'cratesio', label: 'Crates.io', image: crateImage, type: 'crate' },
+  { value: 'debian', label: 'Debian', image: debianImage, type: 'deb' },
+  { value: 'packagist', label: 'Packagist', image: composerImage, type: 'composer' }
 ]
 
 const multiEditableFields = ['licensed.declared']
