@@ -85,6 +85,7 @@ export default class RehydrationDelayedProvider extends Component {
     return (
       <Provider store={store} history={history}>
         <Router>
+        <Route path={ROUTE_HEALTH} component={HealthCheck} />
           <App className="App">
             <Switch>
               <Route path={ROUTE_WORKSPACE} component={withTracker(PageDefinitions)} />
@@ -100,7 +101,6 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
               <Route path={ROUTE_FILE} component={withTracker(PageFile)} />
-              <Route path={ROUTE_HEALTH} component={withTracker(HealthCheck)} />
               <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
             </Switch>
           </App>
