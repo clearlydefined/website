@@ -12,12 +12,9 @@ server {
         etag off;
     }
 
-    location /nginx_health {
-      set_by_lua $app_version 'return os.getenv("APP_VERSION")';
-      set_by_lua $build_sha 'return os.getenv("BUILD_SHA")';
-
-      default_type application/json;
-      return 200 '{"status":"OK", "version": "$app_version", "sha": "$build_sha"}';
+    location /health {
+      add_header 'Content-Type' 'application/json';
+      return 200 '{"status":"OK", "version": "${APP_VERSION}", "sha": "${BUILD_SHA}"}';
     }
 
     # redirect server error pages to the static page /50x.html

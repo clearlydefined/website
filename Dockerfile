@@ -17,7 +17,14 @@ RUN npm install -g npm@9
 RUN npm install
 RUN npm run build
 
-FROM nginx:alpine
-ADD nginx.conf /etc/nginx/conf.d/default.conf
+FROM nginx:1.19.6-alpine
+
+ARG APP_VERSION="UNKNOWN"
+ENV APP_VERSION=$APP_VERSION
+ARG BUILD_SHA="UNKNOWN"
+ENV BUILD_SHA=$BUILD_SHA
+
+RUN mkdir /etc/nginx/templates
+COPY default.conf.template /etc/nginx/templates
 COPY --from=builder /opt/website/build /usr/share/nginx/html
 EXPOSE 80
