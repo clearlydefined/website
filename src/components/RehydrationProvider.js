@@ -85,7 +85,7 @@ export default class RehydrationDelayedProvider extends Component {
     return (
       <Provider store={store} history={history}>
         <Router>
-          <React.Fragment>
+          <Switch>
             <Route path={ROUTE_HEALTH} component={HealthCheck} />
             <App className="App">
               <Switch>
@@ -105,7 +105,7 @@ export default class RehydrationDelayedProvider extends Component {
                 <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
               </Switch>
             </App>
-          </React.Fragment>
+          </Switch>
         </Router>
       </Provider>
     )
