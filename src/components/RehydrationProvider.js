@@ -37,7 +37,6 @@ import PageFile from './Navigation/Pages/PageFile'
 import PageHarvest from './Navigation/Pages/PageHarvest'
 import GetInvolved from './GetInvolved'
 import Charter from './Charter'
-import Health from './Health'
 
 const store = configureStore()
 
@@ -100,7 +99,6 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
               <Route path={ROUTE_FILE} component={withTracker(PageFile)} />
               <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
-              <Route path={ROUTE_HEALTH} component={withTracker(Health)} />
             </Switch>
           </App>
         </Router>
