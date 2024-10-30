@@ -85,25 +85,27 @@ export default class RehydrationDelayedProvider extends Component {
     return (
       <Provider store={store} history={history}>
         <Router>
-        <Route path={ROUTE_HEALTH} component={HealthCheck} />
-          <App className="App">
-            <Switch>
-              <Route path={ROUTE_WORKSPACE} component={withTracker(PageDefinitions)} />
-              <Route path={ROUTE_DEFINITIONS} exact={true} component={() => (window.location = ROUTE_WORKSPACE)} />
-              <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
-              <Route path={ROUTE_SHARE} component={withTracker(PageDefinitions)} />
-              <Route path={ROUTE_CURATIONS} component={withTracker(PageContribution)} />
-              <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
-              <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
-              <Route path={ROUTE_GETINVOLED} component={withTracker(GetInvolved)} />
-              <Route path={ROUTE_CHARTER} component={withTracker(Charter)} />
-              <Route path={ROUTE_STATS} component={withTracker(PageStats)} />
-              <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
-              <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
-              <Route path={ROUTE_FILE} component={withTracker(PageFile)} />
-              <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
-            </Switch>
-          </App>
+          <React.Fragment>
+            <Route path={ROUTE_HEALTH} component={HealthCheck} />
+            <App className="App">
+              <Switch>
+                <Route path={ROUTE_WORKSPACE} component={withTracker(PageDefinitions)} />
+                <Route path={ROUTE_DEFINITIONS} exact={true} component={() => (window.location = ROUTE_WORKSPACE)} />
+                <Route path={ROUTE_DEFINITIONS} component={withTracker(FullDetailPage)} />
+                <Route path={ROUTE_SHARE} component={withTracker(PageDefinitions)} />
+                <Route path={ROUTE_CURATIONS} component={withTracker(PageContribution)} />
+                <Route path={ROUTE_HARVEST} component={withTracker(PageHarvest)} />
+                <Route path={ROUTE_ABOUT} component={withTracker(PageAbout)} />
+                <Route path={ROUTE_GETINVOLED} component={withTracker(GetInvolved)} />
+                <Route path={ROUTE_CHARTER} component={withTracker(Charter)} />
+                <Route path={ROUTE_STATS} component={withTracker(PageStats)} />
+                <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
+                <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
+                <Route path={ROUTE_FILE} component={withTracker(PageFile)} />
+                <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
+              </Switch>
+            </App>
+          </React.Fragment>
         </Router>
       </Provider>
     )
