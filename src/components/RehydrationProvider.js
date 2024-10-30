@@ -18,6 +18,7 @@ import {
   ROUTE_GETINVOLED,
   ROUTE_CHARTER,
   ROUTE_FILE,
+  ROUTE_HEALTH
 } from '../utils/routingConstants'
 import history from '../config/history'
 import { configureStore } from '../configureStore'
@@ -99,6 +100,7 @@ export default class RehydrationDelayedProvider extends Component {
               <Route path={ROUTE_STATUS} component={withTracker(PageStatus)} />
               <Route path={ROUTE_DISCORD} component={() => (window.location = 'https://discord.gg/wEzHJku')} />
               <Route path={ROUTE_FILE} component={withTracker(PageFile)} />
+              <Route path={ROUTE_HEALTH} component={withTracker(HealthCheck)} />
               <Route path={ROUTE_ROOT} component={withTracker(PageBrowse)} />
             </Switch>
           </App>
