@@ -1,19 +1,16 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import React, { Component } from 'react'
-import { Grid, Row, Col, Table } from 'react-bootstrap'
+import { Component } from 'react'
+import { Grid, Row, Table } from 'react-bootstrap'
 import ColorScheme from 'color-scheme'
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
   Legend,
   Line,
   LineChart,
-  Pie,
-  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -34,7 +31,6 @@ export default class PageStatus extends Component {
     this.state = {
       loaded: false,
       requestsPerDay: [],
-      definitionAvailability: [],
       crawledPerDay: [],
       recentlyCrawled: []
     }
@@ -43,7 +39,6 @@ export default class PageStatus extends Component {
   async componentDidMount() {
     const data = await Promise.all([
       this.fetchRequestsPerDay(),
-      this.fetchDefinitionAvailability(),
       this.fetchCrawledPerDay(),
       this.fetchRecentlyCrawled(),
       this.fetchCrawlbreakdown(),
@@ -52,11 +47,10 @@ export default class PageStatus extends Component {
     this.setState({
       loaded: true,
       requestsPerDay: data[0],
-      definitionAvailability: data[1],
-      crawledPerDay: data[2],
-      recentlyCrawled: data[3],
-      crawlbreakdown: data[4],
-      toolsRanPerDay: data[5]
+      crawledPerDay: data[1],
+      recentlyCrawled: data[2],
+      crawlbreakdown: data[3],
+      toolsRanPerDay: data[4]
     })
   }
 
@@ -64,13 +58,6 @@ export default class PageStatus extends Component {
     const data = await getStatus('requestcount')
     return Object.keys(data).map(date => {
       return { date: new Date(date).toLocaleDateString(), count: data[date] }
-    })
-  }
-
-  async fetchDefinitionAvailability() {
-    const data = await getStatus('definitionavailability')
-    return Object.keys(data).map(name => {
-      return { name, value: data[name] }
     })
   }
 
@@ -122,14 +109,6 @@ export default class PageStatus extends Component {
             </Row>
             <hr />
             <Row>
-              <Col md={6}>
-                <h2>Definition availability</h2>
-                {this.renderDefinitionAvailabilityTable()}
-              </Col>
-              <Col md={6}>{this.renderDefinitionAvailabilityChart()}</Col>
-            </Row>
-            <hr />
-            <Row>
               <h2>Components processed / day</h2>
               {this.renderComponentsProcessed()}
             </Row>
@@ -163,57 +142,6 @@ export default class PageStatus extends Component {
           <Tooltip />
           <Line type="monotone" dataKey="count" stroke={`#${colors[0]}`} />
         </LineChart>
-      </ResponsiveContainer>
-    )
-  }
-
-  renderDefinitionAvailabilityTable() {
-    return (
-      <table style={{ margin: '60px' }}>
-        <tbody>
-          {this.state.definitionAvailability.map((entry, index) => {
-            return (
-              <tr key={entry.name}>
-                <td>
-                  <span
-                    style={{
-                      backgroundColor: `#${colors[index % colors.length]}`,
-                      height: '20px',
-                      width: '20px',
-                      marginRight: '10px',
-                      display: 'inline-block'
-                    }}
-                  />
-                </td>
-                <td>
-                  <h3>{entry.name}</h3>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    )
-  }
-
-  renderDefinitionAvailabilityChart() {
-    return (
-      <ResponsiveContainer height={500}>
-        <PieChart>
-          <Pie
-            nameKey="name"
-            dataKey="value"
-            data={this.state.definitionAvailability}
-            labelLine={false}
-            label={this.renderPieLabel}
-            outerRadius={200}
-            fill="#8884d8"
-          >
-            {this.state.definitionAvailability.map((entry, index) => (
-              <Cell fill={`#${colors[index % colors.length]}`} key={entry.name} />
-            ))}
-          </Pie>
-        </PieChart>
       </ResponsiveContainer>
     )
   }
