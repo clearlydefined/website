@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
 
-import { Component } from 'react'
+import React, { Component } from 'react'
 import { Grid, Row, Table } from 'react-bootstrap'
 import ColorScheme from 'color-scheme'
 import {
