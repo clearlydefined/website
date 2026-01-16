@@ -46,11 +46,11 @@ export class PageDefinitions extends UserManagedList {
     dispatch(uiNavigation({ to: ROUTE_WORKSPACE }))
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     if (
-      JSON.stringify(nextProps.curationStatus) !== JSON.stringify(this.props.curationStatus) &&
-      !nextProps.curationStatus.isFetching &&
-      !nextProps.curationStatus.error
+      JSON.stringify(this.props.curationStatus) !== JSON.stringify(prevProps.curationStatus) &&
+      !this.props.curationStatus.isFetching &&
+      !this.props.curationStatus.error
     ) {
       this.refresh()
     }
