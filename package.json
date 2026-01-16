@@ -21,7 +21,7 @@
     "minimatch": "^3.0.4",
     "moment": "^2.30.1",
     "monaco-editor": "^0.18.1",
-    "node-sass": "^4.14.1",
+    "sass": "^1.83.0",
     "pako": "^1.0.6",
     "protobufjs": "^6.8.8",
     "react": "^16.4.1",
@@ -75,8 +75,8 @@
     "serve": "^11.0.0"
   },
   "scripts": {
-    "build-css": "node-sass src/ -o src/",
-    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
+    "build-css": "sass src/:src/",
+    "watch-css": "npm run build-css && sass src/:src/ --watch",
     "start-js": "react-scripts start",
     "build-scripts": "npm-run-all -p build watch-css start-js",
     "start": "env-cmd --fallback ./.env npm run build-scripts",
