@@ -32,7 +32,7 @@ export default class NpmVersionPicker extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.request.revision !== this.props.request.revision) {
-      this.setState({ selected: this.props.request.revision ? [this.props.request.revision] : [] })
+      this.setState(state => ({ ...state, selected: this.props.request.revision ? [this.props.request.revision] : [] }))
     }
   }
 
