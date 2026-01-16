@@ -32,14 +32,14 @@ class PageCurate extends Component {
     dispatch(uiNavigation({ to: ROUTE_CURATE }))
   }
 
-  componentWillReceiveProps(newProps) {
+  componentDidUpdate(prevProps) {
     // if the path is changing, update the filter to match. That will trigger getting the content
-    const newPath = newProps.path
-    if (this.props.path !== newPath) return this.props.dispatch(uiCurateUpdateFilter(newPath))
+    const newPath = this.props.path
+    if (prevProps.path !== newPath) return this.props.dispatch(uiCurateUpdateFilter(newPath))
 
     // if the filter is changing (either on its own or because of the path), get the new content
-    const newFilter = newProps.filterValue
-    if (this.props.filterValue !== newFilter) this.handleNewSpec(newFilter)
+    const newFilter = this.props.filterValue
+    if (prevProps.filterValue !== newFilter) this.handleNewSpec(newFilter)
   }
 
   // A new spec has been seleted, fetch all the details

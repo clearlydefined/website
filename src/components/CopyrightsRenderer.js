@@ -60,16 +60,20 @@ class CopyrightsRenderer extends Component {
       })
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      values: nextProps.item.map(item => {
-        return { value: item, isDifferent: !this.state.originalValues.find(originalItem => originalItem === item) }
-      }),
-      classIfDifferent:
-        nextProps.item.find(item => {
-          return !this.state.originalValues.find(originalItem => originalItem === item)
-        }) && 'bg-info'
-    })
+  componentDidUpdate(prevProps) {
+    if (prevProps.item !== this.props.item) {
+      this.setState(prevState => {
+        const { originalValues } = prevState
+        const values = this.props.item.map(item => {
+          return { value: item, isDifferent: !originalValues.find(originalItem => originalItem === item) }
+        })
+        const classIfDifferent =
+          this.props.item.find(item => {
+            return !originalValues.find(originalItem => originalItem === item)
+          }) && 'bg-info'
+        return { values, classIfDifferent }
+      })
+    }
   }
 
   onShowAddRow = () => {

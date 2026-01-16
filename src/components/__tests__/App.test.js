@@ -1,21 +1,47 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import { App, Header, Footer } from '../'
+import { render, screen } from '@testing-library/react'
+import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
+import App from '../App'
+
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
+
+const defaultStore = mockStore({
+  session: { isAnonymous: true, isFetching: false },
+  navigation: [],
+  ui: { header: {} },
+  loader: { isLoading: 0 }
+})
+
+const renderWithProviders = (ui, { store = defaultStore } = {}) => {
+  return render(
+    <Provider store={store}>
+      <BrowserRouter>{ui}</BrowserRouter>
+    </Provider>
+  )
+}
 
 describe('App', () => {
   it('renders without crashing', () => {
-    shallow(<App />)
+    renderWithProviders(<App />)
   })
+
   it('renders the header', () => {
-    const wrapper = shallow(<App />)
-    expect(wrapper).toContainReact(<Header />)
+    renderWithProviders(<App />)
+    expect(screen.getByRole('banner')).toBeInTheDocument()
   })
-  it('renders the content', () => {
-    const wrapper = shallow(<App />)
-    expect(wrapper.find('.App-content')).toExist()
+
+  it('renders the main content area', () => {
+    renderWithProviders(<App />)
+    expect(screen.getByRole('main')).toBeInTheDocument()
+    expect(screen.getByRole('main')).toHaveClass('App-content')
   })
+
   it('renders the footer', () => {
-    const wrapper = shallow(<App />)
-    expect(wrapper).toContainReact(<Footer />)
+    renderWithProviders(<App />)
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument()
   })
 })

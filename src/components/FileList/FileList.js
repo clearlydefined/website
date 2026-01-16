@@ -40,8 +40,14 @@ export default class FileList extends PureComponent {
     this.updateFileList(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.updateFileList(nextProps)
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.files !== this.props.files ||
+      prevProps.component !== this.props.component ||
+      prevProps.previewDefinition !== this.props.previewDefinition
+    ) {
+      this.updateFileList(this.props)
+    }
   }
 
   updateFileList = props => {
@@ -307,7 +313,8 @@ export default class FileList extends PureComponent {
           value={Contribution.getValue(component.item, previewDefinition, field)}
           placeholder={'SPDX license'}
           editor={editor}
-          onChange={license => this.onLicenseChange(record, license)} />
+          onChange={license => this.onLicenseChange(record, license)}
+        />
       )
     )
   }

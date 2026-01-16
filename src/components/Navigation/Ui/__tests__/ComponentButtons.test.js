@@ -1,8 +1,6 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { render } from '@testing-library/react'
 import ComponentButtons from '../ComponentButtons'
-import { Button, ButtonGroup } from 'react-bootstrap'
-import { Menu, Dropdown } from 'antd'
 
 const mockedDefinition = {
   described: {
@@ -41,11 +39,12 @@ const mockedDefinition = {
   coordinates: { type: 'npm', provider: 'npmjs', name: 'async', revision: '2.6.0' },
   schemaVersion: '1.0.0'
 }
+
 const mockedComponent = { type: 'npm', provider: 'npmjs', name: 'async', revision: '2.6.0' }
 
 describe('ComponentButtons', () => {
   it('renders without crashing', () => {
-    shallow(
+    render(
       <ComponentButtons
         definition={mockedDefinition}
         currentComponent={mockedComponent}

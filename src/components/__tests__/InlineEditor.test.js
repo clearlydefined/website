@@ -1,10 +1,13 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render } from '@testing-library/react'
+import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import InlineEditor from '../InlineEditor'
+
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
+
 describe('InlineEditor', () => {
   it('renders without crashing', () => {
     const store = mockStore({
@@ -24,8 +27,10 @@ describe('InlineEditor', () => {
       }
     })
 
-    shallow(
-      <InlineEditor onChange={() => {}} store={store} placeholder={'test'} type={'text'} field={'licensed.declared'} />
+    render(
+      <Provider store={store}>
+        <InlineEditor onChange={() => {}} placeholder={'test'} type={'text'} field={'licensed.declared'} />
+      </Provider>
     )
   })
 })
