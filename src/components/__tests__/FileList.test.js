@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -55,5 +55,24 @@ describe('FileList', () => {
         <FileList component={definition} files={files} />
       </Provider>
     )
+  })
+
+  it('renders table with file data', () => {
+    render(
+      <Provider store={store}>
+        <FileList component={definition} files={files} />
+      </Provider>
+    )
+    // Verify the table structure is present
+    expect(screen.getByRole('table')).toBeInTheDocument()
+  })
+
+  it('renders with empty files array', () => {
+    render(
+      <Provider store={store}>
+        <FileList component={definition} files={[]} />
+      </Provider>
+    )
+    expect(screen.getByRole('table')).toBeInTheDocument()
   })
 })

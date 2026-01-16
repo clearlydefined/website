@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import ScoreRenderer from '../ScoreRenderer'
 
 const definition = {
@@ -44,6 +44,9 @@ describe('ScoreRenderer', () => {
         score: { total: 0, declared: 0, discovered: 0, consistency: 0, spdx: 0, texts: 0 }
       }
     }
-    render(<ScoreRenderer scores={scores} definition={customDefinition} />)
+    const zeroScores = { tool: 0, effective: 0 }
+    render(<ScoreRenderer scores={zeroScores} definition={customDefinition} />)
+    // Verify that the zero score is displayed in the badge
+    expect(screen.getByText('0')).toBeInTheDocument()
   })
 })
