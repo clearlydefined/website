@@ -44,7 +44,7 @@ export default class FilterBar extends Component {
   constructor(props) {
     super(props)
     this.onChange = this.onChange.bind(this)
-    this.typeahead = React.createRef()
+    this.typeahead = null
   }
 
   onChange(values) {
@@ -52,7 +52,7 @@ export default class FilterBar extends Component {
     if (values.length) {
       onChange && onChange(values[0].name)
       // timing hack to work around https://github.com/ericgio/react-bootstrap-typeahead/issues/211
-      clearOnChange && setTimeout(() => this.refs.typeahead && this.refs.typeahead.getInstance().clear(), 0)
+      clearOnChange && setTimeout(() => this.typeahead && this.typeahead.getInstance().clear(), 0)
     } else {
       onClear && onClear()
     }

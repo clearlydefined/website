@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { ControlLabel, Modal, FormGroup, FormControl, Button } from 'react-bootstrap'
 import DropFileOrText from './DropFileOrText'
@@ -28,7 +27,6 @@ export default class SavePopUp extends Component {
 
   constructor(props) {
     super(props)
-    this.templateInputRef = React.createRef()
     this.state = { renderer: 'text', template: defaultNoticeTemplate }
   }
 
@@ -58,8 +56,6 @@ export default class SavePopUp extends Component {
   }
 
   onTemplate = template => {
-    const textarea = ReactDOM.findDOMNode(this.templateInputRef.current)
-    if (textarea) textarea.value = template
     this.setState({ ...this.state, template })
   }
 
@@ -85,11 +81,10 @@ export default class SavePopUp extends Component {
               <ControlLabel>Template</ControlLabel>
               <DropFileOrText onLoad={this.onTemplate}>
                 <FormControl
-                  ref={this.templateInputRef}
                   componentClass="textarea"
                   placeholder="Provide a Handlebars template (see https://handlebarsjs.com). Paste the template text or drag and drop a template file here."
                   onChange={e => this.setState({ ...this.state, template: e.target.value })}
-                  defaultValue={this.state.template}
+                  value={this.state.template}
                   rows="6"
                 />
               </DropFileOrText>
