@@ -1,21 +1,28 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render, screen } from '@testing-library/react'
 import ButtonWithTooltip from '../ButtonWithTooltip'
 
 describe('ButtonWithTooltip', () => {
   it('renders without crashing', () => {
-    shallow(<ButtonWithTooltip />)
+    render(<ButtonWithTooltip tip="Test tooltip" />)
   })
-  it('render a button as a child', async () => {
-    const wrapper = shallow(
-      <ButtonWithTooltip>
-        <button>Test</button>
+
+  it('renders children inside the tooltip wrapper', () => {
+    render(
+      <ButtonWithTooltip tip="Test tooltip">
+        <button type="button">Test Button</button>
       </ButtonWithTooltip>
     )
-    expect(wrapper.props().children).toEqual(
-      <div className="tooltipWrapper">
-        <button>Test</button>
-      </div>
+    expect(screen.getByRole('button', { name: /test button/i })).toBeInTheDocument()
+  })
+
+  it('wraps children in a div with tooltipWrapper class', () => {
+    render(
+      <ButtonWithTooltip tip="Test tooltip">
+        <span data-testid="child">Child content</span>
+      </ButtonWithTooltip>
     )
+    const child = screen.getByTestId('child')
+    expect(child.parentElement).toHaveClass('tooltipWrapper')
   })
 })
