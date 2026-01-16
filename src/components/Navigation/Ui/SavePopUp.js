@@ -32,10 +32,10 @@ export default class SavePopUp extends Component {
     this.state = { renderer: 'text', template: defaultNoticeTemplate }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.type === nextProps.type) return
-    const filename = nextProps.type === 'notice' ? 'NOTICE' : ''
-    this.setState({ ...this.state, filename })
+  componentDidUpdate(prevProps) {
+    if (prevProps.type === this.props.type) return
+    const filename = this.props.type === 'notice' ? 'NOTICE' : ''
+    this.setState(prevState => ({ ...prevState, filename }))
   }
 
   doOK = () => {
