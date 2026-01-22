@@ -17,6 +17,8 @@ class PageCurate extends Component {
   constructor(props) {
     super(props)
     this.state = {}
+    this.contributeModalRef = React.createRef()
+    this.proposeModalRef = React.createRef()
     this.doContribute = this.doContribute.bind(this)
     this.doPropose = this.doPropose.bind(this)
     this.doPromptContribute = this.doPromptContribute.bind(this)
@@ -84,11 +86,11 @@ class PageCurate extends Component {
     const { entitySpec } = this.state
     if (entitySpec.pr) return this.doMerge(entitySpec)
     this.setState({ ...this.state, proposal })
-    this.refs.contributeModal.open()
+    this.contributeModalRef.current.open()
   }
 
   doPromptPropose(proposal) {
-    this.refs.proposeModal.open()
+    this.proposeModalRef.current.open()
   }
 
   filterChanged(newFilter) {
@@ -157,8 +159,8 @@ class PageCurate extends Component {
     const searchWidth = isCurator ? 7 : 9
     return (
       <Grid className="main-container">
-        <ContributePrompt ref="contributeModal" actionHandler={this.doContribute} />
-        <ProposePrompt ref="proposeModal" actionHandler={this.doPropose} />
+        <ContributePrompt ref={this.contributeModalRef} actionHandler={this.doContribute} />
+        <ProposePrompt ref={this.proposeModalRef} actionHandler={this.doPropose} />
         <Row className="show-grid spacer">
           <Col md={searchWidth} mdOffset={1}>
             <FilterBar
