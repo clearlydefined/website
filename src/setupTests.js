@@ -1,9 +1,5 @@
+import '@testing-library/jest-dom'
 import 'regenerator-runtime/runtime'
-import { configure } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-import 'jest-enzyme'
-
-configure({ adapter: new Adapter() })
 
 // Polyfill window prompts to always confirm.  Needed for react-copy-to-clipboard to work.
 global.prompt = () => true
@@ -12,9 +8,9 @@ global.prompt = () => true
 // Can remove this once https://github.com/jsdom/jsdom/issues/317 is implemented.
 const getSelection = () => ({
   rangeCount: 0,
-  addRange: () => {},
-  getRangeAt: () => {},
-  removeAllRanges: () => {}
+  addRange: () => { },
+  getRangeAt: () => { },
+  removeAllRanges: () => { }
 })
 
 window.getSelection = getSelection

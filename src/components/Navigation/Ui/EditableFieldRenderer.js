@@ -8,7 +8,7 @@ import { InlineEditor, ModalEditor } from '../..'
 import Contribution from '../../../utils/contribution'
 import ListDataRenderer from '../Ui/ListDataRenderer'
 import { Divider } from '@material-ui/core'
-import carrortDown from "../../../images/icons/carrortDown.svg"
+import carrortDown from '../../../images/icons/carrortDown.svg'
 class EditableFieldRenderer extends Component {
   static propTypes = {
     label: PropTypes.string,
@@ -24,7 +24,7 @@ class EditableFieldRenderer extends Component {
     editable: PropTypes.bool,
     multiple: PropTypes.bool,
     component: PropTypes.any,
-    dropDown: PropTypes.bool,
+    dropDown: PropTypes.bool
   }
 
   constructor(props) {
@@ -41,9 +41,16 @@ class EditableFieldRenderer extends Component {
     this.setComputedValue(definition, previewDefinition, field, type)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { definition, previewDefinition, field, type } = nextProps
-    this.setComputedValue(definition, previewDefinition, field, type)
+  componentDidUpdate(prevProps) {
+    const { definition, previewDefinition, field, type } = this.props
+    if (
+      prevProps.definition !== definition ||
+      prevProps.previewDefinition !== previewDefinition ||
+      prevProps.field !== field ||
+      prevProps.type !== type
+    ) {
+      this.setComputedValue(definition, previewDefinition, field, type)
+    }
   }
 
   setComputedValue(definition, previewDefinition, field, type) {
@@ -91,7 +98,7 @@ class EditableFieldRenderer extends Component {
       labelIcon,
       dropDown,
       customBox,
-      customBoxIcon,
+      customBoxIcon
     } = this.props
     const { computedValue, initialValue } = this.state
     const { licensed } = definition || {}
@@ -130,10 +137,9 @@ class EditableFieldRenderer extends Component {
         />
       )
 
-
     return (
       <>
-        {customBox ?
+        {customBox ? (
           <div className="row justify-content-center my-2 pt-2 align-items-start">
             <div className="col-12">
               <div className="custom-box">
@@ -141,49 +147,55 @@ class EditableFieldRenderer extends Component {
                   {customBoxIcon && customBoxIcon}
                   <LabelRenderer text={label} />
                 </div>
-                <div className="custom-box-body">
-                  {component}
-                </div>
+                <div className="custom-box-body">{component}</div>
               </div>
             </div>
           </div>
-          :
+        ) : (
           <>
             <Row className="tile-row">
               <Col md={labelIcon ? 12 : 3} xs={labelIcon ? 12 : 4} className="tile-row__title">
                 <LabelRenderer text={label} />
                 {labelIcon && labelIcon}:
-                {dropDown &&
-                  <img onClick={this.handleOpenForm}
-                    className={`carrotImg ${this.state.openedForm ? 'openedForm' : 'closeForm'}`} src={carrortDown} alt="openForm" />
-                }
+                {dropDown && (
+                  <img
+                    onClick={this.handleOpenForm}
+                    className={`carrotImg ${this.state.openedForm ? 'openedForm' : 'closeForm'}`}
+                    src={carrortDown}
+                    alt="openForm"
+                  />
+                )}
               </Col>
               {dropDown && <Divider className="mt-3" />}
-              <Col md={labelIcon ? 12 : 9} xs={labelIcon ? 12 : 8}
-                className={`tile-row__definition ${dropDown ? !this.state.openedForm ? 'no-height' : '.' : ''}`}>
+              <Col
+                md={labelIcon ? 12 : 9}
+                xs={labelIcon ? 12 : 8}
+                className={`tile-row__definition ${dropDown ? (!this.state.openedForm ? 'no-height' : '.') : ''}`}
+              >
                 {component ? (
-                  dropDown ?
-                    this.state.openedForm ?
-                      component : null
-                    :
+                  dropDown ? (
+                    this.state.openedForm ? (
+                      component
+                    ) : null
+                  ) : (
                     component
+                  )
                 ) : editable ? (
                   renderEditor()
                 ) : multiple ? (
                   <ListDataRenderer licensed={licensed} item={field} title={label} />
                 ) : (
-                  <p className={`list-singleLine ${Contribution.classIfDifferent(definition, previewDefinition, field)}`}>
+                  <p
+                    className={`list-singleLine ${Contribution.classIfDifferent(definition, previewDefinition, field)}`}
+                  >
                     {value}
                   </p>
                 )}
               </Col>
             </Row>
-            {lastIndex || dropDown ?
-              null :
-              <Divider />
-            }
+            {lastIndex || dropDown ? null : <Divider />}
           </>
-        }
+        )}
       </>
     )
   }

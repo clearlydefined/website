@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import ConnectedPageContribution from '../Navigation/Pages/PageContribution'
+import ConnectedPageBrowse from '../Navigation/Pages/PageBrowse'
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
@@ -17,12 +17,13 @@ const defaultStore = mockStore({
       filterList: {},
       componentList: { list: [], transformedList: [] }
     },
+    definitions: {
+      filter: {},
+      filterList: { list: [] },
+      componentList: { list: [], transformedList: [] }
+    },
     curate: {
       bodies: {}
-    },
-    contribution: {
-      url: {},
-      componentList: { list: [], transformedList: [] }
     }
   },
   definition: {
@@ -31,8 +32,14 @@ const defaultStore = mockStore({
 })
 
 const defaultProps = {
-  match: { path: '/contribution', url: '/contribution', isExact: true, params: {} },
-  location: { pathname: '/contribution', search: '', hash: '', key: 'ip23w9' }
+  match: { path: '/', url: '/', isExact: true, params: {} },
+  location: { pathname: '/', search: '', hash: '', key: 'ip23w9' },
+  history: {
+    replace: jest.fn(),
+    push: jest.fn(),
+    listen: jest.fn(),
+    location: { pathname: '/', search: '', hash: '' }
+  }
 }
 
 const renderWithProviders = (ui, { store = defaultStore } = {}) => {
@@ -43,8 +50,8 @@ const renderWithProviders = (ui, { store = defaultStore } = {}) => {
   )
 }
 
-describe('PageContribution', () => {
+describe('PageBrowse', () => {
   it('renders without crashing', () => {
-    renderWithProviders(<ConnectedPageContribution {...defaultProps} />)
+    renderWithProviders(<ConnectedPageBrowse {...defaultProps} />)
   })
 })

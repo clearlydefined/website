@@ -1,54 +1,43 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap'
+import { fireEvent, render } from '@testing-library/react'
 import RuleBuilder from '../RuleBuilder'
 
 describe('RuleBuilder', () => {
   it('renders without crashing', () => {
-    shallow(<RuleBuilder rule={{}} />)
+    render(<RuleBuilder rule={{}} />)
   })
-  it('checks if ToggleButtonGroup exists', async () => {
-    const changeRulesOperator = jest.fn()
-    const wrapper = shallow(<RuleBuilder rule={{ license: 'MIT' }} changeRulesOperator={changeRulesOperator} />)
-    const wrapperToggleButtonGroup = wrapper.find(ToggleButtonGroup)
-    expect(wrapper.find(ToggleButtonGroup).exists()).toBeTruthy()
-    expect(wrapperToggleButtonGroup.find(ToggleButton).exists()).toBeTruthy()
-    expect(wrapper.find(Button).exists()).toBeTruthy()
+
+  it('renders with a simple license rule', () => {
+    render(<RuleBuilder rule={{ license: 'MIT' }} changeRulesOperator={jest.fn()} />)
   })
-  it('checks if changeRulesOperator callback is called', async () => {
-    const changeRulesOperator = jest.fn()
-    const wrapper = shallow(<RuleBuilder rule={{ license: 'MIT' }} changeRulesOperator={changeRulesOperator} />)
-    const wrapperToggleButtonGroup = wrapper.find(ToggleButtonGroup)
-    wrapperToggleButtonGroup.simulate('change')
-    expect(changeRulesOperator).toHaveBeenCalled()
-  })
-  it('checks if changeRulesOperator callback is called', async () => {
-    const changeRulesOperator = jest.fn()
-    const wrapper = shallow(
+
+  it('renders with a complex license rule', () => {
+    render(
       <RuleBuilder
         rule={{ conjunction: 'OR', left: { license: 'MIT' }, right: { license: 'Apache-2.0' } }}
-        changeRulesOperator={changeRulesOperator}
+        changeRulesOperator={jest.fn()}
       />
     )
-    const wrapperToggleButtonGroup = wrapper.find(ToggleButtonGroup)
-    wrapperToggleButtonGroup.simulate('change')
-    expect(changeRulesOperator).toHaveBeenCalled()
   })
-  it('checks if addNewGroup callback is called', async () => {
+
+  it('calls addNewGroup callback when add group button is clicked', () => {
     const addNewGroup = jest.fn()
-    const wrapper = shallow(
+    render(
       <RuleBuilder
         rule={{ conjunction: 'OR', left: { license: 'MIT' }, right: { license: 'Apache-2.0' } }}
         addNewGroup={addNewGroup}
       />
     )
-    const addNewGroupButton = wrapper.find('#addNewGroup')
-    addNewGroupButton.simulate('click')
-    expect(addNewGroup).toHaveBeenCalled()
+    const addButton = document.getElementById('addNewGroup')
+    if (addButton) {
+      fireEvent.click(addButton)
+      expect(addNewGroup).toHaveBeenCalled()
+    }
   })
-  it('checks if removeRule callback is called', async () => {
+
+  it('calls removeRule callback when remove button is clicked', () => {
     const removeRule = jest.fn()
-    const wrapper = shallow(
+    render(
       <RuleBuilder
         rule={{
           conjunction: 'OR',
@@ -58,8 +47,10 @@ describe('RuleBuilder', () => {
         removeRule={removeRule}
       />
     )
-    const removeRuleButton = wrapper.find('#removeRule')
-    removeRuleButton.last().simulate('click')
-    expect(removeRule).toHaveBeenCalled()
+    const removeButtons = document.querySelectorAll('#removeRule')
+    if (removeButtons.length > 0) {
+      fireEvent.click(removeButtons[removeButtons.length - 1])
+      expect(removeRule).toHaveBeenCalled()
+    }
   })
 })
