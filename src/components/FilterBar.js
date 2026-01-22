@@ -10,6 +10,7 @@ import maven from '../images/maven.png'
 import nuget from '../images/nuget.png'
 import pod from '../images/pod.png'
 import git from '../images/Git-Logo-2Color.png'
+import conda from '../images/conda.svg'
 import crate from '../images/cargo.png'
 import gem from '../images/gem.png'
 import pypi from '../images/pypi.png'
@@ -23,6 +24,7 @@ const types = {
   maven: maven,
   nuget: nuget,
   git: git,
+  conda: conda,
   crate: crate,
   pod: pod,
   deb: debian,
