@@ -17,7 +17,7 @@ RUN npm install -g npm@9
 RUN npm install
 RUN npm run build
 
-FROM nginx:1.29.4-alpine
+FROM nginx:1.29.5-alpine
 
 ARG APP_VERSION="UNKNOWN"
 ENV APP_VERSION=$APP_VERSION
