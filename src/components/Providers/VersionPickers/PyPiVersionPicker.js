@@ -30,8 +30,10 @@ export default class PyPiVersionPicker extends Component {
     this.getOptions('')
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, selected: nextProps.request.revision ? [nextProps.request.revision] : [] })
+  componentDidUpdate(prevProps) {
+    if (prevProps.request.revision !== this.props.request.revision) {
+      this.setState(state => ({ ...state, selected: this.props.request.revision ? [this.props.request.revision] : [] }))
+    }
   }
 
   async getOptions(value) {

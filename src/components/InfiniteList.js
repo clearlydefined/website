@@ -28,9 +28,9 @@ export default class InfiniteList extends React.Component {
     this.state = {}
   }
 
-  componentWillReceiveProps(newProps) {
+  componentDidUpdate(prevProps) {
     // aggressively recompute heights if the deeper content has changes. Never know if heights will be affected.
-    const changed = newProps.contentSeq !== this.props.contentSeq
+    const changed = this.props.contentSeq !== prevProps.contentSeq
     if (!changed || !this.state.list) return
     this.state.list.recomputeRowHeights(0)
   }

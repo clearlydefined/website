@@ -68,7 +68,7 @@ export default class RehydrationDelayedProvider extends Component {
     this.state = { rehydrated: false }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     persistStore(
       store,
       { whitelist: ['session', 'ui', 'definition'], transforms: [transformRemoveFetchErr, transformUiDefinitions] },

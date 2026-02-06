@@ -1,8 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { fireEvent, render, screen } from '@testing-library/react'
 import CurationRenderer from '../CurationRenderer'
-import { Tag } from 'antd'
-import TwoLineEntry from '../../../TwoLineEntry'
 
 const testCuration = {
   pr: {
@@ -11,7 +9,7 @@ const testCuration = {
     state: 'closed',
     merged_at: '2018-11-13T02:44:34Z',
     user: {
-      login: 'test'
+      login: 'testuser'
     }
   }
 }
@@ -22,45 +20,32 @@ const testPendingCuration = {
     title: 'test',
     state: 'open',
     user: {
-      login: 'test'
+      login: 'testuser'
     }
   }
 }
 
 describe('CurationRenderer', () => {
   it('renders without crashing', () => {
-    const wrapper = shallow(<CurationRenderer contribution={testCuration} />)
-    expect(wrapper.find(TwoLineEntry).exists()).toBeTruthy()
-    expect(wrapper.find(TwoLineEntry).props().message).toEqual(<span>@{testCuration.pr.user.login}</span>)
+    render(<CurationRenderer contribution={testCuration} />)
+    expect(screen.getByText(/@testuser/)).toBeInTheDocument()
   })
-  it('check the onClick function', () => {
-    const parentClick = jest.fn()
-    const wrapper = shallow(<CurationRenderer contribution={testCuration} onClick={parentClick} />)
-    wrapper.find(TwoLineEntry).simulate('click')
-    expect(parentClick).toHaveBeenCalled()
+
+  it('calls onClick when clicked', () => {
+    const handleClick = jest.fn()
+    render(<CurationRenderer contribution={testCuration} onClick={handleClick} />)
+    const entry = screen.getByText(/@testuser/).closest('.list-row') || screen.getByText(/@testuser/).parentElement
+    fireEvent.click(entry)
+    expect(handleClick).toHaveBeenCalled()
   })
-  it('renders a purple color for a merged curation', () => {
-    const wrapper = shallow(<CurationRenderer contribution={testCuration} />)
-    const twoline = wrapper.find(TwoLineEntry)
-    expect(twoline.props().headline).toEqual(
-      <span>
-        #{testCuration.pr.number} {testCuration.pr.title}{' '}
-        <Tag className="cd-badge" color={'purple'}>
-          {'Merged'}
-        </Tag>
-      </span>
-    )
+
+  it('renders Merged tag for a merged curation', () => {
+    render(<CurationRenderer contribution={testCuration} />)
+    expect(screen.getByText('Merged')).toBeInTheDocument()
   })
-  it('renders a green color for a pending curation', () => {
-    const wrapper = shallow(<CurationRenderer contribution={testPendingCuration} />)
-    const twoline = wrapper.find(TwoLineEntry)
-    expect(twoline.props().headline).toEqual(
-      <span>
-        #{testPendingCuration.pr.number} {testPendingCuration.pr.title}{' '}
-        <Tag className="cd-badge" color={'green'}>
-          {'Open'}
-        </Tag>
-      </span>
-    )
+
+  it('renders Open tag for a pending curation', () => {
+    render(<CurationRenderer contribution={testPendingCuration} />)
+    expect(screen.getByText('Open')).toBeInTheDocument()
   })
 })

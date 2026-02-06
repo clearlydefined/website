@@ -35,14 +35,14 @@ export default class GitHubCommitPicker extends Component {
     this.getOptions('')
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ ...this.state, selected: nextProps.request.commit ? [nextProps.request.commit] : [] }, () =>
-      this.getOptions('')
-    )
-  }
-
-  componentDidUpdate() {
-    if (this.state.shouldUpdate) this.getOptions('')
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.request.commit !== this.props.request.commit) {
+      this.setState(
+        state => ({ ...state, selected: this.props.request.commit ? [this.props.request.commit] : [] }),
+        () => this.getOptions('')
+      )
+    }
+    if (this.state.shouldUpdate && !prevState.shouldUpdate) this.getOptions('')
   }
 
   componentWillUnmount() {
