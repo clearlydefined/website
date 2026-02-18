@@ -7,7 +7,21 @@ on:
     types: [published]
 
 jobs:
+  upload-package-lock-json:
+    name: Upload package-lock.json from this repo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Upload package-lock.json
+        uses: actions/upload-artifact@v6
+        with:
+          name: package-lock.json
+          path: package-lock.json
+
   build-and-deploy-prod:
+    needs: upload-package-lock-json
     uses: clearlydefined/operations/.github/workflows/app-build-and-deploy.yml@v3.2.0
     secrets: 
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
