@@ -43,11 +43,11 @@ class ComponentList extends React.Component {
     this.getDefinition = this.getDefinition.bind(this)
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.definitions.sequence !== this.props.definitions.sequence) this.incrementSequence()
-    if (newProps.curations.sequence !== this.props.curations.sequence) this.incrementSequence()
-    if (newProps.sequence !== this.props.sequence) this.incrementSequence()
-    if (!isEqual(newProps.list, this.props.list.sequence)) this.incrementSequence()
+  componentDidUpdate(prevProps) {
+    if (this.props.definitions.sequence !== prevProps.definitions.sequence) this.incrementSequence()
+    if (this.props.curations.sequence !== prevProps.curations.sequence) this.incrementSequence()
+    if (this.props.sequence !== prevProps.sequence) this.incrementSequence()
+    if (!isEqual(this.props.list, prevProps.list)) this.incrementSequence()
   }
 
   getDefinition(component) {

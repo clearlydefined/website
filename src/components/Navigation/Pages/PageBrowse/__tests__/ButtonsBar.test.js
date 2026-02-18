@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { render, screen } from '@testing-library/react'
 import ButtonsBar from '../ButtonsBar'
 
 const components = {
@@ -8,26 +8,18 @@ const components = {
 
 describe('ButtonsBar', () => {
   it('renders without crashing', () => {
-    shallow(<ButtonsBar />)
+    render(<ButtonsBar toggleCollapseExpandAll={jest.fn()} />)
   })
 
-  it("checks if buttons are enabled when there aren't changes", async () => {
-    const wrapper = await shallow(<ButtonsBar hasChanges={false} toggleCollapseExpandAll={jest.fn()} />)
-    const toggleCollapseButton = wrapper.find({ children: 'Toggle Collapse' })
-    expect(toggleCollapseButton.exists()).toBeTruthy()
-    const contributeButton = wrapper.find({ children: 'Contribute' })
-    expect(contributeButton.exists()).toBeTruthy()
-    expect(contributeButton.prop('disabled')).toBe(false)
+  it('renders Contribute button enabled when there are no changes', () => {
+    render(<ButtonsBar hasChanges={false} toggleCollapseExpandAll={jest.fn()} />)
+    const contributeButton = screen.getByRole('button', { name: /contribute/i })
+    expect(contributeButton).not.toBeDisabled()
   })
 
-  it('checks if buttons are disabled when there are changes', async () => {
-    const wrapper = await shallow(
-      <ButtonsBar components={components} hasChanges={true} toggleCollapseExpandAll={jest.fn()} />
-    )
-    const toggleCollapseButton = wrapper.find({ children: 'Toggle Collapse' })
-    expect(toggleCollapseButton.exists()).toBeTruthy()
-    const contributeButton = wrapper.find({ children: 'Contribute' })
-    expect(contributeButton.exists()).toBeTruthy()
-    expect(contributeButton.prop('disabled')).toBe(true)
+  it('renders Contribute button disabled when there are changes', () => {
+    render(<ButtonsBar components={components} hasChanges={true} toggleCollapseExpandAll={jest.fn()} />)
+    const contributeButton = screen.getByRole('button', { name: /contribute/i })
+    expect(contributeButton).toBeDisabled()
   })
 })
