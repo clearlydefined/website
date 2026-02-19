@@ -3,7 +3,6 @@
 
 import React, { Component } from 'react'
 import { SocialIcons } from './'
-import { Link } from 'react-router-dom'
 
 // import { API_DEVELOP, API_PROD, API_LOCAL } from '../api/clearlyDefined';
 // function colorize(content) {
@@ -40,36 +39,13 @@ export default class Footer extends Component {
               </p>
             </div>
             <div className="col-md-4 footer-links col-12 ml-md-auto mt-md-0 mt-4">
-              <Link to="https://docs.clearlydefined.io/docs/legal/terms" className="text-decoration-underline mx-2 d-inline text-white">Terms</Link>
-              <Link to="https://docs.clearlydefined.io/docs/legal/privacy" className="text-decoration-underline mx-2 d-inline  text-white">Privacy</Link>
-              <Link to="https://docs.clearlydefined.io/docs/legal/NOTICES" className="text-decoration-underline mx-2 d-inline text-white">Notices</Link>
+              <a href="https://docs.clearlydefined.io/docs/legal/terms" className="text-decoration-underline mx-2 d-inline text-white">Terms</a>
+              <a href="https://docs.clearlydefined.io/docs/legal/privacy" className="text-decoration-underline mx-2 d-inline text-white">Privacy</a>
+              <a href="https://docs.clearlydefined.io/docs/legal/NOTICES" className="text-decoration-underline mx-2 d-inline text-white">Notices</a>
             </div>
           </div>
         </div>
       </footer>
-      // <footer className="Footer">
-      //   <Grid>
-      //     <Col sm={4} xs={3} className="vcenter">
-      //       <SocialIcons className="socials" entity={socials} />
-      //     </Col>
-      //     <Col sm={4} xs={5} className="text-center vcenter">
-      //       Are you ClearlyDefined?
-      //     </Col>
-      //     <Col sm={4} xs={4} className="vcenter">
-      //       <div className="pull-right right">
-      //         <a href="https://docs.clearlydefined.io/legal/terms" target="_blank" rel="noopener noreferrer">
-      //           Terms of use
-      //         </a>{' '}
-      //         <span>| </span>
-      //         <a href="https://docs.clearlydefined.io/legal/privacy" target="_blank" rel="noopener noreferrer">
-      //           Privacy policy
-      //         </a>{' '}
-      //         <span>| </span>
-      //         <a href="https://docs.clearlydefined.io/legal/NOTICES">Notices</a>
-      //       </div>
-      //     </Col>
-      //   </Grid>
-      // </footer>
     )
   }
 }
