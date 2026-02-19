@@ -11,6 +11,7 @@ import git from '../images/Git-Logo-2Color.png'
 import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import gem from '../images/gem.png'
+import conda from '../images/conda.svg'
 import cargo from '../images/cargo.png'
 import nuget from '../images/nuget.svg'
 import debian from '../images/debian.png'
@@ -49,7 +50,7 @@ class DefinitionEntry extends React.Component {
   static defaultProps = {}
 
   isSourceComponent(component) {
-    return ['github', 'sourcearchive', 'debsrc'].includes(component.provider)
+    return ['github', 'sourcearchive', 'debsrc', 'condasrc'].includes(component.provider)
   }
 
   fieldChange(field, equality = isEqual, transform = a => a) {
@@ -453,6 +454,7 @@ class DefinitionEntry extends React.Component {
   getImage(definition) {
     if (definition.coordinates.type === 'git') return git
     if (definition.coordinates.type === 'npm') return npm
+    if (definition.coordinates.type === 'conda') return conda
     if (definition.coordinates.type === 'crate') return cargo
     if (definition.coordinates.type === 'pypi') return pypi
     if (definition.coordinates.type === 'gem') return gem

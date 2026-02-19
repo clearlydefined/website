@@ -11,6 +11,7 @@ import {
   NpmVersionPicker,
   MavenVersionPicker,
   PyPiVersionPicker,
+  CondaVersionPicker,
   CrateVersionPicker,
   DebianVersionPicker,
   NuGetVersionPicker,
@@ -25,6 +26,9 @@ import npm from '../images/n-large.png'
 import pypi from '../images/pypi.png'
 import debian from '../images/debian.png'
 import gem from '../images/gem.png'
+import anaconda_main from '../images/anaconda-main.svg'
+import anaconda_r from '../images/anaconda-r.png'
+import conda_forge from '../images/conda-forge.png'
 import cargo from '../images/cargo.png'
 import maven from '../images/maven.png'
 import nuget from '../images/nuget.png'
@@ -73,6 +77,15 @@ class HarvestQueueList extends React.Component {
     this.props.onChange(request, newRequest)
   }
 
+  condaVersionChanged(request, value) {
+    const newRequest = clone(request)
+    let [namespace, revision] = value.split(':')
+    newRequest.namespace = namespace
+    newRequest.revision = revision
+    this.setState({ contentSeq: this.state.contentSeq + 1 })
+    this.props.onChange(request, newRequest)
+  }
+
   renderButtons(request) {
     return (
       <div className="list-activity-area">
@@ -83,6 +96,15 @@ class HarvestQueueList extends React.Component {
             getGitHubRevisions={path => getGitHubRevisions(this.props.token, path)}
             onChange={this.commitChanged.bind(this, request)}
           />
+        )}
+        {request.provider === 'anaconda-main' && (
+          <CondaVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
+        )}
+        {request.provider === 'anaconda-r' && (
+          <CondaVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
+        )}
+        {request.provider === 'cratesio' && (
+          <CrateVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
         )}
         {request.provider === 'npmjs' && (
           <NpmVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
@@ -95,6 +117,9 @@ class HarvestQueueList extends React.Component {
         )}
         {request.provider === 'rubygems' && (
           <RubyGemsVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
+        )}
+        {request.provider === 'conda-forge' && (
+          <CondaVersionPicker request={request} onChange={this.condaVersionChanged.bind(this, request)} />
         )}
         {request.provider === 'cratesio' && (
           <CrateVersionPicker request={request} onChange={this.versionChanged.bind(this, request)} />
@@ -150,6 +175,9 @@ class HarvestQueueList extends React.Component {
     if (request.provider === 'npmjs') return npm
     if (request.provider === 'pypi') return pypi
     if (request.provider === 'rubygems') return gem
+    if (request.provider === 'anaconda-main') return anaconda_main
+    if (request.provider === 'anaconda-r') return anaconda_r
+    if (request.provider === 'conda-forge') return conda_forge
     if (request.provider === 'cratesio') return cargo
     if (request.provider === 'mavencentral') return maven
     if (request.provider === 'nuget') return nuget

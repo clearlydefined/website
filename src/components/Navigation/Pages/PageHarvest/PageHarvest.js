@@ -12,6 +12,7 @@ import {
   NpmSelector,
   MavenSelector,
   NuGetSelector,
+  CondaSelector,
   CrateSelector,
   DebianSelector,
   ComposerSelector,
@@ -114,11 +115,14 @@ class PageHarvest extends Component {
         <Row className="show-grid">
           <Col md={6}>{this.renderProviderButtons()}</Col>
           <Col md={4}>
+            {activeProvider.value === 'anaconda-main' && <CondaSelector provider='anaconda-main' onChange={this.onAddRequest} />}
+            {activeProvider.value === 'anaconda-r' && <CondaSelector provider='anaconda-r' onChange={this.onAddRequest} />}
             {activeProvider.value === 'github' && <GitHubSelector onChange={this.onAddRequest} />}
             {activeProvider.value === 'mavencentral' && <MavenSelector onChange={this.onAddRequest} />}
             {activeProvider.value === 'npmjs' && <NpmSelector onChange={this.onAddRequest} />}
             {activeProvider.value === 'nuget' && <NuGetSelector onChange={this.onAddRequest} />}
             {activeProvider.value === 'cratesio' && <CrateSelector onChange={this.onAddRequest} />}
+            {activeProvider.value === 'conda-forge' && <CondaSelector provider='conda-forge' onChange={this.onAddRequest} />}
             {activeProvider.value === 'packagist' && <ComposerSelector onChange={this.onAddRequest} />}
             {activeProvider.value === 'pypi' && <PyPiSelector onChange={this.onAddRequest} />}
             {activeProvider.value === 'rubygems' && <RubyGemsSelector onChange={this.onAddRequest} />}
