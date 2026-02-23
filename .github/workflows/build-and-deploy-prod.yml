@@ -35,3 +35,5 @@ jobs:
       azure-app-base-name: clearlydefined
       azure-app-name-postfix: -prod
       secondary-azure-app-name-postfix: -prod-europe
+      docker-build-args: |
+        REACT_APP_SERVER=https://api.clearlydefined.io
