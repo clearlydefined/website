@@ -22,7 +22,7 @@
     "moment": "^2.30.1",
     "monaco-editor": "^0.18.1",
     "pako": "^1.0.6",
-    "protobufjs": "^6.8.8",
+    "protobufjs": "^8.0.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.3",
     "react-bootstrap-typeahead": "^4.1.0",
