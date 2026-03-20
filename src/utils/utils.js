@@ -1,11 +1,14 @@
 // Copyright (c) Microsoft Corporation and others. Licensed under the MIT license.
 // SPDX-License-Identifier: MIT
+import anacondaMainImage from '../images/anaconda-main.svg'
+import anacondaRImage from '../images/anaconda-r.png'
 import deepDiff from 'deep-diff'
 import npmImage from '../images/n-large.png'
 import mavenImage from '../images/maven.png'
 import nugetImage from '../images/nuget.svg'
 import podImage from '../images/pod.png'
 import gitImage from '../images/Git-Logo-2Color.png'
+import condaForgeImage from '../images/conda-forge.png'
 import crateImage from '../images/cargo.png'
 import gemImage from '../images/gem.png'
 import pypiImage from '../images/pypi.png'
@@ -108,6 +111,8 @@ const curateFilters = [
 const types = [
   { value: 'composer', label: 'Composer', provider: 'packagist' },
   { value: 'pod', label: 'Pod', provider: 'cocoapods' },
+  { value: 'conda', label: 'Conda', provider: 'conda-forge' },
+  { value: 'condasrc', label: 'Conda Sources', provider: 'conda-forge' },
   { value: 'crate', label: 'Crate', provider: 'cratesio' },
   { value: 'git', label: 'Git', provider: 'github' },
   { value: 'maven', label: 'Maven', provider: 'mavencentral' },
@@ -121,6 +126,8 @@ const types = [
 ]
 
 const providers = [
+  { value: 'anaconda-main', label: 'Anaconda /main', image: anacondaMainImage, type: 'conda' },
+  { value: 'anaconda-r', label: 'Anaconda /r', image: anacondaRImage, type: 'conda' },
   { value: 'npmjs', label: 'NpmJS', image: npmImage, type: 'npm' },
   { value: 'github', label: 'GitHub', image: gitImage, type: 'git' },
   { value: 'mavencentral', label: 'MavenCentral', image: mavenImage, type: 'maven' },
@@ -128,6 +135,7 @@ const providers = [
   { value: 'pypi', label: 'PyPI', image: pypiImage, type: 'pypi' },
   { value: 'rubygems', label: 'RubyGems', image: gemImage, type: 'gem' },
   { value: 'cocoapods', label: 'CocoaPods', image: podImage, type: 'pod' },
+  { value: 'conda-forge', label: 'Conda-Forge', image: condaForgeImage, type: 'conda' },
   { value: 'cratesio', label: 'Crates.io', image: crateImage, type: 'crate' },
   { value: 'debian', label: 'Debian', image: debianImage, type: 'deb' },
   { value: 'packagist', label: 'Packagist', image: composerImage, type: 'composer' }
