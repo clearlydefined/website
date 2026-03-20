@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import set from 'lodash/set'
+import get from 'lodash/get'
 import toPath from 'lodash/toPath'
 import { Button, Row, Col } from 'react-bootstrap'
 import RuleBuilder from './RuleBuilder'
@@ -64,10 +65,16 @@ export default class LicensePicker extends Component {
   }
 
   updateLicense = async (value, path) => {
-    if (!value) return
     const rules = { ...this.state.rules }
     const currentPath = [...path, 'license']
     set(rules, toPath(currentPath), value || '')
+    // Clear exception if license is cleared
+    if (!value) {
+      const currentRule = path.length > 0 ? get(rules, path) : rules
+      if (currentRule && currentRule.exception) {
+        delete currentRule.exception
+      }
+    }
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }
 
@@ -83,6 +90,17 @@ export default class LicensePicker extends Component {
     const rules = { ...this.state.rules }
     const currentPath = [...path, 'plus']
     set(rules, toPath(currentPath), value || false)
+    this.setState({ rules, sequence: this.state.sequence + 1 })
+  }
+
+  updateException = async (value, path) => {
+    const rules = { ...this.state.rules }
+    const currentRule = path.length > 0 ? get(rules, path) : rules
+    if (value) {
+      currentRule.exception = value
+    } else {
+      delete currentRule.exception
+    }
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }
 
@@ -130,6 +148,7 @@ export default class LicensePicker extends Component {
               changeRulesOperator={this.changeRulesConjunction}
               updateLicense={this.updateLicense}
               considerLaterVersions={this.considerLaterVersions}
+              updateException={this.updateException}
               addNewGroup={this.addNewGroup}
               removeRule={this.removeRule}
             />

@@ -2,10 +2,12 @@
 // SPDX-License-Identifier: MIT
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 import Contribution from '../../../utils/contribution'
 import TwoColumnsSection from '../Sections/TwoColumnsSection'
 import { FileCountRenderer } from '../..'
 import EnhancedLicensePicker from '../../../utils/EnhancedLicensePicker'
+import CopyrightsRenderer from '../../CopyrightsRenderer'
 
 class LicensedSection extends Component {
   static propTypes = {
@@ -31,6 +33,8 @@ class LicensedSection extends Component {
       applyCurationSuggestion
     } = this.props
     const definition = Contribution.foldFacets(rawDefinition, activeFacets)
+    const parties = get(definition, 'licensed.attribution.parties', [])
+    const originalParties = get(rawDefinition, 'licensed.facets.core.attribution.parties', [])
     const elements = [
       {
         label: 'Declared',
@@ -46,9 +50,19 @@ class LicensedSection extends Component {
         multiple: true,
       },
       {
-        multiple: true,
         label: 'Attributions',
         field: 'attribution.parties',
+        component: (
+          <CopyrightsRenderer
+            item={parties}
+            initialValue={originalParties}
+            onSave={updatedParties =>
+              onChange && onChange('licensed.facets.core.attribution.parties', updatedParties, null, a => a)
+            }
+            readOnly={readOnly}
+            field="licensed.facets.core.attribution.parties"
+          />
+        ),
       },
 
       {
