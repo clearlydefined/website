@@ -279,6 +279,7 @@
   color: $gray-900;
   font-weight: 500;
   min-width: 0;
+  overflow: hidden;
 
   &.col-md-12.col-xs-12 {
     width: 100%;
@@ -295,17 +296,6 @@
 
   > * {
     padding-right: 44px;
-  }
-
-  .popoverSpan {
-    white-space: normal;
-    word-break: break-word;
-  }
-
-  .list-singleLine {
-    white-space: normal;
-    word-break: break-word;
-    display: block;
   }
 }
 
