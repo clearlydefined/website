@@ -88,7 +88,7 @@ export default class RuleBuilder extends Component {
                   <Button
                     className="add-exception-btn"
                     bsSize="xsmall"
-                    onClick={() => updateException(' ', path)}
+                    onClick={() => updateException('pending', path)}
                   >
                     + WITH
                   </Button>
@@ -105,7 +105,8 @@ export default class RuleBuilder extends Component {
             <Col md={12} className="flex-center editable-container spdx-exception-row">
               <span className="spdx-exception-label">WITH</span>
               <SpdxExceptionPicker
-                value={rule.exception.trim()}
+                key={rule.exception}
+                value={rule.exception === 'pending' ? '' : rule.exception}
                 onChange={value => updateException(value, path)}
               />
               <Button id="removeException" onClick={() => updateException('', path)}>

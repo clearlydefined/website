@@ -3,7 +3,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import set from 'lodash/set'
-import get from 'lodash/get'
 import toPath from 'lodash/toPath'
 import { Button, Row, Col } from 'react-bootstrap'
 import RuleBuilder from './RuleBuilder'
@@ -68,12 +67,12 @@ export default class LicensePicker extends Component {
     const rules = { ...this.state.rules }
     const currentPath = [...path, 'license']
     set(rules, toPath(currentPath), value || '')
-    // Clear exception if license is cleared
+    // Clear exception and plus if license is cleared
     if (!value) {
-      const currentRule = path.length > 0 ? get(rules, path) : rules
-      if (currentRule && currentRule.exception) {
-        delete currentRule.exception
-      }
+      const exceptionPath = [...path, 'exception']
+      const plusPath = [...path, 'plus']
+      set(rules, toPath(exceptionPath), undefined)
+      set(rules, toPath(plusPath), undefined)
     }
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }
@@ -95,11 +94,11 @@ export default class LicensePicker extends Component {
 
   updateException = async (value, path) => {
     const rules = { ...this.state.rules }
-    const currentRule = path.length > 0 ? get(rules, path) : rules
+    const exceptionPath = [...path, 'exception']
     if (value) {
-      currentRule.exception = value
+      set(rules, toPath(exceptionPath), value)
     } else {
-      delete currentRule.exception
+      set(rules, toPath(exceptionPath), undefined)
     }
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }

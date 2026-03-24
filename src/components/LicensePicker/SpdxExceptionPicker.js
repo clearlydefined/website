@@ -15,20 +15,20 @@ export default class SpdxExceptionPicker extends Component {
   constructor(props) {
     super(props)
     this._typeahead = React.createRef()
-    this.exceptions = spdxExceptions.sort()
+    this.exceptions = [...spdxExceptions].sort()
   }
 
   onKeyPress = event => {
     if (event.key === 'Enter') {
       const { value } = event.target
-      if (value && this.exceptions.includes(value)) {
+      if (value) {
         this.props.onChange(value)
       }
     }
   }
 
   onChange = ([first]) => {
-    if (first) this.props.onChange(first)
+    if (first) this.props.onChange(typeof first === 'object' ? first.label : first)
   }
 
   render() {
@@ -37,6 +37,7 @@ export default class SpdxExceptionPicker extends Component {
       <div className="editable-editor" data-test-id="spdx-exception-picker">
         <Autocomplete
           id="spdx-exception-picker"
+          key={value}
           defaultInputValue={value}
           options={this.exceptions}
           onKeyDown={this.onKeyPress}
@@ -45,6 +46,7 @@ export default class SpdxExceptionPicker extends Component {
           positionFixed
           selectHintOnEnter
           clearButton
+          allowNew
           placeholder="Exception (e.g. Classpath-exception-2.0)"
         />
       </div>

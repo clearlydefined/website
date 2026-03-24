@@ -73,6 +73,7 @@ yarn-debug.log*
 yarn-error.log*
 
 src/styles/index.css
+src/styles/index.css.map
 public/vs
 
 # dotenv environment variables file

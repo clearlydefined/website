@@ -417,9 +417,8 @@ export default class FileList extends PureComponent {
             columns={columns}
             dataSource={searchText ? filteredFiles : files}
             onChange={this.handleChange}
-            expandIconAsCell={false}
-            expandIcon={() => null}
-            childrenColumnName="_nochildren"
+            expandedRowKeys={expandedRows}
+            onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}
             pagination={false}
           />
         </Paper>
