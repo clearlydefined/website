@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { ToggleButtonGroup, ToggleButton, Button, Row, Col } from 'react-bootstrap'
 import SpdxPicker from '../SpdxPicker'
+import SpdxExceptionPicker from './SpdxExceptionPicker'
 import CloseIcon from '@material-ui/icons/Close'
 
 export default class RuleBuilder extends Component {
@@ -12,6 +13,7 @@ export default class RuleBuilder extends Component {
     changeRulesOperator: PropTypes.func, //callback function called when switching a conjunction operator
     updateLicense: PropTypes.func, //callback function called when changing a specific license value
     considerLaterVersions: PropTypes.func, //callback function called when applying a plus operator
+    updateException: PropTypes.func, //callback function called when changing the WITH exception
     addNewGroup: PropTypes.func, //callback function called when adding a new license group object
     removeRule: PropTypes.func //callback function called when removing a single license or a group
   }
@@ -51,7 +53,7 @@ export default class RuleBuilder extends Component {
   }
 
   renderRule = (rule, path, conjunction = null, parentRule = {}) => {
-    const { updateLicense, considerLaterVersions, removeRule } = this.props
+    const { updateLicense, considerLaterVersions, updateException, removeRule } = this.props
     const currentPath = path[path.length - 1]
     if (Object.keys(rule).includes('noassertion'))
       return (
@@ -61,11 +63,6 @@ export default class RuleBuilder extends Component {
             : null}
           <Col md={12} className="flex-center">
             <SpdxPicker value={'NOASSERTION'} onChange={value => updateLicense(value, path)} />
-            {/* {path.length > 0 && (
-              <Button id="removeRule" onClick={() => removeRule(path)}>
-                x
-              </Button>
-            )} */}
           </Col>
         </Col>
       )
@@ -78,22 +75,45 @@ export default class RuleBuilder extends Component {
           <Col md={12} className="flex-center editable-container">
             <SpdxPicker value={rule.license} onChange={value => updateLicense(value, path)} />
             {rule.license && (
-              <div>
+              <div className="license-options">
                 <input
                   type="checkbox"
                   className="checkbox"
                   onChange={event => considerLaterVersions(event.target.checked, path)}
                   value="+"
+                  checked={!!rule.plus}
                 />
                 Any later version
+                {!rule.exception && (
+                  <Button
+                    className="add-exception-btn"
+                    bsSize="xsmall"
+                    onClick={() => updateException('pending', path)}
+                  >
+                    + WITH
+                  </Button>
+                )}
               </div>
             )}
-            {path.length > 0 && (
-              <Button id="removeRule" onClick={() => removeRule(path)}>
+            {(path.length > 0 || rule.license) && (
+              <Button id="removeRule" onClick={() => path.length > 0 ? removeRule(path) : updateLicense('', path)}>
                 <CloseIcon />
               </Button>
             )}
           </Col>
+          {rule.license && rule.exception && (
+            <Col md={12} className="flex-center editable-container spdx-exception-row">
+              <span className="spdx-exception-label">WITH</span>
+              <SpdxExceptionPicker
+                key={rule.exception}
+                value={rule.exception === 'pending' ? '' : rule.exception}
+                onChange={value => updateException(value, path)}
+              />
+              <Button id="removeException" onClick={() => updateException('', path)}>
+                <CloseIcon />
+              </Button>
+            </Col>
+          )}
         </Col>
       )
     else
@@ -117,7 +137,6 @@ export default class RuleBuilder extends Component {
 
   render() {
     const { rule } = this.props
-    console.log(rule)
     return (
       <Row>
         <Col md={12} className="flex">

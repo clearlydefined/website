@@ -278,6 +278,8 @@
   display: block;
   color: $gray-900;
   font-weight: 500;
+  min-width: 0;
+  overflow: hidden;
 
   &.col-md-12.col-xs-12 {
     width: 100%;
@@ -587,7 +589,7 @@
   }
 }
 
-.diractry-viewer {
+.directory-viewer {
   .breadcrumbs-container {
     display: flex;
     padding-bottom: 15px;
@@ -606,8 +608,28 @@
     padding-right: 10px;
   }
 
+  .ant-table table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .ant-table-expand-icon-th,
+  .ant-table-row-expand-icon-cell {
+    width: 0;
+    min-width: 0;
+    padding: 0 !important;
+  }
+
   .ant-table-row-expand-icon {
     display: none;
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    padding: 8px 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .column-license {

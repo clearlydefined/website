@@ -15,7 +15,6 @@ import ModalEditor from '../ModalEditor'
 import EnhancedLicensePicker from '../../utils/EnhancedLicensePicker'
 import folderIcon from '../../images/icons/folder.svg'
 import fileIcon from '../../images/icons/file.svg'
-import FolderOpenIcon from '@material-ui/icons/FolderOpen'
 export default class FileList extends PureComponent {
   static propTypes = {
     onChange: PropTypes.func,
@@ -285,9 +284,8 @@ export default class FileList extends PureComponent {
         {breadcrumbs.map((item, index) => {
           return (
             <div
-              className={`${
-                breadcrumbs.length - 1 === index ? 'breadcrumb-item breadcrumb-last-item' : 'breadcrumb-item'
-              }`}
+              className={`${breadcrumbs.length - 1 === index ? 'breadcrumb-item breadcrumb-last-item' : 'breadcrumb-item'
+                }`}
               key={index}
               onClick={e => this.onBreadcrumbSelect(item, index)}
             >
@@ -412,13 +410,12 @@ export default class FileList extends PureComponent {
     ]
 
     return (
-      <div className="diractry-viewer">
+      <div className="directory-viewer">
         {this.renderBreadcrumbs()}
         <Paper className="w-100 rounded">
           <Table
             columns={columns}
             dataSource={searchText ? filteredFiles : files}
-            expandableRowIcon={<FolderOpenIcon />}
             onChange={this.handleChange}
             expandedRowKeys={expandedRows}
             onExpandedRowsChange={expandedRows => expandedRows.length > 0 && this.setState({ expandedRows })}

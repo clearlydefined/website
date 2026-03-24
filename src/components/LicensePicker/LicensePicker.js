@@ -64,10 +64,16 @@ export default class LicensePicker extends Component {
   }
 
   updateLicense = async (value, path) => {
-    if (!value) return
     const rules = { ...this.state.rules }
     const currentPath = [...path, 'license']
     set(rules, toPath(currentPath), value || '')
+    // Clear exception and plus if license is cleared
+    if (!value) {
+      const exceptionPath = [...path, 'exception']
+      const plusPath = [...path, 'plus']
+      set(rules, toPath(exceptionPath), undefined)
+      set(rules, toPath(plusPath), undefined)
+    }
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }
 
@@ -83,6 +89,17 @@ export default class LicensePicker extends Component {
     const rules = { ...this.state.rules }
     const currentPath = [...path, 'plus']
     set(rules, toPath(currentPath), value || false)
+    this.setState({ rules, sequence: this.state.sequence + 1 })
+  }
+
+  updateException = async (value, path) => {
+    const rules = { ...this.state.rules }
+    const exceptionPath = [...path, 'exception']
+    if (value) {
+      set(rules, toPath(exceptionPath), value)
+    } else {
+      set(rules, toPath(exceptionPath), undefined)
+    }
     this.setState({ rules, sequence: this.state.sequence + 1 })
   }
 
@@ -130,6 +147,7 @@ export default class LicensePicker extends Component {
               changeRulesOperator={this.changeRulesConjunction}
               updateLicense={this.updateLicense}
               considerLaterVersions={this.considerLaterVersions}
+              updateException={this.updateException}
               addNewGroup={this.addNewGroup}
               removeRule={this.removeRule}
             />

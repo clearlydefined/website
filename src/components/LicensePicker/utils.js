@@ -10,9 +10,21 @@ const NOASSERTION = 'NOASSERTION'
 // Shared methods appliable to License Picker
 export default class LicensePickerUtils {
   static parseLicense(license) {
-    return license && !['NONE', 'NOASSERTION', 'OTHER', 'PRESENCE OF', 'ABSENCE OF'].includes(license)
-      ? parse(license)
-      : { license }
+    if (!license || ['NONE', 'NOASSERTION', 'OTHER', 'PRESENCE OF', 'ABSENCE OF'].includes(license)) {
+      return { license }
+    }
+    try {
+      const result = parse(license)
+      // The parser returns { noassertion: true } for expressions it can't handle
+      // (e.g. LicenseRef-* WITH exception AND ...). If the input wasn't actually
+      // NOASSERTION, fall back to treating it as a raw license string.
+      if (result && result.noassertion && license !== 'NOASSERTION') {
+        return { license }
+      }
+      return result
+    } catch (e) {
+      return { license }
+    }
   }
 
   static isValidExpression(expression) {
@@ -27,10 +39,11 @@ export default class LicensePickerUtils {
   static toString(expression) {
     if (!expression) return null
     if (expression.hasOwnProperty('noassertion')) return NOASSERTION
-    if (expression.license)
-      return `${expression.license}${expression.plus ? '+' : ''}${
-        expression.exception ? ` WITH ${expression.exception}` : ''
-      }`
+    if (expression.license) {
+      const exception = expression.exception && expression.exception !== 'pending' && expression.exception.trim()
+      return `${expression.license}${expression.plus ? '+' : ''}${exception ? ` WITH ${exception}` : ''
+        }`
+    }
     const left =
       get(expression, 'left.conjunction', '').toLowerCase() === 'or'
         ? `(${this.toString(expression.left)})`
@@ -96,16 +109,16 @@ export default class LicensePickerUtils {
           ? this.createRuleObject(conjunction, expression.left.left, expression.left.right)
           : expression.left
         : expression.right && expression.right.conjunction
-        ? expression.left
-        : expression.conjunction !== conjunction
-        ? expression
-        : expression.left
+          ? expression.left
+          : expression.conjunction !== conjunction
+            ? expression
+            : expression.left
     const right =
       path[0] === 'left'
         ? expression.right
         : get(expression, 'right.conjunction')
-        ? this.createRuleObject(conjunction, expression.right.left, expression.right.right)
-        : expression.conjunction === conjunction && this.createRuleObject(conjunction, expression.right)
+          ? this.createRuleObject(conjunction, expression.right.left, expression.right.right)
+          : expression.conjunction === conjunction && this.createRuleObject(conjunction, expression.right)
 
     return this.createRuleObject(ruleConjunction, left, right)
   }

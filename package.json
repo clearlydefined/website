@@ -43,6 +43,7 @@
     "redux-thunk": "^2.3.0",
     "sass": "^1.83.0",
     "spdx-compare": "^1.0.0",
+    "spdx-exceptions": "^2.2.0",
     "spdx-license-ids": "^3.0.7",
     "spdx-satisfies": "^5.0.0",
     "throat": "^4.1.0",
