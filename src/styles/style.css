@@ -133,7 +133,8 @@ a:hover {
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   outline: 0 !important;
-  box-shadow: 0 0 0 0.2rem rgba(29, 82, 212, 0.5) !important; }
+  box-shadow: 0 0 0 0.2rem rgba(29, 82, 212, 0.5) !important; 
+  z-index: 1; }
 
 .top-search-and-filter .right-side-filter {
   /* padding: 20px;
@@ -171,7 +172,6 @@ a:hover {
 
 .harvest-provider .provider-drop-down div input {
   border: 0;
-  border-radius: 50px 0px 0px 50px;
   font-size: 14px;
   height: 100%; }
 
