@@ -31,7 +31,9 @@ import searchSvg from '../../../../images/icons/searchSvg.svg'
 class PageBrowse extends SystemManagedList {
   constructor(props) {
     super(props)
+    // keep the state initialized by SystemManagedList (e.g. sequence), otherwise sequence + 1 ends up as NaN
     this.state = {
+      ...this.state,
       activeSort: 'releaseDate-desc',
       searchFocused: false,
       selectedProvider: providers[0],
