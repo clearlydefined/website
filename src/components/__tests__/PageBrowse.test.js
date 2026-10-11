@@ -1,10 +1,16 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import ConnectedPageBrowse from '../Navigation/Pages/PageBrowse'
+
+let mockComponentListProps = null
+jest.mock('../ComponentList', () => props => {
+  mockComponentListProps = props
+  return null
+})
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
@@ -51,7 +57,22 @@ const renderWithProviders = (ui, { store = defaultStore } = {}) => {
 }
 
 describe('PageBrowse', () => {
+  beforeEach(() => {
+    mockComponentListProps = null
+  })
+
   it('renders without crashing', () => {
     renderWithProviders(<ConnectedPageBrowse {...defaultProps} />)
+  })
+
+  it('keeps a numeric sequence when a component is expanded', async () => {
+    renderWithProviders(<ConnectedPageBrowse {...defaultProps} />)
+    expect(mockComponentListProps.sequence).toBe(0)
+
+    const component = { type: 'npm', provider: 'npmjs', name: 'test', revision: '1.0.0' }
+    await act(async () => {
+      await mockComponentListProps.onChange(component, { ...component, expanded: true })
+    })
+    expect(mockComponentListProps.sequence).toBe(1)
   })
 })
